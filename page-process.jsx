@@ -158,7 +158,7 @@ const ProcessPage = ({ onNav, tweaks }) => {
 
       {/* CTA */}
       <section style={{ background: "var(--c-navy)" }}>
-        <div className="tl-container" data-tlgrid-collapse style={{ paddingBlock: "96px", display: "grid",
+        <div className="tl-container" data-tlgrid-collapse style={{ paddingTop: "96px", paddingBottom: "96px", display: "grid",
                                                 gridTemplateColumns: "1fr auto", gap: 48, alignItems: "center" }}>
           <div>
             <ParallelRule light label="READY?" />

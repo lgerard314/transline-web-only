@@ -225,7 +225,7 @@ const HomePage = ({ onNav, tweaks }) => {
 
       {/* ── Final CTA ─────────────────────────────────────────── */}
       <section style={{ background: "var(--c-navy)", color: "var(--c-on-navy)" }}>
-        <div className="tl-container" style={{ paddingBlock: "var(--space-10)", textAlign: "center" }}>
+        <div className="tl-container" style={{ paddingTop: "var(--space-10)", paddingBottom: "var(--space-10)", textAlign: "center" }}>
           <ParallelRule light label="START A PROJECT" />
           <h2 className="tl-display tl-display--xl" style={{ color: "#fff", margin: "32px auto 24px", maxWidth: "20ch" }}>
             Need help with a cross-border waste project?

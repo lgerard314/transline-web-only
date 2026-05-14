@@ -252,7 +252,7 @@ const AboutPage = ({ onNav, tweaks }) => {
 
       {/* CTA */}
       <section style={{ background: "var(--c-navy)" }}>
-        <div className="tl-container" style={{ paddingBlock: "96px", textAlign: "center" }}>
+        <div className="tl-container" style={{ paddingTop: "96px", paddingBottom: "96px", textAlign: "center" }}>
           <ParallelRule light label="TALK TO US" />
           <h2 className="tl-display tl-display--xl" style={{ color: "#fff", margin: "32px auto 24px", maxWidth: "22ch" }}>
             Talk to TransLine49° about your waste movement challenge.

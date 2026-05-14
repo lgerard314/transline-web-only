@@ -237,7 +237,7 @@ const ServicesPage = ({ onNav, tweaks }) => {
 
       {/* CTA */}
       <section style={{ background: "var(--c-navy)" }}>
-        <div className="tl-container" data-tlgrid-collapse style={{ paddingBlock: "96px", display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 64, alignItems: "center" }}>
+        <div className="tl-container" data-tlgrid-collapse style={{ paddingTop: "96px", paddingBottom: "96px", display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 64, alignItems: "center" }}>
           <div>
             <ParallelRule light label="GET A PATH" />
             <h2 className="tl-display tl-display--l" style={{ color: "#fff", marginTop: 24, maxWidth: "20ch" }}>

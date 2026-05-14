@@ -507,7 +507,10 @@ a { color: inherit; text-decoration: none; }
 .tl-hero__inner {
   position: relative;
   z-index: 2;
-  /* logical block-only padding so .tl-container's horizontal padding survives */
+  /* logical block-only padding so .tl-container's horizontal padding survives.
+     Physical longhands listed first so older Safari (< 14.5) still gets it. */
+  padding-top: clamp(72px, 9vw, 140px);
+  padding-bottom: clamp(72px, 9vw, 140px);
   padding-block: clamp(72px, 9vw, 140px);
 }
 .tl-hero__photo {
@@ -588,6 +591,8 @@ a { color: inherit; text-decoration: none; }
   align-items: flex-end;
   flex-wrap: wrap;
   gap: 24px;
+  padding-top: 24px;
+  padding-bottom: 36px;
   padding-block: 24px 36px;
   border-top: 1px solid rgba(255,255,255,0.1);
   color: rgba(230, 238, 242, 0.6);
