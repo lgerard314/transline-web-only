@@ -1162,6 +1162,28 @@ a { color: inherit; text-decoration: none; }
   [data-reveal], [data-reveal-stagger] > * { transition: none; opacity: 1; transform: none; }
 }
 
+/* On phones, tone the reveal motion down so partial-state never looks
+   like a broken render. Smaller travel, faster transition. */
+@media (max-width: 640px) {
+  [data-reveal] {
+    transform: translateY(14px);
+    transition: opacity 380ms cubic-bezier(.2,.7,.2,1), transform 380ms cubic-bezier(.2,.7,.2,1);
+  }
+  [data-reveal-stagger] > * {
+    transform: translateY(14px);
+    transition: opacity 360ms cubic-bezier(.2,.7,.2,1), transform 360ms cubic-bezier(.2,.7,.2,1);
+  }
+  /* Stagger spacing also compressed so the last child isn't delayed too long */
+  [data-reveal-stagger][data-in="1"] > *:nth-child(1) { transition-delay: 0ms; }
+  [data-reveal-stagger][data-in="1"] > *:nth-child(2) { transition-delay: 40ms; }
+  [data-reveal-stagger][data-in="1"] > *:nth-child(3) { transition-delay: 80ms; }
+  [data-reveal-stagger][data-in="1"] > *:nth-child(4) { transition-delay: 120ms; }
+  [data-reveal-stagger][data-in="1"] > *:nth-child(5) { transition-delay: 160ms; }
+  [data-reveal-stagger][data-in="1"] > *:nth-child(6) { transition-delay: 200ms; }
+  [data-reveal-stagger][data-in="1"] > *:nth-child(7) { transition-delay: 240ms; }
+  [data-reveal-stagger][data-in="1"] > *:nth-child(8) { transition-delay: 280ms; }
+}
+
 /* ── ProcessFlowSimple (Home) ───────────────────────────────────── */
 .tlpf { padding: 0; }
 .tlpf__head { max-width: 720px; margin-bottom: 56px; }
@@ -1633,7 +1655,7 @@ a { color: inherit; text-decoration: none; }
   .tl-display--xl { font-size: clamp(38px, 10vw, 52px); }
 }
 
-/* ── Services detail rows — mobile reorder + size ────────────────── */
+/* ── Services detail rows — mobile reorder + size + spacing ────── */
 @media (max-width: 920px) {
   .tl-svcdetail__photo {
     order: 1 !important;
@@ -1641,8 +1663,18 @@ a { color: inherit; text-decoration: none; }
   }
   .tl-svcdetail__text {
     order: 0 !important;
-    padding-block: var(--space-6) !important;
+    padding-top: var(--space-6) !important;
+    padding-bottom: var(--space-5) !important;
     padding-inline: 0 !important;
+  }
+  /* Real breathing room between stacked service rows on phones —
+     a 1px border alone wasn't enough separation, and the photo was
+     butting against the next row's text. */
+  .tl-svcdetail__row {
+    padding-bottom: var(--space-7) !important;
+  }
+  .tl-svcdetail__row + .tl-svcdetail__row .tl-svcdetail__text {
+    padding-top: var(--space-7) !important;
   }
 }
 

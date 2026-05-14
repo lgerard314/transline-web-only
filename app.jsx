@@ -54,7 +54,11 @@ function App() {
           io.unobserve(e.target);
         }
       }
-    }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+      // Positive bottom rootMargin extends the observer area 400px BELOW
+      // the viewport, so animations fire while elements are still off-screen
+      // and are complete by the time the user can see them. Avoids the
+      // "partially transparent as I scroll past it" effect on mobile.
+    }, { threshold: 0, rootMargin: "0px 0px 400px 0px" });
 
     const attach = () => {
       const els = document.querySelectorAll("[data-reveal], [data-reveal-stagger]");
