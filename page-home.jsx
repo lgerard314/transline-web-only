@@ -117,7 +117,7 @@ const HomePage = ({ onNav, tweaks }) => {
             lead="When a U.S. generator needs a Canadian outcome, three things have to land together. Companies use us to make that happen."
           />
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 32 }} data-reveal-stagger>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 32 }} data-tlgrid-collapse data-reveal-stagger>
             {[
               {
                 kn: "01",
@@ -163,7 +163,7 @@ const HomePage = ({ onNav, tweaks }) => {
 
       {/* ── Partner / affiliation ─────────────────────────────── */}
       <section className="tl-section" style={{ background: "var(--c-surface)", borderBottom: "1px solid var(--c-line)" }}>
-        <div className="tl-container" style={{ display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: 64, alignItems: "center" }}>
+        <div className="tl-container" data-tlgrid-collapse style={{ display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: 64, alignItems: "center" }}>
           <div>
             <ParallelRule label="04 · NETWORK" />
             <h2 className="tl-display tl-display--l" style={{ marginTop: 24 }}>
@@ -175,7 +175,7 @@ const HomePage = ({ onNav, tweaks }) => {
               shipments and permitting guidance.
             </p>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, marginTop: 36, borderTop: "1px solid var(--c-line)" }}>
+            <div data-tlgrid-collapse style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, marginTop: 36, borderTop: "1px solid var(--c-line)" }}>
               {[
                 { k: "U.S. BASE", v: "St. Louis, Missouri" },
                 { k: "OPERATIONAL PARTNER", v: "Miller Environmental Corp." },
@@ -206,7 +206,7 @@ const HomePage = ({ onNav, tweaks }) => {
                 <span className="tl-mono" style={{ color: "var(--c-accent)", fontSize: 11 }}>LIVE PATHWAYS</span>
               </div>
               <BorderMap height={280} />
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16, marginTop: 24, paddingTop: 16, borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+              <div data-tlgrid-collapse style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16, marginTop: 24, paddingTop: 16, borderTop: "1px solid rgba(255,255,255,0.08)" }}>
                 {[
                   { k: "ORIGIN", v: "St. Louis, MO" },
                   { k: "PRIMARY", v: "ON · AB · QC" },

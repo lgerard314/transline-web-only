@@ -137,7 +137,7 @@ const ContactPage = ({ onNav, tweaks }) => {
       {/* Contact cards */}
       <section className="tl-section">
         <div className="tl-container">
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 0,
+          <div data-tlgrid-collapse style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 0,
                         border: "1px solid var(--c-line)", borderRadius: 14, overflow: "hidden", background: "var(--c-surface)" }}>
             {[
               {
@@ -153,8 +153,9 @@ const ContactPage = ({ onNav, tweaks }) => {
                 t: "231 S. Bemiston Ave, Suite 800",
                 b: "Clayton, Missouri 63105",
                 cta: "Open map",
-                href: "#",
+                href: "https://www.google.com/maps/search/?api=1&query=231+S+Bemiston+Ave+Suite+800+Clayton+MO+63105",
                 icon: "north",
+                external: true,
               },
               {
                 tag: "PROJECT INTAKE",
@@ -201,13 +202,15 @@ const ContactPage = ({ onNav, tweaks }) => {
                   {c.b}
                 </p>
                 <a href={c.href} className="tl-mono"
+                   target={c.external ? "_blank" : undefined}
+                   rel={c.external ? "noreferrer noopener" : undefined}
                    onClick={(e) => { if (c.href === "#tl-intake") { e.preventDefault(); document.getElementById("tl-intake")?.scrollIntoView({ behavior: "smooth" }); } }}
                    style={{
                   fontSize: 12, letterSpacing: "0.08em", textTransform: "uppercase",
                   color: i === 2 ? "var(--c-accent)" : "var(--c-blue)",
                   display: "flex", alignItems: "center", gap: 6, cursor: "pointer",
                 }}>
-                  {c.cta} <span style={{ fontFamily: "var(--font-mono)" }}>→</span>
+                  {c.cta} <span style={{ fontFamily: "var(--font-mono)" }} aria-hidden="true">→</span>
                 </a>
               </div>
             ))}
@@ -217,8 +220,8 @@ const ContactPage = ({ onNav, tweaks }) => {
 
       {/* The intake wizard */}
       <section className="tl-section" id="tl-intake" style={{ paddingTop: 0 }}>
-        <div className="tl-container" style={{ display: "grid", gridTemplateColumns: "0.7fr 1.3fr", gap: 56, alignItems: "start" }}>
-          <div style={{ position: "sticky", top: 96 }}>
+        <div className="tl-container" data-tlgrid-collapse style={{ display: "grid", gridTemplateColumns: "0.7fr 1.3fr", gap: 56, alignItems: "start" }}>
+          <div data-tlsticky style={{ position: "sticky", top: 96 }}>
             <ParallelRule label="INTAKE · 5 STEPS" />
             <h2 className="tl-display tl-display--l" style={{ marginTop: 24 }}>
               Project intake form.
@@ -464,7 +467,7 @@ const ContactPage = ({ onNav, tweaks }) => {
 
       {/* Mini FAQ */}
       <section className="tl-section" style={{ background: "var(--c-surface)", borderTop: "1px solid var(--c-line)" }}>
-        <div className="tl-container" style={{ display: "grid", gridTemplateColumns: "0.7fr 1fr", gap: 64, alignItems: "start" }}>
+        <div className="tl-container" data-tlgrid-collapse style={{ display: "grid", gridTemplateColumns: "0.7fr 1fr", gap: 64, alignItems: "start" }}>
           <div>
             <ParallelRule label="MINI FAQ" />
             <h2 className="tl-display tl-display--l" style={{ marginTop: 24 }}>Quick answers.</h2>
@@ -487,17 +490,23 @@ const ContactPage = ({ onNav, tweaks }) => {
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 function FormField({ label, required, value, onChange, placeholder, type = "text", textarea = false, err }) {
+  const id = React.useId();
+  const errId = `${id}-err`;
   return (
     <div className="tl-field">
-      <label>{label} {required && <span className="req">*</span>}</label>
+      <label htmlFor={id}>{label} {required && <span className="req" aria-hidden="true">*</span>}{required && <span className="tl-sr-only"> (required)</span>}</label>
       {textarea ? (
-        <textarea data-error={err ? "1" : "0"} value={value} placeholder={placeholder}
+        <textarea id={id} data-error={err ? "1" : "0"} value={value} placeholder={placeholder}
+                  aria-invalid={err ? "true" : "false"}
+                  aria-describedby={err ? errId : undefined}
                   onChange={(e) => onChange(e.target.value)} />
       ) : (
-        <input data-error={err ? "1" : "0"} type={type} value={value} placeholder={placeholder}
+        <input id={id} data-error={err ? "1" : "0"} type={type} value={value} placeholder={placeholder}
+               aria-invalid={err ? "true" : "false"}
+               aria-describedby={err ? errId : undefined}
                onChange={(e) => onChange(e.target.value)} />
       )}
-      {err && <div className="err">{err}</div>}
+      {err && <div id={errId} className="err" role="alert">{err}</div>}
     </div>
   );
 }

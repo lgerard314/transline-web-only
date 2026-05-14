@@ -2,29 +2,50 @@
 <html lang="en" data-palette="clay" data-type="utility" data-density="regular">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>TransLine49° — Cross-Border Waste Disposal &amp; Recycling</title>
+  <meta name="description" content="TransLine49° Environmental Services moves hazardous and non-hazardous waste from the U.S. into Canada — cross-border permitting, logistics, disposal &amp; recycling access. Based in St. Louis, MO." />
+  <meta name="theme-color" content="#0B1F2A" />
+  <meta name="color-scheme" content="light dark" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="TransLine49° — Cross-Border Waste, Handled." />
+  <meta property="og:description" content="U.S. → Canada transboundary waste services: hazardous waste permitting, logistics coordination, disposal &amp; recycling pathways." />
+  <meta property="og:image" content="logo.png" />
+  <meta name="twitter:card" content="summary" />
+
+  <link rel="icon" type="image/png" href="logo.png" />
 
   <!-- Fonts: Geist + Geist Mono (utility), Newsreader (editorial), Manrope + Funnel Display (grotesk) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;family=Geist+Mono:wght@400;500;600&amp;family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&amp;family=Manrope:wght@400;500;600;700&amp;family=Funnel+Display:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="styles.css" />
   <style>
     html, body, #root { height: 100%; }
-    body { background: #1a1a1a; }
+    body { background: var(--c-bg, #F7F1E6); }
     /* Hide raw content during a moment of FOUC */
     .tl-bootloading #root { opacity: 0; }
     #root { opacity: 1; transition: opacity 200ms ease; }
+    /* Skip link, visible only on focus — escape hatch for keyboard users */
+    .tl-skip { position: absolute; left: -9999px; top: 0; padding: 12px 18px;
+               background: var(--c-navy, #3B2418); color: #fff;
+               font-family: var(--font-mono, ui-monospace, monospace); font-size: 12px;
+               letter-spacing: 0.08em; text-transform: uppercase; z-index: 1000;
+               border-radius: 0 0 8px 0; text-decoration: none; }
+    .tl-skip:focus { left: 0; outline: 2px solid var(--c-accent, #A85A2C); outline-offset: 2px; }
   </style>
 </head>
 <body>
+  <a class="tl-skip" href="#tl-main">Skip to content</a>
   <div id="root"></div>
 
-  <!-- React + Babel pinned -->
-  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <!-- React + Babel pinned — production builds for live deploy -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 
   <!-- App code, in dependency order -->

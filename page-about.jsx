@@ -22,7 +22,7 @@ const AboutPage = ({ onNav, tweaks }) => {
 
       {/* Who we are */}
       <section className="tl-section">
-        <div className="tl-container" style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr", gap: 64 }}>
+        <div className="tl-container" data-tlgrid-collapse style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr", gap: 64 }}>
           <div>
             <ParallelRule label="01 · WHO WE ARE" />
             <h2 className="tl-display tl-display--l" style={{ marginTop: 24 }}>Who we are.</h2>
@@ -50,7 +50,7 @@ const AboutPage = ({ onNav, tweaks }) => {
             title="Three things we do, in plainer English."
           />
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 0,
+          <div data-tlgrid-collapse style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 0,
                         borderTop: "1px solid var(--c-line)", borderBottom: "1px solid var(--c-line)" }}>
             {[
               { tag: "GUIDE",
@@ -105,7 +105,7 @@ const AboutPage = ({ onNav, tweaks }) => {
             lead="TransLine49° doesn't have to invent the relationships, the regulatory familiarity, or the operational backbone that cross-border waste needs. Those came with the company."
           />
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 24 }}>
+          <div data-tlgrid-collapse style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 24 }}>
             <div className="tl-card">
               <ParallelRule label="U.S. BASE" />
               <h3 className="tl-display tl-display--m" style={{ marginTop: 24, marginBottom: 12 }}>
@@ -169,7 +169,7 @@ const AboutPage = ({ onNav, tweaks }) => {
         background: "linear-gradient(180deg, #122C3A 0%, #0B1F2A 100%)",
         color: "var(--c-on-navy)",
       }}>
-        <div className="tl-container" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center" }}>
+        <div className="tl-container" data-tlgrid-collapse style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center" }}>
           <div>
             <ParallelRule light label="04 · ENVIRONMENTAL FOCUS" />
             <h2 className="tl-display tl-display--l" style={{ marginTop: 24, color: "#fff" }}>
@@ -181,7 +181,7 @@ const AboutPage = ({ onNav, tweaks }) => {
               that doesn't end up in a landfill.
             </p>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          <div data-tlgrid-collapse style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
             {[
               { k: "01", t: "Recycle", b: "Where the material allows, we look for a recycling pathway first." },
               { k: "02", t: "Repurpose", b: "Material that can be put to another use is directed there." },
@@ -227,7 +227,7 @@ const AboutPage = ({ onNav, tweaks }) => {
               { t: "Coordination across all the moving pieces", b: "Disposal, recycling, permitting, logistics — one partner." },
               { t: "Sustainability-oriented where viable", b: "Recycling and repurposing get priority when the material allows." },
             ].map((it, i) => (
-              <div key={i} style={{
+              <div key={i} data-tlgrid-collapse style={{
                 padding: "24px 0", borderBottom: "1px solid var(--c-line)",
                 display: "grid", gridTemplateColumns: "60px 1fr auto", gap: 32, alignItems: "center",
               }}>

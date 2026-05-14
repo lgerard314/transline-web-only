@@ -30,7 +30,6 @@ const PAGE_TITLES = {
 function App() {
   const [page, setPage] = appUseState("home");
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
-  const scrollRef = React.useRef(null);
 
   // Apply tweaks to <html> root attrs (CSS variables react)
   appUseEffect(() => {
@@ -39,11 +38,15 @@ function App() {
     document.documentElement.setAttribute("data-density", t.density);
   }, [t.palette, t.typePairing, t.density]);
 
-  // Scroll-reveal: observe all [data-reveal] / [data-reveal-stagger]
-  // elements inside the inner scroll container and toggle data-in=1.
+  // Drive the document title from the current route (was previously baked
+  // into the BrowserShell mock chrome).
   appUseEffect(() => {
-    const root = scrollRef.current;
-    if (!root) return;
+    document.title = PAGE_TITLES[page] || PAGE_TITLES.home;
+  }, [page]);
+
+  // Scroll-reveal: observe all [data-reveal] / [data-reveal-stagger]
+  // elements against the viewport (window) and toggle data-in=1.
+  appUseEffect(() => {
     const io = new IntersectionObserver((entries) => {
       for (const e of entries) {
         if (e.isIntersecting) {
@@ -51,10 +54,10 @@ function App() {
           io.unobserve(e.target);
         }
       }
-    }, { root, threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+    }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
 
     const attach = () => {
-      const els = root.querySelectorAll("[data-reveal], [data-reveal-stagger]");
+      const els = document.querySelectorAll("[data-reveal], [data-reveal-stagger]");
       els.forEach((el) => {
         if (el.getAttribute("data-in") !== "1") io.observe(el);
       });
@@ -67,11 +70,8 @@ function App() {
 
   const onNav = (id) => {
     setPage(id);
-    // scroll the content area to top
-    setTimeout(() => {
-      if (scrollRef.current) scrollRef.current.scrollTop = 0;
-      window.scrollTo({ top: 0 });
-    }, 10);
+    // scroll the window to top
+    setTimeout(() => { window.scrollTo({ top: 0 }); }, 10);
   };
 
   const renderPage = () => {
@@ -98,13 +98,11 @@ function App() {
 
   return (
     <>
-      <BrowserShell url={PAGE_URLS[page]} title={PAGE_TITLES[page]} scrollRef={scrollRef}>
-        <div className="tl-shell" key={page}>
-          <TopNav page={page} onNav={onNav} />
-          {renderPage()}
-          <SiteFooter onNav={onNav} />
-        </div>
-      </BrowserShell>
+      <div className="tl-shell" key={page}>
+        <TopNav page={page} onNav={onNav} />
+        <main id="tl-main">{renderPage()}</main>
+        <SiteFooter onNav={onNav} />
+      </div>
 
       <TweaksPanel title="Site Tweaks">
         <TweakSection label="Color palette">
@@ -173,69 +171,6 @@ function App() {
   );
 }
 
-// ─── BrowserShell: thin wrapper around ChromeWindow, full-viewport ─────────
-function BrowserShell({ url, title, children, scrollRef }) {
-  // Mostly mirrors browser-window.jsx but lets us size to viewport.
-  const C = { barBg: "#202124", tabBg: "#35363a", text: "#e8eaed", dim: "#9aa0a6", urlBg: "#282a2d" };
-  return (
-    <div style={{
-      width: "100vw", height: "100vh", overflow: "hidden",
-      background: "#1a1a1a", display: "flex", flexDirection: "column",
-    }}>
-      {/* Tab bar */}
-      <div style={{ display: "flex", alignItems: "center", height: 38, background: C.barBg, flexShrink: 0 }}>
-        <div style={{ display: "flex", gap: 8, padding: "0 14px" }}>
-          <div style={{ width: 12, height: 12, borderRadius: "50%", background: "#ff5f57" }} />
-          <div style={{ width: 12, height: 12, borderRadius: "50%", background: "#febc2e" }} />
-          <div style={{ width: 12, height: 12, borderRadius: "50%", background: "#28c840" }} />
-        </div>
-        <div style={{ display: "flex", alignItems: "flex-end", height: "100%", paddingLeft: 4, flex: 1 }}>
-          <div style={{
-            position: "relative", height: 30, alignSelf: "flex-end",
-            padding: "0 14px", display: "flex", alignItems: "center", gap: 8,
-            background: C.tabBg, borderRadius: "8px 8px 0 0", minWidth: 240, maxWidth: 340,
-            fontFamily: "system-ui, sans-serif", fontSize: 12, color: C.text,
-          }}>
-            <img src="logo.png" alt="" width="14" height="14" style={{ display: "block", flexShrink: 0 }} />
-            <span style={{ flex: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-              {title}
-            </span>
-            <span style={{ color: C.dim, fontSize: 12 }}>×</span>
-          </div>
-          <div style={{ width: 28, height: 24, display: "flex", alignItems: "center", justifyContent: "center", color: C.dim }}>+</div>
-        </div>
-      </div>
-      {/* URL bar */}
-      <div style={{ height: 40, background: C.tabBg, display: "flex", alignItems: "center",
-                    gap: 4, padding: "0 8px", flexShrink: 0 }}>
-        <BrowserIcon d="M15 18l-6-6 6-6" />
-        <BrowserIcon d="M9 6l6 6-6 6" muted />
-        <BrowserIcon d="M4 12a8 8 0 0 1 14-5l2-2v6h-6l2-2a6 6 0 1 0 1 5" />
-        <div style={{
-          flex: 1, height: 30, borderRadius: 15, background: C.urlBg,
-          display: "flex", alignItems: "center", gap: 10, padding: "0 14px", margin: "0 6px",
-        }}>
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke={C.dim}
-               strokeWidth="2" strokeLinecap="round">
-            <rect x="5" y="11" width="14" height="9" rx="2" />
-            <path d="M8 11V8a4 4 0 0 1 8 0v3" />
-          </svg>
-          <span style={{ flex: 1, color: C.text, fontSize: 13, fontFamily: "system-ui, sans-serif" }}>
-            {url}
-          </span>
-          <span style={{ color: C.dim, fontSize: 13 }}>↻</span>
-        </div>
-        <BrowserIcon d="M12 2a10 10 0 1 1-10 10A10 10 0 0 1 12 2z" />
-      </div>
-
-      {/* Content — scrollable, fills rest */}
-      <div ref={scrollRef} style={{ flex: 1, overflow: "auto", background: "#fff" }}>
-        {children}
-      </div>
-    </div>
-  );
-}
-
 // ─── Palette chip picker ────────────────────────────────────────────────────
 function PaletteChips({ value, onChange }) {
   const palettes = [
@@ -268,18 +203,6 @@ function PaletteChips({ value, onChange }) {
           )}
         </button>
       ))}
-    </div>
-  );
-}
-
-function BrowserIcon({ d, muted }) {
-  return (
-    <div style={{ width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-           stroke={muted ? "rgba(154,160,166,.4)" : "rgba(154,160,166,.85)"}
-           strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d={d} />
-      </svg>
     </div>
   );
 }

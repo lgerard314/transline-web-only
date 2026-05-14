@@ -331,35 +331,105 @@ const NAV_ITEMS = [
 ];
 
 function TopNav({ page, onNav }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  // Close the mobile menu whenever the route changes.
+  useEffect(() => { setMenuOpen(false); }, [page]);
+
+  // Lock body scroll when the mobile menu is open.
+  useEffect(() => {
+    if (!menuOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, [menuOpen]);
+
+  // Close on Escape.
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e) => { if (e.key === "Escape") setMenuOpen(false); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [menuOpen]);
+
+  const go = (id) => { onNav(id); setMenuOpen(false); };
+
   return (
-    <header className="tl-topbar">
-      <div className="tl-topbar__inner">
-        <a className="tl-logo" onClick={() => onNav("home")} href="#" aria-label="TransLine49° home">
-          <Logomark />
-          <span>TransLine<span className="tl-logo__deg">49°</span></span>
-        </a>
-        <nav>
-          <ul className="tl-nav-list">
-            {NAV_ITEMS.map((n) => (
-              <li key={n.id}>
-                <a href="#" aria-current={page === n.id ? "page" : undefined}
-                   onClick={(e) => { e.preventDefault(); onNav(n.id); }}>
-                  {n.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-        <div className="tl-topbar__cta">
-          <span className="tl-callphone tl-mono">
-            <strong>(314) 934-2133</strong>
-          </span>
-          <button className="tl-btn tl-btn--primary" onClick={() => onNav("contact")}>
+    <React.Fragment>
+      <header className="tl-topbar" data-menu-open={menuOpen ? "1" : "0"}>
+        <div className="tl-topbar__inner">
+          <a className="tl-logo" onClick={(e) => { e.preventDefault(); go("home"); }}
+             href="#" aria-label="TransLine49° home">
+            <Logomark />
+            <span>TransLine<span className="tl-logo__deg">49°</span></span>
+          </a>
+
+          <nav className="tl-nav-desktop" aria-label="Primary">
+            <ul className="tl-nav-list">
+              {NAV_ITEMS.map((n) => (
+                <li key={n.id}>
+                  <a href="#" aria-current={page === n.id ? "page" : undefined}
+                     onClick={(e) => { e.preventDefault(); go(n.id); }}>
+                    {n.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <div className="tl-topbar__cta">
+            <a className="tl-callphone tl-mono" href="tel:+13149342133">
+              <strong>(314) 934-2133</strong>
+            </a>
+            <button className="tl-btn tl-btn--primary tl-cta-desktop" onClick={() => go("contact")}>
+              Start a Project <span className="tl-btn-arr">→</span>
+            </button>
+            <button type="button"
+                    className="tl-menu-btn"
+                    data-tl-menu-btn=""
+                    aria-expanded={menuOpen}
+                    aria-controls="tl-mobile-nav"
+                    aria-label={menuOpen ? "Close menu" : "Open menu"}
+                    onClick={() => setMenuOpen((v) => !v)}>
+              <span className="tl-menu-btn__bars" aria-hidden="true">
+                <span /><span /><span />
+              </span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile drawer — rendered OUTSIDE the topbar so its position:fixed
+          isn't trapped by the topbar's backdrop-filter containing block. */}
+      <div id="tl-mobile-nav"
+           className="tl-mobile-nav"
+           data-tl-mobile-nav=""
+           data-open={menuOpen ? "1" : "0"}
+           aria-hidden={!menuOpen}>
+        <ul className="tl-mobile-nav__list">
+          {NAV_ITEMS.map((n) => (
+            <li key={n.id}>
+              <a href="#"
+                 aria-current={page === n.id ? "page" : undefined}
+                 onClick={(e) => { e.preventDefault(); go(n.id); }}>
+                <span className="tl-mono tl-mobile-nav__num">{String(NAV_ITEMS.indexOf(n) + 1).padStart(2, "0")}</span>
+                <span className="tl-mobile-nav__lbl">{n.label}</span>
+                <span className="tl-mobile-nav__arr" aria-hidden="true">→</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <div className="tl-mobile-nav__foot">
+          <a className="tl-btn tl-btn--primary tl-btn--lg" href="#"
+             onClick={(e) => { e.preventDefault(); go("contact"); }}>
             Start a Project <span className="tl-btn-arr">→</span>
-          </button>
+          </a>
+          <a className="tl-btn tl-btn--ghost-light tl-btn--lg" href="tel:+13149342133">
+            Call (314) 934-2133
+          </a>
         </div>
       </div>
-    </header>
+    </React.Fragment>
   );
 }
 
@@ -374,15 +444,21 @@ function Logomark({ size = 30 }) {
 
 // ─── Footer ───────────────────────────────────────────────────────────────
 function SiteFooter({ onNav }) {
+  const MAPS_URL = "https://www.google.com/maps/search/?api=1&query=231+S+Bemiston+Ave+Suite+800+Clayton+MO+63105";
+  const navItem = (id, label) => (
+    <li>
+      <button type="button" className="tl-footer__link" onClick={() => onNav(id)}>{label}</button>
+    </li>
+  );
   return (
     <footer className="tl-footer">
       <div className="tl-footer__top">
-        <div>
+        <div className="tl-footer__pitch">
           <ParallelRule light label="49°N · CROSS-BORDER" note="EST. ST. LOUIS, MO" />
-          <h3 className="tl-footer__big" style={{ marginTop: 28 }}>
+          <h3 className="tl-footer__big">
             Have a cross-border<br/>waste project?
           </h3>
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 12 }}>
+          <div className="tl-footer__pitch-ctas">
             <button className="tl-btn tl-btn--primary" onClick={() => onNav("contact")}>
               Start a Project <span className="tl-btn-arr">→</span>
             </button>
@@ -391,32 +467,35 @@ function SiteFooter({ onNav }) {
             </a>
           </div>
         </div>
-        <div>
+
+        <div className="tl-footer__col">
           <h4>Services</h4>
           <ul>
-            <li onClick={() => onNav("services")}>Cross-Border Waste Movement</li>
-            <li onClick={() => onNav("services")}>Hazardous Waste Permitting</li>
-            <li onClick={() => onNav("services")}>Logistics Coordination</li>
-            <li onClick={() => onNav("services")}>Disposal &amp; Recycling Access</li>
+            {navItem("services", "Cross-Border Waste Movement")}
+            {navItem("services", "Hazardous Waste Permitting")}
+            {navItem("services", "Logistics Coordination")}
+            {navItem("services", "Disposal & Recycling Access")}
           </ul>
         </div>
-        <div>
+
+        <div className="tl-footer__col">
           <h4>Company</h4>
           <ul>
-            <li onClick={() => onNav("about")}>About / Network</li>
-            <li onClick={() => onNav("process")}>Cross-Border Process</li>
-            <li onClick={() => onNav("contact")}>Contact</li>
-            <li>Miller Environmental Corp.</li>
+            {navItem("about", "About / Network")}
+            {navItem("process", "Cross-Border Process")}
+            {navItem("contact", "Contact")}
+            <li><span className="tl-footer__static">Miller Environmental Corp.</span></li>
           </ul>
         </div>
-        <div>
+
+        <div className="tl-footer__col">
           <h4>Office</h4>
-          <ul>
-            <li style={{ cursor: "default" }}>231 S. Bemiston Ave.</li>
-            <li style={{ cursor: "default" }}>Suite 800</li>
-            <li style={{ cursor: "default" }}>Clayton, MO 63105</li>
-            <li style={{ cursor: "default" }}>(314) 934-2133</li>
-          </ul>
+          <address className="tl-footer__addr">
+            <a href={MAPS_URL} target="_blank" rel="noreferrer noopener" className="tl-footer__link">
+              231 S. Bemiston Ave.<br/>Suite 800<br/>Clayton, MO 63105
+            </a>
+            <a href="tel:+13149342133" className="tl-footer__link tl-mono">(314) 934-2133</a>
+          </address>
         </div>
       </div>
       <div className="tl-footer__bot">
@@ -479,13 +558,13 @@ function PageHero({ eyebrow, title, lead, photo, variant = "photo", ctas = null,
 // ─── Service card ─────────────────────────────────────────────────────────
 function ServiceCard({ num, title, body, icon, onClick }) {
   return (
-    <div className="tl-svccard" onClick={onClick}>
-      <div className="tl-svccard__icon">{icon}</div>
+    <button type="button" className="tl-svccard" onClick={onClick}>
+      <div className="tl-svccard__icon" aria-hidden="true">{icon}</div>
       <div className="tl-svccard__num">{num}</div>
       <h3 className="tl-svccard__title">{title}</h3>
       <p className="tl-svccard__body">{body}</p>
-      <div className="tl-svccard__more">Learn more <span className="arr">→</span></div>
-    </div>
+      <span className="tl-svccard__more">Learn more <span className="arr" aria-hidden="true">→</span></span>
+    </button>
   );
 }
 
@@ -547,17 +626,26 @@ function FAQ({ items }) {
   const [open, setOpen] = useState(0);
   return (
     <div className="tl-faq">
-      {items.map((it, i) => (
-        <div className="tl-faq__item" key={i} data-open={open === i ? "1" : "0"}
-             onClick={() => setOpen(open === i ? -1 : i)}>
-          <div className="tl-faq__row">
-            <span className="tl-faq__num">{String(i + 1).padStart(2, "0")}</span>
-            <span className="tl-faq__q">{it.q}</span>
-            <span className="tl-faq__toggle">+</span>
+      {items.map((it, i) => {
+        const isOpen = open === i;
+        const panelId = `tl-faq-panel-${i}`;
+        const btnId   = `tl-faq-btn-${i}`;
+        return (
+          <div className="tl-faq__item" key={i} data-open={isOpen ? "1" : "0"}>
+            <button type="button"
+                    id={btnId}
+                    className="tl-faq__btn"
+                    aria-expanded={isOpen}
+                    aria-controls={panelId}
+                    onClick={() => setOpen(isOpen ? -1 : i)}>
+              <span className="tl-faq__num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+              <span className="tl-faq__q">{it.q}</span>
+              <span className="tl-faq__toggle" aria-hidden="true">+</span>
+            </button>
+            <div id={panelId} role="region" aria-labelledby={btnId} className="tl-faq__a">{it.a}</div>
           </div>
-          <div className="tl-faq__a">{it.a}</div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

@@ -41,7 +41,7 @@ const ProcessPage = ({ onNav, tweaks }) => {
             lead="None of these are deal-breakers. They're the reason a partner who lives in this work is useful."
           />
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 0,
+          <div data-tlgrid-collapse style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 0,
                         borderTop: "1px solid var(--c-line)", borderBottom: "1px solid var(--c-line)" }}>
             {[
               { k: "01", t: "Permit requirements", b: "Applicable hazardous waste or recyclable material may require permit-related steps before any movement." },
@@ -77,7 +77,7 @@ const ProcessPage = ({ onNav, tweaks }) => {
             title="What you bring vs. what we coordinate."
           />
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0,
+          <div data-tlgrid-collapse style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0,
                         borderTop: "1px solid var(--c-line)", borderBottom: "1px solid var(--c-line)" }}>
             <div style={{ padding: "40px 0 40px", paddingRight: 32, borderRight: "1px solid var(--c-line)" }}>
               <div className="tl-tag" style={{ marginBottom: 24 }}>YOUR CHALLENGE</div>
@@ -127,8 +127,8 @@ const ProcessPage = ({ onNav, tweaks }) => {
 
       {/* FAQ */}
       <section className="tl-section" id="tl-process-faq" style={{ background: "var(--c-surface)", borderTop: "1px solid var(--c-line)" }}>
-        <div className="tl-container" style={{ display: "grid", gridTemplateColumns: "0.7fr 1fr", gap: 64, alignItems: "start" }}>
-          <div style={{ position: "sticky", top: 96 }}>
+        <div className="tl-container" data-tlgrid-collapse style={{ display: "grid", gridTemplateColumns: "0.7fr 1fr", gap: 64, alignItems: "start" }}>
+          <div data-tlsticky style={{ position: "sticky", top: 96 }}>
             <ParallelRule label="FAQ" />
             <h2 className="tl-display tl-display--l" style={{ marginTop: 24 }}>
               Frequently asked.
@@ -158,7 +158,7 @@ const ProcessPage = ({ onNav, tweaks }) => {
 
       {/* CTA */}
       <section style={{ background: "var(--c-navy)" }}>
-        <div className="tl-container" style={{ padding: "96px 0", display: "grid",
+        <div className="tl-container" data-tlgrid-collapse style={{ padding: "96px 0", display: "grid",
                                                 gridTemplateColumns: "1fr auto", gap: 48, alignItems: "center" }}>
           <div>
             <ParallelRule light label="READY?" />

@@ -87,7 +87,7 @@ const ServicesPage = ({ onNav, tweaks }) => {
                 icon: "truck",
               },
             ].map((s, i) => (
-              <div key={i} style={{
+              <div key={i} data-tlgrid-collapse style={{
                 display: "grid",
                 gridTemplateColumns: i % 2 === 0 ? "1fr 1.1fr" : "1.1fr 1fr",
                 borderBottom: "1px solid var(--c-line)",
@@ -153,7 +153,7 @@ const ServicesPage = ({ onNav, tweaks }) => {
             lead="If your waste is hard to place, time-sensitive, or has crossed your domestic options — there's a good chance we can help."
           />
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 0,
+          <div data-tlgrid-collapse style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 0,
                         borderTop: "1px solid var(--c-line)", borderLeft: "1px solid var(--c-line)" }}>
             {[
               "Industrial facilities",
@@ -186,8 +186,8 @@ const ServicesPage = ({ onNav, tweaks }) => {
 
       {/* What we need to evaluate a project */}
       <section className="tl-section">
-        <div className="tl-container" style={{ display: "grid", gridTemplateColumns: "1fr 1.3fr", gap: 64, alignItems: "start" }}>
-          <div style={{ position: "sticky", top: 96 }}>
+        <div className="tl-container" data-tlgrid-collapse style={{ display: "grid", gridTemplateColumns: "1fr 1.3fr", gap: 64, alignItems: "start" }}>
+          <div data-tlsticky style={{ position: "sticky", top: 96 }}>
             <ParallelRule label="INTAKE CHECKLIST" />
             <h2 className="tl-display tl-display--l" style={{ marginTop: 24 }}>
               What we need to evaluate a project.
@@ -237,7 +237,7 @@ const ServicesPage = ({ onNav, tweaks }) => {
 
       {/* CTA */}
       <section style={{ background: "var(--c-navy)" }}>
-        <div className="tl-container" style={{ padding: "96px 0", display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 64, alignItems: "center" }}>
+        <div className="tl-container" data-tlgrid-collapse style={{ padding: "96px 0", display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 64, alignItems: "center" }}>
           <div>
             <ParallelRule light label="GET A PATH" />
             <h2 className="tl-display tl-display--l" style={{ color: "#fff", marginTop: 24, maxWidth: "20ch" }}>

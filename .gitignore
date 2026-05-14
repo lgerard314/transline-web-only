@@ -1,0 +1,5 @@
+.aws/screens/
+.aws/playwright-audit.py
+.aws/playwright-menu.py
+.aws/playwright-menu-debug.py
+.claude/
