@@ -141,7 +141,7 @@ const AboutPage = ({ onNav, tweaks }) => {
                   Affiliated with Miller Environmental Corporation. Connected to White Owl
                   Family Office Group — which holds strategic investments across the U.S. and Canada.
                 </p>
-                <div style={{ borderTop: "1px solid rgba(255,255,255,0.12)", paddingTop: 20 }}>
+                <div className="tl-affil-list" style={{ borderTop: "1px solid rgba(255,255,255,0.12)", paddingTop: 20 }}>
                   {[
                     { k: "OPERATIONAL PARTNER", v: "Miller Environmental Corporation" },
                     { k: "OWNERSHIP", v: "White Owl Family Office Group" },
@@ -252,7 +252,7 @@ const AboutPage = ({ onNav, tweaks }) => {
 
       {/* CTA */}
       <section style={{ background: "var(--c-navy)" }}>
-        <div className="tl-container" style={{ padding: "96px 0", textAlign: "center" }}>
+        <div className="tl-container" style={{ paddingBlock: "96px", textAlign: "center" }}>
           <ParallelRule light label="TALK TO US" />
           <h2 className="tl-display tl-display--xl" style={{ color: "#fff", margin: "32px auto 24px", maxWidth: "22ch" }}>
             Talk to TransLine49° about your waste movement challenge.

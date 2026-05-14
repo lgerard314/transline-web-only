@@ -77,7 +77,7 @@ const ProcessPage = ({ onNav, tweaks }) => {
             title="What you bring vs. what we coordinate."
           />
 
-          <div data-tlgrid-collapse style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0,
+          <div data-tlgrid-collapse className="tl-process-help-row" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0,
                         borderTop: "1px solid var(--c-line)", borderBottom: "1px solid var(--c-line)" }}>
             <div style={{ padding: "40px 0 40px", paddingRight: 32, borderRight: "1px solid var(--c-line)" }}>
               <div className="tl-tag" style={{ marginBottom: 24 }}>YOUR CHALLENGE</div>
@@ -158,7 +158,7 @@ const ProcessPage = ({ onNav, tweaks }) => {
 
       {/* CTA */}
       <section style={{ background: "var(--c-navy)" }}>
-        <div className="tl-container" data-tlgrid-collapse style={{ padding: "96px 0", display: "grid",
+        <div className="tl-container" data-tlgrid-collapse style={{ paddingBlock: "96px", display: "grid",
                                                 gridTemplateColumns: "1fr auto", gap: 48, alignItems: "center" }}>
           <div>
             <ParallelRule light label="READY?" />

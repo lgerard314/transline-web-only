@@ -87,14 +87,14 @@ const ServicesPage = ({ onNav, tweaks }) => {
                 icon: "truck",
               },
             ].map((s, i) => (
-              <div key={i} data-tlgrid-collapse style={{
+              <div key={i} data-tlgrid-collapse className="tl-svcdetail__row" style={{
                 display: "grid",
                 gridTemplateColumns: i % 2 === 0 ? "1fr 1.1fr" : "1.1fr 1fr",
                 borderBottom: "1px solid var(--c-line)",
                 minHeight: 420,
               }}>
                 {/* Photo column */}
-                <div style={{
+                <div className="tl-svcdetail__photo" style={{
                   order: i % 2 === 0 ? 0 : 1,
                   background: `linear-gradient(180deg, rgba(11,31,42,0.15) 0%, rgba(11,31,42,0.45) 100%), url(${s.photo})`,
                   backgroundSize: "cover",
@@ -115,7 +115,7 @@ const ServicesPage = ({ onNav, tweaks }) => {
                   </div>
                 </div>
                 {/* Content column */}
-                <div style={{ padding: "56px 48px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                <div className="tl-svcdetail__text" style={{ padding: "56px 48px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
                     <span style={{ width: 36, height: 36, borderRadius: 999, border: "1px solid var(--c-line)",
                                    display: "flex", alignItems: "center", justifyContent: "center", color: "var(--c-blue)" }}>
@@ -153,7 +153,7 @@ const ServicesPage = ({ onNav, tweaks }) => {
             lead="If your waste is hard to place, time-sensitive, or has crossed your domestic options — there's a good chance we can help."
           />
 
-          <div data-tlgrid-collapse style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 0,
+          <div data-tlgrid-collapse className="tl-industries-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 0,
                         borderTop: "1px solid var(--c-line)", borderLeft: "1px solid var(--c-line)" }}>
             {[
               "Industrial facilities",
@@ -237,7 +237,7 @@ const ServicesPage = ({ onNav, tweaks }) => {
 
       {/* CTA */}
       <section style={{ background: "var(--c-navy)" }}>
-        <div className="tl-container" data-tlgrid-collapse style={{ padding: "96px 0", display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 64, alignItems: "center" }}>
+        <div className="tl-container" data-tlgrid-collapse style={{ paddingBlock: "96px", display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 64, alignItems: "center" }}>
           <div>
             <ParallelRule light label="GET A PATH" />
             <h2 className="tl-display tl-display--l" style={{ color: "#fff", marginTop: 24, maxWidth: "20ch" }}>

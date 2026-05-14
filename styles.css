@@ -507,7 +507,8 @@ a { color: inherit; text-decoration: none; }
 .tl-hero__inner {
   position: relative;
   z-index: 2;
-  padding: clamp(72px, 9vw, 140px) 0;
+  /* logical block-only padding so .tl-container's horizontal padding survives */
+  padding-block: clamp(72px, 9vw, 140px);
 }
 .tl-hero__photo {
   position: absolute;
@@ -569,8 +570,9 @@ a { color: inherit; text-decoration: none; }
 }
 .tl-hero__rule {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 12px;
+  gap: 10px 12px;
   margin-bottom: 32px;
   color: rgba(230, 238, 242, 0.72);
 }
@@ -586,7 +588,7 @@ a { color: inherit; text-decoration: none; }
   align-items: flex-end;
   flex-wrap: wrap;
   gap: 24px;
-  padding: 24px 0 36px;
+  padding-block: 24px 36px;
   border-top: 1px solid rgba(255,255,255,0.1);
   color: rgba(230, 238, 242, 0.6);
   font-family: var(--font-mono);
@@ -1553,6 +1555,13 @@ a { color: inherit; text-decoration: none; }
   /* sticky sidebars become static so they don't stick to a tiny top */
   [data-tlsticky] { position: static !important; top: auto !important; }
 }
+/* Tablet + below: tighten container + section rhythm */
+@media (max-width: 920px) {
+  .tl-container { padding-inline: var(--space-5); }
+  .tl-topbar__inner { padding-inline: var(--space-5); }
+  .tl-section { padding-block: clamp(64px, 10vw, 88px); }
+}
+
 @media (max-width: 640px) {
   .tl-services-grid, .tl-trustbar, .tl-steps, .tl-footer__top { grid-template-columns: 1fr; }
   .tl-svccard, .tl-step, .tl-trustbar__item { border-left: 0; border-top: 1px solid var(--c-line); }
@@ -1560,18 +1569,129 @@ a { color: inherit; text-decoration: none; }
   .tl-field-row { grid-template-columns: 1fr; }
   [data-tlgrid="4"] { grid-template-columns: 1fr; }
 
-  .tl-topbar__inner { padding: 0 var(--space-4); gap: 12px; }
-  .tl-container { padding: 0 var(--space-4); }
-  .tl-section { padding-block: clamp(56px, 12vw, var(--section-y)); }
-  .tl-hero__inner { padding: clamp(56px, 14vw, 100px) 0; }
-  .tl-hero__meta { gap: 12px; padding: 16px 0 24px; flex-direction: column; align-items: flex-start; }
+  .tl-topbar__inner { padding-inline: var(--space-5); gap: 12px; }
+  .tl-container { padding-inline: var(--space-5); }
+  .tl-section { padding-block: clamp(52px, 12vw, 72px); }
+  .tl-hero__inner { padding-block: clamp(56px, 14vw, 96px); }
+  .tl-hero__meta { gap: 14px; padding-block: 18px 26px; flex-direction: column; align-items: flex-start; }
   .tl-hero__meta span { font-size: 10.5px; }
-  .tl-footer__top { padding: var(--space-7) var(--space-4) var(--space-6); gap: 32px; }
-  .tl-footer__bot { padding: 16px var(--space-4); flex-direction: column; gap: 8px; text-align: center; font-size: 10.5px; }
+  .tl-hero__lead { font-size: 16px; }
+
+  /* Display scale recalibrated for phones — clamp's 7.4vw is still huge at 390px */
+  .tl-display--xl { font-size: clamp(42px, 11vw, 64px); line-height: 0.98; letter-spacing: -0.025em; }
+  .tl-display--l  { font-size: clamp(32px, 9vw, 52px); }
+  .tl-display--m  { font-size: clamp(26px, 7vw, 40px); }
+  .tl-display--s  { font-size: clamp(20px, 5.5vw, 26px); }
+
+  /* CTAs become full-width tap targets on phones */
+  .tl-hero__ctas .tl-btn,
+  .tl-footer__pitch-ctas .tl-btn { width: 100%; justify-content: center; }
+  .tl-hero__ctas, .tl-footer__pitch-ctas { gap: 10px; }
+
+  .tl-footer__top { padding: var(--space-7) var(--space-5) var(--space-6); gap: 32px; }
+  .tl-footer__bot { padding: 16px var(--space-5); flex-direction: column; gap: 8px; text-align: center; font-size: 10.5px; }
+  .tl-footer__big { font-size: clamp(34px, 9vw, 54px); }
   .tl-marquee__track { padding: 14px 0; font-size: 11.5px; gap: 40px; }
+
+  /* Service-card title font dialled down so a 4-card stack doesn't feel like 4 hero blocks */
+  .tl-svccard { padding: var(--space-6) var(--space-5); min-height: 0; }
+  .tl-svccard__title { font-size: 20px; }
+  .tl-svccard__body { font-size: 14px; }
+
+  /* TrustBar items reduced (currently each is 80+px tall) */
+  .tl-trustbar__item { padding: 20px var(--space-5); }
+  .tl-trustbar__value { font-size: 14px; }
+
+  /* Sticky sidebar margin: when collapsed, give the form below room */
+  [data-tlsticky] { margin-bottom: var(--space-5); }
+
+  /* Eyebrow rules: hide the gradient line (visual fluff that takes room) on phones */
+  .tl-hero__rule { gap: 8px 10px; }
+  .tl-hero__rule > span:last-child { display: none; }
+
+  /* CTA section padding bleed — even though we fixed the inline `padding: "X 0"`,
+     guard rail in case any new inline `padding: "X 0"` lands on a .tl-container */
+  .tl-container[style*="padding: 96px 0"],
+  .tl-container[style*="padding:96px 0"] {
+    padding-inline: var(--space-5) !important;
+  }
 }
 @media (max-width: 480px) {
   [data-tlgrid="4"] { grid-template-columns: 1fr; }
+  /* Even tighter mobile container — 16px on very small phones */
+  .tl-container { padding-inline: var(--space-4); }
+  .tl-topbar__inner { padding-inline: var(--space-4); }
+  .tl-display--xl { font-size: clamp(38px, 10vw, 52px); }
+}
+
+/* ── Services detail rows — mobile reorder + size ────────────────── */
+@media (max-width: 920px) {
+  .tl-svcdetail__photo {
+    order: 1 !important;
+    min-height: 220px !important;
+  }
+  .tl-svcdetail__text {
+    order: 0 !important;
+    padding-block: var(--space-6) !important;
+    padding-inline: 0 !important;
+  }
+}
+
+/* ── Process page "Where we help" — symmetric padding on mobile, drop divider ─ */
+@media (max-width: 920px) {
+  .tl-process-help-row > div {
+    padding-inline: 0 !important;
+    border-right: 0 !important;
+  }
+  .tl-process-help-row > div:first-child {
+    border-bottom: 1px solid var(--c-line);
+    padding-bottom: 32px !important;
+  }
+  .tl-process-help-row > div:last-child {
+    padding-top: 32px !important;
+  }
+}
+
+/* ── Network 2x2 meta items — drop the desktop column gutter on mobile ─ */
+@media (max-width: 920px) {
+  .tl-meta-grid > div { padding-inline: 0 !important; padding-right: 0 !important; }
+}
+
+/* ── About NETWORK card meta list — collapse the 180px key column on mobile ─ */
+@media (max-width: 640px) {
+  .tl-affil-list > div {
+    grid-template-columns: 1fr !important;
+    gap: 4px !important;
+    padding: 14px 0 !important;
+  }
+}
+
+/* ── SectionHead right-aligned button: stack under heading on mobile ─ */
+@media (max-width: 920px) {
+  .tl-sechead__right { justify-self: start; margin-top: var(--space-3); }
+  .tl-sechead__title { max-width: none !important; }
+}
+
+/* ── Industries grid: drop the table-like right border on mobile ─ */
+@media (max-width: 640px) {
+  .tl-industries-grid > div {
+    border-right: 0 !important;
+  }
+}
+
+/* ── Cells inside a collapsing grid: drop the desktop table-style vertical
+      separators on mobile (they become orphan vertical lines on a stack). ── */
+@media (max-width: 920px) {
+  [data-tlgrid-collapse] > div[style*="border-left:"] {
+    border-left: 0 !important;
+  }
+  [data-tlgrid-collapse] > div[style*="border-right:"]:not(.tl-process-help-row > div) {
+    border-right: 0 !important;
+  }
+  /* Add a soft horizontal separator between stacked cells instead */
+  [data-tlgrid-collapse] > div[style*="border-left:"]:not(:first-child) {
+    border-top: 1px solid var(--c-line) !important;
+  }
 }
 
 /* ── Reduced motion ───────────────────────────────────────────────── */
