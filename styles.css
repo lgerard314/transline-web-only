@@ -377,6 +377,7 @@ a { color: inherit; text-decoration: none; }
 .tl-nav-list a[aria-current="page"] { color: #fff; background: rgba(255,255,255,0.08); }
 .tl-topbar__cta {
   display: flex; gap: 10px; align-items: center;
+  margin-left: auto; /* push to right edge when nav-desktop is hidden on mobile */
 }
 .tl-callphone {
   font-family: var(--font-mono);
@@ -961,7 +962,9 @@ a { color: inherit; text-decoration: none; }
   color: var(--c-ink-2);
   font-size: 15px;
   line-height: 1.6;
-  padding-left: 50px;
+  /* Align with question text: num column (50px) + button flex gap (24px) = 74px */
+  padding-left: 74px;
+  padding-right: 24px;
   padding-bottom: 0;
   max-width: 70ch;
   opacity: 0;
@@ -976,7 +979,8 @@ a { color: inherit; text-decoration: none; }
   .tl-faq__btn { padding: 18px 0; gap: 14px; }
   .tl-faq__num { width: 36px; }
   .tl-faq__q { font-size: 16.5px; }
-  .tl-faq__a { padding-left: 36px; font-size: 14.5px; }
+  /* Mobile alignment: num column (36px) + button flex gap (14px) = 50px */
+  .tl-faq__a { padding-left: 50px; padding-right: 0; font-size: 14.5px; }
 }
 
 /* ── Footer ──────────────────────────────────────────────────────── */
@@ -1696,6 +1700,12 @@ a { color: inherit; text-decoration: none; }
   /* Add a soft horizontal separator between stacked cells instead */
   [data-tlgrid-collapse] > div[style*="border-left:"]:not(:first-child) {
     border-top: 1px solid var(--c-line) !important;
+  }
+  /* Drop minHeight on collapsed cards — it creates dead space on a vertical
+     stack. Exclude the services detail row's photo column which deliberately
+     enforces 220px on mobile. */
+  [data-tlgrid-collapse] > div[style*="min-height:"]:not(.tl-svcdetail__photo) {
+    min-height: 0 !important;
   }
 }
 

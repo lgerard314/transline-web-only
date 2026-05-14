@@ -50,7 +50,7 @@ const AboutPage = ({ onNav, tweaks }) => {
             title="Three things we do, in plainer English."
           />
 
-          <div data-tlgrid-collapse style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 0,
+          <div data-tlgrid-collapse data-reveal-stagger style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 0,
                         borderTop: "1px solid var(--c-line)", borderBottom: "1px solid var(--c-line)" }}>
             {[
               { tag: "GUIDE",
@@ -105,7 +105,7 @@ const AboutPage = ({ onNav, tweaks }) => {
             lead="TransLine49° doesn't have to invent the relationships, the regulatory familiarity, or the operational backbone that cross-border waste needs. Those came with the company."
           />
 
-          <div data-tlgrid-collapse style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 24 }}>
+          <div data-tlgrid-collapse data-reveal-stagger style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 24 }}>
             <div className="tl-card">
               <ParallelRule label="U.S. BASE" />
               <h3 className="tl-display tl-display--m" style={{ marginTop: 24, marginBottom: 12 }}>
@@ -181,7 +181,7 @@ const AboutPage = ({ onNav, tweaks }) => {
               that doesn't end up in a landfill.
             </p>
           </div>
-          <div data-tlgrid-collapse style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          <div data-tlgrid-collapse data-reveal-stagger style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
             {[
               { k: "01", t: "Recycle", b: "Where the material allows, we look for a recycling pathway first." },
               { k: "02", t: "Repurpose", b: "Material that can be put to another use is directed there." },
@@ -219,7 +219,7 @@ const AboutPage = ({ onNav, tweaks }) => {
             lead="We're not trying to be every environmental services company. We're trying to be the right one for a specific class of project."
           />
 
-          <div style={{ borderTop: "1px solid var(--c-line)" }}>
+          <div data-reveal-stagger style={{ borderTop: "1px solid var(--c-line)" }}>
             {[
               { t: "Specialised focus on U.S.–Canada waste movement", b: "It's all we do." },
               { t: "Cross-border permitting knowledge", b: "We live inside the permit workflow." },
@@ -252,7 +252,7 @@ const AboutPage = ({ onNav, tweaks }) => {
 
       {/* CTA */}
       <section style={{ background: "var(--c-navy)" }}>
-        <div className="tl-container" style={{ paddingTop: "96px", paddingBottom: "96px", textAlign: "center" }}>
+        <div className="tl-container" style={{ paddingTop: "clamp(56px, 11vw, 96px)", paddingBottom: "clamp(56px, 11vw, 96px)", textAlign: "center" }}>
           <ParallelRule light label="TALK TO US" />
           <h2 className="tl-display tl-display--xl" style={{ color: "#fff", margin: "32px auto 24px", maxWidth: "22ch" }}>
             Talk to TransLine49° about your waste movement challenge.

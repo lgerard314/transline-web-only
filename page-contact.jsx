@@ -137,7 +137,7 @@ const ContactPage = ({ onNav, tweaks }) => {
       {/* Contact cards */}
       <section className="tl-section">
         <div className="tl-container">
-          <div data-tlgrid-collapse style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 0,
+          <div data-tlgrid-collapse data-reveal-stagger style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 0,
                         border: "1px solid var(--c-line)", borderRadius: 14, overflow: "hidden", background: "var(--c-surface)" }}>
             {[
               {

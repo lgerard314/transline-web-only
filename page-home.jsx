@@ -175,7 +175,7 @@ const HomePage = ({ onNav, tweaks }) => {
               shipments and permitting guidance.
             </p>
 
-            <div data-tlgrid-collapse className="tl-meta-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, marginTop: 36, borderTop: "1px solid var(--c-line)" }}>
+            <div data-tlgrid-collapse data-reveal-stagger className="tl-meta-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, marginTop: 36, borderTop: "1px solid var(--c-line)" }}>
               {[
                 { k: "U.S. BASE", v: "St. Louis, Missouri" },
                 { k: "OPERATIONAL PARTNER", v: "Miller Environmental Corp." },
@@ -225,7 +225,7 @@ const HomePage = ({ onNav, tweaks }) => {
 
       {/* ── Final CTA ─────────────────────────────────────────── */}
       <section style={{ background: "var(--c-navy)", color: "var(--c-on-navy)" }}>
-        <div className="tl-container" style={{ paddingTop: "var(--space-10)", paddingBottom: "var(--space-10)", textAlign: "center" }}>
+        <div className="tl-container" style={{ paddingTop: "clamp(64px, 13vw, 128px)", paddingBottom: "clamp(64px, 13vw, 128px)", textAlign: "center" }}>
           <ParallelRule light label="START A PROJECT" />
           <h2 className="tl-display tl-display--xl" style={{ color: "#fff", margin: "32px auto 24px", maxWidth: "20ch" }}>
             Need help with a cross-border waste project?

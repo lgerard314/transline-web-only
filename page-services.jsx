@@ -87,7 +87,7 @@ const ServicesPage = ({ onNav, tweaks }) => {
                 icon: "truck",
               },
             ].map((s, i) => (
-              <div key={i} data-tlgrid-collapse className="tl-svcdetail__row" style={{
+              <div key={i} data-tlgrid-collapse data-reveal className="tl-svcdetail__row" style={{
                 display: "grid",
                 gridTemplateColumns: i % 2 === 0 ? "1fr 1.1fr" : "1.1fr 1fr",
                 borderBottom: "1px solid var(--c-line)",
@@ -153,7 +153,7 @@ const ServicesPage = ({ onNav, tweaks }) => {
             lead="If your waste is hard to place, time-sensitive, or has crossed your domestic options — there's a good chance we can help."
           />
 
-          <div data-tlgrid-collapse className="tl-industries-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 0,
+          <div data-tlgrid-collapse data-reveal-stagger className="tl-industries-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 0,
                         borderTop: "1px solid var(--c-line)", borderLeft: "1px solid var(--c-line)" }}>
             {[
               "Industrial facilities",
@@ -204,7 +204,7 @@ const ServicesPage = ({ onNav, tweaks }) => {
           </div>
 
           <div>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0,
+            <ul data-reveal-stagger style={{ listStyle: "none", padding: 0, margin: 0,
                           borderTop: "1px solid var(--c-line)" }}>
               {[
                 { k: "01", t: "Waste description", b: "What the material is, in plain language." },
@@ -237,7 +237,7 @@ const ServicesPage = ({ onNav, tweaks }) => {
 
       {/* CTA */}
       <section style={{ background: "var(--c-navy)" }}>
-        <div className="tl-container" data-tlgrid-collapse style={{ paddingTop: "96px", paddingBottom: "96px", display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 64, alignItems: "center" }}>
+        <div className="tl-container" data-tlgrid-collapse style={{ paddingTop: "clamp(56px, 11vw, 96px)", paddingBottom: "clamp(56px, 11vw, 96px)", display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 64, alignItems: "center" }}>
           <div>
             <ParallelRule light label="GET A PATH" />
             <h2 className="tl-display tl-display--l" style={{ color: "#fff", marginTop: 24, maxWidth: "20ch" }}>
