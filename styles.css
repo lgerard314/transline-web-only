@@ -1502,9 +1502,21 @@ a { color: inherit; text-decoration: none; }
 }
 
 @media (max-width: 900px) {
-  .tlpfx__row { grid-template-columns: 1fr; }
+  .tlpfx__row {
+    grid-template-columns: 1fr;
+    /* Kill the desktop-only "non-active step is dimmed" effect on mobile.
+       The dimming reads as progress along the zigzag stem, but the stem
+       is display:none on mobile — so all the user sees is 5 of 6 cards
+       stuck at 55% opacity. Every card should be fully rendered here. */
+    opacity: 1 !important;
+    min-height: 0 !important;
+  }
   .tlpfx__stem, .tlpfx__branch, .tlpfx__truck { display: none; }
-  .tlpfx__card-wrap { grid-column: 1 !important; padding: 0 !important; justify-content: stretch !important; }
+  .tlpfx__card-wrap {
+    grid-column: 1 !important;
+    padding: var(--space-5) 0 !important; /* breathing room between cards */
+    justify-content: stretch !important;
+  }
   .tlpfx__card { max-width: 100%; }
 }
 
