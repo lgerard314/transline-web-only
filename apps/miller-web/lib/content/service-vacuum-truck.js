@@ -7,7 +7,7 @@ export const vacuumTruck = {
     title: "Vacuum Truck",
     lead:
       "Safety is Miller's top priority and primary core value as demonstrated by our Total Recordable Incident Rating (TRIR).",
-    photo: "/miller/services/vacuum-truck-hero.jpg",
+    photo: "/miller/services/vacuum-truck-hero.webp",
   },
   sections: [
     {

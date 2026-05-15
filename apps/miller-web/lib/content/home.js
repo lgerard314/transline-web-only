@@ -18,10 +18,14 @@ export const HOME = {
     eyebrow: "Miller Environmental",
     title: "Committed to Leadership in the Hazardous Waste Disposal Industry",
     subhead: `Providing ${SAFE_DEPENDABLE_ON_TIME.toLowerCase()} to all our clients.`,
+    // 1400-wide WebP variants generated from the originals — saves
+    // ~400KB of mobile transfer vs the 1920/2560-wide source files.
+    // Frame 1 is the LCP element; frames 2/3 transition in after 4s
+    // and 8s of the CSS animation.
     frames: [
-      "/miller/facility/vbec-aerial.webp",
-      "/miller/case-studies/brandon-power-2.webp",
-      "/miller/services/industrial-cleaning-hero.jpeg",
+      "/miller/hero/home-frame-1.webp",
+      "/miller/hero/home-frame-2.webp",
+      "/miller/hero/home-frame-3.webp",
     ],
   },
 

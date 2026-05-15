@@ -1,5 +1,6 @@
 import "@white-owl/brand/styles/globals.css";
 import "./globals.css";
+import { Geist, Geist_Mono } from "next/font/google";
 import { ScrollReveal } from "@white-owl/brand/components";
 import { cookies, headers } from "next/headers";
 import { TopNav } from "../components/TopNav";
@@ -8,6 +9,24 @@ import { EmergencyBanner } from "../components/EmergencyBanner";
 import { BannerRouteGate } from "../components/BannerRouteGate";
 import { OVER_25_YEARS } from "../lib/content/brand";
 import { shouldShowEmergencyBanner } from "../lib/nav";
+
+// Self-host Geist + Geist Mono via next/font/google. Replaces the
+// render-blocking Google Fonts stylesheet link (Lighthouse called it
+// out as ~800ms LCP hit on slow 4G mobile). next/font emits the font
+// files from the same origin, preloads only the subsets we use, and
+// applies font-display: swap so text isn't blocked on font load.
+const geist = Geist({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-geist",
+  display: "swap",
+});
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-geist-mono",
+  display: "swap",
+});
 
 // Tweaks panel is dev-only. Import-site gate via top-level await so the
 // module is omitted from the production bundle entirely.
@@ -41,11 +60,6 @@ export const viewport = {
   themeColor: "#06141B",
 };
 
-// Production loads Geist + Geist Mono only (see design spec §4.3).
-const FONTS_HREF =
-  "https://fonts.googleapis.com/css2?" +
-  "family=Geist:wght@300;400;500;600;700&" +
-  "family=Geist+Mono:wght@400;500;600&display=swap";
 
 export default async function RootLayout({ children }) {
   // Cookie-gated SSR initial state for the EmergencyBanner so dismissals
@@ -61,12 +75,14 @@ export default async function RootLayout({ children }) {
   const bannerOn = shouldShowEmergencyBanner(pathname);
 
   return (
-    <html lang="en" data-brand="miller" data-palette="deep" data-type="utility" data-density="regular">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href={FONTS_HREF} rel="stylesheet" />
-      </head>
+    <html
+      lang="en"
+      data-brand="miller"
+      data-palette="deep"
+      data-type="utility"
+      data-density="regular"
+      className={`${geist.variable} ${geistMono.variable}`}
+    >
       {/* Server-rendered banner gate via next-url header. The client
           BannerRouteGate keeps the attribute in sync on client-side
           navigations (no full re-render). */}

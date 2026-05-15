@@ -9,5 +9,20 @@ export const metadata = {
 };
 
 export default function HomePage() {
-  return <HomeTemplate content={HOME} />;
+  return (
+    <>
+      {/* High-priority preload for the hero's first frame: it's the
+          LCP element on mobile and the CSS animation reveals it before
+          any user interaction. Frames 2/3 transition in after 4s+ —
+          leave them to normal discovery. React 19 hoists <link> tags
+          into <head>. */}
+      <link
+        rel="preload"
+        href="/miller/hero/home-frame-1.webp"
+        as="image"
+        fetchPriority="high"
+      />
+      <HomeTemplate content={HOME} />
+    </>
+  );
 }
