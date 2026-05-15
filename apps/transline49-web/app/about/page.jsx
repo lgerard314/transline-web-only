@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { TL_PHOTOS } from "@/lib/photos";
-import { PageHero } from "@/components/PageHero";
-import { SectionHead } from "@/components/SectionHead";
-import { ParallelRule } from "@/components/ParallelRule";
+import {
+  PageHero,
+  SectionHead,
+  ParallelRule,
+  Icon,
+} from "@white-owl/brand/components";
 import { BorderMap } from "@/components/BorderMap";
-import { Icon } from "@/components/Icon";
 
 export const metadata = { title: "About" };
 

@@ -5,13 +5,16 @@
 // `submitted` and show a confirmation block. Real submission is a future
 // task (Resend / Postmark / your CRM).
 import Link from "next/link";
-import { useId, useState, Fragment } from "react";
+import { useState, Fragment } from "react";
 import { TL_PHOTOS } from "@/lib/photos";
-import { PageHero } from "@/components/PageHero";
-import { SectionHead } from "@/components/SectionHead";
-import { ParallelRule } from "@/components/ParallelRule";
-import { FAQ } from "@/components/FAQ";
-import { Icon } from "@/components/Icon";
+import {
+  PageHero,
+  SectionHead,
+  ParallelRule,
+  FAQ,
+  Icon,
+  FormField,
+} from "@white-owl/brand/components";
 
 const WIZARD_STEPS = [
   { id: 0, key: "you",       num: "01", label: "About you" },
@@ -413,26 +416,6 @@ export function ContactClient() {
           </div>
         </div>
       </section>
-    </div>
-  );
-}
-
-function FormField({ label, required, value, onChange, placeholder, type = "text", textarea = false, err }) {
-  const id = useId();
-  const errId = `${id}-err`;
-  return (
-    <div className="tl-field">
-      <label htmlFor={id}>
-        {label}
-        {required && <span className="req" aria-hidden="true"> *</span>}
-        {required && <span className="tl-sr-only"> (required)</span>}
-      </label>
-      {textarea ? (
-        <textarea id={id} data-error={err ? "1" : "0"} value={value} placeholder={placeholder} aria-invalid={err ? "true" : "false"} aria-describedby={err ? errId : undefined} onChange={(e) => onChange(e.target.value)} />
-      ) : (
-        <input id={id} data-error={err ? "1" : "0"} type={type} value={value} placeholder={placeholder} aria-invalid={err ? "true" : "false"} aria-describedby={err ? errId : undefined} onChange={(e) => onChange(e.target.value)} />
-      )}
-      {err && <div id={errId} className="err" role="alert">{err}</div>}
     </div>
   );
 }

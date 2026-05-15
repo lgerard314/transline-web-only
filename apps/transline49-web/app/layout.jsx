@@ -1,8 +1,15 @@
-import "./globals.css";
+import "@white-owl/brand/styles/globals.css";
 import { TopNav } from "@/components/TopNav";
 import { SiteFooter } from "@/components/SiteFooter";
-import { ScrollReveal } from "@/components/ScrollReveal";
-import { SiteTweaksProvider } from "@/components/tweaks/SiteTweaksProvider";
+import { ScrollReveal } from "@white-owl/brand/components";
+
+// Tweaks panel is dev-only. Import-site gate via top-level await so the
+// module is omitted from the production bundle entirely (zero bytes —
+// verified by grepping `.next/static/chunks/` for the `twk-` CSS prefix).
+const SiteTweaksProvider =
+  process.env.NODE_ENV !== "production"
+    ? (await import("@white-owl/brand/tweaks")).SiteTweaksProvider
+    : null;
 
 export const metadata = {
   title: {
@@ -58,7 +65,7 @@ export default function RootLayout({ children }) {
           <SiteFooter />
         </div>
         <ScrollReveal />
-        <SiteTweaksProvider />
+        {SiteTweaksProvider && <SiteTweaksProvider namespace="tweaks:tl49" />}
       </body>
     </html>
   );

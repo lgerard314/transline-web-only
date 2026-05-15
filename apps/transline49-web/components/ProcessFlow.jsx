@@ -7,7 +7,7 @@
 // Both share the same step definitions + icon set below.
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { ParallelRule } from "./ParallelRule";
+import { ParallelRule } from "@white-owl/brand/components";
 
 export const PROC_STEPS = [
   {

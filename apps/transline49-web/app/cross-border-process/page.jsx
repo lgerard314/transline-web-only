@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { TL_PHOTOS } from "@/lib/photos";
-import { PageHero } from "@/components/PageHero";
-import { SectionHead } from "@/components/SectionHead";
-import { ParallelRule } from "@/components/ParallelRule";
-import { FAQ } from "@/components/FAQ";
+import {
+  PageHero,
+  SectionHead,
+  ParallelRule,
+  FAQ,
+} from "@white-owl/brand/components";
 import { ProcessFlowAdvanced } from "@/components/ProcessFlow";
 
 export const metadata = { title: "Cross-Border Process" };

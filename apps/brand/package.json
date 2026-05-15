@@ -1,0 +1,15 @@
+{
+  "name": "@white-owl/brand",
+  "version": "0.1.0",
+  "private": true,
+  "exports": {
+    "./styles/globals.css": "./styles/globals.css",
+    "./components": "./components/index.js",
+    "./tweaks": "./tweaks/index.js"
+  },
+  "peerDependencies": {
+    "next": "^16",
+    "react": "^19",
+    "react-dom": "^19"
+  }
+}

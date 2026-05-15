@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ParallelRule } from "./ParallelRule";
+import { ParallelRule } from "@white-owl/brand/components";
 
 // Footer columns: pitch + ctas, then three nav columns + an address column.
 // Service links all point to /services (the page contains all four bullets);

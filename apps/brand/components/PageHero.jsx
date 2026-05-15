@@ -1,16 +1,20 @@
 // Shared hero block for secondary pages. Variant decides what fills the
-// background: a photo (CSS background-image), the BorderMap SVG, or an
-// abstract gradient defined in globals.css.
+// background: a photo (CSS background-image), an app-supplied map slot
+// (e.g., TL49's BorderMap), or an abstract gradient defined in globals.css.
+//
+// The map is passed as a render-prop (`mapSlot`) rather than imported here,
+// because the map artwork is brand-specific (TL49: 49°N parallel; Miller
+// would supply its own or none at all). Keeping the slot generic lets this
+// component stay in the shared package.
 import { HeroPhoto } from "./HeroPhoto";
-import { BorderMap } from "./BorderMap";
 
-export function PageHero({ eyebrow, title, lead, photo, variant = "photo", ctas = null, meta = null }) {
+export function PageHero({ eyebrow, title, lead, photo, variant = "photo", ctas = null, meta = null, mapSlot = null }) {
   return (
     <section className="tl-hero" data-variant={variant}>
       <HeroPhoto src={photo} variant={variant} />
-      {variant === "map" && (
+      {variant === "map" && mapSlot && (
         <div style={{ position: "absolute", inset: 0, zIndex: 1, opacity: 0.55 }}>
-          <BorderMap height="100%" />
+          {mapSlot}
         </div>
       )}
       <div className="tl-container tl-hero__inner">

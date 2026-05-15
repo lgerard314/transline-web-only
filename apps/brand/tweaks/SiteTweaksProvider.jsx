@@ -6,6 +6,10 @@
 // Renders the TweaksPanel at the document level. The panel stays closed
 // unless the URL has ?tweaks=1 or a host posts __activate_edit_mode, so
 // regular visitors never see it.
+//
+// `namespace` is a plain string used as the storage / postMessage key per
+// app — TL49 passes "tweaks:tl49", Miller passes "tweaks:miller".
+// No namespace factory; each app mounts a provider with its own key.
 import { useEffect } from "react";
 import { useTweaks } from "./useTweaks";
 import { TweaksPanel } from "./TweaksPanel";
@@ -31,8 +35,8 @@ const TYPE_PAIRINGS = [
   { value: "grotesk",   label: "Grotesk (Funnel + Manrope)" },
 ];
 
-export function SiteTweaksProvider() {
-  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+export function SiteTweaksProvider({ namespace = "tweaks:default" }) {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS, namespace);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-palette", t.palette);

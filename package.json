@@ -6,9 +6,15 @@
     "apps/*"
   ],
   "scripts": {
-    "dev": "npm run dev --workspace=transline49-web",
-    "build": "npm run build --workspace=transline49-web",
+    "dev": "npm run dev:tl49",
+    "dev:tl49": "npm run dev --workspace=transline49-web",
+    "dev:miller": "npm run dev --workspace=miller-web",
+    "build": "npm run build --workspaces --if-present",
     "start": "npm run start --workspace=transline49-web",
-    "lint": "npm run lint --workspace=transline49-web"
+    "lint": "eslint apps/**/*.{js,jsx,mjs}"
+  },
+  "devDependencies": {
+    "eslint": "^9",
+    "eslint-config-next": "^16.2.6"
   }
 }
