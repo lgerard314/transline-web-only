@@ -536,3 +536,38 @@ body[data-banner="on"] .miller-eb { display: block; }
   color: var(--c-ink);
   font-size: 14px;
 }
+/* Case-study Results table (CaseStudyDetailTemplate). Semantic <table>
+   wrapped in an overflow-x container so narrow viewports scroll instead
+   of squashing the columns. */
+.mw-results-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--c-line);
+  border-radius: 12px;
+  overflow: hidden;
+  font-size: 14px;
+}
+.mw-results-table th,
+.mw-results-table td {
+  padding: 12px 16px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--c-line);
+}
+.mw-results-table thead th {
+  background: var(--c-line-2);
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--c-ink-3);
+}
+.mw-results-table tbody th[scope="row"] {
+  font-weight: 600;
+  color: var(--c-ink);
+  width: 32%;
+}
+.mw-results-table tbody tr:last-child th,
+.mw-results-table tbody tr:last-child td {
+  border-bottom: 0;
+}
