@@ -1,1 +1,335 @@
-/* Miller-only overrides go here. Tokens live in @white-owl/brand globals.css. */
+/* Miller-only overrides. Tokens + tl-* component selectors live in
+   @white-owl/brand/styles/globals.css. Anything in here is either:
+     a) a new chrome element only Miller uses (EmergencyBanner, mega-menu
+        flyout, mobile sub-list) — namespaced `mw-*` or `miller-*`.
+     b) a brand-scoped tweak of a shared tl-* selector via the
+        `[data-brand="miller"]` attribute set on <html> in layout.jsx.
+*/
+
+/* ─────────────────────────────────────────────────────────────────
+   EmergencyBanner — sticky above TopNav on allow-listed routes only.
+   Gated per-route via body[data-banner="on|off"] so the banner is rendered
+   unconditionally and never paints if the route opts out.
+   ───────────────────────────────────────────────────────────────── */
+
+.miller-eb { display: none; }
+body[data-banner="on"] .miller-eb { display: block; }
+
+.miller-eb {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  min-block-size: 56px;
+  background: var(--c-navy);
+  color: var(--c-on-navy);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.miller-eb__inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 10px clamp(16px, 4vw, 32px);
+  min-block-size: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.miller-eb__phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--c-on-navy);
+  text-decoration: none;
+  padding: 6px 8px;
+  border-radius: 6px;
+}
+.miller-eb__phone:hover,
+.miller-eb__phone:focus-visible {
+  background: rgba(255,255,255,0.06);
+  outline: none;
+}
+
+.miller-eb__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: var(--c-accent);
+  color: var(--c-navy);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.miller-eb__label {
+  display: inline-flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+.miller-eb__eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(230,238,242,0.7);
+}
+.miller-eb__number {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.miller-eb__dismiss {
+  appearance: none;
+  background: transparent;
+  color: var(--c-on-navy);
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 999px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.miller-eb__dismiss:hover,
+.miller-eb__dismiss:focus-visible {
+  background: rgba(255,255,255,0.08);
+  outline: none;
+}
+
+/* Mobile: collapse the banner to an icon-only call action. Screen readers
+   still get the full phone number via aria-label on the link. */
+@media (max-width: 640px) {
+  .miller-eb__label { display: none; }
+  .miller-eb__inner { min-block-size: 48px; padding: 8px 16px; }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Miller TopNav: mega-menu + dropdown styling. Reuses tl-topbar /
+   tl-nav-desktop / tl-nav-list visuals from @white-owl/brand; the only
+   net-new chrome is the submenu flyout.
+   ───────────────────────────────────────────────────────────────── */
+
+.mw-nav-item--has-children { position: relative; }
+
+.mw-nav-trigger {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  padding: 8px 10px;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.mw-nav-trigger:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.mw-nav-caret { font-size: 10px; opacity: 0.7; }
+
+.mw-submenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: 10px;
+  box-shadow: var(--shadow-card);
+  padding: 12px;
+  z-index: 70;
+  min-width: 260px;
+}
+
+.mw-submenu[data-variant="mega"] {
+  min-width: 520px;
+}
+.mw-submenu[data-variant="mega"] ul {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 16px;
+}
+
+.mw-submenu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.mw-submenu li a {
+  display: block;
+  padding: 8px 10px;
+  color: var(--c-ink);
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 14px;
+}
+.mw-submenu li a:hover,
+.mw-submenu li a:focus-visible {
+  background: var(--c-line-2);
+  outline: none;
+}
+
+/* Mobile drawer sub-list. Compact, indented under each top-level item. */
+.mw-mobile-sub {
+  list-style: none;
+  margin: 4px 0 12px 40px;
+  padding: 0;
+}
+.mw-mobile-sub li a {
+  display: block;
+  padding: 6px 0;
+  font-size: 14px;
+  color: var(--c-ink-2);
+  text-decoration: none;
+}
+.mw-mobile-sub li a:hover { color: var(--c-ink); }
+
+/* Right-align the mobile hamburger on small screens to match TL49's
+   mobile sweep. */
+@media (max-width: 768px) {
+  .mw-topbar .tl-topbar__cta { margin-left: auto; }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Miller footer — eyebrow line above the pitch headline.
+   ───────────────────────────────────────────────────────────────── */
+.mw-footer__eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-ink-3);
+  margin: 0 0 12px 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Miller atoms — Certification + Affiliations + Location + CaseStudy +
+   ProcessFlow.
+   ───────────────────────────────────────────────────────────────── */
+
+.mw-cert-grid,
+.mw-aff-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+
+.mw-cert-card,
+.mw-aff-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 180px;
+}
+
+.mw-cert-card__mark,
+.mw-aff-card__mark {
+  width: 64px;
+  height: 64px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--c-line-2);
+  border-radius: 8px;
+  color: var(--c-ink-3);
+  font-size: 11px;
+  text-align: center;
+}
+
+.mw-cert-card__name,
+.mw-aff-card__name {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--c-ink);
+  margin: 0;
+}
+
+.mw-cert-card__year { font-size: 12px; color: var(--c-ink-3); }
+.mw-cert-card__link {
+  font-size: 13px;
+  color: var(--c-blue);
+  text-decoration: underline;
+  margin-top: auto;
+}
+
+.mw-aff-card__desc { font-size: 13px; color: var(--c-ink-2); margin: 0; }
+.mw-aff-card__link { font-size: 13px; color: var(--c-blue); text-decoration: underline; margin-top: auto; }
+
+.mw-loc-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.mw-loc-card__title { margin: 0; font-size: 18px; }
+.mw-loc-card__addr  { font-style: normal; color: var(--c-ink-2); font-size: 14px; }
+
+.mw-cs-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.mw-cs-card__loc { font-size: 12px; color: var(--c-ink-3); letter-spacing: 0.06em; text-transform: uppercase; }
+.mw-cs-card__title { margin: 0; font-size: 16px; font-weight: 600; }
+.mw-cs-card__more { margin-top: auto; font-size: 13px; color: var(--c-blue); text-decoration: underline; }
+
+/* MillerProcessFlow — an <ol> rendered as a step timeline. */
+.mw-process {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: mw-step;
+  display: grid;
+  gap: 16px;
+}
+.mw-process > li {
+  counter-increment: mw-step;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+.mw-process > li::before {
+  content: counter(mw-step, decimal-leading-zero);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--c-accent);
+  font-weight: 600;
+}
+.mw-process__step-title { margin: 0 0 4px 0; font-size: 16px; font-weight: 600; }
+.mw-process__step-body  { margin: 0; color: var(--c-ink-2); font-size: 14px; }
+
+/* Trust badge inline pill used by ServiceDetailTemplate capabilities variant. */
+.mw-trust-badge {
+  display: inline-block;
+  background: var(--c-line-2);
+  border: 1px solid var(--c-line);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 13px;
+  color: var(--c-ink-2);
+  margin: 12px 0;
+}

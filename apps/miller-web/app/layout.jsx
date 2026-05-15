@@ -1,6 +1,11 @@
 import "@white-owl/brand/styles/globals.css";
 import "./globals.css";
 import { ScrollReveal } from "@white-owl/brand/components";
+import { cookies } from "next/headers";
+import { TopNav } from "../components/TopNav";
+import { SiteFooter } from "../components/SiteFooter";
+import { EmergencyBanner } from "../components/EmergencyBanner";
+import { BannerRouteGate } from "../components/BannerRouteGate";
 
 // Tweaks panel is dev-only. Import-site gate via top-level await so the
 // module is omitted from the production bundle entirely.
@@ -35,15 +40,18 @@ export const viewport = {
   themeColor: "#06141B",
 };
 
-// Production loads Geist + Geist Mono only (see design spec §4.3). Alternate
-// families are dev-only via NEXT_PUBLIC_FONTS=all — to be implemented in a
-// later phase if needed.
+// Production loads Geist + Geist Mono only (see design spec §4.3).
 const FONTS_HREF =
   "https://fonts.googleapis.com/css2?" +
   "family=Geist:wght@300;400;500;600;700&" +
   "family=Geist+Mono:wght@400;500;600&display=swap";
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  // Cookie-gated SSR initial state for the EmergencyBanner so dismissals
+  // don't flash on re-paint.
+  const cookieStore = await cookies();
+  const ebDismissed = cookieStore.get("miller_eb_dismissed")?.value === "1";
+
   return (
     <html lang="en" data-brand="miller" data-palette="deep" data-type="utility" data-density="regular">
       <head>
@@ -51,18 +59,16 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href={FONTS_HREF} rel="stylesheet" />
       </head>
-      <body>
+      {/* Default banner state = on. Routes that opt out set
+          data-banner="off" via a route-segment layout. */}
+      <body data-banner="on">
         <a className="tl-skip" href="#main">Skip to content</a>
+        <BannerRouteGate />
+        <EmergencyBanner initialDismissed={ebDismissed} />
+        <TopNav />
         <div className="tl-shell">
-          {/* TopNav + SiteFooter are phase-02 work. Placeholders below keep
-              the skeleton renderable. */}
-          <header className="tl-container" style={{ padding: "20px 0" }}>
-            <strong>Miller Environmental</strong>
-          </header>
           <main id="main" tabIndex={-1}>{children}</main>
-          <footer className="tl-container" style={{ padding: "40px 0", color: "var(--c-ink-3)" }}>
-            <small>© Miller Environmental — site in development.</small>
-          </footer>
+          <SiteFooter />
         </div>
         <ScrollReveal />
         {SiteTweaksProvider && <SiteTweaksProvider namespace="tweaks:miller" />}
