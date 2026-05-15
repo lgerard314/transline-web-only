@@ -12,8 +12,8 @@
 
 - For each Miller route, ensure `export const metadata = { title, description }` is present and sourced from `lib/content/*` (single source — copy edits flow).
 - Add `apps/miller-web/app/sitemap.js`:
-  - Enumerate the 26 real routes (NOT the 6 stubs — they're shells with no real content; better to omit from sitemap until they're filled).
-  - Each entry has `url`, `lastModified` (build time), `changeFrequency: "monthly"`, `priority` (home = 1.0, services = 0.8, others = 0.5).
+  - Enumerate all 32 real routes (no stubs — every route has full content per the 2026-05-15 second scrape).
+  - Each entry has `url`, `lastModified` (build time), `changeFrequency: "monthly"`, `priority` (home = 1.0, services = 0.8, case studies / job postings = 0.6, others = 0.5).
 - Add `apps/miller-web/app/robots.js` allowing all.
 - Add `apps/miller-web/public/og.png` (placeholder until real asset).
 - Verify: build, hit `/sitemap.xml` + `/robots.txt`, eyeball.
@@ -72,7 +72,7 @@
 ## Exit criteria
 
 - `npm run lint` + `npm run build` clean at root.
-- All 26 real + 6 stub Miller routes prerender.
+- All 32 real Miller routes prerender (no stubs).
 - Lighthouse mobile LCP ≤ 2.5 s on `/` and Remediation.
 - Axe reports zero serious/critical violations on each route.
 - `FamilyOfCompanies` renders in both apps' footers.

@@ -65,8 +65,18 @@ since they import from it.
 
 ## Non-goals (carried from the spec)
 
-- No push to origin/, no deploy. All commits local.
-- No new CSS class renames.
+- No push to `origin/main`. We are on `origin/dev`; pushes to dev are fine.
+- No new CSS class renames (`tl-*` stays).
 - No invented stat counter values.
 - No backend/CMS integration.
-- No real case-study or job-posting detail pages — stub routes only.
+
+## What was resolved between spec drafts and this overview
+
+- **WordPress media migration is done.** 83 images downloaded on 2026-05-15
+  and live under `apps/miller-web/public/miller/`. Spec §4.4 + Non-goals
+  updated. Phase 02 onward references local paths via `lib/photos.js` and
+  uses `next/image`.
+- **All 32 published routes are real content.** The second scrape pass
+  captured the 4 case-study detail pages and 2 job postings the first pass
+  treated as stubs. No `generateStaticParams` is used; each route ships its
+  own content module. Phase 03 picks up the additional routes.

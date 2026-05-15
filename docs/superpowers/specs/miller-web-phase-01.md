@@ -74,6 +74,7 @@ Tweaks extraction:
   - `layout.jsx` imports `@white-owl/brand/styles/globals.css`, sets `<html lang="en" data-brand="miller" data-palette="deep">`, includes only `<TopNav />`/footer placeholders for now, ScrollReveal, dev-gated SiteTweaksProvider (`namespace="tweaks:miller"`).
   - `page.jsx` renders a one-line "Miller Environmental — coming soon" placeholder.
   - `globals.css` is empty (room for Miller-only overrides later).
+- **Note on imagery (already in place):** `apps/miller-web/public/miller/` already contains 83 real site images organized in 9 subdirs (downloaded 2026-05-15; see `_manifest.md`). Phase 01 does not need to re-download. The real Miller logomark lives at `apps/miller-web/public/miller/logo/miller-logomark.webp`. Phase 02 references images via paths like `/miller/services/industrial-waste-treatment-hero.webp`. The placeholder `public/logo.png` mentioned in earlier draft text is not needed; use the real WebP from the `miller/logo/` directory.
 - Update root `package.json` scripts:
   ```json
   "dev": "npm run dev:tl49",

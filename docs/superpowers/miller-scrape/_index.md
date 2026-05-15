@@ -33,13 +33,29 @@ in `apps/miller-web/`. Each file captures one page verbatim where possible.
 | 23 | [23-careers-benefits-rewards.md](23-careers-benefits-rewards.md) | `/careers/benefits-rewards/` |
 | 24 | [24-careers-working-at-miller.md](24-careers-working-at-miller.md) | `/careers/working-at-miller/` |
 | 25 | [25-contact.md](25-contact.md) | `/contact-us/` |
+| 26 | [26-case-brandon-power.md](26-case-brandon-power.md) | `/case-studies/brandon-power-facility/` |
+| 27 | [27-case-grain-elevator.md](27-case-grain-elevator.md) | `/case-studies/grain-elevator-remediation-project/` |
+| 28 | [28-case-hwy16-diesel.md](28-case-hwy16-diesel.md) | `/case-studies/highway-16-diesel-spill-response-remediation/` |
+| 29 | [29-case-steinbach-fire.md](29-case-steinbach-fire.md) | `/case-studies/steinbach-strip-mall-fire-recovery-restoration-project/` |
+| 30 | [30-careers-plant-manager.md](30-careers-plant-manager.md) | `/careers/plant-manager/` |
+| 31 | [31-careers-enterprise-automation-manager.md](31-careers-enterprise-automation-manager.md) | `/careers/enterprise-automation-manager/` |
 
-## Pages NOT scraped in this pass (link-targets only)
-- 4 case-study detail pages under `/case-studies/…`
-- 2 job posting pages under `/careers/plant-manager/` and `/careers/enterprise-automation-manager/`
+**All 32 published content URLs now scraped.** The 4 case-study detail pages
+and 2 job postings, originally deferred to stub routes, are now real content.
+The rebuild can ship them as full pages from day one — see updated phase 03/04
+allocation in `miller-web-phase-*.md`.
 
-These are deferred — the rebuild plan treats them as stub routes that can be
-filled in later directly from the live URLs.
+## Imagery
+
+All site images were downloaded to `apps/miller-web/public/miller/` —
+83 files, 11 MB, organized into 9 category subdirs (logo / hero / services /
+facility / affiliations / certs / case-studies / careers / oxidizers).
+A per-file manifest lives at `apps/miller-web/public/miller/_manifest.md`.
+
+The Miller logomark — the live site's actual mark — is at
+`apps/miller-web/public/miller/logo/miller-logomark.webp`. The placeholder
+`apps/miller-web/public/logo.png` mentioned in the spec is no longer needed;
+the real mark ships from phase 01.
 
 ## Brand notes (cross-cut)
 - Phones: **(204) 925-9600** general · **(204) 957-6327** 24/7 spill response

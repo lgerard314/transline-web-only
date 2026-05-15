@@ -64,18 +64,27 @@ Case Studies index (1 route): `/case-studies/`.
 
 **Verify:** 4 routes load; form validates and submits to local state confirmation.
 
-### 03.5 Services landing + stub routes via `generateStaticParams`
+### 03.5 Services landing + 4 case-study detail pages + 2 job postings (REAL CONTENT)
 
 - `/industrial-services/` — render `<ServicesLandingPage />` (simple 10-card grid driven by `lib/services.js`). No hero copy — matches the scraped live site.
-- `/case-studies/[slug]/page.jsx` — `generateStaticParams` returns the 4 case-study slugs from `lib/content/case-studies.js`. Page renders `<PageHero>` + "More detail coming · contact us" body + form CTA.
-- `/careers/[position]/page.jsx` — `generateStaticParams` returns `["plant-manager", "enterprise-automation-manager"]`. Same stub shape.
+- `/case-studies/brandon-power-facility/page.jsx` — Brandon Power lime dust remediation case study. Source: scrape file `26-case-brandon-power.md`. Layout: `PageHero` + Problem section + Approach section (3 subheadings) + Results table.
+- `/case-studies/grain-elevator-remediation-project/page.jsx` — Source: `27-case-grain-elevator.md`. Same layout shape.
+- `/case-studies/highway-16-diesel-spill-response-remediation/page.jsx` — Source: `28-case-hwy16-diesel.md`. Same layout shape.
+- `/case-studies/steinbach-strip-mall-fire-recovery-restoration-project/page.jsx` — Source: `29-case-steinbach-fire.md`. Same layout shape.
+- `/careers/plant-manager/page.jsx` — Source: `30-careers-plant-manager.md`. Layout: `PageHero` + Role Summary + Responsibilities (`<ul>`) + Requirements (`<ul>`) + Benefits + "Apply Now: email hr@…" CTA.
+- `/careers/enterprise-automation-manager/page.jsx` — Source: `31-careers-enterprise-automation-manager.md`. Same shape.
 
-**Verify:** `npm run build --workspace=miller-web` reports 6 stub prerendered routes from these two `[slug]` segments. No 404s.
+> Earlier draft assumed these 6 would be stubs via `generateStaticParams`. The second scrape pass on 2026-05-15 captured their full content, so they ship as real static pages. This brings the route count to **32 real prerendered routes, zero stubs**.
+
+For consistency, define two simple shared templates in this task:
+- `<CaseStudyDetailTemplate>` — hero (with case-study image), Problem (h2 + prose), Approach (h2 + nested h3 + prose blocks), Results table (`<table>` semantically), CTA footer.
+- `<JobPostingTemplate>` — hero, role summary, Responsibilities `<ul>`, Requirements `<ul>`, Compensation/Benefits, "Apply by email" CTA.
+
+**Verify:** `npm run build --workspace=miller-web` reports **32 prerendered routes**.
 
 ## Exit criteria
 
-- 20 of the 26 real Miller routes ship working (6 home/rich pages remain in phase 04).
-- All 6 stub routes prerender.
-- `npm run build` at root succeeds, prerenders all expected routes.
+- 26 of the 32 real Miller routes ship working — 20 from 03.1-03.4 plus 6 from 03.5 (services landing + 4 case studies + 2 job postings). The remaining 6 (home + 5 rich pages) land in phase 04.
+- `npm run build` at root succeeds; prerender count matches expected.
 - `npm run lint` clean.
 - Visual spot-check of each route at desktop + mobile (~30 min).
