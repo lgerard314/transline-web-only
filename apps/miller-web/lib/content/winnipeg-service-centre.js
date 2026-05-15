@@ -1,6 +1,8 @@
 // Winnipeg Service Centre — location content.
 // Source: docs/superpowers/miller-scrape/20-location-winnipeg-service-centre.md
 
+import { EMAIL_SALES, EMERGENCY_PHONE, GENERAL_PHONE } from "./brand";
+
 export const winnipegServiceCentre = {
   hero: {
     eyebrow: "Location",
@@ -28,8 +30,8 @@ export const winnipegServiceCentre = {
     "Field coordination and project services",
   ],
   contact: {
-    phone: { display: "(204) 925-9600", href: "tel:+12049259600" },
-    email: "sales@millerenvironmental.mb.ca",
-    hours: "24/7 spill response: (204) 957-6327",
+    phone: { display: GENERAL_PHONE, href: "tel:+12049259600" },
+    email: EMAIL_SALES,
+    hours: `24/7 spill response: ${EMERGENCY_PHONE}`,
   },
 };

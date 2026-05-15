@@ -6,6 +6,8 @@
 // the real files. ESLint `no-restricted-syntax` blocks href="#" so these
 // must be real paths even when the file isn't shipped yet.
 
+import { CRADLE_TO_GRAVE_PHRASE } from "./brand";
+
 export const aboutLicencingInformation = {
   hero: {
     eyebrow: "About",
@@ -17,7 +19,7 @@ export const aboutLicencingInformation = {
     {
       heading: "Regulatory framework",
       body:
-        "The regulatory framework establishes a system of controlling hazardous waste from cradle to grave and involves registration of generators plus licensing of carriers and receivers. The facility license specifies administrative and technical conditions under which waste must be managed while ensuring safe, ethical, and environmentally responsible operations.",
+        `The regulatory framework establishes a system of controlling hazardous waste from ${CRADLE_TO_GRAVE_PHRASE} and involves registration of generators plus licensing of carriers and receivers. The facility license specifies administrative and technical conditions under which waste must be managed while ensuring safe, ethical, and environmentally responsible operations.`,
     },
   ],
   licences: [

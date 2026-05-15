@@ -1,6 +1,8 @@
 // Emergency Response — capabilities service content.
 // Source: docs/superpowers/miller-scrape/03-svc-emergency-response.md
 
+import { ONLY_IN_CANADA_CLAIM } from "./brand";
+
 export const emergencyResponse = {
   hero: {
     eyebrow: "Service",
@@ -9,8 +11,7 @@ export const emergencyResponse = {
       "Miller Environmental's experienced team of spill responders support customers throughout central Canada such as the transport industry, manufacturing sector as well as chemical distribution centers. Highly trained response technicians and our network of subcontractors can assist with a variety of chemical spill clean-up and remediation situations, chemical transfers, vessel cleanings, and chemical repackaging that include flammable, corrosive, and toxic dangerous goods.",
     photo: "/miller/services/emergency-response-hero.webp",
   },
-  inlineTrustBadge:
-    "The only hazardous waste management company in Canada with an integrated management system featuring three ISO certifications.",
+  inlineTrustBadge: ONLY_IN_CANADA_CLAIM,
   sections: [
     {
       heading: "Miller is ready and able",

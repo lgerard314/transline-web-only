@@ -1,6 +1,8 @@
 // Process page — Disposal of Inorganic Oxidizers.
 // Source: docs/superpowers/miller-scrape/12-process-inorganic-oxidizers.md
 
+import { GENERAL_PHONE } from "./brand";
+
 export const processInorganicOxidizers = {
   hero: {
     eyebrow: "Process",
@@ -56,7 +58,7 @@ export const processInorganicOxidizers = {
     },
     {
       q: "How can I book a delivery date for oxidizer disposal?",
-      a: "Contact via callback request or direct call to (204) 925-9600.",
+      a: `Contact via callback request or direct call to ${GENERAL_PHONE}.`,
     },
   ],
   cta: { label: "Contact Miller", href: "/contact-us" },

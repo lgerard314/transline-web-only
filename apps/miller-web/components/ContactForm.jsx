@@ -12,6 +12,7 @@
 
 import { useRef, useState } from "react";
 import { FormField } from "@white-owl/brand/components";
+import { EMERGENCY_PHONE } from "@/lib/content/brand";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -63,7 +64,7 @@ export function ContactForm() {
           Your message has been received. A Miller team member will be in touch
           shortly. For urgent spill response, call{" "}
           <a className="tl-mono" href="tel:+12049576327">
-            (204) 957-6327
+            {EMERGENCY_PHONE}
           </a>
           .
         </p>

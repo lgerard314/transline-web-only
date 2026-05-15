@@ -3,7 +3,7 @@
 // Miller (4 core values) → Open Positions (2 cards) → Benefits teaser
 // → DEI block (verbatim) → close.
 
-import { EMAIL_HR } from "./brand";
+import { EMAIL_HR, VBEC_FULL_NAME } from "./brand";
 
 export const CAREERS = {
   eyebrow: "Careers",
@@ -44,8 +44,7 @@ export const CAREERS = {
     {
       title: "Plant Manager",
       href: "/careers/plant-manager/",
-      summary:
-        "Operating leadership at the Vaughn Bullough Environmental Centre.",
+      summary: `Operating leadership at the ${VBEC_FULL_NAME}.`,
     },
     {
       title: "Enterprise Automation Manager",

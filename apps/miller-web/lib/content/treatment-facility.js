@@ -1,10 +1,16 @@
 // Treatment Facility (VBEC) — location content.
 // Source: docs/superpowers/miller-scrape/19-location-treatment-facility.md
 
+import {
+  EMAIL_INQUIRIES,
+  EMERGENCY_PHONE,
+  VBEC_FULL_NAME,
+} from "./brand";
+
 export const treatmentFacility = {
   hero: {
     eyebrow: "Location",
-    title: "Vaughn Bullough Environmental Centre",
+    title: VBEC_FULL_NAME,
     // Subhead per phase 03.3 — one-line "named for…" line.
     lead:
       "Named for our co-founder Vaughn Bullough — a fully licensed hazardous waste treatment facility 70 kilometres south of Winnipeg on 64 hectares in the rural municipality of Montcalm.",
@@ -28,7 +34,7 @@ export const treatmentFacility = {
   ],
   contact: {
     phone: { display: "(204) 737-2045", href: "tel:+12047372045" },
-    email: "inquiries@millerenvironmental.mb.ca",
-    hours: "24/7 spill response: (204) 957-6327 · Fax: (204) 737-2161",
+    email: EMAIL_INQUIRIES,
+    hours: `24/7 spill response: ${EMERGENCY_PHONE} · Fax: (204) 737-2161`,
   },
 };

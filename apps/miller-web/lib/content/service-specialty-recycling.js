@@ -1,6 +1,8 @@
 // Specialty Recycling — capabilities service content.
 // Source: docs/superpowers/miller-scrape/09-svc-specialty-recycling.md
 
+import { ONLY_IN_CANADA_CLAIM } from "./brand";
+
 export const specialtyRecycling = {
   hero: {
     eyebrow: "Service",
@@ -9,8 +11,7 @@ export const specialtyRecycling = {
       "Miller Environmental is a strong supporter of recycling and continuously investigates options that can be offered to our customers.",
     photo: "/miller/services/specialty-recycling-hero.webp",
   },
-  inlineTrustBadge:
-    "The only hazardous waste management company in Canada with an integrated management system featuring three ISO certifications.",
+  inlineTrustBadge: ONLY_IN_CANADA_CLAIM,
   sections: [
     {
       heading: "Programs implemented",

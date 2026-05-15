@@ -1,12 +1,14 @@
 // Stewardship — compact service content.
 // Source: docs/superpowers/miller-scrape/10-svc-stewardship.md
 
+import { CRADLE_TO_GRAVE_PHRASE } from "./brand";
+
 export const stewardship = {
   hero: {
     eyebrow: "Service",
     title: "Stewardship",
     lead:
-      "Miller Environmental has relationships with a variety of different Stewardship Programs that oversee the cradle to grave management of waste with a focus on recycling.",
+      `Miller Environmental has relationships with a variety of different Stewardship Programs that oversee the ${CRADLE_TO_GRAVE_PHRASE} management of waste with a focus on recycling.`,
     photo: "/miller/services/stewardship-hero.webp",
   },
   sections: [

@@ -1,6 +1,8 @@
 // Research & Development — capabilities service content.
 // Source: docs/superpowers/miller-scrape/08-svc-research-development.md
 
+import { ONLY_IN_CANADA_CLAIM } from "./brand";
+
 export const researchDevelopment = {
   hero: {
     eyebrow: "Service",
@@ -9,8 +11,7 @@ export const researchDevelopment = {
       "Research and Development is an integral part of Miller Environmental focusing on customizing specialized chemical treatments to process waste streams providing niche waste treatment options to our customers.",
     photo: "/miller/services/research-development-hero.webp",
   },
-  inlineTrustBadge:
-    "The only hazardous waste management company in Canada with an integrated management system featuring three ISO certifications.",
+  inlineTrustBadge: ONLY_IN_CANADA_CLAIM,
   sections: [
     {
       heading: "Overview",
