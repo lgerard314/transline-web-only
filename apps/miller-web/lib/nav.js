@@ -88,7 +88,7 @@ export function pageIdFromPath(pathname) {
 // visibility with a single CSS rule. The string list below is the
 // authoritative source; route layouts read it to decide which value to
 // emit.
-export const EMERGENCY_BANNER_ROUTES = {
+const EMERGENCY_BANNER_ROUTES = {
   exact: new Set(["/", "/treatment-facility"]),
   prefix: ["/industrial-services"],
 };

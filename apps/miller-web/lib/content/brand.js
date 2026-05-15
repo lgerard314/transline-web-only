@@ -37,17 +37,3 @@ export const EMAIL_HR = "hr@millerenvironmental.mb.ca";
 export const VBEC_FULL_NAME = "Vaughn Bullough Environmental Centre";
 export const VBEC_SHORT = "VBEC";
 
-// Two distinct addresses — corporate office and the treatment facility
-// (VBEC). Each as an array of display lines so templates can render
-// <address> with line breaks without parsing strings.
-export const WINNIPEG_ADDRESS = [
-  "Miller Environmental Corporation",
-  "1803 Hekla Ave",
-  "Winnipeg, MB R2R 0K3",
-];
-
-export const VBEC_ADDRESS = [
-  "Vaughn Bullough Environmental Centre",
-  "Hwy 14 & 75",
-  "Saint Jean Baptiste, MB R0G 2B0",
-];

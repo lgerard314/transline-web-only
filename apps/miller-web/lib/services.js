@@ -111,10 +111,6 @@ export const SERVICES = [
   },
 ];
 
-export function serviceBySlug(slug) {
-  return SERVICES.find((s) => s.slug === slug);
-}
-
 export function relatedServices(slug, limit = 3) {
   return SERVICES.filter((s) => s.slug !== slug).slice(0, limit);
 }
