@@ -105,7 +105,17 @@ export function TopNav() {
                       aria-haspopup="true"
                       aria-expanded={isOpen}
                       aria-current={page === n.id ? "page" : undefined}
-                      onClick={() => setOpenSub((prev) => (prev === n.id ? null : n.id))}
+                      // Click toggles based on the rendered `aria-expanded`
+                      // state at the moment of click, NOT on stale prev
+                      // state. Previously this read `prev === n.id` and
+                      // toggled it off — but in mouse interactions the
+                      // mouseEnter handler had already set prev to n.id,
+                      // so the click immediately closed the menu the user
+                      // was trying to keep open. Reading from `isOpen`
+                      // (a render-time snapshot of the visible state)
+                      // keeps mouse-hover-then-click idempotent on open
+                      // and only closes on a deliberate second click.
+                      onClick={() => setOpenSub(isOpen ? null : n.id)}
                     >
                       {n.label}
                       <span aria-hidden="true" className="mw-nav-caret">▾</span>
@@ -171,8 +181,11 @@ export function TopNav() {
         // (replaces aria-hidden + manual tabIndex juggling). Avoids the
         // axe `aria-hidden-focus` violation: an aria-hidden container
         // with focusable descendants. inert is widely supported
-        // (Chromium 102+, Safari 15.5+, FF 112+).
-        inert={!menuOpen ? "" : undefined}
+        // (Chromium 102+, Safari 15.5+, FF 112+). React 19: pass a
+        // real boolean — empty-string triggers "not a valid boolean
+        // attribute value" warnings. Spread-conditional keeps the
+        // attribute absent entirely when the drawer is open.
+        {...(menuOpen ? {} : { inert: true })}
       >
         <ul className="tl-mobile-nav__list">
           {NAV_ITEMS.map((n, i) => (

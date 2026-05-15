@@ -18,7 +18,7 @@ export const SERVICES = [
     summary:
       "VBEC facility treatment of inorganic, organic, liquid and solid hazardous waste streams.",
     icon: "▣",
-    photo: "/miller/services/industrial-waste-treatment.webp",
+    photo: "/miller/services/industrial-waste-treatment-hero.webp",
     variant: "capabilities",
   },
   {
@@ -28,7 +28,7 @@ export const SERVICES = [
     summary:
       "Site assessment, containment, excavation, treatment and verification across Western Canada.",
     icon: "△",
-    photo: "/miller/services/environmental-remediation.webp",
+    photo: "/miller/services/remediation-contaminated-soil.webp",
     variant: "bespoke",
   },
   {
@@ -37,7 +37,7 @@ export const SERVICES = [
     title: "Emergency Response",
     summary: "24/7 spill response across Manitoba and the prairies.",
     icon: "✕",
-    photo: "/miller/services/emergency-response.webp",
+    photo: "/miller/services/emergency-response-hero.webp",
     variant: "capabilities",
   },
   {
@@ -47,7 +47,7 @@ export const SERVICES = [
     summary:
       "Scheduled pickup of hazardous and non-hazardous waste streams from customer sites.",
     icon: "◫",
-    photo: "/miller/services/customer-waste-collection.webp",
+    photo: "/miller/services/customer-waste-collection-hero.webp",
     variant: "compact",
   },
   {
@@ -57,7 +57,7 @@ export const SERVICES = [
     summary:
       "Vessel, tank and process cleaning with confined-space and high-pressure capabilities.",
     icon: "◐",
-    photo: "/miller/services/industrial-cleaning.webp",
+    photo: "/miller/services/industrial-cleaning-hero.jpeg",
     variant: "compact",
   },
   {
@@ -66,7 +66,7 @@ export const SERVICES = [
     title: "Project Management",
     summary: "Turnkey project oversight from planning through closeout.",
     icon: "◑",
-    photo: "/miller/services/project-management.webp",
+    photo: "/miller/services/project-management-hero.webp",
     variant: "compact",
   },
   {
@@ -76,7 +76,7 @@ export const SERVICES = [
     summary:
       "Treatment R&D for novel waste streams; bench- to pilot-scale process development.",
     icon: "✦",
-    photo: "/miller/services/research-development.webp",
+    photo: "/miller/services/research-development-hero.webp",
     variant: "capabilities",
   },
   {
@@ -86,7 +86,7 @@ export const SERVICES = [
     summary:
       "Recovery and recycling pathways for specialty waste streams diverted from landfill.",
     icon: "↻",
-    photo: "/miller/services/specialty-recycling.webp",
+    photo: "/miller/services/specialty-recycling-hero.webp",
     variant: "capabilities",
   },
   {
@@ -96,7 +96,7 @@ export const SERVICES = [
     summary:
       "Producer-responsibility programs and end-of-life stewardship for regulated products.",
     icon: "◇",
-    photo: "/miller/services/stewardship.webp",
+    photo: "/miller/services/stewardship-hero.webp",
     variant: "compact",
   },
   {
@@ -106,7 +106,7 @@ export const SERVICES = [
     summary:
       "Liquid, solid and slurry vacuum services with dedicated hazardous-rated equipment.",
     icon: "▽",
-    photo: "/miller/services/vacuum-truck.webp",
+    photo: "/miller/services/vacuum-truck-hero.webp",
     variant: "compact",
   },
 ];

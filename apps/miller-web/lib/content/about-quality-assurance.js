@@ -8,7 +8,7 @@ export const QA = {
   eyebrow: "About",
   title: "Quality Assurance",
   lead: ONLY_IN_CANADA_CLAIM,
-  photo: "/miller/services/about-quality-assurance.webp",
+  photo: "/miller/hero/about-quality-assurance.webp",
 
   intro: {
     heading: "An integrated management system",
