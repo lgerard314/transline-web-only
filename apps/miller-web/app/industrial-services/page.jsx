@@ -2,6 +2,9 @@
 // No hero copy per the scraped live site (file 01).
 import { ServiceCard } from "@white-owl/brand/components";
 import { SERVICES } from "../../lib/services";
+import { EMERGENCY_PHONE } from "../../lib/content/brand";
+
+const EMERGENCY_HREF = `tel:+1${EMERGENCY_PHONE.replace(/\D/g, "")}`;
 
 export const metadata = { title: "Industrial Services" };
 
@@ -39,7 +42,7 @@ export default function ServicesLandingPage() {
           <h2 className="mw-loc-card__title">24/7 spill response</h2>
           <p style={{ marginTop: 8 }}>
             For our 24/7 spill response team, call{" "}
-            <a className="tl-mono" href="tel:+12049576327">(204) 957-6327</a>.
+            <a className="tl-mono" href={EMERGENCY_HREF}>{EMERGENCY_PHONE}</a>.
           </p>
         </div>
       </section>

@@ -7,6 +7,7 @@
 
 import { useRef, useState } from "react";
 import { FormField } from "@white-owl/brand/components";
+import { GENERAL_PHONE } from "../lib/content/brand";
 
 export function RemediationCallback() {
   const [firstName, setFirstName] = useState("");
@@ -59,7 +60,7 @@ export function RemediationCallback() {
         </h3>
         <p>
           A member of the Miller remediation team will reach out shortly. For
-          immediate assistance, call (204) 925-9600.
+          immediate assistance, call {GENERAL_PHONE}.
         </p>
       </div>
     );

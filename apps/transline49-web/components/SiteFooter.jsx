@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ParallelRule } from "@white-owl/brand/components";
+import { ParallelRule, FamilyOfCompanies } from "@white-owl/brand/components";
 
 // Footer columns: pitch + ctas, then three nav columns + an address column.
 // Service links all point to /services (the page contains all four bullets);
@@ -64,6 +64,7 @@ export function SiteFooter() {
           </address>
         </div>
       </div>
+      <FamilyOfCompanies current="tl49" />
       <div className="tl-footer__bot">
         <span>© 2026 TRANSLINE49° ENVIRONMENTAL SERVICES · ALL RIGHTS RESERVED</span>
         <span>U.S.–CANADA TRANSBOUNDARY WASTE · A WHITE OWL FAMILY OFFICE COMPANY</span>

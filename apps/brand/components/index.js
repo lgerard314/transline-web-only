@@ -12,3 +12,4 @@ export { PageHero } from "./PageHero";
 export { ServiceCard } from "./ServiceCard";
 export { ScrollReveal } from "./ScrollReveal";
 export { FormField } from "./FormField";
+export { FamilyOfCompanies } from "./FamilyOfCompanies";

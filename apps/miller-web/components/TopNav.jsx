@@ -13,9 +13,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Logomark } from "./Logomark";
 import { NAV_ITEMS, pageIdFromPath } from "../lib/nav";
+import { GENERAL_PHONE } from "../lib/content/brand";
 
-const GENERAL_PHONE_DISPLAY = "(204) 925-9600";
-const GENERAL_PHONE_HREF    = "tel:+12049259600";
+const GENERAL_PHONE_DISPLAY = GENERAL_PHONE;
+const GENERAL_PHONE_HREF    = `tel:+1${GENERAL_PHONE.replace(/\D/g, "")}`;
 
 export function TopNav() {
   const pathname = usePathname();

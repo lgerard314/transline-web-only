@@ -1054,6 +1054,51 @@ a { color: inherit; text-decoration: none; }
   color: #fff;
   margin: 0 0 16px;
 }
+.tl-family {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding: 20px var(--space-6);
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.tl-family__head {
+  margin: 0 0 10px;
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(230, 238, 242, 0.55);
+}
+.tl-family__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+}
+.tl-family__item {
+  font-size: 14px;
+  color: rgba(230, 238, 242, 0.78);
+}
+.tl-family__link {
+  color: rgba(230, 238, 242, 0.78);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  padding-bottom: 1px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.tl-family__link:hover,
+.tl-family__link:focus-visible {
+  color: #fff;
+  border-bottom-color: rgba(255,255,255,0.5);
+}
+.tl-family__current {
+  color: #fff;
+  font-weight: 600;
+}
+@media (max-width: 600px) {
+  .tl-family__list { flex-direction: column; gap: 6px; }
+}
+
 .tl-footer__bot {
   border-top: 1px solid rgba(255,255,255,0.08);
   padding: 24px var(--space-6);

@@ -1,16 +1,18 @@
 // Miller site footer. Four columns (Services / Company / Locations /
-// Contact) plus a social row, per design spec §2.3. The
-// `FamilyOfCompanies` cross-link strip is deferred to phase 5.
+// Contact) plus a social row, per design spec §2.3. Phase 05 added the
+// `FamilyOfCompanies` cross-link strip above the bottom bar.
 //
 // Internal links use next/link so prefetch behaviour matches the rest of
 // the app; the Google Maps link uses a plain anchor with rel="noreferrer
 // noopener" because it points off-site.
 import Link from "next/link";
+import { FamilyOfCompanies } from "@white-owl/brand/components";
+import { GENERAL_PHONE, EMERGENCY_PHONE } from "../lib/content/brand";
 
-const GENERAL_PHONE_DISPLAY = "(204) 925-9600";
-const GENERAL_PHONE_HREF    = "tel:+12049259600";
-const EMERGENCY_DISPLAY     = "(204) 957-6327";
-const EMERGENCY_HREF        = "tel:+12049576327";
+const GENERAL_PHONE_DISPLAY = GENERAL_PHONE;
+const GENERAL_PHONE_HREF    = `tel:+1${GENERAL_PHONE.replace(/\D/g, "")}`;
+const EMERGENCY_DISPLAY     = EMERGENCY_PHONE;
+const EMERGENCY_HREF        = `tel:+1${EMERGENCY_PHONE.replace(/\D/g, "")}`;
 const MAPS_URL =
   "https://www.google.com/maps/search/?api=1&query=1803+Hekla+Avenue+Winnipeg+MB+R2R+0J7";
 
@@ -88,6 +90,7 @@ export function SiteFooter() {
           </address>
         </div>
       </div>
+      <FamilyOfCompanies current="miller" />
       <div className="tl-footer__bot">
         <span>© {new Date().getFullYear()} MILLER ENVIRONMENTAL · ALL RIGHTS RESERVED</span>
         <span>HAZARDOUS WASTE MANAGEMENT · WINNIPEG, MANITOBA</span>

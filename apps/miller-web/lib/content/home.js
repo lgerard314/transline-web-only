@@ -42,8 +42,10 @@ export const HOME = {
 
   // VBEC promoted to position 4 (procurement journey wants to see the
   // facility). Capabilities verbatim from 19-location-treatment-facility.md.
+  // Position 3 (services lead) already expanded the full name once; per
+  // design spec §5.4, position 4 uses the short form.
   vbec: {
-    eyebrow: `${VBEC_FULL_NAME} (${VBEC_SHORT})`,
+    eyebrow: VBEC_SHORT,
     title: "Our Facility",
     body:
       `${VBEC_SHORT} sits on 64 hectares in the rural municipality of Montcalm, 70 km south of Winnipeg. ` +

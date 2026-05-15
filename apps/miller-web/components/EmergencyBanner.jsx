@@ -13,9 +13,10 @@
 // out the full phone number for screen-reader users.
 
 import { useEffect, useState } from "react";
+import { EMERGENCY_PHONE } from "../lib/content/brand";
 
-const EMERGENCY_DISPLAY = "(204) 957-6327";
-const EMERGENCY_HREF    = "tel:+12049576327";
+const EMERGENCY_DISPLAY = EMERGENCY_PHONE;
+const EMERGENCY_HREF    = `tel:+1${EMERGENCY_PHONE.replace(/\D/g, "")}`;
 const COOKIE_NAME       = "miller_eb_dismissed";
 
 export function EmergencyBanner({ initialDismissed = false }) {

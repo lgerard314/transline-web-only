@@ -8,10 +8,9 @@
 // content-layer rule (design spec §5.1). The template owns layout
 // markup only.
 //
-// The "only in Canada" trust badge eventually sources from
-// `lib/content/brand.js` (phase 04.1). Until that module exists the
-// caller can pass an explicit `trustBadge` prop, or fall back to the
-// canonical phrase via the constant below.
+// The "only in Canada" trust badge sources from `lib/content/brand.js`
+// (single source — copy edits flow). Callers may override with an
+// explicit `trustBadge` prop.
 
 import Link from "next/link";
 import { PageHero, ServiceCard } from "@white-owl/brand/components";
