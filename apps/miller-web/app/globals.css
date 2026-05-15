@@ -7,6 +7,17 @@
 */
 
 /* ─────────────────────────────────────────────────────────────────
+   A11y: token overrides for WCAG AA contrast on Miller pages.
+   Default --c-ink-3 (#9C8975) only reaches ~3.0:1 on the warm cream
+   --c-bg, which fails AA for normal text. Darken to #736049 — ~5.3:1
+   on cream, ~4.9:1 on line-2 (tinted sections), ~6.0:1 on white.
+   Scoped to Miller so TL49 chrome is untouched.
+   ───────────────────────────────────────────────────────────────── */
+html[data-brand="miller"] {
+  --c-ink-3: #736049;
+}
+
+/* ─────────────────────────────────────────────────────────────────
    EmergencyBanner — sticky above TopNav on allow-listed routes only.
    Gated per-route via body[data-banner="on|off"] so the banner is rendered
    unconditionally and never paints if the route opts out.
@@ -206,7 +217,10 @@ body[data-banner="on"] .miller-eb { display: block; }
   font-size: 11px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--c-ink-3);
+  /* Footer bg is dark navy (#0B1F2A). `--c-ink-3` is tuned for light
+     surfaces and fails AA contrast here. Use the on-navy cream token,
+     softened to ~70% — ~6.5:1 on the navy bg. */
+  color: rgba(245, 230, 203, 0.75);
   margin: 0 0 12px 0;
 }
 
@@ -393,9 +407,17 @@ body[data-banner="on"] .miller-eb { display: block; }
   font-size: 11.5px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--c-accent);
+  /* Use the darker accent variant for AA contrast on light surfaces.
+     `--c-accent` (#2EBFA5 in the deep palette) only reaches ~2.0:1 on
+     the cream bg. `#0A6F5E` is ~5.4:1 on cream and still reads as the
+     brand teal. Dark sections re-bind below. */
+  color: #0A6F5E;
   margin: 0 0 12px 0;
 }
+/* Hardcoded teal (deep-palette accent) so the rule wins regardless of
+   cascade order or axe-core variable resolution quirks. #2EBFA5 on the
+   #06141B navy bg is ~8.1:1, well over AA. */
+.mw-section--dark .mw-section__eyebrow { color: #2EBFA5; }
 .mw-section__title { margin: 0 0 16px 0; }
 .mw-section__lead { font-size: 18px; color: var(--c-ink-2); max-width: 70ch; }
 .mw-section--dark .mw-section__lead { color: rgba(230,238,242,0.85); }

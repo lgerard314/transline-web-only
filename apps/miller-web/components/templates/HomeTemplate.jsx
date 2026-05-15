@@ -83,8 +83,12 @@ export function HomeTemplate({ content }) {
       </section>
 
       {/* 2. TRUST STRIP */}
-      <section className="tl-container mw-section">
+      <section className="tl-container mw-section" aria-labelledby="mw-trust-heading">
         <div className="mw-trust-strip">
+          {/* Visually-hidden h2 keeps heading order H1 → H2 → H3 (cert
+              card names) for a11y. Trust strip visual design has no
+              section title — the eyebrow + claim copy carry it. */}
+          <h2 id="mw-trust-heading" className="tl-sr-only">Certifications and tenure</h2>
           <div className="mw-trust-strip__head">
             <p className="mw-trust-strip__claim">{c.trust.claim}</p>
             <span className="mw-trust-strip__tenure">{c.trust.tenure}</span>

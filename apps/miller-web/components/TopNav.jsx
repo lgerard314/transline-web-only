@@ -158,13 +158,21 @@ export function TopNav() {
       </header>
 
       {/* Mobile drawer — outside the header so its position:fixed isn't
-          trapped by any backdrop-filter containing block. */}
-      <div
+          trapped by any backdrop-filter containing block. Rendered as a
+          <nav> landmark so the inner menu items are inside an a11y region
+          (avoids the axe `region` violation). */}
+      <nav
         id="mw-mobile-nav"
         className="tl-mobile-nav mw-mobile-nav"
         data-tl-mobile-nav=""
         data-open={menuOpen ? "1" : "0"}
-        aria-hidden={!menuOpen}
+        aria-label="Mobile"
+        // `inert` removes the closed drawer from a11y tree + tab order
+        // (replaces aria-hidden + manual tabIndex juggling). Avoids the
+        // axe `aria-hidden-focus` violation: an aria-hidden container
+        // with focusable descendants. inert is widely supported
+        // (Chromium 102+, Safari 15.5+, FF 112+).
+        inert={!menuOpen ? "" : undefined}
       >
         <ul className="tl-mobile-nav__list">
           {NAV_ITEMS.map((n, i) => (
@@ -194,7 +202,7 @@ export function TopNav() {
             Call {GENERAL_PHONE_DISPLAY}
           </a>
         </div>
-      </div>
+      </nav>
     </>
   );
 }
