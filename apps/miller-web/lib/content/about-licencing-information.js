@@ -2,9 +2,8 @@
 // Source: docs/superpowers/miller-scrape/15-about-licencing.md
 //
 // The 3 cert/license cards declare { name, code, href, sizeKB } per phase
-// 03.3. `href` points at placeholder PDFs under /licences/; phase 05 wires
-// the real files. ESLint `no-restricted-syntax` blocks href="#" so these
-// must be real paths even when the file isn't shipped yet.
+// 03.3. `href` points at real PDFs under /licences/ extracted from
+// millerenvironmental.ca in phase 05.
 
 import { CRADLE_TO_GRAVE_PHRASE } from "./brand";
 
@@ -27,19 +26,19 @@ export const aboutLicencingInformation = {
       name: "VBEC Processing Facility Operating Licence",
       code: "58 HW S2 RRRR",
       href: "/licences/vbec-processing-facility-operating-licence.pdf",
-      sizeKB: 300,
+      sizeKB: 194,
     },
     {
       name: "Hazardous Waste Transport Licence",
       code: "MBC00202",
       href: "/licences/hazardous-waste-transport-licence.pdf",
-      sizeKB: 300,
+      sizeKB: 5143,
     },
     {
       name: "1803 Hekla Ave. Operating Licence",
       code: "211 HW RR",
       href: "/licences/1803-hekla-ave-operating-licence.pdf",
-      sizeKB: 300,
+      sizeKB: 155,
     },
   ],
 };

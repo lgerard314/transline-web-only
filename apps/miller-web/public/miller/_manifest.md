@@ -134,8 +134,13 @@ The single published Process page.
   site only had a `-scaled.jpg` version. Next.js's image pipeline will
   produce WebP on demand if we wire `next/image`.
 
-## What's missing
-- **MHCA COR 2023 mark.** Not in the scraped image set. Phase 04 either pulls
-  from a sibling URL or links straight to the COR PDF on the live site.
-- **OG image (`/og.png`)** for social card previews. The live site has one
-  on the homepage `<meta property="og:image">` — pull it in phase 05 SEO.
+## Phase 05 additions
+- **MHCA COR 2023 mark** (`/miller/certs/mhca-cor-2023.webp`) — converted
+  from the `COR®-logo-black-background.pdf` published on the live
+  licencing page (the only COR asset Miller publishes).
+- **OG image** (`/og.webp`) — fetched from the live site's
+  `<meta property="og:image">` on the homepage.
+- **ISO PDFs** (`/certs/iso-{9001-2015,14001-2015,45001-2018}.pdf`) and
+  **licence PDFs** (`/licences/*.pdf`) — fetched from
+  millerenvironmental.ca. Real `sizeKB` written into
+  `lib/certs.js` + `lib/content/about-licencing-information.js`.
