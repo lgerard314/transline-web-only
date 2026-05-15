@@ -6,6 +6,7 @@ import { TopNav } from "../components/TopNav";
 import { SiteFooter } from "../components/SiteFooter";
 import { EmergencyBanner } from "../components/EmergencyBanner";
 import { BannerRouteGate } from "../components/BannerRouteGate";
+import { OVER_25_YEARS } from "../lib/content/brand";
 
 // Tweaks panel is dev-only. Import-site gate via top-level await so the
 // module is omitted from the production bundle entirely.
@@ -19,8 +20,7 @@ export const metadata = {
     default: "Miller Environmental — Hazardous Waste Management",
     template: "%s · Miller Environmental",
   },
-  description:
-    "Miller Environmental is a Manitoba-based hazardous waste management company with three ISO certifications and over 25 years of operating history.",
+  description: `Miller Environmental is a Manitoba-based hazardous waste management company with three ISO certifications and ${OVER_25_YEARS.toLowerCase()} of operating history.`,
   metadataBase: new URL("https://millerenvironmental.ca"),
   openGraph: {
     type: "website",

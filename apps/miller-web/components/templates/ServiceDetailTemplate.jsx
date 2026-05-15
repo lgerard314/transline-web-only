@@ -16,11 +16,7 @@
 import Link from "next/link";
 import { PageHero, ServiceCard } from "@white-owl/brand/components";
 import { relatedServices } from "../../lib/services";
-
-// TODO(phase-4): replace with import from lib/content/brand.js once that
-// module lands.
-const ONLY_IN_CANADA_TRUST =
-  "The only hazardous waste management company in Canada with an integrated management system featuring three ISO certifications.";
+import { ONLY_IN_CANADA_CLAIM } from "../../lib/content/brand";
 
 export function ServiceDetailTemplate({
   variant = "compact",
@@ -51,7 +47,7 @@ export function ServiceDetailTemplate({
         {variant === "capabilities" ? (
           <CapabilitiesBody
             groups={groups}
-            trustBadge={trustBadge ?? ONLY_IN_CANADA_TRUST}
+            trustBadge={trustBadge ?? ONLY_IN_CANADA_CLAIM}
           />
         ) : (
           <CompactBody sections={sections} bullets={bullets} />
