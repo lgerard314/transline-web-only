@@ -2,7 +2,7 @@
 // Form controls used inside <TweaksPanel>. Each renders into a single row of
 // the panel and emits onChange in the type it received (string → string,
 // number → number) so the persisted JSON stays well-typed.
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function TweakSection({ label, children }) {
   return (
@@ -48,8 +48,13 @@ export function TweakSelect({ label, value, options, onChange }) {
 export function TweakRadio({ label, value, options, onChange }) {
   const trackRef = useRef(null);
   const [dragging, setDragging] = useState(false);
+  // Mirror `value` into a ref so the long-lived pointermove handler can read
+  // the latest selection without re-binding. Sync via effect, not in render
+  // (assigning to .current during render trips react-hooks/refs).
   const valueRef = useRef(value);
-  valueRef.current = value;
+  useEffect(() => {
+    valueRef.current = value;
+  }, [value]);
 
   const labelLen = (o) => String(typeof o === "object" ? o.label : o).length;
   const maxLen = options.reduce((m, o) => Math.max(m, labelLen(o)), 0);

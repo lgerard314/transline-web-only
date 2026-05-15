@@ -46,7 +46,7 @@ export default function AboutPage() {
               permitting assistance, and logistics coordination.
             </p>
             <p className="tl-body" style={{ marginTop: 24, fontSize: 17, lineHeight: 1.55 }}>
-              The 49th parallel is the line on the map. We're the people who help your material
+              The 49th parallel is the line on the map. We&apos;re the people who help your material
               cross it cleanly — with the right permits, the right paperwork, and a recycling-first
               preference where the material allows.
             </p>
@@ -153,7 +153,7 @@ export default function AboutPage() {
             <p className="tl-lead" style={{ marginTop: 20, color: "rgba(230,238,242,0.85)" }}>
               TransLine49° emphasizes recycling and repurposing of waste where possible to make
               disposal options more environmentally sustainable. The cleanest waste is the waste
-              that doesn't end up in a landfill.
+              that doesn&apos;t end up in a landfill.
             </p>
           </div>
           <div data-tlgrid-collapse="" data-reveal-stagger="" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>

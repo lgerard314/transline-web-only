@@ -247,7 +247,7 @@ export default function ServicesPage() {
               Need to know whether your material has a viable Canadian path?
             </h2>
             <p className="tl-lead" style={{ color: "rgba(230,238,242,0.78)", marginTop: 20, maxWidth: "50ch" }}>
-              Submit the basics and we'll review options. No commitment.
+              Submit the basics and we&apos;ll review options. No commitment.
             </p>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>

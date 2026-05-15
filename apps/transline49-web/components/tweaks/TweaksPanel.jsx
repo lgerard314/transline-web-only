@@ -6,11 +6,15 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { TWEAKS_STYLE } from "./styles";
 
+const PAD = 16;
+
 export function TweaksPanel({ title = "Tweaks", children }) {
   const [open, setOpen] = useState(false);
+  // Drag position in state (not ref) so panel re-renders on move. Re-renders
+  // during drag are cheap — the panel is small — and using state keeps the
+  // component compliant with React 19's no-refs-during-render rule.
+  const [offset, setOffset] = useState({ x: PAD, y: PAD });
   const dragRef = useRef(null);
-  const offsetRef = useRef({ x: 16, y: 16 });
-  const PAD = 16;
 
   const clampToViewport = useCallback(() => {
     const panel = dragRef.current;
@@ -19,20 +23,15 @@ export function TweaksPanel({ title = "Tweaks", children }) {
     const h = panel.offsetHeight;
     const maxRight = Math.max(PAD, window.innerWidth - w - PAD);
     const maxBottom = Math.max(PAD, window.innerHeight - h - PAD);
-    offsetRef.current = {
-      x: Math.min(maxRight, Math.max(PAD, offsetRef.current.x)),
-      y: Math.min(maxBottom, Math.max(PAD, offsetRef.current.y)),
-    };
-    panel.style.right = offsetRef.current.x + "px";
-    panel.style.bottom = offsetRef.current.y + "px";
+    setOffset((o) => ({
+      x: Math.min(maxRight, Math.max(PAD, o.x)),
+      y: Math.min(maxBottom, Math.max(PAD, o.y)),
+    }));
   }, []);
 
-  // Open automatically if URL has ?tweaks=1; also listen for host messages.
+  // Mount: check URL for ?tweaks=1, subscribe to host edit-mode messages,
+  // announce availability to a potential parent shell.
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (new URLSearchParams(window.location.search).get("tweaks") === "1") {
-      setOpen(true);
-    }
     const onMsg = (e) => {
       const t = e?.data?.type;
       if (t === "__activate_edit_mode") setOpen(true);
@@ -42,6 +41,10 @@ export function TweaksPanel({ title = "Tweaks", children }) {
     try {
       window.parent?.postMessage({ type: "__edit_mode_available" }, "*");
     } catch {}
+    if (new URLSearchParams(window.location.search).get("tweaks") === "1") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setOpen(true);
+    }
     return () => window.removeEventListener("message", onMsg);
   }, []);
 
@@ -73,11 +76,9 @@ export function TweaksPanel({ title = "Tweaks", children }) {
     const startRight = window.innerWidth - r.right;
     const startBottom = window.innerHeight - r.bottom;
     const move = (ev) => {
-      offsetRef.current = {
-        x: startRight - (ev.clientX - sx),
-        y: startBottom - (ev.clientY - sy),
-      };
-      clampToViewport();
+      const x = startRight - (ev.clientX - sx);
+      const y = startBottom - (ev.clientY - sy);
+      setOffset({ x, y });
     };
     const up = () => {
       window.removeEventListener("mousemove", move);
@@ -95,7 +96,7 @@ export function TweaksPanel({ title = "Tweaks", children }) {
         ref={dragRef}
         className="twk-panel"
         data-noncommentable=""
-        style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}
+        style={{ right: offset.x, bottom: offset.y }}
       >
         <div className="twk-hd" onMouseDown={onDragStart}>
           <b>{title}</b>

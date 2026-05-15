@@ -32,7 +32,10 @@ export function ContactClient() {
   const [step, setStep] = useState(0);
   const [form, setForm] = useState(INITIAL_FORM);
   const [errors, setErrors] = useState({});
-  const [submitted, setSubmitted] = useState(false);
+  // submission holds { ref, receivedAt } once submitted; null while editing.
+  // Captured at submit time so render stays pure (no Date.now() in render).
+  const [submission, setSubmission] = useState(null);
+  const submitted = submission !== null;
 
   const update = (k, v) => {
     setForm((f) => ({ ...f, [k]: v }));
@@ -83,7 +86,13 @@ export function ContactClient() {
     setStep((s) => Math.max(0, s - 1));
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-  const submit = () => setSubmitted(true);
+  const submit = () => {
+    const now = new Date();
+    setSubmission({
+      ref: `TL49-${now.getTime().toString(36).toUpperCase().slice(-6)}`,
+      receivedAt: now.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }).toUpperCase(),
+    });
+  };
 
   if (submitted) {
     return (
@@ -92,7 +101,7 @@ export function ContactClient() {
           eyebrow="PROJECT INTAKE · RECEIVED"
           title={
             <>
-              Thanks. We've got your project<span style={{ color: "var(--c-accent)" }}>.</span>
+              Thanks. We&apos;ve got your project<span style={{ color: "var(--c-accent)" }}>.</span>
             </>
           }
           lead="A team member will review the inquiry and follow up. For urgent matters call (314) 934-2133."
@@ -106,7 +115,7 @@ export function ContactClient() {
               <button
                 className="tl-btn tl-btn--ghost-light"
                 onClick={() => {
-                  setSubmitted(false);
+                  setSubmission(null);
                   setStep(0);
                   setForm(INITIAL_FORM);
                 }}
@@ -116,8 +125,8 @@ export function ContactClient() {
             </>
           }
           meta={[
-            { k: "REF", v: `TL49-${Date.now().toString(36).toUpperCase().slice(-6)}` },
-            { k: "RECEIVED", v: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }).toUpperCase() },
+            { k: "REF", v: submission.ref },
+            { k: "RECEIVED", v: submission.receivedAt },
             { k: "NEXT STEP", v: "A TEAM MEMBER WILL REVIEW" },
           ]}
         />
@@ -248,7 +257,7 @@ export function ContactClient() {
 
               {step === 1 && (
                 <div>
-                  <h3 className="tl-display tl-display--s" style={{ marginBottom: 24 }}>What's the material?</h3>
+                  <h3 className="tl-display tl-display--s" style={{ marginBottom: 24 }}>What&apos;s the material?</h3>
                   <FormField label="Waste description" required textarea value={form.description} err={errors.description} onChange={(v) => update("description", v)} placeholder="Describe the material in plain language — what it is, what process it came from, anything notable about it." />
 
                   <div className="tl-field">

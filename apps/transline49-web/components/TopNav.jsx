@@ -13,10 +13,15 @@ export function TopNav() {
   const page = pageIdFromPath(pathname);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Close the drawer whenever the route changes.
-  useEffect(() => {
+  // React 19's "reset state on prop change" pattern: track the previous
+  // pathname; if it changed, force the menu closed. Runs during render so
+  // we don't need an effect (effect-based syncing trips the
+  // react-hooks/set-state-in-effect rule).
+  const [prevPath, setPrevPath] = useState(pathname);
+  if (prevPath !== pathname) {
+    setPrevPath(pathname);
     setMenuOpen(false);
-  }, [pathname]);
+  }
 
   // Lock body scroll while drawer is open.
   useEffect(() => {
