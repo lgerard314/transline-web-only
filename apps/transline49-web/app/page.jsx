@@ -1,22 +1,23 @@
-// page-home.jsx
-const HomePage = ({ onNav, tweaks }) => {
-  const heroVariant = tweaks.heroVariant || "photo";
-  const heroPhoto = TL_PHOTOS[tweaks.heroPhoto || "heroTruck"];
+import Link from "next/link";
+import { TL_PHOTOS } from "@/lib/photos";
+import { HeroPhoto } from "@/components/HeroPhoto";
+import { BorderMap } from "@/components/BorderMap";
+import { ParallelRule } from "@/components/ParallelRule";
+import { TrustBar } from "@/components/TrustBar";
+import { SectionHead } from "@/components/SectionHead";
+import { ServiceCard } from "@/components/ServiceCard";
+import { Icon } from "@/components/Icon";
+import { Marquee } from "@/components/Marquee";
+import { ProcessFlowSimple } from "@/components/ProcessFlow";
+
+export default function HomePage() {
+  const heroPhoto = TL_PHOTOS.heroTruck;
 
   return (
     <div className="tl-pagewrap">
       {/* ── Hero ───────────────────────────────────────────────── */}
-      <section className="tl-hero" data-variant={heroVariant}>
-        <HeroPhoto src={heroPhoto} variant={heroVariant} />
-        {heroVariant === "map" && (
-          <div style={{ position: "absolute", inset: 0, zIndex: 1, opacity: 0.6, pointerEvents: "none" }}>
-            <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <div style={{ width: "100%", maxWidth: 1100, padding: "0 24px" }}>
-                <BorderMap height={400} />
-              </div>
-            </div>
-          </div>
-        )}
+      <section className="tl-hero" data-variant="photo">
+        <HeroPhoto src={heroPhoto} variant="photo" />
 
         <div className="tl-container tl-hero__inner">
           <div className="tl-hero__rule">
@@ -36,9 +37,9 @@ const HomePage = ({ onNav, tweaks }) => {
           </p>
 
           <div className="tl-hero__ctas">
-            <button className="tl-btn tl-btn--primary tl-btn--lg" onClick={() => onNav("contact")}>
+            <Link href="/contact" className="tl-btn tl-btn--primary tl-btn--lg">
               Start a Project <span className="tl-btn-arr">→</span>
-            </button>
+            </Link>
             <a className="tl-btn tl-btn--ghost-light tl-btn--lg" href="tel:+13149342133">
               <Icon name="phone" /> (314) 934-2133
             </a>
@@ -69,41 +70,37 @@ const HomePage = ({ onNav, tweaks }) => {
             title="A practical bridge across the 49th parallel."
             lead="Four core capabilities. We handle the messy parts of moving waste from a U.S. generator to a Canadian receiving facility — from paper to wheels-up."
             right={
-              <button className="tl-btn tl-btn--ghost" onClick={() => onNav("services")}>
+              <Link href="/services" className="tl-btn tl-btn--ghost">
                 See all services <span className="tl-btn-arr">→</span>
-              </button>
+              </Link>
             }
           />
         </div>
 
-        <div className="tl-services-grid" data-reveal-stagger>
+        <div className="tl-services-grid" data-reveal-stagger="">
           <ServiceCard
             num="S/01"
             title="Cross-Border Waste Movement"
             body="Support for moving hazardous and non-hazardous waste from the United States into Canada, from project scoping through completion."
             icon={<Icon name="border" />}
-            onClick={() => onNav("services")}
           />
           <ServiceCard
             num="S/02"
             title="Hazardous Waste Permitting"
             body="Assistance with cross-border hazardous waste permitting requirements, documentation, and the workflow between regulators."
             icon={<Icon name="permit" />}
-            onClick={() => onNav("services")}
           />
           <ServiceCard
             num="S/03"
             title="Logistics Coordination"
             body="Scheduling and coordination of material movement between generators, carriers, and receiving facilities — without the back-and-forth."
             icon={<Icon name="truck" />}
-            onClick={() => onNav("services")}
           />
           <ServiceCard
             num="S/04"
             title="Disposal & Recycling Access"
             body="Access to Canadian treatment, disposal, recycling, and repurposing options — with a recycling-first preference where viable."
             icon={<Icon name="recycle" />}
-            onClick={() => onNav("services")}
           />
         </div>
       </section>
@@ -117,23 +114,11 @@ const HomePage = ({ onNav, tweaks }) => {
             lead="When a U.S. generator needs a Canadian outcome, three things have to land together. Companies use us to make that happen."
           />
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 32 }} data-tlgrid-collapse data-reveal-stagger>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 32 }} data-tlgrid-collapse="" data-reveal-stagger="">
             {[
-              {
-                kn: "01",
-                t: "Navigate complexity",
-                b: "Cross-border hazardous waste movement involves regulatory steps, paperwork, and coordination that don't map cleanly to a domestic disposal job.",
-              },
-              {
-                kn: "02",
-                t: "Access Canadian options",
-                b: "We connect U.S. customers with Canadian treatment, disposal, recycling, and repurposing pathways that may not be visible from south of the border.",
-              },
-              {
-                kn: "03",
-                t: "Improve environmental outcomes",
-                b: "Emphasis on recycling and repurposing where viable, with a preference for the most sustainable disposal option available for the material.",
-              },
+              { kn: "01", t: "Navigate complexity",          b: "Cross-border hazardous waste movement involves regulatory steps, paperwork, and coordination that don't map cleanly to a domestic disposal job." },
+              { kn: "02", t: "Access Canadian options",      b: "We connect U.S. customers with Canadian treatment, disposal, recycling, and repurposing pathways that may not be visible from south of the border." },
+              { kn: "03", t: "Improve environmental outcomes", b: "Emphasis on recycling and repurposing where viable, with a preference for the most sustainable disposal option available for the material." },
             ].map((c, i) => (
               <div key={i} style={{ borderTop: "2px solid var(--c-navy)", paddingTop: 20 }}>
                 <div className="tl-keynum">{c.kn}</div>
@@ -148,7 +133,7 @@ const HomePage = ({ onNav, tweaks }) => {
       {/* ── How we do it (simplified) ─────────────────────────── */}
       <section className="tl-section">
         <div className="tl-container">
-          <ProcessFlowSimple onNav={onNav} />
+          <ProcessFlowSimple />
         </div>
       </section>
 
@@ -163,7 +148,7 @@ const HomePage = ({ onNav, tweaks }) => {
 
       {/* ── Partner / affiliation ─────────────────────────────── */}
       <section className="tl-section" style={{ background: "var(--c-surface)", borderBottom: "1px solid var(--c-line)" }}>
-        <div className="tl-container" data-tlgrid-collapse style={{ display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: 64, alignItems: "center" }}>
+        <div className="tl-container" data-tlgrid-collapse="" style={{ display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: 64, alignItems: "center" }}>
           <div>
             <ParallelRule label="04 · NETWORK" />
             <h2 className="tl-display tl-display--l" style={{ marginTop: 24 }}>
@@ -175,7 +160,7 @@ const HomePage = ({ onNav, tweaks }) => {
               shipments and permitting guidance.
             </p>
 
-            <div data-tlgrid-collapse data-reveal-stagger className="tl-meta-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, marginTop: 36, borderTop: "1px solid var(--c-line)" }}>
+            <div data-tlgrid-collapse="" data-reveal-stagger="" className="tl-meta-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, marginTop: 36, borderTop: "1px solid var(--c-line)" }}>
               {[
                 { k: "U.S. BASE", v: "St. Louis, Missouri" },
                 { k: "OPERATIONAL PARTNER", v: "Miller Environmental Corp." },
@@ -190,9 +175,9 @@ const HomePage = ({ onNav, tweaks }) => {
             </div>
 
             <div style={{ marginTop: 32 }}>
-              <button className="tl-btn tl-btn--dark" onClick={() => onNav("about")}>
+              <Link href="/about" className="tl-btn tl-btn--dark">
                 About TransLine49° <span className="tl-btn-arr">→</span>
-              </button>
+              </Link>
             </div>
           </div>
 
@@ -206,7 +191,7 @@ const HomePage = ({ onNav, tweaks }) => {
                 <span className="tl-mono" style={{ color: "var(--c-accent)", fontSize: 11 }}>LIVE PATHWAYS</span>
               </div>
               <BorderMap height={280} />
-              <div data-tlgrid-collapse style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16, marginTop: 24, paddingTop: 16, borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+              <div data-tlgrid-collapse="" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16, marginTop: 24, paddingTop: 16, borderTop: "1px solid rgba(255,255,255,0.08)" }}>
                 {[
                   { k: "ORIGIN", v: "St. Louis, MO" },
                   { k: "PRIMARY", v: "ON · AB · QC" },
@@ -235,9 +220,9 @@ const HomePage = ({ onNav, tweaks }) => {
             start with a quick call.
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", marginTop: 40, flexWrap: "wrap" }}>
-            <button className="tl-btn tl-btn--primary tl-btn--lg" onClick={() => onNav("contact")}>
+            <Link href="/contact" className="tl-btn tl-btn--primary tl-btn--lg">
               Start a Project <span className="tl-btn-arr">→</span>
-            </button>
+            </Link>
             <a className="tl-btn tl-btn--ghost-light tl-btn--lg" href="tel:+13149342133">
               <Icon name="phone" /> (314) 934-2133
             </a>
@@ -246,6 +231,4 @@ const HomePage = ({ onNav, tweaks }) => {
       </section>
     </div>
   );
-};
-
-window.HomePage = HomePage;
+}

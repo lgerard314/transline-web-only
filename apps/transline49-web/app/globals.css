@@ -3,6 +3,19 @@
    Industrial editorial, U.S. → Canada cross-border waste services
    ───────────────────────────────────────────────────────────────── */
 
+html, body { height: 100%; }
+body { background: var(--c-bg, #F7F1E6); margin: 0; }
+
+/* Skip link — visible only on focus, an escape hatch for keyboard users. */
+.tl-skip {
+  position: absolute; left: -9999px; top: 0; padding: 12px 18px;
+  background: var(--c-navy, #3B2418); color: #fff;
+  font-family: var(--font-mono, ui-monospace, monospace); font-size: 12px;
+  letter-spacing: 0.08em; text-transform: uppercase; z-index: 1000;
+  border-radius: 0 0 8px 0; text-decoration: none;
+}
+.tl-skip:focus { left: 0; outline: 2px solid var(--c-accent, #A85A2C); outline-offset: 2px; }
+
 :root {
   /* Brand color tokens (defaults; can be re-bound by Tweaks via .palette-*) */
   --c-bg:        #F7F1E6;   /* warm cream */

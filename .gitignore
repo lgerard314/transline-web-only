@@ -3,3 +3,30 @@
 .aws/playwright-menu.py
 .aws/playwright-menu-debug.py
 .claude/
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output
+.next/
+out/
+dist/
+build/
+
+# Env
+.env*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/
+Thumbs.db
+
+# Vercel
+.vercel

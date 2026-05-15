@@ -1,0 +1,14 @@
+{
+  "name": "transline49-monorepo",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=transline49-web",
+    "build": "npm run build --workspace=transline49-web",
+    "start": "npm run start --workspace=transline49-web",
+    "lint": "npm run lint --workspace=transline49-web"
+  }
+}
