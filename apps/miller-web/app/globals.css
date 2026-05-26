@@ -421,17 +421,12 @@ body[data-banner="on"] .miller-eb { display: block; }
   font-size: 11.5px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  /* Use the darker accent variant for AA contrast on light surfaces.
-     `--c-accent` (#2EBFA5 in the deep palette) only reaches ~2.0:1 on
-     the cream bg. `#0A6F5E` is ~5.4:1 on cream and still reads as the
-     brand teal. Dark sections re-bind below. */
-  color: #0A6F5E;
+  /* Eyebrow uses the darker terracotta variant for AA contrast on the warm cream surface — `--c-accent-2` (#8A4720) reaches ~5.5:1 on `--c-bg`. Dark sections re-bind below. */
+  color: var(--c-accent-2);
   margin: 0 0 12px 0;
 }
-/* Hardcoded teal (deep-palette accent) so the rule wins regardless of
-   cascade order or axe-core variable resolution quirks. #2EBFA5 on the
-   #06141B navy bg is ~8.1:1, well over AA. */
-.mw-section--dark .mw-section__eyebrow { color: #2EBFA5; }
+/* On dark walnut surfaces (`--c-navy` #3B2418 in the clay palette) the brand amber gives ~6:1 contrast and stays inside the warm clay/terracotta family. */
+.mw-section--dark .mw-section__eyebrow { color: var(--c-amber); }
 .mw-section__title { margin: 0 0 16px 0; }
 .mw-section__lead { font-size: 18px; color: var(--c-ink-2); max-width: 70ch; }
 .mw-section--dark .mw-section__lead { color: rgba(230,238,242,0.85); }
@@ -566,7 +561,7 @@ body[data-banner="on"] .miller-eb { display: block; }
 .mw-callback__ok {
   margin-top: 16px;
   padding: 12px 14px;
-  background: rgba(46,191,165,0.10);
+  background: rgba(168,90,44,0.10);
   border: 1px solid var(--c-accent);
   border-radius: 10px;
   color: var(--c-ink);

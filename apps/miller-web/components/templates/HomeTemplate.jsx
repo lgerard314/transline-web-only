@@ -58,11 +58,11 @@ export function HomeTemplate({ content }) {
         </div>
         <div className="tl-container tl-hero__inner" style={{ position: "relative", zIndex: 2 }}>
           <div className="tl-hero__rule">
-            <span className="tl-parallel__tick" style={{ borderColor: "rgba(46,191,165,0.85)" }} />
+            <span className="tl-parallel__tick" style={{ borderColor: "var(--c-accent)" }} />
             <span className="tl-mono">{c.hero.eyebrow}</span>
             <span
               className="tl-parallel__line"
-              style={{ background: "linear-gradient(to right, rgba(46,191,165,0.4), transparent)" }}
+              style={{ background: "linear-gradient(to right, rgba(168,90,44,0.4), transparent)" }}
             />
           </div>
           <h1 className="tl-display tl-display--xl tl-hero__title">{c.hero.title}</h1>
