@@ -9,13 +9,14 @@ import { useState } from "react";
 export function HistoryTimeline({ items }) {
   const [activeIndex, setActiveIndex] = useState(0);
   return (
-    <ol className="mw-ten3__milestones" data-reveal-stagger>
+    <ol className="mw-ten3__milestones">
       {items.map((item, i) => {
         const side = i % 2 === 0 ? "left" : "right";
         const isActive = i === activeIndex;
         return (
           <li
             key={i}
+            data-reveal
             className={
               "mw-ten3__milestone mw-ten3__milestone--" + side + (isActive ? " is-active" : "")
             }

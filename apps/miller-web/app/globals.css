@@ -3056,55 +3056,47 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
 
 /* ════════════════════════════════════════════════════════════
    MILLER — Scroll reveal system (single uniform vocabulary).
-   One animation throughout the site: rise + faint scale-in, the same
-   motion the certifications band uses. Every observable element gets
-   `data-reveal`. For grids, each card is observed independently — as
-   the user scrolls, each card crosses the viewport edge and animates
-   itself, instead of the whole grid firing in one synchronized cascade.
-   Driven by components/MillerScrollReveal.jsx (root margin -8%).
+   ONE animation across the entire site: a quick, subtle fade with a
+   short upward settle, anchored to each element's top edge so items
+   simply "render in" as they cross the viewport. Every observable unit
+   (cards, headers, list items) carries `data-reveal` and is observed
+   individually by components/MillerScrollReveal.jsx — so each element
+   animates itself as it scrolls into view, rather than whole sections
+   firing at once.
    ════════════════════════════════════════════════════════════ */
 
 html[data-brand="miller"] [data-reveal],
 html[data-brand="miller"] [data-reveal-stagger] > * {
   opacity: 0;
-  /* Kill the brand baseline's transition so nothing animates via the
-     brand's 0.6s transition when data-in flips — everything has to go
-     through the mw-rv keyframe instead. We deliberately do NOT set a
-     resting transform here; mw-rv's animation-fill-mode `both` applies
-     its 0% keyframe (translateY 28px, scale 0.98) as the resting state
-     while the animation is pending. Adding a transform here breaks the
-     IntersectionObserver's first-frame intersection calc on some
-     browsers. */
+  /* The hidden resting state comes from mw-rv's 0% keyframe via
+     fill-mode `both`; we deliberately set no resting transform here
+     (it can break the IntersectionObserver's first-frame intersection
+     calc on some browsers). Kill the brand baseline transition so
+     motion only ever runs through the mw-rv keyframe. No `will-change`
+     here on purpose — it would leave 40+ permanent composited layers on
+     the home page; the short fade composites fine on demand. */
   transition: none;
-  will-change: opacity, transform;
 }
 
-/* Every reveal: quick rise from lower-left to final position.
-   Start = 14px LEFT and 22px DOWN from final position. End = identity.
-   So during the 380ms animation the element moves UP and to the RIGHT
-   — a diagonal settle, not a straight rise. */
+/* The single reveal: a short fade with a subtle 12px upward settle. */
 @keyframes mw-rv {
-  0%   { opacity: 0; transform: translate3d(-14px, 22px, 0); }
+  0%   { opacity: 0; transform: translate3d(0, 12px, 0); }
   100% { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 
-/* Per-element trigger — every observed element animates when it
-   crosses the viewport edge, regardless of whether it has data-reveal
-   directly or is a > * child of data-reveal-stagger. */
+/* Per-element trigger — each observed element animates when it crosses
+   the viewport edge, whether it carries data-reveal directly or is a
+   direct child of a data-reveal-stagger container. */
 html[data-brand="miller"] [data-reveal][data-in="1"],
 html[data-brand="miller"] [data-reveal-stagger] > *[data-in="1"] {
-  animation: mw-rv 380ms cubic-bezier(.2, .82, .26, 1) both;
-  /* --reveal-order is assigned by MillerScrollReveal.jsx based on each
-     child's visual position (top, then left). Two cards on the same row
-     get sequential orders so the left fires 25ms before the right. */
-  animation-delay: calc(var(--reveal-order, 0) * 25ms);
+  animation: mw-rv 320ms cubic-bezier(.22, .61, .36, 1) both;
+  /* --reveal-order is set by MillerScrollReveal.jsx for stagger
+     containers: it is the child's column index within its row, so the
+     leftmost (order 0) reveals immediately when the row crosses and each
+     element to its right trails by one 60ms step. Plain data-reveal
+     elements leave it unset → 0 delay. */
+  animation-delay: calc(var(--reveal-order, 0) * 60ms);
 }
-
-/* Nested stagger container animates the SAME mw-rv as its peers —
-   uniformity is more important than avoiding the visual overlap with
-   its children. The earlier "skip" rule made nested parents use the
-   brand's transition instead of mw-rv, which produced a different
-   timing/easing than everything else (the user's complaint). */
 
 @media (prefers-reduced-motion: reduce) {
   html[data-brand="miller"] [data-reveal],

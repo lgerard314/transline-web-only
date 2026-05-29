@@ -140,7 +140,7 @@ export function HomeTemplate({ content }) {
 
       {/* 2. TRUST — Certifications. Full-width 4-card row, each with mark + body. No eyebrow/heading/lead. */}
       <section className="mw-trust" aria-label="Certifications">
-        <div className="mw-certs" role="list" aria-label="Certifications">
+        <div className="mw-certs" role="list" aria-label="Certifications" data-reveal-stagger>
           {CERTS.map((cert) => {
             const isISO = cert.name.startsWith("ISO");
             const display = isISO
@@ -181,23 +181,21 @@ export function HomeTemplate({ content }) {
       {/* 3. SERVICES — Article 03: Capabilities on walnut. Bento composition: anchor with photo + 2 stacked features + 7-row registry. */}
       <section className="mw-services" aria-labelledby="mw-services-heading">
         <div className="mw-inner">
-          <header className="mw-section-head mw-services__head">
-            <div className="mw-services__head-l">
-              <p className="mw-section-tag" aria-hidden="true">
-                <span className="mw-section-tag-mark" />
-                <span className="mw-section-tag-label">Services</span>
-              </p>
-              <h2 id="mw-services-heading" className="mw-section-title">
-                whatever your waste needs,<br />we&rsquo;ve <span className="mw-services__title-em">got you covered.</span>
-              </h2>
-            </div>
+          <header className="mw-section-head mw-services__head" data-reveal-stagger>
+            <p className="mw-section-tag" aria-hidden="true">
+              <span className="mw-section-tag-mark" />
+              <span className="mw-section-tag-label">Services</span>
+            </p>
+            <h2 id="mw-services-heading" className="mw-section-title">
+              whatever your waste needs,<br />we&rsquo;ve <span className="mw-services__title-em">got you covered.</span>
+            </h2>
             <p className="mw-services__intro">
               From routine industrial streams to one-off emergency calls, Miller&rsquo;s licensed VBEC facility and field crews handle the full spectrum &mdash; collection, treatment, and final disposition, all under one roof.
             </p>
           </header>
 
           {/* Single bento grid. Cell 1 = anchor; cells 2–3 = stacked features (both keep their original card treatment); cells 4–10 = small tiles with photo fully visible + content overlay; cell 11 = Cross Border Services (external link to TransLine49). */}
-          <ul className="mw-svcs-grid" aria-label="Capabilities">
+          <ul className="mw-svcs-grid" aria-label="Capabilities" data-reveal-stagger>
             {/* 01 — Anchor (Industrial Waste Treatment). Same num + title-row + text + arrow structure as the rest. */}
             <li>
               <Link
@@ -367,11 +365,11 @@ export function HomeTemplate({ content }) {
       <section className="mw-sec2" aria-labelledby="mw-sectors-heading-copy">
         <div className="mw-inner">
           <header className="mw-sec2__head">
-            <p className="mw-section-tag" aria-hidden="true">
+            <p className="mw-section-tag" aria-hidden="true" data-reveal>
               <span className="mw-section-tag-mark" />
               <span className="mw-section-tag-label">Who we serve</span>
             </p>
-            <div className="mw-sec2__head-split">
+            <div className="mw-sec2__head-split" data-reveal-stagger>
               <div className="mw-sec2__head-left">
                 <h2 id="mw-sectors-heading-copy" className="mw-sec2__title">
                   From rail yards to research labs &mdash; and the kitchen sink.
@@ -386,7 +384,7 @@ export function HomeTemplate({ content }) {
             </div>
           </header>
 
-          <div className="mw-sec2__cards">
+          <div className="mw-sec2__cards" data-reveal-stagger>
             <article className="mw-sec2__card">
               <div className="mw-sec2__card-photo" aria-hidden="true">
                 <img src="/miller/services/industrial-waste-treatment-hero.webp" alt="" loading="lazy" />
@@ -454,7 +452,7 @@ export function HomeTemplate({ content }) {
 {/* 4. FACILITY — Photo-led: a large aerial photo on the right with a smaller plaque photo overlapping its bottom-left corner; content panel on the left with eyebrow + title above the lead, then stats and CTAs. Capabilities below as a clean chip ribbon. */}
       <section className="mw-fac2" aria-labelledby="mw-facility-heading-copy">
         <div className="mw-inner">
-          <div className="mw-fac2__split">
+          <div className="mw-fac2__split" data-reveal-stagger>
             <div className="mw-fac2__content">
               <header className="mw-fac2__head">
                 <p className="mw-section-tag" aria-hidden="true">
@@ -496,13 +494,13 @@ export function HomeTemplate({ content }) {
           </div>
 
           <div className="mw-fac2__caps">
-            <header className="mw-fac2__caps-head">
+            <header className="mw-fac2__caps-head" data-reveal>
               <h3 className="mw-fac2__caps-title">
                 <span className="mw-fac2__caps-mark" aria-hidden="true" />
                 <span>7 powerful capabilities</span>
               </h3>
             </header>
-            <ol className="mw-fac2__caps-grid" aria-label="Onsite capabilities">
+            <ol className="mw-fac2__caps-grid" aria-label="Onsite capabilities" data-reveal-stagger>
               {c.vbec.capabilities.map((cap, i) => (
                 <li key={i} className="mw-fac2__caps-item">
                   <span className="mw-fac2__caps-num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
@@ -529,7 +527,7 @@ export function HomeTemplate({ content }) {
             </aside>
 
             <div className="mw-ten3__body">
-              <header className="mw-ten3__head">
+              <header className="mw-ten3__head" data-reveal>
                 <p className="mw-section-tag" aria-hidden="true">
                   <span className="mw-section-tag-mark" />
                   <span className="mw-section-tag-label">Our history</span>
@@ -542,7 +540,7 @@ export function HomeTemplate({ content }) {
                 </p>
               </header>
 
-              <div className="mw-ten3__plate" aria-label="Track record">
+              <div className="mw-ten3__plate" aria-label="Track record" data-reveal>
                 <img
                   className="mw-ten3__plate-img"
                   src="/miller/full-truck-sideview.png"
@@ -566,7 +564,7 @@ export function HomeTemplate({ content }) {
                 </dl>
               </div>
 
-              <div className="mw-ten2__mission">
+              <div className="mw-ten2__mission" data-reveal>
                 <h3 className="mw-ten2__mission-heading">Mission</h3>
                 <p className="mw-ten2__mission-copy">At Miller Environmental, our mission is to lead the hazardous waste disposal industry by exemplifying unwavering commitment to environmentally responsible practices, rigorous regulatory compliance, and continuous innovation.</p>
                 <p className="mw-ten2__mission-copy">We prioritize safety in all operations, ensuring the well-being of our team, clients, and the communities we serve.</p>
@@ -587,7 +585,7 @@ export function HomeTemplate({ content }) {
         </div>
         <div className="mw-inner">
           <header className="mw-careers__head">
-            <div className="mw-careers__head-text" data-reveal-stagger>
+            <div className="mw-careers__head-text" data-reveal>
               <p className="mw-section-tag" aria-hidden="true">
                 <span className="mw-section-tag-mark" />
                 <span className="mw-section-tag-label mw-section-tag-label--invert">Careers</span>
