@@ -131,22 +131,9 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   line-height: 1;
 }
 .miller-eb__number {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   line-height: 1;
-}
-.miller-eb__number-link {
-  display: inline-flex;
-  align-items: center;
-  color: var(--c-on-navy);
-  text-decoration: none;
-  padding: 6px 8px;
-  border-radius: 6px;
-}
-.miller-eb__number-link:hover,
-.miller-eb__number-link:focus-visible {
-  background: rgba(255,255,255,0.06);
-  outline: none;
 }
 
 .miller-eb__dismiss {
@@ -1789,10 +1776,10 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
    Continues the dark surface and lets the brand refrains scroll.
    ───────────────────────────────────────────────────────────────── */
 .mw-marquee {
-  background: var(--c-navy);
+  background: var(--c-bg);
   padding-block: 0;
-  border-top: 1px solid rgba(245, 230, 203, 0.10);
-  border-bottom: 1px solid rgba(245, 230, 203, 0.10);
+  border-top: 0;
+  border-bottom: 1px solid var(--c-line);
 }
 /* Restyled marquee ticker: condensed mono-mix typography, terracotta
    diamond separators (replacing the middle-dot glyph), and slightly
@@ -1819,7 +1806,8 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   align-items: center;
 }
 .mw-marquee .tl-marquee__track span:nth-child(odd) {
-  color: var(--c-on-navy);
+  display: inline-flex;
+  align-items: center;
 }
 /* Replace the middle-dot character with a small terracotta diamond. */
 .mw-marquee .tl-marquee__track .dot {
@@ -1840,13 +1828,62 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   transform: rotate(45deg);
   flex-shrink: 0;
 }
+/* Locked "Proud affiliates." label inline with the scrolling logos. The
+   label stays put (outside the marquee's overflow box); the logo track
+   flexes into the remaining width and scrolls beside it. */
+.mw-marquee__row {
+  display: flex;
+  align-items: center;
+  gap: clamp(24px, 3vw, 56px);
+  padding-left: clamp(24px, 5vw, 96px);
+}
+.mw-marquee__row .tl-marquee { flex: 1 1 auto; min-width: 0; }
+.mw-marquee__label {
+  margin: 0;
+  flex-shrink: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(22px, 2.2vw, 32px);
+  line-height: 1.02;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--c-ink);
+}
+/* Square-shaped ":" — two stacked terracotta squares, replacing the single square period. */
+.mw-stop-colon {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.18em;
+  height: 0.72em;
+  margin-left: 0.14em;
+  vertical-align: middle;
+  transform: translateY(-0.15em);
+}
+.mw-stop-colon::before,
+.mw-stop-colon::after {
+  content: "";
+  width: 0.15em;
+  height: 0.15em;
+  background: var(--c-accent);
+}
+/* Stop the flex track from shrinking its items — an <img width:auto> in a
+   shrinking flex item collapses to 0 width. flex-shrink:0 keeps each logo at
+   its intrinsic (aspect-ratio) width and lets the track overflow to scroll. */
+.mw-marquee .tl-marquee__track > span { flex-shrink: 0; }
+.mw-marquee__logo {
+  height: clamp(45px, 4.5vw, 63px);
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
 
 /* ─────────────────────────────────────────────────────────────────
    Final CTA — cream close. Centered eyebrow + headline + body +
    two action buttons (Contact + 24/7 emergency).
    ───────────────────────────────────────────────────────────────── */
 .mw-final {
-  background: var(--c-bg);
+  background: var(--c-surface-warm);
   padding-block: clamp(56px, 5.5vw, 100px);
   text-align: center;
   position: relative;
@@ -1913,9 +1950,8 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   .mw-final__col--logo { display: none; }
   .mw-final__truck { max-width: 320px; opacity: 0.55; }
 }
-/* Eyebrow gets extra breathing room before the headline; other gaps
-   come from .mw-final__col--content's row-gap. */
-.mw-final .mw-final__tag { margin: 0 0 clamp(28px, 2.4vw, 40px) 0; }
+/* The content column applies row-gap: 24px between every child, so the eyebrow→headline gap would be 24px + this margin. Offset the row-gap so the eyebrow→headline gap equals the standard section header gap, clamp(20px, 1.5vw, 24px), used by fac2/ten3/careers/sec2. */
+.mw-final .mw-final__tag { margin: 0 0 calc(clamp(20px, 1.5vw, 24px) - 24px) 0; }
 .mw-final__title {
   margin: 0;
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
@@ -1941,6 +1977,31 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   flex-wrap: wrap;
   justify-content: center;
 }
+/* Light divider + social row beneath the Final CTA buttons. Vertical
+   spacing is handled by .mw-final__col--content's row-gap. */
+.mw-final__divider {
+  width: min(100%, 360px);
+  height: 1px;
+  background: var(--c-line);
+  align-self: center;
+}
+.mw-final__socials {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: clamp(18px, 1.6vw, 28px);
+}
+.mw-final__social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--c-ink-2);
+  transition: color 180ms ease, transform 180ms ease;
+}
+.mw-final__social:hover { color: var(--c-accent); transform: translateY(-2px); }
+.mw-final__social:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 4px; border-radius: 2px; }
 /* Override the ghost CTA inside the Final block — its default
    palette is built for the dark hero, so on cream we recolor it. */
 .mw-final .mw-cta--ghost {
@@ -2128,8 +2189,13 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
    centers match the visual mid of the larger condensed corp text
    (whose glyph descenders push its visual center fractionally
    below its line-box center). */
-.mw-hero__mark-dot { transform: translateY(1px); }
-.mw-hero__mark-since { transform: translateY(1px); }
+.mw-hero__mark-since { transform: translateY(6px); }
+/* Logomark to the left of the corp name — 2.5x the corp text height. */
+.mw-hero__mark-logo {
+  height: calc(clamp(24px, 1.8vw, 29px) * 2.5);
+  width: auto;
+  flex-shrink: 0;
+}
 .mw-hero__mark-corp {
   font-family: var(--font-condensed), ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(24px, 1.8vw, 29px);
@@ -2152,12 +2218,13 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   align-items: center;
 }
 .mw-hero__mark-dot {
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
   background: var(--c-accent);
   flex-shrink: 0;
-  /* Square stamp — recurring brand mark. NOT a circle. */
   border-radius: 0;
+  /* Diamond stamp — matches the section eyebrow marks. */
+  transform: translateY(6px) rotate(45deg);
 }
 .mw-hero__title {
   grid-column: 1 / -1;
@@ -2179,6 +2246,15 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   background: var(--c-accent);
   vertical-align: baseline;
   margin-left: 0.06em;
+}
+/* Square period stamp for h1/h2 display headings — the same brand mark as the hero, sized in em so it scales with each heading. */
+.mw-stop {
+  display: inline-block;
+  width: 0.16em;
+  height: 0.16em;
+  background: var(--c-accent);
+  vertical-align: baseline;
+  margin-left: 0.04em;
 }
 
 /* Rotating phrase slot. Inline-block so it can sit next to static text like "in <cycle>". A hidden sizer reserves the width of the longest phrase so the line doesn't shrink/expand when the active phrase changes. */
@@ -2361,9 +2437,10 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
 }
 .mw-section-tag-mark {
   display: inline-block;
-  width: 9px;
-  height: 9px;
+  width: 8.1px;
+  height: 8.1px;
   background: var(--c-accent);
+  transform: rotate(45deg);
   flex-shrink: 0;
 }
 .mw-section-tag-label {
@@ -3160,6 +3237,58 @@ html[data-brand="miller"] .tl-logo > img {
   width: 48px;
   height: 48px;
 }
+/* Topnav logo swap: maple leaf (default / top of home) cross-fades to the
+   Miller logomark once scrolled past the hero mark. The incoming mark rises
+   from below and settles while the leaf lifts away — so it reads as the hero
+   logo flying up into the nav. Both marks are stacked in a fixed 48px box. */
+html[data-brand="miller"] .mw-navlogo {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+}
+html[data-brand="miller"] .mw-navlogo { overflow: visible; }
+/* Swapped state: the Miller logomark fills the box and rises in. */
+html[data-brand="miller"] .mw-navlogo__mark {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transform: translateY(11px) scale(1.14);
+  transition: opacity 300ms ease, transform 360ms cubic-bezier(.2, .7, .2, 1);
+}
+/* Default state: the maple leaf wrapped in a diamond frame that echoes the
+   logomark's diamond shape, drawn in the leaf's own brown. */
+html[data-brand="miller"] .mw-navlogo__diamond,
+html[data-brand="miller"] .mw-navlogo__leaf {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transition: opacity 300ms ease;
+}
+html[data-brand="miller"] .mw-navlogo__diamond {
+  width: 33px;
+  height: 33px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  border: 2px solid var(--c-navy);
+  border-radius: 4px;
+}
+html[data-brand="miller"] .mw-navlogo__leaf {
+  width: 22px;
+  height: auto;
+  transform: translate(-50%, -50%);
+}
+/* Swapped → leaf + diamond fade out, logomark settles in. */
+html[data-brand="miller"] .mw-navlogo[data-swapped="1"] .mw-navlogo__leaf,
+html[data-brand="miller"] .mw-navlogo[data-swapped="1"] .mw-navlogo__diamond {
+  opacity: 0;
+}
+html[data-brand="miller"] .mw-navlogo[data-swapped="1"] .mw-navlogo__mark {
+  opacity: 1;
+  transform: none;
+}
 html[data-brand="miller"] .tl-nav-desktop {
   margin-left: 0;
   justify-content: center;
@@ -3223,8 +3352,8 @@ html[data-brand="miller"] .tl-topbar__cta {
   gap: clamp(14px, 1.4vw, 22px);
 }
 html[data-brand="miller"] .tl-callphone {
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
-  font-size: 13px;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 16px;
   color: var(--c-ink-2);
   letter-spacing: 0.04em;
   display: inline-flex;
@@ -3241,7 +3370,7 @@ html[data-brand="miller"] .tl-callphone::before {
 }
 html[data-brand="miller"] .tl-callphone strong {
   color: var(--c-ink);
-  font-weight: 500;
+  font-weight: 600;
 }
 html[data-brand="miller"] .tl-callphone:hover strong {
   color: var(--c-accent);
@@ -3314,7 +3443,7 @@ html[data-brand="miller"] .mw-submenu li a {
   padding: 6px 6px;
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
   font-weight: 600;
-  font-size: 14.5px;
+  font-size: 16px;
   letter-spacing: 0.04em;
   color: var(--c-ink);
   border-radius: 0;
@@ -3341,6 +3470,8 @@ html[data-brand="miller"] .mw-submenu li a:hover::before,
 html[data-brand="miller"] .mw-submenu li a:focus-visible::before {
   opacity: 1;
 }
+/* Dropdown items inherit the 2px nav-link underline (.tl-nav-list a::after); slim it to 1px in submenus only, leaving the top-level triggers at 2px. */
+html[data-brand="miller"] .mw-submenu li a::after { height: 1px; }
 
 /* ── Mobile drawer (cream) ─────────────────────────────────── */
 html[data-brand="miller"] .tl-mobile-nav {
@@ -3541,6 +3672,11 @@ html[data-brand="miller"] .tl-footer__pitch-ctas .tl-btn--primary {
 html[data-brand="miller"] .tl-footer__pitch-ctas .tl-btn--primary:hover {
   background: #fff;
   color: var(--c-accent);
+}
+/* Match the 24/7 ghost button's height to the Contact Miller button's outer
+   frame (its 48px box + 3px outline-offset + 1px outline = 56px). */
+html[data-brand="miller"] .tl-footer__pitch-ctas .mw-cta--ghost {
+  padding-block: 9.5px;
 }
 html[data-brand="miller"] .tl-footer__pitch-ctas .tl-btn--ghost-light {
   background: transparent;

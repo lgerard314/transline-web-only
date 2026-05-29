@@ -65,12 +65,6 @@ export function EmergencyBanner({ initialDismissed = false }) {
         >
           <span className="miller-eb__icon" aria-hidden="true">☎</span>
           <span className="miller-eb__eyebrow">24/7 Emergency Response</span>
-        </a>
-        <a
-          className="miller-eb__number-link"
-          href={EMERGENCY_HREF}
-          aria-label={`Call ${EMERGENCY_DISPLAY}`}
-        >
           <span className="miller-eb__number tl-mono">{EMERGENCY_DISPLAY}</span>
         </a>
       </div>
