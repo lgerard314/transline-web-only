@@ -143,20 +143,30 @@ Comprehensive chronological record of milestones, events, and achievements. Mont
 
 *(Undated case-study projects not placed above: the Winnipeg grain-elevator arsenic remediation and the Steinbach strip-mall fire-site asbestos abatement — neither gives a year in the source.)*
 
-## Most notable milestones (top 10)
+## Most notable milestones and achievements
 
-The events with the clearest dates and the greatest strategic, structural, or reputational weight.
+The events carrying the greatest strategic, structural, operational, reputational, or leadership weight — including executive appointments and notable company news — in chronological order. (Most administrative and address-change entries from the master timeline are intentionally excluded; the 2008 lease and 2010 rent-arrears conversion are omitted here because they read as financial strain rather than achievement.)
 
 1. **1986 (Sep/Nov)** — The Manitoba Hazardous Waste Management Corporation Act creates the Crown corporation that becomes MEC's institutional predecessor.
 2. **1993** — The St. Jean Baptiste treatment facility is licensed — the physical asset still at the core of the business.
-3. **January 1, 1996 (announced January 10)** — The 50/50 public-private Miller takeover becomes effective: the founding of the current Miller-operated entity and the structural "moat" that defines it.
+3. **January 1, 1996 (announced January 10)** — The 50/50 public-private Miller takeover becomes effective: the founding of the current Miller-operated entity and the structural "moat" that defines it. Leo McArthur, then president & CEO of the Miller Group, is the public face of the deal.
 4. **1997** — Vaughn Bullough joins as General Manager and builds the operation from a struggling Crown-asset takeover into Manitoba's dominant operator.
-5. **February 28, 2018** — Colas Canada acquires the Miller McAsphalt Group for CAN $913 million, setting MEC's ultimate corporate parentage.
-6. **2019–2022** — Processing Cell 5 is constructed and authorized (use approved Aug/Nov 2022) — a major capacity expansion.
-7. **August 23, 2022** — The flagship facility is renamed the Vaughn Bullough Environmental Centre, an exceptional recognition in Manitoba's environmental-services sector.
-8. **2024** — Paul Bauer receives the MEIA Lifetime Achievement Award, anchoring the operating company's credibility with regulators and large generators.
-9. **October 2024 → May 2, 2025** — The in-province solvent-recovery system is filed and approved, shifting ~4.5M L/year from U.S. cement-kiln fuel-blending to true material recovery and updating the licence to 58 HW S2 RRRRR.
-10. **February 11, 2026** — Bauer is publicly identified as President and lays out the company's strategy ("96% managed in-house"), the best public marker of MEC's current leadership and direction.
+5. **2007** — The Winnipeg Service Centre opens at 1803 Hekla Avenue (applied for October 2006), establishing the company's current public-facing base and a licensed PCB-storage / waste-coordination hub.
+6. **2013 (March)** — A major Processing Cell 5 expansion and regulatory submission package is filed, opening the modern facility-modernization cycle.
+7. **2015 (November)** — Manitoba posts the core treatment-facility operating Licence No. 58 HW S2 RRRR, the licence backbone for everything that follows.
+8. **2016** — Paul Bauer, the current president, joins the company.
+9. **February 28, 2017** — MEC wins a federal Hazardous Waste Disposal Services contract (later amended through 2026, expiring 2027), establishing federal-government business that has run for years.
+10. **February 28, 2018** — Colas Canada acquires the Miller McAsphalt Group for CAN $913 million, setting MEC's ultimate corporate parentage.
+11. **April 2018** — A new behaviour-based safety management system is implemented company-wide, a foundational safety-culture milestone (followed by the company-wide Incident Command System rollout in 2021).
+12. **2019** — Construction Equipment Guide features MEC's fleet/equipment modernization, a notable trade-press profile of the company's reinvestment.
+13. **2019–2022** — Processing Cell 5 is constructed and authorized (use approved Aug/Nov 2022) — a major capacity expansion.
+14. **2022** — MEC publishes its first Sustainability Report (covering 2021 initiatives), its clearest public sustainability disclosure to date.
+15. **August 23, 2022** — The flagship facility is renamed the Vaughn Bullough Environmental Centre; the announcement is signed by Blair McArthur as President & CEO — an exceptional recognition in Manitoba's environmental-services sector.
+16. **2023** — MEC joins the Mining Association of Manitoba Inc. (Associate member) and earns MHCA COR 2023 safety certification, broadening its sector standing.
+17. **Between 2022 and early 2026** — Paul Bauer is appointed President of the operating company, succeeding Blair McArthur at that level (no primary source pins the exact date; the title is confirmed publicly by February 2026).
+18. **2024** — Paul Bauer receives the MEIA Lifetime Achievement Award and is featured in a Manitoba Chambers / MEIA partnership announcement, anchoring the company's credibility with regulators, policymakers, and large generators.
+19. **October 2024 → May 2, 2025** — The in-province solvent-recovery system is filed and approved, shifting ~4.5M L/year from U.S. cement-kiln fuel-blending to true material recovery and updating the licence to 58 HW S2 RRRRR.
+20. **February 11, 2026** — Bauer is publicly identified as President and lays out the company's strategy ("96% managed in-house"), the best public marker of MEC's current leadership and direction.
 
 ## Recommendations
 

@@ -1191,7 +1191,7 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
      milestone head height), so when the last milestone is expanded
      its body card's bottom edge lands exactly on the spine bottom. */
   justify-content: space-between;
-  padding-block: clamp(8px, 1vw, 16px) clamp(64px, 6.1vw, 100px);
+  padding-block: clamp(8px, 1vw, 16px) clamp(26px, calc(17px + 1.06vw), 34px);
 }
 .mw-ten3__milestones::before {
   content: "";
