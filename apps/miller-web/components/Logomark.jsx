@@ -8,7 +8,7 @@
 // surrounding text or `aria-label`. Empty alt avoids the axe
 // `image-redundant-alt` violation (AT would otherwise read the name
 // twice).
-export function Logomark({ size = 30 }) {
+export function Logomark({ size = 48 }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img

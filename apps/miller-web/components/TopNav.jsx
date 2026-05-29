@@ -23,6 +23,50 @@ export function TopNav() {
   const page = pageIdFromPath(pathname);
   const [menuOpen, setMenuOpen]   = useState(false);
   const [openSubmenu, setOpenSub] = useState(null); // id of currently-open desktop submenu
+  const [scrollState, setScrollState] = useState("top"); // "top" | "past-hero"
+
+  // Once the user scrolls past the hero section, hide the emergency
+  // banner and collapse the topnav to a compact fixed bar at the very
+  // top of the viewport. Threshold: bottom of the first <section> under
+  // <main>, with a 60vh fallback if no hero is found.
+  useEffect(() => {
+    let raf = 0;
+    const compute = () => {
+      const hero = document.querySelector("main > section:first-of-type, .mw-hero, .tl-hero");
+      const threshold = hero
+        ? hero.getBoundingClientRect().bottom + window.scrollY - 80
+        : window.innerHeight * 0.6;
+      setScrollState(window.scrollY > threshold ? "past-hero" : "top");
+    };
+    const onScroll = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(() => {
+        compute();
+        raf = 0;
+      });
+    };
+    compute();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) window.cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  // Expose EB height as a CSS var so the topnav can sit flush below it
+  // and the body spacer matches exactly. Measured on mount + on resize.
+  useEffect(() => {
+    const sync = () => {
+      const eb = document.querySelector(".miller-eb");
+      const h = eb ? eb.getBoundingClientRect().height : 0;
+      document.documentElement.style.setProperty("--mw-eb-h", `${Math.round(h)}px`);
+    };
+    sync();
+    window.addEventListener("resize", sync);
+    return () => window.removeEventListener("resize", sync);
+  }, []);
 
   // Close the mobile drawer + any open desktop submenu whenever the route
   // changes. React 19's "reset on prop change" pattern — runs during
@@ -71,7 +115,11 @@ export function TopNav() {
 
   return (
     <>
-      <header className="tl-topbar mw-topbar" data-menu-open={menuOpen ? "1" : "0"}>
+      <header
+        className="tl-topbar mw-topbar"
+        data-menu-open={menuOpen ? "1" : "0"}
+        data-scroll-state={scrollState}
+      >
         <div className="tl-topbar__inner" ref={barRef}>
           <Link href="/" className="tl-logo" aria-label="Miller Environmental home">
             <Logomark />

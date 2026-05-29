@@ -36,18 +36,26 @@ function FooterLink({ href, children, external = false }) {
 export function SiteFooter() {
   return (
     <footer className="tl-footer mw-footer">
-      <div className="tl-footer__top">
+      <div className="tl-footer__top" data-reveal-stagger>
         <div className="tl-footer__pitch">
-          <p className="tl-mono mw-footer__eyebrow">Over 25 Years · Hazardous Waste Management</p>
+          <p className="tl-mono mw-footer__eyebrow">Over 25 Years &middot; Hazardous Waste Management</p>
           <h3 className="tl-footer__big">
-            Safe, dependable,<br />and on-time service.
+            Safe, dependable,<br /><span className="mw-footer__big-em">and on-time.</span>
           </h3>
+          <p className="mw-footer__lede">
+            From routine industrial waste streams to one-off emergency calls &mdash; Miller&rsquo;s VBEC facility and field crews handle the work, all under one roof.
+          </p>
           <div className="tl-footer__pitch-ctas">
             <Link href="/contact-us" className="tl-btn tl-btn--primary">
-              Contact Miller <span className="tl-btn-arr">→</span>
+              Contact Miller <span className="tl-btn-arr">&rarr;</span>
             </Link>
-            <a className="tl-btn tl-btn--ghost-light" href={EMERGENCY_HREF}>
-              24/7 Emergency · {EMERGENCY_DISPLAY}
+            <a
+              href={EMERGENCY_HREF}
+              className="mw-cta mw-cta--ghost"
+              aria-label={`Call 24/7 emergency: ${EMERGENCY_DISPLAY}`}
+            >
+              <span className="mw-cta__sup">24/7 emergency</span>
+              <span className="mw-cta__num">{EMERGENCY_DISPLAY}</span>
             </a>
           </div>
         </div>

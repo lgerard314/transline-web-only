@@ -53,7 +53,7 @@ export const HOME = {
     title: "Our Facility",
     body:
       `${VBEC_SHORT} sits on 64 hectares in the rural municipality of Montcalm, 70 km south of Winnipeg. ` +
-      "Named for the General Manager who built it — Vaughn Bullough, who joined Miller in 1997 — the facility is the operating heart of every service on this site.",
+      "Renamed in 2022 to honour Vaughn Bullough — the long-tenured General Manager who joined Miller in 1997 and led operations for 25 years — the facility is the operating heart of every service on this site.",
     aboutHref: "/about-us/",
     aboutLinkLabel: "Read the Vaughn Bullough story",
     capabilities: [

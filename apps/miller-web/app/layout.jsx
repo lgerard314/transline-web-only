@@ -1,7 +1,7 @@
 import "@white-owl/brand/styles/globals.css";
 import "./globals.css";
-import { Geist, Geist_Mono } from "next/font/google";
-import { ScrollReveal } from "@white-owl/brand/components";
+import { Geist, Geist_Mono, Barlow_Condensed, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
+import { MillerScrollReveal } from "../components/MillerScrollReveal";
 import { cookies, headers } from "next/headers";
 import { TopNav } from "../components/TopNav";
 import { SiteFooter } from "../components/SiteFooter";
@@ -25,6 +25,25 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
   variable: "--font-geist-mono",
+  display: "swap",
+});
+const barlowCondensed = Barlow_Condensed({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-condensed",
+  display: "swap",
+});
+const plexSans = IBM_Plex_Sans({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  style: ["normal", "italic"],
+  variable: "--font-plex-sans",
+  display: "swap",
+});
+const plexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-plex-mono",
   display: "swap",
 });
 
@@ -78,10 +97,10 @@ export default async function RootLayout({ children }) {
     <html
       lang="en"
       data-brand="miller"
-      data-palette="deep"
+      data-palette="clay"
       data-type="utility"
       data-density="regular"
-      className={`${geist.variable} ${geistMono.variable}`}
+      className={`${geist.variable} ${geistMono.variable} ${barlowCondensed.variable} ${plexSans.variable} ${plexMono.variable}`}
     >
       {/* Server-rendered banner gate via next-url header. The client
           BannerRouteGate keeps the attribute in sync on client-side
@@ -95,7 +114,7 @@ export default async function RootLayout({ children }) {
           <main id="main" tabIndex={-1}>{children}</main>
           <SiteFooter />
         </div>
-        <ScrollReveal />
+        <MillerScrollReveal />
         {SiteTweaksProvider && <SiteTweaksProvider namespace="tweaks:miller" />}
       </body>
     </html>
