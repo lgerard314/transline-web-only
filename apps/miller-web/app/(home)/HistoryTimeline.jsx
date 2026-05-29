@@ -3,11 +3,11 @@
 import { useState } from "react";
 
 // Vertical zigzag timeline with a single "open" milestone at a time.
-// Index 0 is open on mount; hovering/focusing another milestone moves
-// the open state to it. Mouse leaving the section does NOT collapse —
-// the last hovered item stays visible.
+// Nothing is open on mount (all titles shown); hovering/focusing a
+// milestone opens its card in place of the title. Mouse leaving the
+// section does NOT collapse — the last hovered item stays visible.
 export function HistoryTimeline({ items }) {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(null);
   return (
     <ol className="mw-ten3__milestones">
       {items.map((item, i) => {
@@ -29,7 +29,10 @@ export function HistoryTimeline({ items }) {
               <h4 className="mw-ten3__milestone-title">{item.title}</h4>
             </div>
             <div className="mw-ten3__milestone-bodywrap">
-              <p className="mw-ten3__milestone-body">{item.body}</p>
+              <div className="mw-ten3__milestone-body">
+                <span className="mw-ten3__milestone-body-title">{item.title}</span>
+                <p className="mw-ten3__milestone-body-text">{item.body}</p>
+              </div>
             </div>
           </li>
         );

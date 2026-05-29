@@ -1177,6 +1177,16 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
 @media (max-width: 900px) {
   .mw-ten3__timeline { margin-top: 0; }
 }
+.mw-ten3__timeline-note {
+  margin: 0 0 clamp(10px, 0.9vw, 14px);
+  text-align: center;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+  opacity: 0.65;
+}
 .mw-ten3__milestones {
   list-style: none;
   padding: 0;
@@ -1191,7 +1201,7 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
      milestone head height), so when the last milestone is expanded
      its body card's bottom edge lands exactly on the spine bottom. */
   justify-content: space-between;
-  padding-block: clamp(8px, 1vw, 16px) clamp(26px, calc(17px + 1.06vw), 34px);
+  padding-block: clamp(8px, 1vw, 16px) clamp(37px, calc(35.5px + 0.18vw), 40px);
 }
 .mw-ten3__milestones::before {
   content: "";
@@ -1241,12 +1251,11 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   transform: rotate(45deg) scale(1.35);
 }
 
-/* Head reserves a row of space above the title for the year. The
-   year is absolutely positioned RELATIVE TO THE MILESTONE (not the
-   head) so it shares the same positioning context as the dot and
-   the bodywrap. Default places it on the opposite side of the spine;
-   active slides it back into the reserved row above the title on
-   the title's side — without ever shifting the title. */
+/* The year is absolutely positioned RELATIVE TO THE MILESTONE (not the
+   head) so it shares the same positioning context as the dot and the
+   bodywrap. It sits on the opposite side of the spine from the title,
+   vertically aligned with the title, and stays there on hover — only
+   the title hides and the card takes its place. */
 .mw-ten3__milestone-head {
   display: flex;
   flex-direction: column;
@@ -1281,20 +1290,6 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   left: auto;
   text-align: right;
 }
-/* ACTIVE — year switches sides (over to the title's side) and rises
-   into the reserved row above the title. Title is never displaced. */
-.mw-ten3__milestone--left.is-active .mw-ten3__milestone-year {
-  top: 0;
-  left: auto;
-  right: clamp(22px, 1.8vw, 32px);
-  text-align: right;
-}
-.mw-ten3__milestone--right.is-active .mw-ten3__milestone-year {
-  top: 0;
-  left: clamp(22px, 1.8vw, 32px);
-  right: auto;
-  text-align: left;
-}
 .mw-ten3__milestone-title {
   margin: 0;
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
@@ -1304,12 +1299,15 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   letter-spacing: 0.005em;
   color: var(--c-ink);
   text-transform: uppercase;
-  transition: color 0.24s ease;
+  transition: color 0.24s ease, opacity 0.24s ease, visibility 0s linear 0.24s;
 }
+/* On hover/active the title fades out and the card takes its place. */
 .mw-ten3__milestone:hover .mw-ten3__milestone-title,
 .mw-ten3__milestone:focus-within .mw-ten3__milestone-title,
 .mw-ten3__milestone.is-active .mw-ten3__milestone-title {
-  color: var(--c-accent);
+  opacity: 0;
+  visibility: hidden;
+  transition: color 0.24s ease, opacity 0.24s ease, visibility 0s linear 0s;
 }
 
 /* Subtle pulsing on inactive milestones — signals the timeline is
@@ -1338,9 +1336,7 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
 .mw-ten3__milestone:nth-child(4):not(.is-active) .mw-ten3__milestone-dot { animation-delay: -1.2s; }
 .mw-ten3__milestone:nth-child(5):not(.is-active) .mw-ten3__milestone-title,
 .mw-ten3__milestone:nth-child(5):not(.is-active) .mw-ten3__milestone-dot { animation-delay: -1.6s; }
-.mw-ten3__milestone:hover .mw-ten3__milestone-title,
 .mw-ten3__milestone:hover .mw-ten3__milestone-dot,
-.mw-ten3__milestone:focus-within .mw-ten3__milestone-title,
 .mw-ten3__milestone:focus-within .mw-ten3__milestone-dot {
   animation: none;
   opacity: 1;
@@ -1353,38 +1349,42 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   }
 }
 
-/* Body wrap sits on the OPPOSITE side of the spine from the milestone
-   head. Absolutely positioned so it never grows the timeline. Active
-   state (controlled via JS) reveals it; only one milestone is active
-   at a time. */
+/* Body wrap sits on the SAME side of the spine as the milestone head,
+   taking the title's place when active. Absolutely positioned so it
+   never grows the timeline. Active state (controlled via JS) reveals
+   it; only one milestone is active at a time. */
 .mw-ten3__milestone-bodywrap {
   position: absolute;
-  top: 0;
+  /* Centered on the dot: top anchors to the dot's vertical center
+     (dot top 1.94rem + half its 12px height) and translateY(-50%)
+     pulls the card up by half its own height. The extra -6px is the
+     reveal slide, removed when active. */
+  top: calc(1.94rem + 6px);
   opacity: 0;
-  transform: translateY(-6px);
+  transform: translateY(calc(-50% - 6px));
   visibility: hidden;
   z-index: 5;
   pointer-events: none;
   width: 100%;
   transition: opacity 0.32s ease, transform 0.32s cubic-bezier(0.2, 0.7, 0.2, 1), visibility 0s linear 0.32s;
 }
-/* --left milestone (title on left side of spine) → body appears on the right. */
+/* --left milestone (title on left side of spine) → card stays on the left, hugging the spine on its right. */
 .mw-ten3__milestone--left .mw-ten3__milestone-bodywrap {
-  left: 100%;
+  left: 0;
   right: auto;
-  padding-left: clamp(22px, 1.8vw, 32px);
-  text-align: left;
-}
-/* --right milestone (title on right side of spine) → body appears on the left. */
-.mw-ten3__milestone--right .mw-ten3__milestone-bodywrap {
-  left: auto;
-  right: 100%;
   padding-right: clamp(22px, 1.8vw, 32px);
   text-align: right;
 }
+/* --right milestone (title on right side of spine) → card stays on the right, hugging the spine on its left. */
+.mw-ten3__milestone--right .mw-ten3__milestone-bodywrap {
+  left: auto;
+  right: 0;
+  padding-left: clamp(22px, 1.8vw, 32px);
+  text-align: left;
+}
 .mw-ten3__milestone.is-active .mw-ten3__milestone-bodywrap {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(-50%);
   visibility: visible;
   pointer-events: auto;
   transition: opacity 0.32s ease, transform 0.32s cubic-bezier(0.2, 0.7, 0.2, 1), visibility 0s linear 0s;
@@ -1396,16 +1396,33 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   margin: 0;
   padding: clamp(8px, 0.8vw, 12px) clamp(12px, 1.2vw, 16px);
   background: #ffffff;
-  border-left: 2px solid var(--c-accent);
-  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
-  font-size: clamp(12px, 0.85vw, 13.5px);
-  line-height: 1.5;
-  color: var(--c-ink-2);
+  display: flex;
+  flex-direction: column;
   box-shadow: 0 18px 36px -22px rgba(42, 27, 18, 0.28);
 }
-.mw-ten3__milestone--right .mw-ten3__milestone-body {
-  border-left: 0;
+.mw-ten3__milestone-body-title,
+.mw-ten3__milestone-body-text {
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  line-height: 1.5;
+}
+/* In-card title: bold. */
+.mw-ten3__milestone-body-title {
+  font-size: clamp(12px, 0.85vw, 13.5px);
+  font-weight: 700;
+  color: var(--c-ink);
+}
+/* Explanation: 0.5px smaller than the title. */
+.mw-ten3__milestone-body-text {
+  font-size: clamp(11.5px, calc(0.85vw - 0.5px), 13px);
+  color: var(--c-ink-2);
+}
+/* Accent edge hugs the spine: left-side cards border on the right, right-side cards border on the left. */
+.mw-ten3__milestone--left .mw-ten3__milestone-body {
   border-right: 2px solid var(--c-accent);
+}
+.mw-ten3__milestone--right .mw-ten3__milestone-body {
+  border-left: 2px solid var(--c-accent);
 }
 
 /* Right body column reuses .mw-ten2 styles */
@@ -1486,6 +1503,15 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   align-items: flex-start;
   gap: clamp(3px, 0.35vw, 6px);
   min-width: 0;
+}
+/* Center the middle stat midway between the left and right stats,
+   which keep their flex-start positions. align-items centers it in
+   its column; the translateX corrects for the outer stats being
+   left-aligned (the offset is ~5% of the plate width — tracked with a
+   clamped vw that caps once the container stops scaling). */
+.mw-ten3__plate-stat:nth-child(2) {
+  align-items: center;
+  transform: translateX(clamp(-35px, -2.3vw, -25px));
 }
 /* Nudge only the third stat 10px left so its longer "SOLVENT
    RECLAIMED" label clears the trailer's right edge. The first two
@@ -1796,6 +1822,10 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
           mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
 }
 .mw-marquee .tl-marquee__track {
+  /* Reverse the shared left-scrolling animation so the affiliates
+     scroll the opposite direction. Seamless because the track is a
+     doubled item list. */
+  animation-direction: reverse;
   gap: clamp(48px, 5vw, 88px);
   padding: clamp(24px, 2.4vw, 38px) 0;
   font-family: var(--font-plex-mono), ui-monospace, monospace;
