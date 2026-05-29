@@ -1858,7 +1858,7 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   height: 0.72em;
   margin-left: 0.14em;
   vertical-align: middle;
-  transform: translateY(-0.15em);
+  transform: translateY(-0.04em);
 }
 .mw-stop-colon::before,
 .mw-stop-colon::after {
@@ -2189,7 +2189,7 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
    centers match the visual mid of the larger condensed corp text
    (whose glyph descenders push its visual center fractionally
    below its line-box center). */
-.mw-hero__mark-since { transform: translateY(6px); }
+.mw-hero__mark-since { transform: translateY(4px); }
 /* Logomark to the left of the corp name — 2.5x the corp text height. */
 .mw-hero__mark-logo {
   height: calc(clamp(24px, 1.8vw, 29px) * 2.5);
@@ -2224,7 +2224,7 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   flex-shrink: 0;
   border-radius: 0;
   /* Diamond stamp — matches the section eyebrow marks. */
-  transform: translateY(6px) rotate(45deg);
+  transform: translateY(4px) rotate(45deg);
 }
 .mw-hero__title {
   grid-column: 1 / -1;
