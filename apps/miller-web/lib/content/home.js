@@ -1,56 +1,15 @@
-// Homepage content — plain strings + arrays only (design spec §5.1).
-// Refrains and contact info source from `brand.js`; the sequence here
-// follows the §3.1 ordering: hero → trust → services → VBEC → editorial
-// → mission → join family → marquee → final CTA. No StatsBand.
+// Homepage content. Strings + arrays only — markup belongs in HomeTemplate.
+// Shared phrases / phone numbers come from `./brand`.
 
 import {
   OVER_25_YEARS,
   SAFE_DEPENDABLE_ON_TIME,
-  ONLY_IN_CANADA_CLAIM,
-  CRADLE_TO_GRAVE_PHRASE,
   EMERGENCY_PHONE,
-  VBEC_FULL_NAME,
   VBEC_SHORT,
 } from "./brand";
 
 export const HOME = {
-  hero: {
-    eyebrow: "Miller Environmental",
-    title: "Committed to Leadership in the Hazardous Waste Disposal Industry",
-    subhead: `Providing ${SAFE_DEPENDABLE_ON_TIME.toLowerCase()} to all our clients.`,
-    // 1400-wide WebP variants generated from the originals — saves
-    // ~400KB of mobile transfer vs the 1920/2560-wide source files.
-    // Frame 1 is the LCP element; frames 2/3 transition in after 4s
-    // and 8s of the CSS animation.
-    frames: [
-      "/miller/hero/home-frame-1.webp",
-      "/miller/hero/home-frame-2.webp",
-      "/miller/hero/home-frame-3.webp",
-    ],
-  },
-
-  trust: {
-    eyebrow: "Certifications",
-    claim: ONLY_IN_CANADA_CLAIM,
-    tenure: `${OVER_25_YEARS.toUpperCase()} OF OPERATING HISTORY`,
-  },
-
-  services: {
-    eyebrow: "Services",
-    title: "Services We Offer",
-    lead:
-      "Ten operating capabilities anchored at the licensed " +
-      VBEC_FULL_NAME +
-      " (" + VBEC_SHORT + ").",
-  },
-
-  // VBEC promoted to position 4 (procurement journey wants to see the
-  // facility). Capabilities verbatim from 19-location-treatment-facility.md.
-  // Position 3 (services lead) already expanded the full name once; per
-  // design spec §5.4, position 4 uses the short form.
   vbec: {
-    eyebrow: VBEC_SHORT,
-    title: "Our Facility",
     body:
       `${VBEC_SHORT} sits on 64 hectares in the rural municipality of Montcalm, 70 km south of Winnipeg. ` +
       "Renamed in 2022 to honour Vaughn Bullough — the long-tenured General Manager who joined Miller in 1997 and led operations for 25 years — the facility is the operating heart of every service on this site.",
@@ -66,33 +25,13 @@ export const HOME = {
       "Hydro-vac slurry receiving",
     ],
     cta: { label: "Visit Treatment Facility", href: "/treatment-facility/" },
-    image: "/miller/facility/vbec-building.webp",
   },
 
-  // Verbatim from 00-homepage.md "For Over 25 Years" block.
-  editorial: {
-    eyebrow: `For ${OVER_25_YEARS}`,
-    body:
-      `Miller Environmental has consistently provided ${SAFE_DEPENDABLE_ON_TIME.toLowerCase()} to all our clients. ` +
-      "This follows through from the initial pickup, to invoicing, to the provision of summary reports. " +
-      `This "${CRADLE_TO_GRAVE_PHRASE}" approach helps our customers to not only remain on-budget, but also provides the ability to track and assess both Miller's performance and audit their own specific waste stream management. ` +
-      "Our clients range from large industrial manufactures to small businesses and even your average household that disposes of waste through various household hazardous waste programs.",
-  },
-
-  // Verbatim from 00-homepage.md "Our Mission" block.
   mission: {
-    eyebrow: "Our Mission",
-    body:
-      "At Miller Environmental, our mission is to lead the hazardous waste disposal industry by exemplifying unwavering commitment to environmentally responsible practices, rigorous regulatory compliance, and continuous innovation. " +
-      "We prioritize safety in all operations, ensuring the well-being of our team, clients, and the communities we serve. " +
-      "Our dedication to transparency fosters trust, while active community engagement reflects our belief in shared responsibility.",
     cta: { label: "Our Core Values", href: "/about-us/vision-mission-and-core-values/" },
   },
 
-  // Verbatim from 00-homepage.md "Join The Miller Family" + "Why Choose
-  // Miller?" + "Career Opportunities" blocks.
   joinFamily: {
-    eyebrow: "Join The Miller Family",
     intro:
       "Total rewards compensation program, growth potential and Manitoba pride are just some of the reasons to join the Miller Team. " +
       "We take pride in the fact that we build a team focused on commitment, enthusiasm, unity to grow in a dynamic industry.",
@@ -106,8 +45,6 @@ export const HOME = {
     opportunitiesCta: { label: "Open Positions", href: "/careers/" },
   },
 
-  // Marquee refrains — each entry is a brand refrain that recurs on
-  // multiple pages.
   marquee: [
     OVER_25_YEARS,
     SAFE_DEPENDABLE_ON_TIME,

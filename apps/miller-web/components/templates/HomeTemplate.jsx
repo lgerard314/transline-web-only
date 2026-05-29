@@ -1,27 +1,20 @@
-// HomeTemplate — server component. Implements design spec §3.1 in order:
+// HomeTemplate — server component. Section order:
+//   1. Hero (photo + cycling phrase headline)
+//   2. Trust — 4 full-width cert cards
+//   3. Services — bento grid of 10 capabilities
+//   4. Who we serve — 4 sector cards
+//   5. VBEC — facility split + 7 capabilities
+//   6. Our history — interactive timeline + truck-plate stats + Mission
+//   7. Careers — bleed photo + Culture / Hiring cards
+//   8. Marquee — brand refrains
+//   9. Final CTA — truck | content | logo, contact + 24/7
 //
-//   1. Hero (3-frame CSS carousel)
-//   2. Trust strip — only-in-Canada eyebrow + CertificationGrid + tenure
-//   3. Services grid (10 cards, custom reorder)
-//   4. Our Facility (VBEC) — promoted to position 4
-//   5. "For Over 25 Years" editorial block
-//   6. Our Mission + Core Values CTA
-//   7. "Join The Miller Family"
-//   8. Marquee with brand refrains
-//   9. Final CTA (Contact + 24/7 emergency)
-//
-// No StatsBand — section is deleted entirely (design spec non-goals + §3.1).
-//
-// Content arrives as a single `content` prop sourced from
-// `lib/content/home.js`. The template owns layout markup only — no inline
-// copy here (design spec §5.1).
+// Content arrives via the `content` prop from lib/content/home.js.
 
 import Link from "next/link";
-import { Marquee, ServiceCard } from "@white-owl/brand/components";
-import { CertificationGrid } from "../CertificationGrid";
+import { Marquee } from "@white-owl/brand/components";
 import { HeroPhraseCycle } from "../HeroPhraseCycle";
 import { SectorStatCycle } from "../SectorStatCycle";
-import { TenureStatCycle } from "../TenureStatCycle";
 import { FacilityGallery } from "../FacilityGallery";
 import { HistoryTimeline } from "../HistoryTimeline";
 import { SERVICES } from "../../lib/services";
@@ -59,17 +52,7 @@ const SECTOR_STATS = [
   },
 ];
 
-// Tenure cycling stats — the big anchor numeral rotates between
-// three angles on Miller's track record. Sourced from
-// content-writing-resources/company-background.md and curated to
-// avoid duplicating the SECTOR_STATS numbers.
-const TENURE_STATS = [
-  { value: "25", suffix: "+ yrs", label: "of relationships" },
-  { value: "96", suffix: "%", label: "managed in-house" },
-  { value: "4.5", suffix: "M L", label: "solvent reclaimed annually" },
-];
-
-// Service ordering for the home grid (design spec §3.1):
+// Service ordering for the home grid:
 // Industrial Waste Treatment, Environmental Remediation, Emergency Response,
 // then the rest alphabetical.
 const HOME_FIRST = [
