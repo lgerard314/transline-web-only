@@ -2,8 +2,6 @@
 // Shared phrases / phone numbers come from `./brand`.
 
 import {
-  OVER_25_YEARS,
-  SAFE_DEPENDABLE_ON_TIME,
   EMERGENCY_PHONE,
   VBEC_SHORT,
 } from "../../lib/content/brand";
@@ -44,16 +42,6 @@ export const HOME = {
       "If you're ready to join us in our mission and share our values, we invite you to explore the career opportunities we have to offer, and the rewards that come from being part of the Miller team.",
     opportunitiesCta: { label: "Open Positions", href: "/careers/" },
   },
-
-  marquee: [
-    OVER_25_YEARS,
-    SAFE_DEPENDABLE_ON_TIME,
-    "Three ISO certifications",
-    "MHCA COR 2023",
-    `${VBEC_SHORT} — licensed hazardous waste facility`,
-    "Cradle-to-grave tracking",
-    "24/7 emergency response",
-  ],
 
   finalCta: {
     eyebrow: "Get in touch",

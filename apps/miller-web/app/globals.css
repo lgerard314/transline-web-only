@@ -1717,7 +1717,6 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
 .mw-careers--bleed {
   position: relative;
 }
-.mw-careers--bleed .mw-careers__head-photo { display: none; }
 .mw-careers--bleed > .mw-inner {
   position: relative;
   z-index: 1;
@@ -2089,15 +2088,6 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
 }
 .mw-callback__row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 @media (max-width: 640px) { .mw-callback__row { grid-template-columns: 1fr; } }
-.mw-callback__ok {
-  margin-top: 16px;
-  padding: 12px 14px;
-  background: rgba(168,90,44,0.10);
-  border: 1px solid var(--c-accent);
-  border-radius: 10px;
-  color: var(--c-ink);
-  font-size: 14px;
-}
 /* Case-study Results table (CaseStudyDetailTemplate). Semantic <table>
    wrapped in an overflow-x container so narrow viewports scroll instead
    of squashing the columns. */
@@ -2623,7 +2613,6 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
 .mw-cert:hover .mw-cert__arr { transform: translateY(2px); }
 
 @media (max-width: 1100px) {
-  .mw-trust__row { grid-template-columns: 1fr; gap: 28px; }
   .mw-certs { grid-template-columns: 1fr 1fr; border-top: 1px solid var(--c-line); }
   .mw-cert:nth-child(odd) { border-left: 0; }
   .mw-cert:nth-child(3),
@@ -2651,7 +2640,6 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   align-items: end;
   margin-bottom: clamp(29px, 3vw, 58px);
 }
-.mw-services__head-l { display: contents; } /* kept for back-compat; new markup avoids wrapping */
 .mw-services__head .mw-section-tag { grid-column: 1; grid-row: 1; align-self: end; }
 .mw-services__head .mw-section-title { grid-column: 1; grid-row: 2; margin-top: 28px; }
 .mw-services__intro {
