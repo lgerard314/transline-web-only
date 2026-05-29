@@ -1,6 +1,6 @@
-import { HomeTemplate } from "../components/templates/HomeTemplate";
-import { HOME } from "../lib/content/home";
-import { OVER_25_YEARS } from "../lib/content/brand";
+import { HomeTemplate } from "./HomeTemplate";
+import { HOME } from "./home";
+import { OVER_25_YEARS } from "../../lib/content/brand";
 
 export const metadata = {
   title: "Miller Environmental — Hazardous Waste Management",

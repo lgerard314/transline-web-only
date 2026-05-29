@@ -6,7 +6,7 @@ import {
   SAFE_DEPENDABLE_ON_TIME,
   EMERGENCY_PHONE,
   VBEC_SHORT,
-} from "./brand";
+} from "../../lib/content/brand";
 
 export const HOME = {
   vbec: {

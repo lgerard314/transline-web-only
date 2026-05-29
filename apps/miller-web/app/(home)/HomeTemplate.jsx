@@ -13,10 +13,10 @@
 
 import Link from "next/link";
 import { Marquee } from "@white-owl/brand/components";
-import { HeroPhraseCycle } from "../HeroPhraseCycle";
-import { SectorStatCycle } from "../SectorStatCycle";
-import { FacilityGallery } from "../FacilityGallery";
-import { HistoryTimeline } from "../HistoryTimeline";
+import { HeroPhraseCycle } from "./HeroPhraseCycle";
+import { SectorStatCycle } from "./SectorStatCycle";
+import { FacilityGallery } from "./FacilityGallery";
+import { HistoryTimeline } from "./HistoryTimeline";
 import { SERVICES } from "../../lib/services";
 import { CERTS } from "../../lib/certs";
 
