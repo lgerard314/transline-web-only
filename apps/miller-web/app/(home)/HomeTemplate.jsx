@@ -9,7 +9,7 @@
 //   8. Marquee — brand refrains
 //   9. Final CTA — truck | content | logo, contact + 24/7
 //
-// Content arrives via the `content` prop from lib/content/home.js.
+// Content arrives via the `content` prop from app/(home)/home.js.
 
 import Link from "next/link";
 import { Marquee } from "@white-owl/brand/components";
@@ -649,7 +649,6 @@ export function HomeTemplate({ content }) {
 
           <div className="mw-careers__cards" data-reveal-stagger>
             <article className="mw-careers__card">
-              <span className="mw-careers__card-rule" aria-hidden="true" />
               <span className="mw-careers__card-tag">Culture</span>
               <h3 className="mw-careers__card-title">{c.joinFamily.whyTitle}</h3>
               <p className="mw-careers__card-text">{c.joinFamily.whyBody}</p>
@@ -658,7 +657,6 @@ export function HomeTemplate({ content }) {
               </Link>
             </article>
             <article className="mw-careers__card">
-              <span className="mw-careers__card-rule" aria-hidden="true" />
               <span className="mw-careers__card-tag">Hiring now</span>
               <h3 className="mw-careers__card-title">{c.joinFamily.opportunitiesTitle}</h3>
               <p className="mw-careers__card-text">{c.joinFamily.opportunitiesBody}</p>

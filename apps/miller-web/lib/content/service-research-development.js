@@ -32,5 +32,4 @@ export const researchDevelopment = {
       items: [],
     },
   ],
-  relatedSlugs: ["stewardship", "vacuum-truck", "project-management"],
 };

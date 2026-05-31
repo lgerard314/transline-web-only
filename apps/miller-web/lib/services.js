@@ -1,14 +1,12 @@
-// Miller services — single source of truth. Each entry drives both the
-// services landing grid and the per-service detail route. `variant`
-// determines which ServiceDetailTemplate branch renders: `compact` for
-// the simpler operational services, `capabilities` for the deeper
-// capabilities pages, `bespoke` for the one-off Remediation page that
-// uses its own RemediationTemplate (phase 04).
+// Miller services — single source of truth. Each entry drives the services
+// landing grid, the home service bento, and RelatedServices rails.
 //
-// Photo paths are absolute under /miller/services/ — those files ship
-// with the public-asset manifest from phase 01. Until phase 03/04 wire
-// the real photos through HeroPhoto, the `photo` field is consumed by
-// templates as a generic background.
+// `variant` documents the page layout family: `compact` and `capabilities`
+// map to ServiceDetailTemplate (each page.jsx passes variant explicitly);
+// `bespoke` marks custom routes (Remediation, Emergency Response).
+//
+// `photo` is consumed by home tiles and RelatedServices card backgrounds.
+// Service page heroes may use a different path from their content module.
 
 export const SERVICES = [
   {
@@ -38,7 +36,7 @@ export const SERVICES = [
     summary: "24/7 spill response across Manitoba and the prairies.",
     icon: "✕",
     photo: "/miller/fleet-trucks-gravel-transparent.png",
-    variant: "capabilities",
+    variant: "bespoke",
   },
   {
     id: "customer-waste-collection",

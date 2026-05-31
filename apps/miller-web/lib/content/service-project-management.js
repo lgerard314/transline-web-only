@@ -28,5 +28,4 @@ export const projectManagement = {
     "Asbestos removal",
     "Building design",
   ],
-  relatedSlugs: ["emergency-response", "research-development", "customer-waste-collection"],
 };

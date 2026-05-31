@@ -39,7 +39,6 @@ Per-service page headers + Remediation page detail cards + a couple of detail sh
 | File | Use |
 | ---- | --- |
 | `customer-waste-collection-hero.webp` | service page hero |
-| `emergency-response-hero.webp` | service page hero |
 | `industrial-waste-treatment-hero.webp` | service page hero (the flagship `capabilities` template) |
 | `project-management-hero.webp` + `project-management-detail.webp` | service page hero + detail |
 | `research-development-hero.webp` | service page hero |

@@ -34,5 +34,4 @@ export const vacuumTruck = {
     "Used oil and glycol",
     "PFOS and PFAS",
   ],
-  relatedSlugs: ["industrial-waste-treatment", "project-management", "research-development"],
 };

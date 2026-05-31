@@ -444,10 +444,6 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
 /* Home — shared section padding (mw-section is still used by interior pages). */
 .mw-section { padding: var(--space-8) 0; }
 
-/* mw-facility / Article 04 — superseded by .mw-fac2 (used by HomeTemplate). */
-
-/* mw-sectors / Article 05 — superseded by .mw-sec2 (used by HomeTemplate). */
-
 /* Cycling stat block — lives in the header's right column. Auto-rotates
    through ~5 stats with a fade-in on each change and a per-dot progress
    fill that matches the cycle interval. */
@@ -539,8 +535,6 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   .mw-stat-cycle__inner { animation: none; }
   .mw-stat-cycle__dot.is-active::before { animation: none; transform: scaleX(1); }
 }
-
-/* mw-tenure / Article 06 — superseded by .mw-ten3 + HistoryTimeline component. */
 
 /* ─────────────────────────────────────────────────────────────────
    Facility v2 — copy redesign. Photo-led: a large aerial photo on
@@ -1131,8 +1125,6 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
 }
 
 
-/* mw-ten2 wrapper / grid / visual / photo / stats — superseded by .mw-ten3 (history) + .mw-ten3__plate (truck). Only .mw-ten2__mission* remain (used by HomeTemplate inside the history right column). */
-
 .mw-ten2__mission {
   display: flex;
   flex-direction: column;
@@ -1474,7 +1466,6 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   border-left: 2px solid var(--c-accent);
 }
 
-/* Right body column reuses .mw-ten2 styles */
 .mw-ten3__body {
   display: flex;
   flex-direction: column;
@@ -1701,13 +1692,6 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
 
 .mw-careers__head {
   margin-bottom: clamp(48px, 5vw, 80px);
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: clamp(40px, 5vw, 80px);
-  align-items: center;
-}
-@media (max-width: 900px) {
-  .mw-careers__head { grid-template-columns: 1fr; gap: 32px; }
 }
 .mw-careers__head-text {
   display: flex;
@@ -1831,8 +1815,6 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
 }
 .mw-careers--bleed .mw-careers__head {
   margin-bottom: 0;
-  grid-template-columns: 1fr;
-  align-items: start;
   max-width: 50%;
 }
 @media (max-width: 900px) {
@@ -2230,10 +2212,9 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
 }
 
 /* ─────────────────────────────────────────────────────────────────
-   Home — hero. Civic-monument typography on warm walnut. The single
-   memorable moment: a heroic two-line imperative in Big Shoulders
-   Display with a terracotta stamp mark and a paper-grain texture
-   overlay. Fits within a 900px desktop viewport without scrolling.
+   Home — hero. Civic-monument typography on warm walnut. Barlow
+   Condensed display headline with terracotta stamp mark and a
+   paper-grain texture overlay.
    ───────────────────────────────────────────────────────────────── */
 .mw-hero {
   position: relative;
@@ -4495,23 +4476,6 @@ html[data-brand="miller"] .tl-footer__bot {
 @media (max-width: 420px) {
   .mw-svc-inds__grid { grid-template-columns: 1fr; }
 }
-/* Dark variant of the card grid (e.g. Emergency incident types) */
-.mw-svc-inds--dark { background: var(--c-navy-2); color: var(--c-on-navy); }
-.mw-svc-inds--dark::before {
-  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-dark) 38px, var(--c-grain-on-dark) 39px);
-}
-.mw-svc-inds--dark .mw-section-title { color: #fff; }
-.mw-svc-inds--dark .mw-svc-inds__lead { color: rgba(250, 243, 229, 0.91); }
-.mw-svc-inds--dark .mw-svc-ind {
-  background: var(--c-navy);
-  border-color: rgba(245, 230, 203, 0.10);
-}
-.mw-svc-inds--dark .mw-svc-ind__name { color: #fff; }
-.mw-svc-inds--dark .mw-svc-ind:hover {
-  border-color: var(--c-accent);
-  box-shadow: 0 16px 32px -24px rgba(0, 0, 0, 0.65);
-}
-
 /* Photo-thumbnail variant of the incident cards (Emergency Response).
    Scoped to --photo so the plain customer-waste collection grid keeps
    its diamond-only rows. Horizontal cards: 4:3 landscape thumb left,

@@ -22,5 +22,4 @@ export const industrialCleaning = {
     },
   ],
   bullets: [],
-  relatedSlugs: ["customer-waste-collection", "specialty-recycling", "project-management"],
 };

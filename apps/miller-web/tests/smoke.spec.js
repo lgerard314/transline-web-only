@@ -292,29 +292,33 @@ test.describe("ContactForm", () => {
 });
 
 // ---------------------------------------------------------------------------
-// test 7 — Carousel respects prefers-reduced-motion
+// test 7 — Home hero (finished design)
 // ---------------------------------------------------------------------------
-test.describe("Hero carousel", () => {
-  test("frames 2/3 are display:none under reduced motion", async ({ browser }) => {
+test.describe("Home hero", () => {
+  test("hero title and phrase cycle render", async ({ page }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+    await expect(page.locator("#mw-hero-title")).toBeVisible();
+    await expect(page.locator(".mw-hero__cycle")).toHaveCount(1);
+    await expect(page.locator(".mw-hero__cycle-item.is-active")).toHaveCount(1);
+  });
+
+  test("phrase cycle freezes on first phrase under reduced motion", async ({ browser }) => {
     const ctx = await browser.newContext({ reducedMotion: "reduce" });
     const page = await ctx.newPage();
     await page.goto("/", { waitUntil: "networkidle" });
-    const frame2 = page.locator(".mw-hero-frame--2");
-    await expect(frame2).toHaveCount(1);
-    const display = await frame2.evaluate((el) => getComputedStyle(el).display);
-    expect(display).toBe("none");
+    const active = page.locator(".mw-hero__cycle-item.is-active");
+    await expect(active).toHaveCount(1);
+    const firstText = await active.textContent();
+    await page.waitForTimeout(4500);
+    await expect(active).toHaveText(firstText ?? "");
     await ctx.close();
   });
 
-  test("animation present without reduced motion", async ({ browser }) => {
-    const ctx = await browser.newContext({ reducedMotion: "no-preference" });
-    const page = await ctx.newPage();
+  test("key home sections render", async ({ page }) => {
     await page.goto("/", { waitUntil: "networkidle" });
-    const animName = await page
-      .locator(".mw-hero-frame--1")
-      .evaluate((el) => getComputedStyle(el).animationName);
-    expect(animName).toContain("mw-carousel");
-    await ctx.close();
+    await expect(page.locator(".mw-sec2")).toHaveCount(1);
+    await expect(page.locator(".mw-fac2")).toHaveCount(1);
+    await expect(page.locator(".mw-ten3")).toHaveCount(1);
   });
 });
 

@@ -34,5 +34,4 @@ export const stewardship = {
       ],
     },
   ],
-  relatedSlugs: ["specialty-recycling", "emergency-response", "research-development"],
 };

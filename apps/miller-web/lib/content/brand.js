@@ -6,20 +6,16 @@
 // Plain strings only — no JSX, no React. This module is consumed by both
 // server components and content modules.
 
-// "Over 25 years" — Home trust eyebrow; Remediation lead; About hero;
+// "Over 25 years" — page metadata; Remediation lead; About hero;
 // service-page leads (optional).
 export const OVER_25_YEARS = "Over 25 years";
 
-// Home hero subhead; footer tagline; contact-page hero.
-export const SAFE_DEPENDABLE_ON_TIME =
-  "Safe, dependable, and on-time service";
-
-// Home trust eyebrow; QA hero (verbatim); inline trust badge on the five
-// regulated-service pages. Verbatim from QA scrape — change here only.
+// QA hero (verbatim); inline trust badge on regulated-service pages.
+// Verbatim from QA scrape — change here only.
 export const ONLY_IN_CANADA_CLAIM =
   "The only hazardous waste management company in Canada with an integrated management system featuring three ISO certifications.";
 
-// Home editorial block (verbatim); QA tracking section (verbatim).
+// QA tracking section (verbatim).
 export const CRADLE_TO_GRAVE_PHRASE = "cradle to grave";
 
 // 24/7 emergency line. Lives in EmergencyBanner + Contact-page Phone card +

@@ -45,5 +45,4 @@ export const specialtyRecycling = {
       ],
     },
   ],
-  relatedSlugs: ["research-development", "industrial-cleaning", "project-management"],
 };
