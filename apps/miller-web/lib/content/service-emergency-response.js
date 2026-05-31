@@ -120,7 +120,7 @@ export const emergencyResponse = {
       {
         text: "Confined-space response",
         photo: "/miller/confined-space-response.png",
-        bigAnchor: "50% 64%",
+        bigAnchor: "50% 100%",
         thumbAnchor: "50% 44%",
         caption: "A trained responder makes entry into a confined space others can't safely reach.",
       },
