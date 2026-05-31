@@ -39,16 +39,12 @@ export function CtaSection() {
 
         <div className="mw-svc-cta__form" data-reveal>
           <div className="mw-svc-cta__form-head">
-            <p className="mw-svc-cta__form-eyebrow" aria-hidden="true">
-              <span className="mw-section-tag-mark" />
-              <span>No emergency?</span>
-            </p>
             <p className="mw-svc-cta__form-title">Request pre-incident planning</p>
             <p className="mw-svc-cta__form-note">
               Quotes, site planning, and general inquiries — we'll be in touch.
             </p>
           </div>
-          <ContactForm />
+          <ContactForm showOptionalFields={false} />
         </div>
       </div>
     </section>

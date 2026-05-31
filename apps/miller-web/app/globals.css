@@ -34,6 +34,8 @@ html[data-brand="miller"] {
   --c-accent-2: #8A4720;
   --c-amber: #D89A3F;
   --c-on-navy: #F5E6CB;
+  /* Body-copy color for text set on the dark walnut/brown surfaces. */
+  --c-body-on-dark: #faf3e5e8;
 }
 
 /* The brand stylesheet hardcodes the topbar / mobile-nav / footer to `rgba(11,31,42,...)` cool navy. Override on Miller pages so the chrome reads as warm walnut alongside the home hero. */
@@ -4639,7 +4641,9 @@ html[data-brand="miller"] .tl-footer__bot {
 .mw-svc-cta--dark .mw-stop { background: var(--c-accent); }
 .mw-svc-cta--dark .mw-section-tag-label { color: rgba(245, 230, 203, 0.82); }
 .mw-svc-cta--dark .mw-svc-cta__title { color: #fff; }
-.mw-svc-cta--dark .mw-svc-cta__body { color: rgba(245, 230, 203, 0.74); }
+/* Square period hugs the last word (immediately after "it"). */
+.mw-svc-cta__title .mw-stop { margin-left: -0.06em; }
+.mw-svc-cta--dark .mw-svc-cta__body { color: var(--c-body-on-dark); }
 
 /* Focal hotline: pulsing live dot + oversized terracotta number in an inset. */
 .mw-svc-cta__hotline {
@@ -4719,17 +4723,6 @@ html[data-brand="miller"] .tl-footer__bot {
 }
 .mw-svc-cta__form .mw-contact-form { max-width: none; }
 .mw-svc-cta__form-head { margin-bottom: clamp(18px, 1.8vw, 26px); }
-.mw-svc-cta__form-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin: 0 0 10px;
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--c-ink-2);
-}
 .mw-svc-cta__form-title {
   margin: 0;
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;

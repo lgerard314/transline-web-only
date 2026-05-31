@@ -16,7 +16,7 @@ import { EMERGENCY_PHONE } from "@/lib/content/brand";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export function ContactForm() {
+export function ContactForm({ showOptionalFields = true }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -123,14 +123,16 @@ export function ContactForm() {
           />
         </div>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-        <div data-fld="company">
-          <FormField label="Company" value={company} onChange={setCompany} />
+      {showOptionalFields && (
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          <div data-fld="company">
+            <FormField label="Company" value={company} onChange={setCompany} />
+          </div>
+          <div data-fld="title">
+            <FormField label="Title" value={title} onChange={setTitle} />
+          </div>
         </div>
-        <div data-fld="title">
-          <FormField label="Title" value={title} onChange={setTitle} />
-        </div>
-      </div>
+      )}
       <div data-fld="comment">
         <FormField
           label="Comment / question"
