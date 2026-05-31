@@ -26,7 +26,7 @@ const MIDDLE = 1;
 export function RelatedServices({
   currentSlug,
   label = "Other services",
-  heading = "How can we help?",
+  heading = "We've got you covered...",
   titleId,
   allHref = "/industrial-services/",
   allLabel = "All services",
