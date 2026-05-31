@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { SERVICES } from "../lib/services";
 
 // Splits a title so the last word drops to its own line — matches the
@@ -12,8 +12,15 @@ function splitTitle(title) {
   return { line1: parts.slice(0, -1).join(" "), line2: parts[parts.length - 1] };
 }
 
-// Reusable related-services rail. Renders every service (minus the
-// current page) as a home mw-svcs-tile picture card in a scroll-snap
+// Three identical copies let the rail scroll endlessly in either direction:
+// scrollLeft is parked in the middle copy and silently jumps by one
+// copy-width when it drifts out of band — invisible because the copies are
+// pixel-identical. Only the middle copy is exposed to keyboard / AT.
+const COPIES = 3;
+const MIDDLE = 1;
+
+// Reusable related-services rail. Renders every service (minus the current
+// page) as a home mw-svcs-tile picture card in an infinite-loop scroll
 // track with prev/next controls. Drop it in on any service page:
 // <RelatedServices currentSlug="emergency-response" />.
 export function RelatedServices({
@@ -25,29 +32,43 @@ export function RelatedServices({
 }) {
   const LabelTag = titleId ? "h2" : "p";
   const services = SERVICES.filter((s) => s.slug !== currentSlug);
+  const n = services.length;
   const trackRef = useRef(null);
-  const [atStart, setAtStart] = useState(true);
-  const [atEnd, setAtEnd] = useState(false);
+  const setWidthRef = useRef(0);
 
-  const update = useCallback(() => {
+  // Pixel distance of one full copy (first card of copy 1 minus first of copy 0).
+  const measure = useCallback(() => {
     const el = trackRef.current;
-    if (!el) return;
-    const { scrollLeft, scrollWidth, clientWidth } = el;
-    setAtStart(scrollLeft <= 2);
-    setAtEnd(scrollLeft + clientWidth >= scrollWidth - 2);
-  }, []);
+    if (!el || el.children.length < n + 1) return;
+    setWidthRef.current = el.children[n].offsetLeft - el.children[0].offsetLeft;
+  }, [n]);
 
+  // Park in the middle copy; wrap whenever scroll leaves the [0.5w, 1.5w) band.
   useEffect(() => {
-    update();
     const el = trackRef.current;
-    if (!el) return undefined;
-    el.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    return () => {
-      el.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
+    if (!el || n === 0) return undefined;
+
+    const init = () => {
+      measure();
+      if (setWidthRef.current) el.scrollLeft = setWidthRef.current;
     };
-  }, [update]);
+    init();
+    const raf = requestAnimationFrame(init); // re-measure after first paint
+
+    const onScroll = () => {
+      const w = setWidthRef.current;
+      if (!w) return;
+      if (el.scrollLeft < w * 0.5) el.scrollLeft += w;
+      else if (el.scrollLeft >= w * 1.5) el.scrollLeft -= w;
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", measure);
+    return () => {
+      cancelAnimationFrame(raf);
+      el.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", measure);
+    };
+  }, [measure, n]);
 
   const scrollByDir = useCallback((dir) => {
     const el = trackRef.current;
@@ -80,47 +101,57 @@ export function RelatedServices({
           type="button"
           className="mw-rel__nav mw-rel__nav--prev"
           aria-label="Scroll to previous services"
-          disabled={atStart}
           onClick={() => scrollByDir(-1)}
         >
           <span aria-hidden="true">&larr;</span>
         </button>
         <ul className="mw-rel__track" ref={trackRef} aria-label={label}>
-        {services.map((s) => {
-          const { line1, line2 } = splitTitle(s.title);
-          return (
-            <li key={s.slug} className="mw-rel__item" data-rel-card>
-              <Link href={`/industrial-services/${s.slug}/`} className="mw-svcs-tile">
-                <span
-                  className="mw-svcs-tile__photo"
-                  style={{ backgroundImage: `url(${s.photo})` }}
-                  aria-hidden="true"
-                />
-                <div className="mw-svcs-tile__body">
-                  <div className="mw-svcs-tile__title-row">
-                    <h3 className="mw-svcs-tile__title">
-                      {line1}
-                      {line2 && (
-                        <>
-                          <br />
-                          {line2}
-                        </>
-                      )}
-                    </h3>
-                    <span className="mw-svcs-tile__arr" aria-hidden="true">&rarr;</span>
-                  </div>
-                  <p className="mw-svcs-tile__text">{s.summary}</p>
-                </div>
-              </Link>
-            </li>
-          );
-        })}
+          {Array.from({ length: COPIES }).flatMap((_, copy) =>
+            services.map((s) => {
+              const { line1, line2 } = splitTitle(s.title);
+              const clone = copy !== MIDDLE;
+              return (
+                <li
+                  key={`${copy}-${s.slug}`}
+                  className="mw-rel__item"
+                  data-rel-card
+                  aria-hidden={clone ? "true" : undefined}
+                >
+                  <Link
+                    href={`/industrial-services/${s.slug}/`}
+                    className="mw-svcs-tile"
+                    tabIndex={clone ? -1 : undefined}
+                  >
+                    <span
+                      className="mw-svcs-tile__photo"
+                      style={{ backgroundImage: `url(${s.photo})` }}
+                      aria-hidden="true"
+                    />
+                    <div className="mw-svcs-tile__body">
+                      <div className="mw-svcs-tile__title-row">
+                        <h3 className="mw-svcs-tile__title">
+                          {line1}
+                          {line2 && (
+                            <>
+                              <br />
+                              {line2}
+                            </>
+                          )}
+                        </h3>
+                        <span className="mw-svcs-tile__arr" aria-hidden="true">&rarr;</span>
+                      </div>
+                      <p className="mw-svcs-tile__text">{s.summary}</p>
+                    </div>
+                  </Link>
+                </li>
+              );
+            })
+          )}
         </ul>
         <button
           type="button"
           className="mw-rel__nav mw-rel__nav--next"
           aria-label="Scroll to next services"
-          disabled={atEnd}
           onClick={() => scrollByDir(1)}
         >
           <span aria-hidden="true">&rarr;</span>
