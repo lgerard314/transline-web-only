@@ -495,8 +495,8 @@ export function HomeTemplate({ content }) {
 {/* 4. FACILITY — Photo-led: a large aerial photo on the right with a smaller plaque photo overlapping its bottom-left corner; content panel on the left with eyebrow + title above the lead, then stats and CTAs. Capabilities below as a clean chip ribbon. */}
       <section className="mw-fac2" aria-labelledby="mw-facility-heading-copy">
         <div className="mw-inner">
-          <div className="mw-fac2__split" data-reveal-stagger>
-            <div className="mw-fac2__content">
+          <div className="mw-fac2__split">
+            <div className="mw-fac2__content" data-reveal-stagger>
               <header className="mw-fac2__head">
                 <p className="mw-section-tag" aria-hidden="true">
                   <span className="mw-section-tag-mark" />

@@ -11,7 +11,7 @@ export function FacilityGallery({ photos }) {
   const active = photos[index];
 
   return (
-    <div className="mw-fac2__media">
+    <div className="mw-fac2__media" data-reveal>
       <figure className="mw-fac2__photo-frame">
         <img
           key={index}
