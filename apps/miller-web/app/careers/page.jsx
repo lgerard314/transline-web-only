@@ -1,5 +1,9 @@
-import { CareersTemplate } from "../../components/templates/CareersTemplate";
-import { CAREERS } from "../../lib/content/careers";
+import { HeroSection } from "./sections/01-hero";
+import { WhyMillerSection } from "./sections/02-why-miller";
+import { OpenPositionsSection } from "./sections/03-open-positions";
+import { BenefitsTeaserSection } from "./sections/04-benefits-teaser";
+import { DeiSection } from "./sections/05-dei";
+import { CloseSection } from "./sections/06-close";
 
 export const metadata = {
   title: "Careers",
@@ -9,5 +13,14 @@ export const metadata = {
 };
 
 export default function CareersPage() {
-  return <CareersTemplate content={CAREERS} />;
+  return (
+    <>
+      <HeroSection />
+      <WhyMillerSection />
+      <OpenPositionsSection />
+      <BenefitsTeaserSection />
+      <DeiSection />
+      <CloseSection />
+    </>
+  );
 }

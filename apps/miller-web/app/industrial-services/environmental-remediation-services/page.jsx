@@ -1,5 +1,10 @@
-import { RemediationTemplate } from "../../../components/templates/RemediationTemplate";
-import { REMEDIATION } from "../../../lib/content/service-environmental-remediation";
+import { HeroSection } from "./sections/01-hero";
+import { WhatWeDoSection } from "./sections/02-what-we-do";
+import { IndustriesSection } from "./sections/03-industries";
+import { ProcessSection } from "./sections/04-process";
+import { CaseStudiesSection } from "./sections/05-case-studies";
+import { WhyChooseSection } from "./sections/06-why-choose";
+import { CallbackSection } from "./sections/07-callback";
 
 export const metadata = {
   title: "Environmental Remediation Services",
@@ -11,5 +16,15 @@ export const metadata = {
 };
 
 export default function RemediationPage() {
-  return <RemediationTemplate content={REMEDIATION} />;
+  return (
+    <>
+      <HeroSection />
+      <WhatWeDoSection />
+      <IndustriesSection />
+      <ProcessSection />
+      <CaseStudiesSection />
+      <WhyChooseSection />
+      <CallbackSection />
+    </>
+  );
 }

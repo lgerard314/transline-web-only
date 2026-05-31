@@ -1,19 +1,15 @@
-import { ContactTemplate } from "../../components/templates/ContactTemplate";
-import { ContactForm } from "../../components/ContactForm";
-import { contactContent as c } from "../../lib/content/contact";
+import { HeroSection } from "./sections/01-hero";
+import { ContactCardsSection } from "./sections/02-contact-cards";
+import { FormSection } from "./sections/03-form";
 
 export const metadata = { title: "Contact" };
 
 export default function ContactPage() {
   return (
-    <ContactTemplate
-      eyebrow={c.hero.eyebrow}
-      title={c.hero.title}
-      lead={c.hero.lead}
-      phone={c.phone}
-      office={c.office}
-      intake={c.intake}
-      formSlot={<ContactForm />}
-    />
+    <>
+      <HeroSection />
+      <ContactCardsSection />
+      <FormSection />
+    </>
   );
 }

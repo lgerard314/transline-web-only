@@ -29,4 +29,12 @@ export const ABOUT_INDEX = {
         "Our vision: a trusted provider of sustainable environmental waste and process solutions. Our mission: innovative and accountable environmental management solutions that advance a sustainable world.",
     },
   ],
+
+  subPages: [
+    { label: "Health & Safety", href: "/about-us/health-safety/" },
+    { label: "Licencing Information", href: "/about-us/licencing-information/" },
+    { label: "Professional Affiliations", href: "/about-us/professional-affiliations/" },
+    { label: "Quality Assurance", href: "/about-us/quality-assurance/" },
+    { label: "Vision, Mission, and Core Values", href: "/about-us/vision-mission-and-core-values/" },
+  ],
 };

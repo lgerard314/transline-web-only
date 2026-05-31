@@ -1,15 +1,13 @@
-import { IndexTemplate } from "../../components/templates/IndexTemplate";
-import { caseStudiesIndex as c } from "../../lib/content/case-studies";
+import { HeroSection } from "./sections/01-hero";
+import { GridSection } from "./sections/02-grid";
 
 export const metadata = { title: "Case Studies" };
 
 export default function CaseStudiesIndexPage() {
   return (
-    <IndexTemplate
-      eyebrow={c.hero.eyebrow}
-      title={c.hero.title}
-      lead={c.hero.lead}
-      cards={c.cards}
-    />
+    <>
+      <HeroSection />
+      <GridSection />
+    </>
   );
 }

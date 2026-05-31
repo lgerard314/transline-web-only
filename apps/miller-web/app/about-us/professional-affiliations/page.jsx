@@ -1,21 +1,15 @@
-import { AboutTemplate } from "../../../components/templates/AboutTemplate";
-import { AffiliationsGrid } from "../../../components/AffiliationsGrid";
-import { aboutProfessionalAffiliations as c } from "../../../lib/content/about-professional-affiliations";
+import { HeroSection } from "./sections/01-hero";
+import { IntroSection } from "./sections/02-intro";
+import { AffiliationsGridSection } from "./sections/03-affiliations-grid";
 
 export const metadata = { title: "Professional Affiliations" };
 
 export default function ProfessionalAffiliationsPage() {
   return (
     <>
-      <AboutTemplate
-        eyebrow={c.hero.eyebrow}
-        title={c.hero.title}
-        lead={c.hero.lead}
-        sections={c.sections}
-      />
-      <section className="tl-container" style={{ padding: "0 0 var(--space-8)" }}>
-        <AffiliationsGrid />
-      </section>
+      <HeroSection />
+      <IntroSection />
+      <AffiliationsGridSection />
     </>
   );
 }

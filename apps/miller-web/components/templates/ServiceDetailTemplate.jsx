@@ -1,8 +1,8 @@
 // Service detail page template. Two variants — `compact` and
 // `capabilities` — share a hero + lead + related-services rail; the
 // middle slot differs. The flagship `industrial-waste-treatment` page
-// uses the capabilities variant; remediation uses its own bespoke
-// template (RemediationTemplate, phase 04).
+// uses the capabilities variant; remediation is sectionized under
+// `app/industrial-services/environmental-remediation-services/`.
 //
 // Content is passed in via props as plain strings + arrays per the
 // content-layer rule (design spec §5.1). The template owns layout

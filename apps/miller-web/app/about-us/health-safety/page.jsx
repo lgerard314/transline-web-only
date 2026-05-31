@@ -1,17 +1,13 @@
-import { AboutTemplate } from "../../../components/templates/AboutTemplate";
-import { aboutHealthSafety as c } from "../../../lib/content/about-health-safety";
+import { HeroSection } from "./sections/01-hero";
+import { ProseSection } from "./sections/02-prose";
 
 export const metadata = { title: "Health & Safety" };
 
 export default function HealthSafetyPage() {
   return (
-    <AboutTemplate
-      eyebrow={c.hero.eyebrow}
-      title={c.hero.title}
-      lead={c.hero.lead}
-      photo={c.hero.photo}
-      sections={c.sections}
-      lists={c.lists}
-    />
+    <>
+      <HeroSection />
+      <ProseSection />
+    </>
   );
 }

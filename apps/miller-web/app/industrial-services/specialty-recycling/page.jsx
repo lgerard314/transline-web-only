@@ -1,19 +1,20 @@
-import { ServiceDetailTemplate } from "../../../components/templates/ServiceDetailTemplate";
-import { specialtyRecycling as c } from "../../../lib/content/service-specialty-recycling";
+import { specialtyRecycling as c } from "@/lib/content/service-specialty-recycling";
+import { HeroSection } from "./sections/01-hero";
+import { BodySection } from "./sections/02-body";
+import { RelatedSection } from "./sections/03-related";
 
-export const metadata = { title: "Specialty Recycling" };
+export const metadata = {
+  title: "Specialty Recycling",
+  description: c.hero.lead,
+  alternates: { canonical: "/industrial-services/specialty-recycling/" },
+};
 
 export default function SpecialtyRecyclingPage() {
   return (
-    <ServiceDetailTemplate
-      variant="capabilities"
-      slug="specialty-recycling"
-      eyebrow={c.hero.eyebrow}
-      title={c.hero.title}
-      lead={c.hero.lead}
-      photo={c.hero.photo}
-      groups={c.sections}
-      trustBadge={c.inlineTrustBadge}
-    />
+    <>
+      <HeroSection />
+      <BodySection />
+      <RelatedSection />
+    </>
   );
 }

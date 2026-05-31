@@ -1,19 +1,19 @@
-import { CaseStudyDetailTemplate } from "../../../components/templates/CaseStudyDetailTemplate";
-import { caseHwy16Diesel as c } from "../../../lib/content/case-hwy16-diesel";
+import { HeroSection } from "./sections/01-hero";
+import { ProblemSection } from "./sections/02-problem";
+import { ApproachSection } from "./sections/03-approach";
+import { ResultsSection } from "./sections/04-results";
+import { CtaSection } from "./sections/05-cta";
 
 export const metadata = { title: "Highway 16 Diesel Spill Response & Remediation" };
 
 export default function Hwy16DieselCaseStudyPage() {
   return (
-    <CaseStudyDetailTemplate
-      eyebrow={c.hero.eyebrow}
-      title={c.hero.title}
-      lead={c.hero.lead}
-      photo={c.hero.photo}
-      meta={c.hero.meta}
-      problem={c.problem}
-      approach={c.approach}
-      results={c.results}
-    />
+    <>
+      <HeroSection />
+      <ProblemSection />
+      <ApproachSection />
+      <ResultsSection />
+      <CtaSection />
+    </>
   );
 }

@@ -1,19 +1,17 @@
-import { JobPostingTemplate } from "../../../components/templates/JobPostingTemplate";
-import { jobPlantManager as c } from "../../../lib/content/job-plant-manager";
+import { jobPlantManager as c } from "@/lib/content/job-plant-manager";
+import { HeroSection } from "./sections/01-hero";
+import { RoleBodySection } from "./sections/02-role-body";
 
-export const metadata = { title: "Plant Manager — Careers" };
+export const metadata = {
+  title: "Plant Manager — Careers",
+  description: c.hero.lead,
+};
 
 export default function PlantManagerJobPage() {
   return (
-    <JobPostingTemplate
-      eyebrow={c.hero.eyebrow}
-      title={c.hero.title}
-      lead={c.hero.lead}
-      location={c.location}
-      roleSummary={c.roleSummary}
-      responsibilities={c.responsibilities}
-      requirements={c.requirements}
-      benefits={c.benefits}
-    />
+    <>
+      <HeroSection />
+      <RoleBodySection />
+    </>
   );
 }

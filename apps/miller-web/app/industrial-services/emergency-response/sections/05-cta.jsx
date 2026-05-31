@@ -8,7 +8,7 @@ export function CtaSection() {
   const cta = c.cta;
   return (
     <section className="mw-svc-cta mw-svc-cta--dark" aria-labelledby="er-cta-title">
-      <div className="mw-svc-cta__inner mw-inner mw-svc-cta__grid">
+      <div className="mw-svc-cta__inner mw-inner mw-svc-cta__grid mw-svc-cta__grid--reverse">
         <div className="mw-svc-cta__content" data-reveal>
           <p className="mw-section-tag" aria-hidden="true">
             <span className="mw-section-tag-mark" />
