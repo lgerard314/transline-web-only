@@ -94,13 +94,13 @@ export default function EmergencyResponsePage() {
       </section>
 
       {/* §3 — What we respond to (dark incident grid) */}
-      <section className="mw-svc-inds mw-svc-inds--dark mw-svc-inds--photo" aria-labelledby="er-inc-title">
+      <section className="mw-svc-inds mw-svc-inds--photo" aria-labelledby="er-inc-title">
         <div className="mw-svc-inds__inner mw-inner">
           <header className="mw-svc-inds__head" data-reveal>
             <div className="mw-svc-inds__head-left">
               <p className="mw-section-tag" aria-hidden="true">
                 <span className="mw-section-tag-mark" />
-                <span className="mw-section-tag-label mw-section-tag-label--invert">{inc.eyebrow}</span>
+                <span className="mw-section-tag-label">{inc.eyebrow}</span>
               </p>
               <h2 id="er-inc-title" className="mw-section-title">
                 {inc.title}<span className="mw-stop" aria-hidden="true" />

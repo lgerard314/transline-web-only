@@ -4460,7 +4460,8 @@ html[data-brand="miller"] .tl-footer__bot {
    Scoped to --photo so the plain customer-waste collection grid keeps
    its diamond-only rows. Horizontal cards: 4:3 landscape thumb left,
    title + one-sentence blurb right; accent top-bar wipe + photo brighten
-   on hover. */
+   on hover. Rendered on the light --c-bg surface. */
+.mw-svc-inds--photo { background: var(--c-bg); }
 .mw-svc-inds--photo .mw-svc-ind {
   position: relative;
   flex-direction: row;
@@ -4489,7 +4490,7 @@ html[data-brand="miller"] .tl-footer__bot {
   aspect-ratio: 4 / 3;
   overflow: hidden;
   background: var(--c-navy-2);
-  border-right: 1px solid rgba(245, 230, 203, 0.12);
+  border-right: 1px solid var(--c-line);
 }
 .mw-svc-ind__thumb img {
   width: 100%;
@@ -4525,7 +4526,7 @@ html[data-brand="miller"] .tl-footer__bot {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
   font-size: clamp(12px, 0.85vw, 13px);
   line-height: 1.4;
-  color: rgba(245, 230, 203, 0.72);
+  color: var(--c-ink-2);
 }
 @media (max-width: 420px) {
   .mw-svc-inds--photo .mw-svc-ind {
