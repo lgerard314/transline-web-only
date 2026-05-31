@@ -66,7 +66,10 @@ export function RelatedServices({
   return (
     <div className="mw-rel" data-reveal>
       <div className="mw-rel__head">
-        <LabelTag id={titleId} className="mw-rel__label">{label}</LabelTag>
+        <LabelTag id={titleId} className="mw-section-tag mw-rel__label">
+          <span className="mw-section-tag-mark" aria-hidden="true" />
+          <span className="mw-section-tag-label">{label}</span>
+        </LabelTag>
         <div className="mw-rel__controls">
           <button
             type="button"

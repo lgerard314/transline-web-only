@@ -4635,14 +4635,7 @@ html[data-brand="miller"] .tl-footer__bot {
   flex-wrap: wrap;
   margin-bottom: clamp(18px, 1.8vw, 26px);
 }
-.mw-rel__label {
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
-  font-size: 11px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--c-ink-2);
-  margin: 0;
-}
+.mw-rel__label { margin: 0; }
 .mw-rel__controls { display: flex; align-items: center; gap: 12px; }
 .mw-rel__nav {
   appearance: none;

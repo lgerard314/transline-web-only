@@ -5,19 +5,13 @@ import { EMERGENCY_PHONE, VBEC_SHORT } from "./brand";
 const EMERGENCY_HREF = `tel:${EMERGENCY_PHONE.replace(/[^0-9+]/g, "")}`;
 
 export const emergencyResponse = {
-  slug: "emergency-response",
-
   hero: {
-    kicker: "Industrial Services",
-    name: "Emergency Response",
     eyebrow: "24/7 spill response",
     title: "When it spills,",
     titleEm: "we're already moving",
     lead:
       "Trained spill responders and a prairie-wide subcontractor network on call around the clock — containment, cleanup, and disposal for flammable, corrosive, and toxic dangerous goods across central Canada.",
     photo: "/miller/fleet-trucks-gravel-transparent.png",
-    caption: "Containment on site, any hour",
-    callSup: "Call the 24/7 line",
     emergencyDisplay: EMERGENCY_PHONE,
     emergencyHref: EMERGENCY_HREF,
     secondaryCta: { label: "Pre-incident planning", href: "/contact-us/" },
@@ -101,6 +95,4 @@ export const emergencyResponse = {
     title: "Save the number before you need it",
     body: "Program Miller's 24/7 line into your phone today. When minutes matter, one call puts a trained crew on the road.",
   },
-
-  relatedSlugs: ["project-management", "customer-waste-collection", "industrial-waste-treatment"],
 };
