@@ -61,14 +61,14 @@ export const emergencyResponse = {
     lead:
       "Spill responses vary with the environment, material, and scale. Every one gets a customized approach — these are the situations our crews are equipped for.",
     items: [
-      { name: "Chemical spills", blurb: "Acids, caustics, and reactive process chemicals contained at the source.", photo: "/miller/services/remediation-hazmat-excavation.webp" },
-      { name: "Fuel & diesel releases", blurb: "Tank, line, and roadway fuel releases recovered before they spread.", photo: "/miller/case-studies/hwy-16-diesel-spill.webp" },
-      { name: "Transport incidents", blurb: "Highway and rail cargo spills cleared and the corridor reopened.", photo: "/miller/case-studies/hwy-16-diesel-spill-response.webp" },
-      { name: "Industrial leaks", blurb: "Process and equipment failures sealed and the area made safe.", photo: "/miller/services/remediation-industrial-site.webp" },
-      { name: "Dangerous goods", blurb: "Flammable, corrosive, and toxic DG handled to TDG standards.", photo: "/miller/services/industrial-waste-treatment-hero.webp" },
-      { name: "Confined-space entry", blurb: "Trained entry into vaults, sumps, and vessels others can't reach.", photo: "/miller/services/industrial-cleaning-hero.jpeg" },
-      { name: "Vessel & tank failures", blurb: "Ruptured tanks drained, contained, and decontaminated on site.", photo: "/miller/services/remediation-ust.webp" },
-      { name: "Contaminated soil", blurb: "Impacted soil excavated, treated, and routed to VBEC.", photo: "/miller/services/remediation-contaminated-soil.webp" },
+      { name: "Chemical spills", blurb: "Acids, caustics, and reactive process chemicals contained at the source.", photo: "/miller/chemical-spills.png" },
+      { name: "Fuel & diesel releases", blurb: "Tank, line, and roadway fuel releases recovered before they spread.", photo: "/miller/fuel-and-diesel-spills.png" },
+      { name: "Transport incidents", blurb: "Highway and rail cargo spills cleared and the corridor reopened.", photo: "/miller/transport-incidents.png" },
+      { name: "Industrial leaks", blurb: "Process and equipment failures sealed and the area made safe.", photo: "/miller/industrial-leaks.png" },
+      { name: "Dangerous goods", blurb: "Flammable, corrosive, and toxic DG handled to TDG standards.", photo: "/miller/dangerous-goods.png" },
+      { name: "Confined-space entry", blurb: "Trained entry into vaults, sumps, and vessels others can't reach.", photo: "/miller/confined-space-entry.png" },
+      { name: "Vessel & tank failures", blurb: "Ruptured tanks drained, contained, and decontaminated on site.", photo: "/miller/vessel-and-tank-failures.png" },
+      { name: "Contaminated soil", blurb: "Impacted soil excavated, treated, and routed to VBEC.", photo: "/miller/contaminated-soul.png" },
     ],
   },
 
@@ -130,7 +130,11 @@ export const emergencyResponse = {
   // §5 — Closing CTA.
   cta: {
     eyebrow: "Don't wait for the spill",
-    title: "Save the number before you need it",
+    title: "Save our number…",
+    titleEm: "before",
+    titleAfter: "you need it",
     body: "Program Miller's 24/7 line into your phone today. When minutes matter, one call puts a trained crew on the road.",
+    formTitle: "Request pre-incident planning",
+    formNote: "Quotes, site planning, and general inquiries — we'll be in touch.",
   },
 };

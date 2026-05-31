@@ -16,7 +16,9 @@ export function CtaSection() {
             <span className="mw-section-tag-label">{cta.eyebrow}</span>
           </p>
           <h2 id="er-cta-title" className="mw-section-title mw-svc-cta__title">
-            {cta.title}<span className="mw-stop" aria-hidden="true" />
+            {cta.title}{" "}
+            <em className="mw-svc-cta__title-em">{cta.titleEm}</em>{" "}
+            {cta.titleAfter}<span className="mw-stop" aria-hidden="true" />
           </h2>
           <p className="mw-svc-cta__body">{cta.body}</p>
 
@@ -30,7 +32,6 @@ export function CtaSection() {
               <span className="mw-svc-cta__hotline-sup">24/7 emergency line</span>
               <span className="mw-svc-cta__hotline-num">{h.emergencyDisplay}</span>
             </span>
-            <span className="mw-svc-cta__hotline-arr" aria-hidden="true">→</span>
           </a>
           <p className="mw-svc-cta__hotline-note">
             Answered by a trained responder — every hour, every day of the year.
@@ -39,10 +40,8 @@ export function CtaSection() {
 
         <div className="mw-svc-cta__form" data-reveal>
           <div className="mw-svc-cta__form-head">
-            <p className="mw-svc-cta__form-title">Request pre-incident planning</p>
-            <p className="mw-svc-cta__form-note">
-              Quotes, site planning, and general inquiries — we'll be in touch.
-            </p>
+            <p className="mw-svc-cta__form-title">{cta.formTitle}</p>
+            <p className="mw-svc-cta__form-note">{cta.formNote}</p>
           </div>
           <ContactForm showOptionalFields={false} />
         </div>

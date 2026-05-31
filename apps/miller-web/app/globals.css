@@ -2443,6 +2443,8 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   text-decoration: none;
   font: inherit;
   cursor: pointer;
+  border: 0;
+  appearance: none;
   transition: transform 180ms ease, background 220ms ease, border-color 220ms ease, color 220ms ease;
 }
 .mw-cta:focus-visible {
@@ -4609,7 +4611,7 @@ html[data-brand="miller"] .tl-footer__bot {
    a terracotta signal rule, a faint brand-diamond watermark, the pulsing 24/7
    hotline as the focal element, and the contact form as a warm cream card. */
 .mw-svc-cta--dark {
-  background: var(--c-navy-2);
+  background: var(--c-navy);
   color: var(--c-on-navy);
   border-top: 3px solid var(--c-accent);
 }
@@ -4636,14 +4638,20 @@ html[data-brand="miller"] .tl-footer__bot {
   gap: clamp(32px, 4vw, 64px);
   align-items: start;
 }
-.mw-svc-cta--dark .mw-svc-cta__content { max-width: 46ch; }
+.mw-svc-cta--dark .mw-svc-cta__content { max-width: none; }
 .mw-svc-cta--dark .mw-section-tag-mark { background: var(--c-accent); }
 .mw-svc-cta--dark .mw-stop { background: var(--c-accent); }
 .mw-svc-cta--dark .mw-section-tag-label { color: rgba(245, 230, 203, 0.82); }
-.mw-svc-cta--dark .mw-svc-cta__title { color: #fff; }
+.mw-svc-cta--dark .mw-svc-cta__title { color: #fff; font-size: clamp(48px, 5.1vw, 90px); }
+.mw-svc-cta__title-em {
+  font-style: italic;
+  text-decoration-line: underline;
+  text-decoration-thickness: 0.06em;
+  text-underline-offset: 0.1em;
+}
 /* Square period hugs the last word (immediately after "it"). */
 .mw-svc-cta__title .mw-stop { margin-left: -0.06em; }
-.mw-svc-cta--dark .mw-svc-cta__body { color: var(--c-body-on-dark); }
+.mw-svc-cta--dark .mw-svc-cta__body { color: var(--c-body-on-dark); max-width: 80%; }
 
 /* Focal hotline: pulsing live dot + oversized terracotta number in an inset. */
 .mw-svc-cta__hotline {
@@ -4695,13 +4703,6 @@ html[data-brand="miller"] .tl-footer__bot {
   line-height: 1;
   color: #fff;
 }
-.mw-svc-cta__hotline-arr {
-  margin-left: auto;
-  font-size: clamp(20px, 2vw, 26px);
-  color: var(--c-accent);
-  transition: transform 0.25s cubic-bezier(.2, .7, .2, 1);
-}
-.mw-svc-cta__hotline:hover .mw-svc-cta__hotline-arr { transform: translateX(4px); }
 .mw-svc-cta__hotline-note {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
   font-size: 13px;

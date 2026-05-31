@@ -144,8 +144,8 @@ export function ContactForm({ showOptionalFields = true }) {
         />
       </div>
       <div>
-        <button type="submit" className="tl-btn tl-btn--primary">
-          Send message <span className="tl-btn-arr">→</span>
+        <button type="submit" className="mw-cta mw-cta--solid">
+          Send message <span aria-hidden="true">→</span>
         </button>
       </div>
     </form>
