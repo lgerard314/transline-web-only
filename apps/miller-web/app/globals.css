@@ -5348,12 +5348,26 @@ html[data-brand="miller"] .tl-footer__bot {
   .mw-svc-cov__item-thumb { transition: none; }
 }
 /* Coverage photo stretches to the content row (header top → actions bottom).
-   The image swap is driven by hovering the list items, so the photo itself has
-   no hover effect; its default state is the end of the old hover — a full-width
-   brown top border. */
-.mw-svc-cov__media::before { width: calc(100% + 2px); }
+   The image swap and the top-border wipe are both driven by hovering the list
+   items, so the photo itself has no hover effect. The shared static bar is
+   replaced by an animated bar that re-wipes (scaleX 0→1) on each item change. */
+.mw-svc-cov__media::before { display: none; }
 .mw-svc-cov__media:hover { transform: none; box-shadow: 0 28px 56px -32px rgba(42, 27, 18, 0.4); }
-.mw-svc-cov__media:hover::before { width: calc(100% + 2px); }
+.mw-svc-cov__topbar {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: calc(100% + 2px);
+  height: 4px;
+  background: var(--c-accent);
+  z-index: 3;
+  transform-origin: left center;
+  animation: mw-cov-topbar-wipe 380ms cubic-bezier(.2, .7, .2, 1);
+}
+@keyframes mw-cov-topbar-wipe { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@media (prefers-reduced-motion: reduce) {
+  .mw-svc-cov__topbar { animation: none; }
+}
 /* Stacked, cross-fading capability photos; only the active one is opaque. */
 .mw-svc-cov__photo {
   position: absolute;

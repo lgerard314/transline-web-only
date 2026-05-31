@@ -78,6 +78,9 @@ export function CoverageGallery({
       </div>
 
       <figure className="mw-svc-photo mw-svc-cov__media" data-reveal>
+        {/* Keyed by active so it remounts on every item change, replaying the
+            top-border wipe each time a different capability is hovered. */}
+        <span key={active} className="mw-svc-cov__topbar" aria-hidden="true" />
         {items.map((it, i) => (
           <img
             key={it.photo}
