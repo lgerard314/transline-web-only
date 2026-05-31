@@ -6,30 +6,15 @@ const LOGO = "/miller/logo/miller-logomark.webp";
 const ANIM_MS = 500;
 
 // Cycles iOS-style notification banners for the emergency-response timeline.
-// Shows one banner initially, then stacks up to two (newest at bottom).
-// Pauses on prefers-reduced-motion — first notification stays visible.
-export function TimelineNotifyCycle({ notifications, interval = 4200 }) {
-  const [index, setIndex] = useState(0);
+// Controlled component: the parent (ResponseTimeline) owns the `index` clock so
+// the banners and the axis fill animation stay perfectly in sync. Shows one
+// banner initially, then stacks up to two (newest at bottom).
+export function TimelineNotifyCycle({ notifications, index = 0 }) {
   const [phase, setPhase] = useState(null);
   const prevIndexRef = useRef(0);
 
   useEffect(() => {
     if (!notifications || notifications.length <= 1) return;
-    const mql = typeof window !== "undefined" && window.matchMedia
-      ? window.matchMedia("(prefers-reduced-motion: reduce)")
-      : null;
-    if (mql && mql.matches) return;
-    const id = setInterval(() => setIndex((i) => (i + 1) % notifications.length), interval);
-    return () => clearInterval(id);
-  }, [notifications, interval]);
-
-  useEffect(() => {
-    if (!notifications || notifications.length <= 1) return;
-
-    const mql = typeof window !== "undefined" && window.matchMedia
-      ? window.matchMedia("(prefers-reduced-motion: reduce)")
-      : null;
-    if (mql && mql.matches) return;
 
     const prev = prevIndexRef.current;
     if (prev === index) return;

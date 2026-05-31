@@ -5365,63 +5365,37 @@ html[data-brand="miller"] .tl-footer__bot {
   .mw-svc-tl-sec--v1 .mw-svc-tl__stage:nth-child(4) { margin-top: -24px; }
   .mw-svc-tl-sec--v1 .mw-svc-tl__stage:nth-child(5) { margin-top: 0; }
 }
-/* Sequential signal: each step's line expands out and its arrow lights brown
-   in turn, holding lit once reached. Each step stays brown until every step is
-   lit, then they all reset together. One full loop == the notification stack's
-   full cycle (count x interval), and each step's 1/count slot lines up with its
-   matching notification — step N lights as notification N appears. */
-.mw-svc-tl-sec--v1 {
-  --mw-tl-period: calc(var(--mw-tl-notify-count, 5) * var(--mw-tl-notify-interval, 4200ms));
-}
+/* Sequential signal driven by the notification clock. ResponseTimeline is the
+   single source of truth: it sets data-tl-active="N" (the active notification
+   index) on the <ol>, so step N's line fills and its arrow lights the instant
+   notification N appears — no separate CSS timeline to drift out of sync. Each
+   step holds lit until the index wraps to 0, then they all retract together. */
 .mw-svc-tl-sec--v1 .mw-svc-tl__axis::before {
-  animation: mw-tl-fill-0 var(--mw-tl-period) ease-out infinite;
+  transition: width 460ms cubic-bezier(.2, .7, .2, 1);
 }
 .mw-svc-tl-sec--v1 .mw-svc-tl__axis::after {
-  animation: mw-tl-arrow-0 var(--mw-tl-period) ease infinite;
+  transition: border-color 220ms ease 240ms;
 }
-.mw-svc-tl-sec--v1 .mw-svc-tl__stage:nth-child(2) .mw-svc-tl__axis::before { animation-name: mw-tl-fill-1; }
-.mw-svc-tl-sec--v1 .mw-svc-tl__stage:nth-child(2) .mw-svc-tl__axis::after  { animation-name: mw-tl-arrow-1; }
-.mw-svc-tl-sec--v1 .mw-svc-tl__stage:nth-child(3) .mw-svc-tl__axis::before { animation-name: mw-tl-fill-2; }
-.mw-svc-tl-sec--v1 .mw-svc-tl__stage:nth-child(3) .mw-svc-tl__axis::after  { animation-name: mw-tl-arrow-2; }
-.mw-svc-tl-sec--v1 .mw-svc-tl__stage:nth-child(4) .mw-svc-tl__axis::before { animation-name: mw-tl-fill-3; }
-.mw-svc-tl-sec--v1 .mw-svc-tl__stage:nth-child(4) .mw-svc-tl__axis::after  { animation-name: mw-tl-arrow-3; }
-.mw-svc-tl-sec--v1 .mw-svc-tl__stage:nth-child(5) .mw-svc-tl__axis::before { animation-name: mw-tl-fill-4; }
-.mw-svc-tl-sec--v1 .mw-svc-tl__stage:nth-child(5) .mw-svc-tl__axis::after  { animation-name: mw-tl-arrow-4; }
-
-/* width 0 -> 100% inside each step's slot, then held until the loop resets */
-@keyframes mw-tl-fill-0 { 0% { width: 0; } 4% { width: 100%; } 100% { width: 100%; } }
-@keyframes mw-tl-fill-1 { 0%, 20% { width: 0; } 24% { width: 100%; } 100% { width: 100%; } }
-@keyframes mw-tl-fill-2 { 0%, 40% { width: 0; } 44% { width: 100%; } 100% { width: 100%; } }
-@keyframes mw-tl-fill-3 { 0%, 60% { width: 0; } 64% { width: 100%; } 100% { width: 100%; } }
-@keyframes mw-tl-fill-4 { 0%, 80% { width: 0; } 84% { width: 100%; } 100% { width: 100%; } }
-
-/* arrow recolors just as its line reaches it, then holds until the loop resets */
-@keyframes mw-tl-arrow-0 {
-  0%, 2% { border-top-color: var(--c-line); border-right-color: var(--c-line); }
-  5%, 100% { border-top-color: var(--c-accent); border-right-color: var(--c-accent); }
-}
-@keyframes mw-tl-arrow-1 {
-  0%, 22% { border-top-color: var(--c-line); border-right-color: var(--c-line); }
-  25%, 100% { border-top-color: var(--c-accent); border-right-color: var(--c-accent); }
-}
-@keyframes mw-tl-arrow-2 {
-  0%, 42% { border-top-color: var(--c-line); border-right-color: var(--c-line); }
-  45%, 100% { border-top-color: var(--c-accent); border-right-color: var(--c-accent); }
-}
-@keyframes mw-tl-arrow-3 {
-  0%, 62% { border-top-color: var(--c-line); border-right-color: var(--c-line); }
-  65%, 100% { border-top-color: var(--c-accent); border-right-color: var(--c-accent); }
-}
-@keyframes mw-tl-arrow-4 {
-  0%, 82% { border-top-color: var(--c-line); border-right-color: var(--c-line); }
-  85%, 100% { border-top-color: var(--c-accent); border-right-color: var(--c-accent); }
-}
-@media (max-width: 900px) {
-  /* Stacked layout: hold the calm static divider state, no sequential signal. */
-  .mw-svc-tl-sec--v1 .mw-svc-tl__axis::before,
-  .mw-svc-tl-sec--v1 .mw-svc-tl__axis::after { animation: none; }
+@media (min-width: 901px) {
+  /* Cumulative fill: at active=N, every step up to and including N is lit. */
+  .mw-svc-tl[data-tl-active="0"] .mw-svc-tl__stage:nth-child(-n+1) .mw-svc-tl__axis::before,
+  .mw-svc-tl[data-tl-active="1"] .mw-svc-tl__stage:nth-child(-n+2) .mw-svc-tl__axis::before,
+  .mw-svc-tl[data-tl-active="2"] .mw-svc-tl__stage:nth-child(-n+3) .mw-svc-tl__axis::before,
+  .mw-svc-tl[data-tl-active="3"] .mw-svc-tl__stage:nth-child(-n+4) .mw-svc-tl__axis::before,
+  .mw-svc-tl[data-tl-active="4"] .mw-svc-tl__stage:nth-child(-n+5) .mw-svc-tl__axis::before {
+    width: 100%;
+  }
+  .mw-svc-tl[data-tl-active="0"] .mw-svc-tl__stage:nth-child(-n+1) .mw-svc-tl__axis::after,
+  .mw-svc-tl[data-tl-active="1"] .mw-svc-tl__stage:nth-child(-n+2) .mw-svc-tl__axis::after,
+  .mw-svc-tl[data-tl-active="2"] .mw-svc-tl__stage:nth-child(-n+3) .mw-svc-tl__axis::after,
+  .mw-svc-tl[data-tl-active="3"] .mw-svc-tl__stage:nth-child(-n+4) .mw-svc-tl__axis::after,
+  .mw-svc-tl[data-tl-active="4"] .mw-svc-tl__stage:nth-child(-n+5) .mw-svc-tl__axis::after {
+    border-top-color: var(--c-accent);
+    border-right-color: var(--c-accent);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
+  /* No motion: lit states still apply but snap instantly (index is frozen at 0). */
   .mw-svc-tl-sec--v1 .mw-svc-tl__axis::before,
-  .mw-svc-tl-sec--v1 .mw-svc-tl__axis::after { animation: none; }
+  .mw-svc-tl-sec--v1 .mw-svc-tl__axis::after { transition: none; }
 }
