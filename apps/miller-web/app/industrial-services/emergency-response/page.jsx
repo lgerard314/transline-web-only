@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { RelatedServices } from "../../../components/RelatedServices";
+import { ContactForm } from "../../../components/ContactForm";
 import { TimelineNotifyCycle } from "../../../components/TimelineNotifyCycle";
 import { emergencyResponse as c } from "../../../lib/content/service-emergency-response";
 
@@ -156,16 +157,9 @@ export default function EmergencyResponsePage() {
         </div>
       </section>
 
-      {/* §5 — Closing CTA (save the number) */}
-      <section className="mw-svc-cta" aria-labelledby="er-cta-title">
-        <img
-          className="mw-svc-cta__truck"
-          src="/miller/truck-graphic-angled.png"
-          alt=""
-          aria-hidden="true"
-          loading="lazy"
-        />
-        <div className="mw-svc-cta__inner mw-inner">
+      {/* §5 — Closing CTA (save the number + contact form) */}
+      <section className="mw-svc-cta mw-svc-cta--accent" aria-labelledby="er-cta-title">
+        <div className="mw-svc-cta__inner mw-inner mw-svc-cta__grid">
           <div className="mw-svc-cta__content" data-reveal>
             <p className="mw-section-tag" aria-hidden="true">
               <span className="mw-section-tag-mark" />
@@ -184,10 +178,10 @@ export default function EmergencyResponsePage() {
                 <span className="mw-cta__sup">24/7 emergency</span>
                 <span className="mw-cta__num">{h.emergencyDisplay}</span>
               </a>
-              <Link href="/contact-us/" className="mw-cta mw-cta--solid">
-                Contact Miller <span aria-hidden="true">→</span>
-              </Link>
             </div>
+          </div>
+          <div className="mw-svc-cta__form" data-reveal>
+            <ContactForm />
           </div>
         </div>
       </section>
