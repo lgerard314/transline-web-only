@@ -4616,16 +4616,22 @@ html[data-brand="miller"] .tl-footer__bot {
 }
 
 /* ── Related services — reusable horizontal card rail ──────────────
-   Landscape cards: a compact photo band over a solid body carrying the
-   service title (display font) + summary — the home "who we serve"
-   card pattern, text-led with a small photo. Uniform size in a
-   scroll-snap track with prev/next controls. Used on every service
-   page via the RelatedServices client component. */
+   Home services picture tiles (mw-svcs-tile): full-bleed photo with
+   bottom overlay, title + arrow, summary. Landscape 4:3 cards in a
+   scroll-snap track (3-up desktop, fewer on narrow viewports) with
+   prev/next controls. Used on every service page via RelatedServices. */
 .mw-rel {
   position: relative;
   margin-top: clamp(44px, 4.5vw, 72px);
   padding-top: clamp(28px, 2.6vw, 40px);
   border-top: 1px solid var(--c-line);
+  /* Full-bleed out of the page column so the rail spans the viewport and
+     cards bleed off both edges. --mw-rel-pad aligns the head with the page
+     content column; --mw-rel-edge is the track inset + edge-fade width. */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  --mw-rel-pad: max(24px, calc((100vw - 1560px) / 2));
+  --mw-rel-edge: clamp(36px, 6vw, 120px);
 }
 .mw-rel__head {
   display: flex;
@@ -4634,13 +4640,18 @@ html[data-brand="miller"] .tl-footer__bot {
   gap: 16px;
   flex-wrap: wrap;
   margin-bottom: clamp(18px, 1.8vw, 26px);
+  padding-inline: var(--mw-rel-pad);
 }
 .mw-rel__label { margin: 0; }
-.mw-rel__controls { display: flex; align-items: center; gap: 12px; }
+.mw-rel__viewport { position: relative; }
 .mw-rel__nav {
   appearance: none;
-  width: 44px;
-  height: 44px;
+  position: absolute;
+  top: 42%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 48px;
+  height: 48px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -4650,8 +4661,11 @@ html[data-brand="miller"] .tl-footer__bot {
   font-size: 18px;
   line-height: 1;
   cursor: pointer;
+  box-shadow: 0 4px 16px rgba(42, 27, 18, 0.14);
   transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease, opacity 0.2s ease;
 }
+.mw-rel__nav--prev { left: clamp(8px, 1.4vw, 22px); }
+.mw-rel__nav--next { right: clamp(8px, 1.4vw, 22px); }
 .mw-rel__nav:hover:not(:disabled) { border-color: var(--c-accent); color: var(--c-accent); }
 .mw-rel__nav:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
 .mw-rel__nav:disabled { opacity: 0.32; cursor: default; }
@@ -4670,119 +4684,59 @@ html[data-brand="miller"] .tl-footer__bot {
 .mw-rel__all:hover { color: var(--c-ink); }
 
 .mw-rel__track {
+  --mw-rel-gap: clamp(14px, 1.4vw, 20px);
+  --mw-rel-visible: 3;
   list-style: none;
   margin: 0;
-  padding: 4px 0;
+  padding: 4px var(--mw-rel-edge);
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: clamp(300px, 31vw, 384px);
-  gap: clamp(14px, 1.4vw, 20px);
+  grid-auto-columns: calc(
+    (100% - (var(--mw-rel-visible) - 1) * var(--mw-rel-gap)) / var(--mw-rel-visible)
+  );
+  gap: var(--mw-rel-gap);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--mw-rel-edge);
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-x: contain;
+  /* Fade partial cards as they scroll under the edges (and the nav arrows). */
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 var(--mw-rel-edge), #000 calc(100% - var(--mw-rel-edge)), transparent 100%);
+          mask-image: linear-gradient(to right, transparent 0, #000 var(--mw-rel-edge), #000 calc(100% - var(--mw-rel-edge)), transparent 100%);
 }
 .mw-rel__track::-webkit-scrollbar { display: none; }
-.mw-rel__item { scroll-snap-align: start; }
-.mw-rel__card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  height: clamp(256px, 25vw, 292px);
-  text-decoration: none;
-  color: inherit;
-  background: var(--c-surface);
-  border: 1px solid var(--c-line);
-  overflow: hidden;
-  isolation: isolate;
-  transition: border-color 240ms ease, transform 360ms cubic-bezier(.2, .7, .2, 1), box-shadow 240ms ease;
+.mw-rel__item {
+  scroll-snap-align: start;
+  container-type: inline-size;
+  min-width: 0;
 }
-.mw-rel__photo {
-  position: relative;
-  flex-shrink: 0;
-  height: clamp(112px, 11.5vw, 140px);
-  background-size: cover;
-  background-position: center;
-  filter: saturate(0.97) brightness(0.98) contrast(1.02) sepia(0.04);
-  transition: transform 1200ms cubic-bezier(.2, .7, .2, 1), filter 320ms ease;
+.mw-rel__item .mw-svcs-tile {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
 }
-.mw-rel__card:hover .mw-rel__photo {
+.mw-rel__item .mw-svcs-tile:hover .mw-svcs-tile__photo {
   transform: scale(1.04);
-  filter: saturate(1.04) brightness(1.04) contrast(1.0) sepia(0.02);
+  filter: saturate(1.05) brightness(1.1) contrast(1.0) sepia(0.02);
 }
-.mw-rel__body {
-  position: relative;
-  z-index: 1;
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: clamp(16px, 1.4vw, 22px);
-}
-.mw-rel__card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 3px;
-  background: var(--c-accent);
-  transition: width 360ms cubic-bezier(.2, .7, .2, 1);
-  z-index: 2;
-}
-.mw-rel__card:hover {
-  border-color: var(--c-accent);
-  transform: translateY(-3px);
-  box-shadow: 0 22px 40px -28px rgba(42, 27, 18, 0.3);
-}
-.mw-rel__card:hover::before { width: 100%; }
-.mw-rel__card:focus-visible { outline: 2px solid var(--c-accent); outline-offset: -1px; }
-.mw-rel__title-row {
-  display: flex;
-  align-items: flex-end;
-  gap: 0.2em;
-  width: max-content;
-  max-width: 100%;
-}
-.mw-rel__title {
-  display: block;
-  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
-  font-weight: 600;
-  font-size: clamp(20px, 1.7vw, 26px);
-  line-height: 1.04;
-  letter-spacing: 0.005em;
-  color: var(--c-ink);
-  margin: 0;
-  text-transform: uppercase;
-}
-.mw-rel__arr {
-  display: inline-block;
-  flex-shrink: 0;
-  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
-  font-size: clamp(20px, 1.7vw, 26px);
-  line-height: 1.04;
-  font-weight: 600;
-  color: var(--c-accent);
-  transition: transform 240ms cubic-bezier(.2, .7, .2, 1);
-}
-.mw-rel__card:hover .mw-rel__arr { transform: translateX(6px); }
-.mw-rel__text {
-  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
-  font-size: 13.5px;
-  line-height: 1.5;
-  color: var(--c-ink-2);
-  margin: 0;
+.mw-rel__item .mw-svcs-tile:hover .mw-svcs-tile__photo::after { opacity: 0.2; }
+.mw-rel__item .mw-svcs-tile__text {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 @media (prefers-reduced-motion: reduce) {
-  .mw-rel__photo,
-  .mw-rel__card,
-  .mw-rel__arr { transition: none; }
+  .mw-rel__item .mw-svcs-tile,
+  .mw-rel__item .mw-svcs-tile__photo,
+  .mw-rel__item .mw-svcs-tile__arr { transition: none; }
+}
+@media (max-width: 900px) {
+  .mw-rel__track { --mw-rel-visible: 2; }
+}
+@media (max-width: 560px) {
+  .mw-rel__track { --mw-rel-visible: 1; }
 }
 @media (max-width: 760px) {
   .mw-svc-cta__truck { display: none; }
@@ -5156,7 +5110,6 @@ html[data-brand="miller"] .tl-footer__bot {
   height: 100%;
   width: 0;
   background: var(--c-accent);
-  transition: width 320ms cubic-bezier(.2,.7,.2,1);
   pointer-events: none;
   z-index: 1;
 }
@@ -5170,7 +5123,6 @@ html[data-brand="miller"] .tl-footer__bot {
   border-top: 2px solid var(--c-line);
   border-right: 2px solid var(--c-line);
   transform: translateY(-50%) rotate(45deg);
-  transition: border-color 100ms ease 240ms;
   pointer-events: none;
   z-index: 2;
 }
@@ -5186,15 +5138,6 @@ html[data-brand="miller"] .tl-footer__bot {
   z-index: 3;
 }
 .mw-svc-tl__stage:hover .mw-svc-tl__node { transform: translate(-1px, -50%) rotate(135deg) scale(1.12); }
-.mw-svc-tl__stage:hover .mw-svc-tl__axis::before { width: 100%; }
-.mw-svc-tl__stage:hover .mw-svc-tl__axis::after {
-  border-top-color: var(--c-accent);
-  border-right-color: var(--c-accent);
-}
-@media (prefers-reduced-motion: reduce) {
-  .mw-svc-tl__axis::before { transition: none; }
-  .mw-svc-tl__stage:hover .mw-svc-tl__axis::before { width: 100%; }
-}
 .mw-svc-tl__name {
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
   font-weight: 600;
@@ -5338,9 +5281,6 @@ html[data-brand="miller"] .tl-footer__bot {
   /* Room for first/last axis node + arrow overhang inside clip edge */
   padding-inline: 7px;
   margin-inline: -7px;
-  --mw-tl-signal-w: 96px;
-  --mw-tl-signal-start: 7px;
-  --mw-tl-signal-arrow-tip: 5px;
 }
 /* Staircase: each step 8px lower; last step anchored (layout unchanged).
    margin-top (not transform) — reveal animation mw-rv ends at translate3d(0,0,0)
@@ -5352,50 +5292,63 @@ html[data-brand="miller"] .tl-footer__bot {
   .mw-svc-tl-sec--v1 .mw-svc-tl__stage:nth-child(4) { margin-top: -24px; }
   .mw-svc-tl-sec--v1 .mw-svc-tl__stage:nth-child(5) { margin-top: 0; }
 }
-.mw-svc-tl-sec--v1 .mw-svc-tl::before {
-  content: "";
-  position: absolute;
-  top: 30px;
-  left: var(--mw-tl-signal-start);
-  height: 3px;
-  width: var(--mw-tl-signal-w);
-  border-radius: 3px;
-  background: linear-gradient(90deg, rgba(168,90,44,0) 0%, rgba(168,90,44,0.55) 70%, var(--c-accent) 92%, #ECC08C 100%);
-  box-shadow: 0 0 12px 2px rgba(168,90,44,0.45);
-  pointer-events: none;
-  z-index: 3;
-  animation: mw-tl-signal calc(var(--mw-tl-notify-count, 5) * var(--mw-tl-notify-interval, 4200ms)) cubic-bezier(.55,0,.45,1) infinite;
+/* Sequential signal: each step's line expands out and its arrow lights brown
+   in turn, holding lit once reached. Each step stays brown until every step is
+   lit, then they all reset together. One full loop == the notification stack's
+   full cycle (count x interval), and each step's 1/count slot lines up with its
+   matching notification — step N lights as notification N appears. */
+.mw-svc-tl-sec--v1 {
+  --mw-tl-period: calc(var(--mw-tl-notify-count, 5) * var(--mw-tl-notify-interval, 4200ms));
 }
-@keyframes mw-tl-signal {
-  0% {
-    left: var(--mw-tl-signal-start);
-    opacity: 0;
-  }
-  1.5% { opacity: 1; }
-  20% {
-    left: calc(var(--mw-tl-signal-start) + (100% + var(--mw-tl-signal-arrow-tip) - var(--mw-tl-signal-w)) * 0.25);
-    opacity: 1;
-  }
-  40% {
-    left: calc(var(--mw-tl-signal-start) + (100% + var(--mw-tl-signal-arrow-tip) - var(--mw-tl-signal-w)) * 0.5);
-    opacity: 1;
-  }
-  60% {
-    left: calc(var(--mw-tl-signal-start) + (100% + var(--mw-tl-signal-arrow-tip) - var(--mw-tl-signal-w)) * 0.75);
-    opacity: 1;
-  }
-  80% {
-    left: calc(100% + var(--mw-tl-signal-arrow-tip) - var(--mw-tl-signal-w) + var(--mw-tl-signal-start));
-    opacity: 1;
-  }
-  88%, 100% {
-    left: var(--mw-tl-signal-start);
-    opacity: 0;
-  }
+.mw-svc-tl-sec--v1 .mw-svc-tl__axis::before {
+  animation: mw-tl-fill-0 var(--mw-tl-period) ease-out infinite;
+}
+.mw-svc-tl-sec--v1 .mw-svc-tl__axis::after {
+  animation: mw-tl-arrow-0 var(--mw-tl-period) ease infinite;
+}
+.mw-svc-tl-sec--v1 .mw-svc-tl__stage:nth-child(2) .mw-svc-tl__axis::before { animation-name: mw-tl-fill-1; }
+.mw-svc-tl-sec--v1 .mw-svc-tl__stage:nth-child(2) .mw-svc-tl__axis::after  { animation-name: mw-tl-arrow-1; }
+.mw-svc-tl-sec--v1 .mw-svc-tl__stage:nth-child(3) .mw-svc-tl__axis::before { animation-name: mw-tl-fill-2; }
+.mw-svc-tl-sec--v1 .mw-svc-tl__stage:nth-child(3) .mw-svc-tl__axis::after  { animation-name: mw-tl-arrow-2; }
+.mw-svc-tl-sec--v1 .mw-svc-tl__stage:nth-child(4) .mw-svc-tl__axis::before { animation-name: mw-tl-fill-3; }
+.mw-svc-tl-sec--v1 .mw-svc-tl__stage:nth-child(4) .mw-svc-tl__axis::after  { animation-name: mw-tl-arrow-3; }
+.mw-svc-tl-sec--v1 .mw-svc-tl__stage:nth-child(5) .mw-svc-tl__axis::before { animation-name: mw-tl-fill-4; }
+.mw-svc-tl-sec--v1 .mw-svc-tl__stage:nth-child(5) .mw-svc-tl__axis::after  { animation-name: mw-tl-arrow-4; }
+
+/* width 0 -> 100% inside each step's slot, then held until the loop resets */
+@keyframes mw-tl-fill-0 { 0% { width: 0; } 4% { width: 100%; } 100% { width: 100%; } }
+@keyframes mw-tl-fill-1 { 0%, 20% { width: 0; } 24% { width: 100%; } 100% { width: 100%; } }
+@keyframes mw-tl-fill-2 { 0%, 40% { width: 0; } 44% { width: 100%; } 100% { width: 100%; } }
+@keyframes mw-tl-fill-3 { 0%, 60% { width: 0; } 64% { width: 100%; } 100% { width: 100%; } }
+@keyframes mw-tl-fill-4 { 0%, 80% { width: 0; } 84% { width: 100%; } 100% { width: 100%; } }
+
+/* arrow recolors just as its line reaches it, then holds until the loop resets */
+@keyframes mw-tl-arrow-0 {
+  0%, 2% { border-top-color: var(--c-line); border-right-color: var(--c-line); }
+  5%, 100% { border-top-color: var(--c-accent); border-right-color: var(--c-accent); }
+}
+@keyframes mw-tl-arrow-1 {
+  0%, 22% { border-top-color: var(--c-line); border-right-color: var(--c-line); }
+  25%, 100% { border-top-color: var(--c-accent); border-right-color: var(--c-accent); }
+}
+@keyframes mw-tl-arrow-2 {
+  0%, 42% { border-top-color: var(--c-line); border-right-color: var(--c-line); }
+  45%, 100% { border-top-color: var(--c-accent); border-right-color: var(--c-accent); }
+}
+@keyframes mw-tl-arrow-3 {
+  0%, 62% { border-top-color: var(--c-line); border-right-color: var(--c-line); }
+  65%, 100% { border-top-color: var(--c-accent); border-right-color: var(--c-accent); }
+}
+@keyframes mw-tl-arrow-4 {
+  0%, 82% { border-top-color: var(--c-line); border-right-color: var(--c-line); }
+  85%, 100% { border-top-color: var(--c-accent); border-right-color: var(--c-accent); }
 }
 @media (max-width: 900px) {
-  .mw-svc-tl-sec--v1 .mw-svc-tl::before { display: none; }
+  /* Stacked layout: hold the calm static divider state, no sequential signal. */
+  .mw-svc-tl-sec--v1 .mw-svc-tl__axis::before,
+  .mw-svc-tl-sec--v1 .mw-svc-tl__axis::after { animation: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .mw-svc-tl-sec--v1 .mw-svc-tl::before { animation: none; opacity: 0; }
+  .mw-svc-tl-sec--v1 .mw-svc-tl__axis::before,
+  .mw-svc-tl-sec--v1 .mw-svc-tl__axis::after { animation: none; }
 }

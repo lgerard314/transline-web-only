@@ -13,9 +13,9 @@ function splitTitle(title) {
 }
 
 // Reusable related-services rail. Renders every service (minus the
-// current page) as a uniform photo tile in the home service-card style,
-// in a scroll-snap track with prev/next controls. Drop it in on any
-// service page: <RelatedServices currentSlug="emergency-response" />.
+// current page) as a home mw-svcs-tile picture card in a scroll-snap
+// track with prev/next controls. Drop it in on any service page:
+// <RelatedServices currentSlug="emergency-response" />.
 export function RelatedServices({
   currentSlug,
   label = "Related services",
@@ -70,45 +70,35 @@ export function RelatedServices({
           <span className="mw-section-tag-mark" aria-hidden="true" />
           <span className="mw-section-tag-label">{label}</span>
         </LabelTag>
-        <div className="mw-rel__controls">
-          <button
-            type="button"
-            className="mw-rel__nav"
-            aria-label="Scroll to previous services"
-            disabled={atStart}
-            onClick={() => scrollByDir(-1)}
-          >
-            <span aria-hidden="true">&larr;</span>
-          </button>
-          <button
-            type="button"
-            className="mw-rel__nav"
-            aria-label="Scroll to next services"
-            disabled={atEnd}
-            onClick={() => scrollByDir(1)}
-          >
-            <span aria-hidden="true">&rarr;</span>
-          </button>
-          <Link href={allHref} className="mw-rel__all">
-            {allLabel} <span aria-hidden="true">&rarr;</span>
-          </Link>
-        </div>
+        <Link href={allHref} className="mw-rel__all">
+          {allLabel} <span aria-hidden="true">&rarr;</span>
+        </Link>
       </div>
 
-      <ul className="mw-rel__track" ref={trackRef} aria-label={label}>
+      <div className="mw-rel__viewport">
+        <button
+          type="button"
+          className="mw-rel__nav mw-rel__nav--prev"
+          aria-label="Scroll to previous services"
+          disabled={atStart}
+          onClick={() => scrollByDir(-1)}
+        >
+          <span aria-hidden="true">&larr;</span>
+        </button>
+        <ul className="mw-rel__track" ref={trackRef} aria-label={label}>
         {services.map((s) => {
           const { line1, line2 } = splitTitle(s.title);
           return (
             <li key={s.slug} className="mw-rel__item" data-rel-card>
-              <Link href={`/industrial-services/${s.slug}/`} className="mw-rel__card">
+              <Link href={`/industrial-services/${s.slug}/`} className="mw-svcs-tile">
                 <span
-                  className="mw-rel__photo"
+                  className="mw-svcs-tile__photo"
                   style={{ backgroundImage: `url(${s.photo})` }}
                   aria-hidden="true"
                 />
-                <span className="mw-rel__body">
-                  <span className="mw-rel__title-row">
-                    <span className="mw-rel__title">
+                <div className="mw-svcs-tile__body">
+                  <div className="mw-svcs-tile__title-row">
+                    <h3 className="mw-svcs-tile__title">
                       {line1}
                       {line2 && (
                         <>
@@ -116,16 +106,26 @@ export function RelatedServices({
                           {line2}
                         </>
                       )}
-                    </span>
-                    <span className="mw-rel__arr" aria-hidden="true">&rarr;</span>
-                  </span>
-                  <span className="mw-rel__text">{s.summary}</span>
-                </span>
+                    </h3>
+                    <span className="mw-svcs-tile__arr" aria-hidden="true">&rarr;</span>
+                  </div>
+                  <p className="mw-svcs-tile__text">{s.summary}</p>
+                </div>
               </Link>
             </li>
           );
         })}
-      </ul>
+        </ul>
+        <button
+          type="button"
+          className="mw-rel__nav mw-rel__nav--next"
+          aria-label="Scroll to next services"
+          disabled={atEnd}
+          onClick={() => scrollByDir(1)}
+        >
+          <span aria-hidden="true">&rarr;</span>
+        </button>
+      </div>
     </div>
   );
 }
