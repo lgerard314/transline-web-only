@@ -1,8 +1,13 @@
 # Design system — the locked baseline
 
-This is the canonical design/style guide for **both** apps in this monorepo (`apps/miller-web` and `apps/transline49-web`). The **Miller home page, its header (TopNav), and its footer (SiteFooter) are the finished reference** — every other page that gets built or converted to the new look should match them. New sections will still get designed, but they must be composed from the tokens, type, motifs, and patterns recorded here so they sit seamlessly next to the home page.
+This is the canonical design/style guide for **both** apps in this monorepo (`apps/miller-web` and `apps/transline49-web`). There are now **two finished reference pages**, and new work should match them:
 
-Read this before redesigning any page. When something here conflicts with what you find in code, the code on the Miller home page wins — and this doc should be updated to match.
+1. **The Miller home page** (with its header `TopNav` and footer `SiteFooter`) — the canonical for the **overall language** and for top-level/marketing sections. The header and footer are the finished chrome for every page.
+2. **The Miller emergency-response service page** (`/industrial-services/emergency-response`) — the canonical for **interior & service pages**. It is the first fully-built interior page in the new look and demonstrates the locked interior rules (§12) end to end: the light "alert" hero, the response timeline, the two-column head + photo-card grid, the selectable hover-swap gallery, the dark dispatch CTA, and the shared related-services rail. See §13 for the section-by-section map.
+
+Every other page that gets built or converted should match these two. New sections will still get designed, but they must be composed from the tokens, type, motifs, and patterns recorded here so they sit seamlessly next to the references.
+
+Read this before redesigning any page. When something here conflicts with what you find in code, **the code on the two reference pages wins** (the home page for language/marketing sections, the emergency-response page for interior/service patterns) — and this doc should be updated to match in the same change.
 
 The authoritative source files (read these when you need exact values):
 
@@ -11,10 +16,13 @@ The authoritative source files (read these when you need exact values):
 | Shared tokens, `tl-*` primitives, palettes, type pairings, density, buttons, cards, layout | `apps/brand/styles/globals.css` |
 | Miller palette/type overrides + every `mw-*` home component + header/footer repaint + scroll-reveal | `apps/miller-web/app/globals.css` |
 | Fonts loaded, `<html>` data-attributes, page shell | `apps/miller-web/app/layout.jsx` |
-| Home page markup (section order, components) | `apps/miller-web/app/(home)/HomeTemplate.jsx` |
+| Home page markup (section order, components) | `apps/miller-web/app/(home)/page.jsx` + `sections/` + `banners/` |
 | Header markup + behavior | `apps/miller-web/components/TopNav.jsx` |
 | Footer markup | `apps/miller-web/components/SiteFooter.jsx` |
 | Shared components (Marquee, FamilyOfCompanies) | `apps/brand/components/` |
+| **Interior/service reference** — page markup, section order, every `mw-svc-*` interior pattern | `apps/miller-web/app/industrial-services/emergency-response/page.jsx` + `sections/` |
+| Interior section components (timeline, gallery, related rail, contact form) | `apps/miller-web/components/{ResponseTimeline,TimelineNotifyCycle,CoverageGallery,RelatedServices,ContactForm}.jsx` |
+| Service-page copy (one file per service page) | `apps/miller-web/lib/content/service-emergency-response.js` |
 
 ---
 
@@ -30,7 +38,7 @@ Each app then layers its own `globals.css` (imported second, so it wins on equal
 2. **Repaints shared `tl-*` chrome** (topbar, mobile nav, footer, buttons) via `html[data-brand="miller"] .tl-…` selectors — the markup stays shared, the look becomes Miller's.
 3. **Adds net-new components** that only Miller uses, namespaced `mw-*` (or `miller-*` for the emergency banner).
 
-TransLine49 currently has **no** per-app override file — it renders straight from the brand package with the default Geist type. Bringing a TL49 page to this baseline means adopting the type system and editorial motifs below (see §13).
+TransLine49 currently has **no** per-app override file — it renders straight from the brand package with the default Geist type. Bringing a TL49 page to this baseline means adopting the type system and editorial motifs below (see §14).
 
 **Namespacing rule:** `tl-*` = shared/brand, reused by both apps. `mw-*` = Miller-only. Never put Miller-specific styling on a bare `tl-*` selector in the brand package; scope it under `html[data-brand="miller"]` in Miller's file, or make a new `mw-*` class.
 
@@ -113,7 +121,7 @@ These small, repeated details are what make the page feel authored. Reuse them; 
 
 1. **The clay square "stamp" / period.** A small filled terracotta square set on the text baseline as a full stop after display headings. `.mw-stop` (0.16em) closes section titles; `.mw-hero__stop` (0.18em) closes the hero. It is the core brand mark. Reproduce by appending `<span className="mw-stop" aria-hidden="true" />` to the end of a heading.
 2. **The rotated diamond eyebrow mark.** The same square, rotated 45° into a diamond, sits before every section's eyebrow label (`.mw-section-tag-mark`, 8px clay). The footer eyebrow, footer column heads, and mega-menu hover bullet all reuse this diamond. It is how a section announces itself.
-3. **The 49° paper-grain wash.** A near-invisible `repeating-linear-gradient(49deg, …)` texture overlaid on section backgrounds — terracotta-on-warm at ~3–4% alpha on light surfaces, cream-on-walnut at ~2% on dark. It gives surfaces a faint "document paper" texture and quietly ties sections together. The 49° angle is a nod to TransLine49.
+3. **The 49° paper-grain wash.** A near-invisible `repeating-linear-gradient(49deg, transparent 0 38px, <grain> 38px 39px)` texture overlaid on section backgrounds. Its color is a **single global token per surface tone**, not a per-section choice — `--c-grain-on-light` (`rgba(168,90,44,0.03)`, terracotta) on every light surface and `--c-grain-on-dark` (`rgba(245,230,203,0.025)`, cream) on every walnut surface — so the texture reads identically across all sections. New sections **must** reference those two tokens and never hand-pick a one-off alpha (a one-off value is what once made one dark section's lines visibly heavier than its neighbors'). It gives surfaces a faint "document paper" texture and quietly ties sections together; the 49° angle is a nod to TransLine49.
 4. **Numbered "article" framing.** Items and cards carry zero-padded numbers (`01`, `02`, …) in mono; the hero carries a small mono caption (`mw-hero__article`). The whole page is composed to read like a numbered document/dossier, not a generic marketing scroll.
 5. **The "→" arrow.** A mono right-arrow trails CTAs and forward links (`tl-btn-arr`, or an inline `<span aria-hidden="true">→</span>`). It's the standard "go" affordance.
 6. **The chain-of-custody hairline.** A 1px vertical clay gradient line in the hero — a thin terracotta thread that reinforces the "documented chain from dock to disposal" story.
@@ -229,9 +237,29 @@ These govern every non-home page (service pages and other interior pages). The h
 
 ---
 
-## 13. Applying this to TransLine49
+## 13. The emergency-response page — the worked interior reference
 
-TL49 already shares the clay palette (`data-palette="clay"`), so the **color system is common** — keep it warm there too. The gaps to close to bring a TL49 page to this baseline: it currently uses Geist (`data-type="utility"` default) rather than Barlow Condensed + IBM Plex, and it has no editorial `mw-*` layer (it renders straight from the brand package). To match: adopt the condensed-uppercase-display / Plex-body / mono-label type system, and reproduce the motifs and section grammar above. Because `mw-*` classes are Miller-namespaced, replicate the patterns for TL49 either by promoting the truly shared pieces into the brand package as new `tl-*` primitives, or by adding a TL49-scoped equivalent — don't reach across and apply `mw-*` to TL49. The goal is that a visitor moving between the two sites feels one design language with two brands.
+`apps/miller-web/app/industrial-services/emergency-response/` is the first fully-built interior page in the new look and the canonical reference for service/interior pages — the interior counterpart to the home page. It puts the §11 authoring checklist and the §12 interior rules into practice. **When building a new service or interior page, open this page first and reuse its section patterns before inventing new ones.** Its copy lives in one file, `lib/content/service-emergency-response.js`; its `page.jsx` is thin composition only, ordering six numbered sections (no banners). All `mw-svc-*` classes below are Miller interior namespacing.
+
+| # | Section file | Pattern it establishes (reuse this) | Key classes / component |
+| --- | --- | --- | --- |
+| 1 | `01-hero` | **Interior "alert" masthead** — the light split hero of §12 (`mw-svc-hero mw-svc-hero--alert`): one eyebrow → condensed title with a clay-emphasized fragment (`*__title-em`) + `mw-stop` → lead → a **same-height** button row pairing a stacked ghost 24/7 phone (`mw-cta--ghost`: small mono `__sup` over tabular `__num`) with a solid clay CTA (`mw-cta--solid` + `→`), plus a bleed photo. Never dark-brown. | `.mw-svc-hero`, `.mw-svc-hero--alert` |
+| 2 | `02-timeline` | **Response timeline (single-clock)** — `ResponseTimeline` owns one `index` (a `setInterval`, frozen under reduced motion) that drives *both* the cycling notification banners (`TimelineNotifyCycle`) and the axis line-fill (via `data-tl-active` on the `<ol>`), so the two never drift. Eyebrow → title → lead, then a numbered staircase `<ol class="mw-svc-tl">`. | `ResponseTimeline`, `TimelineNotifyCycle`, `.mw-svc-tl` |
+| 3 | `03-incidents` | **Two-column head + photo-card grid** — the header splits into a copy column (eyebrow/title/lead; a later title line can go italic via `*__title-em`) and a decorative transparent-PNG image column (`__head-media`, `aria-hidden`). Cards stay **horizontal**: a 4:3 photo half with the card title overlaid on a bottom-up scrim (`mw-svc-ind__name`) beside an **equal-width** white half carrying the **tick marker** (a clay diamond + short hairline, `mw-svc-ind__tick` = `__tick-dot` + `__tick-line`) above a one-line description. On card hover the diamond rotates and the caption weight bumps +100. | `.mw-svc-inds--photo`, `.mw-svc-ind`, `.mw-svc-ind__tick` |
+| 4 | `04-coverage` | **Selectable hover-swap gallery** — `CoverageGallery`: a list of capabilities on one side and a large photo on the other that swaps on hover/select, with a **default-selected** item (`default: true` in content), a darker-brown phone number (`--c-navy`), and a signature diamond (`mw-svc-cov__cap-mark`) before the big photo's caption. | `CoverageGallery`, `.mw-svc-cov` |
+| 5 | `05-cta` | **Dark dispatch CTA** — the page's single dark-walnut anchor (`mw-svc-cta--dark`, using the home-Careers dark text colors per §12). A dispatch block aligns the logomark to the 24/7 hotline (`__dispatch` / `__dispatch-row` / `__dispatch-logo`) with the "answered by a responder" note beneath, beside a warm cream contact-form card (`ContactForm showOptionalFields={false}`). The card's hover/focus lift lives on a **non-reveal wrapper** (`__form-col` holds `data-reveal`; the inner `__form` does the transform) because `mw-rv`'s fill-mode would otherwise override a hover transform. This dark panel is mid-page punctuation — the light related rail still closes the page. | `.mw-svc-cta--dark`, `.mw-svc-cta__dispatch`, `ContactForm` |
+| 6 | `06-related` | **Related-services rail** — the shared `RelatedServices` close of §12: a light surface, a horizontal scroll-snap track listing every service except the current one. Don't hand-roll a per-page grid. | `RelatedServices`, `.mw-svc-related-sec` |
+
+Two standing rules this page proves out:
+
+- **Compose the interactive components, don't fork them.** `ResponseTimeline`, `CoverageGallery`, `RelatedServices`, and `ContactForm` are existing, accessible, reduced-motion-safe components. Drive them with new content (`lib/content/<page>.js`); only add a new `mw-svc-*` pattern when none of the existing ones fit.
+- **A reveal element can't also be a hover-transform element.** Because the `mw-rv` reveal ends at `translate3d(0,0,0)` with `fill: both`, it permanently wins over any `:hover { transform }` on the *same* node. Put `data-reveal` on a wrapper and do the hover lift on an inner non-reveal child (the §5 CTA form and the photo cards both do this).
+
+---
+
+## 14. Applying this to TransLine49
+
+TL49 already shares the clay palette (`data-palette="clay"`), so the **color system is common** — keep it warm there too. The gaps to close to bring a TL49 page to this baseline: it currently uses Geist (`data-type="utility"` default) rather than Barlow Condensed + IBM Plex, and it has no editorial `mw-*` layer (it renders straight from the brand package). To match: adopt the condensed-uppercase-display / Plex-body / mono-label type system, and reproduce the motifs and section grammar above. Use the **same two Miller reference pages** as the target — a TL49 home/marketing page mirrors the Miller home page, and a TL49 interior/service page mirrors the emergency-response page (§13) — so the two sites feel like one design language with two brands. Because `mw-*` classes are Miller-namespaced, replicate the patterns for TL49 either by promoting the truly shared pieces into the brand package as new `tl-*` primitives, or by adding a TL49-scoped equivalent (e.g. a `tl49-*` layer mirroring `mw-*`) — don't reach across and apply `mw-*` to TL49.
 
 ---
 

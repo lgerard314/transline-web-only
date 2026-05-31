@@ -1,4 +1,4 @@
-// Homepage content. Strings + arrays only — markup belongs in HomeTemplate.
+// Homepage content. Strings + arrays only — markup belongs in app/(home)/sections/.
 // Shared phrases / phone numbers come from `./brand`.
 
 import {

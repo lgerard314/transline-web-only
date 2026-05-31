@@ -1,6 +1,8 @@
 # transline49-web
 
-Next.js 15 (App Router) marketing site for TransLine49° Environmental Services.
+Next.js 16 (App Router) marketing site for TransLine49° Environmental Services.
+
+> **Design baseline.** This app has not yet been brought onto the shared baseline (it still renders straight from `@white-owl/brand` with Geist type and the flat layout described below). Any new or converted page must follow `docs/DESIGN-SYSTEM.md` (see §14 for what TL49 specifically needs to adopt) and the page route structure in root `CLAUDE.md` — mirror the Miller home page for marketing pages and the Miller emergency-response page for interior/service pages. Don't extend the legacy flat structure for new work.
 
 ## Develop
 

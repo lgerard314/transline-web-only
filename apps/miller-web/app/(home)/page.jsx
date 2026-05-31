@@ -1,6 +1,13 @@
-import { HomeTemplate } from "./HomeTemplate";
-import { HOME } from "./home";
 import { OVER_25_YEARS } from "../../lib/content/brand";
+import { AffiliatesBanner } from "./banners/affiliates";
+import { CertsBanner } from "./banners/certs";
+import { HeroSection } from "./sections/01-hero";
+import { ServicesSection } from "./sections/02-services";
+import { SectorsSection } from "./sections/03-sectors";
+import { FacilitySection } from "./sections/04-facility";
+import { HistorySection } from "./sections/05-history";
+import { CareersSection } from "./sections/06-careers";
+import { FinalCtaSection } from "./sections/07-final-cta";
 
 export const metadata = {
   title: "Miller Environmental — Hazardous Waste Management",
@@ -19,7 +26,15 @@ export default function HomePage() {
         as="image"
         fetchPriority="high"
       />
-      <HomeTemplate content={HOME} />
+      <HeroSection />
+      <CertsBanner />
+      <ServicesSection />
+      <SectorsSection />
+      <FacilitySection />
+      <HistorySection />
+      <CareersSection />
+      <AffiliatesBanner />
+      <FinalCtaSection />
     </>
   );
 }
