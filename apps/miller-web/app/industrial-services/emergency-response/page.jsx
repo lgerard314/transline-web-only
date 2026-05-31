@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { TimelineNotifyCycle } from "../../../components/TimelineNotifyCycle";
 import { RelatedServices } from "../../../components/RelatedServices";
+import { TimelineNotifyCycle } from "../../../components/TimelineNotifyCycle";
 import { emergencyResponse as c } from "../../../lib/content/service-emergency-response";
 
 export const metadata = {
@@ -156,7 +156,7 @@ export default function EmergencyResponsePage() {
         </div>
       </section>
 
-      {/* §5 — Closing CTA (save the number) + related */}
+      {/* §5 — Closing CTA (save the number) */}
       <section className="mw-svc-cta" aria-labelledby="er-cta-title">
         <img
           className="mw-svc-cta__truck"
@@ -189,8 +189,13 @@ export default function EmergencyResponsePage() {
               </Link>
             </div>
           </div>
+        </div>
+      </section>
 
-          <RelatedServices currentSlug="emergency-response" />
+      {/* §6 — Related services carousel */}
+      <section className="mw-svc-related-sec" aria-labelledby="er-related-title">
+        <div className="mw-svc-related-sec__inner mw-inner">
+          <RelatedServices currentSlug="emergency-response" titleId="er-related-title" />
         </div>
       </section>
     </>

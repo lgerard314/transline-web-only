@@ -19,9 +19,11 @@ function splitTitle(title) {
 export function RelatedServices({
   currentSlug,
   label = "Related services",
+  titleId,
   allHref = "/industrial-services/",
   allLabel = "All services",
 }) {
+  const LabelTag = titleId ? "h2" : "p";
   const services = SERVICES.filter((s) => s.slug !== currentSlug);
   const trackRef = useRef(null);
   const [atStart, setAtStart] = useState(true);
@@ -64,7 +66,7 @@ export function RelatedServices({
   return (
     <div className="mw-rel" data-reveal>
       <div className="mw-rel__head">
-        <p className="mw-rel__label">{label}</p>
+        <LabelTag id={titleId} className="mw-rel__label">{label}</LabelTag>
         <div className="mw-rel__controls">
           <button
             type="button"

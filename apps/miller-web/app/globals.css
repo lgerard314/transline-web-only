@@ -1610,6 +1610,62 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
     left: 2px;
     right: auto;
   }
+
+  /* The desktop hover-to-reveal model is dead on touch, so on mobile
+     every milestone becomes a static, fully-readable entry: year →
+     title → description, stacked down a left-edge spine. Note hint is
+     hidden because nothing needs hovering. */
+  .mw-ten3__timeline-note { display: none; }
+  .mw-ten3__milestones { display: block; padding-block: 2px; }
+  .mw-ten3__milestone { padding-block: 0; }
+  .mw-ten3__milestone + .mw-ten3__milestone { margin-top: 22px; }
+  .mw-ten3__milestone-head { padding-top: 0; }
+  .mw-ten3__milestone-dot { top: 3px; }
+  /* Year was absolutely positioned off the opposite side of the spine
+     (clipped at the screen edge). Put it inline above the title. */
+  .mw-ten3__milestone--left .mw-ten3__milestone-year,
+  .mw-ten3__milestone--right .mw-ten3__milestone-year {
+    position: static; display: block; left: auto; right: auto;
+    margin-bottom: 5px; font-size: 12px; text-align: left;
+  }
+  /* Title always shown (kill the hover-fade + interactive pulse). */
+  .mw-ten3__milestone-title,
+  .mw-ten3__milestone:not(.is-active) .mw-ten3__milestone-title,
+  .mw-ten3__milestone.is-active .mw-ten3__milestone-title {
+    opacity: 1; visibility: visible; animation: none;
+  }
+  .mw-ten3__milestone:not(.is-active) .mw-ten3__milestone-dot { animation: none; opacity: 1; }
+  /* Description revealed inline under every milestone (no active state). */
+  .mw-ten3__milestone-bodywrap,
+  .mw-ten3__milestone--left .mw-ten3__milestone-bodywrap,
+  .mw-ten3__milestone--right .mw-ten3__milestone-bodywrap,
+  .mw-ten3__milestone.is-active .mw-ten3__milestone-bodywrap {
+    position: static; opacity: 1; visibility: visible; transform: none;
+    pointer-events: auto; width: 100%; margin-top: 7px; padding: 0; text-align: left;
+  }
+  .mw-ten3__milestone-body,
+  .mw-ten3__milestone--left .mw-ten3__milestone-body,
+  .mw-ten3__milestone--right .mw-ten3__milestone-body {
+    background: transparent; box-shadow: none; padding: 0; border: 0;
+  }
+  .mw-ten3__milestone-body-title { display: none; }
+  .mw-ten3__milestone-body-text { font-size: 13.5px; }
+
+  /* The truck-with-overlaid-stats plate is ~66px tall at phone width —
+     the truck reads as a sliver and the stat labels collide. Drop the
+     truck and show the three figures as a clean 3-up row, matching the
+     VBEC figures pattern. */
+  .mw-ten3__plate { aspect-ratio: auto; }
+  .mw-ten3__plate-img { display: none; }
+  .mw-ten3__plate-stats {
+    position: static; transform: none; inset: auto; left: auto; right: auto; top: auto;
+    width: 100%; gap: 16px; padding-top: 20px; border-top: 1px solid var(--c-line);
+  }
+  .mw-ten3__plate-stat,
+  .mw-ten3__plate-stat:nth-child(2),
+  .mw-ten3__plate-stat:last-child { transform: none; align-items: flex-start; }
+  .mw-ten3__plate-num { font-size: clamp(30px, 9vw, 40px); }
+  .mw-ten3__plate-label { white-space: normal; }
 }
 
 /* ─────────────────────────────────────────────────────────────────
@@ -2472,6 +2528,14 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   .mw-hero__title { font-size: clamp(48px, 14vw, 72px); }
   .mw-hero__lead { font-size: 16px; }
   .mw-hero::after { left: 12px; }
+  /* Full-width, equal-weight CTAs: larger tap targets and a more
+     deliberate composition than auto-width buttons on a phone. The
+     24/7 emergency call is a primary action for this business, so it
+     gets equal visual weight to "Talk to Miller". */
+  .mw-hero__foot { width: 100%; gap: 12px; }
+  .mw-hero__ctas { width: 100%; flex-direction: column; align-items: stretch; gap: 12px; }
+  .mw-hero__ctas .mw-cta { width: 100%; justify-content: center; }
+  .mw-hero__ctas .mw-cta--ghost { align-items: center; text-align: center; border-color: rgba(245,230,203,0.34); }
 }
 
 /* ─────────────────────────────────────────────────────────────────
@@ -2699,7 +2763,11 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   .mw-services__head { grid-template-columns: 1fr; }
   .mw-services__head .mw-section-tag,
   .mw-services__head .mw-section-title,
-  .mw-services__intro { grid-column: 1; }
+  .mw-services__intro { grid-column: 1; grid-row: auto; }
+  /* Without resetting grid-row, the title (row 2) and intro (row 2)
+     collapse into the same single-column cell and overlap. Let them
+     flow in source order instead, with breathing room before the intro. */
+  .mw-services__intro { margin-top: clamp(16px, 3vw, 24px); }
 }
 .mw-services {
   background: var(--c-surface-warm);
@@ -3189,6 +3257,10 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
     grid-template-rows: repeat(11, minmax(220px, auto));
     grid-template-areas: "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k";
   }
+  /* The anchor title is a single un-split string; its title-row uses
+     width:max-content, which forces "INDUSTRIAL WASTE TREATMENT" past
+     the narrow column where overflow:hidden clips it. Let it wrap. */
+  .mw-svcs-anchor__title-row { width: auto; flex-wrap: wrap; }
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -3444,7 +3516,7 @@ html[data-brand="miller"] .tl-cta-desktop {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   font-weight: 600;
-  padding: 0 20px;
+  padding: 1px 20px 0;
   height: 44px;
   border-radius: 0;
   background: var(--c-accent);
@@ -3452,6 +3524,9 @@ html[data-brand="miller"] .tl-cta-desktop {
   outline: none;
   border: 0;
   transition: background 220ms ease, color 220ms ease;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
 }
 html[data-brand="miller"] .tl-cta-desktop:hover {
   background: var(--c-navy);
@@ -3459,6 +3534,9 @@ html[data-brand="miller"] .tl-cta-desktop:hover {
 }
 html[data-brand="miller"] .tl-cta-desktop .tl-btn-arr {
   margin-left: 6px;
+  transform: none;
+  line-height: 1;
+  font-size: 13.5px;
 }
 
 html[data-brand="miller"] .tl-menu-btn {
@@ -3880,6 +3958,13 @@ html[data-brand="miller"] .tl-footer__bot {
   html[data-brand="miller"] .tl-footer__top > div:nth-child(4) { grid-column: auto; }
   html[data-brand="miller"] .tl-footer__bot { flex-direction: column; gap: 8px; text-align: center; }
 }
+@media (max-width: 600px) {
+  /* In a row the 24/7 ghost gets squeezed and wraps the phone number to
+     three lines. Stack the footer pitch CTAs full-width on phones. */
+  html[data-brand="miller"] .tl-footer__pitch-ctas { flex-direction: column; align-items: stretch; }
+  html[data-brand="miller"] .tl-footer__pitch-ctas .tl-btn { width: 100%; justify-content: center; }
+  html[data-brand="miller"] .tl-footer__pitch-ctas .mw-cta--ghost { width: 100%; align-items: center; text-align: center; }
+}
 
 /* ════════════════════════════════════════════════════════════
    SERVICE PAGES — shared mw-svc-* toolkit. Built on the home design
@@ -3957,6 +4042,18 @@ html[data-brand="miller"] .tl-footer__bot {
 .mw-svc-cta .mw-cta__sup { color: var(--c-ink-2); }
 .mw-svc-hero .mw-cta__num,
 .mw-svc-cta .mw-cta__num { color: var(--c-ink); }
+
+@media (max-width: 600px) {
+  /* Full-width, equal-weight CTAs on phones — bigger tap targets and a
+     balanced stack instead of mismatched auto-widths. The 24/7 call is a
+     primary action; this matches the home hero treatment. */
+  .mw-svc-hero__ctas,
+  .mw-svc-cta__actions { flex-direction: column; align-items: stretch; }
+  .mw-svc-hero__ctas > .mw-cta,
+  .mw-svc-cta__actions > .mw-cta { width: 100%; justify-content: center; }
+  .mw-svc-hero__ctas > .mw-cta--ghost,
+  .mw-svc-cta__actions > .mw-cta--ghost { align-items: center; text-align: center; }
+}
 
 .mw-svc-hero__media { position: relative; }
 /* Shared photo frame — every service photo uses this: 1px line border +
@@ -4361,18 +4458,17 @@ html[data-brand="miller"] .tl-footer__bot {
 
 /* Photo-thumbnail variant of the incident cards (Emergency Response).
    Scoped to --photo so the plain customer-waste collection grid keeps
-   its diamond-only rows. Each card becomes a media+label registry row:
-   an edge-to-edge full-height photo at the left, the incident name
-   beside it, and the home service-tile hover language (accent top-bar
-   wipe + photo brighten/zoom). */
+   its diamond-only rows. Horizontal cards: 4:3 landscape thumb left,
+   title + one-sentence blurb right; accent top-bar wipe + photo brighten
+   on hover. */
 .mw-svc-inds--photo .mw-svc-ind {
   position: relative;
+  flex-direction: row;
   gap: 0;
   padding: 0;
   align-items: stretch;
   overflow: hidden;
   isolation: isolate;
-  min-height: clamp(94px, 7.6vw, 116px);
 }
 .mw-svc-inds--photo .mw-svc-ind::before {
   content: "";
@@ -4389,7 +4485,8 @@ html[data-brand="miller"] .tl-footer__bot {
 .mw-svc-ind__thumb {
   position: relative;
   flex-shrink: 0;
-  width: clamp(126px, 11.5vw, 162px);
+  width: clamp(112px, 11vw, 152px);
+  aspect-ratio: 4 / 3;
   overflow: hidden;
   background: var(--c-navy-2);
   border-right: 1px solid rgba(245, 230, 203, 0.12);
@@ -4424,10 +4521,24 @@ html[data-brand="miller"] .tl-footer__bot {
 }
 .mw-svc-inds--photo .mw-svc-ind__name { line-height: 1.08; }
 .mw-svc-ind__desc {
+  margin: 0;
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
-  font-size: 12.5px;
+  font-size: clamp(12px, 0.85vw, 13px);
   line-height: 1.4;
   color: rgba(245, 230, 203, 0.72);
+}
+@media (max-width: 420px) {
+  .mw-svc-inds--photo .mw-svc-ind {
+    flex-direction: column;
+  }
+  .mw-svc-inds--photo .mw-svc-ind__thumb {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid rgba(245, 230, 203, 0.12);
+  }
+  .mw-svc-inds--photo .mw-svc-ind__thumb::after {
+    background: linear-gradient(to top, rgba(36, 22, 12, 0.42) 0%, rgba(42, 27, 18, 0) 48%);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .mw-svc-ind__thumb img { transition: filter 320ms ease; }
@@ -4478,6 +4589,32 @@ html[data-brand="miller"] .tl-footer__bot {
   margin: clamp(20px, 1.5vw, 24px) 0 clamp(28px, 2.4vw, 36px);
 }
 .mw-svc-cta__actions { display: flex; flex-wrap: wrap; gap: 16px; align-items: stretch; }
+
+/* Standalone related-services section (split from closing CTA) */
+.mw-svc-related-sec {
+  position: relative;
+  background: var(--c-bg);
+  color: var(--c-ink);
+  padding-block: clamp(44px, 4.5vw, 72px);
+  overflow: hidden;
+  isolation: isolate;
+  border-top: 1px solid var(--c-line);
+}
+.mw-svc-related-sec::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 42px, rgba(168,90,44,0.028) 42px, rgba(168,90,44,0.028) 43px);
+}
+.mw-svc-related-sec__inner { position: relative; z-index: 1; }
+.mw-svc-related-sec .mw-rel {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
 /* ── Related services — reusable horizontal card rail ──────────────
    Landscape cards: a compact photo band over a solid body carrying the
    service title (display font) + summary — the home "who we serve"
@@ -4866,10 +5003,9 @@ html[data-brand="miller"] .tl-footer__bot {
   background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(42, 27, 18, 0.07);
   border-radius: 13px;
-  box-shadow:
-    0 10px 32px -14px rgba(42, 27, 18, 0.28),
-    0 0 0 1px rgba(42, 27, 18, 0.07);
+  box-shadow: 0 10px 32px -14px rgba(42, 27, 18, 0.28);
   will-change: transform, opacity;
 }
 .mw-svc-tl-notify__banner--solo,
