@@ -4603,37 +4603,150 @@ html[data-brand="miller"] .tl-footer__bot {
 }
 .mw-svc-cta__actions { display: flex; flex-wrap: wrap; gap: 16px; align-items: stretch; }
 
-/* Accent (terracotta) CTA with a two-column contact form. The copy column
-   sits left on the clay field; the form floats in a light panel on the right. */
-.mw-svc-cta--accent { background: var(--c-accent); color: #fff; border-top-color: rgba(255, 255, 255, 0.22); }
-.mw-svc-cta--accent::before {
-  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, rgba(255, 255, 255, 0.05) 38px, rgba(255, 255, 255, 0.05) 39px);
+/* Dark "after-hours dispatch" CTA: deep walnut field, cream paper-grain wash,
+   a terracotta signal rule, a faint brand-diamond watermark, the pulsing 24/7
+   hotline as the focal element, and the contact form as a warm cream card. */
+.mw-svc-cta--dark {
+  background: var(--c-navy-2);
+  color: var(--c-on-navy);
+  border-top: 3px solid var(--c-accent);
+}
+.mw-svc-cta--dark::before {
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, rgba(245, 230, 203, 0.04) 38px, rgba(245, 230, 203, 0.04) 39px);
+}
+/* Oversized brand diamond, bleeding off the bottom-left for depth in the copy
+   column's negative space. */
+.mw-svc-cta__diamond {
+  position: absolute;
+  z-index: 0;
+  width: clamp(360px, 40vw, 620px);
+  aspect-ratio: 1;
+  left: clamp(-300px, -16vw, -190px);
+  bottom: clamp(-240px, -13vw, -150px);
+  transform: rotate(45deg);
+  border: 1px solid rgba(168, 90, 44, 0.34);
+  box-shadow: inset 0 0 0 1px rgba(245, 230, 203, 0.04);
+  pointer-events: none;
 }
 .mw-svc-cta__grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: clamp(32px, 4vw, 64px);
-  align-items: center;
+  align-items: start;
 }
-.mw-svc-cta--accent .mw-svc-cta__content { max-width: 46ch; }
-.mw-svc-cta--accent .mw-section-tag-mark,
-.mw-svc-cta--accent .mw-stop { background: #fff; }
-.mw-svc-cta--accent .mw-section-tag-label { color: rgba(255, 245, 236, 0.92); }
-.mw-svc-cta--accent .mw-svc-cta__title { color: #fff; }
-.mw-svc-cta--accent .mw-svc-cta__body { color: rgba(255, 244, 235, 0.92); }
-.mw-svc-cta--accent .mw-cta--ghost { color: #fff; border-color: rgba(255, 255, 255, 0.55); }
-.mw-svc-cta--accent .mw-cta--ghost:hover { color: var(--c-accent); background: #fff; border-color: #fff; }
-.mw-svc-cta--accent .mw-cta__sup { color: rgba(255, 245, 236, 0.85); }
-.mw-svc-cta--accent .mw-cta__num { color: #fff; }
-.mw-svc-cta--accent .mw-cta--ghost:hover .mw-cta__sup { color: var(--c-ink-2); }
-.mw-svc-cta--accent .mw-cta--ghost:hover .mw-cta__num { color: var(--c-accent); }
+.mw-svc-cta--dark .mw-svc-cta__content { max-width: 46ch; }
+.mw-svc-cta--dark .mw-section-tag-mark { background: var(--c-accent); }
+.mw-svc-cta--dark .mw-stop { background: var(--c-accent); }
+.mw-svc-cta--dark .mw-section-tag-label { color: rgba(245, 230, 203, 0.82); }
+.mw-svc-cta--dark .mw-svc-cta__title { color: #fff; }
+.mw-svc-cta--dark .mw-svc-cta__body { color: rgba(245, 230, 203, 0.74); }
+
+/* Focal hotline: pulsing live dot + oversized terracotta number in an inset. */
+.mw-svc-cta__hotline {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(14px, 1.4vw, 20px);
+  width: min(100%, 420px);
+  margin-top: clamp(22px, 2.2vw, 32px);
+  padding: clamp(14px, 1.4vw, 20px) clamp(18px, 1.8vw, 24px);
+  text-decoration: none;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(245, 230, 203, 0.16);
+  box-shadow: 0 22px 50px -32px rgba(0, 0, 0, 0.75), 0 0 44px -18px rgba(168, 90, 44, 0.4);
+  transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease, transform 0.25s cubic-bezier(.2, .7, .2, 1);
+}
+.mw-svc-cta__hotline:hover {
+  border-color: var(--c-accent);
+  background: rgba(168, 90, 44, 0.16);
+  box-shadow: 0 26px 56px -32px rgba(0, 0, 0, 0.8), 0 0 60px -16px rgba(168, 90, 44, 0.55);
+  transform: translateY(-2px);
+}
+.mw-svc-cta__hotline-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--c-accent);
+  flex-shrink: 0;
+  box-shadow: 0 0 0 0 rgba(168, 90, 44, 0.55);
+  animation: mw-cta-pulse 2.2s ease-out infinite;
+}
+@keyframes mw-cta-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(168, 90, 44, 0.55); }
+  70% { box-shadow: 0 0 0 13px rgba(168, 90, 44, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(168, 90, 44, 0); }
+}
+.mw-svc-cta__hotline-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.mw-svc-cta__hotline-sup {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(245, 230, 203, 0.66);
+}
+.mw-svc-cta__hotline-num {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(26px, 2.8vw, 40px);
+  letter-spacing: 0.01em;
+  line-height: 1;
+  color: #fff;
+}
+.mw-svc-cta__hotline-arr {
+  margin-left: auto;
+  font-size: clamp(20px, 2vw, 26px);
+  color: var(--c-accent);
+  transition: transform 0.25s cubic-bezier(.2, .7, .2, 1);
+}
+.mw-svc-cta__hotline:hover .mw-svc-cta__hotline-arr { transform: translateX(4px); }
+.mw-svc-cta__hotline-note {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.01em;
+  color: rgba(245, 230, 203, 0.62);
+  margin: 12px 0 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-svc-cta__hotline-dot { animation: none; }
+}
+
+/* Contact form floats as a warm cream card with a terracotta top accent. */
 .mw-svc-cta__form {
-  background: var(--c-surface);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  padding: clamp(22px, 2.2vw, 36px);
-  box-shadow: 0 40px 80px -50px rgba(42, 27, 18, 0.7);
+  background: var(--c-surface-warm);
+  border: 1px solid var(--c-line);
+  border-top: 3px solid var(--c-accent);
+  padding: clamp(24px, 2.4vw, 40px);
+  box-shadow: 0 56px 100px -52px rgba(0, 0, 0, 0.66);
 }
 .mw-svc-cta__form .mw-contact-form { max-width: none; }
+.mw-svc-cta__form-head { margin-bottom: clamp(18px, 1.8vw, 26px); }
+.mw-svc-cta__form-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 10px;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+}
+.mw-svc-cta__form-title {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(20px, 1.9vw, 27px);
+  line-height: 1.05;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  color: var(--c-ink);
+}
+.mw-svc-cta__form-note {
+  margin: 8px 0 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--c-ink-2);
+}
 @media (max-width: 860px) {
   .mw-svc-cta__grid { grid-template-columns: 1fr; gap: 32px; }
 }
