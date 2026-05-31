@@ -4887,7 +4887,7 @@ html[data-brand="miller"] .tl-footer__bot {
 /* ── Service: response timeline (horizontal time-axis) ───────────── */
 .mw-svc-tl-sec {
   position: relative;
-  background: var(--c-bg);
+  background: var(--c-surface-warm);
   color: var(--c-ink);
   padding-block: clamp(56px, 5.5vw, 100px);
   overflow: hidden;
@@ -4931,7 +4931,7 @@ html[data-brand="miller"] .tl-footer__bot {
 }
 .mw-svc-tl-notify {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-self: start;
   align-items: flex-start;
   width: 100%;
@@ -4939,7 +4939,7 @@ html[data-brand="miller"] .tl-footer__bot {
   overflow: hidden;
 }
 .mw-svc-tl-sec__intro .mw-svc-tl-notify {
-  justify-content: flex-start;
+  justify-content: center;
 }
 .mw-svc-tl-notify__stage {
   display: flex;
@@ -5059,15 +5059,11 @@ html[data-brand="miller"] .tl-footer__bot {
     transform: translateY(0);
   }
 }
+/* First banner holds its position when the second appears — fade only,
+   no transform, so it never jumps/glitches as the stack builds 1 -> 2. */
 @keyframes mw-tl-notify-make-room {
-  from {
-    opacity: 1;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 0.88;
-    transform: translateY(0);
-  }
+  from { opacity: 1; }
+  to { opacity: 0.88; }
 }
 @media (prefers-reduced-motion: reduce) {
   .mw-svc-tl-notify__banner--solo,
@@ -5086,7 +5082,7 @@ html[data-brand="miller"] .tl-footer__bot {
   .mw-svc-tl-sec__intro > .mw-svc-tl-notify {
     margin-top: 0;
   }
-  .mw-svc-tl-sec__intro .mw-svc-tl-notify { justify-content: flex-start; }
+  .mw-svc-tl-sec__intro .mw-svc-tl-notify { justify-content: center; }
 }
 .mw-svc-tl {
   list-style: none;
