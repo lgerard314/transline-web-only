@@ -14,6 +14,8 @@ export function CoverageSection() {
           items={cov.provides}
           cta={cov.cta}
           titleId="er-cov-title"
+          phoneHref={c.hero.emergencyHref}
+          phoneDisplay={c.hero.emergencyDisplay}
         />
       </div>
     </section>

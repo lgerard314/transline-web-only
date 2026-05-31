@@ -5,21 +5,35 @@
 // and active styling persist until another row is hovered — so the panel never
 // flickers back to a default. Row height and type sizes are fixed; the
 // thumbnail is absolutely positioned so it can't grow the row.
+//
+// Layout: the eyebrow sits in its own grid row so the photo (col 2) spans only
+// the content row — its top meets the header top and its bottom meets the
+// actions row (button + 24/7 phone) bottom.
 
 import { useState } from "react";
 import Link from "next/link";
 
-export function CoverageGallery({ eyebrow, title, lead, items, cta, titleId }) {
+export function CoverageGallery({
+  eyebrow,
+  title,
+  lead,
+  items,
+  cta,
+  titleId,
+  phoneHref,
+  phoneDisplay,
+}) {
   const [active, setActive] = useState(0);
 
   return (
     <div className="mw-svc-cov__grid">
+      <p className="mw-section-tag mw-svc-cov__eyebrow" aria-hidden="true" data-reveal>
+        <span className="mw-section-tag-mark" />
+        <span className="mw-section-tag-label">{eyebrow}</span>
+      </p>
+
       <div className="mw-svc-cov__content" data-reveal>
-        <p className="mw-section-tag" aria-hidden="true">
-          <span className="mw-section-tag-mark" />
-          <span className="mw-section-tag-label">{eyebrow}</span>
-        </p>
-        <h2 id={titleId} className="mw-section-title">
+        <h2 id={titleId} className="mw-section-title mw-svc-cov__heading">
           {title}
           <span className="mw-stop" aria-hidden="true" />
         </h2>
@@ -42,10 +56,24 @@ export function CoverageGallery({ eyebrow, title, lead, items, cta, titleId }) {
           ))}
         </ul>
 
-        {cta && (
-          <Link href={cta.href} className="mw-cta mw-cta--solid mw-svc-cov__cta">
-            {cta.label} <span aria-hidden="true">→</span>
-          </Link>
+        {(cta || phoneDisplay) && (
+          <div className="mw-svc-cov__actions">
+            {cta && (
+              <Link href={cta.href} className="mw-cta mw-cta--solid mw-svc-cov__cta">
+                {cta.label} <span aria-hidden="true">→</span>
+              </Link>
+            )}
+            {phoneDisplay && (
+              <a
+                href={phoneHref}
+                className="mw-svc-cov__phone"
+                aria-label={`Call 24/7 emergency: ${phoneDisplay}`}
+              >
+                <span className="mw-svc-cov__phone-sup">24/7 emergency</span>
+                <span className="mw-svc-cov__phone-num">{phoneDisplay}</span>
+              </a>
+            )}
+          </div>
         )}
       </div>
 

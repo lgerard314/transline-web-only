@@ -5236,12 +5236,18 @@ html[data-brand="miller"] .tl-footer__bot {
   z-index: 1;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 0.82fr);
-  gap: clamp(32px, 4vw, 72px);
+  /* Row 1 = eyebrow (left only); row 2 = content (left) + photo (right).
+     Row gap is 0 — the eyebrow's own margin-bottom drives eyebrow→header. */
+  column-gap: clamp(32px, 4vw, 72px);
+  row-gap: 0;
   align-items: start;
 }
-/* Push the image down so its top edge meets the vertical middle of the
-   "Across Manitoba…" header (eyebrow height + half the header). */
-.mw-svc-cov__media { margin-top: clamp(44px, 5vw, 86px); }
+.mw-svc-cov__eyebrow { grid-column: 1; grid-row: 1; }
+.mw-svc-cov__content { grid-column: 1; grid-row: 2; min-width: 0; }
+/* Photo spans only the content row, so its top meets the header top and its
+   bottom meets the actions-row (button + phone) bottom. */
+.mw-svc-cov__media { grid-column: 2; grid-row: 2; align-self: stretch; }
+.mw-svc-cov__heading { margin-top: 0; }
 .mw-svc-cov__lead {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
   font-size: clamp(16px, 1.2vw, 19px);
@@ -5306,14 +5312,48 @@ html[data-brand="miller"] .tl-footer__bot {
 .mw-svc-cov__item-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .mw-svc-cov__item:hover .mw-svc-cov__item-thumb,
 .mw-svc-cov__item[data-active] .mw-svc-cov__item-thumb { opacity: 1; border-color: var(--c-accent); }
-.mw-svc-cov__cta { margin-top: clamp(28px, 2.6vw, 40px); }
+/* Actions row: solid CTA + text-only 24/7 phone (no border) sitting alongside. */
+.mw-svc-cov__actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: clamp(16px, 2vw, 28px);
+  margin-top: clamp(28px, 2.6vw, 40px);
+}
+.mw-svc-cov__cta { margin-top: 0; }
+.mw-svc-cov__phone {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+  text-decoration: none;
+  line-height: 1.05;
+}
+.mw-svc-cov__phone-sup {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+}
+.mw-svc-cov__phone-num {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(20px, 1.8vw, 26px);
+  letter-spacing: 0.01em;
+  color: var(--c-accent);
+}
+.mw-svc-cov__phone:hover .mw-svc-cov__phone-num { text-decoration: underline; text-underline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) {
   .mw-svc-cov__item,
   .mw-svc-cov__item-thumb { transition: none; }
 }
-/* Coverage photo: differs from the hero photo by ratio (taller) and
-   overlay (clay caption, bottom-right) — the shared border is identical. */
-.mw-svc-cov__media { height: clamp(440px, 46vw, 580px); }
+/* Coverage photo stretches to the content row (header top → actions bottom).
+   The image swap is driven by hovering the list items, so the photo itself has
+   no hover effect; its default state is the end of the old hover — a full-width
+   brown top border. */
+.mw-svc-cov__media::before { width: calc(100% + 2px); }
+.mw-svc-cov__media:hover { transform: none; box-shadow: 0 28px 56px -32px rgba(42, 27, 18, 0.4); }
+.mw-svc-cov__media:hover::before { width: calc(100% + 2px); }
 /* Stacked, cross-fading capability photos; only the active one is opaque. */
 .mw-svc-cov__photo {
   position: absolute;
@@ -5343,8 +5383,16 @@ html[data-brand="miller"] .tl-footer__bot {
   .mw-svc-cov__photo { transition: none; }
 }
 @media (max-width: 860px) {
-  .mw-svc-cov__grid { grid-template-columns: 1fr; gap: 32px; }
-  .mw-svc-cov__media { order: -1; margin-top: 0; }
+  .mw-svc-cov__grid { grid-template-columns: 1fr; row-gap: clamp(18px, 4vw, 28px); }
+  .mw-svc-cov__eyebrow { grid-column: 1; grid-row: auto; order: 0; margin-bottom: 0; }
+  .mw-svc-cov__media {
+    grid-column: 1;
+    grid-row: auto;
+    align-self: auto;
+    order: 1;
+    height: clamp(300px, 64vw, 440px);
+  }
+  .mw-svc-cov__content { grid-column: 1; grid-row: auto; order: 2; }
 }
 
 /* "When you call" — signal sweep along the response axis */
