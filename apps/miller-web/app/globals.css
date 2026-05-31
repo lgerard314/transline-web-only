@@ -4625,21 +4625,45 @@ html[data-brand="miller"] .tl-footer__bot {
   margin-top: clamp(44px, 4.5vw, 72px);
   padding-top: clamp(28px, 2.6vw, 40px);
   border-top: 1px solid var(--c-line);
+  /* Full-bleed out of the page column so the rail spans the viewport and
+     cards bleed off both edges. --mw-rel-pad aligns the head with the page
+     content column; --mw-rel-edge is the track inset + edge-fade width. */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  --mw-rel-pad: max(24px, calc((100vw - 1560px) / 2));
+  --mw-rel-edge: clamp(36px, 6vw, 120px);
 }
 .mw-rel__head {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
   margin-bottom: clamp(18px, 1.8vw, 26px);
+  padding-inline: var(--mw-rel-pad);
 }
+.mw-rel__head-text { display: flex; flex-direction: column; gap: clamp(20px, 1.5vw, 24px); }
 .mw-rel__label { margin: 0; }
-.mw-rel__controls { display: flex; align-items: center; gap: 12px; }
+.mw-rel__head-text .mw-rel__label { margin-bottom: 0; }
+.mw-rel__heading {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(26px, 2.45vw, 39px);
+  line-height: 1.02;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--c-ink);
+}
+.mw-rel__viewport { position: relative; }
 .mw-rel__nav {
   appearance: none;
-  width: 44px;
-  height: 44px;
+  position: absolute;
+  top: 42%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 48px;
+  height: 48px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -4649,8 +4673,11 @@ html[data-brand="miller"] .tl-footer__bot {
   font-size: 18px;
   line-height: 1;
   cursor: pointer;
+  box-shadow: 0 4px 16px rgba(42, 27, 18, 0.14);
   transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease, opacity 0.2s ease;
 }
+.mw-rel__nav--prev { left: clamp(8px, 1.4vw, 22px); }
+.mw-rel__nav--next { right: clamp(8px, 1.4vw, 22px); }
 .mw-rel__nav:hover:not(:disabled) { border-color: var(--c-accent); color: var(--c-accent); }
 .mw-rel__nav:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
 .mw-rel__nav:disabled { opacity: 0.32; cursor: default; }
@@ -4673,7 +4700,7 @@ html[data-brand="miller"] .tl-footer__bot {
   --mw-rel-visible: 3;
   list-style: none;
   margin: 0;
-  padding: 4px 0;
+  padding: 4px var(--mw-rel-edge);
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: calc(
@@ -4682,9 +4709,13 @@ html[data-brand="miller"] .tl-footer__bot {
   gap: var(--mw-rel-gap);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--mw-rel-edge);
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-x: contain;
+  /* Fade partial cards as they scroll under the edges (and the nav arrows). */
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 var(--mw-rel-edge), #000 calc(100% - var(--mw-rel-edge)), transparent 100%);
+          mask-image: linear-gradient(to right, transparent 0, #000 var(--mw-rel-edge), #000 calc(100% - var(--mw-rel-edge)), transparent 100%);
 }
 .mw-rel__track::-webkit-scrollbar { display: none; }
 .mw-rel__item {
@@ -4856,7 +4887,7 @@ html[data-brand="miller"] .tl-footer__bot {
 /* ── Service: response timeline (horizontal time-axis) ───────────── */
 .mw-svc-tl-sec {
   position: relative;
-  background: var(--c-surface-warm);
+  background: var(--c-bg);
   color: var(--c-ink);
   padding-block: clamp(56px, 5.5vw, 100px);
   overflow: hidden;
@@ -5255,7 +5286,7 @@ html[data-brand="miller"] .tl-footer__bot {
   .mw-svc-cov__media { order: -1; }
 }
 
-/* "When you call" — each step lights up in sequence (see fill/arrow below) */
+/* "When you call" — signal sweep along the response axis */
 .mw-svc-tl-sec--v1 .mw-svc-tl {
   position: relative;
   overflow-x: clip;
