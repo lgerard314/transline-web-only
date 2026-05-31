@@ -106,7 +106,7 @@ export const emergencyResponse = {
       {
         text: "Clean-up and site remediation",
         photo: "/miller/snowing-hazmat-cleaning.png",
-        bigAnchor: "50% 42%",
+        bigAnchor: "50% 15%",
         thumbAnchor: "50% 20%",
         caption: "Hazmat crews decontaminate an impacted site through harsh prairie winter conditions.",
       },
@@ -120,7 +120,7 @@ export const emergencyResponse = {
       {
         text: "Confined-space response",
         photo: "/miller/confined-space-response.png",
-        bigAnchor: "50% 46%",
+        bigAnchor: "50% 64%",
         thumbAnchor: "50% 44%",
         caption: "A trained responder makes entry into a confined space others can't safely reach.",
       },

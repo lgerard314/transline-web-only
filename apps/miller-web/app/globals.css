@@ -5350,9 +5350,9 @@ html[data-brand="miller"] .tl-footer__bot {
 }
 .mw-svc-cov__eyebrow { grid-column: 1; grid-row: 1; }
 .mw-svc-cov__content { grid-column: 1; grid-row: 2; min-width: 0; }
-/* Photo spans only the content row, so its top meets the header top and its
-   bottom meets the actions-row (button + phone) bottom. */
-.mw-svc-cov__media { grid-column: 2; grid-row: 2; align-self: stretch; }
+/* Photo top meets the header top; its height is locked to a fixed aspect ratio
+   (≈ the content-row height) so each photo's crop is deterministic and stable. */
+.mw-svc-cov__media { grid-column: 2; grid-row: 2; align-self: start; aspect-ratio: 7 / 8; }
 .mw-svc-cov__heading { margin-top: 0; }
 .mw-svc-cov__lead {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
