@@ -29,6 +29,10 @@ export const EMERGENCY_PHONE = "(204) 957-6327";
 // General switchboard. TopNav + Contact + footer.
 export const GENERAL_PHONE = "(204) 925-9600";
 
+// Sitewide on-call indicator in EmergencyBanner (compact label on narrow viewports).
+export const RESPONDERS_ON_CALL_STATUS = "Responders on call right now";
+export const RESPONDERS_ON_CALL_STATUS_SHORT = "On call";
+
 export const EMAIL_INQUIRIES = "inquiries@millerenvironmental.mb.ca";
 export const EMAIL_SALES = "sales@millerenvironmental.mb.ca";
 export const EMAIL_HR = "hr@millerenvironmental.mb.ca";

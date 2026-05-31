@@ -13,7 +13,11 @@
 // out the full phone number for screen-reader users.
 
 import { useEffect, useState } from "react";
-import { EMERGENCY_PHONE } from "../lib/content/brand";
+import {
+  EMERGENCY_PHONE,
+  RESPONDERS_ON_CALL_STATUS,
+  RESPONDERS_ON_CALL_STATUS_SHORT,
+} from "../lib/content/brand";
 
 // Watches the topnav's data-scroll-state attribute. Once the user
 // scrolls past the hero (topnav switches to "past-hero"), the
@@ -67,6 +71,13 @@ export function EmergencyBanner({ initialDismissed = false }) {
           <span className="miller-eb__eyebrow">24/7 Emergency Response</span>
           <span className="miller-eb__number tl-mono">{EMERGENCY_DISPLAY}</span>
         </a>
+        <p className="miller-eb__oncall" role="status">
+          <span className="miller-eb__oncall-dot" aria-hidden="true" />
+          <span className="miller-eb__oncall-label">{RESPONDERS_ON_CALL_STATUS}</span>
+          <span className="miller-eb__oncall-label miller-eb__oncall-label--short">
+            {RESPONDERS_ON_CALL_STATUS_SHORT}
+          </span>
+        </p>
       </div>
     </aside>
   );

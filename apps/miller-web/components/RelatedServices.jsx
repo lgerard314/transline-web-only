@@ -1,0 +1,126 @@
+"use client";
+
+import Link from "next/link";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { SERVICES } from "../lib/services";
+
+// Splits a title so the last word drops to its own line — matches the
+// home service-tile treatment so the arrow renders inline on line two.
+function splitTitle(title) {
+  const parts = String(title).trim().split(/\s+/);
+  if (parts.length <= 1) return { line1: title, line2: null };
+  return { line1: parts.slice(0, -1).join(" "), line2: parts[parts.length - 1] };
+}
+
+// Reusable related-services rail. Renders every service (minus the
+// current page) as a uniform photo tile in the home service-card style,
+// in a scroll-snap track with prev/next controls. Drop it in on any
+// service page: <RelatedServices currentSlug="emergency-response" />.
+export function RelatedServices({
+  currentSlug,
+  label = "Related services",
+  allHref = "/industrial-services/",
+  allLabel = "All services",
+}) {
+  const services = SERVICES.filter((s) => s.slug !== currentSlug);
+  const trackRef = useRef(null);
+  const [atStart, setAtStart] = useState(true);
+  const [atEnd, setAtEnd] = useState(false);
+
+  const update = useCallback(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    const { scrollLeft, scrollWidth, clientWidth } = el;
+    setAtStart(scrollLeft <= 2);
+    setAtEnd(scrollLeft + clientWidth >= scrollWidth - 2);
+  }, []);
+
+  useEffect(() => {
+    update();
+    const el = trackRef.current;
+    if (!el) return undefined;
+    el.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    return () => {
+      el.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, [update]);
+
+  const scrollByDir = useCallback((dir) => {
+    const el = trackRef.current;
+    if (!el) return;
+    const card = el.querySelector("[data-rel-card]");
+    const styles = window.getComputedStyle(el);
+    const gap = parseFloat(styles.columnGap || styles.gap || "0") || 16;
+    const step = card ? card.offsetWidth + gap : el.clientWidth * 0.8;
+    const reduce =
+      typeof window !== "undefined" &&
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    el.scrollBy({ left: dir * step, behavior: reduce ? "auto" : "smooth" });
+  }, []);
+
+  return (
+    <div className="mw-rel" data-reveal>
+      <div className="mw-rel__head">
+        <p className="mw-rel__label">{label}</p>
+        <div className="mw-rel__controls">
+          <button
+            type="button"
+            className="mw-rel__nav"
+            aria-label="Scroll to previous services"
+            disabled={atStart}
+            onClick={() => scrollByDir(-1)}
+          >
+            <span aria-hidden="true">&larr;</span>
+          </button>
+          <button
+            type="button"
+            className="mw-rel__nav"
+            aria-label="Scroll to next services"
+            disabled={atEnd}
+            onClick={() => scrollByDir(1)}
+          >
+            <span aria-hidden="true">&rarr;</span>
+          </button>
+          <Link href={allHref} className="mw-rel__all">
+            {allLabel} <span aria-hidden="true">&rarr;</span>
+          </Link>
+        </div>
+      </div>
+
+      <ul className="mw-rel__track" ref={trackRef} aria-label={label}>
+        {services.map((s) => {
+          const { line1, line2 } = splitTitle(s.title);
+          return (
+            <li key={s.slug} className="mw-rel__item" data-rel-card>
+              <Link href={`/industrial-services/${s.slug}/`} className="mw-rel__card">
+                <span
+                  className="mw-rel__photo"
+                  style={{ backgroundImage: `url(${s.photo})` }}
+                  aria-hidden="true"
+                />
+                <span className="mw-rel__body">
+                  <span className="mw-rel__title-row">
+                    <span className="mw-rel__title">
+                      {line1}
+                      {line2 && (
+                        <>
+                          <br />
+                          {line2}
+                        </>
+                      )}
+                    </span>
+                    <span className="mw-rel__arr" aria-hidden="true">&rarr;</span>
+                  </span>
+                  <span className="mw-rel__text">{s.summary}</span>
+                </span>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}

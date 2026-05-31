@@ -37,7 +37,7 @@ export const SERVICES = [
     title: "Emergency Response",
     summary: "24/7 spill response across Manitoba and the prairies.",
     icon: "✕",
-    photo: "/miller/services/emergency-response-hero.webp",
+    photo: "/miller/fleet-trucks-gravel-transparent.png",
     variant: "capabilities",
   },
   {

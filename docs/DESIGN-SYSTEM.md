@@ -213,7 +213,23 @@ Don't:
 
 ---
 
-## 12. Applying this to TransLine49
+## 12. Interior & service-page rules (locked)
+
+These govern every non-home page (service pages and other interior pages). The home page is the deliberate exception where noted — it stays the single most powerful page and is not modified to satisfy these.
+
+- **No breadcrumb line in heroes.** Interior heroes open with a single eyebrow (`mw-section-tag`) — never a "Section / Page-name" nav line.
+- **One eyebrow per element — zero double/triple eyebrows.** A hero gets one `mw-section-tag`; each content section gets exactly one. Any other mono-uppercase line (e.g. a live-status indicator) must live elsewhere — beside the CTA it reinforces — not stacked with the eyebrow.
+- **Heroes are never dark-brown.** Interior heroes use a light surface (`--c-surface-warm`) — the light split-masthead `.mw-svc-hero`. The dark walnut hero is reserved for the home page so it stays the most powerful first impression.
+- **The last section before the footer is never dark-brown.** Close on a light surface (cream/`--c-bg`), mirroring the home Final CTA → dark footer transition. Never stack two dark surfaces into the footer.
+- **All buttons match a home button — no exceptions.** Use `mw-cta mw-cta--solid` (square clay) or `mw-cta mw-cta--ghost` (stacked phone) in page content, or the repainted `tl-btn` family in chrome/forms. On light surfaces the ghost is recolored exactly like the home Final CTA (ink text + border, clay on hover). Never invent a bespoke button (icon buttons, custom call buttons, etc.). **When two buttons sit together they are always the same height** — the row stretches them to match (`align-items: stretch`, with the ghost's stacked content vertically centered).
+- **No `<h1>`–`<h6>` ever has a diamond directly in front of it.** The clay diamond belongs to the eyebrow `<p>` (`mw-section-tag-mark`) and to functional marks (timeline/scale nodes, list-item markers on spans) — never as a decorative prefix on a heading element.
+- **Dark-brown sections copy the home Careers ("Join the team") text colors.** Title `#fff`, lead `rgba(250,243,229,0.91)`, body/card text `rgba(250,243,229,0.89)`, eyebrow `--invert` (`rgba(245,230,203,0.72)`), card bg `rgba(245,230,203,0.035)`. Don't reach for `--c-on-navy` at an arbitrary alpha.
+- **Photos: one shared border; per-page variety in ratio + overlay.** Every photo uses `.mw-svc-photo` — a `1px --c-line` border plus a thick clay top bar that grows to full width on hover (the Careers card motif; a `.mw-svc-photo--side` variant moves the growing bar to the left edge). Within a single page, no two single-photo sections may share identical styling: vary the **aspect ratio** and the **caption/overlay** (position + color), while keeping the border treatment identical across all of them.
+- **Related services is one shared rail everywhere.** Every service page closes with the `RelatedServices` client component (`.mw-rel`) — a horizontal scroll-snap track of uniform landscape cards (compact photo band over a solid `--c-surface` body with the service title in the display font + a two-line summary, the home "who we serve" card pattern), with squared prev/next controls (disabled at the ends, reduced-motion safe) and an "All services" link. It lists every service except the current page; do not hand-roll a per-page related-services grid.
+
+---
+
+## 13. Applying this to TransLine49
 
 TL49 already shares the clay palette (`data-palette="clay"`), so the **color system is common** — keep it warm there too. The gaps to close to bring a TL49 page to this baseline: it currently uses Geist (`data-type="utility"` default) rather than Barlow Condensed + IBM Plex, and it has no editorial `mw-*` layer (it renders straight from the brand package). To match: adopt the condensed-uppercase-display / Plex-body / mono-label type system, and reproduce the motifs and section grammar above. Because `mw-*` classes are Miller-namespaced, replicate the patterns for TL49 either by promoting the truly shared pieces into the brand package as new `tl-*` primitives, or by adding a TL49-scoped equivalent — don't reach across and apply `mw-*` to TL49. The goal is that a visitor moving between the two sites feels one design language with two brands.
 
