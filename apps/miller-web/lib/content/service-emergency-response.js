@@ -72,21 +72,47 @@ export const emergencyResponse = {
     ],
   },
 
-  // §4 — Coverage & capabilities.
+  // §4 — Coverage & capabilities. Each capability carries its own photo +
+  // one-line caption; hovering a row swaps the large image on the right and
+  // the last-hovered image stays locked until another row is hovered.
   coverage: {
     eyebrow: "Coverage & readiness",
     title: "Across Manitoba and the prairies",
     lead:
       "From Winnipeg out across central Canada — local crews backed by a coordinated subcontractor network for large, remote, or multi-site incidents.",
+    cta: { label: "Plan your spill response", href: "/contact-us/" },
     provides: [
-      "24-hour emergency response availability",
-      "Response coordination — locally and out-of-province",
-      "Spill containment",
-      "Clean-up and site remediation",
-      "Treatment & disposal of spilled materials and contaminated soils",
-      "Confined-space response",
+      {
+        text: "24-hour emergency response availability",
+        photo: "/miller/24-hour-emergency-response-availability.png",
+        caption: "A Miller responder answers the emergency line around the clock — day, night, weekend, or holiday.",
+      },
+      {
+        text: "Response coordination — locally and out-of-province",
+        photo: "/miller/response-coordination.png",
+        caption: "Crews coordinate the response locally and across provincial lines for large or remote incidents.",
+      },
+      {
+        text: "Spill containment",
+        photo: "/miller/guy-with-clipboard-by-barrels.png",
+        caption: "A technician documents and secures recovered drums at the containment site.",
+      },
+      {
+        text: "Clean-up and site remediation",
+        photo: "/miller/snowing-hazmat-cleaning.png",
+        caption: "Hazmat crews decontaminate an impacted site through harsh prairie winter conditions.",
+      },
+      {
+        text: "Treatment & disposal of spilled materials and contaminated soils",
+        photo: "/miller/spill-containment.png",
+        caption: "Spilled product and contaminated soil are contained for treatment and documented disposal.",
+      },
+      {
+        text: "Confined-space response",
+        photo: "/miller/confined-space-response.png",
+        caption: "A trained responder makes entry into a confined space others can't safely reach.",
+      },
     ],
-    photo: "/miller/services/remediation-emergency-spill.webp",
   },
 
   // §5 — Closing CTA.

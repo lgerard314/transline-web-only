@@ -5210,8 +5210,11 @@ html[data-brand="miller"] .tl-footer__bot {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 0.82fr);
   gap: clamp(32px, 4vw, 72px);
-  align-items: center;
+  align-items: start;
 }
+/* Push the image down so its top edge meets the vertical middle of the
+   "Across Manitoba…" header (eyebrow height + half the header). */
+.mw-svc-cov__media { margin-top: clamp(44px, 5vw, 86px); }
 .mw-svc-cov__lead {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
   font-size: clamp(16px, 1.2vw, 19px);
@@ -5226,11 +5229,10 @@ html[data-brand="miller"] .tl-footer__bot {
    left-accent-bar slide and an arrow that reveals on hover. */
 .mw-svc-cov__item {
   position: relative;
-  display: grid;
-  grid-template-columns: 1fr auto;
+  display: flex;
   align-items: center;
-  gap: 18px;
   padding: 15px 0;
+  padding-right: clamp(64px, 7vw, 88px);
   border-top: 1px solid var(--c-line);
   transition: padding-left 0.26s cubic-bezier(.2, .7, .2, 1);
 }
@@ -5245,8 +5247,10 @@ html[data-brand="miller"] .tl-footer__bot {
   background: var(--c-accent);
   transition: width 0.26s cubic-bezier(.2, .7, .2, 1);
 }
-.mw-svc-cov__item:hover { padding-left: 16px; }
-.mw-svc-cov__item:hover::before { width: 3px; }
+.mw-svc-cov__item:hover,
+.mw-svc-cov__item[data-active] { padding-left: 16px; }
+.mw-svc-cov__item:hover::before,
+.mw-svc-cov__item[data-active]::before { width: 3px; }
 .mw-svc-cov__item-text {
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
   font-weight: 600;
@@ -5256,47 +5260,64 @@ html[data-brand="miller"] .tl-footer__bot {
   text-transform: uppercase;
   color: var(--c-ink);
 }
-.mw-svc-cov__item-arr {
-  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
-  font-weight: 600;
-  font-size: clamp(18px, 1.5vw, 22px);
-  color: var(--c-accent);
-  opacity: 0;
-  transform: translateX(-6px);
-  transition: opacity 0.24s ease, transform 0.24s cubic-bezier(.2, .7, .2, 1);
+/* Far-right capability thumbnail. Absolutely positioned + vertically centered
+   so it never changes the row height; brightens when its row is active. */
+.mw-svc-cov__item-thumb {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: clamp(48px, 5.5vw, 68px);
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 1px solid var(--c-line);
+  background: var(--c-navy-2);
+  opacity: 0.55;
+  transition: opacity 0.26s ease, border-color 0.26s ease;
+  pointer-events: none;
 }
-.mw-svc-cov__item:hover .mw-svc-cov__item-arr { opacity: 1; transform: translateX(0); }
+.mw-svc-cov__item-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mw-svc-cov__item:hover .mw-svc-cov__item-thumb,
+.mw-svc-cov__item[data-active] .mw-svc-cov__item-thumb { opacity: 1; border-color: var(--c-accent); }
+.mw-svc-cov__cta { margin-top: clamp(28px, 2.6vw, 40px); }
 @media (prefers-reduced-motion: reduce) {
   .mw-svc-cov__item,
-  .mw-svc-cov__item-arr { transition: none; }
+  .mw-svc-cov__item-thumb { transition: none; }
 }
 /* Coverage photo: differs from the hero photo by ratio (taller) and
    overlay (clay caption, bottom-right) — the shared border is identical. */
+.mw-svc-cov__media { height: clamp(440px, 46vw, 580px); }
+/* Stacked, cross-fading capability photos; only the active one is opaque. */
 .mw-svc-cov__photo {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: clamp(440px, 46vw, 580px);
+  height: 100%;
   object-fit: cover;
   display: block;
+  opacity: 0;
+  transition: opacity 0.5s ease;
 }
+.mw-svc-cov__photo[data-active] { opacity: 1; }
+/* Bottom gradient scrim + one-line white caption describing the active photo. */
 .mw-svc-cov__cap {
   position: absolute;
-  right: 0; bottom: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 16px;
-  background: var(--c-accent);
+  left: 0; right: 0; bottom: 0;
+  margin: 0;
+  padding: clamp(48px, 6vw, 76px) clamp(16px, 1.6vw, 22px) clamp(14px, 1.3vw, 18px);
+  background: linear-gradient(to top, rgba(20, 12, 6, 0.86) 0%, rgba(20, 12, 6, 0.55) 42%, rgba(20, 12, 6, 0) 100%);
   color: #fff;
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(13px, 1vw, 15px);
+  line-height: 1.4;
   z-index: 2;
 }
-.mw-svc-cov__cap-mark { width: 7px; height: 7px; background: #fff; transform: rotate(45deg); flex-shrink: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .mw-svc-cov__photo { transition: none; }
+}
 @media (max-width: 860px) {
   .mw-svc-cov__grid { grid-template-columns: 1fr; gap: 32px; }
-  .mw-svc-cov__media { order: -1; }
+  .mw-svc-cov__media { order: -1; margin-top: 0; }
 }
 
 /* "When you call" — signal sweep along the response axis */

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { RelatedServices } from "../../../components/RelatedServices";
 import { ContactForm } from "../../../components/ContactForm";
+import { CoverageGallery } from "../../../components/CoverageGallery";
 import { TimelineNotifyCycle } from "../../../components/TimelineNotifyCycle";
 import { emergencyResponse as c } from "../../../lib/content/service-emergency-response";
 
@@ -126,34 +127,17 @@ export default function EmergencyResponsePage() {
         </div>
       </section>
 
-      {/* §4 — Coverage & capabilities (light split) */}
+      {/* §4 — Coverage & capabilities (hover-swap gallery) */}
       <section className="mw-svc-cov" aria-labelledby="er-cov-title">
-        <div className="mw-svc-cov__grid mw-inner">
-          <div className="mw-svc-cov__content" data-reveal>
-            <p className="mw-section-tag" aria-hidden="true">
-              <span className="mw-section-tag-mark" />
-              <span className="mw-section-tag-label">{cov.eyebrow}</span>
-            </p>
-            <h2 id="er-cov-title" className="mw-section-title">
-              {cov.title}<span className="mw-stop" aria-hidden="true" />
-            </h2>
-            <p className="mw-svc-cov__lead">{cov.lead}</p>
-            <ul className="mw-svc-cov__list" data-reveal-stagger>
-              {cov.provides.map((item) => (
-                <li key={item} className="mw-svc-cov__item">
-                  <span className="mw-svc-cov__item-text">{item}</span>
-                  <span className="mw-svc-cov__item-arr" aria-hidden="true">→</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <figure className="mw-svc-photo mw-svc-cov__media" data-reveal>
-            <img className="mw-svc-cov__photo" src={cov.photo} alt="" loading="lazy" />
-            <figcaption className="mw-svc-cov__cap">
-              <span className="mw-svc-cov__cap-mark" aria-hidden="true" />
-              <span>Spill containment across central Canada</span>
-            </figcaption>
-          </figure>
+        <div className="mw-inner">
+          <CoverageGallery
+            eyebrow={cov.eyebrow}
+            title={cov.title}
+            lead={cov.lead}
+            items={cov.provides}
+            cta={cov.cta}
+            titleId="er-cov-title"
+          />
         </div>
       </section>
 
