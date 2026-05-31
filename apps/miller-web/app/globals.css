@@ -5341,7 +5341,7 @@ html[data-brand="miller"] .tl-footer__bot {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 0.82fr);
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.72fr);
   /* Row 1 = eyebrow (left only); row 2 = content (left) + photo (right).
      Row gap is 0 — the eyebrow's own margin-bottom drives eyebrow→header. */
   column-gap: clamp(32px, 4vw, 72px);
