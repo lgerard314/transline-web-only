@@ -57,7 +57,7 @@ export const emergencyResponse = {
   // §3 — Incident types.
   incidents: {
     eyebrow: "What we respond to",
-    title: "Built for the call we hope you never make",
+    title: "Ready for the call we hope you never have to make",
     lead:
       "Spill responses vary with the environment, material, and scale. Every one gets a customized approach — these are the situations our crews are equipped for.",
     items: [
