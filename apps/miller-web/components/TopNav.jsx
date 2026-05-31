@@ -20,6 +20,9 @@ const GENERAL_PHONE_HREF    = `tel:+1${GENERAL_PHONE.replace(/\D/g, "")}`;
 export function TopNav() {
   const pathname = usePathname();
   const page = pageIdFromPath(pathname);
+  // Trailing-slash-insensitive match for highlighting the active submenu child.
+  const normPath = (p) => (p || "").replace(/\/+$/, "") || "/";
+  const isActivePath = (p) => normPath(pathname) === normPath(p);
   const [menuOpen, setMenuOpen]   = useState(false);
   const [openSubmenu, setOpenSub] = useState(null); // id of currently-open desktop submenu
   const [scrollState, setScrollState] = useState("top"); // "top" | "past-hero"
@@ -195,8 +198,12 @@ export function TopNav() {
                         <ul>
                           {n.children.map((c) => (
                             <li key={c.path} role="none">
-                              <Link href={c.path} role="menuitem">
-                                {c.label}
+                              <Link
+                                href={c.path}
+                                role="menuitem"
+                                aria-current={isActivePath(c.path) ? "page" : undefined}
+                              >
+                                <span className="mw-submenu__lbl">{c.label}</span>
                               </Link>
                             </li>
                           ))}

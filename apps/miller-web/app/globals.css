@@ -3563,13 +3563,13 @@ html[data-brand="miller"] .mw-submenu {
   border-top: 2px solid var(--c-accent);
   border-radius: 0;
   box-shadow: 0 22px 48px -22px rgba(42, 27, 18, 0.34);
-  padding: 9px;
+  padding: 4px;
   margin-top: 0;
   min-width: 300px;
 }
 html[data-brand="miller"] .mw-submenu[data-variant="mega"] {
   min-width: 580px;
-  padding: 11px 12px;
+  padding: 6px 6px;
 }
 html[data-brand="miller"] .mw-submenu[data-variant="mega"] ul {
   grid-template-columns: 1fr 1fr;
@@ -3580,7 +3580,7 @@ html[data-brand="miller"] .mw-submenu li a {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 6px 6px;
+  padding: 3px 6px;
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
   font-weight: 600;
   font-size: 16px;
@@ -3610,8 +3610,35 @@ html[data-brand="miller"] .mw-submenu li a:hover::before,
 html[data-brand="miller"] .mw-submenu li a:focus-visible::before {
   opacity: 1;
 }
-/* Dropdown items inherit the 2px nav-link underline (.tl-nav-list a::after); slim it to 1px in submenus only, leaving the top-level triggers at 2px. */
-html[data-brand="miller"] .mw-submenu li a::after { height: 1px; }
+/* Submenu links sit inside .tl-nav-list, so they'd otherwise inherit the
+   full-width accent-bar underline (.tl-nav-list a::after). Suppress it and
+   underline the LABEL TEXT ONLY (the diamond marker is a ::before flex item
+   and is never part of the underlined span). */
+html[data-brand="miller"] .mw-submenu li a::after { content: none; }
+html[data-brand="miller"] .mw-submenu__lbl {
+  text-decoration-line: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: text-decoration-color 180ms ease;
+}
+html[data-brand="miller"] .mw-submenu li a:hover .mw-submenu__lbl,
+html[data-brand="miller"] .mw-submenu li a:focus-visible .mw-submenu__lbl {
+  text-decoration-color: var(--c-accent);
+}
+/* Active child page: the diamond stays lit and the label keeps the same
+   slightly-thicker (2px) accent underline the active primary nav items get. */
+html[data-brand="miller"] .mw-submenu li a[aria-current="page"] {
+  color: var(--c-accent);
+}
+html[data-brand="miller"] .mw-submenu li a[aria-current="page"]::before { opacity: 1; }
+html[data-brand="miller"] .mw-submenu li a[aria-current="page"] .mw-submenu__lbl {
+  text-decoration-color: var(--c-accent);
+  text-decoration-thickness: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-brand="miller"] .mw-submenu__lbl { transition: none; }
+}
 
 /* ── Mobile drawer (cream) ─────────────────────────────────── */
 html[data-brand="miller"] .tl-mobile-nav {
