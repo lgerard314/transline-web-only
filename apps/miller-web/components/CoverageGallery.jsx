@@ -50,7 +50,7 @@ export function CoverageGallery({
             >
               <span className="mw-svc-cov__item-text">{it.text}</span>
               <span className="mw-svc-cov__item-thumb" aria-hidden="true">
-                <img src={it.photo} alt="" loading="lazy" />
+                <img src={it.photo} alt="" loading="lazy" style={{ objectPosition: it.thumbAnchor }} />
               </span>
             </li>
           ))}
@@ -89,6 +89,7 @@ export function CoverageGallery({
             alt=""
             data-active={i === active ? "1" : undefined}
             loading="lazy"
+            style={{ objectPosition: it.bigAnchor }}
           />
         ))}
         <figcaption className="mw-svc-cov__cap" aria-live="polite">
