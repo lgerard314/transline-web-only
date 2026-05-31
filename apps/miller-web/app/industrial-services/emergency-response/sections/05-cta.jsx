@@ -8,7 +8,6 @@ export function CtaSection() {
   const cta = c.cta;
   return (
     <section className="mw-svc-cta mw-svc-cta--dark" aria-labelledby="er-cta-title">
-      <span className="mw-svc-cta__diamond" aria-hidden="true" />
       <div className="mw-svc-cta__inner mw-inner mw-svc-cta__grid">
         <div className="mw-svc-cta__content" data-reveal>
           <p className="mw-section-tag" aria-hidden="true">
@@ -22,28 +21,40 @@ export function CtaSection() {
           </h2>
           <p className="mw-svc-cta__body">{cta.body}</p>
 
-          <a
-            href={h.emergencyHref}
-            className="mw-svc-cta__hotline"
-            aria-label={`Call the 24/7 emergency line: ${h.emergencyDisplay}`}
-          >
-            <span className="mw-svc-cta__hotline-dot" aria-hidden="true" />
-            <span className="mw-svc-cta__hotline-text">
-              <span className="mw-svc-cta__hotline-sup">24/7 emergency line</span>
-              <span className="mw-svc-cta__hotline-num">{h.emergencyDisplay}</span>
-            </span>
-          </a>
-          <p className="mw-svc-cta__hotline-note">
-            Answered by a trained responder — every hour, every day of the year.
-          </p>
+          <div className="mw-svc-cta__dispatch">
+            <div className="mw-svc-cta__dispatch-row">
+              <img
+                className="mw-svc-cta__dispatch-logo"
+                src="/miller/logo/miller-logomark.webp"
+                alt=""
+                aria-hidden="true"
+              />
+              <a
+                href={h.emergencyHref}
+                className="mw-svc-cta__hotline"
+                aria-label={`Call the 24/7 emergency line: ${h.emergencyDisplay}`}
+              >
+                <span className="mw-svc-cta__hotline-dot" aria-hidden="true" />
+                <span className="mw-svc-cta__hotline-text">
+                  <span className="mw-svc-cta__hotline-sup">24/7 emergency line</span>
+                  <span className="mw-svc-cta__hotline-num">{h.emergencyDisplay}</span>
+                </span>
+              </a>
+            </div>
+            <p className="mw-svc-cta__hotline-note">
+              Answered by a trained responder — every hour, every day of the year.
+            </p>
+          </div>
         </div>
 
-        <div className="mw-svc-cta__form" data-reveal>
-          <div className="mw-svc-cta__form-head">
-            <p className="mw-svc-cta__form-title">{cta.formTitle}</p>
-            <p className="mw-svc-cta__form-note">{cta.formNote}</p>
+        <div className="mw-svc-cta__form-col" data-reveal>
+          <div className="mw-svc-cta__form">
+            <div className="mw-svc-cta__form-head">
+              <p className="mw-svc-cta__form-title">{cta.formTitle}</p>
+              <p className="mw-svc-cta__form-note">{cta.formNote}</p>
+            </div>
+            <ContactForm showOptionalFields={false} />
           </div>
-          <ContactForm showOptionalFields={false} />
         </div>
       </div>
     </section>

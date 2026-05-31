@@ -10,7 +10,7 @@
 // the content row — its top meets the header top and its bottom meets the
 // actions row (button + 24/7 phone) bottom.
 
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import Link from "next/link";
 
 export function CoverageGallery({
@@ -23,7 +23,9 @@ export function CoverageGallery({
   phoneHref,
   phoneDisplay,
 }) {
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState(() =>
+    Math.max(0, items.findIndex((it) => it.default))
+  );
 
   return (
     <div className="mw-svc-cov__grid">
@@ -34,7 +36,12 @@ export function CoverageGallery({
 
       <div className="mw-svc-cov__content" data-reveal>
         <h2 id={titleId} className="mw-section-title mw-svc-cov__heading">
-          {title}
+          {title.split("\n").map((line, i, arr) => (
+            <Fragment key={i}>
+              {line}
+              {i < arr.length - 1 && <br />}
+            </Fragment>
+          ))}
           <span className="mw-stop" aria-hidden="true" />
         </h2>
         <p className="mw-svc-cov__lead">{lead}</p>
@@ -93,6 +100,7 @@ export function CoverageGallery({
           />
         ))}
         <figcaption className="mw-svc-cov__cap" aria-live="polite">
+          <span className="mw-svc-cov__cap-mark" aria-hidden="true" />
           {items[active].caption}
         </figcaption>
       </figure>

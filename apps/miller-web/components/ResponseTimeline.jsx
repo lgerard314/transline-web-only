@@ -14,7 +14,7 @@ export function ResponseTimeline({
   steps,
   notifications,
   titleId,
-  interval = 4200,
+  interval = 3000,
 }) {
   const [index, setIndex] = useState(0);
 

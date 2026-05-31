@@ -57,18 +57,18 @@ export const emergencyResponse = {
   // §3 — Incident types.
   incidents: {
     eyebrow: "What we respond to",
-    title: "Ready for the call we hope you never have to make",
+    title: "Prepared for the call\nwe hope you never have to make",
     lead:
       "Spill responses vary with the environment, material, and scale. Every one gets a customized approach — these are the situations our crews are equipped for.",
     items: [
-      { name: "Chemical spills", blurb: "Acids, caustics, and reactive process chemicals contained at the source.", photo: "/miller/chemical-spills.png" },
-      { name: "Fuel & diesel releases", blurb: "Tank, line, and roadway fuel releases recovered before they spread.", photo: "/miller/fuel-and-diesel-spills.png" },
-      { name: "Transport incidents", blurb: "Highway and rail cargo spills cleared and the corridor reopened.", photo: "/miller/transport-incidents.png" },
-      { name: "Industrial leaks", blurb: "Process and equipment failures sealed and the area made safe.", photo: "/miller/industrial-leaks.png" },
-      { name: "Dangerous goods", blurb: "Flammable, corrosive, and toxic DG handled to TDG standards.", photo: "/miller/dangerous-goods.png" },
-      { name: "Confined-space entry", blurb: "Trained entry into vaults, sumps, and vessels others can't reach.", photo: "/miller/confined-space-entry.png" },
-      { name: "Vessel & tank failures", blurb: "Ruptured tanks drained, contained, and decontaminated on site.", photo: "/miller/vessel-and-tank-failures.png" },
-      { name: "Contaminated soil", blurb: "Impacted soil excavated, treated, and routed to VBEC.", photo: "/miller/contaminated-soul.png" },
+      { name: "Chemical\nspills", blurb: "Acids, caustics, and reactive process chemicals contained at the source.", photo: "/miller/chemical-spills.png" },
+      { name: "Fuel & diesel\nreleases", blurb: "Tank, line, and roadway fuel releases recovered before they spread.", photo: "/miller/fuel-and-diesel-spills.png" },
+      { name: "Transport\nincidents", blurb: "Highway and rail cargo spills cleared and the corridor reopened.", photo: "/miller/transport-incidents.png" },
+      { name: "Industrial\nleaks", blurb: "Process and equipment failures sealed and the area made safe.", photo: "/miller/industrial-leaks.png" },
+      { name: "Dangerous\ngoods", blurb: "Flammable, corrosive, and toxic DG handled to TDG standards.", photo: "/miller/dangerous-goods.png" },
+      { name: "Confined-space\nentry", blurb: "Trained entry into vaults, sumps, and vessels others can't reach.", photo: "/miller/confined-space-entry.png" },
+      { name: "Vessel & tank\nfailures", blurb: "Ruptured tanks drained, contained, and decontaminated on site.", photo: "/miller/vessel-and-tank-failures.png" },
+      { name: "Contaminated\nsoil", blurb: "Impacted soil excavated, treated, and routed to VBEC.", photo: "/miller/contaminated-soul.png" },
     ],
   },
 
@@ -77,7 +77,7 @@ export const emergencyResponse = {
   // the last-hovered image stays locked until another row is hovered.
   coverage: {
     eyebrow: "Coverage & readiness",
-    title: "Across Manitoba and the prairies",
+    title: "Ready across Manitoba\nand the prairies",
     lead:
       "From Winnipeg out across central Canada — local crews backed by a coordinated subcontractor network for large, remote, or multi-site incidents.",
     cta: { label: "Plan your spill response", href: "/contact-us/" },
@@ -98,7 +98,7 @@ export const emergencyResponse = {
       },
       {
         text: "Spill containment",
-        photo: "/miller/guy-with-clipboard-by-barrels.png",
+        photo: "/miller/spill-containment-portrait.png",
         bigAnchor: "50% 50%",
         thumbAnchor: "50% 50%",
         caption: "A technician documents and secures recovered drums at the containment site.",
@@ -109,6 +109,7 @@ export const emergencyResponse = {
         bigAnchor: "50% 15%",
         thumbAnchor: "50% 20%",
         caption: "Hazmat crews decontaminate an impacted site through harsh prairie winter conditions.",
+        default: true,
       },
       {
         text: "Treatment & disposal of spilled materials and contaminated soils",

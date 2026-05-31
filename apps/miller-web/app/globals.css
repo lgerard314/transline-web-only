@@ -36,6 +36,11 @@ html[data-brand="miller"] {
   --c-on-navy: #F5E6CB;
   /* Body-copy color for text set on the dark walnut/brown surfaces. */
   --c-body-on-dark: #faf3e5e8;
+  /* Faint 49° paper-grain line color. One value per background family so the
+     diagonal wash reads at the same strength in every section: terracotta on
+     light surfaces, cream on dark walnut/brown surfaces. */
+  --c-grain-on-light: rgba(168, 90, 44, 0.03);
+  --c-grain-on-dark: rgba(245, 230, 203, 0.025);
 }
 
 /* The brand stylesheet hardcodes the topbar / mobile-nav / footer to `rgba(11,31,42,...)` cool navy. Override on Miller pages so the chrome reads as warm walnut alongside the home hero. */
@@ -973,7 +978,7 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, rgba(168,90,44,0.03) 38px, rgba(168,90,44,0.03) 39px);
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
 }
 .mw-sec2 > .mw-inner { position: relative; z-index: 1; }
 
@@ -1690,7 +1695,7 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, rgba(245,230,203,0.025) 38px, rgba(245,230,203,0.025) 39px);
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-dark) 38px, var(--c-grain-on-dark) 39px);
 }
 .mw-careers > .mw-inner { position: relative; z-index: 1; }
 
@@ -2025,7 +2030,7 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, rgba(168,90,44,0.025) 38px, rgba(168,90,44,0.025) 39px);
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
 }
 /* Full-width 3-column layout: truck (left third), content (center
    third), logomark (right third). Each item centered within its own
@@ -2268,7 +2273,7 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, rgba(245,230,203,0.04) 38px, rgba(245,230,203,0.04) 39px);
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-dark) 38px, var(--c-grain-on-dark) 39px);
   z-index: 1;
 }
 /* Vertical clay hairline running the height of the hero — the start of the chain-of-custody motif that recurs through the page. */
@@ -2616,7 +2621,7 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, rgba(168,90,44,0.035) 38px, rgba(168,90,44,0.035) 39px);
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
 }
 /* Cert columns: 4-up compact tiles */
 .mw-certs {
@@ -2787,7 +2792,7 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   inset: 0;
   pointer-events: none;
   /* Subtle terracotta paper-grain on white — matches the trust section. */
-  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, rgba(168,90,44,0.04) 38px, rgba(168,90,44,0.04) 39px);
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
 }
 .mw-services > .mw-inner { position: relative; z-index: 1; }
 
@@ -3758,7 +3763,7 @@ html[data-brand="miller"] .tl-footer::before {
   background:
     repeating-linear-gradient(49deg,
       transparent 0 38px,
-      rgba(255,255,255,0.018) 38px 39px);
+      var(--c-grain-on-dark) 38px 39px);
   pointer-events: none;
   z-index: 0;
 }
@@ -4020,7 +4025,7 @@ html[data-brand="miller"] .tl-footer__bot {
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, rgba(168,90,44,0.03) 38px, rgba(168,90,44,0.03) 39px);
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
 }
 .mw-svc-hero__inner {
   position: relative;
@@ -4191,7 +4196,7 @@ html[data-brand="miller"] .tl-footer__bot {
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, rgba(168,90,44,0.03) 38px, rgba(168,90,44,0.03) 39px);
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
 }
 .mw-svc-scale__inner { position: relative; z-index: 1; }
 .mw-svc-scale__head {
@@ -4323,7 +4328,7 @@ html[data-brand="miller"] .tl-footer__bot {
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, rgba(245,230,203,0.025) 38px, rgba(245,230,203,0.025) 39px);
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-dark) 38px, var(--c-grain-on-dark) 39px);
 }
 .mw-svc-steps__inner { position: relative; z-index: 1; }
 .mw-svc-steps__head { margin-bottom: clamp(40px, 4vw, 72px); }
@@ -4405,14 +4410,14 @@ html[data-brand="miller"] .tl-footer__bot {
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, rgba(168,90,44,0.03) 38px, rgba(168,90,44,0.03) 39px);
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
 }
 .mw-svc-inds__inner { position: relative; z-index: 1; }
 .mw-svc-inds__head {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
   gap: clamp(20px, 3vw, 56px);
-  align-items: end;
+  align-items: stretch;
   margin-bottom: clamp(36px, 4vw, 64px);
 }
 .mw-svc-inds__lead {
@@ -4420,8 +4425,28 @@ html[data-brand="miller"] .tl-footer__bot {
   font-size: clamp(15px, 1.05vw, 18px);
   line-height: 1.6;
   color: var(--c-ink-2);
-  max-width: 46ch;
-  margin: 0;
+  max-width: 52ch;
+  margin: clamp(18px, 1.8vw, 26px) 0 0;
+}
+.mw-svc-inds__title-em { font-style: italic; }
+.mw-svc-inds__head-media {
+  justify-self: stretch;
+  align-self: stretch;
+  position: relative;
+  width: 100%;
+}
+/* Image is absolutely positioned so it sizes to the column height (header top →
+   body-paragraph bottom) without inflating the grid row. height fixes the span;
+   width:auto keeps the intrinsic aspect ratio locked; centered horizontally. */
+.mw-svc-inds__head-media img {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
 }
 .mw-svc-inds__grid {
   list-style: none;
@@ -4473,7 +4498,7 @@ html[data-brand="miller"] .tl-footer__bot {
 /* Dark variant of the card grid (e.g. Emergency incident types) */
 .mw-svc-inds--dark { background: var(--c-navy-2); color: var(--c-on-navy); }
 .mw-svc-inds--dark::before {
-  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, rgba(245,230,203,0.022) 38px, rgba(245,230,203,0.022) 39px);
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-dark) 38px, var(--c-grain-on-dark) 39px);
 }
 .mw-svc-inds--dark .mw-section-title { color: #fff; }
 .mw-svc-inds--dark .mw-svc-inds__lead { color: rgba(250, 243, 229, 0.91); }
@@ -4517,7 +4542,8 @@ html[data-brand="miller"] .tl-footer__bot {
 .mw-svc-ind__thumb {
   position: relative;
   flex-shrink: 0;
-  width: clamp(112px, 11vw, 152px);
+  /* Photo half — the white text half matches this width (50 / 50). */
+  width: 50%;
   aspect-ratio: 4 / 3;
   overflow: hidden;
   background: var(--c-navy-2);
@@ -4535,7 +4561,8 @@ html[data-brand="miller"] .tl-footer__bot {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(to right, rgba(42, 27, 18, 0) 55%, rgba(36, 22, 12, 0.55) 100%);
+  /* Bottom-up darken so the overlaid title stays legible on any photo. */
+  background: linear-gradient(to top, rgba(18, 11, 5, 0.86) 0%, rgba(18, 11, 5, 0.4) 32%, rgba(18, 11, 5, 0) 64%);
   transition: opacity 320ms ease;
 }
 .mw-svc-inds--photo .mw-svc-ind:hover .mw-svc-ind__thumb img {
@@ -4551,13 +4578,51 @@ html[data-brand="miller"] .tl-footer__bot {
   gap: 5px;
   padding: clamp(12px, 1vw, 16px) clamp(16px, 1.4vw, 22px);
 }
-.mw-svc-inds--photo .mw-svc-ind__name { line-height: 1.08; }
+.mw-svc-inds--photo .mw-svc-ind__name {
+  position: absolute;
+  z-index: 2;
+  left: clamp(12px, 1.1vw, 17px);
+  right: clamp(12px, 1.1vw, 17px);
+  bottom: clamp(10px, 0.9vw, 14px);
+  color: #fff;
+  font-size: clamp(18px, 1.6vw, 26px);
+  line-height: 1.02;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45);
+}
+/* Small accent marker above each card description: diamond + short line. */
+.mw-svc-ind__tick {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: clamp(7px, 0.7vw, 10px);
+}
+.mw-svc-ind__tick-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+  transition: transform 320ms cubic-bezier(.2, .7, .2, 1);
+}
+.mw-svc-ind__tick-line {
+  width: clamp(20px, 2vw, 30px);
+  height: 1px;
+  background: rgba(168, 90, 44, 0.45);
+}
 .mw-svc-ind__desc {
   margin: 0;
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
-  font-size: clamp(12px, 0.85vw, 13px);
+  font-size: clamp(13.5px, 0.95vw, 14.5px);
+  font-weight: 400;
   line-height: 1.4;
   color: var(--c-ink-2);
+}
+/* Card hover: spin the signature diamond and slightly weight the caption. */
+.mw-svc-inds--photo .mw-svc-ind:hover .mw-svc-ind__tick-dot {
+  transform: rotate(135deg);
+}
+.mw-svc-inds--photo .mw-svc-ind:hover .mw-svc-ind__desc {
+  font-weight: 500;
 }
 @media (max-width: 420px) {
   .mw-svc-inds--photo .mw-svc-ind {
@@ -4592,7 +4657,7 @@ html[data-brand="miller"] .tl-footer__bot {
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, rgba(168,90,44,0.028) 38px, rgba(168,90,44,0.028) 39px);
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
 }
 .mw-svc-cta__inner { position: relative; z-index: 1; }
 .mw-svc-cta__content { max-width: 60ch; }
@@ -4603,7 +4668,7 @@ html[data-brand="miller"] .tl-footer__bot {
   line-height: 1.55;
   color: var(--c-ink-2);
   max-width: 46ch;
-  margin: clamp(20px, 1.5vw, 24px) 0 clamp(28px, 2.4vw, 36px);
+  margin: clamp(20px, 1.5vw, 24px) 0 clamp(47px, 4.06vw, 61px);
 }
 .mw-svc-cta__actions { display: flex; flex-wrap: wrap; gap: 16px; align-items: stretch; }
 
@@ -4616,21 +4681,7 @@ html[data-brand="miller"] .tl-footer__bot {
   border-top: 3px solid var(--c-accent);
 }
 .mw-svc-cta--dark::before {
-  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, rgba(245, 230, 203, 0.04) 38px, rgba(245, 230, 203, 0.04) 39px);
-}
-/* Oversized brand diamond, bleeding off the bottom-left for depth in the copy
-   column's negative space. */
-.mw-svc-cta__diamond {
-  position: absolute;
-  z-index: 0;
-  width: clamp(360px, 40vw, 620px);
-  aspect-ratio: 1;
-  left: clamp(-300px, -16vw, -190px);
-  bottom: clamp(-240px, -13vw, -150px);
-  transform: rotate(45deg);
-  border: 1px solid rgba(168, 90, 44, 0.34);
-  box-shadow: inset 0 0 0 1px rgba(245, 230, 203, 0.04);
-  pointer-events: none;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-dark) 38px, var(--c-grain-on-dark) 39px);
 }
 .mw-svc-cta__grid {
   display: grid;
@@ -4645,22 +4696,41 @@ html[data-brand="miller"] .tl-footer__bot {
 .mw-svc-cta--dark .mw-svc-cta__title { color: #fff; font-size: clamp(48px, 5.1vw, 90px); }
 .mw-svc-cta__title-em {
   font-style: italic;
-  text-decoration-line: underline;
-  text-decoration-thickness: 0.06em;
-  text-underline-offset: 0.1em;
+  color: var(--c-accent);
 }
 /* Square period hugs the last word (immediately after "it"). */
 .mw-svc-cta__title .mw-stop { margin-left: -0.06em; }
 .mw-svc-cta--dark .mw-svc-cta__body { color: var(--c-body-on-dark); max-width: 80%; }
 
+/* Dispatch block: brand logomark straddling the left edge of the hotline box
+   (box's left aligns with the logo's horizontal middle), note below. */
+.mw-svc-cta__dispatch {
+  margin-top: clamp(22px, 2.2vw, 32px);
+}
+.mw-svc-cta__dispatch-row {
+  position: relative;
+  /* Push the box's left edge to the logo's horizontal middle (half logo width). */
+  padding-left: clamp(36px, 3.5vw, 52px);
+}
+.mw-svc-cta__dispatch-logo {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: clamp(72px, 7vw, 104px);
+  height: auto;
+}
+
 /* Focal hotline: pulsing live dot + oversized terracotta number in an inset. */
 .mw-svc-cta__hotline {
   display: inline-flex;
-  align-items: center;
+  align-items: flex-start;
   gap: clamp(14px, 1.4vw, 20px);
-  width: min(100%, 420px);
-  margin-top: clamp(22px, 2.2vw, 32px);
+  width: min(100%, 500px);
   padding: clamp(14px, 1.4vw, 20px) clamp(18px, 1.8vw, 24px);
+  /* Extra left inset so the dot/number clear the overlapping logo half. */
+  padding-left: clamp(54px, 5.2vw, 72px);
   text-decoration: none;
   background: rgba(0, 0, 0, 0.22);
   border: 1px solid rgba(245, 230, 203, 0.16);
@@ -4676,6 +4746,8 @@ html[data-brand="miller"] .tl-footer__bot {
 .mw-svc-cta__hotline-dot {
   width: 10px;
   height: 10px;
+  /* Sit on the "24/7 emergency line" row (above the number). */
+  margin-top: 3px;
   border-radius: 50%;
   background: var(--c-accent);
   flex-shrink: 0;
@@ -4708,19 +4780,28 @@ html[data-brand="miller"] .tl-footer__bot {
   font-size: 13px;
   letter-spacing: 0.01em;
   color: rgba(245, 230, 203, 0.62);
-  margin: 12px 0 0;
+  /* Aligned under the box's left edge (logo middle), then nudged 15px right. */
+  margin: 12px 0 0 calc(clamp(36px, 3.5vw, 52px) + 15px);
 }
 @media (prefers-reduced-motion: reduce) {
   .mw-svc-cta__hotline-dot { animation: none; }
 }
 
 /* Contact form floats as a warm cream card with a terracotta top accent. */
+.mw-svc-cta__form-col { min-width: 0; }
 .mw-svc-cta__form {
   background: var(--c-surface-warm);
   border: 1px solid var(--c-line);
   border-top: 3px solid var(--c-accent);
   padding: clamp(24px, 2.4vw, 40px);
   box-shadow: 0 56px 100px -52px rgba(0, 0, 0, 0.66);
+  transition: transform 260ms cubic-bezier(.2, .7, .2, 1), border-color 260ms ease, box-shadow 260ms ease;
+}
+.mw-svc-cta__form:hover,
+.mw-svc-cta__form:focus-within {
+  transform: translateY(-3px);
+  border-color: var(--c-accent);
+  box-shadow: 0 64px 112px -52px rgba(0, 0, 0, 0.72), 0 0 0 1px rgba(168, 90, 44, 0.22);
 }
 .mw-svc-cta__form .mw-contact-form { max-width: none; }
 .mw-svc-cta__form-head { margin-bottom: clamp(18px, 1.8vw, 26px); }
@@ -4750,7 +4831,7 @@ html[data-brand="miller"] .tl-footer__bot {
   position: relative;
   background: var(--c-bg);
   color: var(--c-ink);
-  padding-block: clamp(44px, 4.5vw, 72px);
+  padding-block: clamp(56px, 5.5vw, 100px);
   overflow: hidden;
   isolation: isolate;
   border-top: 1px solid var(--c-line);
@@ -4761,7 +4842,7 @@ html[data-brand="miller"] .tl-footer__bot {
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, rgba(168,90,44,0.028) 38px, rgba(168,90,44,0.028) 39px);
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
 }
 .mw-svc-related-sec__inner { position: relative; z-index: 1; }
 .mw-svc-related-sec .mw-rel {
@@ -5051,7 +5132,7 @@ html[data-brand="miller"] .tl-footer__bot {
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, rgba(168,90,44,0.03) 38px, rgba(168,90,44,0.03) 39px);
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
 }
 .mw-svc-tl-sec__inner { position: relative; z-index: 1; }
 .mw-svc-tl-sec__intro {
@@ -5120,17 +5201,17 @@ html[data-brand="miller"] .tl-footer__bot {
 }
 .mw-svc-tl-notify__banner--solo,
 .mw-svc-tl-notify__banner--enter {
-  animation: mw-tl-notify-in 500ms cubic-bezier(.2, .7, .2, 1) both;
+  animation: mw-tl-notify-in 357ms cubic-bezier(.2, .7, .2, 1) both;
 }
 .mw-svc-tl-notify__banner--older {
   opacity: 0.88;
 }
 .mw-svc-tl-notify__banner--make-room {
-  animation: mw-tl-notify-make-room 500ms cubic-bezier(.2, .7, .2, 1) forwards;
+  animation: mw-tl-notify-make-room 357ms cubic-bezier(.2, .7, .2, 1) forwards;
   opacity: 0.88;
 }
 .mw-svc-tl-notify__banner--shift-up {
-  animation: mw-tl-notify-shift-up 500ms cubic-bezier(.2, .7, .2, 1) forwards;
+  animation: mw-tl-notify-shift-up 357ms cubic-bezier(.2, .7, .2, 1) forwards;
   opacity: 0.88;
   z-index: 1;
 }
@@ -5141,12 +5222,12 @@ html[data-brand="miller"] .tl-footer__bot {
   right: 0;
   z-index: 2;
   pointer-events: none;
-  animation: mw-tl-notify-out 500ms cubic-bezier(.4, 0, .2, 1) forwards;
+  animation: mw-tl-notify-out 357ms cubic-bezier(.4, 0, .2, 1) forwards;
 }
 .mw-svc-tl-notify__banner--exit-second {
   top: auto;
   bottom: 0;
-  animation-delay: 40ms;
+  animation-delay: 29ms;
 }
 .mw-svc-tl-notify__icon {
   width: 36px;
@@ -5237,7 +5318,7 @@ html[data-brand="miller"] .tl-footer__bot {
 }
 .mw-svc-tl {
   list-style: none;
-  margin: clamp(12px, 1.4vw, 20px) 0 0;
+  margin: clamp(66px, 6.2vw, 80px) 0 0;
   padding: 0;
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -5336,7 +5417,7 @@ html[data-brand="miller"] .tl-footer__bot {
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, rgba(168,90,44,0.03) 38px, rgba(168,90,44,0.03) 39px);
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
 }
 .mw-svc-cov__grid {
   position: relative;
@@ -5353,7 +5434,7 @@ html[data-brand="miller"] .tl-footer__bot {
 .mw-svc-cov__content { grid-column: 1; grid-row: 2; min-width: 0; }
 /* Photo top meets the header top; its height is locked to a fixed aspect ratio
    (≈ the content-row height) so each photo's crop is deterministic and stable. */
-.mw-svc-cov__media { grid-column: 2; grid-row: 2; align-self: start; aspect-ratio: 7 / 8; }
+.mw-svc-cov__media { grid-column: 2; grid-row: 2; align-self: stretch; }
 .mw-svc-cov__heading { margin-top: 0; }
 .mw-svc-cov__lead {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
@@ -5447,7 +5528,7 @@ html[data-brand="miller"] .tl-footer__bot {
   font-weight: 700;
   font-size: clamp(20px, 1.8vw, 26px);
   letter-spacing: 0.01em;
-  color: var(--c-accent);
+  color: var(--c-navy);
 }
 .mw-svc-cov__phone:hover .mw-svc-cov__phone-num { text-decoration: underline; text-underline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) {
@@ -5500,6 +5581,15 @@ html[data-brand="miller"] .tl-footer__bot {
   line-height: 1.4;
   z-index: 2;
 }
+/* Signature diamond stamp above the photo caption. */
+.mw-svc-cov__cap-mark {
+  display: block;
+  width: 9px;
+  height: 9px;
+  margin-bottom: clamp(10px, 1vw, 14px);
+  background: var(--c-accent);
+  transform: rotate(45deg);
+}
 @media (prefers-reduced-motion: reduce) {
   .mw-svc-cov__photo { transition: none; }
 }
@@ -5540,10 +5630,10 @@ html[data-brand="miller"] .tl-footer__bot {
    notification N appears — no separate CSS timeline to drift out of sync. Each
    step holds lit until the index wraps to 0, then they all retract together. */
 .mw-svc-tl-sec--v1 .mw-svc-tl__axis::before {
-  transition: width 460ms cubic-bezier(.2, .7, .2, 1);
+  transition: width 329ms cubic-bezier(.2, .7, .2, 1);
 }
 .mw-svc-tl-sec--v1 .mw-svc-tl__axis::after {
-  transition: border-color 220ms ease 240ms;
+  transition: border-color 157ms ease 171ms;
 }
 @media (min-width: 901px) {
   /* Cumulative fill: at active=N, every step up to and including N is lit. */
