@@ -1,9 +1,10 @@
-import Link from "next/link";
-import { RelatedServices } from "../../../components/RelatedServices";
-import { ContactForm } from "../../../components/ContactForm";
-import { CoverageGallery } from "../../../components/CoverageGallery";
-import { TimelineNotifyCycle } from "../../../components/TimelineNotifyCycle";
-import { emergencyResponse as c } from "../../../lib/content/service-emergency-response";
+import { emergencyResponse as c } from "@/lib/content/service-emergency-response";
+import { HeroSection } from "./sections/01-hero";
+import { TimelineSection } from "./sections/02-timeline";
+import { IncidentsSection } from "./sections/03-incidents";
+import { CoverageSection } from "./sections/04-coverage";
+import { CtaSection } from "./sections/05-cta";
+import { RelatedSection } from "./sections/06-related";
 
 export const metadata = {
   title: "Emergency Response",
@@ -12,170 +13,14 @@ export const metadata = {
 };
 
 export default function EmergencyResponsePage() {
-  const h = c.hero;
-  const tl = c.timeline;
-  const inc = c.incidents;
-  const cov = c.coverage;
-  const cta = c.cta;
   return (
     <>
-      {/* HERO — alert masthead. The 24/7 line is the primary action. */}
-      <section className="mw-svc-hero mw-svc-hero--alert" aria-labelledby="er-hero-title">
-        <div className="mw-svc-hero__inner mw-inner">
-          <div className="mw-svc-hero__content">
-            <p className="mw-section-tag" aria-hidden="true">
-              <span className="mw-section-tag-mark" />
-              <span className="mw-section-tag-label">{h.eyebrow}</span>
-            </p>
-            <h1 id="er-hero-title" className="mw-svc-hero__title">
-              {h.title}<br />
-              <span className="mw-svc-hero__title-em">{h.titleEm}</span><span className="mw-stop" aria-hidden="true" />
-            </h1>
-            <p className="mw-svc-hero__lead">{h.lead}</p>
-            <div className="mw-svc-hero__ctas">
-              <a
-                href={h.emergencyHref}
-                className="mw-cta mw-cta--ghost"
-                aria-label={`Call 24/7 emergency: ${h.emergencyDisplay}`}
-              >
-                <span className="mw-cta__sup">24/7 emergency</span>
-                <span className="mw-cta__num">{h.emergencyDisplay}</span>
-              </a>
-              <Link href={h.secondaryCta.href} className="mw-cta mw-cta--solid">
-                {h.secondaryCta.label} <span aria-hidden="true">→</span>
-              </Link>
-            </div>
-          </div>
-        </div>
-        <div className="mw-svc-hero__bleed-photo" aria-hidden="true">
-          <img className="mw-svc-hero__photo" src={h.photo} alt="" />
-        </div>
-      </section>
-
-      {/* §2 — Response timeline (signature layout) */}
-      <section
-        className="mw-svc-tl-sec mw-svc-tl-sec--v1"
-        aria-labelledby="er-tl-title"
-        style={{
-          "--mw-tl-notify-count": tl.notifications.length,
-          "--mw-tl-notify-interval": "4200ms",
-        }}
-      >
-        <div className="mw-svc-tl-sec__inner mw-inner">
-          <div className="mw-svc-tl-sec__intro">
-            <div className="mw-svc-tl-sec__intro-copy">
-              <header className="mw-svc-tl-sec__head" data-reveal>
-                <div>
-                  <p className="mw-section-tag" aria-hidden="true">
-                    <span className="mw-section-tag-mark" />
-                    <span className="mw-section-tag-label">{tl.eyebrow}</span>
-                  </p>
-                  <h2 id="er-tl-title" className="mw-section-title">
-                    {tl.title}<span className="mw-stop" aria-hidden="true" />
-                  </h2>
-                </div>
-              </header>
-              <p className="mw-svc-tl-sec__lead" data-reveal>{tl.lead}</p>
-            </div>
-            <TimelineNotifyCycle notifications={tl.notifications} />
-          </div>
-
-          <ol className="mw-svc-tl" data-reveal-stagger>
-            {tl.steps.map((st) => (
-              <li key={st.name} className="mw-svc-tl__stage">
-                <span className="mw-svc-tl__time">{st.t}</span>
-                <span className="mw-svc-tl__axis" aria-hidden="true">
-                  <span className="mw-svc-tl__node" />
-                </span>
-                <h3 className="mw-svc-tl__name">{st.name}</h3>
-                <p className="mw-svc-tl__body">{st.body}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
-
-      {/* §3 — What we respond to (dark incident grid) */}
-      <section className="mw-svc-inds mw-svc-inds--photo" aria-labelledby="er-inc-title">
-        <div className="mw-svc-inds__inner mw-inner">
-          <header className="mw-svc-inds__head" data-reveal>
-            <div className="mw-svc-inds__head-left">
-              <p className="mw-section-tag" aria-hidden="true">
-                <span className="mw-section-tag-mark" />
-                <span className="mw-section-tag-label">{inc.eyebrow}</span>
-              </p>
-              <h2 id="er-inc-title" className="mw-section-title">
-                {inc.title}<span className="mw-stop" aria-hidden="true" />
-              </h2>
-            </div>
-            <p className="mw-svc-inds__lead">{inc.lead}</p>
-          </header>
-
-          <ul className="mw-svc-inds__grid" data-reveal-stagger>
-            {inc.items.map((item) => (
-              <li key={item.name} className="mw-svc-ind">
-                <span className="mw-svc-ind__thumb" aria-hidden="true">
-                  <img src={item.photo} alt="" loading="lazy" />
-                </span>
-                <span className="mw-svc-ind__text">
-                  <span className="mw-svc-ind__name">{item.name}</span>
-                  <span className="mw-svc-ind__desc">{item.blurb}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* §4 — Coverage & capabilities (hover-swap gallery) */}
-      <section className="mw-svc-cov" aria-labelledby="er-cov-title">
-        <div className="mw-inner">
-          <CoverageGallery
-            eyebrow={cov.eyebrow}
-            title={cov.title}
-            lead={cov.lead}
-            items={cov.provides}
-            cta={cov.cta}
-            titleId="er-cov-title"
-          />
-        </div>
-      </section>
-
-      {/* §5 — Closing CTA (save the number + contact form) */}
-      <section className="mw-svc-cta mw-svc-cta--accent" aria-labelledby="er-cta-title">
-        <div className="mw-svc-cta__inner mw-inner mw-svc-cta__grid">
-          <div className="mw-svc-cta__content" data-reveal>
-            <p className="mw-section-tag" aria-hidden="true">
-              <span className="mw-section-tag-mark" />
-              <span className="mw-section-tag-label">{cta.eyebrow}</span>
-            </p>
-            <h2 id="er-cta-title" className="mw-section-title mw-svc-cta__title">
-              {cta.title}<span className="mw-stop" aria-hidden="true" />
-            </h2>
-            <p className="mw-svc-cta__body">{cta.body}</p>
-            <div className="mw-svc-cta__actions">
-              <a
-                href={h.emergencyHref}
-                className="mw-cta mw-cta--ghost"
-                aria-label={`Call 24/7 emergency: ${h.emergencyDisplay}`}
-              >
-                <span className="mw-cta__sup">24/7 emergency</span>
-                <span className="mw-cta__num">{h.emergencyDisplay}</span>
-              </a>
-            </div>
-          </div>
-          <div className="mw-svc-cta__form" data-reveal>
-            <ContactForm />
-          </div>
-        </div>
-      </section>
-
-      {/* §6 — Related services carousel */}
-      <section className="mw-svc-related-sec" aria-labelledby="er-related-title">
-        <div className="mw-svc-related-sec__inner mw-inner">
-          <RelatedServices currentSlug="emergency-response" titleId="er-related-title" />
-        </div>
-      </section>
+      <HeroSection />
+      <TimelineSection />
+      <IncidentsSection />
+      <CoverageSection />
+      <CtaSection />
+      <RelatedSection />
     </>
   );
 }
