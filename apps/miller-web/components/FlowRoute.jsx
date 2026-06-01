@@ -75,10 +75,7 @@ export function FlowRoute({
               <span className="mw-flow__node">{st.num}</span>
             </div>
             <div className="mw-flow__card">
-              <p className="mw-flow__tag">
-                <span className="mw-flow__tag-code">{st.num}</span>
-                {st.tag}
-              </p>
+              <p className="mw-flow__tag">{st.tag}</p>
               <h3 className="mw-flow__name">{st.name}</h3>
               <p className="mw-flow__text">{st.body}</p>
             </div>

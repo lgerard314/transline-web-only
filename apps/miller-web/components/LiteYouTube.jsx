@@ -34,7 +34,8 @@ export function LiteYouTube({ id, title, className = "" }) {
             alt=""
             loading="lazy"
             onError={(e) => {
-              e.currentTarget.src = `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = `https://i.ytimg.com/vi/${id}/mqdefault.jpg`;
             }}
           />
           <span className="mw-lyt__play" aria-hidden="true">

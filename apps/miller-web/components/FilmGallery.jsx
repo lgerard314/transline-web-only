@@ -25,7 +25,15 @@ export function FilmGallery({ films }) {
               onClick={() => setActive(i)}
             >
               <span className="mw-film__thumb" aria-hidden="true">
-                <img src={`https://i.ytimg.com/vi/${f.id}/hqdefault.jpg`} alt="" loading="lazy" />
+                <img
+                  src={`https://i.ytimg.com/vi/${f.id}/maxresdefault.jpg`}
+                  alt=""
+                  loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = `https://i.ytimg.com/vi/${f.id}/mqdefault.jpg`;
+                  }}
+                />
                 <span className="mw-film__play">
                   <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <path d="M8 5.5 18 12 8 18.5 Z" fill="currentColor" />

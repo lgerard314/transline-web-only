@@ -166,38 +166,9 @@
   z-index: 2;
 }
 .mw-svc-hero__cap-mark { width: 7px; height: 7px; background: var(--c-accent); transform: rotate(45deg); flex-shrink: 0; }
-.mw-svc-hero__stat {
-  position: absolute;
-  top: clamp(-20px, -1.4vw, -14px);
-  right: clamp(-12px, -1vw, -8px);
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  padding: 14px 18px;
-  background: var(--c-accent);
-  color: #fff;
-  box-shadow: 0 18px 36px -18px rgba(42,27,18,0.6);
-  z-index: 3;
-}
-.mw-svc-hero__stat-val {
-  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
-  font-weight: 700;
-  font-size: clamp(28px, 2.4vw, 38px);
-  line-height: 0.9;
-  font-variant-numeric: tabular-nums;
-}
-.mw-svc-hero__stat-label {
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.82);
-  max-width: 16ch;
-}
 @media (max-width: 960px) {
   .mw-svc-hero__inner { grid-template-columns: 1fr; gap: 36px; }
   .mw-svc-hero__title { font-size: clamp(40px, 11vw, 72px); }
-  .mw-svc-hero__stat { right: 12px; }
 }
 @media (max-width: 600px) {
   .mw-svc-hero__photo { height: clamp(260px, 60vw, 340px); }
@@ -351,11 +322,11 @@
   .mw-vol__spec { margin-left: 0; }
 }
 
-/* ── Service §3: dock → VBEC routing manifest (dark band) ────────── */
+/* ── Service §3: dock → VBEC routing manifest (light band) ───────── */
 .mw-flow {
   position: relative;
-  background: var(--c-navy);
-  color: var(--c-on-navy);
+  background: var(--c-bg);
+  color: var(--c-ink);
   padding-block: clamp(56px, 5.5vw, 100px);
   overflow: hidden;
   isolation: isolate;
@@ -367,16 +338,17 @@
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-dark) 38px, var(--c-grain-on-dark) 39px);
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
 }
+.mw-flow .mw-section-tag-label--invert { color: var(--c-ink-3); }
 .mw-flow__inner { position: relative; z-index: 1; }
 .mw-flow__head { margin-bottom: 0; min-width: 0; }
-.mw-flow__title { color: #fff; max-width: 20ch; }
+.mw-flow__title { color: var(--c-ink); max-width: 20ch; }
 .mw-flow__lead {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
   font-size: clamp(15px, 1.1vw, 18px);
   line-height: 1.55;
-  color: var(--c-body-on-dark);
+  color: var(--c-ink-2);
   margin: clamp(16px, 1.6vw, 22px) 0 0;
   max-width: 60ch;
 }
@@ -386,12 +358,13 @@
   gap: 10px;
   margin: clamp(18px, 1.8vw, 24px) 0 0;
   padding: 8px 14px;
-  border: 1px solid rgba(245, 230, 203, 0.18);
+  border: 1px solid var(--c-line);
+  background: var(--c-surface-warm);
   font-family: var(--font-plex-mono), ui-monospace, monospace;
   font-size: 11.5px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(245, 230, 203, 0.82);
+  color: var(--c-ink-2);
 }
 .mw-flow__route-mark {
   width: 8px;
@@ -438,14 +411,21 @@
   left: 46px;
   right: calc(clamp(16px, 1.8vw, 28px) * -1);
   height: 2px;
-  background-color: rgba(245, 230, 203, 0.16);
-  background-image: linear-gradient(90deg, var(--c-accent), var(--c-amber));
+  background-color: var(--c-line);
+  background-image: linear-gradient(90deg, var(--c-navy), var(--c-amber));
   background-repeat: no-repeat;
   background-size: 0% 100%;
   transition: background-size 600ms cubic-bezier(.4, 0, .2, 1);
 }
 /* Connector fills left→right once its stop falls behind the active step. */
 .mw-flow__stop[data-state="done"] .mw-flow__track::after { background-size: 100% 100%; }
+/* Once the next segment begins filling, earlier connectors lock to solid navy
+   (matches the diamonds); only the segment leaving "active" keeps the gradient. */
+.mw-flow__stop[data-state="done"]:has(~ .mw-flow__stop[data-state="active"]):not(:has(+ .mw-flow__stop[data-state="active"])) .mw-flow__track::after {
+  background-image: none;
+  background-color: var(--c-navy);
+  transition: background-color 280ms ease, background-size 0ms;
+}
 .mw-flow__stop[data-terminal="1"] .mw-flow__track::after { display: none; }
 .mw-flow__node {
   position: relative;
@@ -455,32 +435,62 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--c-navy);
-  border: 1.5px solid rgba(168, 90, 44, 0.55);
-  color: rgba(255, 255, 255, 0.85);
+  background: transparent;
+  border: none;
+  color: var(--c-navy);
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
   font-weight: 700;
   font-size: 20px;
   font-variant-numeric: tabular-nums;
-  transition: background 360ms ease, border-color 360ms ease, color 360ms ease, box-shadow 360ms ease;
+  transition: color 360ms ease;
 }
-/* Done + active stops light up; the active node pulses in time with its banner. */
+.mw-flow__node::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--c-line-2);
+  border: 1.5px solid rgba(59, 36, 24, 0.32);
+  box-shadow: none;
+  transform: rotate(45deg);
+  transition: background 360ms ease, border-color 360ms ease, box-shadow 360ms ease;
+}
+/* Done: connector line fills and the diamond does one turn in sync (600ms). */
 .mw-flow__stop[data-state="done"] .mw-flow__node {
-  background: var(--c-accent);
-  border-color: var(--c-accent);
   color: #fff;
 }
+.mw-flow__stop[data-state="done"] .mw-flow__node::before {
+  background: var(--c-navy);
+  border-color: var(--c-navy);
+  box-shadow: none;
+  animation: mw-flow-node-spin 600ms cubic-bezier(.4, 0, .2, 1);
+}
+@keyframes mw-flow-node-spin {
+  from { transform: rotate(45deg); }
+  to { transform: rotate(405deg); }
+}
+/* Active stop: scale the whole node so the number and diamond pulse together. */
 .mw-flow__stop[data-state="active"] .mw-flow__node {
-  background: var(--c-accent);
-  border-color: var(--c-amber);
   color: #fff;
-  box-shadow: 0 0 0 0 rgba(168, 90, 44, 0.5);
   animation: mw-flow-pulse 1.9s ease-out infinite;
 }
+.mw-flow__stop[data-state="active"] .mw-flow__node::before {
+  background: var(--c-navy);
+  border: 2px solid var(--c-amber);
+  box-shadow:
+    0 0 0 1px rgba(216, 154, 63, 0.45),
+    inset 0 0 0 1px rgba(245, 230, 203, 0.12);
+  animation: mw-flow-pulse-glow 1.9s ease-out infinite;
+}
 @keyframes mw-flow-pulse {
-  0% { box-shadow: 0 0 0 0 rgba(168, 90, 44, 0.5); }
-  70% { box-shadow: 0 0 0 13px rgba(168, 90, 44, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(168, 90, 44, 0); }
+  0% { transform: scale(1); }
+  70% { transform: scale(1.24); }
+  100% { transform: scale(1); }
+}
+@keyframes mw-flow-pulse-glow {
+  0% { filter: drop-shadow(0 0 0 rgba(216, 154, 63, 0.55)); }
+  70% { filter: drop-shadow(0 0 12px rgba(216, 154, 63, 0.35)); }
+  100% { filter: drop-shadow(0 0 0 rgba(216, 154, 63, 0)); }
 }
 .mw-flow__card { margin-top: clamp(18px, 1.8vw, 26px); padding-right: clamp(6px, 1vw, 16px); }
 .mw-flow__tag {
@@ -492,23 +502,22 @@
   font-size: 11px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(245, 230, 203, 0.6);
+  color: var(--c-accent-2);
 }
-.mw-flow__tag-code { color: var(--c-accent); }
 .mw-flow__name {
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
   font-weight: 600;
   font-size: clamp(20px, 1.6vw, 26px);
   text-transform: uppercase;
   letter-spacing: 0.01em;
-  color: #fff;
+  color: var(--c-ink);
   margin: 0 0 10px;
 }
 .mw-flow__text {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
   font-size: 14.5px;
   line-height: 1.55;
-  color: rgba(250, 243, 229, 0.86);
+  color: var(--c-ink-2);
   margin: 0;
 }
 /* Tablet: the route line wraps to a 2-up grid and the horizontal connector is
@@ -520,7 +529,7 @@
 /* ≤900: the intro dissolves (display:contents) so the notification can pin as a
    sticky top band; the steps stack into a single vertical column and scroll
    beneath it, releasing at the end of the section. Same behaviour as the "when
-   you call" timeline, on the dark route section. */
+   you call" timeline, on the light route section. */
 @media (max-width: 900px) {
   .mw-flow { overflow: visible; }            /* a clipping ancestor would kill sticky */
   .mw-flow__intro { display: contents; }
@@ -532,13 +541,15 @@
     justify-content: center;
     margin: 0 0 clamp(22px, 4vw, 30px);
     padding-block: clamp(10px, 1.4vw, 15px);
-    background: var(--c-navy);               /* opaque band so steps hide cleanly under it */
-    box-shadow: 0 14px 18px -14px rgba(0, 0, 0, 0.55);
+    background: var(--c-bg);                 /* opaque band so steps hide cleanly under it */
+    box-shadow: 0 14px 18px -14px rgba(42, 27, 18, 0.12);
   }
   .mw-flow__line { grid-template-columns: 1fr; gap: clamp(28px, 6vw, 40px); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .mw-flow__stop[data-state="active"] .mw-flow__node { animation: none; box-shadow: none; }
+  .mw-flow__stop[data-state="active"] .mw-flow__node { animation: none; }
+  .mw-flow__stop[data-state="active"] .mw-flow__node::before { animation: none; filter: none; }
+  .mw-flow__stop[data-state="done"] .mw-flow__node::before { animation: none; }
 }
 /* --wide: give the head column extra room so a short title (e.g. "Assessment to
    closure") holds one line on desktop. CWC keeps the default tighter split. */
@@ -1361,11 +1372,9 @@
   padding-top: clamp(28px, 2.6vw, 40px);
   border-top: 1px solid var(--c-line);
   /* Full-bleed out of the page column so the rail spans the viewport and
-     cards bleed off both edges. --mw-rel-pad aligns the head with the page
-     content column; --mw-rel-edge is the track inset + edge-fade width. */
+     cards bleed off both edges. --mw-rel-edge is the track inset + edge-fade width. */
   width: 100vw;
   margin-left: calc(50% - 50vw);
-  --mw-rel-pad: max(24px, calc((100vw - 1560px) / 2));
   --mw-rel-edge: clamp(36px, 6vw, 120px);
 }
 .mw-rel__head {
@@ -1374,8 +1383,12 @@
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
+  margin-inline: auto;
   margin-bottom: clamp(18px, 1.8vw, 26px);
-  padding-inline: var(--mw-rel-pad);
+  width: min(100% - clamp(48px, 8vw, 144px), 1560px);
+  max-width: 100%;
+  padding-inline: 0;
+  box-sizing: border-box;
 }
 .mw-rel__head-text { display: flex; flex-direction: column; gap: clamp(20px, 1.5vw, 24px); }
 .mw-rel__label { margin: 0; }

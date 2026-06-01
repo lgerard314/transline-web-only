@@ -4,8 +4,7 @@ import { StopText } from "@/components/StopText";
 import { LiteYouTube } from "@/components/LiteYouTube";
 
 // HERO — remediation masthead. In-grid 2-column variant (a lightly modified
-// version of the service hero) with the featured field film in the photo frame
-// and a terracotta stat badge, so the page opens on real footage from the field.
+// version of the service hero) with the featured field film in the photo frame.
 export function HeroSection() {
   const h = c.hero;
   const film = c.videos.films[0];
@@ -45,10 +44,6 @@ export function HeroSection() {
               {h.caption}
             </figcaption>
           </figure>
-          <div className="mw-svc-hero__stat" aria-hidden="true">
-            <span className="mw-svc-hero__stat-val">{h.stat.value}</span>
-            <span className="mw-svc-hero__stat-label">{h.stat.label}</span>
-          </div>
         </div>
       </div>
     </section>

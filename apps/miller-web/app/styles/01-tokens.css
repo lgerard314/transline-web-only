@@ -27,6 +27,8 @@ html[data-brand="miller"] {
   --c-line-2: #F0E7D5;
   --c-navy: #3B2418;
   --c-navy-2: #4A2F1F;
+  /* Inset panels on navy bands (darker than --c-navy for depth). */
+  --c-navy-3: #2E1910;
   --c-blue: #6E3D1A;
   --c-accent: #A85A2C;
   --c-accent-2: #8A4720;

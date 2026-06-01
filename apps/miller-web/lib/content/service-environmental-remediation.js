@@ -2,7 +2,7 @@
 // arrays only (no JSX); markup lives in the section composition. All body copy
 // is sourced from the live millerenvironmental.ca remediation page.
 
-import { OVER_25_YEARS, EMERGENCY_PHONE, GENERAL_PHONE } from "./brand";
+import { OVER_25_YEARS, EMERGENCY_PHONE, GENERAL_PHONE, VBEC_SHORT } from "./brand";
 
 const EMERGENCY_TEL = `tel:${EMERGENCY_PHONE.replace(/[^0-9+]/g, "")}`;
 
@@ -20,7 +20,6 @@ export const REMEDIATION = {
     emergencyHref: EMERGENCY_TEL,
     secondaryCta: { label: "Book a consult", labelShort: "Book a consult", href: "/contact-us/" },
     caption: "Remediation in the field · Falcon Beach, MB",
-    stat: { value: "25+ yrs", label: "Remediation experience" },
   },
 
   // §2 — What we do: six remediation capabilities. Full-bleed photo cards whose
@@ -231,6 +230,32 @@ export const REMEDIATION = {
   whyChoose: {
     eyebrow: "Why Miller",
     title: "Why crews call us first",
+    lead:
+      "One operator from first assessment through treatment, transport, and regulatory sign-off — not a patchwork of subcontractors.",
+    highlights: [
+      {
+        label: "Licensed",
+        value: VBEC_SHORT,
+        text: "Our own licensed hazardous waste treatment facility in Manitoba — every load documented through chain of custody.",
+      },
+      {
+        label: "Full-service",
+        value: "One",
+        unit: "contract",
+        text: "Demolition, remediation, and disposal coordinated under a single operator.",
+      },
+      {
+        label: "Experienced",
+        value: "25+",
+        unit: "years",
+        text: "Decades of proven work on complex, high-risk remediation programs.",
+      },
+      {
+        label: "Fast",
+        value: "24/7",
+        text: "Rapid mobilization and compliance with provincial and CCME standards.",
+      },
+    ],
     items: [
       { mark: "01", title: "Licensed", body: "Our own licensed hazardous waste treatment facility in Manitoba." },
       { mark: "02", title: "Full-service", body: "Demolition, remediation, and disposal under one contract." },
