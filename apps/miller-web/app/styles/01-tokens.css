@@ -1,0 +1,57 @@
+/* ============================================================
+   01 - TOKENS
+   Palette lock, a11y --c-ink-3, Miller type bindings, tl-* token repaints, overflow-x clip.
+   Source: globals.css 9-59.
+   ============================================================ */
+
+/* ─────────────────────────────────────────────────────────────────
+   A11y: token overrides for WCAG AA contrast on Miller pages.
+   Default --c-ink-3 (#9C8975) only reaches ~3.0:1 on the warm cream
+   --c-bg, which fails AA for normal text. Darken to #736049 — ~5.3:1
+   on cream, ~4.9:1 on line-2 (tinted sections), ~6.0:1 on white.
+   Scoped to Miller so TL49 chrome is untouched.
+   ───────────────────────────────────────────────────────────────── */
+html[data-brand="miller"] {
+  --c-ink-3: #736049;
+}
+
+/* Defensively lock the warm clay palette on Miller pages. The brand stylesheet's `[data-palette="deep"]` block would otherwise force `--c-accent` to a cool teal (#2EBFA5) at production runtime — the Tweaks panel masks this in dev. Miller must always render warm. */
+html[data-brand="miller"] {
+  --c-bg: #F7F1E6;
+  --c-surface: #FFFFFF;
+  /* Warm off-white sitting between #FFFFFF and --c-bg (#F7F1E6). Use this as the default surface color instead of pure white — it carries a hint of warmth that unifies with the clay palette. */
+  --c-surface-warm: #FBF8F2;
+  --c-ink: #2A1B12;
+  --c-ink-2: #5C4937;
+  --c-line: #E8DCC6;
+  --c-line-2: #F0E7D5;
+  --c-navy: #3B2418;
+  --c-navy-2: #4A2F1F;
+  --c-blue: #6E3D1A;
+  --c-accent: #A85A2C;
+  --c-accent-2: #8A4720;
+  --c-amber: #D89A3F;
+  --c-on-navy: #F5E6CB;
+  /* Body-copy color for text set on the dark walnut/brown surfaces. */
+  --c-body-on-dark: #faf3e5e8;
+  /* Faint 49° paper-grain line color. One value per background family so the
+     diagonal wash reads at the same strength in every section: terracotta on
+     light surfaces, cream on dark walnut/brown surfaces. */
+  --c-grain-on-light: rgba(168, 90, 44, 0.03);
+  --c-grain-on-dark: rgba(245, 230, 203, 0.025);
+}
+
+/* The brand stylesheet hardcodes the topbar / mobile-nav / footer to `rgba(11,31,42,...)` cool navy. Override on Miller pages so the chrome reads as warm walnut alongside the home hero. */
+html[data-brand="miller"] .tl-topbar { background: rgba(59, 36, 24, 0.94); }
+html[data-brand="miller"] .tl-mobile-nav { background: rgba(59, 36, 24, 0.985); }
+html[data-brand="miller"] .tl-footer { background: var(--c-navy); }
+html[data-brand="miller"] .tl-btn--primary { color: #fff; }
+html[data-brand="miller"] .tl-hero { background: var(--c-navy); }
+
+/* Type system for Miller. Self-hosted via next/font: Big Shoulders Display (heroic civic-monument display), IBM Plex Sans (body), IBM Plex Mono (labels + tabular data). Geist is kept as the system fallback for the brand stylesheet's `"Geist"` family references. */
+html[data-brand="miller"] {
+  --font-sans:    var(--font-plex-sans), var(--font-geist), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-condensed), var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    var(--font-plex-mono), var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
+}
+

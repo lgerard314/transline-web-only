@@ -1,0 +1,2199 @@
+/* ============================================================
+   05 - SERVICE SHARED
+   mw-svc toolkit: hero, volume ladder, VBEC manifest, industries grid, closing CTA,
+   schedule, related rail, alert hero, response timeline, coverage gallery. Source: 4115-6307.
+   ============================================================ */
+
+/* ════════════════════════════════════════════════════════════
+   SERVICE PAGES — shared mw-svc-* toolkit. Built on the home design
+   system (clay palette, condensed/Plex/mono type, stamp + diamond +
+   49° grain motifs). The service hero is deliberately distinct from
+   the home hero — a split masthead, shorter than a full viewport,
+   no cycling headline — so the home page stays the most powerful
+   first impression.
+   ════════════════════════════════════════════════════════════ */
+
+.mw-svc-hero {
+  position: relative;
+  background: var(--c-surface-warm);
+  color: var(--c-ink);
+  overflow: hidden;
+  isolation: isolate;
+  border-bottom: 3px solid var(--c-accent);
+}
+.mw-svc-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+.mw-svc-hero__inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: clamp(32px, 4vw, 72px);
+  align-items: center;
+  padding-block: clamp(44px, 5vw, 92px);
+}
+.mw-svc-hero__content { display: flex; flex-direction: column; align-items: flex-start; }
+/* Canonical section-head spacing — matches the home page: the eyebrow's
+   margin-bottom drives the eyebrow → title gap (clamp(20px, 1.5vw, 24px)),
+   the same value the home sections render. */
+.mw-svc-hero .mw-section-tag,
+.mw-vol .mw-section-tag,
+.mw-flow .mw-section-tag,
+.mw-svc-inds .mw-section-tag,
+.mw-svc-tl-sec .mw-section-tag,
+.mw-svc-cov .mw-section-tag,
+.mw-sched__panel .mw-section-tag,
+.mw-svc-cta .mw-section-tag { margin-bottom: clamp(20px, 1.5vw, 24px); }
+.mw-svc-hero__title {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(40px, 5vw, 82px);
+  line-height: 0.92;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--c-ink);
+  margin: 0 0 clamp(20px, 1.5vw, 24px);
+}
+.mw-svc-hero__title-em { color: var(--c-accent); }
+.mw-svc-hero__lead {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(16px, 1.2vw, 19px);
+  line-height: 1.55;
+  color: var(--c-ink-2);
+  max-width: 52ch;
+  margin: 0 0 clamp(28px, 2.6vw, 40px);
+}
+/* Two-button rows stretch so the solid + ghost are always the same height. */
+.mw-svc-hero__ctas { display: flex; flex-wrap: wrap; gap: 16px; align-items: stretch; }
+/* Ghost CTA on light service sections — recolored like the home Final CTA,
+   and its stacked content vertically centered when the row stretches it. */
+.mw-svc-hero .mw-cta--ghost,
+.mw-svc-cta .mw-cta--ghost { color: var(--c-ink); border-color: var(--c-ink); justify-content: center; }
+.mw-svc-hero .mw-cta--ghost:hover,
+.mw-svc-cta .mw-cta--ghost:hover { border-color: var(--c-accent); color: var(--c-accent); }
+.mw-svc-hero .mw-cta__sup,
+.mw-svc-cta .mw-cta__sup { color: var(--c-ink-2); }
+.mw-svc-hero .mw-cta__num,
+.mw-svc-cta .mw-cta__num { color: var(--c-ink); }
+
+.mw-svc-hero__cta-label--short { display: none; }
+
+@media (max-width: 600px) {
+  /* Full-width, equal-weight CTAs on phones — bigger tap targets and a
+     balanced stack instead of mismatched auto-widths. The 24/7 call is a
+     primary action; this matches the home hero treatment. */
+  .mw-svc-cta__actions { flex-direction: column; align-items: stretch; }
+  .mw-svc-hero__ctas { flex-direction: row; flex-wrap: nowrap; align-items: stretch; gap: 8px; }
+  .mw-svc-cta__actions > .mw-cta { width: 100%; justify-content: center; }
+  .mw-svc-hero__ctas > .mw-cta--ghost {
+    flex: 1 1 0;
+    min-width: 0;
+    justify-content: center;
+    padding: 10px 8px;
+    align-items: center;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .mw-svc-hero__ctas > .mw-cta--ghost .mw-cta__num { font-size: 14px; }
+  .mw-svc-hero__ctas > .mw-cta--solid {
+    flex: 0 0 auto;
+    justify-content: center;
+    padding: 11px 12px;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  .mw-svc-hero__cta-label--full { display: none; }
+  .mw-svc-hero__cta-label--short { display: inline; }
+  .mw-svc-cta__actions > .mw-cta--ghost { align-items: center; text-align: center; }
+}
+
+.mw-svc-hero__media { position: relative; }
+/* Shared photo frame — every service photo uses this: 1px line border +
+   a thick clay top bar that grows to full width on hover (the Careers card
+   motif). Per-page uniqueness comes from aspect ratio + caption overlay,
+   never from the border. */
+.mw-svc-photo {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--c-line);
+  box-shadow: 0 28px 56px -32px rgba(42, 27, 18, 0.4);
+  transition: transform 0.3s cubic-bezier(.2,.7,.2,1), box-shadow 0.3s ease;
+}
+.mw-svc-photo::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  height: 4px;
+  width: clamp(48px, 4vw, 72px);
+  background: var(--c-accent);
+  z-index: 3;
+  transition: width 0.34s cubic-bezier(.2,.7,.2,1);
+}
+.mw-svc-photo:hover { transform: translateY(-4px); box-shadow: 0 34px 66px -32px rgba(42, 27, 18, 0.46); }
+.mw-svc-photo:hover::before { width: calc(100% + 2px); }
+/* Optional side-thick-border-on-hover variant for visual variety. */
+.mw-svc-photo--side::before { bottom: auto; height: clamp(48px, 4vw, 72px); width: 4px; transition: height 0.34s cubic-bezier(.2,.7,.2,1); }
+.mw-svc-photo--side:hover::before { height: calc(100% + 2px); width: 4px; }
+.mw-svc-hero__photo {
+  width: 100%;
+  height: clamp(320px, 38vw, 480px);
+  object-fit: cover;
+  display: block;
+  filter: saturate(1.02);
+}
+.mw-svc-hero__cap {
+  position: absolute;
+  left: 0; bottom: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px 10px 14px;
+  background: rgba(42,27,18,0.82);
+  color: rgba(245,230,203,0.92);
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  z-index: 2;
+}
+.mw-svc-hero__cap-mark { width: 7px; height: 7px; background: var(--c-accent); transform: rotate(45deg); flex-shrink: 0; }
+.mw-svc-hero__stat {
+  position: absolute;
+  top: clamp(-20px, -1.4vw, -14px);
+  right: clamp(-12px, -1vw, -8px);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 14px 18px;
+  background: var(--c-accent);
+  color: #fff;
+  box-shadow: 0 18px 36px -18px rgba(42,27,18,0.6);
+  z-index: 3;
+}
+.mw-svc-hero__stat-val {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(28px, 2.4vw, 38px);
+  line-height: 0.9;
+  font-variant-numeric: tabular-nums;
+}
+.mw-svc-hero__stat-label {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.82);
+  max-width: 16ch;
+}
+@media (max-width: 960px) {
+  .mw-svc-hero__inner { grid-template-columns: 1fr; gap: 36px; }
+  .mw-svc-hero__title { font-size: clamp(40px, 11vw, 72px); }
+  .mw-svc-hero__stat { right: 12px; }
+}
+@media (max-width: 600px) {
+  .mw-svc-hero__photo { height: clamp(260px, 60vw, 340px); }
+}
+
+/* ── Service §2: "any volume" container capacity ladder ──────────── */
+.mw-vol {
+  position: relative;
+  background: var(--c-bg);
+  padding-block: clamp(56px, 5.5vw, 100px);
+  color: var(--c-ink);
+  overflow: hidden;
+  isolation: isolate;
+  border-bottom: 1px solid var(--c-line);
+}
+.mw-vol::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+.mw-vol__inner { position: relative; z-index: 1; }
+.mw-vol__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+  gap: clamp(32px, 4vw, 80px);
+  align-items: start;
+}
+.mw-vol__title { max-width: 14ch; }
+.mw-vol__lead {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.05vw, 18px);
+  line-height: 1.6;
+  color: var(--c-ink-2);
+  max-width: 44ch;
+  margin: clamp(18px, 1.8vw, 26px) 0 0;
+}
+/* Head rail stretches to the ladder height so the truck graphic can fill the
+   empty space beneath the copy. */
+.mw-vol__head { align-self: stretch; display: flex; flex-direction: column; }
+.mw-vol__head-photo { margin-top: auto; padding-top: clamp(28px, 3.5vw, 56px); }
+.mw-vol__head-photo img {
+  display: block;
+  width: 100%;
+  max-width: 416px;
+  height: auto;
+}
+
+/* Capacity ladder — one row per container tier, bottom-aligned in its column. */
+.mw-vol__ladder { list-style: none; margin: 0; padding: 0; align-self: end; }
+.mw-vol__tier {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: clamp(16px, 1.8vw, 28px);
+  align-items: start;
+  padding: clamp(20px, 2vw, 28px) clamp(8px, 1.2vw, 18px);
+  border-top: 1px solid var(--c-line);
+  transition: background 220ms ease;
+}
+.mw-vol__tier:last-child { border-bottom: 1px solid var(--c-line); }
+.mw-vol__tier:hover { background: var(--c-surface-warm); }
+.mw-vol__glyph {
+  color: var(--c-accent);
+  width: clamp(40px, 4vw, 52px);
+  height: clamp(40px, 4vw, 52px);
+  display: block;
+  transition: color 220ms ease, transform 260ms cubic-bezier(.2,.7,.2,1);
+}
+.mw-vol__glyph svg { width: 100%; height: 100%; display: block; }
+.mw-vol__tier:hover .mw-vol__glyph { color: var(--c-accent-2); transform: translateY(-2px); }
+.mw-vol__body { min-width: 0; }
+.mw-vol__line {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(10px, 1.2vw, 16px);
+}
+.mw-vol__name {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(22px, 2vw, 34px);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  color: var(--c-ink);
+  margin: 0;
+  transition: transform 220ms cubic-bezier(.2, .7, .2, 1);
+}
+/* Nudge the title right on hover, like the site's other row lists. */
+.mw-vol__tier:hover .mw-vol__name { transform: translateX(8px); }
+.mw-vol__spec {
+  margin-left: auto;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(20px, 1.9vw, 30px);
+  letter-spacing: 0.01em;
+  line-height: 1;
+  color: var(--c-accent-2);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.mw-vol__gauge {
+  position: relative;
+  height: 8px;
+  margin: clamp(12px, 1.2vw, 16px) 0 clamp(12px, 1.1vw, 14px);
+  background: var(--c-line-2);
+  overflow: hidden;
+}
+.mw-vol__fill {
+  display: block;
+  height: 100%;
+  min-width: 6px;
+  background: linear-gradient(90deg, var(--c-accent) 0%, var(--c-accent-2) 100%);
+  box-shadow: inset -2px 0 0 0 var(--c-amber);
+  transition: filter 220ms ease;
+}
+.mw-vol__tier:hover .mw-vol__fill { filter: brightness(1.06); }
+.mw-vol__note {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--c-ink-3);
+  margin: 0;
+  max-width: 54ch;
+}
+@media (max-width: 900px) {
+  .mw-vol__grid { grid-template-columns: 1fr; gap: clamp(28px, 5vw, 40px); }
+  .mw-vol__title { max-width: none; }
+  .mw-vol__head-photo { display: none; }
+}
+@media (max-width: 480px) {
+  .mw-vol__tier { grid-template-columns: 1fr; gap: 14px; }
+  .mw-vol__glyph { width: 40px; height: 40px; }
+  .mw-vol__line { flex-wrap: wrap; }
+  .mw-vol__spec { margin-left: 0; }
+}
+
+/* ── Service §3: dock → VBEC routing manifest (dark band) ────────── */
+.mw-flow {
+  position: relative;
+  background: var(--c-navy);
+  color: var(--c-on-navy);
+  padding-block: clamp(56px, 5.5vw, 100px);
+  overflow: hidden;
+  isolation: isolate;
+  border-top: 3px solid var(--c-accent);
+}
+.mw-flow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-dark) 38px, var(--c-grain-on-dark) 39px);
+}
+.mw-flow__inner { position: relative; z-index: 1; }
+.mw-flow__head { margin-bottom: clamp(36px, 4vw, 64px); }
+.mw-flow__title { color: #fff; max-width: 20ch; }
+.mw-flow__lead {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.1vw, 18px);
+  line-height: 1.55;
+  color: var(--c-body-on-dark);
+  margin: clamp(16px, 1.6vw, 22px) 0 0;
+  max-width: 60ch;
+}
+.mw-flow__route {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: clamp(18px, 1.8vw, 24px) 0 0;
+  padding: 8px 14px;
+  border: 1px solid rgba(245, 230, 203, 0.18);
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(245, 230, 203, 0.82);
+}
+.mw-flow__route-mark {
+  width: 8px;
+  height: 8px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
+/* Two-column container: the route line (left) + notification banners (right). */
+.mw-flow__cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1.62fr) minmax(0, 1fr);
+  gap: clamp(28px, 3.5vw, 64px);
+  align-items: center;
+}
+.mw-flow__notify { min-width: 0; display: flex; justify-content: center; }
+
+/* Stations strung along a clay route line (segment drawn per stop). */
+.mw-flow__line {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--mw-flow-cols, 4), minmax(0, 1fr));
+  gap: clamp(16px, 1.8vw, 28px);
+}
+.mw-flow__stop { position: relative; display: flex; flex-direction: column; }
+.mw-flow__track { position: relative; height: 46px; display: flex; align-items: center; }
+.mw-flow__track::after {
+  content: "";
+  position: absolute;
+  top: 23px;
+  left: 46px;
+  right: calc(clamp(16px, 1.8vw, 28px) * -1);
+  height: 2px;
+  background-color: rgba(245, 230, 203, 0.16);
+  background-image: linear-gradient(90deg, var(--c-accent), var(--c-amber));
+  background-repeat: no-repeat;
+  background-size: 0% 100%;
+  transition: background-size 600ms cubic-bezier(.4, 0, .2, 1);
+}
+/* Connector fills left→right once its stop falls behind the active step. */
+.mw-flow__stop[data-state="done"] .mw-flow__track::after { background-size: 100% 100%; }
+.mw-flow__stop[data-terminal="1"] .mw-flow__track::after { display: none; }
+.mw-flow__node {
+  position: relative;
+  z-index: 1;
+  width: 46px;
+  height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--c-navy);
+  border: 1.5px solid rgba(168, 90, 44, 0.55);
+  color: rgba(255, 255, 255, 0.85);
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+  transition: background 360ms ease, border-color 360ms ease, color 360ms ease, box-shadow 360ms ease;
+}
+/* Done + active stops light up; the active node pulses in time with its banner. */
+.mw-flow__stop[data-state="done"] .mw-flow__node {
+  background: var(--c-accent);
+  border-color: var(--c-accent);
+  color: #fff;
+}
+.mw-flow__stop[data-state="active"] .mw-flow__node {
+  background: var(--c-accent);
+  border-color: var(--c-amber);
+  color: #fff;
+  box-shadow: 0 0 0 0 rgba(168, 90, 44, 0.5);
+  animation: mw-flow-pulse 1.9s ease-out infinite;
+}
+@keyframes mw-flow-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(168, 90, 44, 0.5); }
+  70% { box-shadow: 0 0 0 13px rgba(168, 90, 44, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(168, 90, 44, 0); }
+}
+.mw-flow__card { margin-top: clamp(18px, 1.8vw, 26px); padding-right: clamp(6px, 1vw, 16px); }
+.mw-flow__tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(245, 230, 203, 0.6);
+}
+.mw-flow__tag-code { color: var(--c-accent); }
+.mw-flow__name {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(20px, 1.6vw, 26px);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  color: #fff;
+  margin: 0 0 10px;
+}
+.mw-flow__text {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: rgba(250, 243, 229, 0.86);
+  margin: 0;
+}
+@media (max-width: 1100px) {
+  .mw-flow__cols { grid-template-columns: 1fr; gap: clamp(32px, 5vw, 48px); align-items: stretch; }
+  .mw-flow__notify { justify-content: flex-start; }
+}
+@media (max-width: 980px) {
+  .mw-flow__line { grid-template-columns: repeat(2, 1fr); gap: 40px 24px; }
+  .mw-flow__track::after { display: none; }
+}
+@media (max-width: 520px) {
+  .mw-flow__line { grid-template-columns: 1fr; gap: 30px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-flow__stop[data-state="active"] .mw-flow__node { animation: none; box-shadow: none; }
+}
+
+/* ── Service: industries grid ────────────────────────────────────── */
+.mw-svc-inds {
+  position: relative;
+  background: var(--c-surface-warm);
+  color: var(--c-ink);
+  padding-block: clamp(56px, 5.5vw, 100px);
+  overflow: hidden;
+  isolation: isolate;
+}
+.mw-svc-inds::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+.mw-svc-inds__inner { position: relative; z-index: 1; }
+.mw-svc-inds__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: clamp(20px, 3vw, 56px);
+  align-items: stretch;
+  margin-bottom: clamp(36px, 4vw, 64px);
+}
+.mw-svc-inds__lead {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.05vw, 18px);
+  line-height: 1.6;
+  color: var(--c-ink-2);
+  max-width: 52ch;
+  margin: clamp(18px, 1.8vw, 26px) 0 0;
+}
+.mw-svc-inds__title-em { font-style: italic; }
+.mw-svc-inds__head-media {
+  justify-self: stretch;
+  align-self: stretch;
+  position: relative;
+  width: 100%;
+}
+/* Image is absolutely positioned so it sizes to the column height (header top →
+   body-paragraph bottom) without inflating the grid row. height fixes the span;
+   width:auto keeps the intrinsic aspect ratio locked; centered horizontally. */
+.mw-svc-inds__head-media img {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+.mw-svc-inds__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(14px, 1.4vw, 20px);
+}
+.mw-svc-ind {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  padding: clamp(18px, 1.5vw, 24px) clamp(18px, 1.5vw, 24px);
+  transition: transform 240ms cubic-bezier(.2,.7,.2,1), border-color 240ms ease, box-shadow 240ms ease;
+}
+.mw-svc-ind__mark {
+  width: 9px;
+  height: 9px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+  transition: transform 300ms cubic-bezier(.2,.7,.2,1);
+}
+.mw-svc-ind__name {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(16px, 1.15vw, 19px);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--c-ink);
+  line-height: 1.12;
+}
+.mw-svc-ind:hover {
+  transform: translateY(-3px);
+  border-color: var(--c-accent);
+  box-shadow: 0 16px 30px -22px rgba(42, 27, 18, 0.3);
+}
+.mw-svc-ind:hover .mw-svc-ind__mark { transform: rotate(135deg); }
+@media (max-width: 860px) {
+  .mw-svc-inds__head { grid-template-columns: 1fr; align-items: start; gap: 16px; }
+  .mw-svc-inds__grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 420px) {
+  .mw-svc-inds__grid { grid-template-columns: 1fr; }
+}
+
+/* Gallery variant — 5-up photo cards (Who we collect from): 16:9 image, name,
+   diamond-tick, one-line blurb. The tenth cell is a "Talk to Miller" button.
+   Own .mw-ind-* classes so the base chip + the --photo variant stay untouched. */
+.mw-svc-inds--gallery .mw-svc-inds__grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(14px, 1.4vw, 22px);
+}
+@media (max-width: 1180px) { .mw-svc-inds--gallery .mw-svc-inds__grid { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 940px)  { .mw-svc-inds--gallery .mw-svc-inds__grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 680px)  { .mw-svc-inds--gallery .mw-svc-inds__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 460px)  { .mw-svc-inds--gallery .mw-svc-inds__grid { grid-template-columns: 1fr; } }
+
+.mw-ind-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform 240ms cubic-bezier(.2,.7,.2,1), border-color 240ms ease, box-shadow 240ms ease;
+}
+.mw-ind-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--c-accent);
+  z-index: 3;
+  transition: width 360ms cubic-bezier(.2,.7,.2,1);
+}
+.mw-ind-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--c-accent);
+  box-shadow: 0 18px 34px -24px rgba(42, 27, 18, 0.34);
+}
+.mw-ind-card:hover::before { width: 100%; }
+.mw-ind-card__media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--c-navy-2);
+  border-bottom: 1px solid var(--c-line);
+}
+.mw-ind-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.96) brightness(0.92) contrast(1.02) sepia(0.05);
+  transition: transform 1000ms cubic-bezier(.2,.7,.2,1), filter 320ms ease;
+}
+.mw-ind-card:hover .mw-ind-card__media img {
+  transform: scale(1.06);
+  filter: saturate(1.05) brightness(1.04) contrast(1.0) sepia(0.02);
+}
+.mw-ind-card__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(14px, 1.1vw, 18px) clamp(15px, 1.1vw, 19px) clamp(15px, 1.2vw, 19px);
+}
+.mw-ind-card__name {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(17px, 1.2vw, 21px);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.08;
+  color: var(--c-ink);
+}
+/* Diamond + short line beneath the title (mirrors the ER incident cards). */
+.mw-ind-card__tick {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: clamp(8px, 0.8vw, 11px) 0 clamp(8px, 0.8vw, 10px);
+}
+.mw-ind-card__tick-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+  transition: transform 320ms cubic-bezier(.2,.7,.2,1);
+}
+.mw-ind-card__tick-line {
+  width: clamp(20px, 2vw, 30px);
+  height: 1px;
+  background: rgba(168, 90, 44, 0.45);
+}
+.mw-ind-card:hover .mw-ind-card__tick-dot { transform: rotate(135deg); }
+.mw-ind-card__blurb {
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--c-ink-3);
+  font-weight: 400;
+  transition: font-weight 200ms ease;
+}
+/* Body copy thickens by 100 weight on hover. */
+.mw-ind-card:hover .mw-ind-card__blurb { font-weight: 500; }
+
+/* Tenth cell — a big "Talk to Miller" button. The cell is the outer square
+   (same footprint as the cards); its border is the frame and its padding is the
+   gap, so the clay button floats inside with a ring of the page showing around. */
+.mw-ind-cta-cell {
+  display: flex;
+  border: 2px solid var(--c-accent-2);
+  padding: clamp(7px, 0.7vw, 11px);
+}
+.mw-ind-cta {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+  padding: clamp(20px, 1.8vw, 30px);
+  text-decoration: none;
+  color: #fff;
+  background: var(--c-navy);
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(20px, 1.5vw, 27px);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.05;
+  transition: background 220ms ease, box-shadow 220ms ease;
+}
+.mw-ind-cta__arrow { transition: transform 220ms cubic-bezier(.2, .7, .2, 1); }
+.mw-ind-cta:hover {
+  background: var(--c-navy-2);
+  box-shadow: 0 16px 28px -20px rgba(42, 27, 18, 0.5);
+}
+.mw-ind-cta:hover .mw-ind-cta__arrow { transform: translateX(4px); }
+.mw-ind-cta:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mw-ind-card:hover .mw-ind-card__media img { transform: none; }
+  .mw-ind-cta:hover { transform: none; }
+}
+
+/* Photo-thumbnail variant of the incident cards (Emergency Response).
+   Scoped to --photo so the plain customer-waste collection grid keeps
+   its diamond-only rows. Horizontal cards: 4:3 landscape thumb left,
+   title + one-sentence blurb right; accent top-bar wipe + photo brighten
+   on hover. Rendered on the light --c-bg surface. */
+.mw-svc-inds--photo { background: var(--c-bg); }
+/* Photo cards wrap on available space — a min/max width track decides how many
+   fit per row (uniform, left-packed). They stay horizontal at every width —
+   never flip to vertical. */
+.mw-svc-inds--photo .mw-svc-inds__grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+}
+.mw-svc-inds--photo .mw-svc-ind {
+  position: relative;
+  flex-direction: row;
+  gap: 0;
+  padding: 0;
+  align-items: stretch;
+  overflow: hidden;
+  isolation: isolate;
+}
+.mw-svc-inds--photo .mw-svc-ind::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--c-accent);
+  z-index: 3;
+  transition: width 360ms cubic-bezier(.2, .7, .2, 1);
+}
+.mw-svc-inds--photo .mw-svc-ind:hover::before { width: 100%; }
+.mw-svc-ind__thumb {
+  position: relative;
+  flex-shrink: 0;
+  /* Photo half; the white text half takes the rest (a wider text half keeps the
+     one-line description from wrapping tall, which keeps the card short). */
+  width: 44%;
+  /* Shorter (wider) ratio = shorter cards; was 4 / 3. */
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--c-navy-2);
+  border-right: 1px solid var(--c-line);
+  /* Query container so the overlaid title can scale to the photo's width. */
+  container-type: inline-size;
+}
+.mw-svc-ind__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.96) brightness(0.9) contrast(1.02) sepia(0.05);
+  transition: transform 1000ms cubic-bezier(.2, .7, .2, 1), filter 320ms ease;
+}
+.mw-svc-ind__thumb::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Bottom-up darken so the overlaid title stays legible on any photo. */
+  background: linear-gradient(to top, rgba(18, 11, 5, 0.86) 0%, rgba(18, 11, 5, 0.4) 32%, rgba(18, 11, 5, 0) 64%);
+  transition: opacity 320ms ease;
+}
+.mw-svc-inds--photo .mw-svc-ind:hover .mw-svc-ind__thumb img {
+  transform: scale(1.07);
+  filter: saturate(1.06) brightness(1.06) contrast(1.0) sepia(0.02);
+}
+.mw-svc-ind__text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  padding: clamp(12px, 1vw, 16px) clamp(16px, 1.4vw, 22px);
+}
+.mw-svc-inds--photo .mw-svc-ind__name {
+  position: absolute;
+  z-index: 2;
+  left: clamp(12px, 1.1vw, 17px);
+  right: clamp(12px, 1.1vw, 17px);
+  bottom: clamp(10px, 0.9vw, 14px);
+  color: #fff;
+  /* Scales with the photo width (cqi = 1% of the thumb's inline size). */
+  font-size: clamp(19px, 15cqi, 34px);
+  line-height: 1.02;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45);
+}
+/* Small accent marker above each card description: diamond + short line. */
+.mw-svc-ind__tick {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: clamp(7px, 0.7vw, 10px);
+}
+.mw-svc-ind__tick-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+  transition: transform 320ms cubic-bezier(.2, .7, .2, 1);
+}
+.mw-svc-ind__tick-line {
+  width: clamp(20px, 2vw, 30px);
+  height: 1px;
+  background: rgba(168, 90, 44, 0.45);
+}
+.mw-svc-ind__desc {
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(13.5px, 0.95vw, 14.5px);
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--c-ink-2);
+}
+/* Card hover: spin the signature diamond and slightly weight the caption. */
+.mw-svc-inds--photo .mw-svc-ind:hover .mw-svc-ind__tick-dot {
+  transform: rotate(135deg);
+}
+.mw-svc-inds--photo .mw-svc-ind:hover .mw-svc-ind__desc {
+  font-weight: 500;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-svc-ind__thumb img { transition: filter 320ms ease; }
+}
+
+/* ── Service: closing CTA + related services (dark) ──────────────── */
+.mw-svc-cta {
+  position: relative;
+  background: var(--c-bg);
+  color: var(--c-ink);
+  padding-block: clamp(56px, 5.5vw, 100px);
+  overflow: hidden;
+  isolation: isolate;
+  border-top: 1px solid var(--c-line);
+}
+.mw-svc-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+.mw-svc-cta__inner { position: relative; z-index: 1; }
+.mw-svc-cta__content { max-width: 60ch; }
+.mw-svc-cta__title { color: var(--c-ink); max-width: 18ch; }
+.mw-svc-cta__body {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(16px, 1.2vw, 19px);
+  line-height: 1.55;
+  color: var(--c-ink-2);
+  max-width: 46ch;
+  margin: clamp(20px, 1.5vw, 24px) 0 clamp(47px, 4.06vw, 61px);
+}
+.mw-svc-cta__actions { display: flex; flex-wrap: wrap; gap: 16px; align-items: stretch; }
+
+/* Dark "after-hours dispatch" CTA: deep walnut field, cream paper-grain wash,
+   a terracotta signal rule, a faint brand-diamond watermark, the pulsing 24/7
+   hotline as the focal element, and the contact form as a warm cream card. */
+.mw-svc-cta--dark {
+  background: var(--c-navy);
+  color: var(--c-on-navy);
+  border-top: 3px solid var(--c-accent);
+}
+.mw-svc-cta--dark::before {
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-dark) 38px, var(--c-grain-on-dark) 39px);
+}
+.mw-svc-cta__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(32px, 4vw, 64px);
+  align-items: start;
+}
+.mw-svc-cta__grid .mw-svc-cta__content,
+.mw-svc-cta__grid .mw-svc-cta__form-col { min-width: 0; }
+@media (min-width: 861px) {
+  .mw-svc-cta__grid--reverse {
+    grid-template-columns: minmax(0, 9fr) minmax(0, 11fr);
+  }
+}
+.mw-svc-cta--dark .mw-svc-cta__content { max-width: none; }
+.mw-svc-cta--dark .mw-section-tag-mark { background: var(--c-accent); }
+.mw-svc-cta--dark .mw-stop { background: var(--c-accent); }
+.mw-svc-cta--dark .mw-section-tag-label { color: rgba(245, 230, 203, 0.82); }
+.mw-svc-cta--dark .mw-svc-cta__title { color: #fff; font-size: clamp(48px, 5.1vw, 90px); }
+.mw-svc-cta__title-em {
+  font-style: italic;
+  color: var(--c-accent);
+}
+/* Square period hugs the last word (immediately after "it"). */
+.mw-svc-cta__title .mw-stop { margin-left: -0.06em; }
+.mw-svc-cta--dark .mw-svc-cta__body { color: var(--c-body-on-dark); max-width: 80%; }
+
+/* Dispatch block: brand logomark straddling the left edge of the hotline box
+   (box's left aligns with the logo's horizontal middle), note below. */
+.mw-svc-cta__dispatch {
+  margin-top: clamp(22px, 2.2vw, 32px);
+}
+.mw-svc-cta__dispatch-row {
+  position: relative;
+  /* Push the box's left edge to the logo's horizontal middle (half logo width). */
+  padding-left: clamp(36px, 3.5vw, 52px);
+}
+.mw-svc-cta__dispatch-logo {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: clamp(72px, 7vw, 104px);
+  height: auto;
+}
+
+/* Focal hotline: pulsing live dot + oversized terracotta number in an inset. */
+.mw-svc-cta__hotline {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: clamp(14px, 1.4vw, 20px);
+  width: min(100%, 500px);
+  padding: clamp(14px, 1.4vw, 20px) clamp(18px, 1.8vw, 24px);
+  /* Extra left inset so the dot/number clear the overlapping logo half. */
+  padding-left: clamp(54px, 5.2vw, 72px);
+  text-decoration: none;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(245, 230, 203, 0.16);
+  box-shadow: 0 22px 50px -32px rgba(0, 0, 0, 0.75), 0 0 44px -18px rgba(168, 90, 44, 0.4);
+  transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease, transform 0.25s cubic-bezier(.2, .7, .2, 1);
+}
+.mw-svc-cta__hotline:hover {
+  border-color: var(--c-accent);
+  background: rgba(168, 90, 44, 0.16);
+  box-shadow: 0 26px 56px -32px rgba(0, 0, 0, 0.8), 0 0 60px -16px rgba(168, 90, 44, 0.55);
+  transform: translateY(-2px);
+}
+.mw-svc-cta__hotline-dot {
+  width: 10px;
+  height: 10px;
+  /* Sit on the "24/7 emergency line" row (above the number). */
+  margin-top: 3px;
+  border-radius: 50%;
+  background: var(--c-accent);
+  flex-shrink: 0;
+  box-shadow: 0 0 0 0 rgba(168, 90, 44, 0.55);
+  animation: mw-cta-pulse 2.2s ease-out infinite;
+}
+@keyframes mw-cta-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(168, 90, 44, 0.55); }
+  70% { box-shadow: 0 0 0 13px rgba(168, 90, 44, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(168, 90, 44, 0); }
+}
+.mw-svc-cta__hotline-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.mw-svc-cta__hotline-sup {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(245, 230, 203, 0.66);
+}
+.mw-svc-cta__hotline-num {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(26px, 2.8vw, 40px);
+  letter-spacing: 0.01em;
+  line-height: 1;
+  color: #fff;
+}
+.mw-svc-cta__hotline-note {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.01em;
+  color: rgba(245, 230, 203, 0.62);
+  /* Aligned under the box's left edge (logo middle), then nudged 15px right. */
+  margin: 12px 0 0 calc(clamp(36px, 3.5vw, 52px) + 15px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-svc-cta__hotline-dot { animation: none; }
+}
+
+/* Contact form floats as a warm cream card with a terracotta top accent. */
+.mw-svc-cta__form-col { min-width: 0; }
+.mw-svc-cta__form {
+  background: var(--c-surface-warm);
+  border: 1px solid var(--c-line);
+  border-top: 3px solid var(--c-accent);
+  padding: clamp(24px, 2.4vw, 40px);
+  box-shadow: 0 56px 100px -52px rgba(0, 0, 0, 0.66);
+  transition: transform 260ms cubic-bezier(.2, .7, .2, 1), border-color 260ms ease, box-shadow 260ms ease;
+}
+.mw-svc-cta__form:hover,
+.mw-svc-cta__form:focus-within {
+  transform: translateY(-3px);
+  border-color: var(--c-accent);
+  box-shadow: 0 64px 112px -52px rgba(0, 0, 0, 0.72), 0 0 0 1px rgba(168, 90, 44, 0.22);
+}
+.mw-svc-cta__form .mw-contact-form { max-width: none; }
+.mw-svc-cta__form-head { margin-bottom: clamp(18px, 1.8vw, 26px); }
+.mw-svc-cta__form-title {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(20px, 1.9vw, 27px);
+  line-height: 1.05;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  color: var(--c-ink);
+}
+.mw-svc-cta__form-note {
+  margin: 8px 0 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--c-ink-2);
+}
+@media (max-width: 860px) {
+  .mw-svc-cta__grid { grid-template-columns: 1fr; gap: 32px; }
+  .mw-svc-cta__grid--reverse .mw-svc-cta__content { order: -1; }
+}
+
+/* ── Service §5: "get on the schedule" — dark walnut section: content left,
+   form + transparent truck right ──────────────────────────────────────── */
+.mw-sched {
+  position: relative;
+  background: var(--c-navy);
+  color: var(--c-on-navy);
+  padding-block: clamp(56px, 5.5vw, 100px);
+  overflow: hidden;
+  isolation: isolate;
+  border-top: 1px solid rgba(245, 230, 203, 0.1);
+}
+.mw-sched::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-dark) 38px, var(--c-grain-on-dark) 39px);
+}
+.mw-sched__inner { position: relative; z-index: 1; }
+/* Transparent truck cutout anchored to the right edge, contained so the whole
+   truck fits, free to span as far left as it needs on the dark section. */
+.mw-sched__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: url("/miller/nice-truck-closeup-transparent-bg.png") right center / contain no-repeat;
+}
+/* Soft left scrim so the copy column stays legible where the truck reaches in. */
+.mw-sched__bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--c-navy) 0%, rgba(59, 36, 24, 0.92) 28%, rgba(59, 36, 24, 0) 52%);
+}
+.mw-sched__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(28px, 3.4vw, 60px);
+  align-items: stretch;
+}
+.mw-sched__panel { min-width: 0; }
+/* Form sits on the right, over the photo — vertically centered, not stretched. */
+.mw-sched__form-col { min-width: 0; display: flex; align-self: center; }
+
+/* Form card — dark glass floating over the truck photo. The clay top bar wipes
+   in left→right only on hover / while being filled out (:focus-within), and the
+   card darkens in the same states. */
+.mw-sched__card {
+  position: relative;
+  width: 100%;
+  background: rgba(22, 13, 7, 0.72);
+  -webkit-backdrop-filter: blur(12px) saturate(1.05);
+  backdrop-filter: blur(12px) saturate(1.05);
+  border: 1px solid rgba(245, 230, 203, 0.16);
+  padding: clamp(24px, 2.6vw, 44px);
+  box-shadow: 0 50px 90px -50px rgba(0, 0, 0, 0.7);
+  transition: background 260ms ease, border-color 260ms ease;
+}
+.mw-sched__card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: var(--c-accent);
+  transition: width 420ms cubic-bezier(.2, .7, .2, 1);
+}
+.mw-sched__card:hover,
+.mw-sched__card:focus-within {
+  background: rgba(22, 13, 7, 0.86);
+  border-color: rgba(245, 230, 203, 0.26);
+}
+.mw-sched__card:hover::before,
+.mw-sched__card:focus-within::before { width: 100%; }
+.mw-sched__card-head { margin-bottom: clamp(20px, 2vw, 28px); }
+.mw-sched__form-title {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(22px, 2.1vw, 30px);
+  line-height: 1.04;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  color: #fff;
+}
+/* Left — "what happens next" content sits directly on the dark section
+   (no container background of its own). */
+.mw-sched__panel { color: var(--c-on-navy); padding: 0; }
+.mw-sched__panel .mw-section-tag-mark { background: var(--c-accent); }
+.mw-sched__title { color: #fff; font-size: clamp(42px, 4.6vw, 76px); line-height: 0.98; max-width: 20ch; }
+.mw-sched__title-em { font-style: italic; color: var(--c-accent); }
+.mw-sched__title .mw-stop { background: var(--c-accent); }
+.mw-sched__body {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.15vw, 18px);
+  line-height: 1.55;
+  color: var(--c-body-on-dark);
+  margin: clamp(16px, 1.5vw, 22px) 0 clamp(26px, 2.6vw, 38px);
+  max-width: 46ch;
+}
+.mw-sched__next {
+  border-top: 1px solid rgba(245, 230, 203, 0.16);
+  padding-top: clamp(22px, 2.2vw, 30px);
+}
+.mw-sched__next-eyebrow {
+  margin: 0 0 clamp(16px, 1.6vw, 22px);
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(245, 230, 203, 0.6);
+}
+.mw-sched__steps { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(16px, 1.6vw, 22px); }
+.mw-sched__step { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: clamp(14px, 1.4vw, 18px); align-items: start; }
+.mw-sched__step-num {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(20px, 1.8vw, 26px);
+  line-height: 1;
+  color: var(--c-accent);
+  font-variant-numeric: tabular-nums;
+  padding-top: 2px;
+}
+.mw-sched__step-name {
+  margin: 0 0 4px;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(16px, 1.3vw, 19px);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  color: #fff;
+}
+.mw-sched__step-text {
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: rgba(245, 230, 203, 0.74);
+  /* Narrow + balanced so each step body lands on two roughly even lines. */
+  max-width: 52ch;
+  text-wrap: balance;
+}
+
+/* New scheduling form: reuse the accessible .tl-field atoms, but keep the
+   focus ring warm (the brand default glows cool navy) and tune spacing. */
+.mw-sched-form .tl-field { margin-bottom: clamp(14px, 1.4vw, 18px); }
+.mw-sched-form .tl-field:last-of-type { margin-bottom: 0; }
+/* Labels read against the dark-glass card. */
+.mw-sched-form .tl-field label { color: rgba(245, 230, 203, 0.74); }
+/* Squared inputs — the brand uses square rectangles, not rounded fields. */
+.mw-sched-form .tl-field input,
+.mw-sched-form .tl-field textarea { border-radius: 0; }
+.mw-sched-form .tl-field input:focus,
+.mw-sched-form .tl-field select:focus,
+.mw-sched-form .tl-field textarea:focus {
+  border-color: var(--c-accent);
+  box-shadow: 0 0 0 3px rgba(168, 90, 44, 0.14);
+}
+.mw-sched-form select[data-placeholder="1"] { color: var(--c-ink-3); }
+.mw-sched-form__submit { margin-top: clamp(8px, 1vw, 12px); width: 100%; justify-content: center; }
+
+/* Success confirmation block. */
+.mw-sched-done {
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-left: 3px solid var(--c-accent);
+  padding: clamp(22px, 2.4vw, 32px);
+}
+.mw-sched-done__mark {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  margin-bottom: 16px;
+}
+.mw-sched-done__title {
+  margin: 0 0 8px;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(22px, 2vw, 28px);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  color: var(--c-ink);
+}
+.mw-sched-done__text {
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--c-ink-2);
+}
+.mw-sched-done__tel { color: var(--c-accent-2); font-weight: 600; text-decoration: none; }
+.mw-sched-done__tel:hover { text-decoration: underline; }
+
+@media (max-width: 860px) {
+  .mw-sched__bg { display: none; }
+  .mw-sched__grid { grid-template-columns: 1fr; gap: clamp(28px, 5vw, 36px); }
+  .mw-sched__form-col { align-self: stretch; }
+  /* No photo behind on mobile — give the card a solid fill one step lighter
+     than the now-dark section so it still reads as a card. */
+  .mw-sched__card {
+    background: var(--c-navy-2);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* Standalone related-services section (split from closing CTA) */
+.mw-svc-related-sec {
+  position: relative;
+  background: var(--c-bg);
+  color: var(--c-ink);
+  padding-block: clamp(56px, 5.5vw, 100px);
+  overflow: hidden;
+  isolation: isolate;
+  border-top: 1px solid var(--c-line);
+}
+.mw-svc-related-sec::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+.mw-svc-related-sec__inner { position: relative; z-index: 1; }
+.mw-svc-related-sec .mw-rel {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+/* ── Related services — reusable horizontal card rail ──────────────
+   Home services picture tiles (mw-svcs-tile): full-bleed photo with
+   bottom overlay, title + arrow, summary. Landscape 4:3 cards in a
+   scroll-snap track (3-up desktop, fewer on narrow viewports) with
+   prev/next controls. Used on every service page via RelatedServices. */
+.mw-rel {
+  position: relative;
+  margin-top: clamp(44px, 4.5vw, 72px);
+  padding-top: clamp(28px, 2.6vw, 40px);
+  border-top: 1px solid var(--c-line);
+  /* Full-bleed out of the page column so the rail spans the viewport and
+     cards bleed off both edges. --mw-rel-pad aligns the head with the page
+     content column; --mw-rel-edge is the track inset + edge-fade width. */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  --mw-rel-pad: max(24px, calc((100vw - 1560px) / 2));
+  --mw-rel-edge: clamp(36px, 6vw, 120px);
+}
+.mw-rel__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: clamp(18px, 1.8vw, 26px);
+  padding-inline: var(--mw-rel-pad);
+}
+.mw-rel__head-text { display: flex; flex-direction: column; gap: clamp(20px, 1.5vw, 24px); }
+.mw-rel__label { margin: 0; }
+.mw-rel__head-text .mw-rel__label { margin-bottom: 0; }
+.mw-rel__heading {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(26px, 2.45vw, 39px);
+  line-height: 1.02;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--c-ink);
+}
+.mw-rel__viewport { position: relative; }
+.mw-rel__nav {
+  appearance: none;
+  position: absolute;
+  top: 42%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  color: var(--c-ink);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(42, 27, 18, 0.14);
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+.mw-rel__nav--prev { left: clamp(8px, 1.4vw, 22px); }
+.mw-rel__nav--next { right: clamp(8px, 1.4vw, 22px); }
+.mw-rel__nav:hover:not(:disabled) { border-color: var(--c-accent); color: var(--c-accent); }
+.mw-rel__nav:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
+.mw-rel__nav:disabled { opacity: 0.32; cursor: default; }
+.mw-rel__all {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 4px;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+  text-decoration: none;
+}
+.mw-rel__all:hover { color: var(--c-ink); }
+
+.mw-rel__track {
+  --mw-rel-gap: clamp(14px, 1.4vw, 20px);
+  --mw-rel-visible: 3;
+  list-style: none;
+  margin: 0;
+  padding: 4px var(--mw-rel-edge);
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc(
+    (100% - (var(--mw-rel-visible) - 1) * var(--mw-rel-gap)) / var(--mw-rel-visible)
+  );
+  gap: var(--mw-rel-gap);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--mw-rel-edge);
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  /* Fade partial cards as they scroll under the edges (and the nav arrows). */
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 var(--mw-rel-edge), #000 calc(100% - var(--mw-rel-edge)), transparent 100%);
+          mask-image: linear-gradient(to right, transparent 0, #000 var(--mw-rel-edge), #000 calc(100% - var(--mw-rel-edge)), transparent 100%);
+}
+.mw-rel__track::-webkit-scrollbar { display: none; }
+.mw-rel__item {
+  scroll-snap-align: start;
+  container-type: inline-size;
+  min-width: 0;
+}
+.mw-rel__item .mw-svcs-tile {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+}
+.mw-rel__item .mw-svcs-tile:hover .mw-svcs-tile__photo {
+  transform: scale(1.04);
+  filter: saturate(1.05) brightness(1.1) contrast(1.0) sepia(0.02);
+}
+.mw-rel__item .mw-svcs-tile:hover .mw-svcs-tile__photo::after { opacity: 0.2; }
+.mw-rel__item .mw-svcs-tile__text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-rel__item .mw-svcs-tile,
+  .mw-rel__item .mw-svcs-tile__photo,
+  .mw-rel__item .mw-svcs-tile__arr { transition: none; }
+}
+@media (max-width: 900px) {
+  .mw-rel__track { --mw-rel-visible: 2; }
+}
+@media (max-width: 560px) {
+  .mw-rel__track { --mw-rel-visible: 1; }
+}
+/* ── Service hero: alert variant (Emergency Response) ────────────── */
+.mw-svc-hero--alert {
+  border-bottom: none;
+  --mw-er-hero-fade-clear: 24%;
+  --mw-er-hero-rule-clear: 10%;
+  --mw-er-hero-rule: #4A4543;
+  --mw-er-hero-photo-start: 40%;
+}
+.mw-svc-hero--alert::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    var(--c-line) 0%,
+    var(--c-line) var(--mw-er-hero-photo-start),
+    color-mix(in srgb, var(--mw-er-hero-rule) 12%, var(--c-line)) calc(var(--mw-er-hero-photo-start) + 1.2%),
+    color-mix(in srgb, var(--mw-er-hero-rule) 32%, var(--c-line)) calc(var(--mw-er-hero-photo-start) + 2.4%),
+    color-mix(in srgb, var(--mw-er-hero-rule) 55%, var(--c-line)) calc(var(--mw-er-hero-photo-start) + 3.6%),
+    color-mix(in srgb, var(--mw-er-hero-rule) 78%, var(--c-line)) calc(var(--mw-er-hero-photo-start) + 4.5%),
+    color-mix(in srgb, var(--mw-er-hero-rule) 92%, var(--c-line)) calc(var(--mw-er-hero-photo-start) + 5.1%),
+    color-mix(in srgb, var(--mw-er-hero-rule) 92%, var(--c-line)) calc(var(--mw-er-hero-photo-start) + 6%),
+    var(--mw-er-hero-rule) calc(var(--mw-er-hero-photo-start) + 9%)
+  );
+  z-index: 3;
+  pointer-events: none;
+}
+.mw-svc-hero--alert .mw-svc-hero__inner {
+  grid-template-columns: 1fr;
+  align-items: center;
+}
+.mw-svc-hero--alert .mw-svc-hero__content {
+  position: relative;
+  z-index: 1;
+  max-width: min(100%, 640px);
+}
+@media (min-width: 961px) {
+  .mw-svc-hero--alert .mw-svc-hero__content { max-width: 50%; }
+}
+@media (min-width: 961px) {
+  .mw-svc-hero--alert.mw-svc-hero--photo-50 { --mw-er-hero-photo-start: 50%; }
+}
+.mw-svc-hero__bleed-photo {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--mw-er-hero-photo-start);
+  width: calc(100% - var(--mw-er-hero-photo-start));
+  z-index: 0;
+  overflow: hidden;
+}
+.mw-svc-hero__bleed-photo::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 1px;
+  height: 1px;
+  z-index: 4;
+  pointer-events: none;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    transparent 2%,
+    color-mix(in srgb, var(--mw-er-hero-rule) 12%, transparent) 4%,
+    color-mix(in srgb, var(--mw-er-hero-rule) 32%, transparent) 6%,
+    color-mix(in srgb, var(--mw-er-hero-rule) 55%, transparent) 7.5%,
+    color-mix(in srgb, var(--mw-er-hero-rule) 78%, transparent) 8.5%,
+    color-mix(in srgb, var(--mw-er-hero-rule) 92%, transparent) var(--mw-er-hero-rule-clear, 10%),
+    var(--mw-er-hero-rule) calc(var(--mw-er-hero-rule-clear, 10%) + 5%)
+  );
+}
+.mw-svc-hero__bleed-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top right,
+    var(--c-surface-warm) 0%,
+    rgba(251, 248, 242, 0.88) 7%,
+    rgba(251, 248, 242, 0.35) 14%,
+    rgba(251, 248, 242, 0) var(--mw-er-hero-fade-clear, 24%)
+  );
+  pointer-events: none;
+}
+.mw-svc-hero__bleed-photo .mw-svc-hero__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: left center;
+  display: block;
+  filter: saturate(1.02);
+}
+@media (max-width: 960px) {
+  .mw-svc-hero__bleed-photo {
+    position: relative;
+    left: 0;
+    width: 100%;
+    height: clamp(220px, 52vw, 320px);
+    margin-top: clamp(8px, 2vw, 16px);
+  }
+  .mw-svc-hero__bleed-photo::after { display: none; }
+  .mw-svc-hero__bleed-photo::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: var(--mw-er-hero-rule, #4A4543);
+  }
+  .mw-svc-hero--alert .mw-svc-hero__inner { padding-block: clamp(36px, 5vw, 64px) 0; }
+  .mw-svc-hero--alert::after { display: none; }
+}
+@keyframes mw-oncall-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(255, 180, 120, 0.65); }
+  70%  { box-shadow: 0 0 0 11px rgba(255, 180, 120, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 180, 120, 0); }
+}
+
+/* ── Service: response timeline (horizontal time-axis) ───────────── */
+.mw-svc-tl-sec {
+  position: relative;
+  background: var(--c-surface-warm);
+  color: var(--c-ink);
+  padding-block: clamp(56px, 5.5vw, 100px);
+  overflow: hidden;
+  isolation: isolate;
+  border-bottom: 1px solid var(--c-line);
+}
+.mw-svc-tl-sec::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+.mw-svc-tl-sec__inner { position: relative; z-index: 1; }
+.mw-svc-tl-sec__intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 56px);
+  align-items: start;
+  margin-bottom: clamp(28px, 3.2vw, 48px);
+}
+.mw-svc-tl-sec__intro-copy {
+  min-width: 0;
+}
+.mw-svc-tl-sec__head {
+  margin-bottom: clamp(16px, 2vw, 24px);
+}
+.mw-svc-tl-sec__lead {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.05vw, 18px);
+  line-height: 1.6;
+  color: var(--c-ink-2);
+  max-width: 58ch;
+  margin: 0;
+}
+.mw-svc-tl-sec__intro > .mw-svc-tl-notify {
+  align-self: start;
+  /* Offset to header bottom — do not alter left-column head/lead spacing */
+  margin-top: calc(20px + clamp(20px, 1.5vw, 24px) + clamp(32px, 3.4vw, 60px) * 1.02);
+}
+.mw-svc-tl-notify {
+  display: flex;
+  justify-content: center;
+  align-self: start;
+  align-items: flex-start;
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+.mw-svc-tl-sec__intro .mw-svc-tl-notify {
+  justify-content: center;
+}
+.mw-svc-tl-notify__stage {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 8px;
+  width: min(100%, 440px);
+  overflow: hidden;
+  /* Two-banner slot (≈58px + 8px gap + 58px) — always reserved so 1→2 never shifts the timeline */
+  min-height: clamp(124px, 15vw, 164px);
+}
+.mw-svc-tl-notify__stage--animating {
+  position: relative;
+}
+.mw-svc-tl-notify__banner {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 11px 12px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(42, 27, 18, 0.07);
+  border-radius: 13px;
+  box-shadow: 0 10px 32px -14px rgba(42, 27, 18, 0.28);
+  will-change: transform, opacity;
+}
+.mw-svc-tl-notify__banner--solo,
+.mw-svc-tl-notify__banner--enter {
+  animation: mw-tl-notify-in 357ms cubic-bezier(.2, .7, .2, 1) both;
+}
+.mw-svc-tl-notify__banner--older {
+  opacity: 0.88;
+}
+.mw-svc-tl-notify__banner--make-room {
+  animation: mw-tl-notify-make-room 357ms cubic-bezier(.2, .7, .2, 1) forwards;
+  opacity: 0.88;
+}
+.mw-svc-tl-notify__banner--shift-up {
+  animation: mw-tl-notify-shift-up 357ms cubic-bezier(.2, .7, .2, 1) forwards;
+  opacity: 0.88;
+  z-index: 1;
+}
+.mw-svc-tl-notify__banner--exit {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  pointer-events: none;
+  animation: mw-tl-notify-out 357ms cubic-bezier(.4, 0, .2, 1) forwards;
+}
+.mw-svc-tl-notify__banner--exit-second {
+  top: auto;
+  bottom: 0;
+  animation-delay: 29ms;
+}
+.mw-svc-tl-notify__icon {
+  width: 36px;
+  height: 36px;
+  padding: 5px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  object-fit: contain;
+  flex-shrink: 0;
+  background: var(--c-surface-warm);
+  box-shadow: 0 0 0 1px rgba(42, 27, 18, 0.06);
+}
+.mw-svc-tl-notify__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.mw-svc-tl-notify__title {
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--c-ink);
+}
+.mw-svc-tl-notify__body {
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--c-ink-2);
+}
+@keyframes mw-tl-notify-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes mw-tl-notify-out {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(calc(100% + 12px));
+  }
+}
+@keyframes mw-tl-notify-shift-up {
+  from {
+    opacity: 1;
+    transform: translateY(calc(100% + 8px));
+  }
+  to {
+    opacity: 0.88;
+    transform: translateY(0);
+  }
+}
+/* First banner holds its position when the second appears — fade only,
+   no transform, so it never jumps/glitches as the stack builds 1 -> 2. */
+@keyframes mw-tl-notify-make-room {
+  from { opacity: 1; }
+  to { opacity: 0.88; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-svc-tl-notify__banner--solo,
+  .mw-svc-tl-notify__banner--enter,
+  .mw-svc-tl-notify__banner--exit,
+  .mw-svc-tl-notify__banner--shift-up,
+  .mw-svc-tl-notify__banner--make-room { animation: none; }
+  .mw-svc-tl-notify__banner--exit { position: static; }
+}
+@media (max-width: 860px) {
+  .mw-svc-tl-sec__intro {
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: clamp(24px, 4vw, 32px);
+  }
+  .mw-svc-tl-sec__intro > .mw-svc-tl-notify {
+    margin-top: 0;
+  }
+  .mw-svc-tl-sec__intro .mw-svc-tl-notify { justify-content: center; }
+}
+.mw-svc-tl {
+  list-style: none;
+  margin: clamp(66px, 6.2vw, 80px) 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(10px, 1.2vw, 24px);
+}
+.mw-svc-tl__stage { display: flex; flex-direction: column; }
+.mw-svc-tl__time {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+  margin-bottom: 16px;
+}
+.mw-svc-tl__axis {
+  position: relative;
+  display: block;
+  height: 2px;
+  background: var(--c-line);
+  margin-bottom: 22px;
+  overflow: visible;
+}
+.mw-svc-tl__axis::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0;
+  background: var(--c-accent);
+  pointer-events: none;
+  z-index: 1;
+}
+.mw-svc-tl__axis::after {
+  content: "";
+  position: absolute;
+  right: -1px;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border-top: 2px solid var(--c-line);
+  border-right: 2px solid var(--c-line);
+  transform: translateY(-50%) rotate(45deg);
+  pointer-events: none;
+  z-index: 2;
+}
+.mw-svc-tl__node {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 13px;
+  height: 13px;
+  background: var(--c-accent);
+  transform: translate(-1px, -50%) rotate(45deg);
+  transition: transform 260ms cubic-bezier(.2,.7,.2,1);
+  z-index: 3;
+}
+.mw-svc-tl__stage:hover .mw-svc-tl__node { transform: translate(-1px, -50%) rotate(135deg) scale(1.12); }
+.mw-svc-tl__name {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(18px, 1.4vw, 23px);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--c-ink);
+  margin: 0 0 10px;
+}
+.mw-svc-tl__body {
+  width: 90%;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--c-ink-2);
+  margin: 0;
+}
+/* ≤900px timeline layout (vertical stack + sticky notification) is consolidated
+   in the "vertical layout below 900px" block after the --v1 axis rules. */
+
+/* ── Service: coverage + capabilities split ──────────────────────── */
+.mw-svc-cov {
+  position: relative;
+  background: var(--c-surface-warm);
+  color: var(--c-ink);
+  padding-block: clamp(56px, 5.5vw, 100px);
+  overflow: hidden;
+  isolation: isolate;
+}
+.mw-svc-cov::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+.mw-svc-cov__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.72fr);
+  /* Row 1 = eyebrow (left only); row 2 = content (left) + photo (right).
+     Row gap is 0 — the eyebrow's own margin-bottom drives eyebrow→header. */
+  column-gap: clamp(32px, 4vw, 72px);
+  row-gap: 0;
+  align-items: start;
+}
+.mw-svc-cov__eyebrow { grid-column: 1; grid-row: 1; }
+.mw-svc-cov__content { grid-column: 1; grid-row: 2; min-width: 0; }
+/* Photo top meets the header top; its height is locked to a fixed aspect ratio
+   (≈ the content-row height) so each photo's crop is deterministic and stable. */
+.mw-svc-cov__media { grid-column: 2; grid-row: 2; align-self: stretch; }
+.mw-svc-cov__heading { margin-top: 0; }
+.mw-svc-cov__lead {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(16px, 1.2vw, 19px);
+  line-height: 1.55;
+  color: var(--c-ink-2);
+  max-width: 52ch;
+  margin: clamp(20px, 1.5vw, 24px) 0 clamp(24px, 2.2vw, 34px);
+}
+.mw-svc-cov__list { list-style: none; margin: 0; padding: 0; }
+/* Capability rows set in the display/header font (Barlow Condensed,
+   uppercase) — echoing the home "who we serve" entry list — with a
+   left-accent-bar slide and an arrow that reveals on hover. */
+.mw-svc-cov__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 15px 0;
+  padding-right: clamp(64px, 7vw, 88px);
+  border-top: 1px solid var(--c-line);
+  transition: padding-left 0.26s cubic-bezier(.2, .7, .2, 1);
+}
+.mw-svc-cov__item:last-child { border-bottom: 1px solid var(--c-line); }
+.mw-svc-cov__item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 0;
+  background: var(--c-accent);
+  transition: width 0.26s cubic-bezier(.2, .7, .2, 1);
+}
+.mw-svc-cov__item:hover,
+.mw-svc-cov__item[data-active] { padding-left: 16px; }
+.mw-svc-cov__item:hover::before,
+.mw-svc-cov__item[data-active]::before { width: 3px; }
+.mw-svc-cov__item-text {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(17px, 1.5vw, 23px);
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--c-ink);
+}
+/* Far-right capability thumbnail. Absolutely positioned + vertically centered
+   so it never changes the row height; brightens when its row is active. */
+.mw-svc-cov__item-thumb {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: clamp(48px, 5.5vw, 68px);
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 1px solid var(--c-line);
+  background: var(--c-navy-2);
+  opacity: 0.55;
+  transition: opacity 0.26s ease, border-color 0.26s ease;
+  pointer-events: none;
+}
+.mw-svc-cov__item-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mw-svc-cov__item:hover .mw-svc-cov__item-thumb,
+.mw-svc-cov__item[data-active] .mw-svc-cov__item-thumb { opacity: 1; border-color: var(--c-accent); }
+/* Actions row: solid CTA + text-only 24/7 phone (no border) sitting alongside. */
+.mw-svc-cov__actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: clamp(16px, 2vw, 28px);
+  margin-top: clamp(28px, 2.6vw, 40px);
+}
+.mw-svc-cov__cta { margin-top: 0; }
+.mw-svc-cov__phone {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+  text-decoration: none;
+  line-height: 1.05;
+}
+.mw-svc-cov__phone-sup {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+}
+.mw-svc-cov__phone-num {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(20px, 1.8vw, 26px);
+  letter-spacing: 0.01em;
+  color: var(--c-navy);
+}
+.mw-svc-cov__phone:hover .mw-svc-cov__phone-num { text-decoration: underline; text-underline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  .mw-svc-cov__item,
+  .mw-svc-cov__item-thumb { transition: none; }
+}
+/* Coverage photo stretches to the content row (header top → actions bottom).
+   The image swap and the top-border wipe are both driven by hovering the list
+   items, so the photo itself has no hover effect. The shared static bar is
+   replaced by an animated bar that re-wipes (scaleX 0→1) on each item change. */
+.mw-svc-cov__media::before { display: none; }
+.mw-svc-cov__media:hover { transform: none; box-shadow: 0 28px 56px -32px rgba(42, 27, 18, 0.4); }
+.mw-svc-cov__topbar {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: calc(100% + 2px);
+  height: 4px;
+  background: var(--c-accent);
+  z-index: 3;
+  transform-origin: left center;
+  animation: mw-cov-topbar-wipe 380ms cubic-bezier(.2, .7, .2, 1);
+}
+@keyframes mw-cov-topbar-wipe { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@media (prefers-reduced-motion: reduce) {
+  .mw-svc-cov__topbar { animation: none; }
+}
+/* Stacked, cross-fading capability photos; only the active one is opaque. */
+.mw-svc-cov__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.mw-svc-cov__photo[data-active] { opacity: 1; }
+/* Bottom gradient scrim + one-line white caption describing the active photo. */
+.mw-svc-cov__cap {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  margin: 0;
+  padding: clamp(48px, 6vw, 76px) clamp(16px, 1.6vw, 22px) clamp(14px, 1.3vw, 18px);
+  background: linear-gradient(to top, rgba(20, 12, 6, 0.86) 0%, rgba(20, 12, 6, 0.55) 42%, rgba(20, 12, 6, 0) 100%);
+  color: #fff;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(13px, 1vw, 15px);
+  line-height: 1.4;
+  z-index: 2;
+}
+/* Signature diamond stamp above the photo caption. */
+.mw-svc-cov__cap-mark {
+  display: block;
+  width: 9px;
+  height: 9px;
+  margin-bottom: clamp(10px, 1vw, 14px);
+  background: var(--c-accent);
+  transform: rotate(45deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-svc-cov__photo { transition: none; }
+}
+@media (max-width: 860px) {
+  /* Stacked: eyebrow → photo → content. The photo pins to the top of the screen
+     while the content (list) scrolls beneath it, so the image stays visible and
+     visibly swaps as items are selected. It releases when the section ends. */
+  .mw-svc-cov { overflow: visible; }   /* a clipping ancestor would kill sticky */
+  .mw-svc-cov__grid { grid-template-columns: 1fr; row-gap: clamp(18px, 4vw, 28px); }
+  .mw-svc-cov__eyebrow { grid-column: 1; grid-row: auto; order: 0; margin-bottom: 0; }
+  .mw-svc-cov__media {
+    grid-column: 1;
+    grid-row: auto;
+    align-self: auto;
+    order: 1;
+    height: clamp(280px, 52vw, 380px);
+    position: sticky;
+    top: 54px;   /* just under the 57px collapsed topbar */
+    z-index: 3;
+  }
+  .mw-svc-cov__content { grid-column: 1; grid-row: auto; order: 2; }
+}
+
+/* "When you call" — signal sweep along the response axis */
+.mw-svc-tl-sec--v1 .mw-svc-tl {
+  position: relative;
+  overflow-x: clip;
+  /* Room for first/last axis node + arrow overhang inside clip edge */
+  padding-inline: 7px;
+  margin-inline: -7px;
+}
+/* Staircase: each step 8px lower; last step anchored (layout unchanged).
+   margin-top (not transform) — reveal animation mw-rv ends at translate3d(0,0,0)
+   with fill-mode both, which overrides any static translateY on the same li. */
+@media (min-width: 901px) {
+  .mw-svc-tl-sec--v1 .mw-svc-tl__stage:nth-child(1) { margin-top: -96px; }
+  .mw-svc-tl-sec--v1 .mw-svc-tl__stage:nth-child(2) { margin-top: -72px; }
+  .mw-svc-tl-sec--v1 .mw-svc-tl__stage:nth-child(3) { margin-top: -48px; }
+  .mw-svc-tl-sec--v1 .mw-svc-tl__stage:nth-child(4) { margin-top: -24px; }
+  .mw-svc-tl-sec--v1 .mw-svc-tl__stage:nth-child(5) { margin-top: 0; }
+}
+/* Sequential signal driven by the notification clock. ResponseTimeline is the
+   single source of truth: it sets data-tl-active="N" (the active notification
+   index) on the <ol>, so step N's line fills and its arrow lights the instant
+   notification N appears — no separate CSS timeline to drift out of sync. Each
+   step holds lit until the index wraps to 0, then they all retract together. */
+.mw-svc-tl-sec--v1 .mw-svc-tl__axis::before {
+  transition: width 329ms cubic-bezier(.2, .7, .2, 1);
+}
+.mw-svc-tl-sec--v1 .mw-svc-tl__axis::after {
+  transition: border-color 157ms ease 171ms;
+}
+@media (min-width: 901px) {
+  /* Cumulative fill: at active=N, every step up to and including N is lit. */
+  .mw-svc-tl[data-tl-active="0"] .mw-svc-tl__stage:nth-child(-n+1) .mw-svc-tl__axis::before,
+  .mw-svc-tl[data-tl-active="1"] .mw-svc-tl__stage:nth-child(-n+2) .mw-svc-tl__axis::before,
+  .mw-svc-tl[data-tl-active="2"] .mw-svc-tl__stage:nth-child(-n+3) .mw-svc-tl__axis::before,
+  .mw-svc-tl[data-tl-active="3"] .mw-svc-tl__stage:nth-child(-n+4) .mw-svc-tl__axis::before,
+  .mw-svc-tl[data-tl-active="4"] .mw-svc-tl__stage:nth-child(-n+5) .mw-svc-tl__axis::before {
+    width: 100%;
+  }
+  .mw-svc-tl[data-tl-active="0"] .mw-svc-tl__stage:nth-child(-n+1) .mw-svc-tl__axis::after,
+  .mw-svc-tl[data-tl-active="1"] .mw-svc-tl__stage:nth-child(-n+2) .mw-svc-tl__axis::after,
+  .mw-svc-tl[data-tl-active="2"] .mw-svc-tl__stage:nth-child(-n+3) .mw-svc-tl__axis::after,
+  .mw-svc-tl[data-tl-active="3"] .mw-svc-tl__stage:nth-child(-n+4) .mw-svc-tl__axis::after,
+  .mw-svc-tl[data-tl-active="4"] .mw-svc-tl__stage:nth-child(-n+5) .mw-svc-tl__axis::after {
+    border-top-color: var(--c-accent);
+    border-right-color: var(--c-accent);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  /* No motion: lit states still apply but snap instantly (index is frozen at 0). */
+  .mw-svc-tl-sec--v1 .mw-svc-tl__axis::before,
+  .mw-svc-tl-sec--v1 .mw-svc-tl__axis::after { transition: none; }
+}
+
+/* ── "When you call" timeline — vertical layout below 900px ───────────────
+   Desktop (>900px) is untouched. Below 900px the five steps stack vertically:
+   the connector axis + arrow rotate to point DOWN (same clock-driven fill),
+   and the notification card moves beside the timeline as a sticky sibling.
+   The notification is relocated purely with `display: contents` on the intro
+   wrapper — no JSX change, so the single notification clock + live region stay
+   intact. */
+@media (max-width: 900px) {
+  /* Single column: notification card stays above the timeline (full width) and
+     becomes a sticky top band; the timeline scrolls beneath it. The notification
+     is promoted to a sibling of the timeline (display:contents on the intro) so it
+     can stay pinned through the whole timeline scroll, then release at its end. */
+  .mw-svc-tl-sec { overflow: visible; }   /* a clipping ancestor would kill sticky */
+  .mw-svc-tl-sec__intro { display: contents; }
+  .mw-svc-tl-sec__intro > .mw-svc-tl-notify {
+    position: sticky;
+    /* Sits just under the 57px collapsed topbar (slight overlap = no peek-through). */
+    top: 54px;
+    z-index: 4;
+    margin: clamp(18px, 2.4vw, 26px) 0 0;
+    padding-block: clamp(10px, 1.4vw, 15px);
+    /* Opaque band (section color) so steps hide cleanly as they scroll under it. */
+    background: var(--c-surface-warm);
+    box-shadow: 0 14px 16px -14px rgba(42, 27, 18, 0.16);
+    justify-content: center;
+  }
+
+  /* One step per row; the axis becomes a vertical spine. */
+  .mw-svc-tl { grid-template-columns: 1fr; gap: 0; margin-top: clamp(26px, 5vw, 44px); }
+  .mw-svc-tl-sec--v1 .mw-svc-tl { padding-inline: 0; margin-inline: 0; overflow-x: clip; }
+
+  .mw-svc-tl__stage {
+    position: relative;
+    display: block;
+    padding-left: clamp(34px, 9vw, 44px);
+    padding-bottom: clamp(30px, 6vw, 48px);
+  }
+  /* Room below the final step so its terminal arrow isn't clipped. */
+  .mw-svc-tl__stage:last-child { padding-bottom: clamp(16px, 2.2vw, 22px); }
+  .mw-svc-tl__time { margin-bottom: 12px; }
+  .mw-svc-tl__name { margin-bottom: 8px; }
+  .mw-svc-tl__body { width: 100%; }
+
+  /* Vertical spine. Stops short of the next step's node (gap via `bottom`) so the
+     arrow never touches the diamond below it. */
+  .mw-svc-tl__axis {
+    position: absolute;
+    left: 11px;
+    top: 11.5px;
+    bottom: clamp(14px, 2vw, 20px);
+    width: 2px;
+    height: auto;
+    margin: 0;
+  }
+
+  /* Fill grows top→bottom instead of left→right. */
+  .mw-svc-tl__axis::before { top: 0; left: 0; width: 100%; height: 0; }
+
+  /* Node diamond centered on the eyebrow line. */
+  .mw-svc-tl__node { top: 0; left: 50%; transform: translate(-50%, -50%) rotate(45deg); }
+  .mw-svc-tl__stage:hover .mw-svc-tl__node { transform: translate(-50%, -50%) rotate(135deg) scale(1.12); }
+
+  /* Arrow points down at the bottom of each spine. */
+  .mw-svc-tl__axis::after {
+    top: auto;
+    bottom: -1px;
+    left: 50%;
+    right: auto;
+    transform: translate(-50%, 0) rotate(135deg);
+  }
+
+  /* Same notification-clock-driven fill, now vertical. */
+  .mw-svc-tl-sec--v1 .mw-svc-tl__axis::before { transition: height 329ms cubic-bezier(.2, .7, .2, 1); }
+  .mw-svc-tl[data-tl-active="0"] .mw-svc-tl__stage:nth-child(-n+1) .mw-svc-tl__axis::before,
+  .mw-svc-tl[data-tl-active="1"] .mw-svc-tl__stage:nth-child(-n+2) .mw-svc-tl__axis::before,
+  .mw-svc-tl[data-tl-active="2"] .mw-svc-tl__stage:nth-child(-n+3) .mw-svc-tl__axis::before,
+  .mw-svc-tl[data-tl-active="3"] .mw-svc-tl__stage:nth-child(-n+4) .mw-svc-tl__axis::before,
+  .mw-svc-tl[data-tl-active="4"] .mw-svc-tl__stage:nth-child(-n+5) .mw-svc-tl__axis::before {
+    height: 100%;
+  }
+  .mw-svc-tl[data-tl-active="0"] .mw-svc-tl__stage:nth-child(-n+1) .mw-svc-tl__axis::after,
+  .mw-svc-tl[data-tl-active="1"] .mw-svc-tl__stage:nth-child(-n+2) .mw-svc-tl__axis::after,
+  .mw-svc-tl[data-tl-active="2"] .mw-svc-tl__stage:nth-child(-n+3) .mw-svc-tl__axis::after,
+  .mw-svc-tl[data-tl-active="3"] .mw-svc-tl__stage:nth-child(-n+4) .mw-svc-tl__axis::after,
+  .mw-svc-tl[data-tl-active="4"] .mw-svc-tl__stage:nth-child(-n+5) .mw-svc-tl__axis::after {
+    border-top-color: var(--c-accent);
+    border-right-color: var(--c-accent);
+  }
+}
+

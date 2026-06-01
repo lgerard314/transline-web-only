@@ -1,0 +1,113 @@
+/* ============================================================
+   07 - SERVICE: INDUSTRIAL CLEANING
+   Fleet equipment dark split (mw-fleet). Source: 6559-6666.
+   ============================================================ */
+
+/* ════════════════════════════════════════════════════════════
+   INDUSTRIAL CLEANING — fleet equipment feature (dark split)
+   ════════════════════════════════════════════════════════════ */
+.mw-fleet {
+  position: relative;
+  background: var(--c-navy);
+  color: var(--c-on-navy);
+  padding-block: clamp(56px, 5.5vw, 100px);
+  overflow: hidden;
+  isolation: isolate;
+  border-top: 3px solid var(--c-accent);
+}
+.mw-fleet::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-dark) 38px, var(--c-grain-on-dark) 39px);
+}
+.mw-fleet__inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr);
+  gap: clamp(28px, 4vw, 64px);
+  align-items: center;
+}
+.mw-fleet .mw-section-tag { margin-bottom: clamp(20px, 1.5vw, 24px); }
+.mw-fleet__title { color: #fff; max-width: 16ch; }
+.mw-fleet__lead {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.1vw, 18px);
+  line-height: 1.6;
+  color: var(--c-on-navy);
+  max-width: 52ch;
+  margin: clamp(18px, 1.8vw, 26px) 0 clamp(28px, 2.6vw, 40px);
+}
+.mw-fleet__list { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(14px, 1.4vw, 20px); }
+.mw-fleet__item {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: clamp(16px, 1.4vw, 22px);
+  background: rgba(245, 230, 203, 0.045);
+  border: 1px solid rgba(245, 230, 203, 0.14);
+  border-left: 2px solid var(--c-accent);
+  transition: transform 240ms cubic-bezier(.2, .7, .2, 1), background 240ms ease;
+}
+.mw-fleet__item:hover { transform: translateX(4px); background: rgba(245, 230, 203, 0.07); }
+.mw-fleet__num {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: var(--c-amber);
+  padding-top: 3px;
+}
+.mw-fleet__item-name {
+  margin: 0 0 6px;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(18px, 1.4vw, 23px);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.05;
+  color: #fff;
+}
+.mw-fleet__item-text {
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(14px, 1vw, 15.5px);
+  line-height: 1.5;
+  color: var(--c-on-navy);
+}
+.mw-fleet__media {
+  position: relative;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: clamp(220px, 26vw, 340px);
+  background: #fff;
+  border: 1px solid var(--c-line);
+  overflow: hidden;
+  box-shadow: 0 28px 56px -32px rgba(0, 0, 0, 0.5);
+}
+.mw-fleet__media::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 4px;
+  width: clamp(48px, 4vw, 80px);
+  background: var(--c-accent);
+  z-index: 2;
+}
+.mw-fleet__media img {
+  width: 100%;
+  height: auto;
+  max-width: 520px;
+  object-fit: contain;
+  padding: clamp(16px, 2vw, 32px);
+}
+@media (max-width: 900px) {
+  .mw-fleet__inner { grid-template-columns: 1fr; gap: 32px; }
+  .mw-fleet__media { order: -1; min-height: 0; }
+}
+

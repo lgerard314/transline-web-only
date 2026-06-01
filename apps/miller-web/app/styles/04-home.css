@@ -1,0 +1,2701 @@
+/* ============================================================
+   04 - HOME
+   All home sections + hero + certs band + capabilities bento. Source: 539-2163, 2240-2586, 2636-3357.
+   ============================================================ */
+
+/* ─────────────────────────────────────────────────────────────────
+   Facility v2 — copy redesign. Photo-led: a large aerial photo on
+   the right with a smaller plaque photo overlapping its bottom-left
+   corner; a content panel on the left with title, lead, stats, and
+   CTAs. Capabilities below as a clean chip ribbon.
+   ───────────────────────────────────────────────────────────────── */
+.mw-fac2 {
+  position: relative;
+  background: var(--c-surface-warm);
+  padding-block: clamp(56px, 5.5vw, 100px);
+  color: var(--c-ink);
+  overflow: clip;
+  isolation: isolate;
+}
+.mw-fac2__head {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 1.5vw, 24px);
+  margin-bottom: 0;
+}
+.mw-fac2__title {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(36px, 4vw, 72px);
+  line-height: 1;
+  letter-spacing: 0.005em;
+  color: var(--c-ink);
+  text-transform: uppercase;
+}
+.mw-fac2__title-em {
+  color: var(--c-accent);
+}
+
+/* Split: content left, photo composition right */
+.mw-fac2__split {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(40px, 5vw, 96px);
+  align-items: center;
+  margin-bottom: clamp(64px, 6vw, 96px);
+}
+@media (max-width: 900px) {
+  .mw-fac2__split { grid-template-columns: 1fr; gap: 40px; }
+}
+
+.mw-fac2__content {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(24px, 2.4vw, 36px);
+}
+.mw-fac2__lead {
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(16px, 1.2vw, 19px);
+  line-height: 1.65;
+  color: var(--c-ink-2);
+  max-width: 52ch;
+}
+
+/* Stats — clean horizontal triplet, each with a number on top and a label below */
+.mw-fac2__figs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 1.8vw, 32px);
+  margin: 0;
+  padding-top: clamp(8px, 1vw, 16px);
+  border-top: 1px solid var(--c-line);
+}
+.mw-fac2__fig {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.mw-fac2__fig-label {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+}
+.mw-fac2__fig-val {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.mw-fac2__fig-num {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(40px, 4vw, 64px);
+  line-height: 0.9;
+  letter-spacing: -0.005em;
+  color: var(--c-ink);
+  font-variant-numeric: tabular-nums;
+}
+.mw-fac2__fig-unit {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(13px, 0.95vw, 15px);
+  line-height: 1.3;
+  color: var(--c-ink-2);
+}
+
+.mw-fac2__actions {
+  display: flex;
+  gap: clamp(16px, 1.6vw, 28px);
+  align-items: center;
+  flex-wrap: wrap;
+}
+.mw-fac2__about {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--c-accent-2);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 3px;
+  transition: color 0.18s ease;
+}
+.mw-fac2__about:hover { color: var(--c-accent); }
+.mw-fac2__lbl-short { display: none; }
+
+/* Photo gallery — main photo (3:2) on top with a caption overlaid
+   at the bottom, then a framed thumbnail row below with a soft
+   surface background. Gaps are tightened so the gap above the
+   thumbs row matches the gap between thumbs. */
+.mw-fac2__media {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.mw-fac2__photo-frame {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: var(--c-navy);
+  border: 1px solid var(--c-navy);
+  box-shadow: 0 24px 60px -28px rgba(42, 27, 18, 0.45);
+  margin: 0;
+  transition: border-color 240ms ease;
+}
+.mw-fac2__photo-frame::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: var(--c-accent);
+  transition: width 480ms cubic-bezier(.2,.7,.2,1);
+  z-index: 3;
+}
+.mw-fac2__photo-frame:hover { border-color: var(--c-accent); }
+.mw-fac2__photo-frame:hover::before { width: 100%; }
+.mw-fac2__photo-main {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  animation: mw-fac2-fade-in 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@keyframes mw-fac2-fade-in {
+  0% { opacity: 0; transform: scale(1.015); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-fac2__photo-main { animation: none; }
+}
+
+/* Caption overlay — sits at the bottom of the main photo with a soft
+   dark gradient for legibility. Small mono uppercase with a terracotta
+   diamond accent. Re-fades on photo change via the keyed remount. */
+.mw-fac2__photo-cap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: clamp(40px, 4vw, 64px) clamp(14px, 1.4vw, 22px) clamp(12px, 1.2vw, 18px);
+  background: linear-gradient(to top, rgba(42, 27, 18, 0.78) 0%, rgba(42, 27, 18, 0.45) 60%, rgba(42, 27, 18, 0) 100%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--c-on-navy);
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: clamp(11px, 0.9vw, 13px);
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  pointer-events: none;
+  animation: mw-fac2-fade-in 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.mw-fac2__photo-cap-mark {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-fac2__photo-cap { animation: none; }
+}
+
+/* Thumbnail rail — wrapped in a soft surface panel with its own
+   border so it reads as a single picker control. */
+.mw-fac2__thumbs {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: clamp(3px, 0.3vw, 5px);
+  padding: clamp(3px, 0.3vw, 5px);
+  background: var(--c-navy);
+  border: 1px solid var(--c-navy);
+  border-top: 0;
+}
+@media (max-width: 700px) {
+  .mw-fac2__thumbs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  /* Short labels so the button + story link fit on one row. */
+  .mw-fac2__lbl-long { display: none; }
+  .mw-fac2__lbl-short { display: inline; }
+  .mw-fac2__actions { flex-wrap: nowrap; gap: clamp(14px, 4vw, 22px); }
+  /* Slightly larger capabilities heading on mobile. */
+  .mw-fac2__caps-title { font-size: 19px; }
+}
+.mw-fac2__thumb {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  border: 1px solid var(--c-line);
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  background: var(--c-navy);
+  overflow: hidden;
+  isolation: isolate;
+  opacity: 0.7;
+  transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.2, 0.7, 0.2, 1), border-color 0.22s ease;
+}
+.mw-fac2__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* Expanding top-accent bar — mirrors the primary photo frame hover. */
+.mw-fac2__thumb::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: var(--c-accent);
+  transition: width 360ms cubic-bezier(.2, .7, .2, 1);
+  z-index: 3;
+}
+.mw-fac2__thumb:hover {
+  opacity: 0.95;
+  transform: translateY(-2px);
+  border-color: var(--c-accent);
+}
+.mw-fac2__thumb:hover::before { width: 100%; }
+.mw-fac2__thumb.is-active {
+  opacity: 1;
+  border-color: var(--c-accent);
+}
+.mw-fac2__thumb.is-active::after {
+  content: "";
+  position: absolute;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  height: 3px;
+  background: var(--c-accent);
+}
+.mw-fac2__thumb:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 2px;
+}
+
+/* Capability chip ribbon — no divider. Title carries a terracotta
+   diamond accent (matching the section eyebrow pattern) so the
+   sub-section feels integrated with the rest of the VBEC block. */
+/* Onsite capabilities — numbered editorial-industrial grid. Each
+   tile carries a huge faded numeral, a small mono "CAP·NN" callout,
+   the capability name in condensed display, and a top accent bar
+   that expands left→right on hover. Reads like a spec sheet rather
+   than a tag cloud. */
+.mw-fac2__caps {
+  position: relative;
+  padding-top: 0;
+  display: grid;
+  gap: clamp(14px, 1.5vw, 24px);
+}
+.mw-fac2__caps::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(-1 * clamp(21px, 2.1vw, 36px));
+  height: 1px;
+  background: var(--c-line);
+}
+.mw-fac2__caps-head {
+  display: block;
+}
+.mw-fac2__caps-title {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-size: clamp(16px, 1.7vw, 30px);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: 0.005em;
+  color: var(--c-ink);
+  white-space: nowrap;
+}
+.mw-fac2__caps-mark {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+.mw-fac2__caps-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--c-line);
+  border: 1px solid var(--c-line);
+}
+@media (max-width: 1100px) {
+  .mw-fac2__caps-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  .mw-fac2__caps-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 480px) {
+  .mw-fac2__caps-grid { grid-template-columns: 1fr; }
+}
+.mw-fac2__caps-item {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--c-bg);
+  min-height: 0;
+  padding: clamp(10px, 0.85vw, 14px);
+  display: flex;
+  align-items: flex-end;
+  transition: background 0.32s ease;
+}
+.mw-fac2__caps-item:hover { background: var(--c-surface-warm); }
+.mw-fac2__caps-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: var(--c-accent);
+  transition: width 0.42s cubic-bezier(0.2, 0.7, 0.2, 1);
+  z-index: 3;
+}
+.mw-fac2__caps-item:hover::before { width: 100%; }
+.mw-fac2__caps-num {
+  position: absolute;
+  right: -6px;
+  bottom: -14px;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(60px, 5.5vw, 96px);
+  line-height: 0.85;
+  letter-spacing: -0.02em;
+  color: var(--c-accent);
+  opacity: 0.10;
+  pointer-events: none;
+  z-index: 0;
+  user-select: none;
+  transition: opacity 0.32s ease, transform 0.42s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.mw-fac2__caps-item:hover .mw-fac2__caps-num {
+  opacity: 0.20;
+  transform: translate(-3px, -3px);
+}
+.mw-fac2__caps-name {
+  margin: 0;
+  align-self: end;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(17px, 1.32vw, 22px);
+  line-height: 1.15;
+  white-space: normal;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--c-ink);
+  position: relative;
+  z-index: 2;
+  transition: color 0.32s ease, transform 0.42s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.mw-fac2__caps-item:hover .mw-fac2__caps-name {
+  color: var(--c-accent);
+  transform: translateY(-2px);
+}
+/* At narrow widths (4-col, 2-col), the 7th item lands alone in a
+   trailing slot. Span it across the row so it doesn't read as
+   incomplete. */
+@media (max-width: 1100px) {
+  .mw-fac2__caps-grid > .mw-fac2__caps-item:last-child { grid-column: span 2; }
+}
+@media (max-width: 760px) {
+  .mw-fac2__caps-grid > .mw-fac2__caps-item:last-child { grid-column: span 2; }
+}
+@media (max-width: 480px) {
+  .mw-fac2__caps-grid > .mw-fac2__caps-item:last-child { grid-column: auto; }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Sectors — Variation A. Four cards in a row, each with a compact
+   photo banner at the top, then a quiet card body with the category
+   title + sector list. Adds a fourth "Community" category to capture
+   small business + households + municipal programs.
+   ───────────────────────────────────────────────────────────────── */
+.mw-sec2 {
+  position: relative;
+  background: var(--c-surface-warm);
+  padding-block: clamp(56px, 5.5vw, 100px);
+  color: var(--c-ink);
+  overflow: clip;
+  isolation: isolate;
+}
+.mw-sec2::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+.mw-sec2 > .mw-inner { position: relative; z-index: 1; }
+
+.mw-sec2__head {
+  margin-bottom: clamp(40px, 4.5vw, 72px);
+  display: grid;
+  gap: 22px;
+}
+.mw-sec2__head-split {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: clamp(32px, 4vw, 80px);
+  align-items: end;
+}
+@media (max-width: 900px) {
+  /* Stacked: trim the dead space between the stat block and the first card. */
+  .mw-sec2__head-split { grid-template-columns: 1fr; gap: 22px; align-items: start; }
+  .mw-sec2__head { margin-bottom: clamp(22px, 5vw, 32px); }
+}
+.mw-sec2__head-left { display: flex; flex-direction: column; gap: 22px; }
+.mw-sec2__head-right { display: flex; flex-direction: column; gap: 14px; padding-bottom: 4px; }
+.mw-sec2__title {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(36px, 4vw, 72px);
+  line-height: 1;
+  letter-spacing: 0.005em;
+  color: var(--c-ink);
+  text-transform: uppercase;
+  max-width: 22ch;
+}
+.mw-sec2__lead {
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(16px, 1.15vw, 19px);
+  line-height: 1.6;
+  color: var(--c-ink-2);
+  max-width: 64ch;
+}
+
+/* Card row */
+.mw-sec2__cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 1.6vw, 28px);
+  align-items: stretch;
+}
+@media (max-width: 1100px) { .mw-sec2__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .mw-sec2__cards { grid-template-columns: 1fr; } }
+
+.mw-sec2__card {
+  display: flex;
+  flex-direction: column;
+  background: var(--c-bg);
+  border: 1px solid var(--c-line);
+  overflow: hidden;
+  position: relative;
+  transition: border-color 0.24s ease, transform 0.24s ease, box-shadow 0.24s ease;
+}
+.mw-sec2__card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 3px;
+  width: 0;
+  background: var(--c-accent);
+  z-index: 2;
+  transition: width 0.32s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.mw-sec2__card:hover {
+  border-color: var(--c-accent);
+  transform: translateY(-3px);
+  box-shadow: 0 22px 40px -28px rgba(42, 27, 18, 0.3);
+}
+.mw-sec2__card:hover::before { width: 100%; }
+
+.mw-sec2__card-photo {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--c-navy);
+}
+.mw-sec2__card-photo-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.45s ease, transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.mw-sec2__card-photo-img[data-active] {
+  opacity: 1;
+  z-index: 1;
+}
+.mw-sec2__card:hover .mw-sec2__card-photo-img[data-active] { transform: scale(1.04); }
+@media (prefers-reduced-motion: reduce) {
+  .mw-sec2__card-photo-img { transition: none; }
+}
+
+.mw-sec2__card-body {
+  padding: clamp(18px, 1.6vw, 24px) clamp(18px, 1.6vw, 24px) clamp(20px, 1.8vw, 28px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 1vw, 16px);
+  flex: 1;
+}
+.mw-sec2__card-title {
+  margin: 0;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+}
+.mw-sec2__card-rule {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: var(--c-line);
+}
+.mw-sec2__card-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.mw-sec2__entry {
+  position: relative;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--c-line-2);
+  transition: padding-left 0.22s cubic-bezier(0.2, 0.7, 0.2, 1), background 0.22s ease;
+}
+.mw-sec2__entry:last-child { border-bottom: 0; }
+.mw-sec2__entry::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 0;
+  background: var(--c-accent);
+  transition: width 0.22s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.mw-sec2__entry:hover,
+.mw-sec2__entry[data-active] {
+  padding-left: 12px;
+}
+.mw-sec2__entry:hover::before,
+.mw-sec2__entry[data-active]::before { width: 3px; }
+.mw-sec2__entry:focus { outline: none; }
+.mw-sec2__entry:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 2px;
+}
+.mw-sec2__entry-name {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(17px, 1.35vw, 21px);
+  line-height: 1.1;
+  letter-spacing: 0.005em;
+  color: var(--c-ink);
+  text-transform: uppercase;
+}
+
+
+.mw-ten2__mission {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 1.2vw, 20px);
+}
+.mw-ten2__mission-heading {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(22px, 1.9vw, 32px);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--c-ink);
+  text-transform: uppercase;
+}
+.mw-ten2__mission-copy {
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.1vw, 18px);
+  line-height: 1.65;
+  color: var(--c-ink-2);
+}
+/* Mission "Our Core Values" — text link with arrow. Inherits the
+   mission's flex gap from the body paragraphs (no extra padding) so
+   it sits one line-gap below the last paragraph. */
+.mw-ten2__mission-link {
+  align-self: flex-start;
+  margin-top: clamp(4px, 0.4vw, 8px);
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 4px;
+  transition: color 0.2s ease, gap 0.2s ease;
+}
+.mw-ten2__mission-link:hover {
+  color: var(--c-accent-2);
+  gap: 14px;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Our history — copy variant with a vertical milestone timeline in
+   the left column. Five milestones alternate either side of a thin
+   terracotta spine. Each row is collapsed by default and expands
+   its body via grid-template-rows: 0fr → 1fr on hover or focus-within.
+   ───────────────────────────────────────────────────────────────── */
+.mw-ten3 {
+  position: relative;
+  background: var(--c-bg);
+  padding-block: clamp(56px, 5.5vw, 100px);
+  color: var(--c-ink);
+  overflow: clip;
+  isolation: isolate;
+  border-top: 1px solid var(--c-line);
+}
+.mw-ten3__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(40px, 5vw, 96px);
+  align-items: stretch;
+}
+.mw-ten3__grid > .mw-ten3__body { order: 1; }
+.mw-ten3__grid > .mw-ten3__timeline { order: 2; }
+@media (max-width: 900px) {
+  /* Stacked: main body first, milestone timeline after it. */
+  .mw-ten3__grid { grid-template-columns: 1fr; gap: 40px; align-items: start; }
+  .mw-ten3__grid > .mw-ten3__body { order: 0; }
+  .mw-ten3__grid > .mw-ten3__timeline { order: 1; }
+}
+
+/* Timeline column. Stretches to match the right column's height. The
+   OL distributes milestones via space-between within (height − bottom
+   reservation). That reservation = the last milestone's expanded body
+   height, so when the body opens it fills exactly the bottom slot —
+   making the full timeline (head→body) align with the right column. */
+.mw-ten3__timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  /* Offset the top so the timeline aligns with the H2 in the body
+     column rather than the eyebrow above it. Matches eyebrow line
+     height (~18px) + the flex gap below the eyebrow. */
+  margin-top: calc(18px + clamp(20px, 1.5vw, 24px));
+}
+@media (max-width: 900px) {
+  .mw-ten3__timeline { margin-top: 0; }
+}
+.mw-ten3__timeline-note {
+  margin: 0 0 clamp(10px, 0.9vw, 14px);
+  text-align: center;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+  opacity: 0.65;
+}
+.mw-ten3__milestones {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  /* Items distribute evenly between top and the bottom-reserved
+     slot. The bottom padding equals (last body card height − last
+     milestone head height), so when the last milestone is expanded
+     its body card's bottom edge lands exactly on the spine bottom. */
+  justify-content: space-between;
+  padding-block: clamp(8px, 1vw, 16px) clamp(37px, calc(35.5px + 0.18vw), 40px);
+}
+.mw-ten3__milestones::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--c-accent);
+  opacity: 0.35;
+  transform: translateX(-50%);
+}
+
+/* A milestone keeps a stable height — only its body wrap (absolutely
+   positioned below) reveals on hover, so the timeline never grows. */
+.mw-ten3__milestone {
+  position: relative;
+  width: 50%;
+  box-sizing: border-box;
+  padding-inline: clamp(22px, 1.8vw, 32px);
+}
+.mw-ten3__milestone--left { text-align: right; }
+.mw-ten3__milestone--right {
+  margin-left: 50%;
+  text-align: left;
+}
+
+/* Dot on the spine — diamond shape, slightly grows on hover */
+.mw-ten3__milestone-dot {
+  position: absolute;
+  /* Vertically centered on the title's line-box. Head's padding-top
+     is 1.6rem (25.6px), title line-box ≈ 23px, so the title center
+     is ~37px from the milestone top → dot at 31px. */
+  top: 1.94rem;
+  width: 12px;
+  height: 12px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  transition: transform 0.24s cubic-bezier(0.2, 0.7, 0.2, 1), background 0.24s ease;
+  z-index: 1;
+}
+.mw-ten3__milestone--left .mw-ten3__milestone-dot { right: -6px; }
+.mw-ten3__milestone--right .mw-ten3__milestone-dot { left: -6px; }
+.mw-ten3__milestone:hover .mw-ten3__milestone-dot,
+.mw-ten3__milestone:focus-within .mw-ten3__milestone-dot,
+.mw-ten3__milestone.is-active .mw-ten3__milestone-dot {
+  transform: rotate(45deg) scale(1.35);
+}
+
+/* The year is absolutely positioned RELATIVE TO THE MILESTONE (not the
+   head) so it shares the same positioning context as the dot and the
+   bodywrap. It sits on the opposite side of the spine from the title,
+   vertically aligned with the title, and stays there on hover — only
+   the title hides and the card takes its place. */
+.mw-ten3__milestone-head {
+  display: flex;
+  flex-direction: column;
+  cursor: default;
+  padding-top: 1.6em;
+}
+.mw-ten3__milestone-year {
+  position: absolute;
+  /* Vertically centered on the title's line-box. Year line-box ≈
+     18px, title center ~37px from milestone top → year top ~28px. */
+  top: 1.75rem;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+  white-space: nowrap;
+  transition: top 0.32s cubic-bezier(0.2, 0.7, 0.2, 1),
+              left 0.32s cubic-bezier(0.2, 0.7, 0.2, 1),
+              right 0.32s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+/* DEFAULT — year on the opposite side of the spine from the title,
+   vertically aligned with the title. */
+.mw-ten3__milestone--left .mw-ten3__milestone-year {
+  left: calc(100% + clamp(22px, 1.8vw, 32px));
+  right: auto;
+  text-align: left;
+}
+.mw-ten3__milestone--right .mw-ten3__milestone-year {
+  right: calc(100% + clamp(22px, 1.8vw, 32px));
+  left: auto;
+  text-align: right;
+}
+.mw-ten3__milestone-title {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(17px, 1.4vw, 22px);
+  line-height: 1.05;
+  letter-spacing: 0.005em;
+  color: var(--c-ink);
+  text-transform: uppercase;
+  transition: color 0.24s ease, opacity 0.24s ease, visibility 0s linear 0.24s;
+}
+/* On hover/active the title fades out and the card takes its place. */
+.mw-ten3__milestone:hover .mw-ten3__milestone-title,
+.mw-ten3__milestone:focus-within .mw-ten3__milestone-title,
+.mw-ten3__milestone.is-active .mw-ten3__milestone-title {
+  opacity: 0;
+  visibility: hidden;
+  transition: color 0.24s ease, opacity 0.24s ease, visibility 0s linear 0s;
+}
+
+/* Subtle pulsing on inactive milestones — signals the timeline is
+   interactive without being distracting. Stops on hover/focus and
+   on the currently-active item. Each milestone is offset so they
+   don't pulse in lockstep. */
+@keyframes mw-ten3-pulse-title {
+  0%, 100% { opacity: 0.72; }
+  50%      { opacity: 1; }
+}
+@keyframes mw-ten3-pulse-dot {
+  0%, 100% { opacity: 0.6; transform: rotate(45deg) scale(0.92); }
+  50%      { opacity: 1;   transform: rotate(45deg) scale(1.06); }
+}
+.mw-ten3__milestone:not(.is-active) .mw-ten3__milestone-title {
+  animation: mw-ten3-pulse-title 2.6s ease-in-out infinite;
+}
+.mw-ten3__milestone:not(.is-active) .mw-ten3__milestone-dot {
+  animation: mw-ten3-pulse-dot 2.6s ease-in-out infinite;
+}
+.mw-ten3__milestone:nth-child(2):not(.is-active) .mw-ten3__milestone-title,
+.mw-ten3__milestone:nth-child(2):not(.is-active) .mw-ten3__milestone-dot { animation-delay: -0.4s; }
+.mw-ten3__milestone:nth-child(3):not(.is-active) .mw-ten3__milestone-title,
+.mw-ten3__milestone:nth-child(3):not(.is-active) .mw-ten3__milestone-dot { animation-delay: -0.8s; }
+.mw-ten3__milestone:nth-child(4):not(.is-active) .mw-ten3__milestone-title,
+.mw-ten3__milestone:nth-child(4):not(.is-active) .mw-ten3__milestone-dot { animation-delay: -1.2s; }
+.mw-ten3__milestone:nth-child(5):not(.is-active) .mw-ten3__milestone-title,
+.mw-ten3__milestone:nth-child(5):not(.is-active) .mw-ten3__milestone-dot { animation-delay: -1.6s; }
+.mw-ten3__milestone:hover .mw-ten3__milestone-dot,
+.mw-ten3__milestone:focus-within .mw-ten3__milestone-dot {
+  animation: none;
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-ten3__milestone:not(.is-active) .mw-ten3__milestone-title,
+  .mw-ten3__milestone:not(.is-active) .mw-ten3__milestone-dot {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* Body wrap sits on the SAME side of the spine as the milestone head,
+   taking the title's place when active. Absolutely positioned so it
+   never grows the timeline. Active state (controlled via JS) reveals
+   it; only one milestone is active at a time. */
+.mw-ten3__milestone-bodywrap {
+  position: absolute;
+  /* Centered on the dot: top anchors to the dot's vertical center
+     (dot top 1.94rem + half its 12px height) and translateY(-50%)
+     pulls the card up by half its own height. The extra -6px is the
+     reveal slide, removed when active. */
+  top: calc(1.94rem + 6px);
+  opacity: 0;
+  transform: translateY(calc(-50% - 6px));
+  visibility: hidden;
+  z-index: 5;
+  pointer-events: none;
+  width: 100%;
+  transition: opacity 0.32s ease, transform 0.32s cubic-bezier(0.2, 0.7, 0.2, 1), visibility 0s linear 0.32s;
+}
+/* --left milestone (title on left side of spine) → card stays on the left, hugging the spine on its right. */
+.mw-ten3__milestone--left .mw-ten3__milestone-bodywrap {
+  left: 0;
+  right: auto;
+  padding-right: clamp(22px, 1.8vw, 32px);
+  text-align: right;
+}
+/* --right milestone (title on right side of spine) → card stays on the right, hugging the spine on its left. */
+.mw-ten3__milestone--right .mw-ten3__milestone-bodywrap {
+  left: auto;
+  right: 0;
+  padding-left: clamp(22px, 1.8vw, 32px);
+  text-align: left;
+}
+.mw-ten3__milestone.is-active .mw-ten3__milestone-bodywrap {
+  opacity: 1;
+  transform: translateY(-50%);
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.32s ease, transform 0.32s cubic-bezier(0.2, 0.7, 0.2, 1), visibility 0s linear 0s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-ten3__milestone-bodywrap { transition: none; }
+}
+.mw-ten3__milestone-body {
+  margin: 0;
+  padding: clamp(8px, 0.8vw, 12px) clamp(12px, 1.2vw, 16px);
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 18px 36px -22px rgba(42, 27, 18, 0.28);
+}
+.mw-ten3__milestone-body-title,
+.mw-ten3__milestone-body-text {
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  line-height: 1.5;
+}
+/* In-card title: bold. */
+.mw-ten3__milestone-body-title {
+  font-size: clamp(12px, 0.85vw, 13.5px);
+  font-weight: 700;
+  color: var(--c-ink);
+}
+/* Explanation: 0.5px smaller than the title. */
+.mw-ten3__milestone-body-text {
+  font-size: clamp(11.5px, calc(0.85vw - 0.5px), 13px);
+  color: var(--c-ink-2);
+}
+/* Accent edge hugs the spine: left-side cards border on the right, right-side cards border on the left. */
+.mw-ten3__milestone--left .mw-ten3__milestone-body {
+  border-right: 2px solid var(--c-accent);
+}
+.mw-ten3__milestone--right .mw-ten3__milestone-body {
+  border-left: 2px solid var(--c-accent);
+}
+
+.mw-ten3__body {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(32px, 3vw, 48px);
+}
+.mw-ten3__head {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 1.5vw, 24px);
+}
+.mw-ten3__title {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(36px, 4vw, 72px);
+  line-height: 1;
+  letter-spacing: 0.005em;
+  color: var(--c-ink);
+  text-transform: uppercase;
+}
+.mw-ten3__title-em { color: var(--c-accent); }
+.mw-ten3__lead {
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(16px, 1.2vw, 20px);
+  line-height: 1.6;
+  color: var(--c-ink-2);
+}
+
+/* Truck plate — flipped truck side-view with three track-record
+   stats laid across the white trailer. The container's
+   aspect-ratio matches the source image (1672 × 321), and the
+   stat overlay is positioned with percentage insets so the
+   numerals + labels always scale together with the truck art. */
+.mw-ten3__plate {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1672 / 321;
+  isolation: isolate;
+}
+.mw-ten3__plate-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  /* Flip horizontally — cab moves from left to right edge. */
+  transform: scaleX(-1);
+  z-index: 0;
+  pointer-events: none;
+}
+.mw-ten3__plate-stats {
+  position: absolute;
+  /* Center the stats group on the trailer's white panel. The
+     vertical center of the white panel sits at 35.5% of the plate
+     height (measured directly from the source image: y=14..214 of
+     321 → midpoint y=114 → 35.5%). Horizontal bounds 8%–69% bracket
+     the trailer's white area with breathing room from both edges. */
+  top: 35.5%;
+  transform: translate(-15px, -50%);
+  left: 8%;
+  right: 31%;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+  z-index: 1;
+  gap: clamp(6px, 0.8vw, 16px);
+}
+.mw-ten3__plate-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(3px, 0.35vw, 6px);
+  min-width: 0;
+}
+/* Center the middle stat midway between the left and right stats,
+   which keep their flex-start positions. align-items centers it in
+   its column; the translateX corrects for the outer stats being
+   left-aligned (the offset is ~5% of the plate width — tracked with a
+   clamped vw that caps once the container stops scaling). */
+.mw-ten3__plate-stat:nth-child(2) {
+  align-items: center;
+  transform: translateX(clamp(-35px, -2.3vw, -25px));
+}
+/* Nudge only the third stat 10px left so its longer "SOLVENT
+   RECLAIMED" label clears the trailer's right edge. The first two
+   stats keep their grid-cell positions. */
+.mw-ten3__plate-stat:last-child {
+  transform: translateX(-10px);
+}
+.mw-ten3__plate-val {
+  margin: 0;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.18em;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  color: var(--c-ink);
+  line-height: 0.95;
+  letter-spacing: -0.005em;
+}
+.mw-ten3__plate-num {
+  font-size: clamp(26px, 2.9vw, 50px);
+}
+.mw-ten3__plate-unit {
+  font-size: clamp(11px, 0.95vw, 15px);
+  font-weight: 600;
+  color: var(--c-accent);
+  text-transform: lowercase;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.mw-ten3__plate-label {
+  margin: 0;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: clamp(9px, 0.7vw, 11px);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+  white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+  /* On mobile: collapse zigzag — all milestones to the right of a left-edge spine. */
+  .mw-ten3__milestones::before { left: 8px; transform: none; }
+  .mw-ten3__milestone,
+  .mw-ten3__milestone--left,
+  .mw-ten3__milestone--right {
+    width: 100%;
+    margin-left: 0;
+    text-align: left;
+    padding-inline: 26px 0;
+  }
+  .mw-ten3__milestone--left .mw-ten3__milestone-dot,
+  .mw-ten3__milestone--right .mw-ten3__milestone-dot {
+    left: 2px;
+    right: auto;
+  }
+
+  /* The desktop hover-to-reveal model is dead on touch, so on mobile
+     every milestone becomes a static, fully-readable entry: year →
+     title → description, stacked down a left-edge spine. Note hint is
+     hidden because nothing needs hovering. */
+  .mw-ten3__timeline-note { display: none; }
+  .mw-ten3__milestones { display: block; padding-block: 2px; }
+  .mw-ten3__milestone { padding-block: 0; }
+  .mw-ten3__milestone + .mw-ten3__milestone { margin-top: 22px; }
+  .mw-ten3__milestone-head { padding-top: 0; }
+  .mw-ten3__milestone-dot { top: 3px; }
+  /* Year was absolutely positioned off the opposite side of the spine
+     (clipped at the screen edge). Put it inline above the title. */
+  .mw-ten3__milestone--left .mw-ten3__milestone-year,
+  .mw-ten3__milestone--right .mw-ten3__milestone-year {
+    position: static; display: block; left: auto; right: auto;
+    margin-bottom: 5px; font-size: 12px; text-align: left;
+  }
+  /* Title always shown (kill the hover-fade + interactive pulse). */
+  .mw-ten3__milestone-title,
+  .mw-ten3__milestone:not(.is-active) .mw-ten3__milestone-title,
+  .mw-ten3__milestone.is-active .mw-ten3__milestone-title {
+    opacity: 1; visibility: visible; animation: none;
+  }
+  .mw-ten3__milestone:not(.is-active) .mw-ten3__milestone-dot { animation: none; opacity: 1; }
+  /* Description revealed inline under every milestone (no active state). */
+  .mw-ten3__milestone-bodywrap,
+  .mw-ten3__milestone--left .mw-ten3__milestone-bodywrap,
+  .mw-ten3__milestone--right .mw-ten3__milestone-bodywrap,
+  .mw-ten3__milestone.is-active .mw-ten3__milestone-bodywrap {
+    position: static; opacity: 1; visibility: visible; transform: none;
+    pointer-events: auto; width: 100%; margin-top: 7px; padding: 0; text-align: left;
+  }
+  .mw-ten3__milestone-body,
+  .mw-ten3__milestone--left .mw-ten3__milestone-body,
+  .mw-ten3__milestone--right .mw-ten3__milestone-body {
+    background: transparent; box-shadow: none; padding: 0; border: 0;
+  }
+  .mw-ten3__milestone-body-title { display: none; }
+  .mw-ten3__milestone-body-text { font-size: 13.5px; }
+
+  /* Keep the truck graphic with its highlights overlaid on the trailer
+     panel (per request); scale the three figures down so the labels fit
+     their columns without colliding on the short plate at phone width. */
+  .mw-ten3__plate-num { font-size: clamp(14px, 4.3vw, 26px); }
+  .mw-ten3__plate-unit { font-size: clamp(8px, 2.2vw, 13px); }
+  .mw-ten3__plate-label { font-size: clamp(6.5px, 1.7vw, 10px); letter-spacing: 0.03em; }
+  .mw-ten3__plate-stats { gap: clamp(2px, 0.6vw, 12px); }
+  .mw-ten3__plate-stat:nth-child(2) { transform: translateX(clamp(-18px, -1.2vw, -8px)); }
+  .mw-ten3__plate-stat:last-child { transform: translateX(-4px); }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Careers — dark walnut anchor near the bottom of the page. Eyebrow
+   + headline + lead on a 2-col split, then two equal cards for
+   "Culture" and "Hiring now". Cards use a terracotta accent rule
+   and a hover slide.
+   ───────────────────────────────────────────────────────────────── */
+.mw-careers {
+  position: relative;
+  background: var(--c-navy-2);
+  padding-block: clamp(56px, 5.5vw, 100px) clamp(40px, 4vw, 70px);
+  color: var(--c-on-navy);
+  overflow: clip;
+  isolation: isolate;
+}
+.mw-careers::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-dark) 38px, var(--c-grain-on-dark) 39px);
+}
+.mw-careers > .mw-inner { position: relative; z-index: 1; }
+
+.mw-careers__head {
+  margin-bottom: clamp(48px, 5vw, 80px);
+}
+.mw-careers__head-text {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 1.5vw, 24px);
+}
+.mw-careers__title {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(36px, 4vw, 72px);
+  line-height: 1;
+  letter-spacing: 0.005em;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+.mw-careers__title-em {
+  color: var(--c-accent);
+}
+.mw-careers__lead {
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(16px, 1.2vw, 20px);
+  line-height: 1.6;
+  color: rgba(250, 243, 229, 0.91);
+  max-width: 56ch;
+}
+
+/* Two equal cards — terracotta rule above each, condensed title, sans body, link with arrow */
+.mw-careers__cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(20px, 2.4vw, 48px);
+}
+@media (max-width: 800px) { .mw-careers__cards { grid-template-columns: 1fr; gap: 32px; } }
+.mw-careers__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 1.2vw, 18px);
+  padding: clamp(24px, 2.4vw, 36px) clamp(20px, 2vw, 32px);
+  background: rgba(245, 230, 203, 0.035);
+  border: 1px solid rgba(245, 230, 203, 0.12);
+  transition: background 0.24s ease, border-color 0.24s ease, transform 0.24s ease;
+}
+/* Terracotta top-border accent — short by default, grows to the card's
+   full width on hover. Sits on top of the 1px subtle border so it reads
+   as the top edge of the card. */
+.mw-careers__card::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  height: 3px;
+  width: clamp(40px, 3.5vw, 56px);
+  background: var(--c-accent);
+  transition: width 0.32s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.mw-careers__card:hover {
+  background: rgba(245, 230, 203, 0.06);
+  border-color: rgba(168, 90, 44, 0.45);
+  transform: translateY(-2px);
+}
+.mw-careers__card:hover::before { width: calc(100% + 2px); }
+.mw-careers__card-tag {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+}
+.mw-careers__card-title {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(22px, 2vw, 32px);
+  line-height: 1.05;
+  letter-spacing: 0.005em;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+.mw-careers__card-text {
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.1vw, 17px);
+  line-height: 1.6;
+  color: rgba(250, 243, 229, 0.89);
+  flex: 1;
+}
+.mw-careers__card-link {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--c-on-navy);
+  text-decoration: none;
+  padding-top: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.2s ease, gap 0.2s ease;
+}
+.mw-careers__card-link:hover { color: var(--c-accent); gap: 12px; }
+
+/* Bleed variant — photo extends as a full-bleed background on the
+   right half of the section (top-to-bottom, all the way to the
+   viewport right edge). Text content sits on the left; the two
+   cards stack into a single column on the right, overlaid on the
+   photo with a dark glass treatment for legibility. */
+.mw-careers--bleed {
+  position: relative;
+}
+.mw-careers--bleed > .mw-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(40px, 4vw, 72px);
+}
+.mw-careers--bleed .mw-careers__head {
+  margin-bottom: 0;
+  max-width: 50%;
+}
+@media (max-width: 900px) {
+  .mw-careers--bleed .mw-careers__head { max-width: 100%; }
+}
+.mw-careers--bleed .mw-careers__head-text,
+.mw-careers--bleed .mw-careers__cards { max-width: none; }
+/* Cards row spans full width and overflows into the right-side photo
+   area. Two cards side by side, the right one sits on top of the photo. */
+.mw-careers--bleed .mw-careers__cards {
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(16px, 1.6vw, 28px);
+  width: 100%;
+  justify-self: stretch;
+}
+@media (max-width: 800px) {
+  .mw-careers--bleed .mw-careers__cards { grid-template-columns: 1fr; }
+}
+/* Cards on photo — translucent dark backdrop + blur so the photo
+   reads through but the text stays legible. */
+.mw-careers--bleed .mw-careers__card {
+  background: rgba(42, 27, 18, 0.92);
+  border-color: rgba(245, 230, 203, 0.18);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.mw-careers--bleed .mw-careers__card:hover {
+  background: rgba(42, 27, 18, 0.82);
+  border-color: rgba(168, 90, 44, 0.55);
+}
+@media (max-width: 900px) {
+  .mw-careers--bleed > .mw-inner { grid-template-columns: 1fr; gap: 24px; }
+}
+
+.mw-careers__bleed-photo {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  right: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+.mw-careers__bleed-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, var(--c-navy-2) 0%, rgba(74,47,31,0.55) 12%, rgba(74,47,31,0) 35%);
+  pointer-events: none;
+}
+.mw-careers__bleed-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+}
+@media (max-width: 900px) {
+  /* Photo flush to the top of the section; clear gap before the eyebrow. */
+  .mw-careers { padding-top: 0; }
+  .mw-careers__bleed-photo {
+    position: relative;
+    left: 0;
+    right: 0;
+    height: clamp(220px, 54vw, 300px);
+    margin-top: 0;
+    margin-bottom: clamp(40px, 9vw, 60px);
+  }
+  .mw-careers__bleed-photo::after { display: none; }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Marquee — a narrow walnut strip between Careers and Final CTA.
+   Continues the dark surface and lets the brand refrains scroll.
+   ───────────────────────────────────────────────────────────────── */
+.mw-marquee {
+  background: var(--c-bg);
+  padding-block: 0;
+  border-top: 0;
+  border-bottom: 1px solid var(--c-line);
+}
+/* Restyled marquee ticker: condensed mono-mix typography, terracotta
+   diamond separators (replacing the middle-dot glyph), and slightly
+   taller track so the refrains read as a deliberate brand band
+   rather than a thin disclaimer strip. Background stays as the
+   surrounding section's navy. */
+.mw-marquee .tl-marquee {
+  background: transparent;
+  border-block: 0;
+  color: rgba(245, 230, 203, 0.78);
+  position: relative;
+  /* Soft fade-out at the section edges to suggest motion off-screen. */
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
+          mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
+}
+.mw-marquee .tl-marquee__track {
+  /* Reverse the shared left-scrolling animation so the affiliates
+     scroll the opposite direction. Seamless because the track is a
+     doubled item list. */
+  animation-direction: reverse;
+  gap: clamp(48px, 5vw, 88px);
+  padding: clamp(24px, 2.4vw, 38px) 0;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: clamp(13px, 1vw, 14.5px);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 500;
+  align-items: center;
+}
+.mw-marquee .tl-marquee__track span:nth-child(odd) {
+  display: inline-flex;
+  align-items: center;
+}
+/* Replace the middle-dot character with a small terracotta diamond. */
+.mw-marquee .tl-marquee__track .dot {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0;
+  line-height: 0;
+  color: transparent;
+  width: 9px;
+  height: 9px;
+}
+.mw-marquee .tl-marquee__track .dot::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+/* Locked "Proud affiliates." label inline with the scrolling logos. The
+   label stays put (outside the marquee's overflow box); the logo track
+   flexes into the remaining width and scrolls beside it. */
+.mw-marquee__row {
+  display: flex;
+  align-items: center;
+  gap: clamp(24px, 3vw, 56px);
+  padding-left: clamp(24px, 5vw, 96px);
+}
+.mw-marquee__row .tl-marquee { flex: 1 1 auto; min-width: 0; }
+.mw-marquee__label {
+  margin: 0;
+  flex-shrink: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(22px, 2.2vw, 32px);
+  line-height: 1.02;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--c-ink);
+}
+/* Square-shaped ":" — two stacked terracotta squares, replacing the single square period. */
+.mw-stop-colon {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.18em;
+  height: 0.72em;
+  margin-left: 0.14em;
+  vertical-align: middle;
+  transform: translateY(-0.04em);
+}
+.mw-stop-colon::before,
+.mw-stop-colon::after {
+  content: "";
+  width: 0.15em;
+  height: 0.15em;
+  background: var(--c-accent);
+}
+/* Stop the flex track from shrinking its items — an <img width:auto> in a
+   shrinking flex item collapses to 0 width. flex-shrink:0 keeps each logo at
+   its intrinsic (aspect-ratio) width and lets the track overflow to scroll. */
+.mw-marquee .tl-marquee__track > span { flex-shrink: 0; }
+.mw-marquee__logo {
+  height: clamp(45px, 4.5vw, 63px);
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Final CTA — cream close. Centered eyebrow + headline + body +
+   two action buttons (Contact + 24/7 emergency).
+   ───────────────────────────────────────────────────────────────── */
+.mw-final {
+  background: var(--c-surface-warm);
+  padding-block: clamp(56px, 5.5vw, 100px);
+  text-align: center;
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+}
+.mw-final::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+/* Full-width 3-column layout: truck (left third), content (center
+   third), logomark (right third). Each item centered within its own
+   column. No max-width — the section spans the full viewport. */
+.mw-final__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  /* Center column is wide enough to keep the H2 on two lines at all
+     desktop widths. Side columns absorb the remaining space. */
+  grid-template-columns: 1fr minmax(680px, 1.6fr) 1fr;
+  align-items: stretch;
+  gap: clamp(20px, 2.5vw, 48px);
+  padding-inline: clamp(24px, 3vw, 56px);
+}
+@media (max-width: 1200px) {
+  .mw-final__grid { grid-template-columns: minmax(0, 1fr) minmax(560px, 2fr) minmax(0, 1fr); }
+}
+@media (max-width: 900px) {
+  .mw-final__grid {
+    grid-template-columns: 1fr;
+    gap: clamp(24px, 4vw, 40px);
+  }
+}
+.mw-final__col { display: flex; align-items: center; justify-content: center; min-width: 0; }
+/* Content column matches the other section heads — flex column with
+   a single row-gap driving the spacing between eyebrow, title, body,
+   and CTA row. */
+.mw-final__col--content {
+  flex-direction: column;
+  text-align: center;
+  row-gap: 24px;
+}
+.mw-final__truck {
+  display: block;
+  width: 100%;
+  max-width: clamp(280px, 30vw, 520px);
+  height: auto;
+  pointer-events: none;
+}
+.mw-final__logomark {
+  display: block;
+  width: clamp(182px, 18.2vw, 286px);
+  height: auto;
+  pointer-events: none;
+  opacity: 0.95;
+}
+@media (max-width: 900px) {
+  /* Drop the truck and put the logomark in its place at the top. */
+  .mw-final__col--truck { display: none; }
+  .mw-final__col--logo { display: flex; order: 0; }
+  .mw-final__col--content { order: 1; }
+  .mw-final__logomark { width: clamp(120px, 32vw, 176px); opacity: 0.95; }
+}
+/* The content column applies row-gap: 24px between every child, so the eyebrow→headline gap would be 24px + this margin. Offset the row-gap so the eyebrow→headline gap equals the standard section header gap, clamp(20px, 1.5vw, 24px), used by fac2/ten3/careers/sec2. */
+.mw-final .mw-final__tag { margin: 0 0 calc(clamp(20px, 1.5vw, 24px) - 24px) 0; }
+.mw-final__title {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(40px, 5vw, 88px);
+  line-height: 0.95;
+  letter-spacing: 0.005em;
+  color: var(--c-ink);
+  text-transform: uppercase;
+  max-width: 22ch;
+}
+.mw-final__body {
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(16px, 1.2vw, 20px);
+  line-height: 1.6;
+  color: var(--c-ink-2);
+  max-width: 56ch;
+}
+.mw-final__row {
+  display: inline-flex;
+  gap: clamp(12px, 1.2vw, 20px);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+/* Light divider + social row beneath the Final CTA buttons. Vertical
+   spacing is handled by .mw-final__col--content's row-gap. */
+.mw-final__divider {
+  width: min(100%, 360px);
+  height: 1px;
+  background: var(--c-line);
+  align-self: center;
+}
+.mw-final__socials {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: clamp(18px, 1.6vw, 28px);
+}
+.mw-final__social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--c-ink-2);
+  transition: color 180ms ease, transform 180ms ease;
+}
+.mw-final__social:hover { color: var(--c-accent); transform: translateY(-2px); }
+.mw-final__social:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 4px; border-radius: 2px; }
+/* Override the ghost CTA inside the Final block — its default
+   palette is built for the dark hero, so on cream we recolor it. */
+.mw-final .mw-cta--ghost {
+  color: var(--c-ink);
+  border-color: var(--c-ink);
+}
+.mw-final .mw-cta--ghost:hover {
+  border-color: var(--c-accent);
+  color: var(--c-accent);
+}
+.mw-final .mw-cta__sup {
+  color: var(--c-ink-2);
+}
+.mw-final .mw-cta__num {
+  color: var(--c-ink);
+}
+
+
+/* ─────────────────────────────────────────────────────────────────
+   Home — hero. Civic-monument typography on warm walnut. Barlow
+   Condensed display headline with terracotta stamp mark and a
+   paper-grain texture overlay.
+   ───────────────────────────────────────────────────────────────── */
+.mw-hero {
+  position: relative;
+  background: var(--c-navy);
+  color: var(--c-on-navy);
+  overflow: hidden;
+  isolation: isolate;
+  /* Fill the visible viewport below the fixed chrome. Body has
+     padding-top of (--mw-eb-h + 76px) to clear the fixed EB+topnav,
+     so the hero only needs to fill the remaining viewport. */
+  min-height: calc(100svh - var(--mw-eb-h, 39px) - 76px);
+  display: flex;
+  align-items: stretch;
+}
+/* Operating-site photograph. Warm-toned via saturation/brightness so it sits inside the clay palette rather than competing with it. */
+.mw-hero__photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center 35%;
+  background-repeat: no-repeat;
+  filter: saturate(0.82) brightness(0.72) contrast(1.06) sepia(0.12);
+}
+/* Warm overlay tuned so the operating-site photo reads under the type — lighter than v2 so the facility is visible. */
+.mw-hero__photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(120deg, rgba(42, 27, 18, 0.78) 0%, rgba(42, 27, 18, 0.55) 45%, rgba(42, 27, 18, 0.28) 75%, rgba(42, 27, 18, 0.5) 100%),
+    linear-gradient(to bottom, rgba(42, 27, 18, 0) 30%, rgba(42, 27, 18, 0.78) 100%);
+}
+/* Subtle 49° paper-grain hairlines layered on top of the photo. Keeps the document-texture motif. */
+.mw-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-dark) 38px, var(--c-grain-on-dark) 39px);
+  z-index: 1;
+}
+/* Vertical clay hairline running the height of the hero — the start of the chain-of-custody motif that recurs through the page. */
+.mw-hero::after {
+  content: "";
+  position: absolute;
+  left: clamp(20px, 3vw, 60px);
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent 0, rgba(168,90,44,0.85) 16%, rgba(168,90,44,0.85) 84%, transparent 100%);
+  z-index: 1;
+}
+.mw-hero__inner {
+  position: relative;
+  z-index: 2;
+  /* 1560 content width at wide viewports, with 24px gutters at viewports < 1608. */
+  width: min(100% - clamp(48px, 8vw, 144px), 1560px);
+  margin-inline: auto;
+  padding-block: clamp(40px, 4vw, 72px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.7fr);
+  gap: clamp(28px, 3.5vw, 56px);
+  align-content: space-between;
+  align-items: end;
+}
+.mw-hero__mark {
+  grid-column: 1 / -1;
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  text-transform: uppercase;
+  align-self: start;
+}
+/* Nudge the diamond + SINCE 1996 down slightly so their optical
+   centers match the visual mid of the larger condensed corp text
+   (whose glyph descenders push its visual center fractionally
+   below its line-box center). */
+.mw-hero__mark-since { transform: translateY(4px); }
+/* Logomark to the left of the corp name — 2.5x the corp text height. */
+.mw-hero__mark-logo {
+  height: calc(clamp(24px, 1.8vw, 29px) * 2.5);
+  width: auto;
+  flex-shrink: 0;
+}
+.mw-hero__mark-corp {
+  font-family: var(--font-condensed), ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(24px, 1.8vw, 29px);
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--c-on-navy);
+  text-transform: none;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+}
+.mw-hero__mark-since {
+  font-family: var(--font-plex-sans), sans-serif;
+  font-size: clamp(11px, 0.8vw, 13px);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: #fff;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+}
+.mw-hero__mark-dot {
+  width: 9px;
+  height: 9px;
+  background: var(--c-accent);
+  flex-shrink: 0;
+  border-radius: 0;
+  /* Diamond stamp — matches the section eyebrow marks. */
+  transform: translateY(4px) rotate(45deg);
+}
+/* Groups the diamond + "since 1996" so they can wrap together (desktop:
+   identical inline row; mobile: a second line under the corp name). */
+.mw-hero__mark-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+}
+.mw-hero__mark-corp-short { display: none; }
+.mw-hero__title {
+  grid-column: 1 / -1;
+  font-family: var(--font-condensed), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  font-size: clamp(56px, 8.5vw, 152px);
+  line-height: 0.78;
+  letter-spacing: 0.002em;
+  color: #fff;
+  margin: 0;
+  text-transform: uppercase;
+}
+.mw-hero__line { display: block; }
+/* Terracotta square stamp — same brand mark as the eyebrow dot. Sits on the baseline next to "disposal" as a period replacement. */
+.mw-hero__stop {
+  display: inline-block;
+  width: 0.18em;
+  height: 0.18em;
+  background: var(--c-accent);
+  vertical-align: baseline;
+  margin-left: 0.06em;
+}
+/* Glue the last word of a heading to its trailing stop-square so the square can
+   never wrap onto its own line (a word-joiner doesn't suppress the soft-wrap
+   opportunity around an inline-block box, so nowrap is required). */
+.mw-nobr { white-space: nowrap; }
+/* Square period stamp for h1/h2 display headings — the same brand mark as the hero, sized in em so it scales with each heading. */
+.mw-stop {
+  display: inline-block;
+  width: 0.16em;
+  height: 0.16em;
+  background: var(--c-accent);
+  vertical-align: baseline;
+  margin-left: 0.04em;
+}
+
+/* Rotating phrase slot. Inline-block so it can sit next to static text like "in <cycle>". A hidden sizer reserves the width of the longest phrase so the line doesn't shrink/expand when the active phrase changes. */
+.mw-hero__cycle {
+  position: relative;
+  display: inline-block;
+  vertical-align: baseline;
+}
+.mw-hero__cycle-sizer {
+  visibility: hidden;
+  display: inline-block;
+  white-space: pre;
+  pointer-events: none;
+}
+.mw-hero__cycle-item {
+  position: absolute;
+  left: 0;
+  top: 0;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(14%);
+  transition: opacity 680ms cubic-bezier(.2,.7,.2,1), transform 680ms cubic-bezier(.2,.7,.2,1);
+  will-change: opacity, transform;
+}
+.mw-hero__cycle-item.is-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+.mw-hero__cycle-item--accent {
+  color: var(--c-accent);
+}
+/* No auto-appended period — the period lives on the static "waste disposal." line beneath the cycle. */
+@media (prefers-reduced-motion: reduce) {
+  .mw-hero__cycle-item {
+    transition: none;
+    transform: none;
+  }
+}
+.mw-hero__lead {
+  grid-column: 1;
+  font-family: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(17px, 1.3vw, 21px);
+  line-height: 1.55;
+  max-width: 56ch;
+  color: rgba(245, 230, 203, 0.84);
+  margin: 0;
+}
+.mw-hero__foot {
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+}
+.mw-hero__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: flex-end;
+  align-items: center;
+}
+.mw-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  font: inherit;
+  cursor: pointer;
+  border: 0;
+  appearance: none;
+  transition: transform 180ms ease, background 220ms ease, border-color 220ms ease, color 220ms ease;
+}
+.mw-cta:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 4px;
+}
+.mw-cta--solid {
+  background: var(--c-accent);
+  color: #fff;
+  padding: 18px 28px;
+  font-family: var(--font-plex-sans), sans-serif;
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: 0.005em;
+  /* Square button — echoes the stamp mark. */
+  border-radius: 0;
+}
+.mw-cta--solid:hover { background: var(--c-accent-2); transform: translateY(-1px); }
+/* Hero-only: frame the "Talk to Miller" solid button with a thin
+   terracotta border + gap, sized so the outer frame matches the
+   24/7 ghost button's outer height. Solid button padding is
+   reduced from 18px to 10px so the framed group reads as the same
+   height as the ghost. */
+.mw-hero__ctas .mw-cta--solid {
+  padding-block: 18px;
+  outline: 1px solid var(--c-accent);
+  outline-offset: 4px;
+}
+.mw-hero__ctas .mw-cta--solid:hover {
+  outline-color: var(--c-accent-2);
+}
+.mw-cta--ghost {
+  background: transparent;
+  color: var(--c-on-navy);
+  padding: 14px 22px;
+  border: 1px solid rgba(245, 230, 203, 0.24);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  border-radius: 0;
+}
+.mw-cta--ghost:hover { border-color: var(--c-accent); color: #fff; }
+.mw-cta__sup {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(245, 230, 203, 0.62);
+}
+.mw-cta__num {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  font-variant-numeric: tabular-nums;
+}
+/* Article number tag — small mono caption pinned to the lower-right of the hero. The first numbered article: this is what makes the page read as a document. */
+.mw-hero__article {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(245, 230, 203, 0.5);
+  margin: 0;
+}
+.mw-hero__article strong {
+  color: var(--c-accent);
+  font-weight: 500;
+}
+@media (max-width: 960px) {
+  .mw-hero { min-height: 0; }
+  .mw-hero__inner {
+    grid-template-columns: 1fr;
+    padding-block: clamp(72px, 12vw, 112px);
+    gap: 32px;
+  }
+  .mw-hero__title { font-size: clamp(56px, 13vw, 96px); line-height: 0.8; }
+  .mw-hero__lead { grid-column: 1; }
+  .mw-hero__foot { grid-column: 1; align-items: flex-start; }
+  .mw-hero__ctas { justify-content: flex-start; }
+}
+@media (max-width: 600px) {
+  .mw-hero__inner { padding-block: 80px 56px; }
+  /* Wordmark stacks: logo at left (spanning two rows), corp name on top,
+     diamond + "since 1996" beneath it. "Corporation" → "Corp.". */
+  .mw-hero__mark {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas: "logo corp" "logo meta";
+    column-gap: 13px;
+    row-gap: 5px;
+    align-items: center;
+    justify-items: start;
+  }
+  .mw-hero__mark-logo { grid-area: logo; }
+  .mw-hero__mark-corp { grid-area: corp; display: block; align-self: end; }
+  .mw-hero__mark-meta { grid-area: meta; align-self: start; }
+  .mw-hero__mark-corp-long { display: none; }
+  .mw-hero__mark-corp-short { display: inline; }
+  .mw-hero__mark-dot { transform: rotate(45deg); }
+  .mw-hero__mark-since { transform: none; }
+  .mw-hero__title { font-size: clamp(48px, 14vw, 72px); }
+  .mw-hero__lead { font-size: 16px; }
+  .mw-hero::after { left: 12px; }
+  /* Full-width, equal-weight CTAs: larger tap targets and a more
+     deliberate composition than auto-width buttons on a phone. The
+     24/7 emergency call is a primary action for this business, so it
+     gets equal visual weight to "Talk to Miller". */
+  .mw-hero__foot { width: 100%; gap: 12px; }
+  .mw-hero__ctas { width: 100%; flex-direction: column; align-items: stretch; gap: 12px; }
+  .mw-hero__ctas .mw-cta { width: 100%; justify-content: center; }
+  .mw-hero__ctas .mw-cta--ghost { align-items: center; text-align: center; border-color: rgba(245,230,203,0.34); }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────
+   Article 02 — Certifications. Cream surface with a 49° paper-grain
+   wash. The four cert numbers are typographic monoliths arranged as
+   an asymmetric 4-column band; heading lives in the upper-left and
+   the lead body anchors the upper-right corner.
+   ───────────────────────────────────────────────────────────────── */
+.mw-trust {
+  position: relative;
+  background: var(--c-bg);
+  /* Thin certifications banner — top/bottom and left/right share
+     the same compact padding. */
+  padding-block: clamp(11px, 1.05vw, 19px);
+  padding-inline: clamp(11px, 1.05vw, 19px);
+  color: var(--c-ink);
+  overflow: hidden;
+  isolation: isolate;
+  border-top: 1px solid var(--c-line);
+  border-bottom: 1px solid var(--c-line);
+}
+.mw-trust::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+/* Cert columns: 4-up compact tiles */
+.mw-certs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  border-left: 1px solid var(--c-line);
+}
+.mw-cert {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: clamp(12px, 1.4vw, 22px);
+  position: relative;
+  text-decoration: none;
+  color: var(--c-ink);
+  padding: clamp(12px, 1.1vw, 18px) clamp(14px, 1.2vw, 22px);
+  border-right: 1px solid var(--c-line);
+  transition: background 240ms ease;
+  overflow: hidden;
+}
+.mw-cert__mark {
+  display: block;
+  flex-shrink: 0;
+  width: clamp(44px, 4.5vw, 72px);
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  /* Push the icon down so its top edge sits at the top of the
+     large number, skipping over the "ISO · YEAR" prefix row above
+     it. prefix font-size (10.5px) × line-height (~1.2) + its
+     margin-bottom (4px) ≈ 17px. */
+  margin-top: 17px;
+}
+.mw-cert__body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+.mw-cert::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--c-accent);
+  transition: width 360ms cubic-bezier(.2,.7,.2,1);
+}
+.mw-cert:hover { background: var(--c-line-2); }
+.mw-cert:hover::before { width: 100%; }
+.mw-cert:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: -3px;
+}
+.mw-cert__prefix {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--c-accent);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.mw-cert__num {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(32px, 3.4vw, 56px);
+  line-height: 0.86;
+  letter-spacing: -0.005em;
+  color: var(--c-ink);
+  text-transform: uppercase;
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+.mw-cert__desc {
+  font-family: var(--font-plex-sans), sans-serif;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--c-ink-2);
+  margin-top: 6px;
+  max-width: 22ch;
+}
+.mw-cert__pdf {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--c-accent-2);
+  transition: color 180ms ease;
+}
+.mw-cert:hover .mw-cert__pdf { color: var(--c-accent); }
+.mw-cert__arr {
+  font-family: var(--font-plex-sans), sans-serif;
+  font-size: 13px;
+  transition: transform 240ms cubic-bezier(.2,.7,.2,1);
+}
+.mw-cert:hover .mw-cert__arr { transform: translateY(2px); }
+
+@media (max-width: 1100px) {
+  .mw-certs { grid-template-columns: 1fr 1fr; border-top: 1px solid var(--c-line); }
+  .mw-cert:nth-child(odd) { border-left: 0; }
+  .mw-cert:nth-child(3),
+  .mw-cert:nth-child(4) { border-top: 1px solid var(--c-line); }
+}
+@media (max-width: 600px) {
+  /* Keep the 2×2 grid (from the ≤1100 rule); make each card a compact vertical
+     stack — icon on top, then prefix / big number / description. */
+  .mw-cert {
+    flex-direction: column;
+    gap: 6px;
+    padding: clamp(14px, 4vw, 20px) clamp(12px, 3.5vw, 18px);
+  }
+  .mw-cert__mark { width: 38px; margin-top: 0; }
+  .mw-cert__num { font-size: clamp(34px, 11vw, 46px); }
+  .mw-cert__desc { font-size: 12px; max-width: none; margin-top: 4px; }
+  .mw-cert__pdf { margin-top: 8px; }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Article 03 — Capabilities. Bento layout on walnut: anchor with
+   photo + two stacked features + seven-row registry below. Visual
+   hierarchy matches editorial intent — the headline capability is
+   visually the biggest one.
+   ───────────────────────────────────────────────────────────────── */
+.mw-services__title-em { color: var(--c-accent); }
+.mw-services__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  column-gap: clamp(32px, 4vw, 80px);
+  row-gap: 0;
+  align-items: end;
+  margin-bottom: clamp(29px, 3vw, 58px);
+}
+.mw-services__head .mw-section-tag { grid-column: 1; grid-row: 1; align-self: end; }
+.mw-services__head .mw-section-title { grid-column: 1; grid-row: 2; margin-top: 28px; }
+.mw-services__intro {
+  grid-column: 2;
+  grid-row: 2;
+  font-family: var(--font-body), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.05vw, 18px);
+  line-height: 1.55;
+  color: var(--c-ink-2);
+  max-width: 52ch;
+  margin: 0;
+  padding-bottom: 0.35em;
+}
+@media (max-width: 900px) {
+  .mw-services__head { grid-template-columns: 1fr; }
+  .mw-services__head .mw-section-tag,
+  .mw-services__head .mw-section-title,
+  .mw-services__intro { grid-column: 1; grid-row: auto; }
+  /* Without resetting grid-row, the title (row 2) and intro (row 2)
+     collapse into the same single-column cell and overlap. Let them
+     flow in source order instead, with breathing room before the intro. */
+  .mw-services__intro { margin-top: clamp(16px, 3vw, 24px); }
+}
+.mw-services {
+  background: var(--c-surface-warm);
+  color: var(--c-ink);
+  padding-block: clamp(68px, 7vw, 124px);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.mw-services::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* Subtle terracotta paper-grain on white — matches the trust section. */
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+.mw-services > .mw-inner { position: relative; z-index: 1; }
+
+/* Bento grid — 11 cells. Anchor (a, 6×2) + 2 stacked features (b, c, each 6×1) + two rows of 4 below. */
+.mw-svcs-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: minmax(220px, 1fr) minmax(220px, 1fr) minmax(280px, 1fr) minmax(280px, 1fr);
+  /* Asymmetric lower rows + a tall feature cell (g = R&D) spanning both rows. Breaks the 4×4 symmetry without a separate "feature" component. */
+  grid-template-areas:
+    "a a a a a a b b b b b b"
+    "a a a a a a c c c c c c"
+    "d d d d e e f f f g g g"
+    "h h h i i j j k k g g g";
+  gap: clamp(3px, 0.35vw, 6px);
+}
+.mw-svcs-grid > li {
+  container-type: inline-size;
+  display: block;
+  min-width: 0;
+}
+.mw-svcs-grid > li:nth-child(1) { grid-area: a; }
+.mw-svcs-grid > li:nth-child(2) { grid-area: b; }
+.mw-svcs-grid > li:nth-child(3) { grid-area: c; }
+.mw-svcs-grid > li:nth-child(4) { grid-area: d; }
+.mw-svcs-grid > li:nth-child(5) { grid-area: e; }
+.mw-svcs-grid > li:nth-child(6) { grid-area: f; }
+.mw-svcs-grid > li:nth-child(7) { grid-area: g; }
+.mw-svcs-grid > li:nth-child(8) { grid-area: h; }
+.mw-svcs-grid > li:nth-child(9) { grid-area: i; }
+.mw-svcs-grid > li:nth-child(10) { grid-area: j; }
+.mw-svcs-grid > li:nth-child(11) { grid-area: k; }
+
+/* ───── 01 — Anchor card (Industrial Waste Treatment). Original treatment, unchanged. ───── */
+.mw-svcs-anchor {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  text-decoration: none;
+  color: inherit;
+  height: 100%;
+  overflow: hidden;
+  background: rgba(245,230,203,0.04);
+  outline: 1px solid rgba(245,230,203,0.14);
+  isolation: isolate;
+  transition: transform 360ms cubic-bezier(.2,.7,.2,1), outline-color 240ms ease;
+}
+.mw-svcs-anchor::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: var(--c-accent);
+  transition: width 360ms cubic-bezier(.2,.7,.2,1);
+  z-index: 3;
+}
+.mw-svcs-anchor:hover { transform: translateY(-3px); outline-color: var(--c-accent); }
+.mw-svcs-anchor:hover::before { width: 100%; }
+.mw-svcs-anchor:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
+.mw-svcs-anchor__photo {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  /* Bright normal state — same filter as card + tile for consistency. */
+  filter: saturate(0.95) brightness(0.96) contrast(1.02) sepia(0.04);
+  transition: transform 1200ms cubic-bezier(.2,.7,.2,1), filter 320ms ease;
+}
+.mw-svcs-grid > li .mw-svcs-anchor:hover .mw-svcs-anchor__photo {
+  transform: scale(1.03);
+  /* Hover BRIGHTENS the photo above the normal state — body::before plate still keeps the bottom ~20% dark. */
+  filter: saturate(1.05) brightness(1.1) contrast(1.0) sepia(0.02);
+}
+.mw-svcs-anchor__photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Very light wash for warm palette cohesion — no heavy darkening up top. */
+  background: linear-gradient(to top, rgba(42,27,18,0.30) 0%, rgba(42,27,18,0.08) 100%);
+  opacity: 1;
+  transition: opacity 320ms ease;
+}
+/* Dense bottom dark plate behind the text — IDENTICAL across anchor / card / tile. */
+.mw-svcs-anchor__body::before {
+  content: "";
+  position: absolute;
+  left: -200px;
+  right: -200px;
+  bottom: -200px;
+  top: -80px;
+  background: linear-gradient(to top,
+    rgba(6, 3, 1, 0.96) 0%,
+    rgba(6, 3, 1, 0.94) 35%,
+    rgba(6, 3, 1, 0.72) 60%,
+    rgba(6, 3, 1, 0.28) 85%,
+    rgba(6, 3, 1, 0) 100%
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+.mw-svcs-anchor__num,
+.mw-svcs-anchor__title-row,
+.mw-svcs-anchor__text {
+  position: relative;
+}
+.mw-svcs-grid > li .mw-svcs-anchor:hover .mw-svcs-anchor__photo::after { opacity: 0.2; }
+.mw-svcs-anchor__body {
+  position: relative;
+  z-index: 1;
+  padding: clamp(28px, 3vw, 56px);
+  max-width: 64ch;
+}
+.mw-svcs-anchor__num {
+  display: block;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--c-accent);
+  margin-bottom: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.mw-svcs-anchor__title-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.18em;
+  margin-bottom: 18px;
+  width: max-content;
+  max-width: 100%;
+}
+.mw-svcs-anchor__title {
+  display: block;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(36px, 4.2vw, 72px);
+  line-height: 0.96;
+  letter-spacing: 0.002em;
+  color: #fff;
+  margin: 0;
+  text-transform: uppercase;
+}
+.mw-svcs-anchor__arr {
+  display: inline-block;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  /* Same scale as the other cards' arrows for visual consistency. */
+  font-size: clamp(24px, 2.2vw, 36px);
+  line-height: 1.05;
+  font-weight: 700;
+  flex-shrink: 0;
+  /* Lift slightly so a small arrow sits at the visual middle of the title's last line (instead of at the descender). */
+  margin-bottom: 0.18em;
+  transition: transform 240ms cubic-bezier(.2,.7,.2,1);
+}
+.mw-svcs-anchor:hover .mw-svcs-anchor__arr { transform: translateX(8px); }
+.mw-svcs-anchor__text {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.1vw, 18px);
+  line-height: 1.55;
+  color: rgba(245,230,203,0.88);
+  margin: 0;
+  max-width: 48ch;
+}
+.mw-svcs-anchor__arr {
+  display: inline;
+  color: var(--c-accent);
+  font-family: var(--font-plex-sans), sans-serif;
+  white-space: nowrap;
+  transition: transform 240ms cubic-bezier(.2,.7,.2,1);
+}
+
+/* ───── 02–03 — Supporting cards. Original photo-backed treatment, but arrow inline with title. ───── */
+.mw-svcs-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+  padding: clamp(24px, 2.4vw, 40px);
+  outline: 1px solid rgba(245,230,203,0.14);
+  transition: outline-color 240ms ease, transform 360ms cubic-bezier(.2,.7,.2,1);
+  overflow: hidden;
+  isolation: isolate;
+}
+.mw-svcs-card__photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+  /* Bright normal state — same filter as anchor + tile for consistency. */
+  filter: saturate(0.95) brightness(0.96) contrast(1.02) sepia(0.04);
+  transition: transform 1200ms cubic-bezier(.2,.7,.2,1), filter 320ms ease;
+}
+.mw-svcs-grid > li .mw-svcs-card:hover .mw-svcs-card__photo {
+  transform: scale(1.04);
+  /* Hover BRIGHTENS the photo above the normal state — body::before plate still keeps the bottom ~20% dark. */
+  filter: saturate(1.05) brightness(1.1) contrast(1.0) sepia(0.02);
+}
+.mw-svcs-card__photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Very light wash for warm palette cohesion — no heavy darkening up top. */
+  background: linear-gradient(to top, rgba(42,27,18,0.30) 0%, rgba(42,27,18,0.08) 100%);
+  opacity: 1;
+  transition: opacity 320ms ease;
+}
+.mw-svcs-card__body::before {
+  content: "";
+  position: absolute;
+  left: -200px;
+  right: -200px;
+  bottom: -200px;
+  top: -80px;
+  background: linear-gradient(to top,
+    rgba(6, 3, 1, 0.96) 0%,
+    rgba(6, 3, 1, 0.94) 35%,
+    rgba(6, 3, 1, 0.72) 60%,
+    rgba(6, 3, 1, 0.28) 85%,
+    rgba(6, 3, 1, 0) 100%
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+.mw-svcs-card__num,
+.mw-svcs-card__title-row,
+.mw-svcs-card__text {
+  position: relative;
+}
+.mw-svcs-grid > li .mw-svcs-card:hover .mw-svcs-card__photo::after { opacity: 0.2; }
+.mw-svcs-card__body { position: relative; z-index: 1; }
+.mw-svcs-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--c-accent);
+  transition: width 360ms cubic-bezier(.2,.7,.2,1);
+  z-index: 2;
+}
+.mw-svcs-card:hover { outline-color: var(--c-accent); transform: translateY(-2px); }
+.mw-svcs-card:hover::before { width: 100%; }
+.mw-svcs-card:focus-visible { outline: 2px solid var(--c-accent); outline-offset: -1px; }
+.mw-svcs-card__num {
+  display: inline-block;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--c-accent);
+  margin-bottom: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.mw-svcs-card__num {
+  display: block;
+}
+.mw-svcs-card__title-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.18em;
+  margin-bottom: 10px;
+  width: max-content;
+  max-width: 100%;
+}
+.mw-svcs-card__title {
+  display: block;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(24px, 2.2vw, 36px);
+  line-height: 1.05;
+  letter-spacing: 0.005em;
+  color: #fff;
+  margin: 0;
+  text-transform: uppercase;
+}
+.mw-svcs-card__arr {
+  display: inline-block;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-size: clamp(24px, 2.2vw, 36px);
+  line-height: 1.05;
+  font-weight: 700;
+  flex-shrink: 0;
+  white-space: nowrap;
+  transition: transform 240ms cubic-bezier(.2,.7,.2,1);
+}
+.mw-svcs-card:hover .mw-svcs-card__arr { transform: translateX(6px); }
+.mw-svcs-card__text {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(245,230,203,0.84);
+  margin: 0;
+  max-width: 44ch;
+}
+
+/* ───── 04–11 — Smaller tiles. Full-card photo darkening (matches the supporting cards above). Arrow inline immediately after the title. ───── */
+.mw-svcs-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+  padding: clamp(20px, 3.5cqw, 36px);
+  outline: 1px solid rgba(245,230,203,0.14);
+  overflow: hidden;
+  isolation: isolate;
+  transition: outline-color 240ms ease, transform 360ms cubic-bezier(.2,.7,.2,1);
+}
+.mw-svcs-tile__photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+  /* Bright normal state — same filter as anchor + card for consistency. */
+  filter: saturate(0.95) brightness(0.96) contrast(1.02) sepia(0.04);
+  transition: transform 1200ms cubic-bezier(.2,.7,.2,1), filter 320ms ease;
+}
+.mw-svcs-grid > li .mw-svcs-tile:hover .mw-svcs-tile__photo {
+  transform: scale(1.04);
+  /* Hover BRIGHTENS the photo above the normal state — body::before plate still keeps the bottom ~20% dark. */
+  filter: saturate(1.05) brightness(1.1) contrast(1.0) sepia(0.02);
+}
+.mw-svcs-tile__photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Very light wash for warm palette cohesion — no heavy darkening up top. */
+  background: linear-gradient(to top, rgba(42,27,18,0.30) 0%, rgba(42,27,18,0.08) 100%);
+  opacity: 1;
+  transition: opacity 320ms ease;
+}
+.mw-svcs-tile__body::before {
+  content: "";
+  position: absolute;
+  left: -200px;
+  right: -200px;
+  bottom: -200px;
+  top: -80px;
+  background: linear-gradient(to top,
+    rgba(6, 3, 1, 0.96) 0%,
+    rgba(6, 3, 1, 0.94) 35%,
+    rgba(6, 3, 1, 0.72) 60%,
+    rgba(6, 3, 1, 0.28) 85%,
+    rgba(6, 3, 1, 0) 100%
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+.mw-svcs-tile__num,
+.mw-svcs-tile__title-row,
+.mw-svcs-tile__text {
+  position: relative;
+}
+.mw-svcs-grid > li .mw-svcs-tile:hover .mw-svcs-tile__photo::after { opacity: 0.2; }
+
+/* Legibility — the brown arrow accents on photo-backed cards. Bumped to a lighter clay (#CA8260) plus a soft walnut text-shadow so they stay readable in both the normal and hover (lighter) photo states. */
+.mw-svcs-anchor__arr,
+.mw-svcs-card__arr,
+.mw-svcs-tile__arr {
+  color: #CA8260;
+  text-shadow: 0 1px 3px rgba(20, 12, 6, 0.6);
+}
+
+/* Hide the "0N" eyebrow numbers on capability cards. */
+.mw-svcs-anchor__num,
+.mw-svcs-card__num,
+.mw-svcs-tile__num {
+  display: none !important;
+}
+.mw-svcs-tile__body { position: relative; z-index: 1; }
+.mw-svcs-tile::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--c-accent);
+  transition: width 360ms cubic-bezier(.2,.7,.2,1);
+  z-index: 2;
+}
+.mw-svcs-tile:hover { outline-color: var(--c-accent); transform: translateY(-2px); }
+.mw-svcs-tile:hover::before { width: 100%; }
+.mw-svcs-tile:focus-visible { outline: 2px solid var(--c-accent); outline-offset: -1px; }
+/* Tile num matches Emergency Response's num exactly — same color / size / weight / spacing / margin. */
+.mw-svcs-tile__num {
+  display: block;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--c-accent);
+  margin-bottom: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.mw-svcs-tile__title-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.18em;
+  margin-bottom: 10px;
+  width: max-content;
+  max-width: 100%;
+}
+.mw-svcs-tile__title {
+  display: block;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(24px, 2.2vw, 36px);
+  line-height: 1.05;
+  letter-spacing: 0.005em;
+  color: #fff;
+  margin: 0;
+  text-transform: uppercase;
+}
+.mw-svcs-tile__arr {
+  display: inline-block;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-size: clamp(24px, 2.2vw, 36px);
+  line-height: 1.05;
+  font-weight: 700;
+  flex-shrink: 0;
+  white-space: nowrap;
+  transition: transform 240ms cubic-bezier(.2,.7,.2,1);
+}
+.mw-svcs-tile:hover .mw-svcs-tile__arr { transform: translateX(6px); }
+.mw-svcs-tile__text {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(245,230,203,0.84);
+  margin: 0;
+  max-width: 44ch;
+}
+
+/* Tablet — anchor full width, supporting features side-by-side, lower tiles use varied widths to keep the asymmetry. */
+@media (max-width: 1100px) {
+  .mw-svcs-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-rows:
+      minmax(360px, 1fr)
+      minmax(240px, 1fr)
+      minmax(240px, 1fr)
+      minmax(240px, 1fr)
+      minmax(240px, 1fr)
+      minmax(240px, 1fr);
+    grid-template-areas:
+      "a a a a a a"
+      "b b b c c c"
+      "d d d d e e"
+      "f f g g g g"
+      "h h h i i i"
+      "j j j k k k";
+  }
+}
+/* Mobile — single column stack with every card rendered identically
+   (anchor / card / tile share the same photo-bg + overlaid-title pattern;
+   here we equalize their sizes so a one-per-row stack reads uniformly). */
+@media (max-width: 720px) {
+  .mw-svcs-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(11, minmax(240px, auto));
+    grid-template-areas: "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k";
+  }
+  /* Let the (un-split) anchor title wrap inside the row so its arrow stays
+     inline at the bottom-right, matching the card/tile cards. */
+  .mw-svcs-anchor__title-row { width: auto; flex-wrap: nowrap; }
+  .mw-svcs-anchor__title { min-width: 0; }
+  /* The anchor pads its __body; the card/tile pad the card container itself.
+     Equalize at the correct level so all cards share one inset (and the card/
+     tile don't double up card-padding + body-padding). */
+  .mw-svcs-anchor__body { padding: clamp(20px, 5.5vw, 30px); max-width: none; }
+  .mw-svcs-card,
+  .mw-svcs-tile { padding: clamp(20px, 5.5vw, 30px); }
+  .mw-svcs-card__body,
+  .mw-svcs-tile__body { max-width: none; }
+  .mw-svcs-anchor__title,
+  .mw-svcs-card__title,
+  .mw-svcs-tile__title {
+    font-size: clamp(28px, 8vw, 40px);
+    line-height: 0.98;
+  }
+  .mw-svcs-anchor__num,
+  .mw-svcs-card__num,
+  .mw-svcs-tile__num {
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+  .mw-svcs-anchor__title-row,
+  .mw-svcs-card__title-row,
+  .mw-svcs-tile__title-row {
+    margin-bottom: 13px;
+  }
+  .mw-svcs-anchor__text,
+  .mw-svcs-card__text,
+  .mw-svcs-tile__text {
+    font-size: 14px;
+    line-height: 1.5;
+    max-width: none;
+  }
+  .mw-svcs-anchor__arr,
+  .mw-svcs-card__arr,
+  .mw-svcs-tile__arr {
+    font-size: clamp(22px, 6vw, 30px);
+  }
+}
+

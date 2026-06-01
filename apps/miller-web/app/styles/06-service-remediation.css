@@ -1,0 +1,256 @@
+/* ============================================================
+   06 - SERVICE: ENVIRONMENTAL REMEDIATION
+   LiteYouTube facade (mw-lyt), case cards, expanded mw-why grid. Source: 6308-6558.
+   ============================================================ */
+
+/* ════════════════════════════════════════════════════════════
+   REMEDIATION — field-footage video gallery, case cards, why-Miller
+   ════════════════════════════════════════════════════════════ */
+
+/* LiteYouTube facade — poster + clay play button; iframe mounts on click. */
+.mw-lyt {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--c-navy-2);
+  border: 1px solid var(--c-line);
+  box-shadow: 0 24px 48px -34px rgba(42, 27, 18, 0.42);
+  isolation: isolate;
+}
+.mw-lyt::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 4px;
+  width: clamp(48px, 5vw, 80px);
+  background: var(--c-accent);
+  z-index: 4;
+  transition: width 0.34s cubic-bezier(.2, .7, .2, 1);
+}
+.mw-lyt[data-active="0"]:hover::before { width: 100%; }
+.mw-lyt__frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+.mw-lyt__poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  isolation: isolate;
+}
+.mw-lyt__thumb {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.96) brightness(0.82) contrast(1.02) sepia(0.05);
+  transition: transform 1000ms cubic-bezier(.2, .7, .2, 1), filter 320ms ease;
+}
+.mw-lyt__poster::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(18, 11, 5, 0.82) 0%, rgba(18, 11, 5, 0.18) 40%, rgba(18, 11, 5, 0.34) 100%);
+  z-index: 1;
+}
+.mw-lyt__poster:hover .mw-lyt__thumb { transform: scale(1.04); filter: saturate(1.04) brightness(0.9) contrast(1.0) sepia(0.02); }
+.mw-lyt__play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: clamp(56px, 5vw, 84px);
+  height: clamp(56px, 5vw, 84px);
+  background: var(--c-accent);
+  color: #fff;
+  box-shadow: 0 18px 34px -16px rgba(42, 27, 18, 0.7);
+  transition: transform 240ms cubic-bezier(.2, .7, .2, 1), background 220ms ease;
+}
+.mw-lyt__poster:hover .mw-lyt__play { transform: translate(-50%, -50%) scale(1.08); background: var(--c-accent-2); }
+.mw-lyt__play svg { width: 42%; height: 42%; margin-left: 6%; }
+.mw-lyt__label {
+  position: absolute;
+  left: clamp(14px, 1.4vw, 22px);
+  right: clamp(14px, 1.4vw, 22px);
+  bottom: clamp(12px, 1.2vw, 18px);
+  z-index: 2;
+  color: #fff;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: clamp(11px, 0.85vw, 13px);
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+  text-align: left;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+}
+.mw-lyt__poster:focus-visible { outline: 3px solid var(--c-accent); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  .mw-lyt__poster:hover .mw-lyt__thumb { transform: none; }
+  .mw-lyt__poster:hover .mw-lyt__play { transform: translate(-50%, -50%); }
+}
+
+/* Field-footage section. */
+.mw-rem-vid {
+  position: relative;
+  background: var(--c-bg);
+  padding-block: clamp(56px, 5.5vw, 100px);
+  overflow: hidden;
+  isolation: isolate;
+  border-top: 1px solid var(--c-line);
+}
+.mw-rem-vid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+.mw-rem-vid__inner { position: relative; z-index: 1; }
+.mw-rem-vid__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: clamp(20px, 3vw, 56px);
+  align-items: end;
+  margin-bottom: clamp(28px, 3vw, 48px);
+}
+.mw-rem-vid__lead {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.05vw, 18px);
+  line-height: 1.6;
+  color: var(--c-ink-2);
+  max-width: 50ch;
+  margin: 0;
+}
+.mw-rem-vid__featured { margin-bottom: clamp(16px, 1.6vw, 24px); }
+.mw-rem-vid__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 1.6vw, 24px);
+}
+@media (max-width: 860px) {
+  .mw-rem-vid__head { grid-template-columns: 1fr; align-items: start; gap: 14px; }
+}
+@media (max-width: 620px) {
+  .mw-rem-vid__grid { grid-template-columns: 1fr; }
+}
+
+/* What-we-do — six capabilities read best as two balanced rows of three.
+   Three class selectors so it beats the --gallery 5-up rule at every width. */
+.mw-svc-inds.mw-rem-wwd .mw-svc-inds__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 940px) { .mw-svc-inds.mw-rem-wwd .mw-svc-inds__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .mw-svc-inds.mw-rem-wwd .mw-svc-inds__grid { grid-template-columns: 1fr; } }
+
+/* Case-study photo cards (clickable). */
+.mw-rem-case .mw-svc-inds__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1100px) { .mw-rem-case .mw-svc-inds__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .mw-rem-case .mw-svc-inds__grid { grid-template-columns: 1fr; } }
+.mw-case-card__link {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+.mw-case-card__loc {
+  margin: 0 0 6px;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-accent-2);
+}
+.mw-case-card__cta {
+  margin-top: auto;
+  padding-top: clamp(12px, 1.2vw, 16px);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-ink);
+}
+.mw-case-card__arrow { color: var(--c-accent); transition: transform 220ms cubic-bezier(.2, .7, .2, 1); }
+.mw-case-card:hover .mw-case-card__arrow { transform: translateX(4px); }
+.mw-case-card__link:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 3px; }
+
+/* Why-Miller — four numbered reason cards on dark walnut. */
+.mw-why {
+  position: relative;
+  background: var(--c-navy);
+  color: var(--c-on-navy);
+  padding-block: clamp(56px, 5.5vw, 100px);
+  overflow: hidden;
+  isolation: isolate;
+  border-top: 3px solid var(--c-accent);
+}
+.mw-why::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-dark) 38px, var(--c-grain-on-dark) 39px);
+}
+.mw-why__inner { position: relative; z-index: 1; }
+.mw-why__head { margin-bottom: clamp(32px, 3.5vw, 56px); }
+.mw-why .mw-section-tag { margin-bottom: clamp(20px, 1.5vw, 24px); }
+.mw-why__title { color: #fff; max-width: 22ch; }
+.mw-why__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 1.6vw, 28px);
+}
+.mw-why__card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: clamp(20px, 1.8vw, 28px);
+  background: rgba(245, 230, 203, 0.045);
+  border: 1px solid rgba(245, 230, 203, 0.14);
+  border-top: 2px solid var(--c-accent);
+  transition: transform 240ms cubic-bezier(.2, .7, .2, 1), background 240ms ease;
+}
+.mw-why__card:hover { transform: translateY(-3px); background: rgba(245, 230, 203, 0.07); }
+.mw-why__num {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: var(--c-amber);
+}
+.mw-why__name {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(20px, 1.6vw, 27px);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.05;
+  color: #fff;
+}
+.mw-why__body {
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(14px, 1vw, 15.5px);
+  line-height: 1.5;
+  color: var(--c-on-navy);
+}
+@media (max-width: 900px) { .mw-why__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 460px) { .mw-why__grid { grid-template-columns: 1fr; } }
+
