@@ -6,7 +6,7 @@
 // (5% intersection past the bottom edge) so the user sees the motion
 // play instead of seeing a static post-state.
 //
-// The accompanying CSS (in globals.css, "Scroll reveal system" block)
+// The accompanying CSS (in app/styles/02-primitives.css, "Scroll reveal" block)
 // provides a SINGLE keyframe (mw-rv): a quick, subtle fade with a short
 // upward settle, used by every element with `data-reveal`.
 //

@@ -4,7 +4,7 @@ import { useState } from "react";
 
 // Facility photo switcher — a main photo with a row of thumbnails
 // underneath. Clicking a thumb swaps the main photo (cross-fade via
-// key={index}). Honors prefers-reduced-motion through globals.css.
+// key={index}). Honors prefers-reduced-motion through app/styles/04-home.css.
 export function FacilityGallery({ photos }) {
   const [index, setIndex] = useState(0);
   if (!photos || photos.length === 0) return null;

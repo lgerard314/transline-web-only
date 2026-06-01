@@ -14,7 +14,8 @@ The authoritative source files (read these when you need exact values):
 | Concern | File |
 | --- | --- |
 | Shared tokens, `tl-*` primitives, palettes, type pairings, density, buttons, cards, layout | `apps/brand/styles/globals.css` |
-| Miller palette/type overrides + every `mw-*` home component + header/footer repaint + scroll-reveal | `apps/miller-web/app/globals.css` |
+| Miller CSS entry point — `@import` barrel + table of contents only, **no rule blocks** | `apps/miller-web/app/globals.css` |
+| Miller palette/type overrides + every `mw-*` component + chrome repaint + scroll-reveal, split into 9 layered partials (`01-tokens` → `09-service-project-management`) | `apps/miller-web/app/styles/*.css` |
 | Fonts loaded, `<html>` data-attributes, page shell | `apps/miller-web/app/layout.jsx` |
 | Home page markup (section order, components) | `apps/miller-web/app/(home)/page.jsx` + `sections/` + `banners/` |
 | Header markup + behavior | `apps/miller-web/components/TopNav.jsx` |
@@ -32,7 +33,7 @@ Both sites render through one shared package, `@white-owl/brand`. It owns the vo
 
 Theme is selected with data-attributes on `<html>`. Miller and TransLine49 both set `data-palette="clay" data-type="utility" data-density="regular"`. Miller additionally sets `data-brand="miller"`, which is the hook for all of Miller's overrides.
 
-Each app then layers its own `globals.css` (imported second, so it wins on equal specificity). Miller's override file does three things, and nothing else should be added that doesn't fit one of these buckets:
+Each app then layers its own `globals.css` (imported second, so it wins on equal specificity). For Miller this entry file is a thin `@import` barrel over 9 layered partials under `app/styles/` (`01-tokens` → `09-service-project-management`), ordered tokens → primitives → chrome → home → service pages; **never add rule blocks back into the barrel**. New shared utility → `02-primitives.css`; new chrome → `03-chrome.css`; a net-new service page with its own blocks → a new `10-service-<slug>.css` plus one `@import`. Miller's overrides do three things, and nothing else should be added that doesn't fit one of these buckets:
 
 1. **Re-binds tokens** for the warm clay palette and Miller's type families, scoped to `html[data-brand="miller"]`.
 2. **Repaints shared `tl-*` chrome** (topbar, mobile nav, footer, buttons) via `html[data-brand="miller"] .tl-…` selectors — the markup stays shared, the look becomes Miller's.

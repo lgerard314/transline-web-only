@@ -5,7 +5,7 @@
 //
 // Visibility per-route is gated by the `data-banner="on|off"` attribute
 // set on `<body>` by route-segment layouts (or the home layout). This
-// component renders unconditionally; the CSS in globals.css decides
+// component renders unconditionally; the CSS in app/styles/03-chrome.css decides
 // whether `.miller-eb` is shown. The route allow-list lives in
 // `lib/nav.js` (`EMERGENCY_BANNER_ROUTES`).
 //
