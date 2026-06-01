@@ -394,7 +394,15 @@
   align-items: start;
   margin-bottom: clamp(44px, 5vw, 76px);
 }
-.mw-flow__notify { min-width: 0; display: flex; justify-content: center; align-self: start; }
+/* Drop the banners down by 1.5× the left-column heading size so they sit against
+   the title rather than the eyebrow. Reset to 0 in the ≤900 sticky band below. */
+.mw-flow__notify {
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+  align-self: start;
+  margin-top: calc(clamp(32px, 3.4vw, 60px) * 1.5);
+}
 
 /* Stations strung along a clay route line (segment drawn per stop). */
 .mw-flow__line {
