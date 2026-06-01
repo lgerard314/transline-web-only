@@ -21,7 +21,12 @@ export function FlowRoute({ steps, notifications, interval = 3400 }) {
 
   return (
     <div className="mw-flow__cols">
-      <ol className="mw-flow__line" data-tl-active={index} data-reveal-stagger>
+      <ol
+        className="mw-flow__line"
+        data-tl-active={index}
+        data-reveal-stagger
+        style={{ "--mw-flow-cols": steps.length }}
+      >
         {steps.map((st, i) => (
           <li
             key={st.num}

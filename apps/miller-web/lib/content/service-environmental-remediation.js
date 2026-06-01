@@ -1,141 +1,181 @@
-// Environmental Remediation content — verbatim from 04-svc-environmental-remediation.md.
-// VBEC short form throughout this module (no need for full name; the
-// service page references the facility but never names it formally).
+// Environmental Remediation — bespoke service page content. Plain strings +
+// arrays only (no JSX); markup lives in the section composition. All body copy
+// is sourced from the live millerenvironmental.ca remediation page.
 
 import { OVER_25_YEARS, EMERGENCY_PHONE, GENERAL_PHONE } from "./brand";
 
+const EMERGENCY_TEL = `tel:${EMERGENCY_PHONE.replace(/[^0-9+]/g, "")}`;
+
 export const REMEDIATION = {
-  eyebrow: "Service",
-  title: "Environmental Remediation Services",
-  lead:
-    `At Miller Environmental Corporation, we specialize in comprehensive environmental remediation services tailored to address a wide range of contamination scenarios. With ${OVER_25_YEARS.toLowerCase()} of experience, we deliver licensed treatment, regulatory compliance, and rapid mobilization across Manitoba and Western Canada.`,
-  photo: "/miller/services/remediation-contaminated-soil.webp",
+  slug: "environmental-remediation-services",
 
-  whatWeDoIntro:
-    "Six specialised remediation capabilities — every project planned, executed, and signed off in-house.",
-  whatWeDo: [
-    {
-      title: "Contaminated Soil Remediation",
-      body:
-        "Our contaminated soil remediation services focus on the safe and effective removal of pollutants from soil. From hydrocarbon impacts to heavy-metal contamination, we plan, excavate, and treat impacted material to provincial and CCME standards.",
-    },
-    {
-      title: "Hazardous Material Excavation & Disposal",
-      body:
-        "Miller Environmental provides expert hazardous material excavation and disposal services, handling substances like heavy metals, PCBs, and other regulated waste streams. Materials are tracked from site to licensed treatment.",
-    },
-    {
-      title: "Emergency Spill Response & Cleanup",
-      body:
-        "In the event of a spill, time is critical for both safety and environmental protection. Our 24/7 response team mobilises with vacuum trucks, containment, and licensed treatment capacity behind it.",
-    },
-    {
-      title: "Fire-Damaged Site Remediation",
-      body:
-        "Fire-damaged sites pose unique environmental and safety challenges, including the presence of hazardous materials such as asbestos, soot, and chemical residues. We coordinate hazard removal, demolition, and restoration prep.",
-    },
-    {
-      title: "Industrial Site Cleanup & Brownfield Redevelopment Prep",
-      body:
-        "We provide industrial site cleanup and brownfield redevelopment preparation services, supporting clients in returning legacy industrial properties to safe, productive use.",
-    },
-    {
-      title: "Underground Storage Tank (UST) Excavation & Soil Remediation",
-      body:
-        "Miller Environmental offers comprehensive underground storage tank excavation and soil remediation services — tank pull, impacted soil management, and verification testing under one contract.",
-    },
-  ],
+  hero: {
+    eyebrow: "Environmental remediation",
+    title: "Contamination,",
+    titleEm: "fully remediated",
+    lead:
+      `At Miller Environmental Corporation, we specialize in comprehensive environmental remediation tailored to a wide range of contamination scenarios. With ${OVER_25_YEARS.toLowerCase()} of experience, our team delivers safe, dependable, full-service solutions — ensuring regulatory compliance and promoting sustainability on every site.`,
+    photo: "/miller/services/remediation-contaminated-soil.webp",
+    emergencyDisplay: EMERGENCY_PHONE,
+    emergencyHref: EMERGENCY_TEL,
+    secondaryCta: { label: "Book a consult", labelShort: "Book a consult", href: "/contact-us/" },
+    caption: "Contaminated-soil excavation · Manitoba",
+    stat: { value: "25+ yrs", label: "Remediation experience" },
+  },
 
-  industries: [
-    "Municipalities & Public Works",
-    "Industrial & Manufacturing Facilities",
-    "Developers & Construction Firms",
-    "Insurance & Claims Adjusters",
-    "Agricultural Operations",
-    "Transportation & Logistics Companies",
-  ],
+  // §2 — What we do: six remediation capabilities (photo gallery cards).
+  whatWeDo: {
+    eyebrow: "What we do",
+    title: "Six remediation capabilities",
+    lead:
+      "Our environmental remediation services cover a wide range of contamination and cleanup scenarios — every project planned, executed, and signed off in-house.",
+    items: [
+      {
+        name: "Contaminated Soil Remediation",
+        photo: "/miller/what-we-do/contaminated-soil-remediation.png",
+        blurb:
+          "Safe, effective removal of pollutants from soil at industrial, commercial, and residential sites — assessed individually for minimal impact, cost efficiency, and compliance.",
+      },
+      {
+        name: "Hazardous Material Excavation & Disposal",
+        photo: "/miller/what-we-do/hazardous-material-excavation-disposal.png",
+        blurb:
+          "Heavy metals, PCBs, and industrial chemicals excavated with precision and transported to our fully licensed Vaughn Bullough Environmental Centre.",
+      },
+      {
+        name: "Emergency Spill Response & Cleanup",
+        photo: "/miller/what-we-do/emergency-spiill-response-cleanup.png",
+        blurb:
+          "Rapid 24/7 response for diesel, petroleum hydrocarbons, and chemicals — contained and cleaned from first assessment to final treatment or disposal.",
+      },
+      {
+        name: "Fire-Damaged Site Remediation",
+        photo: "/miller/what-we-do/fire-damaged-site-remediation.png",
+        blurb:
+          "Asbestos, soot, and contaminated runoff removed with advanced techniques that restore fire-damaged sites to a safe, usable condition.",
+      },
+      {
+        name: "Industrial Site Cleanup & Brownfield Prep",
+        photo: "/miller/what-we-do/industrial-site-cleanup-brownfield-redevelopment-prep.png",
+        blurb:
+          "Underutilized, abandoned, or contaminated properties returned to productive use through detailed assessment, planning, and full remediation.",
+      },
+      {
+        name: "Underground Storage Tank (UST) Work",
+        photo: "/miller/what-we-do/underground-storage-tank-excavation-soil-remediation.png",
+        blurb:
+          "Leaks, corrosion, and hazardous contamination addressed end-to-end — tank pull, impacted-soil remediation, and verification under one contract.",
+      },
+    ],
+  },
 
-  // 5-step process. MUST render as <ol> — design spec §6 a11y rule.
-  process: [
-    {
-      title: "Assessment & Planning",
-      body:
-        "Site inspections, Phase II ESA reviews, and Remedial Action Plan (RAP) preparation.",
-    },
-    {
-      title: "Containment & Safety",
-      body:
-        "Barriers, berms, air monitoring, and regulatory coordination throughout the work.",
-    },
-    {
-      title: "Specialized Excavation",
-      body:
-        "Hydro vac soft-dig near utilities, deep excavation for heavy-metals contamination, and selective demolition.",
-    },
-    {
-      title: "Licensed Treatment & Disposal",
-      body:
-        "Contaminated material is processed at our licensed hazardous waste treatment facility.",
-    },
-    {
-      title: "Verification & Sign-Off",
-      body:
-        "Independent lab testing, third-party oversight, and final regulatory closure.",
-    },
-  ],
+  // §3 — Industries & situations we serve.
+  industries: {
+    eyebrow: "Who we serve",
+    title: "Industries & situations we serve",
+    lead:
+      "From a single-site spill to a multi-phase brownfield program, our crews mobilize across Manitoba and Western Canada for the clients who carry the risk.",
+    items: [
+      "Municipalities & Public Works",
+      "Industrial & Manufacturing Facilities",
+      "Developers & Construction Firms",
+      "Insurance & Claims Adjusters",
+      "Agricultural Operations",
+      "Transportation & Logistics Companies",
+    ],
+  },
 
-  // Case-study rail — 4 cards link to detail routes built in Phase 03.
-  caseStudies: [
-    {
-      href: "/case-studies/brandon-power-facility/",
-      title: "Brandon Power Facility — Lime Removal",
-      location: "Brandon, MB",
-      summary: "Heavy-handed lime contamination managed under tight power-utility constraints.",
-    },
-    {
-      href: "/case-studies/grain-elevator-remediation-project/",
-      title: "Arsenic-Contaminated Soil Removal",
-      location: "Grain Elevator, Winnipeg",
-      summary: "Arsenic-impacted soil excavated and disposed under provincial oversight.",
-    },
-    {
-      href: "/case-studies/highway-16-diesel-spill-response-remediation/",
-      title: "Diesel Spill Remediation",
-      location: "Highway 16",
-      summary: "Emergency mobilisation, containment, and impacted-soil management on a highway corridor.",
-    },
-    {
-      href: "/case-studies/steinbach-strip-mall-fire-recovery-restoration-project/",
-      title: "Fire Site Hazard Removal",
-      location: "Steinbach Strip Mall",
-      summary: "Post-fire hazard removal — asbestos, soot, residual chemicals — for restoration handoff.",
-    },
-  ],
+  // §4 — Our process. Linear 5-step route (rendered as <ol>); one banner per
+  // step, cycled in lock-step with the route-line animation.
+  process: {
+    eyebrow: "Our process",
+    title: "Assessment to closure",
+    lead:
+      "Every remediation runs the same documented route — from the first site inspection to final regulatory sign-off.",
+    route: "Assessment → Closure",
+    steps: [
+      { num: "01", tag: "Plan", name: "Assessment & Planning", body: "Site inspections, Phase II ESA reviews, and Remedial Action Plan (RAP) preparation." },
+      { num: "02", tag: "Secure", name: "Containment & Safety", body: "Barriers, berms, air monitoring, and regulatory coordination throughout the work." },
+      { num: "03", tag: "Excavate", name: "Specialized Excavation", body: "Hydrovac soft-dig near utilities, deep excavation for heavy metals, and selective demolition." },
+      { num: "04", tag: "Treat", name: "Licensed Treatment & Disposal", body: "Contaminated material processed at our licensed hazardous waste treatment facility." },
+      { num: "05", tag: "Verify", name: "Verification & Sign-Off", body: "Independent lab testing, third-party oversight, and final regulatory closure." },
+    ],
+    notifications: [
+      { title: "Site assessed", body: "Phase II ESA reviewed and a Remedial Action Plan prepared." },
+      { title: "Site secured", body: "Berms, barriers, and air monitoring in place under regulatory oversight." },
+      { title: "Excavation underway", body: "Impacted material removed with hydrovac and selective dig." },
+      { title: "Treated & disposed", body: "Material processed at the licensed VBEC facility." },
+      { title: "Closure signed off", body: "Independent lab testing confirms regulatory closure." },
+    ],
+  },
 
-  whyChoose: [
-    {
-      title: "Licensed",
-      body: "Licensed hazardous waste treatment facility in Manitoba.",
-    },
-    {
-      title: "Full-service",
-      body: "Full-service demolition, remediation, and disposal under one contract.",
-    },
-    {
-      title: "Experience",
-      body: "Decades of proven experience with complex, high-risk projects.",
-    },
-    {
-      title: "Speed",
-      body: "Rapid mobilization and compliance with provincial and CCME standards.",
-    },
-  ],
+  // §5 — Field footage: real Miller Environmental project + brand films.
+  videos: {
+    eyebrow: "On film",
+    title: "Remediation in the field",
+    lead:
+      "Real Miller crews, real sites. See how a remediation program comes together — and the integrated facility that closes the loop on every load.",
+    featured: { id: "VQhFqQjvFHg", title: "Environmental Remediation — Falcon Beach, MB" },
+    supporting: [
+      { id: "zocx7OaaVPk", title: "Your Trusted Partner for Reliable, Direct Industrial Waste Management" },
+      { id: "AchmNsx3rzU", title: "Industrial Waste Management with a Focus on Maximum Recovery" },
+    ],
+  },
 
-  callback: {
-    title: "Request a Callback",
+  // §6 — Case studies that prove our expertise.
+  caseStudies: {
+    eyebrow: "Proof of work",
+    title: "Case studies that prove it",
+    lead: "Complex, high-risk sites brought back to compliance — under provincial and CCME oversight.",
+    items: [
+      {
+        href: "/case-studies/grain-elevator-remediation-project/",
+        title: "Arsenic-Contaminated Soil Removal",
+        location: "Grain Elevator, Winnipeg",
+        photo: "/miller/case-studies/grain-elevator-arsenic.webp",
+      },
+      {
+        href: "/case-studies/highway-16-diesel-spill-response-remediation/",
+        title: "Diesel Spill Remediation",
+        location: "Highway 16 Emergency Response",
+        photo: "/miller/case-studies/hwy-16-diesel-spill-response.webp",
+      },
+      {
+        href: "/case-studies/steinbach-strip-mall-fire-recovery-restoration-project/",
+        title: "Fire Site Hazard Removal",
+        location: "Steinbach Strip Mall",
+        photo: "/miller/case-studies/steinbach-strip-mall-fire.webp",
+      },
+      {
+        href: "/case-studies/brandon-power-facility/",
+        title: "Brandon Power Facility — Lime Removal",
+        location: "Brandon, MB",
+        photo: "/miller/case-studies/brandon-power-vbec.webp",
+      },
+    ],
+  },
+
+  // §7 — Why choose Miller.
+  whyChoose: {
+    eyebrow: "Why Miller",
+    title: "Why crews call us first",
+    items: [
+      { mark: "01", title: "Licensed", body: "Our own licensed hazardous waste treatment facility in Manitoba." },
+      { mark: "02", title: "Full-service", body: "Demolition, remediation, and disposal under one contract." },
+      { mark: "03", title: "Experienced", body: "Decades of proven work on complex, high-risk projects." },
+      { mark: "04", title: "Fast", body: "Rapid mobilization and compliance with provincial & CCME standards." },
+    ],
+  },
+
+  // §8 — Closing CTA (dark dispatch panel + callback form).
+  cta: {
+    eyebrow: "Request a callback",
+    title: "Book a consult or",
+    titleEm: "request a callback",
+    titleAfter: "today",
     body:
-      `Fill out the form to request a callback or book a consult — or call now at ${GENERAL_PHONE} for immediate assistance.`,
-    emergency:
-      `For our 24/7 emergency response team, call ${EMERGENCY_PHONE}.`,
+      `Tell us about your site and we'll be in touch — or call now at ${GENERAL_PHONE} for immediate assistance. For an active spill or release, our 24/7 emergency team is standing by.`,
+    formTitle: "Request a callback",
+    formNote: "A remediation coordinator will reach out within one business day.",
   },
 };

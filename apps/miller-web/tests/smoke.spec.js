@@ -230,37 +230,33 @@ test.describe("EmergencyBanner", () => {
 });
 
 // ---------------------------------------------------------------------------
-// test 5 — RemediationCallback form
+// test 5 — Remediation closing-CTA contact form
 // ---------------------------------------------------------------------------
-test.describe("RemediationCallback form", () => {
+test.describe("Remediation contact form", () => {
   test("validates required fields + shows confirmation", async ({ page }) => {
     const issues = setupConsoleSpy(page);
     await page.goto("/industrial-services/environmental-remediation-services", {
       waitUntil: "networkidle",
     });
-    const form = page.locator("form.mw-callback");
+    const form = page.locator("form.mw-contact-form");
     await expect(form).toBeVisible();
 
     // Submit empty → focus moves to the first invalid input.
     await form.locator("button[type=submit]").click();
-    const firstNameInput = form.locator("[data-field='firstName'] input");
-    await expect(firstNameInput).toBeFocused();
-    // FormField renders error text; assert at least one error is in the DOM.
-    const errorCount = await form.locator("[aria-invalid='true'], .tl-form-err, [role='alert']").count();
-    expect(errorCount).toBeGreaterThan(0);
+    await expect(form.locator("[data-fld='firstName'] input")).toBeFocused();
 
-    // Fill valid values.
-    await form.locator("[data-field='firstName'] input").fill("Jane");
-    await form.locator("[data-field='lastName'] input").fill("Operator");
-    await form.locator("[data-field='email'] input").fill("jane@example.com");
-    await form.locator("[data-field='phone'] input").fill("204-555-0123");
-    await form.locator("[data-field='comments'] textarea").fill("Spill response needed at our plant ASAP.");
+    // Fill valid values (page renders the form with optional fields off).
+    await form.locator("[data-fld='firstName'] input").fill("Jane");
+    await form.locator("[data-fld='lastName'] input").fill("Operator");
+    await form.locator("[data-fld='email'] input").fill("jane@example.com");
+    await form.locator("[data-fld='phone'] input").fill("204-555-0123");
+    await form.locator("[data-fld='comment'] textarea").fill("Spill response needed at our plant ASAP.");
     await form.locator("button[type=submit]").click();
     // Confirmation block appears.
-    const confirm = page.locator(".mw-callback[role='status']");
+    const confirm = page.locator(".mw-loc-card[role='status']");
     await expect(confirm).toBeVisible();
-    await expect(confirm).toContainText(/Thanks/);
-    assertNoIssues("RemediationCallback", issues);
+    await expect(confirm).toContainText(/Thank you/);
+    assertNoIssues("Remediation contact form", issues);
   });
 });
 
