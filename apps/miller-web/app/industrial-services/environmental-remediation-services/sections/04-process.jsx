@@ -8,7 +8,7 @@ import { FlowRoute } from "@/components/FlowRoute";
 export function ProcessSection() {
   const p = c.process;
   return (
-    <section className="mw-flow" aria-labelledby="rem-steps-title">
+    <section className="mw-flow mw-flow--wide" aria-labelledby="rem-steps-title">
       <div className="mw-flow__inner mw-inner">
         <FlowRoute
           eyebrow={p.eyebrow}

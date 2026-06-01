@@ -1,8 +1,9 @@
 import { REMEDIATION as c } from "@/lib/content/service-environmental-remediation";
 import { StopText } from "@/components/StopText";
 
-// §2 — What we do. Six remediation capabilities as 16:9 photo cards
-// (photo, name, diamond-tick, one-line blurb) on the light surface.
+// §2 — What we do. Six remediation capabilities as full-bleed photo cards: the
+// overlay shows the title + one-line blurb at rest, and on hover the title
+// shrinks and the body swaps to the full capability paragraph.
 export function WhatWeDoSection() {
   const w = c.whatWeDo;
   return (
@@ -23,17 +24,16 @@ export function WhatWeDoSection() {
 
         <ul className="mw-svc-inds__grid" data-reveal-stagger>
           {w.items.map((it) => (
-            <li key={it.name} className="mw-ind-card">
-              <div className="mw-ind-card__media">
-                <img src={it.photo} alt="" loading="lazy" />
-              </div>
-              <div className="mw-ind-card__body">
-                <h3 className="mw-ind-card__name">{it.name}</h3>
-                <span className="mw-ind-card__tick" aria-hidden="true">
-                  <span className="mw-ind-card__tick-dot" />
-                  <span className="mw-ind-card__tick-line" />
+            <li key={it.name} className="mw-wwd-card" tabIndex={0}>
+              <img className="mw-wwd-card__photo" src={it.photo} alt="" loading="lazy" />
+              <div className="mw-wwd-card__overlay">
+                <h3 className="mw-wwd-card__name">{it.name}</h3>
+                <span className="mw-wwd-card__tick" aria-hidden="true">
+                  <span className="mw-wwd-card__tick-dot" />
+                  <span className="mw-wwd-card__tick-line" />
                 </span>
-                <p className="mw-ind-card__blurb">{it.blurb}</p>
+                <p className="mw-wwd-card__blurb">{it.blurb}</p>
+                <p className="mw-wwd-card__detail">{it.detail}</p>
               </div>
             </li>
           ))}

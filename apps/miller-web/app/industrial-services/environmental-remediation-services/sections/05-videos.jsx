@@ -1,10 +1,10 @@
 import { REMEDIATION as c } from "@/lib/content/service-environmental-remediation";
 import { StopText } from "@/components/StopText";
-import { LiteYouTube } from "@/components/LiteYouTube";
+import { FilmGallery } from "@/components/FilmGallery";
 
-// §5 — Field footage (the page's unique section). A featured project film over
-// two supporting brand films, each a click-to-load YouTube facade so the page
-// stays fast until a viewer opts in.
+// §5 — On film (the page's unique section). A column of selectable film cards on
+// the left drives one large click-to-load player on the right, so the page stays
+// fast until a viewer opts in.
 export function VideosSection() {
   const v = c.videos;
   return (
@@ -23,17 +23,7 @@ export function VideosSection() {
           <p className="mw-rem-vid__lead" data-reveal>{v.lead}</p>
         </header>
 
-        <div className="mw-rem-vid__featured" data-reveal>
-          <LiteYouTube id={v.featured.id} title={v.featured.title} className="mw-lyt--featured" />
-        </div>
-
-        <ul className="mw-rem-vid__grid" data-reveal-stagger>
-          {v.supporting.map((vid) => (
-            <li key={vid.id} className="mw-rem-vid__item">
-              <LiteYouTube id={vid.id} title={vid.title} />
-            </li>
-          ))}
-        </ul>
+        <FilmGallery films={v.films} />
       </div>
     </section>
   );

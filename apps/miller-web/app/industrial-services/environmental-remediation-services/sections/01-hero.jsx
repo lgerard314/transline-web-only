@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { REMEDIATION as c } from "@/lib/content/service-environmental-remediation";
 import { StopText } from "@/components/StopText";
+import { LiteYouTube } from "@/components/LiteYouTube";
 
 // HERO — remediation masthead. In-grid 2-column variant (a lightly modified
-// version of the service hero) with a captioned site photo and a terracotta
-// stat badge, so the page reads as a worked field document from the first scroll.
+// version of the service hero) with the featured field film in the photo frame
+// and a terracotta stat badge, so the page opens on real footage from the field.
 export function HeroSection() {
   const h = c.hero;
+  const film = c.videos.films[0];
   return (
     <section className="mw-svc-hero" aria-labelledby="rem-hero-title">
       <div className="mw-svc-hero__inner mw-inner">
@@ -36,8 +38,8 @@ export function HeroSection() {
         </div>
 
         <div className="mw-svc-hero__media" data-reveal>
-          <figure className="mw-svc-photo">
-            <img className="mw-svc-hero__photo" src={h.photo} alt="" />
+          <figure className="mw-svc-photo mw-svc-hero__videoframe">
+            <LiteYouTube id={film.id} title={film.title} className="mw-svc-hero__video" />
             <figcaption className="mw-svc-hero__cap">
               <span className="mw-svc-hero__cap-mark" aria-hidden="true" />
               {h.caption}

@@ -32,6 +32,7 @@ export function CaseStudiesSection() {
                 <div className="mw-ind-card__body">
                   <p className="mw-case-card__loc">{it.location}</p>
                   <h3 className="mw-ind-card__name">{it.title}</h3>
+                  <p className="mw-case-card__desc">{it.desc}</p>
                   <span className="mw-case-card__cta">
                     Read case study <span className="mw-case-card__arrow" aria-hidden="true">→</span>
                   </span>

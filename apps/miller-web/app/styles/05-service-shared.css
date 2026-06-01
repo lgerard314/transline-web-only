@@ -202,6 +202,21 @@
   .mw-svc-hero__photo { height: clamp(260px, 60vw, 340px); }
 }
 
+/* Hero media as a click-to-load film: the .mw-svc-photo figure supplies the
+   border, top bar, and caption, so the facade drops its own chrome and fills
+   the frame. The play button + poster stay; the iframe mounts on click. */
+.mw-svc-hero__video.mw-lyt {
+  border: 0;
+  box-shadow: none;
+  aspect-ratio: 16 / 9;
+  background: var(--c-navy-2);
+}
+.mw-svc-hero__video.mw-lyt::before { display: none; }
+.mw-svc-hero__video .mw-lyt__label { display: none; }
+@media (max-width: 600px) {
+  .mw-svc-hero__video.mw-lyt { aspect-ratio: 16 / 10; }
+}
+
 /* ── Service §2: "any volume" container capacity ladder ──────────── */
 .mw-vol {
   position: relative;
@@ -523,6 +538,12 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .mw-flow__stop[data-state="active"] .mw-flow__node { animation: none; box-shadow: none; }
+}
+/* --wide: give the head column extra room so a short title (e.g. "Assessment to
+   closure") holds one line on desktop. CWC keeps the default tighter split. */
+@media (min-width: 901px) {
+  .mw-flow--wide .mw-flow__intro { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); }
+  .mw-flow--wide .mw-flow__title { max-width: none; }
 }
 
 /* ── Service: industries grid ────────────────────────────────────── */
@@ -1902,6 +1923,8 @@
    (≈ the content-row height) so each photo's crop is deterministic and stable. */
 .mw-svc-cov__media { grid-column: 2; grid-row: 2; align-self: stretch; }
 .mw-svc-cov__heading { margin-top: 0; }
+/* Who-we-serve variant: a touch more room for the photo column. */
+.mw-svc-cov--serve .mw-svc-cov__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr); }
 .mw-svc-cov__lead {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
   font-size: clamp(16px, 1.2vw, 19px);
