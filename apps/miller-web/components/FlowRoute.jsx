@@ -1,13 +1,30 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { StopText } from "./StopText";
 import { TimelineNotifyCycle } from "./TimelineNotifyCycle";
 
-// Owns the single clock for the §3 "how it works" route. The same `index` drives
-// the cycling notification banners (right) and the moving fill along the route
-// line (left) via per-stop data-state, so the line advances the instant a new
-// banner appears — no drift between a CSS animation and a JS interval.
-export function FlowRoute({ steps, notifications, interval = 3400 }) {
+// Owns the single clock for the service "process / how it works" route. The same
+// `index` drives the cycling notification banners (intro, right) and the moving
+// fill along the route line (below) via per-stop data-state, so the line advances
+// the instant a new banner appears — no drift between a CSS animation and a JS
+// interval.
+//
+// Layout mirrors the emergency-response "when you call" timeline: on desktop the
+// banners sit in the right column of a two-column intro ABOVE the route line; at
+// ≤900px the intro dissolves (display:contents) and the banners become a sticky
+// top band while the now-vertical steps scroll beneath them. The head copy is
+// rendered here (not in the page section) so the intro can own both columns.
+export function FlowRoute({
+  eyebrow,
+  title,
+  lead,
+  route,
+  steps,
+  notifications,
+  titleId,
+  interval = 3400,
+}) {
   const [index, setIndex] = useState(0);
   const cycle = notifications?.length || steps.length;
 
@@ -20,7 +37,27 @@ export function FlowRoute({ steps, notifications, interval = 3400 }) {
   }, [cycle, interval]);
 
   return (
-    <div className="mw-flow__cols">
+    <>
+      <div className="mw-flow__intro">
+        <header className="mw-flow__head">
+          <p className="mw-section-tag" data-reveal aria-hidden="true">
+            <span className="mw-section-tag-mark" />
+            <span className="mw-section-tag-label mw-section-tag-label--invert">{eyebrow}</span>
+          </p>
+          <h2 id={titleId} className="mw-section-title mw-flow__title" data-reveal>
+            <StopText>{title}</StopText>
+          </h2>
+          <p className="mw-flow__lead" data-reveal>{lead}</p>
+          <p className="mw-flow__route" data-reveal aria-hidden="true">
+            <span className="mw-flow__route-mark" />
+            {route}
+          </p>
+        </header>
+        <div className="mw-flow__notify" data-reveal>
+          <TimelineNotifyCycle notifications={notifications} index={index} />
+        </div>
+      </div>
+
       <ol
         className="mw-flow__line"
         data-tl-active={index}
@@ -48,9 +85,6 @@ export function FlowRoute({ steps, notifications, interval = 3400 }) {
           </li>
         ))}
       </ol>
-      <div className="mw-flow__notify" data-reveal>
-        <TimelineNotifyCycle notifications={notifications} index={index} />
-      </div>
-    </div>
+    </>
   );
 }
