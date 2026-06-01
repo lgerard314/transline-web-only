@@ -1,5 +1,6 @@
 import { ContactForm } from "@/components/ContactForm";
 import { emergencyResponse as c } from "@/lib/content/service-emergency-response";
+import { StopText } from "@/components/StopText";
 
 // §5 — Closing CTA. Dark walnut "after-hours dispatch" panel: the 24/7 hotline
 // is the focal element; the contact form floats as a warm cream card.
@@ -9,6 +10,16 @@ export function CtaSection() {
   return (
     <section className="mw-svc-cta mw-svc-cta--dark" aria-labelledby="er-cta-title">
       <div className="mw-svc-cta__inner mw-inner mw-svc-cta__grid mw-svc-cta__grid--reverse">
+        <div className="mw-svc-cta__form-col" data-reveal>
+          <div className="mw-svc-cta__form">
+            <div className="mw-svc-cta__form-head">
+              <p className="mw-svc-cta__form-title">{cta.formTitle}</p>
+              <p className="mw-svc-cta__form-note">{cta.formNote}</p>
+            </div>
+            <ContactForm showOptionalFields={false} />
+          </div>
+        </div>
+
         <div className="mw-svc-cta__content" data-reveal>
           <p className="mw-section-tag" aria-hidden="true">
             <span className="mw-section-tag-mark" />
@@ -17,7 +28,7 @@ export function CtaSection() {
           <h2 id="er-cta-title" className="mw-section-title mw-svc-cta__title">
             {cta.title}{" "}
             <em className="mw-svc-cta__title-em">{cta.titleEm}</em>{" "}
-            {cta.titleAfter}<span className="mw-stop" aria-hidden="true" />
+            <StopText>{cta.titleAfter}</StopText>
           </h2>
           <p className="mw-svc-cta__body">{cta.body}</p>
 
@@ -44,16 +55,6 @@ export function CtaSection() {
             <p className="mw-svc-cta__hotline-note">
               Answered by a trained responder — every hour, every day of the year.
             </p>
-          </div>
-        </div>
-
-        <div className="mw-svc-cta__form-col" data-reveal>
-          <div className="mw-svc-cta__form">
-            <div className="mw-svc-cta__form-head">
-              <p className="mw-svc-cta__form-title">{cta.formTitle}</p>
-              <p className="mw-svc-cta__form-note">{cta.formNote}</p>
-            </div>
-            <ContactForm showOptionalFields={false} />
           </div>
         </div>
       </div>

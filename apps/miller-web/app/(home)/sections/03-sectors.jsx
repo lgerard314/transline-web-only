@@ -33,7 +33,7 @@ export function SectorsSection() {
           <div className="mw-sec2__head-split" data-reveal-stagger>
             <div className="mw-sec2__head-left">
               <h2 id="mw-sectors-heading-copy" className="mw-sec2__title">
-                From refineries to households &mdash; and everything between<span className="mw-stop" aria-hidden="true" />
+                From refineries to households &mdash; and everything <span className="mw-nobr">between<span className="mw-stop" aria-hidden="true" /></span>
               </h2>
               <p className="mw-sec2__lead">
                 Large industrial manufacturers, public agencies, small businesses, and even the household-hazardous-waste drop-off down the street &mdash; one operator, one chain of custody.

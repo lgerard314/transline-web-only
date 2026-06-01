@@ -6,7 +6,7 @@ const EMERGENCY_HREF = `tel:${EMERGENCY_PHONE.replace(/[^0-9+]/g, "")}`;
 
 export const emergencyResponse = {
   hero: {
-    eyebrow: "24/7 spill response",
+    eyebrow: "24/7 emergency response",
     title: "When it spills,",
     titleEm: "we're already moving",
     lead:
@@ -14,7 +14,7 @@ export const emergencyResponse = {
     photo: "/miller/fleet-trucks-gravel-transparent.png",
     emergencyDisplay: EMERGENCY_PHONE,
     emergencyHref: EMERGENCY_HREF,
-    secondaryCta: { label: "Pre-incident planning", href: "/contact-us/" },
+    secondaryCta: { label: "Pre-incident planning", labelShort: "Get prepared", href: "/contact-us/" },
   },
 
   // §2 — Response timeline (signature layout for this page).

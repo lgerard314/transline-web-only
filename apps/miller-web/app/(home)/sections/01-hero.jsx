@@ -14,9 +14,15 @@ export function HeroSection() {
       <div className="mw-hero__inner">
         <p className="mw-hero__mark" aria-hidden="true">
           <img className="mw-hero__mark-logo" src="/miller/logo/miller-logomark.webp" alt="" />
-          <span className="mw-hero__mark-corp">Miller Environmental Corporation</span>
-          <span className="mw-hero__mark-dot" />
-          <span className="mw-hero__mark-since">Since 1996</span>
+          <span className="mw-hero__mark-corp">
+            Miller Environmental{" "}
+            <span className="mw-hero__mark-corp-long">Corporation</span>
+            <span className="mw-hero__mark-corp-short">Corp.</span>
+          </span>
+          <span className="mw-hero__mark-meta">
+            <span className="mw-hero__mark-dot" />
+            <span className="mw-hero__mark-since">Since 1996</span>
+          </span>
         </p>
 
         <h1 id="mw-hero-title" className="mw-hero__title">
@@ -30,7 +36,7 @@ export function HeroSection() {
               ]}
             />
           </span>
-          <span className="mw-hero__line">waste disposal<span className="mw-hero__stop" aria-hidden="true" /></span>
+          <span className="mw-hero__line">waste <span className="mw-nobr">disposal<span className="mw-hero__stop" aria-hidden="true" /></span></span>
         </h1>
 
         <p className="mw-hero__lead">

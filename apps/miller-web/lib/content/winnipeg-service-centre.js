@@ -32,6 +32,6 @@ export const winnipegServiceCentre = {
   contact: {
     phone: { display: GENERAL_PHONE, href: "tel:+12049259600" },
     email: EMAIL_SALES,
-    hours: `24/7 spill response: ${EMERGENCY_PHONE}`,
+    hours: `24/7 emergency response: ${EMERGENCY_PHONE}`,
   },
 };

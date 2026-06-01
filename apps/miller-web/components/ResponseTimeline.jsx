@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { TimelineNotifyCycle } from "./TimelineNotifyCycle";
+import { StopText } from "./StopText";
 
 // Owns the single notification clock for the "when you call" timeline. The same
 // `index` drives both the cycling banners and the axis fill (via data-tl-active
@@ -42,7 +43,7 @@ export function ResponseTimeline({
                 <span className="mw-section-tag-label">{eyebrow}</span>
               </p>
               <h2 id={titleId} className="mw-section-title">
-                {title}<span className="mw-stop" aria-hidden="true" />
+                <StopText>{title}</StopText>
               </h2>
             </div>
           </header>

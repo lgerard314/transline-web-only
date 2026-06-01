@@ -22,4 +22,4 @@
 *\* = required*
 
 ## Secondary callout
-> For our 24/7 spill response team, call (204) 957-6327
+> For our 24/7 emergency response team, call (204) 957-6327

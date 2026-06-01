@@ -136,6 +136,6 @@ export const REMEDIATION = {
     body:
       `Fill out the form to request a callback or book a consult — or call now at ${GENERAL_PHONE} for immediate assistance.`,
     emergency:
-      `For our 24/7 spill response team, call ${EMERGENCY_PHONE}.`,
+      `For our 24/7 emergency response team, call ${EMERGENCY_PHONE}.`,
   },
 };

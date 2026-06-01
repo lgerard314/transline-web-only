@@ -20,7 +20,7 @@
 
 ## CTAs
 - **Contact Miller** → `/contact-us/`
-- **For our 24/7 spill response team, call (204) 957-6327** → `tel:+12049576327`
+- **For our 24/7 emergency response team, call (204) 957-6327** → `tel:+12049576327`
 
 ## Related Services
 - Project Management

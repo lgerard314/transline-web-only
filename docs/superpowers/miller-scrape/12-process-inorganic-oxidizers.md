@@ -33,4 +33,4 @@ A: Contact via callback request or direct call to (204) 925-9600.
 
 ## CTA
 - Standard inquiries: (204) 925-9600
-- 24/7 spill response: (204) 957-6327
+- 24/7 emergency response: (204) 957-6327

@@ -16,7 +16,7 @@ export function CareersSection() {
               <span className="mw-section-tag-label mw-section-tag-label--invert">Careers</span>
             </p>
             <h2 id="mw-careers-bleed-heading" className="mw-careers__title">
-              Join the<br /><span className="mw-careers__title-em">Miller team<span className="mw-stop" aria-hidden="true" /></span>
+              Join the<br /><span className="mw-careers__title-em">Miller <span className="mw-nobr">team<span className="mw-stop" aria-hidden="true" /></span></span>
             </h2>
             <p className="mw-careers__lead">{c.joinFamily.intro}</p>
           </div>

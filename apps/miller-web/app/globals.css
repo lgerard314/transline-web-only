@@ -94,7 +94,7 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
 }
 
 .miller-eb__inner {
-  width: min(100% - 48px, 1560px);
+  width: min(100% - clamp(48px, 8vw, 144px), 1560px);
   margin: 0 auto;
   padding-block: 4px;
   padding-inline: 0;
@@ -659,6 +659,7 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   transition: color 0.18s ease;
 }
 .mw-fac2__about:hover { color: var(--c-accent); }
+.mw-fac2__lbl-short { display: none; }
 
 /* Photo gallery — main photo (3:2) on top with a caption overlaid
    at the bottom, then a framed thumbnail row below with a soft
@@ -754,6 +755,12 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
 }
 @media (max-width: 700px) {
   .mw-fac2__thumbs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  /* Short labels so the button + story link fit on one row. */
+  .mw-fac2__lbl-long { display: none; }
+  .mw-fac2__lbl-short { display: inline; }
+  .mw-fac2__actions { flex-wrap: nowrap; gap: clamp(14px, 4vw, 22px); }
+  /* Slightly larger capabilities heading on mobile. */
+  .mw-fac2__caps-title { font-size: 19px; }
 }
 .mw-fac2__thumb {
   position: relative;
@@ -988,7 +995,9 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   align-items: end;
 }
 @media (max-width: 900px) {
-  .mw-sec2__head-split { grid-template-columns: 1fr; gap: 28px; align-items: start; }
+  /* Stacked: trim the dead space between the stat block and the first card. */
+  .mw-sec2__head-split { grid-template-columns: 1fr; gap: 22px; align-items: start; }
+  .mw-sec2__head { margin-bottom: clamp(22px, 5vw, 32px); }
 }
 .mw-sec2__head-left { display: flex; flex-direction: column; gap: 22px; }
 .mw-sec2__head-right { display: flex; flex-direction: column; gap: 14px; padding-bottom: 4px; }
@@ -1196,9 +1205,10 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
 .mw-ten3__grid > .mw-ten3__body { order: 1; }
 .mw-ten3__grid > .mw-ten3__timeline { order: 2; }
 @media (max-width: 900px) {
+  /* Stacked: main body first, milestone timeline after it. */
   .mw-ten3__grid { grid-template-columns: 1fr; gap: 40px; align-items: start; }
   .mw-ten3__grid > .mw-ten3__body { order: 0; }
-  .mw-ten3__grid > .mw-ten3__timeline { order: 0; }
+  .mw-ten3__grid > .mw-ten3__timeline { order: 1; }
 }
 
 /* Timeline column. Stretches to match the right column's height. The
@@ -1649,21 +1659,15 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   .mw-ten3__milestone-body-title { display: none; }
   .mw-ten3__milestone-body-text { font-size: 13.5px; }
 
-  /* The truck-with-overlaid-stats plate is ~66px tall at phone width —
-     the truck reads as a sliver and the stat labels collide. Drop the
-     truck and show the three figures as a clean 3-up row, matching the
-     VBEC figures pattern. */
-  .mw-ten3__plate { aspect-ratio: auto; }
-  .mw-ten3__plate-img { display: none; }
-  .mw-ten3__plate-stats {
-    position: static; transform: none; inset: auto; left: auto; right: auto; top: auto;
-    width: 100%; gap: 16px; padding-top: 20px; border-top: 1px solid var(--c-line);
-  }
-  .mw-ten3__plate-stat,
-  .mw-ten3__plate-stat:nth-child(2),
-  .mw-ten3__plate-stat:last-child { transform: none; align-items: flex-start; }
-  .mw-ten3__plate-num { font-size: clamp(30px, 9vw, 40px); }
-  .mw-ten3__plate-label { white-space: normal; }
+  /* Keep the truck graphic with its highlights overlaid on the trailer
+     panel (per request); scale the three figures down so the labels fit
+     their columns without colliding on the short plate at phone width. */
+  .mw-ten3__plate-num { font-size: clamp(14px, 4.3vw, 26px); }
+  .mw-ten3__plate-unit { font-size: clamp(8px, 2.2vw, 13px); }
+  .mw-ten3__plate-label { font-size: clamp(6.5px, 1.7vw, 10px); letter-spacing: 0.03em; }
+  .mw-ten3__plate-stats { gap: clamp(2px, 0.6vw, 12px); }
+  .mw-ten3__plate-stat:nth-child(2) { transform: translateX(clamp(-18px, -1.2vw, -8px)); }
+  .mw-ten3__plate-stat:last-child { transform: translateX(-4px); }
 }
 
 /* ─────────────────────────────────────────────────────────────────
@@ -1873,12 +1877,15 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   display: block;
 }
 @media (max-width: 900px) {
+  /* Photo flush to the top of the section; clear gap before the eyebrow. */
+  .mw-careers { padding-top: 0; }
   .mw-careers__bleed-photo {
     position: relative;
     left: 0;
     right: 0;
-    height: 280px;
-    margin-top: 32px;
+    height: clamp(220px, 54vw, 300px);
+    margin-top: 0;
+    margin-bottom: clamp(40px, 9vw, 60px);
   }
   .mw-careers__bleed-photo::after { display: none; }
 }
@@ -2061,10 +2068,11 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   opacity: 0.95;
 }
 @media (max-width: 900px) {
-  .mw-final__col--truck { order: 0; }
+  /* Drop the truck and put the logomark in its place at the top. */
+  .mw-final__col--truck { display: none; }
+  .mw-final__col--logo { display: flex; order: 0; }
   .mw-final__col--content { order: 1; }
-  .mw-final__col--logo { display: none; }
-  .mw-final__truck { max-width: 320px; opacity: 0.55; }
+  .mw-final__logomark { width: clamp(120px, 32vw, 176px); opacity: 0.95; }
 }
 /* The content column applies row-gap: 24px between every child, so the eyebrow→headline gap would be 24px + this margin. Offset the row-gap so the eyebrow→headline gap equals the standard section header gap, clamp(20px, 1.5vw, 24px), used by fac2/ten3/careers/sec2. */
 .mw-final .mw-final__tag { margin: 0 0 calc(clamp(20px, 1.5vw, 24px) - 24px) 0; }
@@ -2272,7 +2280,7 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   position: relative;
   z-index: 2;
   /* 1560 content width at wide viewports, with 24px gutters at viewports < 1608. */
-  width: min(100% - 48px, 1560px);
+  width: min(100% - clamp(48px, 8vw, 144px), 1560px);
   margin-inline: auto;
   padding-block: clamp(40px, 4vw, 72px);
   display: grid;
@@ -2332,6 +2340,14 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   /* Diamond stamp — matches the section eyebrow marks. */
   transform: translateY(4px) rotate(45deg);
 }
+/* Groups the diamond + "since 1996" so they can wrap together (desktop:
+   identical inline row; mobile: a second line under the corp name). */
+.mw-hero__mark-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+}
+.mw-hero__mark-corp-short { display: none; }
 .mw-hero__title {
   grid-column: 1 / -1;
   font-family: var(--font-condensed), ui-sans-serif, system-ui, sans-serif;
@@ -2353,6 +2369,10 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   vertical-align: baseline;
   margin-left: 0.06em;
 }
+/* Glue the last word of a heading to its trailing stop-square so the square can
+   never wrap onto its own line (a word-joiner doesn't suppress the soft-wrap
+   opportunity around an inline-block box, so nowrap is required). */
+.mw-nobr { white-space: nowrap; }
 /* Square period stamp for h1/h2 display headings — the same brand mark as the hero, sized in em so it scales with each heading. */
 .mw-stop {
   display: inline-block;
@@ -2515,6 +2535,24 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
 }
 @media (max-width: 600px) {
   .mw-hero__inner { padding-block: 80px 56px; }
+  /* Wordmark stacks: logo at left (spanning two rows), corp name on top,
+     diamond + "since 1996" beneath it. "Corporation" → "Corp.". */
+  .mw-hero__mark {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas: "logo corp" "logo meta";
+    column-gap: 13px;
+    row-gap: 5px;
+    align-items: center;
+    justify-items: start;
+  }
+  .mw-hero__mark-logo { grid-area: logo; }
+  .mw-hero__mark-corp { grid-area: corp; display: block; align-self: end; }
+  .mw-hero__mark-meta { grid-area: meta; align-self: start; }
+  .mw-hero__mark-corp-long { display: none; }
+  .mw-hero__mark-corp-short { display: inline; }
+  .mw-hero__mark-dot { transform: rotate(45deg); }
+  .mw-hero__mark-since { transform: none; }
   .mw-hero__title { font-size: clamp(48px, 14vw, 72px); }
   .mw-hero__lead { font-size: 16px; }
   .mw-hero::after { left: 12px; }
@@ -2533,7 +2571,7 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
    1560-cap content area with 24px viewport gutters at narrow widths.
    ───────────────────────────────────────────────────────────────── */
 .mw-inner {
-  width: min(100% - 48px, 1560px);
+  width: min(100% - clamp(48px, 8vw, 144px), 1560px);
   margin-inline: auto;
 }
 .mw-section-head {
@@ -2715,10 +2753,17 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
   .mw-cert:nth-child(4) { border-top: 1px solid var(--c-line); }
 }
 @media (max-width: 600px) {
-  .mw-certs { grid-template-columns: 1fr; border-left: 0; }
-  .mw-cert { border-right: 0; border-bottom: 1px solid var(--c-line); }
-  .mw-cert:last-child { border-bottom: 0; }
-  .mw-cert__num { font-size: clamp(36px, 12vw, 56px); }
+  /* Keep the 2×2 grid (from the ≤1100 rule); make each card a compact vertical
+     stack — icon on top, then prefix / big number / description. */
+  .mw-cert {
+    flex-direction: column;
+    gap: 6px;
+    padding: clamp(14px, 4vw, 20px) clamp(12px, 3.5vw, 18px);
+  }
+  .mw-cert__mark { width: 38px; margin-top: 0; }
+  .mw-cert__num { font-size: clamp(34px, 11vw, 46px); }
+  .mw-cert__desc { font-size: 12px; max-width: none; margin-top: 4px; }
+  .mw-cert__pdf { margin-top: 8px; }
 }
 
 /* ─────────────────────────────────────────────────────────────────
@@ -3240,17 +3285,56 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] ~ * .miller-
       "j j j k k k";
   }
 }
-/* Mobile — single column stack. */
+/* Mobile — single column stack with every card rendered identically
+   (anchor / card / tile share the same photo-bg + overlaid-title pattern;
+   here we equalize their sizes so a one-per-row stack reads uniformly). */
 @media (max-width: 720px) {
   .mw-svcs-grid {
     grid-template-columns: 1fr;
-    grid-template-rows: repeat(11, minmax(220px, auto));
+    grid-template-rows: repeat(11, minmax(240px, auto));
     grid-template-areas: "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k";
   }
-  /* The anchor title is a single un-split string; its title-row uses
-     width:max-content, which forces "INDUSTRIAL WASTE TREATMENT" past
-     the narrow column where overflow:hidden clips it. Let it wrap. */
-  .mw-svcs-anchor__title-row { width: auto; flex-wrap: wrap; }
+  /* Let the (un-split) anchor title wrap inside the row so its arrow stays
+     inline at the bottom-right, matching the card/tile cards. */
+  .mw-svcs-anchor__title-row { width: auto; flex-wrap: nowrap; }
+  .mw-svcs-anchor__title { min-width: 0; }
+  /* The anchor pads its __body; the card/tile pad the card container itself.
+     Equalize at the correct level so all cards share one inset (and the card/
+     tile don't double up card-padding + body-padding). */
+  .mw-svcs-anchor__body { padding: clamp(20px, 5.5vw, 30px); max-width: none; }
+  .mw-svcs-card,
+  .mw-svcs-tile { padding: clamp(20px, 5.5vw, 30px); }
+  .mw-svcs-card__body,
+  .mw-svcs-tile__body { max-width: none; }
+  .mw-svcs-anchor__title,
+  .mw-svcs-card__title,
+  .mw-svcs-tile__title {
+    font-size: clamp(28px, 8vw, 40px);
+    line-height: 0.98;
+  }
+  .mw-svcs-anchor__num,
+  .mw-svcs-card__num,
+  .mw-svcs-tile__num {
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+  .mw-svcs-anchor__title-row,
+  .mw-svcs-card__title-row,
+  .mw-svcs-tile__title-row {
+    margin-bottom: 13px;
+  }
+  .mw-svcs-anchor__text,
+  .mw-svcs-card__text,
+  .mw-svcs-tile__text {
+    font-size: 14px;
+    line-height: 1.5;
+    max-width: none;
+  }
+  .mw-svcs-anchor__arr,
+  .mw-svcs-card__arr,
+  .mw-svcs-tile__arr {
+    font-size: clamp(22px, 6vw, 30px);
+  }
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -3334,7 +3418,7 @@ html[data-brand="miller"] .tl-topbar[data-scroll-state="past-hero"] .tl-topbar__
   height: 56px;
 }
 html[data-brand="miller"] .tl-topbar__inner {
-  width: min(100% - 48px, 1560px);
+  width: min(100% - clamp(48px, 8vw, 144px), 1560px);
   max-width: none;
   margin: 0 auto;
   padding: 0;
@@ -3528,6 +3612,7 @@ html[data-brand="miller"] .tl-cta-desktop .tl-btn-arr {
   line-height: 1;
   font-size: 13.5px;
 }
+html[data-brand="miller"] .tl-cta-desktop__compact { display: none; }
 
 html[data-brand="miller"] .tl-menu-btn {
   color: var(--c-ink);
@@ -3724,6 +3809,16 @@ html[data-brand="miller"] .tl-mobile-nav__foot .tl-btn--ghost-light:hover {
 }
 @media (max-width: 560px) {
   html[data-brand="miller"] .tl-callphone { display: none; }
+  /* Compact CTA + tighter spacing so the logo, CTA, and hamburger all fit. */
+  html[data-brand="miller"] .tl-cta-desktop__full { display: none; }
+  html[data-brand="miller"] .tl-cta-desktop__compact { display: inline; }
+  html[data-brand="miller"] .tl-cta-desktop { padding: 1px 15px 0; height: 40px; }
+  html[data-brand="miller"] .tl-topbar__inner { gap: 12px; }
+  html[data-brand="miller"] .tl-topbar__cta { gap: 10px; }
+}
+@media (max-width: 380px) {
+  /* Drop the wordmark on the very smallest screens — the mark carries it. */
+  html[data-brand="miller"] .tl-logo > span:not(.mw-navlogo) { display: none; }
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -3750,7 +3845,7 @@ html[data-brand="miller"] .tl-footer::before {
 }
 html[data-brand="miller"] .tl-footer > * { position: relative; z-index: 1; }
 html[data-brand="miller"] .tl-footer__top {
-  width: min(100% - 48px, 1560px);
+  width: min(100% - clamp(48px, 8vw, 144px), 1560px);
   max-width: none;
   margin: 0 auto;
   padding: clamp(36px, 3.5vw, 60px) 0 28px;
@@ -3918,7 +4013,7 @@ html[data-brand="miller"] .tl-footer__addr .tl-footer__link.tl-mono {
 
 /* Family of companies strip */
 html[data-brand="miller"] .tl-family {
-  width: min(100% - 48px, 1560px);
+  width: min(100% - clamp(48px, 8vw, 144px), 1560px);
   max-width: none;
   margin: 0 auto;
   padding: 28px 0 24px;
@@ -3952,7 +4047,7 @@ html[data-brand="miller"] .tl-family__current { color: var(--c-accent); font-wei
 
 /* Bottom bar */
 html[data-brand="miller"] .tl-footer__bot {
-  width: min(100% - 48px, 1560px);
+  width: min(100% - clamp(48px, 8vw, 144px), 1560px);
   max-width: none;
   margin: 0 auto;
   padding: 20px 0;
@@ -3971,16 +4066,32 @@ html[data-brand="miller"] .tl-footer__bot {
   html[data-brand="miller"] .tl-footer__top > div:nth-child(4) { grid-column: span 3; }
 }
 @media (max-width: 720px) {
-  html[data-brand="miller"] .tl-footer__top { grid-template-columns: 1fr; }
+  /* Pitch spans the top; the link groups sit below in a 2-column grid. */
+  html[data-brand="miller"] .tl-footer__top {
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(28px, 6vw, 44px) clamp(24px, 6vw, 40px);
+  }
+  html[data-brand="miller"] .tl-footer__pitch { grid-column: 1 / -1; }
   html[data-brand="miller"] .tl-footer__top > div:nth-child(4) { grid-column: auto; }
   html[data-brand="miller"] .tl-footer__bot { flex-direction: column; gap: 8px; text-align: center; }
 }
 @media (max-width: 600px) {
-  /* In a row the 24/7 ghost gets squeezed and wraps the phone number to
-     three lines. Stack the footer pitch CTAs full-width on phones. */
-  html[data-brand="miller"] .tl-footer__pitch-ctas { flex-direction: column; align-items: stretch; }
-  html[data-brand="miller"] .tl-footer__pitch-ctas .tl-btn { width: 100%; justify-content: center; }
-  html[data-brand="miller"] .tl-footer__pitch-ctas .mw-cta--ghost { width: 100%; align-items: center; text-align: center; }
+  /* Two equal-size buttons on one row (together = full width). */
+  html[data-brand="miller"] .tl-footer__pitch-ctas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch;
+    gap: 10px;
+  }
+  html[data-brand="miller"] .tl-footer__pitch-ctas .tl-btn,
+  html[data-brand="miller"] .tl-footer__pitch-ctas .mw-cta--ghost {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    padding-inline: 10px;
+  }
+  html[data-brand="miller"] .tl-footer__pitch-ctas .mw-cta--ghost { align-items: center; }
+  html[data-brand="miller"] .tl-footer__pitch-ctas .mw-cta__num { white-space: nowrap; }
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -4060,15 +4171,34 @@ html[data-brand="miller"] .tl-footer__bot {
 .mw-svc-hero .mw-cta__num,
 .mw-svc-cta .mw-cta__num { color: var(--c-ink); }
 
+.mw-svc-hero__cta-label--short { display: none; }
+
 @media (max-width: 600px) {
   /* Full-width, equal-weight CTAs on phones — bigger tap targets and a
      balanced stack instead of mismatched auto-widths. The 24/7 call is a
      primary action; this matches the home hero treatment. */
-  .mw-svc-hero__ctas,
   .mw-svc-cta__actions { flex-direction: column; align-items: stretch; }
-  .mw-svc-hero__ctas > .mw-cta,
+  .mw-svc-hero__ctas { flex-direction: row; flex-wrap: nowrap; align-items: stretch; gap: 8px; }
   .mw-svc-cta__actions > .mw-cta { width: 100%; justify-content: center; }
-  .mw-svc-hero__ctas > .mw-cta--ghost,
+  .mw-svc-hero__ctas > .mw-cta--ghost {
+    flex: 1 1 0;
+    min-width: 0;
+    justify-content: center;
+    padding: 10px 8px;
+    align-items: center;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .mw-svc-hero__ctas > .mw-cta--ghost .mw-cta__num { font-size: 14px; }
+  .mw-svc-hero__ctas > .mw-cta--solid {
+    flex: 0 0 auto;
+    justify-content: center;
+    padding: 11px 12px;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  .mw-svc-hero__cta-label--full { display: none; }
+  .mw-svc-hero__cta-label--short { display: inline; }
   .mw-svc-cta__actions > .mw-cta--ghost { align-items: center; text-align: center; }
 }
 
@@ -4482,6 +4612,12 @@ html[data-brand="miller"] .tl-footer__bot {
    title + one-sentence blurb right; accent top-bar wipe + photo brighten
    on hover. Rendered on the light --c-bg surface. */
 .mw-svc-inds--photo { background: var(--c-bg); }
+/* Photo cards wrap on available space — a min/max width track decides how many
+   fit per row (uniform, left-packed). They stay horizontal at every width —
+   never flip to vertical. */
+.mw-svc-inds--photo .mw-svc-inds__grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+}
 .mw-svc-inds--photo .mw-svc-ind {
   position: relative;
   flex-direction: row;
@@ -4506,12 +4642,16 @@ html[data-brand="miller"] .tl-footer__bot {
 .mw-svc-ind__thumb {
   position: relative;
   flex-shrink: 0;
-  /* Photo half — the white text half matches this width (50 / 50). */
-  width: 50%;
-  aspect-ratio: 4 / 3;
+  /* Photo half; the white text half takes the rest (a wider text half keeps the
+     one-line description from wrapping tall, which keeps the card short). */
+  width: 44%;
+  /* Shorter (wider) ratio = shorter cards; was 4 / 3. */
+  aspect-ratio: 16 / 9;
   overflow: hidden;
   background: var(--c-navy-2);
   border-right: 1px solid var(--c-line);
+  /* Query container so the overlaid title can scale to the photo's width. */
+  container-type: inline-size;
 }
 .mw-svc-ind__thumb img {
   width: 100%;
@@ -4549,7 +4689,8 @@ html[data-brand="miller"] .tl-footer__bot {
   right: clamp(12px, 1.1vw, 17px);
   bottom: clamp(10px, 0.9vw, 14px);
   color: #fff;
-  font-size: clamp(18px, 1.6vw, 26px);
+  /* Scales with the photo width (cqi = 1% of the thumb's inline size). */
+  font-size: clamp(19px, 15cqi, 34px);
   line-height: 1.02;
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45);
 }
@@ -4587,19 +4728,6 @@ html[data-brand="miller"] .tl-footer__bot {
 }
 .mw-svc-inds--photo .mw-svc-ind:hover .mw-svc-ind__desc {
   font-weight: 500;
-}
-@media (max-width: 420px) {
-  .mw-svc-inds--photo .mw-svc-ind {
-    flex-direction: column;
-  }
-  .mw-svc-inds--photo .mw-svc-ind__thumb {
-    width: 100%;
-    border-right: none;
-    border-bottom: 1px solid rgba(245, 230, 203, 0.12);
-  }
-  .mw-svc-inds--photo .mw-svc-ind__thumb::after {
-    background: linear-gradient(to top, rgba(36, 22, 12, 0.42) 0%, rgba(42, 27, 18, 0) 48%);
-  }
 }
 @media (prefers-reduced-motion: reduce) {
   .mw-svc-ind__thumb img { transition: filter 320ms ease; }
@@ -4653,9 +4781,12 @@ html[data-brand="miller"] .tl-footer__bot {
   gap: clamp(32px, 4vw, 64px);
   align-items: start;
 }
+.mw-svc-cta__grid .mw-svc-cta__content,
+.mw-svc-cta__grid .mw-svc-cta__form-col { min-width: 0; }
 @media (min-width: 861px) {
-  .mw-svc-cta__grid--reverse .mw-svc-cta__content { grid-column: 2; }
-  .mw-svc-cta__grid--reverse .mw-svc-cta__form-col { grid-column: 1; }
+  .mw-svc-cta__grid--reverse {
+    grid-template-columns: minmax(0, 9fr) minmax(0, 11fr);
+  }
 }
 .mw-svc-cta--dark .mw-svc-cta__content { max-width: none; }
 .mw-svc-cta--dark .mw-section-tag-mark { background: var(--c-accent); }
@@ -4792,6 +4923,7 @@ html[data-brand="miller"] .tl-footer__bot {
 }
 @media (max-width: 860px) {
   .mw-svc-cta__grid { grid-template-columns: 1fr; gap: 32px; }
+  .mw-svc-cta__grid--reverse .mw-svc-cta__content { order: -1; }
 }
 
 /* Standalone related-services section (split from closing CTA) */
@@ -5065,18 +5197,8 @@ html[data-brand="miller"] .tl-footer__bot {
     height: 2px;
     background: var(--mw-er-hero-rule, #4A4543);
   }
-  .mw-svc-hero--alert .mw-svc-hero__inner { padding-block: clamp(36px, 5vw, 64px) clamp(28px, 4vw, 48px); }
+  .mw-svc-hero--alert .mw-svc-hero__inner { padding-block: clamp(36px, 5vw, 64px) 0; }
   .mw-svc-hero--alert::after { display: none; }
-  .mw-svc-hero--alert .mw-svc-hero__inner::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 1px;
-    background: var(--c-line);
-    pointer-events: none;
-  }
 }
 @keyframes mw-oncall-pulse {
   0%   { box-shadow: 0 0 0 0 rgba(255, 180, 120, 0.65); }
@@ -5363,12 +5485,8 @@ html[data-brand="miller"] .tl-footer__bot {
   color: var(--c-ink-2);
   margin: 0;
 }
-@media (max-width: 900px) {
-  .mw-svc-tl { grid-template-columns: 1fr 1fr; gap: 30px 24px; }
-}
-@media (max-width: 520px) {
-  .mw-svc-tl { grid-template-columns: 1fr; }
-}
+/* ≤900px timeline layout (vertical stack + sticky notification) is consolidated
+   in the "vertical layout below 900px" block after the --v1 axis rules. */
 
 /* ── Service: coverage + capabilities split ──────────────────────── */
 .mw-svc-cov {
@@ -5562,6 +5680,10 @@ html[data-brand="miller"] .tl-footer__bot {
   .mw-svc-cov__photo { transition: none; }
 }
 @media (max-width: 860px) {
+  /* Stacked: eyebrow → photo → content. The photo pins to the top of the screen
+     while the content (list) scrolls beneath it, so the image stays visible and
+     visibly swaps as items are selected. It releases when the section ends. */
+  .mw-svc-cov { overflow: visible; }   /* a clipping ancestor would kill sticky */
   .mw-svc-cov__grid { grid-template-columns: 1fr; row-gap: clamp(18px, 4vw, 28px); }
   .mw-svc-cov__eyebrow { grid-column: 1; grid-row: auto; order: 0; margin-bottom: 0; }
   .mw-svc-cov__media {
@@ -5569,7 +5691,10 @@ html[data-brand="miller"] .tl-footer__bot {
     grid-row: auto;
     align-self: auto;
     order: 1;
-    height: clamp(300px, 64vw, 440px);
+    height: clamp(280px, 52vw, 380px);
+    position: sticky;
+    top: 54px;   /* just under the 57px collapsed topbar */
+    z-index: 3;
   }
   .mw-svc-cov__content { grid-column: 1; grid-row: auto; order: 2; }
 }
@@ -5625,4 +5750,94 @@ html[data-brand="miller"] .tl-footer__bot {
   /* No motion: lit states still apply but snap instantly (index is frozen at 0). */
   .mw-svc-tl-sec--v1 .mw-svc-tl__axis::before,
   .mw-svc-tl-sec--v1 .mw-svc-tl__axis::after { transition: none; }
+}
+
+/* ── "When you call" timeline — vertical layout below 900px ───────────────
+   Desktop (>900px) is untouched. Below 900px the five steps stack vertically:
+   the connector axis + arrow rotate to point DOWN (same clock-driven fill),
+   and the notification card moves beside the timeline as a sticky sibling.
+   The notification is relocated purely with `display: contents` on the intro
+   wrapper — no JSX change, so the single notification clock + live region stay
+   intact. */
+@media (max-width: 900px) {
+  /* Single column: notification card stays above the timeline (full width) and
+     becomes a sticky top band; the timeline scrolls beneath it. The notification
+     is promoted to a sibling of the timeline (display:contents on the intro) so it
+     can stay pinned through the whole timeline scroll, then release at its end. */
+  .mw-svc-tl-sec { overflow: visible; }   /* a clipping ancestor would kill sticky */
+  .mw-svc-tl-sec__intro { display: contents; }
+  .mw-svc-tl-sec__intro > .mw-svc-tl-notify {
+    position: sticky;
+    /* Sits just under the 57px collapsed topbar (slight overlap = no peek-through). */
+    top: 54px;
+    z-index: 4;
+    margin: clamp(18px, 2.4vw, 26px) 0 0;
+    padding-block: clamp(10px, 1.4vw, 15px);
+    /* Opaque band (section color) so steps hide cleanly as they scroll under it. */
+    background: var(--c-surface-warm);
+    box-shadow: 0 14px 16px -14px rgba(42, 27, 18, 0.16);
+    justify-content: center;
+  }
+
+  /* One step per row; the axis becomes a vertical spine. */
+  .mw-svc-tl { grid-template-columns: 1fr; gap: 0; margin-top: clamp(26px, 5vw, 44px); }
+  .mw-svc-tl-sec--v1 .mw-svc-tl { padding-inline: 0; margin-inline: 0; overflow-x: clip; }
+
+  .mw-svc-tl__stage {
+    position: relative;
+    display: block;
+    padding-left: clamp(34px, 9vw, 44px);
+    padding-bottom: clamp(30px, 6vw, 48px);
+  }
+  /* Room below the final step so its terminal arrow isn't clipped. */
+  .mw-svc-tl__stage:last-child { padding-bottom: clamp(16px, 2.2vw, 22px); }
+  .mw-svc-tl__time { margin-bottom: 12px; }
+  .mw-svc-tl__name { margin-bottom: 8px; }
+  .mw-svc-tl__body { width: 100%; }
+
+  /* Vertical spine. Stops short of the next step's node (gap via `bottom`) so the
+     arrow never touches the diamond below it. */
+  .mw-svc-tl__axis {
+    position: absolute;
+    left: 11px;
+    top: 11.5px;
+    bottom: clamp(14px, 2vw, 20px);
+    width: 2px;
+    height: auto;
+    margin: 0;
+  }
+
+  /* Fill grows top→bottom instead of left→right. */
+  .mw-svc-tl__axis::before { top: 0; left: 0; width: 100%; height: 0; }
+
+  /* Node diamond centered on the eyebrow line. */
+  .mw-svc-tl__node { top: 0; left: 50%; transform: translate(-50%, -50%) rotate(45deg); }
+  .mw-svc-tl__stage:hover .mw-svc-tl__node { transform: translate(-50%, -50%) rotate(135deg) scale(1.12); }
+
+  /* Arrow points down at the bottom of each spine. */
+  .mw-svc-tl__axis::after {
+    top: auto;
+    bottom: -1px;
+    left: 50%;
+    right: auto;
+    transform: translate(-50%, 0) rotate(135deg);
+  }
+
+  /* Same notification-clock-driven fill, now vertical. */
+  .mw-svc-tl-sec--v1 .mw-svc-tl__axis::before { transition: height 329ms cubic-bezier(.2, .7, .2, 1); }
+  .mw-svc-tl[data-tl-active="0"] .mw-svc-tl__stage:nth-child(-n+1) .mw-svc-tl__axis::before,
+  .mw-svc-tl[data-tl-active="1"] .mw-svc-tl__stage:nth-child(-n+2) .mw-svc-tl__axis::before,
+  .mw-svc-tl[data-tl-active="2"] .mw-svc-tl__stage:nth-child(-n+3) .mw-svc-tl__axis::before,
+  .mw-svc-tl[data-tl-active="3"] .mw-svc-tl__stage:nth-child(-n+4) .mw-svc-tl__axis::before,
+  .mw-svc-tl[data-tl-active="4"] .mw-svc-tl__stage:nth-child(-n+5) .mw-svc-tl__axis::before {
+    height: 100%;
+  }
+  .mw-svc-tl[data-tl-active="0"] .mw-svc-tl__stage:nth-child(-n+1) .mw-svc-tl__axis::after,
+  .mw-svc-tl[data-tl-active="1"] .mw-svc-tl__stage:nth-child(-n+2) .mw-svc-tl__axis::after,
+  .mw-svc-tl[data-tl-active="2"] .mw-svc-tl__stage:nth-child(-n+3) .mw-svc-tl__axis::after,
+  .mw-svc-tl[data-tl-active="3"] .mw-svc-tl__stage:nth-child(-n+4) .mw-svc-tl__axis::after,
+  .mw-svc-tl[data-tl-active="4"] .mw-svc-tl__stage:nth-child(-n+5) .mw-svc-tl__axis::after {
+    border-top-color: var(--c-accent);
+    border-right-color: var(--c-accent);
+  }
 }

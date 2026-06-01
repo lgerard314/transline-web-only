@@ -33,7 +33,7 @@ export const SERVICES = [
     id: "emergency-response",
     slug: "emergency-response",
     title: "Emergency Response",
-    summary: "24/7 spill response across Manitoba and the prairies.",
+    summary: "24/7 emergency response across Manitoba and the prairies.",
     icon: "✕",
     photo: "/miller/fleet-trucks-gravel-transparent.png",
     variant: "bespoke",

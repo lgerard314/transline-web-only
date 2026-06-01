@@ -35,6 +35,6 @@ export const treatmentFacility = {
   contact: {
     phone: { display: "(204) 737-2045", href: "tel:+12047372045" },
     email: EMAIL_INQUIRIES,
-    hours: `24/7 spill response: ${EMERGENCY_PHONE} · Fax: (204) 737-2161`,
+    hours: `24/7 emergency response: ${EMERGENCY_PHONE} · Fax: (204) 737-2161`,
   },
 };

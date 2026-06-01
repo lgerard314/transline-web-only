@@ -18,4 +18,4 @@ No hero copy. Page is essentially a 9-card grid linking to each service detail.
 (Note: existing site does not show Environmental Remediation in this grid, but the page exists at `/industrial-services/environmental-remediation-services/` — possibly an in-flight addition.)
 
 ## Emergency CTA
-> For our 24/7 spill response team, call (204) 957-6327
+> For our 24/7 emergency response team, call (204) 957-6327

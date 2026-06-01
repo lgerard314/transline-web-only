@@ -34,7 +34,7 @@ export function HistorySection() {
                 <span className="mw-section-tag-label">Our history</span>
               </p>
               <h2 id="mw-tenure-heading-copy-b" className="mw-ten3__title">
-                Three decades in <span className="mw-ten3__title-em">hazardous waste</span><span className="mw-stop" aria-hidden="true" />
+                Three decades in <span className="mw-ten3__title-em">hazardous <span className="mw-nobr">waste<span className="mw-stop" aria-hidden="true" /></span></span>
               </h2>
               <p className="mw-ten3__lead">
                 Miller Environmental was formed in 1996 as Manitoba&rsquo;s first private-public hazardous-waste operator. Vaughn Bullough joined as General Manager in 1997 and led operations for twenty-five years. The facility was renamed in his honour in 2022. The work continues.

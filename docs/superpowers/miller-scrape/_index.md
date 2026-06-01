@@ -58,7 +58,7 @@ The Miller logomark — the live site's actual mark — is at
 the real mark ships from phase 01.
 
 ## Brand notes (cross-cut)
-- Phones: **(204) 925-9600** general · **(204) 957-6327** 24/7 spill response
+- Phones: **(204) 925-9600** general · **(204) 957-6327** 24/7 emergency response
 - Email: `inquiries@millerenvironmental.mb.ca` · sales: `sales@millerenvironmental.mb.ca` · HR: `hr@millerenvironmental.mb.ca`
 - Address (HQ): 1803 Hekla Ave, Winnipeg, MB R2R 0K3
 - Address (VBEC): Hwy 14 & 75, Saint Jean Baptiste, MB R0G 2B0

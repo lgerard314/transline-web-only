@@ -12,6 +12,7 @@
 
 import { Fragment, useState } from "react";
 import Link from "next/link";
+import { StopText } from "./StopText";
 
 export function CoverageGallery({
   eyebrow,
@@ -38,11 +39,10 @@ export function CoverageGallery({
         <h2 id={titleId} className="mw-section-title mw-svc-cov__heading">
           {title.split("\n").map((line, i, arr) => (
             <Fragment key={i}>
-              {line}
+              {i === arr.length - 1 ? <StopText>{line}</StopText> : line}
               {i < arr.length - 1 && <br />}
             </Fragment>
           ))}
-          <span className="mw-stop" aria-hidden="true" />
         </h2>
         <p className="mw-svc-cov__lead">{lead}</p>
 
@@ -54,6 +54,7 @@ export function CoverageGallery({
               data-active={i === active ? "1" : undefined}
               onMouseEnter={() => setActive(i)}
               onFocus={() => setActive(i)}
+              onClick={() => setActive(i)}
             >
               <span className="mw-svc-cov__item-text">{it.text}</span>
               <span className="mw-svc-cov__item-thumb" aria-hidden="true">

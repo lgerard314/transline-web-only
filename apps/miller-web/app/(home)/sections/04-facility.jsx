@@ -24,7 +24,7 @@ export function FacilitySection() {
                 <span className="mw-section-tag-label">Vaughn Bullough Environmental Centre</span>
               </p>
               <h2 id="mw-facility-heading-copy" className="mw-fac2__title">
-                VBEC<span className="mw-stop" aria-hidden="true" /><br /><span className="mw-fac2__title-em">A facility built for the work<span className="mw-stop" aria-hidden="true" /></span>
+                <span className="mw-nobr">VBEC<span className="mw-stop" aria-hidden="true" /></span><br /><span className="mw-fac2__title-em">A facility built for the <span className="mw-nobr">work<span className="mw-stop" aria-hidden="true" /></span></span>
               </h2>
             </header>
             <p className="mw-fac2__lead">{c.vbec.body}</p>
@@ -46,10 +46,14 @@ export function FacilitySection() {
 
             <div className="mw-fac2__actions">
               <Link href={c.vbec.cta.href} className="mw-cta mw-cta--solid">
-                {c.vbec.cta.label} <span aria-hidden="true">→</span>
+                <span className="mw-fac2__lbl-long">{c.vbec.cta.label}</span>
+                <span className="mw-fac2__lbl-short">Visit Facility</span>
+                {" "}<span aria-hidden="true">→</span>
               </Link>
               <Link href={c.vbec.aboutHref} className="mw-fac2__about">
-                {c.vbec.aboutLinkLabel} <span aria-hidden="true">→</span>
+                <span className="mw-fac2__lbl-long">{c.vbec.aboutLinkLabel}</span>
+                <span className="mw-fac2__lbl-short">Read the story</span>
+                {" "}<span aria-hidden="true">→</span>
               </Link>
             </div>
           </div>

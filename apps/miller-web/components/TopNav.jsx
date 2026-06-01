@@ -221,7 +221,8 @@ export function TopNav() {
               <strong>{GENERAL_PHONE_DISPLAY}</strong>
             </a>
             <Link href="/contact-us" className="tl-btn tl-btn--primary tl-cta-desktop">
-              Contact us <span className="tl-btn-arr">→</span>
+              <span className="tl-cta-desktop__full">Contact us <span className="tl-btn-arr">→</span></span>
+              <span className="tl-cta-desktop__compact">Connect</span>
             </Link>
             <button
               type="button"

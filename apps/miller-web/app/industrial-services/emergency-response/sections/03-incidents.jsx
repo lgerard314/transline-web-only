@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import { emergencyResponse as c } from "@/lib/content/service-emergency-response";
+import { StopText } from "@/components/StopText";
 
 // §3 — What we respond to (photo incident grid on the light --c-bg surface).
 export function IncidentsSection() {
@@ -14,13 +15,15 @@ export function IncidentsSection() {
               <span className="mw-section-tag-label">{inc.eyebrow}</span>
             </p>
             <h2 id="er-inc-title" className="mw-section-title">
-              {inc.title.split("\n").map((line, i, arr) => (
-                <Fragment key={i}>
-                  {i === 0 ? line : <em className="mw-svc-inds__title-em">{line}</em>}
-                  {i < arr.length - 1 && <br />}
-                </Fragment>
-              ))}
-              <span className="mw-stop" aria-hidden="true" />
+              {inc.title.split("\n").map((line, i, arr) => {
+                const inner = i === arr.length - 1 ? <StopText>{line}</StopText> : line;
+                return (
+                  <Fragment key={i}>
+                    {i === 0 ? inner : <em className="mw-svc-inds__title-em">{inner}</em>}
+                    {i < arr.length - 1 && <br />}
+                  </Fragment>
+                );
+              })}
             </h2>
             <p className="mw-svc-inds__lead">{inc.lead}</p>
           </div>

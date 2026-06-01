@@ -35,7 +35,7 @@ export function ServicesSection() {
             <span className="mw-section-tag-label">Services</span>
           </p>
           <h2 id="mw-services-heading" className="mw-section-title">
-            whatever your waste needs,<br /><span className="mw-services__title-em">we&rsquo;ve got you covered<span className="mw-stop" aria-hidden="true" /></span>
+            whatever your waste needs,<br /><span className="mw-services__title-em">we&rsquo;ve got you <span className="mw-nobr">covered<span className="mw-stop" aria-hidden="true" /></span></span>
           </h2>
           <p className="mw-services__intro">
             From routine industrial streams to one-off emergency calls, Miller&rsquo;s licensed VBEC facility and field crews handle the full spectrum &mdash; collection, treatment, and final disposition, all under one roof.

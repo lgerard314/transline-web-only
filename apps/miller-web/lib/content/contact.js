@@ -22,7 +22,7 @@ export const contactContent = {
   intake: {
     display: EMERGENCY_PHONE,
     href: "tel:+12049576327",
-    note: "24/7 spill response team.",
+    note: "24/7 emergency response team.",
   },
   email: EMAIL_INQUIRIES,
 };

@@ -35,7 +35,7 @@
 **Change.** Rename to `wo-*` (white owl) in `apps/shared/brand/` *before* Miller starts importing. Patch TL49 in the same PR — it's mechanical. Decision #2's churn estimate is wrong: the work is 1 sed pass + lint, not a refactor.
 
 ### 4. `EmergencyBanner` is right, but the spec under-specifies its scope.
-**Issue.** §2.2 puts it sitewide, dismissable per-session. Good. But on Careers, Contact, About sub-pages, and the Treatment Facility page, a panic spill caller is not the journey — and the banner steals visual weight from those pages' actual CTAs (Apply Now, Contact form, VBEC directions). The Remediation page (`04-svc-environmental-remediation.md`) already has its *own* "For our 24/7 spill response team" footer block — the banner duplicates it.
+**Issue.** §2.2 puts it sitewide, dismissable per-session. Good. But on Careers, Contact, About sub-pages, and the Treatment Facility page, a panic spill caller is not the journey — and the banner steals visual weight from those pages' actual CTAs (Apply Now, Contact form, VBEC directions). The Remediation page (`04-svc-environmental-remediation.md`) already has its *own* "For our 24/7 emergency response team" footer block — the banner duplicates it.
 
 **Why it matters.** A persistent red strip on every page trains buyers to filter it out within two clicks. By the time they reach Contact, the banner is invisible — defeating its purpose for the one journey it serves.
 

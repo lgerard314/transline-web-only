@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { emergencyResponse as c } from "@/lib/content/service-emergency-response";
+import { StopText } from "@/components/StopText";
 
 // HERO — alert masthead. The 24/7 line is the primary action.
 export function HeroSection() {
@@ -14,7 +15,7 @@ export function HeroSection() {
           </p>
           <h1 id="er-hero-title" className="mw-svc-hero__title">
             {h.title}<br />
-            <span className="mw-svc-hero__title-em">{h.titleEm}</span><span className="mw-stop" aria-hidden="true" />
+            <span className="mw-svc-hero__title-em"><StopText>{h.titleEm}</StopText></span>
           </h1>
           <p className="mw-svc-hero__lead">{h.lead}</p>
           <div className="mw-svc-hero__ctas">
@@ -27,7 +28,9 @@ export function HeroSection() {
               <span className="mw-cta__num">{h.emergencyDisplay}</span>
             </a>
             <Link href={h.secondaryCta.href} className="mw-cta mw-cta--solid">
-              {h.secondaryCta.label} <span aria-hidden="true">→</span>
+              <span className="mw-svc-hero__cta-label mw-svc-hero__cta-label--full">{h.secondaryCta.label}</span>
+              <span className="mw-svc-hero__cta-label mw-svc-hero__cta-label--short">{h.secondaryCta.labelShort}</span>{" "}
+              <span aria-hidden="true">→</span>
             </Link>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { HOME as c } from "../home";
+import { StopText } from "@/components/StopText";
 
 const SOCIALS = [
   {
@@ -48,7 +49,7 @@ export function FinalCtaSection() {
             <span className="mw-section-tag-mark" />
             <span className="mw-section-tag-label">{c.finalCta.eyebrow}</span>
           </p>
-          <h2 id="mw-final-heading" className="mw-final__title">{c.finalCta.title.replace(/\.\s*$/, "")}<span className="mw-stop" aria-hidden="true" /></h2>
+          <h2 id="mw-final-heading" className="mw-final__title"><StopText>{c.finalCta.title.replace(/\.\s*$/, "")}</StopText></h2>
           <p className="mw-final__body">{c.finalCta.body}</p>
           <div className="mw-final__row">
             <Link href={c.finalCta.contactHref} className="mw-cta mw-cta--solid">
