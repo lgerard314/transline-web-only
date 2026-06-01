@@ -49,6 +49,7 @@
 .mw-svc-tl-sec .mw-section-tag,
 .mw-svc-cov .mw-section-tag,
 .mw-sched__panel .mw-section-tag,
+.mw-rem-vid .mw-section-tag,
 .mw-svc-cta .mw-section-tag { margin-bottom: clamp(20px, 1.5vw, 24px); }
 .mw-svc-hero__title {
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
