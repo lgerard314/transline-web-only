@@ -86,8 +86,8 @@ export function RelatedServices({
   }, []);
 
   return (
-    <div className="mw-rel" data-reveal>
-      <div className="mw-rel__head">
+    <div className="mw-rel">
+      <div className="mw-rel__head" data-reveal>
         <div className="mw-rel__head-text">
           <LabelTag id={titleId} className="mw-section-tag mw-rel__label">
             <span className="mw-section-tag-mark" aria-hidden="true" />
@@ -100,7 +100,7 @@ export function RelatedServices({
         </Link>
       </div>
 
-      <div className="mw-rel__viewport">
+      <div className="mw-rel__viewport" data-reveal>
         <button
           type="button"
           className="mw-rel__nav mw-rel__nav--prev"

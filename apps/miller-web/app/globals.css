@@ -4344,27 +4344,19 @@ html[data-brand="miller"] .tl-footer__bot {
   max-width: 44ch;
   margin: clamp(18px, 1.8vw, 26px) 0 0;
 }
-.mw-vol__kicker {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin: clamp(20px, 2vw, 28px) 0 0;
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
-  font-size: 11.5px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--c-ink-3);
-}
-.mw-vol__kicker-mark {
-  width: 8px;
-  height: 8px;
-  background: var(--c-accent);
-  transform: rotate(45deg);
-  flex-shrink: 0;
+/* Head rail stretches to the ladder height so the truck graphic can fill the
+   empty space beneath the copy. */
+.mw-vol__head { align-self: stretch; display: flex; flex-direction: column; }
+.mw-vol__head-photo { margin-top: auto; padding-top: clamp(28px, 3.5vw, 56px); }
+.mw-vol__head-photo img {
+  display: block;
+  width: 100%;
+  max-width: 416px;
+  height: auto;
 }
 
-/* Capacity ladder — one row per container tier. */
-.mw-vol__ladder { list-style: none; margin: 0; padding: 0; }
+/* Capacity ladder — one row per container tier, bottom-aligned in its column. */
+.mw-vol__ladder { list-style: none; margin: 0; padding: 0; align-self: end; }
 .mw-vol__tier {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
@@ -4391,13 +4383,6 @@ html[data-brand="miller"] .tl-footer__bot {
   align-items: baseline;
   gap: clamp(10px, 1.2vw, 16px);
 }
-.mw-vol__num {
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
-  font-size: 12px;
-  letter-spacing: 0.16em;
-  color: var(--c-accent);
-  flex-shrink: 0;
-}
 .mw-vol__name {
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
   font-weight: 600;
@@ -4407,7 +4392,10 @@ html[data-brand="miller"] .tl-footer__bot {
   line-height: 1;
   color: var(--c-ink);
   margin: 0;
+  transition: transform 220ms cubic-bezier(.2, .7, .2, 1);
 }
+/* Nudge the title right on hover, like the site's other row lists. */
+.mw-vol__tier:hover .mw-vol__name { transform: translateX(8px); }
 .mw-vol__spec {
   margin-left: auto;
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
@@ -4446,6 +4434,7 @@ html[data-brand="miller"] .tl-footer__bot {
 @media (max-width: 900px) {
   .mw-vol__grid { grid-template-columns: 1fr; gap: clamp(28px, 5vw, 40px); }
   .mw-vol__title { max-width: none; }
+  .mw-vol__head-photo { display: none; }
 }
 @media (max-width: 480px) {
   .mw-vol__tier { grid-template-columns: 1fr; gap: 14px; }
@@ -4473,28 +4462,21 @@ html[data-brand="miller"] .tl-footer__bot {
   background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-dark) 38px, var(--c-grain-on-dark) 39px);
 }
 .mw-flow__inner { position: relative; z-index: 1; }
-.mw-flow__head { margin-bottom: clamp(40px, 4.4vw, 76px); }
-.mw-flow__head-split {
-  display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-  gap: clamp(20px, 3vw, 56px);
-  align-items: end;
-}
-.mw-flow__title { color: #fff; max-width: 18ch; }
-.mw-flow__head-aside { display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
+.mw-flow__head { margin-bottom: clamp(36px, 4vw, 64px); }
+.mw-flow__title { color: #fff; max-width: 20ch; }
 .mw-flow__lead {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
   font-size: clamp(15px, 1.1vw, 18px);
   line-height: 1.55;
   color: var(--c-body-on-dark);
-  margin: 0;
-  max-width: 42ch;
+  margin: clamp(16px, 1.6vw, 22px) 0 0;
+  max-width: 60ch;
 }
 .mw-flow__route {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  margin: 0;
+  margin: clamp(18px, 1.8vw, 24px) 0 0;
   padding: 8px 14px;
   border: 1px solid rgba(245, 230, 203, 0.18);
   font-family: var(--font-plex-mono), ui-monospace, monospace;
@@ -4510,6 +4492,15 @@ html[data-brand="miller"] .tl-footer__bot {
   transform: rotate(45deg);
   flex-shrink: 0;
 }
+
+/* Two-column container: the route line (left) + notification banners (right). */
+.mw-flow__cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1.62fr) minmax(0, 1fr);
+  gap: clamp(28px, 3.5vw, 64px);
+  align-items: center;
+}
+.mw-flow__notify { min-width: 0; display: flex; justify-content: center; }
 
 /* Stations strung along a clay route line (segment drawn per stop). */
 .mw-flow__line {
@@ -4529,8 +4520,14 @@ html[data-brand="miller"] .tl-footer__bot {
   left: 46px;
   right: calc(clamp(16px, 1.8vw, 28px) * -1);
   height: 2px;
-  background: linear-gradient(90deg, var(--c-accent) 0%, rgba(168, 90, 44, 0.45) 100%);
+  background-color: rgba(245, 230, 203, 0.16);
+  background-image: linear-gradient(90deg, var(--c-accent), var(--c-amber));
+  background-repeat: no-repeat;
+  background-size: 0% 100%;
+  transition: background-size 600ms cubic-bezier(.4, 0, .2, 1);
 }
+/* Connector fills left→right once its stop falls behind the active step. */
+.mw-flow__stop[data-state="done"] .mw-flow__track::after { background-size: 100% 100%; }
 .mw-flow__stop[data-terminal="1"] .mw-flow__track::after { display: none; }
 .mw-flow__node {
   position: relative;
@@ -4541,16 +4538,31 @@ html[data-brand="miller"] .tl-footer__bot {
   align-items: center;
   justify-content: center;
   background: var(--c-navy);
-  border: 1.5px solid var(--c-accent);
-  color: #fff;
+  border: 1.5px solid rgba(168, 90, 44, 0.55);
+  color: rgba(255, 255, 255, 0.85);
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
   font-weight: 700;
   font-size: 20px;
   font-variant-numeric: tabular-nums;
+  transition: background 360ms ease, border-color 360ms ease, color 360ms ease, box-shadow 360ms ease;
 }
-.mw-flow__stop[data-terminal="1"] .mw-flow__node {
+/* Done + active stops light up; the active node pulses in time with its banner. */
+.mw-flow__stop[data-state="done"] .mw-flow__node {
   background: var(--c-accent);
-  box-shadow: 0 0 0 5px rgba(168, 90, 44, 0.18);
+  border-color: var(--c-accent);
+  color: #fff;
+}
+.mw-flow__stop[data-state="active"] .mw-flow__node {
+  background: var(--c-accent);
+  border-color: var(--c-amber);
+  color: #fff;
+  box-shadow: 0 0 0 0 rgba(168, 90, 44, 0.5);
+  animation: mw-flow-pulse 1.9s ease-out infinite;
+}
+@keyframes mw-flow-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(168, 90, 44, 0.5); }
+  70% { box-shadow: 0 0 0 13px rgba(168, 90, 44, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(168, 90, 44, 0); }
 }
 .mw-flow__card { margin-top: clamp(18px, 1.8vw, 26px); padding-right: clamp(6px, 1vw, 16px); }
 .mw-flow__tag {
@@ -4581,8 +4593,11 @@ html[data-brand="miller"] .tl-footer__bot {
   color: rgba(250, 243, 229, 0.86);
   margin: 0;
 }
+@media (max-width: 1100px) {
+  .mw-flow__cols { grid-template-columns: 1fr; gap: clamp(32px, 5vw, 48px); align-items: stretch; }
+  .mw-flow__notify { justify-content: flex-start; }
+}
 @media (max-width: 980px) {
-  .mw-flow__head-split { grid-template-columns: 1fr; align-items: start; gap: 20px; }
   .mw-flow__line { grid-template-columns: repeat(2, 1fr); gap: 40px 24px; }
   .mw-flow__track::after { display: none; }
 }
@@ -4590,7 +4605,7 @@ html[data-brand="miller"] .tl-footer__bot {
   .mw-flow__line { grid-template-columns: 1fr; gap: 30px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .mw-flow__stop[data-terminal="1"] .mw-flow__node { box-shadow: none; }
+  .mw-flow__stop[data-state="active"] .mw-flow__node { animation: none; box-shadow: none; }
 }
 
 /* ── Service: industries grid ────────────────────────────────────── */
@@ -4694,11 +4709,18 @@ html[data-brand="miller"] .tl-footer__bot {
   .mw-svc-inds__grid { grid-template-columns: 1fr; }
 }
 
-/* Gallery variant — vertical photo cards (Who we collect from): a 16:9 image
-   on top with the industry name below. Distinct from the --photo overlay
-   cards used on Emergency Response; uses its own .mw-ind-card classes so the
-   base chip + the --photo variant are both untouched. */
-.mw-svc-inds--gallery .mw-svc-inds__grid { gap: clamp(14px, 1.4vw, 22px); }
+/* Gallery variant — 5-up photo cards (Who we collect from): 16:9 image, name,
+   diamond-tick, one-line blurb. The tenth cell is a "Talk to Miller" button.
+   Own .mw-ind-* classes so the base chip + the --photo variant stay untouched. */
+.mw-svc-inds--gallery .mw-svc-inds__grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(14px, 1.4vw, 22px);
+}
+@media (max-width: 1180px) { .mw-svc-inds--gallery .mw-svc-inds__grid { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 940px)  { .mw-svc-inds--gallery .mw-svc-inds__grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 680px)  { .mw-svc-inds--gallery .mw-svc-inds__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 460px)  { .mw-svc-inds--gallery .mw-svc-inds__grid { grid-template-columns: 1fr; } }
+
 .mw-ind-card {
   position: relative;
   display: flex;
@@ -4745,31 +4767,93 @@ html[data-brand="miller"] .tl-footer__bot {
   transform: scale(1.06);
   filter: saturate(1.05) brightness(1.04) contrast(1.0) sepia(0.02);
 }
-.mw-ind-card__name {
+.mw-ind-card__body {
+  flex: 1;
   display: flex;
-  align-items: center;
-  gap: 11px;
+  flex-direction: column;
+  padding: clamp(14px, 1.1vw, 18px) clamp(15px, 1.1vw, 19px) clamp(15px, 1.2vw, 19px);
+}
+.mw-ind-card__name {
   margin: 0;
-  padding: clamp(14px, 1.3vw, 19px) clamp(15px, 1.3vw, 20px);
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
   font-weight: 600;
-  font-size: clamp(16px, 1.15vw, 20px);
+  font-size: clamp(17px, 1.2vw, 21px);
   text-transform: uppercase;
   letter-spacing: 0.02em;
-  line-height: 1.1;
+  line-height: 1.08;
   color: var(--c-ink);
 }
-.mw-ind-card__mark {
-  width: 9px;
-  height: 9px;
+/* Diamond + short line beneath the title (mirrors the ER incident cards). */
+.mw-ind-card__tick {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: clamp(8px, 0.8vw, 11px) 0 clamp(8px, 0.8vw, 10px);
+}
+.mw-ind-card__tick-dot {
+  width: 7px;
+  height: 7px;
   background: var(--c-accent);
   transform: rotate(45deg);
   flex-shrink: 0;
-  transition: transform 300ms cubic-bezier(.2,.7,.2,1);
+  transition: transform 320ms cubic-bezier(.2,.7,.2,1);
 }
-.mw-ind-card:hover .mw-ind-card__mark { transform: rotate(135deg); }
+.mw-ind-card__tick-line {
+  width: clamp(20px, 2vw, 30px);
+  height: 1px;
+  background: rgba(168, 90, 44, 0.45);
+}
+.mw-ind-card:hover .mw-ind-card__tick-dot { transform: rotate(135deg); }
+.mw-ind-card__blurb {
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--c-ink-3);
+  font-weight: 400;
+  transition: font-weight 200ms ease;
+}
+/* Body copy thickens by 100 weight on hover. */
+.mw-ind-card:hover .mw-ind-card__blurb { font-weight: 500; }
+
+/* Tenth cell — a big "Talk to Miller" button. The cell is the outer square
+   (same footprint as the cards); its border is the frame and its padding is the
+   gap, so the clay button floats inside with a ring of the page showing around. */
+.mw-ind-cta-cell {
+  display: flex;
+  border: 2px solid var(--c-accent-2);
+  padding: clamp(7px, 0.7vw, 11px);
+}
+.mw-ind-cta {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+  padding: clamp(20px, 1.8vw, 30px);
+  text-decoration: none;
+  color: #fff;
+  background: var(--c-navy);
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(20px, 1.5vw, 27px);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.05;
+  transition: background 220ms ease, box-shadow 220ms ease;
+}
+.mw-ind-cta__arrow { transition: transform 220ms cubic-bezier(.2, .7, .2, 1); }
+.mw-ind-cta:hover {
+  background: var(--c-navy-2);
+  box-shadow: 0 16px 28px -20px rgba(42, 27, 18, 0.5);
+}
+.mw-ind-cta:hover .mw-ind-cta__arrow { transform: translateX(4px); }
+.mw-ind-cta:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 3px; }
+
 @media (prefers-reduced-motion: reduce) {
   .mw-ind-card:hover .mw-ind-card__media img { transform: none; }
+  .mw-ind-cta:hover { transform: none; }
 }
 
 /* Photo-thumbnail variant of the incident cards (Emergency Response).
@@ -5092,15 +5176,16 @@ html[data-brand="miller"] .tl-footer__bot {
   .mw-svc-cta__grid--reverse .mw-svc-cta__content { order: -1; }
 }
 
-/* ── Service §5: "get on the schedule" — form + walnut panel split ── */
+/* ── Service §5: "get on the schedule" — dark walnut section: content left,
+   form + transparent truck right ──────────────────────────────────────── */
 .mw-sched {
   position: relative;
-  background: var(--c-bg);
-  color: var(--c-ink);
+  background: var(--c-navy);
+  color: var(--c-on-navy);
   padding-block: clamp(56px, 5.5vw, 100px);
   overflow: hidden;
   isolation: isolate;
-  border-top: 1px solid var(--c-line);
+  border-top: 1px solid rgba(245, 230, 203, 0.1);
 }
 .mw-sched::before {
   content: "";
@@ -5108,27 +5193,65 @@ html[data-brand="miller"] .tl-footer__bot {
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-dark) 38px, var(--c-grain-on-dark) 39px);
 }
 .mw-sched__inner { position: relative; z-index: 1; }
+/* Transparent truck cutout anchored to the right edge, contained so the whole
+   truck fits, free to span as far left as it needs on the dark section. */
+.mw-sched__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: url("/miller/nice-truck-closeup-transparent-bg.png") right center / contain no-repeat;
+}
+/* Soft left scrim so the copy column stays legible where the truck reaches in. */
+.mw-sched__bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--c-navy) 0%, rgba(59, 36, 24, 0.92) 28%, rgba(59, 36, 24, 0) 52%);
+}
 .mw-sched__grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: clamp(28px, 3.4vw, 60px);
   align-items: stretch;
 }
-.mw-sched__form-col { order: -1; min-width: 0; display: flex; }
 .mw-sched__panel { min-width: 0; }
+/* Form sits on the right, over the photo — vertically centered, not stretched. */
+.mw-sched__form-col { min-width: 0; display: flex; align-self: center; }
 
-/* Left — scheduling form on a warm cream card. */
+/* Form card — dark glass floating over the truck photo. The clay top bar wipes
+   in left→right only on hover / while being filled out (:focus-within), and the
+   card darkens in the same states. */
 .mw-sched__card {
+  position: relative;
   width: 100%;
-  background: var(--c-surface-warm);
-  border: 1px solid var(--c-line);
-  border-top: 3px solid var(--c-accent);
+  background: rgba(22, 13, 7, 0.72);
+  -webkit-backdrop-filter: blur(12px) saturate(1.05);
+  backdrop-filter: blur(12px) saturate(1.05);
+  border: 1px solid rgba(245, 230, 203, 0.16);
   padding: clamp(24px, 2.6vw, 44px);
-  box-shadow: 0 40px 80px -54px rgba(42, 27, 18, 0.5);
+  box-shadow: 0 50px 90px -50px rgba(0, 0, 0, 0.7);
+  transition: background 260ms ease, border-color 260ms ease;
 }
+.mw-sched__card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: var(--c-accent);
+  transition: width 420ms cubic-bezier(.2, .7, .2, 1);
+}
+.mw-sched__card:hover,
+.mw-sched__card:focus-within {
+  background: rgba(22, 13, 7, 0.86);
+  border-color: rgba(245, 230, 203, 0.26);
+}
+.mw-sched__card:hover::before,
+.mw-sched__card:focus-within::before { width: 100%; }
 .mw-sched__card-head { margin-bottom: clamp(20px, 2vw, 28px); }
 .mw-sched__form-title {
   margin: 0;
@@ -5138,37 +5261,13 @@ html[data-brand="miller"] .tl-footer__bot {
   line-height: 1.04;
   text-transform: uppercase;
   letter-spacing: 0.01em;
-  color: var(--c-ink);
+  color: #fff;
 }
-.mw-sched__form-note {
-  margin: 10px 0 0;
-  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
-  font-size: 14px;
-  line-height: 1.5;
-  color: var(--c-ink-2);
-  max-width: 48ch;
-}
-
-/* Right — deep walnut "what happens next" panel. */
-.mw-sched__panel {
-  position: relative;
-  background: var(--c-navy);
-  color: var(--c-on-navy);
-  padding: clamp(28px, 3vw, 48px);
-  overflow: hidden;
-  isolation: isolate;
-}
-.mw-sched__panel::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-dark) 38px, var(--c-grain-on-dark) 39px);
-}
-.mw-sched__panel > * { position: relative; z-index: 1; }
+/* Left — "what happens next" content sits directly on the dark section
+   (no container background of its own). */
+.mw-sched__panel { color: var(--c-on-navy); padding: 0; }
 .mw-sched__panel .mw-section-tag-mark { background: var(--c-accent); }
-.mw-sched__title { color: #fff; font-size: clamp(34px, 3.4vw, 56px); max-width: 16ch; }
+.mw-sched__title { color: #fff; font-size: clamp(42px, 4.6vw, 76px); line-height: 0.98; max-width: 20ch; }
 .mw-sched__title-em { font-style: italic; color: var(--c-accent); }
 .mw-sched__title .mw-stop { background: var(--c-accent); }
 .mw-sched__body {
@@ -5217,53 +5316,20 @@ html[data-brand="miller"] .tl-footer__bot {
   font-size: 13.5px;
   line-height: 1.5;
   color: rgba(245, 230, 203, 0.74);
+  /* Narrow + balanced so each step body lands on two roughly even lines. */
+  max-width: 52ch;
+  text-wrap: balance;
 }
-
-/* 24/7 hotline chip. */
-.mw-sched__hotline {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-top: clamp(24px, 2.4vw, 34px);
-  padding: clamp(14px, 1.4vw, 18px) clamp(16px, 1.6vw, 22px);
-  text-decoration: none;
-  background: rgba(0, 0, 0, 0.22);
-  border: 1px solid rgba(245, 230, 203, 0.16);
-  transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s cubic-bezier(.2, .7, .2, 1);
-}
-.mw-sched__hotline:hover { border-color: var(--c-accent); background: rgba(168, 90, 44, 0.16); transform: translateY(-2px); }
-.mw-sched__hotline:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 3px; }
-.mw-sched__hotline-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--c-accent);
-  flex-shrink: 0;
-  box-shadow: 0 0 0 0 rgba(168, 90, 44, 0.55);
-  animation: mw-cta-pulse 2.2s ease-out infinite;
-}
-.mw-sched__hotline-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.mw-sched__hotline-sup {
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
-  font-size: 10.5px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(245, 230, 203, 0.66);
-}
-.mw-sched__hotline-num {
-  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
-  font-weight: 700;
-  font-size: clamp(24px, 2.4vw, 34px);
-  line-height: 1;
-  color: #fff;
-}
-.mw-sched__hotline-arrow { margin-left: auto; color: var(--c-accent); font-size: 20px; flex-shrink: 0; }
-@media (prefers-reduced-motion: reduce) { .mw-sched__hotline-dot { animation: none; } }
 
 /* New scheduling form: reuse the accessible .tl-field atoms, but keep the
    focus ring warm (the brand default glows cool navy) and tune spacing. */
 .mw-sched-form .tl-field { margin-bottom: clamp(14px, 1.4vw, 18px); }
 .mw-sched-form .tl-field:last-of-type { margin-bottom: 0; }
+/* Labels read against the dark-glass card. */
+.mw-sched-form .tl-field label { color: rgba(245, 230, 203, 0.74); }
+/* Squared inputs — the brand uses square rectangles, not rounded fields. */
+.mw-sched-form .tl-field input,
+.mw-sched-form .tl-field textarea { border-radius: 0; }
 .mw-sched-form .tl-field input:focus,
 .mw-sched-form .tl-field select:focus,
 .mw-sched-form .tl-field textarea:focus {
@@ -5308,8 +5374,16 @@ html[data-brand="miller"] .tl-footer__bot {
 .mw-sched-done__tel:hover { text-decoration: underline; }
 
 @media (max-width: 860px) {
+  .mw-sched__bg { display: none; }
   .mw-sched__grid { grid-template-columns: 1fr; gap: clamp(28px, 5vw, 36px); }
-  .mw-sched__form-col { order: 0; }
+  .mw-sched__form-col { align-self: stretch; }
+  /* No photo behind on mobile — give the card a solid fill one step lighter
+     than the now-dark section so it still reads as a card. */
+  .mw-sched__card {
+    background: var(--c-navy-2);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
 }
 
 /* Standalone related-services section (split from closing CTA) */

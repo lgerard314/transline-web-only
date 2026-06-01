@@ -22,7 +22,6 @@ export const customerWasteCollection = {
   scale: {
     eyebrow: "Any volume",
     title: "From a single pail to full van loads",
-    kicker: "Four container tiers · one chain of custody",
     lead:
       "One drum a year or a van load every week — it runs on the same documented chain of custody either way. We size the service to your generation rate, not the other way around.",
     // fill = relative capacity, drives the proportional clay bar (0–100).
@@ -47,6 +46,13 @@ export const customerWasteCollection = {
       { num: "03", tag: "On-site", name: "Package & manifest", body: "On-site technicians pack, label, and document every container for compliant, hazardous-rated transport." },
       { num: "04", tag: "Transport", name: "Transport to VBEC", body: `Dedicated trucks move your waste under documented chain of custody to the licensed ${VBEC_SHORT} for treatment or disposal.` },
     ],
+    // One banner per step — cycled in lock-step with the route-line animation.
+    notifications: [
+      { title: "Streams profiled", body: "Waste types and volumes logged — service sized to your site." },
+      { title: "Pickup scheduled", body: "A cadence is set. Your next collection window is booked." },
+      { title: "Packed & manifested", body: "Containers labelled and documented for hazardous transport." },
+      { title: "En route to VBEC", body: `Dedicated truck rolling to the licensed ${VBEC_SHORT} under chain of custody.` },
+    ],
   },
 
   // §4 — Industries.
@@ -55,15 +61,17 @@ export const customerWasteCollection = {
     title: "Built for regulated generators",
     lead: `On-site technicians handle the packaging and paperwork so your team doesn't have to — across every sector that ${VBEC_FULL_NAME} serves.`,
     items: [
-      { name: "Manufacturing", photo: "/miller/industrial-leaks.png" },
-      { name: "Aerospace & Defence", photo: "/miller/dangerous-goods.png" },
-      { name: "Agriculture", photo: "/miller/contaminated-soul.png" },
-      { name: "Transportation & Rail", photo: "/miller/transport-incidents.png" },
-      { name: "Healthcare", photo: "/miller/hazmat-cleaning.png" },
-      { name: "Biotech & Pharma", photo: "/miller/chemical-spills.png" },
-      { name: "Education", photo: "/miller/clean-up-and-site-remediation.png" },
-      { name: "Oil & Gas", photo: "/miller/fuel-and-diesel-spills.png" },
+      { name: "Manufacturing", photo: "/miller/industrial-leaks.png", blurb: "Process solvents, sludges, and off-spec plant waste." },
+      { name: "Aerospace & Defence", photo: "/miller/dangerous-goods.png", blurb: "Specialty chemicals, fuels, and secure-site streams." },
+      { name: "Agriculture", photo: "/miller/contaminated-soul.png", blurb: "Surplus pesticides, fertilizers, and used farm oils." },
+      { name: "Transportation & Rail", photo: "/miller/transport-incidents.png", blurb: "Yard spill residues, used fluids, and shop waste." },
+      { name: "Healthcare", photo: "/miller/hazmat-cleaning.png", blurb: "Pharmaceutical, lab, and regulated medical waste." },
+      { name: "Biotech & Pharma", photo: "/miller/chemical-spills.png", blurb: "Reactive reagents, solvents, and expired product." },
+      { name: "Education", photo: "/miller/clean-up-and-site-remediation.png", blurb: "Lab-pack service for campus chemistry and shops." },
+      { name: "Oil & Gas", photo: "/miller/fuel-and-diesel-spills.png", blurb: "Tank bottoms, drilling waste, and hydrocarbons." },
+      { name: "Other", photo: "/miller/dumptruck-on-ice.png", blurb: "Almost any regulated waste stream — just ask." },
     ],
+    cta: { label: "Talk to Miller", href: "/contact-us/" },
   },
 
   // §5 — Closing CTA: split panel with a purpose-built scheduling form.
@@ -73,7 +81,6 @@ export const customerWasteCollection = {
     titleEm: "schedule",
     body: "Tell us what you generate and how often. We'll build a pickup cadence that keeps your site compliant and your waste volume under control.",
     formTitle: "Request a pickup schedule",
-    formNote: "Share your containers and cadence — a coordinator confirms a first pickup window within one business day.",
     nextEyebrow: "What happens next",
     next: [
       { num: "01", name: "We profile your streams", text: "A coordinator reviews your waste types, containers, and site — usually within one business day." },

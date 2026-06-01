@@ -51,28 +51,26 @@ export function ScaleSection() {
     <section className="mw-vol" aria-labelledby="cwc-scale-title">
       <div className="mw-vol__inner mw-inner">
         <div className="mw-vol__grid">
-          <header className="mw-vol__head" data-reveal>
-            <p className="mw-section-tag" aria-hidden="true">
+          <header className="mw-vol__head">
+            <p className="mw-section-tag" data-reveal aria-hidden="true">
               <span className="mw-section-tag-mark" />
               <span className="mw-section-tag-label">{s.eyebrow}</span>
             </p>
-            <h2 id="cwc-scale-title" className="mw-section-title mw-vol__title">
+            <h2 id="cwc-scale-title" className="mw-section-title mw-vol__title" data-reveal>
               <StopText>{s.title}</StopText>
             </h2>
-            <p className="mw-vol__lead">{s.lead}</p>
-            <p className="mw-vol__kicker">
-              <span className="mw-vol__kicker-mark" aria-hidden="true" />
-              {s.kicker}
-            </p>
+            <p className="mw-vol__lead" data-reveal>{s.lead}</p>
+            <div className="mw-vol__head-photo" data-reveal aria-hidden="true">
+              <img src="/miller/dumptruck-2.png" alt="" loading="lazy" />
+            </div>
           </header>
 
           <ol className="mw-vol__ladder" data-reveal-stagger>
             {s.tiers.map((t) => (
-              <li key={t.num} className="mw-vol__tier">
+              <li key={t.name} className="mw-vol__tier">
                 <span className="mw-vol__glyph" aria-hidden="true">{GLYPHS[t.glyph]}</span>
                 <div className="mw-vol__body">
                   <div className="mw-vol__line">
-                    <span className="mw-vol__num">{t.num}</span>
                     <h3 className="mw-vol__name">{t.name}</h3>
                     <span className="mw-vol__spec">{t.spec}</span>
                   </div>

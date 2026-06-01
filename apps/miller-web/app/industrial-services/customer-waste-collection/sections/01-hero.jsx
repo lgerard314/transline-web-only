@@ -9,16 +9,16 @@ export function HeroSection() {
     <section className="mw-svc-hero mw-svc-hero--alert mw-svc-hero--photo-50" aria-labelledby="cwc-hero-title">
       <div className="mw-svc-hero__inner mw-inner">
         <div className="mw-svc-hero__content">
-          <p className="mw-section-tag" aria-hidden="true">
+          <p className="mw-section-tag" data-reveal aria-hidden="true">
             <span className="mw-section-tag-mark" />
             <span className="mw-section-tag-label">{h.eyebrow}</span>
           </p>
-          <h1 id="cwc-hero-title" className="mw-svc-hero__title">
+          <h1 id="cwc-hero-title" className="mw-svc-hero__title" data-reveal>
             {h.title}<br />
             <span className="mw-svc-hero__title-em"><StopText>{h.titleEm}</StopText></span>
           </h1>
-          <p className="mw-svc-hero__lead">{h.lead}</p>
-          <div className="mw-svc-hero__ctas">
+          <p className="mw-svc-hero__lead" data-reveal>{h.lead}</p>
+          <div className="mw-svc-hero__ctas" data-reveal>
             <Link href={h.secondaryCta.href} className="mw-cta mw-cta--solid">
               <span className="mw-svc-hero__cta-label mw-svc-hero__cta-label--full">{h.secondaryCta.label}</span>
               <span className="mw-svc-hero__cta-label mw-svc-hero__cta-label--short">{h.secondaryCta.labelShort}</span>{" "}
