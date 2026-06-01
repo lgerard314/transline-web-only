@@ -1,4 +1,5 @@
 import { SectorStatCycle } from "./sector-stat-cycle";
+import { SectorCard } from "./sector-card";
 
 const SECTOR_STATS = [
   {
@@ -17,6 +18,45 @@ const SECTOR_STATS = [
     value: "40M+",
     unit: "tons",
     text: "diverted from landfill through specialty recycling — solvents, metals, plastics, and oils recovered back into use.",
+  },
+];
+
+const SECTOR_CARDS = [
+  {
+    title: "Industrial",
+    items: [
+      { slug: "industrial-manufacturing", name: "Industrial Manufacturing" },
+      { slug: "mining", name: "Mining" },
+      { slug: "oil-and-gas", name: "Oil & Gas" },
+      { slug: "chemical-distribution", name: "Chemical Distribution" },
+    ],
+  },
+  {
+    title: "Infrastructure",
+    items: [
+      { slug: "aerospace-and-defence", name: "Aerospace & Defence" },
+      { slug: "transportation-and-rail", name: "Transportation & Rail" },
+      { slug: "utlities-and-power", name: "Utilities & Power" },
+      { slug: "agriculture", name: "Agriculture" },
+    ],
+  },
+  {
+    title: "Institutional",
+    items: [
+      { slug: "biotech-and-pharma", name: "Biotech & Pharma" },
+      { slug: "crown-insurers", name: "Crown Insurers" },
+      { slug: "federal-and-provincial-agencies", name: "Federal & Provincial Agencies" },
+      { slug: "education-and-healthcare", name: "Education & Healthcare" },
+    ],
+  },
+  {
+    title: "Community",
+    items: [
+      { slug: "small-business", name: "Small Business" },
+      { slug: "households", name: "Households (HHW)" },
+      { slug: "municipal-programs", name: "Municipal Programs" },
+      { slug: "construction-and-demolition", name: "Construction & Demolition" },
+    ],
   },
 ];
 
@@ -46,66 +86,9 @@ export function SectorsSection() {
         </header>
 
         <div className="mw-sec2__cards" data-reveal-stagger>
-          <article className="mw-sec2__card">
-            <div className="mw-sec2__card-photo" aria-hidden="true">
-              <img src="/miller/services/industrial-waste-treatment-hero.webp" alt="" loading="lazy" />
-            </div>
-            <div className="mw-sec2__card-body">
-              <h3 className="mw-sec2__card-title">Industrial</h3>
-              <span className="mw-sec2__card-rule" aria-hidden="true" />
-              <ul className="mw-sec2__card-list">
-                <li className="mw-sec2__entry"><span className="mw-sec2__entry-name">Industrial Manufacturing</span></li>
-                <li className="mw-sec2__entry"><span className="mw-sec2__entry-name">Mining</span></li>
-                <li className="mw-sec2__entry"><span className="mw-sec2__entry-name">Oil &amp; Gas</span></li>
-                <li className="mw-sec2__entry"><span className="mw-sec2__entry-name">Chemical Distribution</span></li>
-              </ul>
-            </div>
-          </article>
-          <article className="mw-sec2__card">
-            <div className="mw-sec2__card-photo" aria-hidden="true">
-              <img src="/miller/services/vacuum-truck-new-logo.webp" alt="" loading="lazy" />
-            </div>
-            <div className="mw-sec2__card-body">
-              <h3 className="mw-sec2__card-title">Infrastructure</h3>
-              <span className="mw-sec2__card-rule" aria-hidden="true" />
-              <ul className="mw-sec2__card-list">
-                <li className="mw-sec2__entry"><span className="mw-sec2__entry-name">Aerospace &amp; Defence</span></li>
-                <li className="mw-sec2__entry"><span className="mw-sec2__entry-name">Transportation &amp; Rail</span></li>
-                <li className="mw-sec2__entry"><span className="mw-sec2__entry-name">Utilities &amp; Power</span></li>
-                <li className="mw-sec2__entry"><span className="mw-sec2__entry-name">Agriculture</span></li>
-              </ul>
-            </div>
-          </article>
-          <article className="mw-sec2__card">
-            <div className="mw-sec2__card-photo" aria-hidden="true">
-              <img src="/miller/services/research-development-hero.webp" alt="" loading="lazy" />
-            </div>
-            <div className="mw-sec2__card-body">
-              <h3 className="mw-sec2__card-title">Institutional</h3>
-              <span className="mw-sec2__card-rule" aria-hidden="true" />
-              <ul className="mw-sec2__card-list">
-                <li className="mw-sec2__entry"><span className="mw-sec2__entry-name">Biotech &amp; Pharma</span></li>
-                <li className="mw-sec2__entry"><span className="mw-sec2__entry-name">Crown Insurers</span></li>
-                <li className="mw-sec2__entry"><span className="mw-sec2__entry-name">Federal &amp; Provincial Agencies</span></li>
-                <li className="mw-sec2__entry"><span className="mw-sec2__entry-name">Education &amp; Healthcare</span></li>
-              </ul>
-            </div>
-          </article>
-          <article className="mw-sec2__card">
-            <div className="mw-sec2__card-photo" aria-hidden="true">
-              <img src="/miller/services/customer-waste-collection-hero.webp" alt="" loading="lazy" />
-            </div>
-            <div className="mw-sec2__card-body">
-              <h3 className="mw-sec2__card-title">Community</h3>
-              <span className="mw-sec2__card-rule" aria-hidden="true" />
-              <ul className="mw-sec2__card-list">
-                <li className="mw-sec2__entry"><span className="mw-sec2__entry-name">Small Business</span></li>
-                <li className="mw-sec2__entry"><span className="mw-sec2__entry-name">Households (HHW)</span></li>
-                <li className="mw-sec2__entry"><span className="mw-sec2__entry-name">Municipal Programs</span></li>
-                <li className="mw-sec2__entry"><span className="mw-sec2__entry-name">Construction &amp; Demolition</span></li>
-              </ul>
-            </div>
-          </article>
+          {SECTOR_CARDS.map((card) => (
+            <SectorCard key={card.title} title={card.title} items={card.items} />
+          ))}
         </div>
       </div>
     </section>

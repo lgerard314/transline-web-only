@@ -22,7 +22,7 @@ export default function HomePage() {
           mobile. React 19 hoists <link> tags into <head>. */}
       <link
         rel="preload"
-        href="/miller/hero/home-frame-1.webp"
+        href="/miller/hero/home-frame-1.png"
         as="image"
         fetchPriority="high"
       />

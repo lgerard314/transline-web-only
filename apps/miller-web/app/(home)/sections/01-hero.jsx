@@ -9,7 +9,7 @@ export function HeroSection() {
       <div
         className="mw-hero__photo"
         aria-hidden="true"
-        style={{ backgroundImage: "url(/miller/hero/home-frame-1.webp)" }}
+        style={{ backgroundImage: "url(/miller/hero/home-frame-1.png)" }}
       />
       <div className="mw-hero__inner">
         <p className="mw-hero__mark" aria-hidden="true">
