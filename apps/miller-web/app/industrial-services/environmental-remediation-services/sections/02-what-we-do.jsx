@@ -28,10 +28,6 @@ export function WhatWeDoSection() {
               <img className="mw-wwd-card__photo" src={it.photo} alt="" loading="lazy" />
               <div className="mw-wwd-card__overlay">
                 <h3 className="mw-wwd-card__name">{it.name}</h3>
-                <span className="mw-wwd-card__tick" aria-hidden="true">
-                  <span className="mw-wwd-card__tick-dot" />
-                  <span className="mw-wwd-card__tick-line" />
-                </span>
                 <p className="mw-wwd-card__blurb">{it.blurb}</p>
                 <p className="mw-wwd-card__detail">{it.detail}</p>
               </div>

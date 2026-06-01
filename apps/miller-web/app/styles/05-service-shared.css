@@ -33,7 +33,7 @@
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
   gap: clamp(32px, 4vw, 72px);
   align-items: center;
   padding-block: clamp(44px, 5vw, 92px);

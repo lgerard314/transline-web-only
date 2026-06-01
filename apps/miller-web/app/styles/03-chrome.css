@@ -969,3 +969,9 @@ html[data-brand="miller"] .tl-footer__bot {
   html[data-brand="miller"] .tl-footer__pitch-ctas .mw-cta__num { white-space: nowrap; }
 }
 
+/* Forms: square the shared field inputs (brand default is --radius-s) so every
+   Miller form matches the squared-rectangle theme used by cards and buttons. */
+html[data-brand="miller"] .tl-field input,
+html[data-brand="miller"] .tl-field select,
+html[data-brand="miller"] .tl-field textarea { border-radius: 0; }
+

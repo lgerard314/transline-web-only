@@ -139,7 +139,7 @@
 .mw-film {
   display: grid;
   grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.18fr);
-  gap: clamp(20px, 2.4vw, 40px);
+  gap: 8px;
   /* Stretch so the player column matches the height of the three-card stack;
      the column ratio keeps the filled poster close to 16:9. */
   align-items: stretch;
@@ -270,7 +270,7 @@
 
 /* What-we-do — six capabilities read best as two balanced rows of three.
    Three class selectors so it beats the --gallery 5-up rule at every width. */
-.mw-svc-inds.mw-rem-wwd .mw-svc-inds__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.mw-svc-inds.mw-rem-wwd .mw-svc-inds__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; }
 @media (max-width: 940px) { .mw-svc-inds.mw-rem-wwd .mw-svc-inds__grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 560px) { .mw-svc-inds.mw-rem-wwd .mw-svc-inds__grid { grid-template-columns: 1fr; } }
 
@@ -339,35 +339,11 @@
   margin: 0;
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
   font-weight: 700;
-  font-size: clamp(20px, 1.7vw, 27px);
+  font-size: clamp(30px, 2.55vw, 40px);
   text-transform: uppercase;
   letter-spacing: 0.01em;
-  line-height: 1.04;
+  line-height: 1.02;
   color: #fff;
-  transition: font-size 320ms cubic-bezier(.2, .7, .2, 1);
-}
-.mw-wwd-card:hover .mw-wwd-card__name,
-.mw-wwd-card:focus-within .mw-wwd-card__name { font-size: clamp(15px, 1.15vw, 18px); }
-.mw-wwd-card__tick {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: clamp(8px, 0.8vw, 11px) 0 0;
-}
-.mw-wwd-card__tick-dot {
-  width: 7px;
-  height: 7px;
-  background: var(--c-accent);
-  transform: rotate(45deg);
-  flex-shrink: 0;
-  transition: transform 320ms cubic-bezier(.2, .7, .2, 1);
-}
-.mw-wwd-card:hover .mw-wwd-card__tick-dot,
-.mw-wwd-card:focus-within .mw-wwd-card__tick-dot { transform: rotate(135deg); }
-.mw-wwd-card__tick-line {
-  width: clamp(20px, 2vw, 30px);
-  height: 1px;
-  background: rgba(245, 230, 203, 0.4);
 }
 .mw-wwd-card__blurb {
   margin: clamp(8px, 0.8vw, 11px) 0 0;
@@ -389,7 +365,7 @@
 .mw-wwd-card__detail {
   margin: clamp(10px, 0.9vw, 13px) 0 0;
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
-  font-size: clamp(11.5px, 0.86vw, 13px);
+  font-size: clamp(12px, 0.86vw, 13.5px);
   line-height: 1.42;
   color: rgba(245, 230, 203, 0.9);
   max-height: 0;
@@ -453,15 +429,16 @@
 .mw-case-card:hover .mw-case-card__arrow { transform: translateX(4px); }
 .mw-case-card__link:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 3px; }
 
-/* Why-Miller — four numbered reason cards on dark walnut. */
+/* Why-Miller — restyled to mirror the home certifications band: a light,
+   bordered 4-up tile row with an accent bar that wipes in on hover. No numbers. */
 .mw-why {
   position: relative;
-  background: var(--c-navy);
-  color: var(--c-on-navy);
-  padding-block: clamp(56px, 5.5vw, 100px);
+  background: var(--c-bg);
+  color: var(--c-ink);
+  padding-block: clamp(48px, 5vw, 88px);
   overflow: hidden;
   isolation: isolate;
-  border-top: 3px solid var(--c-accent);
+  border-top: 1px solid var(--c-line);
 }
 .mw-why::before {
   content: "";
@@ -469,54 +446,68 @@
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-dark) 38px, var(--c-grain-on-dark) 39px);
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
 }
 .mw-why__inner { position: relative; z-index: 1; }
-.mw-why__head { margin-bottom: clamp(32px, 3.5vw, 56px); }
+.mw-why__head { margin-bottom: clamp(28px, 3vw, 44px); }
 .mw-why .mw-section-tag { margin-bottom: clamp(20px, 1.5vw, 24px); }
-.mw-why__title { color: #fff; max-width: 22ch; }
+.mw-why__title { color: var(--c-ink); max-width: 22ch; }
 .mw-why__grid {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(16px, 1.6vw, 28px);
+  gap: 0;
+  border-left: 1px solid var(--c-line);
+  border-top: 1px solid var(--c-line);
 }
 .mw-why__card {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: clamp(20px, 1.8vw, 28px);
-  background: rgba(245, 230, 203, 0.045);
-  border: 1px solid rgba(245, 230, 203, 0.14);
-  border-top: 2px solid var(--c-accent);
-  transition: transform 240ms cubic-bezier(.2, .7, .2, 1), background 240ms ease;
+  gap: 8px;
+  padding: clamp(18px, 1.6vw, 26px) clamp(16px, 1.4vw, 24px);
+  border-right: 1px solid var(--c-line);
+  border-bottom: 1px solid var(--c-line);
+  background: transparent;
+  overflow: hidden;
+  transition: background 240ms ease;
 }
-.mw-why__card:hover { transform: translateY(-3px); background: rgba(245, 230, 203, 0.07); }
-.mw-why__num {
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
-  font-size: 12px;
-  letter-spacing: 0.14em;
-  color: var(--c-amber);
+.mw-why__card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--c-accent);
+  transition: width 360ms cubic-bezier(.2, .7, .2, 1);
 }
+.mw-why__card:hover { background: var(--c-line-2); }
+.mw-why__card:hover::before { width: 100%; }
 .mw-why__name {
   margin: 0;
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
   font-weight: 700;
-  font-size: clamp(20px, 1.6vw, 27px);
+  font-size: clamp(26px, 2.6vw, 40px);
+  line-height: 0.94;
+  letter-spacing: -0.005em;
   text-transform: uppercase;
-  letter-spacing: 0.02em;
-  line-height: 1.05;
-  color: #fff;
+  color: var(--c-ink);
 }
 .mw-why__body {
   margin: 0;
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
-  font-size: clamp(14px, 1vw, 15.5px);
-  line-height: 1.5;
-  color: var(--c-on-navy);
+  font-size: clamp(13px, 1vw, 14.5px);
+  line-height: 1.45;
+  color: var(--c-ink-2);
 }
-@media (max-width: 900px) { .mw-why__grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 460px) { .mw-why__grid { grid-template-columns: 1fr; } }
+@media (max-width: 900px) {
+  .mw-why__grid { grid-template-columns: 1fr 1fr; }
+  .mw-why__card:nth-child(odd) { border-left: 0; }
+}
+@media (max-width: 460px) {
+  .mw-why__grid { grid-template-columns: 1fr; border-left: 0; }
+}
 
