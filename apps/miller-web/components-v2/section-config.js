@@ -3,8 +3,10 @@
 // Emits attributes/inline-style ONLY for non-default values, so default config
 // leaves the DOM byte-identical.
 // NOTE: `data-layout` is NOT emitted here — the section root does not consume it.
-// Layout reversal is driven by `data-layout={config.layout}` placed directly on
-// each reversible inner grid container (the element the CSS targets).
+// Layout reversal is handled per-template, by whatever mechanism its source uses:
+// home templates (e.g. MediaSplit01) set `data-layout` on their own inner grid;
+// service templates reproduce the source's literal modifier class (e.g.
+// `mw-svc-cta__grid--reverse`). Only `scheme` and `tokens` flow through here.
 export function sectionProps(config = {}) {
   const props = {};
   if (config.scheme) props["data-scheme"] = config.scheme;
