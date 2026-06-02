@@ -89,7 +89,7 @@ export function pageIdFromPath(pathname) {
 // authoritative source; route layouts read it to decide which value to
 // emit.
 const EMERGENCY_BANNER_ROUTES = {
-  exact: new Set(["/", "/treatment-facility"]),
+  exact: new Set(["/", "/treatment-facility", "/template-testing"]),
   prefix: ["/industrial-services"],
 };
 
