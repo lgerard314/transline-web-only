@@ -12,6 +12,7 @@ export function Services01() {
         <HeadIntro01
           eyebrow="Services"
           headingId="mw-services-heading"
+          className="mw-services__head"
           title={<>whatever your waste needs,<br /><span className="mw-services__title-em">we&rsquo;ve got you <span className="mw-nobr">covered<span className="mw-stop" aria-hidden="true" /></span></span></>}
           intro={<>From routine industrial streams to one-off emergency calls, Miller&rsquo;s licensed VBEC facility and field crews handle the full spectrum &mdash; collection, treatment, and final disposition, all under one roof.</>}
         />

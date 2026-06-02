@@ -2,10 +2,10 @@
 // eyebrow -> title -> intro. title is a node (already includes its stop).
 import { Eyebrow01 } from "@/components-v2/items/eyebrow-01";
 
-export function HeadIntro01({ eyebrow, headingId, title, intro, stagger = true }) {
+export function HeadIntro01({ eyebrow, headingId, title, intro, stagger = true, className = "" }) {
   const staggerAttr = stagger ? { "data-reveal-stagger": "" } : {};
   return (
-    <header className="mw-section-head mw-services__head" {...staggerAttr}>
+    <header className={"mw-section-head" + (className ? " " + className : "")} {...staggerAttr}>
       <Eyebrow01 label={eyebrow} />
       <h2 id={headingId} className="mw-section-title">{title}</h2>
       <p className="mw-services__intro">{intro}</p>
