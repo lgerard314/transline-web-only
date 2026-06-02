@@ -2,6 +2,10 @@
    Surface-tone schemes re-bind core palette tokens on the section subtree, so all
    descendant mw-* color rules follow. Tokens are the existing warm-clay set. */
 
+/* Scheme presets retint TOKEN-DRIVEN surfaces only. `cream`/`warm` light-tone
+   swaps are reliable. `dark` is best-effort: sections with hardcoded color
+   literals (e.g. white card bodies, rgba washes) will not fully invert without
+   per-section overrides. */
 [data-scheme="dark"] {
   --c-bg: var(--c-navy);
   --c-surface-warm: var(--c-navy);
@@ -22,7 +26,10 @@
    above 900px (each uses @media (max-width: 900px) to stack).
    Below 901px the section is stacked; we leave natural DOM order intact.
    All three use display:grid, so we reverse via direction:rtl on the
-   container and direction:ltr on each direct child to keep text readable. */
+   container and direction:ltr on each direct child to keep text readable.
+   NOTE: timeline-split's `.mw-ten3__grid` is intentionally NOT reversible —
+   it positions its two columns via CSS `order`, which `direction: rtl` can't
+   cleanly flip, so no reverse rule is offered for it. */
 @media (min-width: 901px) {
   /* facility media split: 2-col grid (content left, gallery right) */
   .mw-fac2__split[data-layout="reverse"] {

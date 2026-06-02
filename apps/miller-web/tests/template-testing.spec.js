@@ -45,11 +45,28 @@ test("hero image preload hint present (LCP parity)", async ({ page }) => {
   await expect(page.locator('link[rel="preload"][as="image"][fetchpriority="high"]')).toBeAttached();
 });
 
-test("config: scheme emits data-scheme + token override applies", async ({ page }) => {
+test("config: tokens override applies to the section subtree", async ({ page }) => {
   await page.goto(`${BASE}/template-testing-variants`);
-  await expect(page.locator('.mw-hero[data-scheme="cream"]')).toBeAttached();
   const accent = await page.evaluate(() => getComputedStyle(document.querySelector(".mw-hero")).getPropertyValue("--c-accent").trim());
   expect(accent).toBe("#7a3d12");
+});
+
+test("config: scheme recolors the token-driven surface (resolved color)", async ({ page }) => {
+  await page.goto(`${BASE}/template-testing-variants`);
+  await expect(page.locator('.mw-fac2[data-scheme="cream"]')).toBeAttached();
+  const { surface, bg } = await page.evaluate(() => {
+    const sec = document.querySelector('.mw-fac2[data-scheme="cream"]');
+    // Resolved background color of the cream-schemed section.
+    const surface = getComputedStyle(sec).backgroundColor;
+    // Resolve the --c-bg token to a color value (what `cream` remaps the surface to).
+    const probe = document.createElement("div");
+    probe.style.color = "var(--c-bg)";
+    sec.appendChild(probe);
+    const bg = getComputedStyle(probe).color;
+    probe.remove();
+    return { surface, bg };
+  });
+  expect(surface).toBe(bg);
 });
 
 test("config: default page emits no variant attributes (parity)", async ({ page }) => {
@@ -62,4 +79,12 @@ test("config: reverse layout flips facility split above breakpoint", async ({ pa
   await page.goto(`${BASE}/template-testing-variants`);
   const dir = await page.evaluate(() => getComputedStyle(document.querySelector(".mw-fac2__split[data-layout='reverse']")).direction);
   expect(dir).toBe("rtl");
+  // Prove the columns visually swapped: content now sits to the RIGHT of the media.
+  const { contentLeft, mediaLeft } = await page.evaluate(() => {
+    const split = document.querySelector(".mw-fac2__split[data-layout='reverse']");
+    const contentLeft = split.querySelector(".mw-fac2__content").getBoundingClientRect().left;
+    const mediaLeft = split.querySelector(".mw-fac2__media").getBoundingClientRect().left;
+    return { contentLeft, mediaLeft };
+  });
+  expect(contentLeft).toBeGreaterThan(mediaLeft);
 });

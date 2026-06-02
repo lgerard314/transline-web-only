@@ -8,7 +8,11 @@ export const metadata = { title: "TT variants", robots: { index: false, follow: 
 export default function P() {
   return (
     <>
-      <MonumentHero01 content={HERO} config={{ scheme: "cream", tokens: { "--c-accent": "#7a3d12" } }} />
+      {/* tokens override demo: recolor the signature accent on the hero subtree. */}
+      <MonumentHero01 content={HERO} config={{ tokens: { "--c-accent": "#7a3d12" } }} />
+      {/* scheme demo: `.mw-fac2` surface is `--c-surface-warm`; `cream` remaps it to `--c-bg`. */}
+      <MediaSplit01 content={FACILITY} config={{ scheme: "cream" }} />
+      {/* layout demo: reverse the facility split columns above the breakpoint. */}
       <MediaSplit01 content={FACILITY} config={{ layout: "reverse" }} />
     </>
   );
