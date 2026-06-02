@@ -28,9 +28,10 @@ export const whatWeDo = {
 
 // §3 — PickerGallery01  config: { serve:true }
 // titleId "rem-serve-title" is a literal from 03-industries.jsx — RECONCILE-IN-D:
-// items maps to REMEDIATION.whoWeServe.provides (CoverageGallery / PickerGallery01 expects items, not provides).
-// phoneHref / phoneDisplay are cross-referenced from hero (same pattern as the real 03-industries.jsx does not
-// pass phone, but PickerGallery01 accepts them; supply from hero for parity with the ER adapter convention).
+// items maps to REMEDIATION.whoWeServe.provides (CoverageGallery expects `items`, content key is `provides`).
+// NOTE: the real 03-industries.jsx passes NO phoneHref/phoneDisplay to CoverageGallery — this section
+// has no phone CTA (only the "Discover your site" link). So we deliberately omit them here; passing them
+// would make CoverageGallery render an extra 24/7-emergency phone block that the real page lacks.
 export const whoWeServe = {
   eyebrow: REMEDIATION.whoWeServe.eyebrow,
   title: REMEDIATION.whoWeServe.title,
@@ -38,8 +39,6 @@ export const whoWeServe = {
   cta: REMEDIATION.whoWeServe.cta,
   items: REMEDIATION.whoWeServe.provides,
   titleId: "rem-serve-title", // RECONCILE-IN-D: literal from sections/03-industries.jsx
-  phoneHref: REMEDIATION.hero.emergencyHref,
-  phoneDisplay: REMEDIATION.hero.emergencyDisplay,
 };
 
 // §4 — ProcessFlow01  config: { wide:true }
