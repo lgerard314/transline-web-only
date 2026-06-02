@@ -1,12 +1,12 @@
-import { Hero01 } from "@/components-v2/sections/hero-01";
-import { CertsBanner01 } from "@/components-v2/sections/certs-banner-01";
-import { Services01 } from "@/components-v2/sections/services-01";
-import { Sectors01 } from "@/components-v2/sections/sectors-01";
-import { Facility01 } from "@/components-v2/sections/facility-01";
-import { History01 } from "@/components-v2/sections/history-01";
-import { Careers01 } from "@/components-v2/sections/careers-01";
-import { AffiliatesBanner01 } from "@/components-v2/sections/affiliates-banner-01";
-import { FinalCta01 } from "@/components-v2/sections/final-cta-01";
+import { MonumentHero01 } from "@/components-v2/06_sections/heroes/monument-hero-01";
+import { TallStaticBanner01 } from "@/components-v2/06_sections/banners/tall-static-banner-01";
+import { BentoGrid01 } from "@/components-v2/06_sections/grids/bento-grid-01";
+import { HoverCardGrid01 } from "@/components-v2/06_sections/grids/hover-card-grid-01";
+import { MediaSplit01 } from "@/components-v2/06_sections/splits/media-split-01";
+import { TimelineSplit01 } from "@/components-v2/06_sections/splits/timeline-split-01";
+import { PhotoBleedCards01 } from "@/components-v2/06_sections/callouts/photo-bleed-cards-01";
+import { RotatingBanner01 } from "@/components-v2/06_sections/banners/rotating-banner-01";
+import { MultiColumnCta01 } from "@/components-v2/06_sections/callouts/multi-column-cta-01";
 
 export const metadata = {
   title: "Template Testing — components-v2 sandbox",
@@ -17,15 +17,15 @@ export default function TemplateTestingPage() {
   return (
     <>
       <link rel="preload" href="/miller/hero/home-frame-1.png" as="image" fetchPriority="high" />
-      <Hero01 />
-      <CertsBanner01 />
-      <Services01 />
-      <Sectors01 />
-      <Facility01 />
-      <History01 />
-      <Careers01 />
-      <AffiliatesBanner01 />
-      <FinalCta01 />
+      <MonumentHero01 />
+      <TallStaticBanner01 />
+      <BentoGrid01 />
+      <HoverCardGrid01 />
+      <MediaSplit01 />
+      <TimelineSplit01 />
+      <PhotoBleedCards01 />
+      <RotatingBanner01 />
+      <MultiColumnCta01 />
     </>
   );
 }
