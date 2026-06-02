@@ -1,5 +1,6 @@
 import { Hero01 } from "@/components-v2/sections/hero-01";
 import { CertsBanner01 } from "@/components-v2/sections/certs-banner-01";
+import { Services01 } from "@/components-v2/sections/services-01";
 
 export const metadata = {
   title: "Template Testing — components-v2 sandbox",
@@ -12,6 +13,7 @@ export default function TemplateTestingPage() {
       <link rel="preload" href="/miller/hero/home-frame-1.png" as="image" fetchPriority="high" />
       <Hero01 />
       <CertsBanner01 />
+      <Services01 />
     </>
   );
 }
