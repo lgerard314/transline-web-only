@@ -1,4 +1,4 @@
-// L1 · cert-card-01 — certification download card (mw-cert). Renders the
+// L1 · download-card-01 — certification download card (mw-cert). Renders the
 // ISO/COR display logic verbatim. Must be a direct child of the stagger row,
 // so it returns the <a> itself (no wrapper).
 export function DownloadCard01({ cert }) {

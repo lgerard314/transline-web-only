@@ -1,4 +1,4 @@
-// L3 · certs-banner-01 — trust band; 4-card cert row under the hero.
+// L3 · tall-static-banner-01 — trust band; 4-card cert row under the hero.
 import { CERTS } from "@/lib/certs";
 import { DownloadCard01 } from "@/components-v2/03_cards/download/download-card-01";
 

@@ -1,4 +1,4 @@
-// L3 · hero-01 — civic-monument hero on darkened site photo.
+// L3 · monument-hero-01 — civic-monument hero on darkened site photo.
 import { EMERGENCY_PHONE } from "@/lib/content/brand";
 import { PhraseCycle01 } from "@/components-v2/05_widgets/cycles/phrase-cycle-01";
 import { StopPeriod01 } from "@/components-v2/01_marks/stops/stop-period-01";

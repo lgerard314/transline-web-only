@@ -1,4 +1,4 @@
-// L3 helper · service-order — recreates the home services ordering + title
+// L3 helper · bento-grid-order — recreates the home services ordering + title
 // split (copied from app/(home)/sections/02-services.jsx, which holds these
 // as inline non-exported helpers).
 import { SERVICES } from "@/lib/services";
