@@ -4,24 +4,29 @@ import { StopText } from "@/components/StopText";
 import { sectionProps } from "@/components-v2/section-config";
 import { IndThumbCard01 } from "@/components-v2/03_cards/ind/ind-thumb-card-01";
 import { IndGalleryCard01 } from "@/components-v2/03_cards/ind/ind-gallery-card-01";
+import { WwdCard01 } from "@/components-v2/03_cards/ind/wwd-card-01";
 
 // PhotoCardGrid01 — shared mw-svc-inds section shell that composes a card
 // sub-component selected by config.cardStyle. Reproduces the DOM of:
 //   • ER   03-incidents.jsx  → cardStyle:"thumb",   head:"media-split"
 //   • CWC  04-industries.jsx → cardStyle:"gallery", head:"split", trailingCta:true
+//   • REM  02-what-we-do.jsx → cardStyle:"wwd",     head:"split", variant:"mw-rem-wwd"
 //
 // Config:
-//   cardStyle: "thumb" | "gallery"  — picks IndThumbCard01 / IndGalleryCard01
+//   cardStyle: "thumb" | "gallery" | "wwd"  — picks IndThumbCard01 / IndGalleryCard01 / WwdCard01
 //              "thumb"   → modifier class mw-svc-inds--photo
 //              "gallery" → modifier class mw-svc-inds--gallery
+//              "wwd"     → modifier class mw-svc-inds--gallery
 //   head:      "media-split" | "split"
 //              "media-split" → ER head: head-left (eyebrow + multi-line h2 + lead) +
 //                              mw-svc-inds__head-media (decorative PNG from content.headMedia)
 //                              data-reveal on the <header> element
-//              "split"       → CWC head: head-left (eyebrow + h2) +
+//              "split"       → CWC/REM head: head-left (eyebrow + h2) +
 //                              sibling p.mw-svc-inds__lead
 //                              data-reveal on each of: mw-section-tag, h2, p.lead
 //   trailingCta: false | true — when true appends the mw-ind-cta-cell <li> from content.cta
+//   variant:   string | undefined — when set, appended as an extra class on the <section> root
+//              (e.g. "mw-rem-wwd" for REM what-we-do). Inert when absent.
 //
 // Content keys consumed:
 //   Shared:            titleId, eyebrow, title, lead, items[]
@@ -31,17 +36,18 @@ import { IndGalleryCard01 } from "@/components-v2/03_cards/ind/ind-gallery-card-
 //
 // Server component — no "use client".
 
-const CARD = { thumb: IndThumbCard01, gallery: IndGalleryCard01 };
-const MODIFIER = { thumb: "mw-svc-inds--photo", gallery: "mw-svc-inds--gallery" };
+const CARD = { thumb: IndThumbCard01, gallery: IndGalleryCard01, wwd: WwdCard01 };
+const MODIFIER = { thumb: "mw-svc-inds--photo", gallery: "mw-svc-inds--gallery", wwd: "mw-svc-inds--gallery" };
 
 export function PhotoCardGrid01({ content, config = {} }) {
-  const { cardStyle = "thumb", head = "split", trailingCta = false } = config;
+  const { cardStyle = "thumb", head = "split", trailingCta = false, variant } = config;
   const Card = CARD[cardStyle];
   const modifier = MODIFIER[cardStyle];
+  const sectionClass = variant ? `mw-svc-inds ${modifier} ${variant}` : `mw-svc-inds ${modifier}`;
 
   return (
     <section
-      className={`mw-svc-inds ${modifier}`}
+      className={sectionClass}
       aria-labelledby={content.titleId}
       {...sectionProps(config)}
     >
