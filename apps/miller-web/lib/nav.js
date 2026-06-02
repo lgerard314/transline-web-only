@@ -90,7 +90,7 @@ export function pageIdFromPath(pathname) {
 // emit.
 const EMERGENCY_BANNER_ROUTES = {
   exact: new Set(["/", "/treatment-facility", "/template-testing"]),
-  prefix: ["/industrial-services"],
+  prefix: ["/industrial-services", "/template-testing"],
 };
 
 export function shouldShowEmergencyBanner(pathname) {
