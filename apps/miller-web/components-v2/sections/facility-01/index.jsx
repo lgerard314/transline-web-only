@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { HOME as c } from "@/app/(home)/home";
 import { FACILITY_PHOTOS } from "@/lib/content/template-testing-home";
 import { Eyebrow01 } from "@/components-v2/items/eyebrow-01";
@@ -31,11 +32,11 @@ export function Facility01() {
                 <span className="mw-fac2__lbl-short">Visit Facility</span>
                 {" "}<ActionArrow01 />
               </CtaSolid01>
-              <a href={c.vbec.aboutHref} className="mw-fac2__about">
+              <Link href={c.vbec.aboutHref} className="mw-fac2__about">
                 <span className="mw-fac2__lbl-long">{c.vbec.aboutLinkLabel}</span>
                 <span className="mw-fac2__lbl-short">Read the story</span>
                 {" "}<span aria-hidden="true">→</span>
-              </a>
+              </Link>
             </div>
           </div>
           <GalleryThumb01 photos={FACILITY_PHOTOS} />
