@@ -1,0 +1,50 @@
+/* /template-testing variant styles — opt-in via config; default render unaffected.
+   Surface-tone schemes re-bind core palette tokens on the section subtree, so all
+   descendant mw-* color rules follow. Tokens are the existing warm-clay set. */
+
+[data-scheme="dark"] {
+  --c-bg: var(--c-navy);
+  --c-surface-warm: var(--c-navy);
+  --c-surface: var(--c-navy-2);
+  --c-ink: #ffffff;
+  --c-ink-2: rgba(250, 243, 229, 0.91);
+  --c-ink-3: rgba(250, 243, 229, 0.7);
+  --c-line: var(--c-navy-2);
+}
+[data-scheme="cream"] {
+  --c-surface-warm: var(--c-bg);
+}
+[data-scheme="warm"] {
+  --c-bg: var(--c-surface-warm);
+}
+
+/* Column reversal — desktop only. All three splits become multi-column
+   above 900px (each uses @media (max-width: 900px) to stack).
+   Below 901px the section is stacked; we leave natural DOM order intact.
+   All three use display:grid, so we reverse via direction:rtl on the
+   container and direction:ltr on each direct child to keep text readable. */
+@media (min-width: 901px) {
+  /* facility media split: 2-col grid (content left, gallery right) */
+  .mw-fac2__split[data-layout="reverse"] {
+    direction: rtl;
+  }
+  .mw-fac2__split[data-layout="reverse"] > * {
+    direction: ltr;
+  }
+
+  /* sectors head split: 2-col grid (title+lead left, stat cycle right) */
+  .mw-sec2__head-split[data-layout="reverse"] {
+    direction: rtl;
+  }
+  .mw-sec2__head-split[data-layout="reverse"] > * {
+    direction: ltr;
+  }
+
+  /* final CTA grid: 3-col grid (truck | content | logo) */
+  .mw-final__grid[data-layout="reverse"] {
+    direction: rtl;
+  }
+  .mw-final__grid[data-layout="reverse"] > * {
+    direction: ltr;
+  }
+}

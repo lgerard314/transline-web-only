@@ -1,3 +1,4 @@
+import "./template-testing.css";
 import { MonumentHero01 } from "@/components-v2/06_sections/heroes/monument-hero-01";
 import { TallStaticBanner01 } from "@/components-v2/06_sections/banners/tall-static-banner-01";
 import { BentoGrid01 } from "@/components-v2/06_sections/grids/bento-grid-01";
