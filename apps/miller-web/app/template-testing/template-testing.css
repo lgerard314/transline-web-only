@@ -22,6 +22,21 @@
   background: rgba(245, 230, 203, 0.035);   /* was #ffffff (04-home.css:934) */
   box-shadow: none;
 }
+
+/* dark-mode logo chip — affiliates-marquee logos and the cert badge are
+   third-party PNG marks (dark ink on transparent) that vanish on walnut.
+   Back each with a warm cream chip so they stay legible, keeping both
+   sections fully darkenable. Light-scheme render is untouched. */
+[data-scheme="dark"] .mw-marquee__logo {
+  background: var(--c-on-navy);
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+[data-scheme="dark"] .mw-cert__mark {
+  background: var(--c-on-navy);
+  border-radius: 6px;
+  padding: 8px;
+}
 [data-scheme="cream"] {
   --c-surface-warm: var(--c-bg);
 }
