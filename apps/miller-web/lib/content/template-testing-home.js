@@ -4,6 +4,22 @@
 // imported without editing them). Exported, importable HOME/SERVICES/CERTS
 // content is imported directly by the v2 sections, not duplicated here.
 
+import { HOME } from "@/app/(home)/home";
+import { SERVICES } from "@/lib/services";
+import { CERTS } from "@/lib/certs";
+import { EMERGENCY_PHONE } from "@/lib/content/brand";
+
+const EMERGENCY_HREF = `tel:${EMERGENCY_PHONE.replace(/[^0-9+]/g, "")}`;
+
+function orderedServices() {
+  const map = new Map(SERVICES.map((s) => [s.slug, s]));
+  const head = HOME_FIRST.map((slug) => map.get(slug)).filter(Boolean);
+  const rest = SERVICES.filter((s) => !HOME_FIRST.includes(s.slug)).sort((a, b) =>
+    a.title.localeCompare(b.title),
+  );
+  return [...head, ...rest];
+}
+
 export const HOME_FIRST = [
   "industrial-waste-treatment",
   "environmental-remediation-services",
@@ -84,3 +100,118 @@ export const SOCIALS = [
   { label: "LinkedIn", href: "https://www.linkedin.com/company/miller-environmental-corporation", path: "M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z" },
   { label: "YouTube", href: "https://www.youtube.com/@MillerEnvironmental", path: "M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.082 2.06l-.008.105-.009.104c-.05.572-.124 1.14-.235 1.558a2.007 2.007 0 0 1-1.415 1.42c-1.16.312-5.569.334-6.18.335h-.142c-.309 0-1.587-.006-2.927-.052l-.17-.006-.087-.004-.171-.007-.171-.007c-1.11-.049-2.167-.128-2.654-.26a2.007 2.007 0 0 1-1.415-1.419c-.111-.417-.185-.986-.235-1.558L.09 9.82l-.008-.104A31.4 31.4 0 0 1 0 7.68v-.123c.002-.215.01-.958.064-1.778l.007-.103.003-.052.008-.104.022-.26.01-.104c.048-.519.119-1.023.22-1.402a2.007 2.007 0 0 1 1.415-1.42c1.123-.302 5.288-.332 6.11-.335zM6.4 5.209v4.818l4.157-2.408L6.4 5.209z" },
 ];
+
+export const HERO = {
+  titleId: "mw-hero-title",
+  photoSrc: "/miller/hero/home-frame-1.png",
+  mark: {
+    logoSrc: "/miller/logo/miller-logomark.webp",
+    name: "Miller Environmental",
+    corpLong: "Corporation",
+    corpShort: "Corp.",
+    since: "Since 1996",
+  },
+  title: {
+    line1: "leaders in",
+    cyclePhrases: [{ text: "hazardous" }, { text: "safe", tone: "accent" }, { text: "reliable", tone: "accent" }],
+    line3: "waste disposal",
+  },
+  lead: "Twenty-five years of licensed hazardous waste management in Manitoba. Three ISO certifications. One documented chain of custody from your loading dock to final disposition at VBEC.",
+  primaryCta: { label: "Talk to Miller", href: "/contact-us/" },
+  ghostPhone: { sup: "24/7 emergency", num: EMERGENCY_PHONE, href: EMERGENCY_HREF },
+  article: { strong: "VBEC", rest: " · 64 ha, Montcalm MB · ISO 9001 · 14001 · 45001" },
+};
+
+export const CERTS_BANNER = { ariaLabel: "Certifications", certs: CERTS };
+
+export const SERVICES_GRID = {
+  headingId: "mw-services-heading",
+  eyebrow: "Services",
+  title: { lead: "whatever your waste needs,", em: "we've got you covered" },
+  intro: "From routine industrial streams to one-off emergency calls, Miller's licensed VBEC facility and field crews handle the full spectrum — collection, treatment, and final disposition, all under one roof.",
+  services: orderedServices(),
+  externalTile: {
+    href: "https://www.transline49.com",
+    photo: "/miller/services/vacuum-truck-new-logo.webp",
+    titleLines: ["Cross-Border", "Services"],
+    summary: "Transboundary movement of waste from the United States to Canada to mitigate your US liabilities.",
+  },
+};
+
+export const SECTORS = {
+  headingId: "mw-sectors-heading-copy",
+  eyebrow: "Who we serve",
+  title: "From refineries to households — and everything between",
+  lead: "Large industrial manufacturers, public agencies, small businesses, and even the household-hazardous-waste drop-off down the street — one operator, one chain of custody.",
+  stats: SECTOR_STATS,
+  cards: SECTOR_CARDS,
+};
+
+export const FACILITY = {
+  headingId: "mw-facility-heading-copy",
+  eyebrow: "Vaughn Bullough Environmental Centre",
+  title: { top: "VBEC", em: "A facility built for the work" },
+  lead: HOME.vbec.body,
+  figures: [
+    { label: "Footprint", num: "64", unit: "hectares" },
+    { label: "Location", num: "70", unit: "km S of Winnipeg" },
+    { label: "Operating", num: "1996", unit: "to today" },
+  ],
+  capsTitle: "7 powerful capabilities",
+  capabilities: HOME.vbec.capabilities,
+  primaryCta: { longLabel: HOME.vbec.cta.label, shortLabel: "Visit Facility", href: HOME.vbec.cta.href },
+  aboutLink: { longLabel: HOME.vbec.aboutLinkLabel, shortLabel: "Read the story", href: HOME.vbec.aboutHref },
+  photos: FACILITY_PHOTOS,
+};
+
+export const HISTORY = {
+  headingId: "mw-tenure-heading-copy-b",
+  eyebrow: "Our history",
+  title: { lead: "Three decades in", em: "hazardous waste" },
+  lead: "Miller Environmental was formed in 1996 as Manitoba's first private-public hazardous-waste operator. Vaughn Bullough joined as General Manager in 1997 and led operations for twenty-five years. The facility was renamed in his honour in 2022. The work continues.",
+  timelineNote: "*hover for more info",
+  milestones: MILESTONES,
+  plate: {
+    imgSrc: "/miller/full-truck-sideview.png",
+    stats: [
+      { num: "25", unit: "+yrs", label: "Relationships" },
+      { num: "96", unit: "%", label: "In-house" },
+      { num: "4.5", unit: "ML/yr", label: "Solvent reclaimed" },
+    ],
+  },
+  mission: {
+    heading: "Mission",
+    paragraphs: [
+      "At Miller Environmental, our mission is to lead the hazardous waste disposal industry by exemplifying unwavering commitment to environmentally responsible practices, rigorous regulatory compliance, and continuous innovation.",
+      "We prioritize safety in all operations, ensuring the well-being of our team, clients, and the communities we serve.",
+      "Our dedication to transparency fosters trust, while active community engagement reflects our belief in shared responsibility.",
+    ],
+    cta: HOME.mission.cta,
+  },
+};
+
+export const CAREERS = {
+  headingId: "mw-careers-bleed-heading",
+  bleedPhotoSrc: "/miller/careers/team-at-conv-booth-big-5.jpg",
+  eyebrow: "Careers",
+  title: { lead: "Join the", em: "Miller team" },
+  lead: HOME.joinFamily.intro,
+  cards: [
+    { tag: "Culture", title: HOME.joinFamily.whyTitle, text: HOME.joinFamily.whyBody, cta: HOME.joinFamily.whyCta },
+    { tag: "Hiring now", title: HOME.joinFamily.opportunitiesTitle, text: HOME.joinFamily.opportunitiesBody, cta: HOME.joinFamily.opportunitiesCta },
+  ],
+};
+
+export const AFFILIATES_BANNER = { ariaLabel: "Affiliates", label: ["Proud", "affiliates"], items: AFFILIATES };
+
+export const FINAL_CTA = {
+  headingId: "mw-final-heading",
+  truckImgSrc: "/miller/truck-graphic-angled.png",
+  logoImgSrc: "/miller/logo/miller-logomark.webp",
+  eyebrow: HOME.finalCta.eyebrow,
+  title: HOME.finalCta.title,
+  body: HOME.finalCta.body,
+  primaryCta: { label: "Contact Miller", href: HOME.finalCta.contactHref },
+  ghostPhone: { sup: "24/7 emergency", num: HOME.finalCta.emergencyDisplay, href: HOME.finalCta.emergencyHref },
+  socials: SOCIALS,
+};
