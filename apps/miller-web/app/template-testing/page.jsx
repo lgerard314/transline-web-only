@@ -7,7 +7,7 @@ import { TimelineSplit01 } from "@/components-v2/06_sections/splits/timeline-spl
 import { PhotoBleedCards01 } from "@/components-v2/06_sections/callouts/photo-bleed-cards-01";
 import { RotatingBanner01 } from "@/components-v2/06_sections/banners/rotating-banner-01";
 import { MultiColumnCta01 } from "@/components-v2/06_sections/callouts/multi-column-cta-01";
-import { HERO, CERTS_BANNER, SERVICES_GRID, SECTORS, FACILITY, HISTORY } from "@/lib/content/template-testing-home";
+import { HERO, CERTS_BANNER, SERVICES_GRID, SECTORS, FACILITY, HISTORY, CAREERS } from "@/lib/content/template-testing-home";
 
 export const metadata = {
   title: "Template Testing — components-v2 sandbox",
@@ -24,7 +24,7 @@ export default function TemplateTestingPage() {
       <HoverCardGrid01 content={SECTORS} />
       <MediaSplit01 content={FACILITY} />
       <TimelineSplit01 content={HISTORY} />
-      <PhotoBleedCards01 />
+      <PhotoBleedCards01 content={CAREERS} />
       <RotatingBanner01 />
       <MultiColumnCta01 />
     </>
