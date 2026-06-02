@@ -20,6 +20,7 @@ function orderedServices() {
   return [...head, ...rest];
 }
 
+// Mirrors HOME_FIRST in app/(home)/sections/02-services.jsx — keep in sync.
 export const HOME_FIRST = [
   "industrial-waste-treatment",
   "environmental-remediation-services",
@@ -214,4 +215,5 @@ export const FINAL_CTA = {
   primaryCta: { label: "Contact Miller", href: HOME.finalCta.contactHref },
   ghostPhone: { sup: "24/7 emergency", num: HOME.finalCta.emergencyDisplay, href: HOME.finalCta.emergencyHref },
   socials: SOCIALS,
+  socialsAriaLabel: "Miller Environmental on social media",
 };

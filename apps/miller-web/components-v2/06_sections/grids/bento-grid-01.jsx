@@ -5,18 +5,16 @@ import { FeatureCard01 } from "@/components-v2/03_cards/feature/feature-card-01"
 import { FeatureTile01 } from "@/components-v2/03_cards/feature/feature-tile-01";
 
 export function BentoGrid01({ content, config = {} }) {
-  const s = content.services;
-  const t = content.title;
-  const ext = content.externalTile;
+  const { services: s, title: t, externalTile: ext, eyebrow, headingId, intro } = content;
   return (
-    <section className="mw-services" aria-labelledby={content.headingId}>
+    <section className="mw-services" aria-labelledby={headingId}>
       <div className="mw-inner">
         <HeadIntro01
-          eyebrow={content.eyebrow}
-          headingId={content.headingId}
+          eyebrow={eyebrow}
+          headingId={headingId}
           className="mw-services__head"
           title={<>{t.lead}<br /><span className="mw-services__title-em"><StopText01>{t.em}</StopText01></span></>}
-          intro={content.intro}
+          intro={intro}
         />
         <ul className="mw-svcs-grid" aria-label="Capabilities" data-reveal-stagger>
           <li><FeatureAnchor01 service={s[0]} /></li>

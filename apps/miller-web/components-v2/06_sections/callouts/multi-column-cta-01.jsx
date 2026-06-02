@@ -5,7 +5,7 @@ import { ActionArrow01 } from "@/components-v2/01_marks/arrows/action-arrow-01";
 import { IconLink01 } from "@/components-v2/03_cards/icon-link/icon-link-01";
 
 export function MultiColumnCta01({ content, config = {} }) {
-  const { truckImgSrc, logoImgSrc, eyebrow, title, body, primaryCta, ghostPhone, socials, headingId } = content;
+  const { truckImgSrc, logoImgSrc, eyebrow, title, body, primaryCta, ghostPhone, socials, socialsAriaLabel, headingId } = content;
   return (
     <section className="mw-final" aria-labelledby={headingId}>
       <div className="mw-final__grid" data-reveal-stagger>
@@ -24,7 +24,7 @@ export function MultiColumnCta01({ content, config = {} }) {
             <GhostPhoneCta01 sup={ghostPhone.sup} num={ghostPhone.num} href={ghostPhone.href} ariaLabel={`Call 24/7 emergency: ${ghostPhone.num}`} />
           </div>
           <span className="mw-final__divider" aria-hidden="true" />
-          <ul className="mw-final__socials" aria-label="Miller Environmental on social media">
+          <ul className="mw-final__socials" aria-label={socialsAriaLabel}>
             {socials.map((so) => (<li key={so.label}><IconLink01 label={so.label} href={so.href} path={so.path} /></li>))}
           </ul>
         </div>
