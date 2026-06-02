@@ -13,9 +13,15 @@
 //   reveal:    bool → when true, places data-reveal on eyebrow / title / lead / ctas
 //              exactly as CWC's source does; when false (ER), emits NONE (default false).
 //
-// Ghost-phone CTA: rendered only when content.emergencyDisplay and content.emergencyHref
-// are both present. ER provides them; sandbox adapters for pages without the ghost-phone
-// block simply omit those fields from the content prop.
+//   ghostPhone: bool → renders the ghost-phone CTA block (default false). It is an
+//              explicit knob, NOT content-presence-gated: CWC's hero content carries
+//              emergencyDisplay/emergencyHref yet shows NO ghost-phone, so presence
+//              alone would emit a phantom CTA. ER passes ghostPhone:true; CWC omits it.
+//              (The block still requires content.emergencyDisplay + emergencyHref to be
+//              present, so the knob never produces a broken link.)
+//
+// ER config:  { media:"transparent-png", alert:true, ghostPhone:true }
+// CWC config: { alert:true, photoHalf:true, reveal:true }
 //
 // Content keys consumed (match the existing lib/content/service-*.js hero shape directly):
 //   eyebrow, title, titleEm, lead, photo,
@@ -28,14 +34,14 @@ import { StopText } from "@/components/StopText";
 import { sectionProps } from "@/components-v2/section-config";
 
 export function ServiceHero01({ content, config = {} }) {
-  const { media = "photo-bleed", alert = false, photoHalf = false, reveal = false } = config;
+  const { media = "photo-bleed", alert = false, photoHalf = false, reveal = false, ghostPhone = false } = config;
 
   const cls =
     "mw-svc-hero" +
     (alert ? " mw-svc-hero--alert" : "") +
     (photoHalf ? " mw-svc-hero--photo-50" : "");
 
-  const hasGhostPhone = !!(content.emergencyDisplay && content.emergencyHref);
+  const hasGhostPhone = ghostPhone && !!(content.emergencyDisplay && content.emergencyHref);
 
   // Media slot — factored as a variable so Sub-project B can extend with "video".
   // "photo-bleed" and "transparent-png" both emit the bleed-photo div + img.
