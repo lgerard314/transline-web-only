@@ -127,8 +127,8 @@ export const CERTS_BANNER = { ariaLabel: "Certifications", certs: CERTS };
 export const SERVICES_GRID = {
   headingId: "mw-services-heading",
   eyebrow: "Services",
-  title: { lead: "whatever your waste needs,", em: "we've got you covered" },
-  intro: "From routine industrial streams to one-off emergency calls, Miller's licensed VBEC facility and field crews handle the full spectrum — collection, treatment, and final disposition, all under one roof.",
+  title: { lead: "whatever your waste needs,", em: "we’ve got you covered" },
+  intro: "From routine industrial streams to one-off emergency calls, Miller’s licensed VBEC facility and field crews handle the full spectrum — collection, treatment, and final disposition, all under one roof.",
   services: orderedServices(),
   externalTile: {
     href: "https://www.transline49.com",
@@ -168,7 +168,7 @@ export const HISTORY = {
   headingId: "mw-tenure-heading-copy-b",
   eyebrow: "Our history",
   title: { lead: "Three decades in", em: "hazardous waste" },
-  lead: "Miller Environmental was formed in 1996 as Manitoba's first private-public hazardous-waste operator. Vaughn Bullough joined as General Manager in 1997 and led operations for twenty-five years. The facility was renamed in his honour in 2022. The work continues.",
+  lead: "Miller Environmental was formed in 1996 as Manitoba’s first private-public hazardous-waste operator. Vaughn Bullough joined as General Manager in 1997 and led operations for twenty-five years. The facility was renamed in his honour in 2022. The work continues.",
   timelineNote: "*hover for more info",
   milestones: MILESTONES,
   plate: {
