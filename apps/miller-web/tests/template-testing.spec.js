@@ -44,3 +44,22 @@ test("hero image preload hint present (LCP parity)", async ({ page }) => {
   await page.goto(`${BASE}/template-testing`);
   await expect(page.locator('link[rel="preload"][as="image"][fetchpriority="high"]')).toBeAttached();
 });
+
+test("config: scheme emits data-scheme + token override applies", async ({ page }) => {
+  await page.goto(`${BASE}/template-testing-variants`);
+  await expect(page.locator('.mw-hero[data-scheme="cream"]')).toBeAttached();
+  const accent = await page.evaluate(() => getComputedStyle(document.querySelector(".mw-hero")).getPropertyValue("--c-accent").trim());
+  expect(accent).toBe("#7a3d12");
+});
+
+test("config: default page emits no variant attributes (parity)", async ({ page }) => {
+  await page.goto(`${BASE}/template-testing`);
+  expect(await page.locator("main [data-scheme], main [data-layout]").count()).toBe(0);
+});
+
+test("config: reverse layout flips facility split above breakpoint", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto(`${BASE}/template-testing-variants`);
+  const dir = await page.evaluate(() => getComputedStyle(document.querySelector(".mw-fac2__split[data-layout='reverse']")).direction);
+  expect(dir).toBe("rtl");
+});
