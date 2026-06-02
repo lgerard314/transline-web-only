@@ -54,16 +54,16 @@ export const FACILITY_PHOTOS = [
 
 export const MILESTONES = [
   { year: "1996", title: "Founding year", body: "The Province of Manitoba and Miller Paving sign a 50/50 partnership creating Miller Environmental Corporation, announced January 10, 1996." },
-  { year: "1997", title: "Vaughn Bullough hired as GM", body: "Bullough builds the operation into Manitoba's only fully-licensed hazardous-waste operator, leading it for twenty-five years." },
-  { year: "2007", title: "Winnipeg Service Centre opens", body: "The Hekla Avenue centre opens as the company's public-facing base and a licensed PCB-storage and waste-coordination hub." },
+  { year: "1997", title: "Vaughn Bullough hired as GM", body: "Bullough builds the operation into Manitoba’s only fully-licensed hazardous-waste operator, leading it for twenty-five years." },
+  { year: "2007", title: "Winnipeg Service Centre opens", body: "The Hekla Avenue centre opens as the company’s public-facing base and a licensed PCB-storage and waste-coordination hub." },
   { year: "2015", title: "Licence 58 HW S2 RRRR", body: "Manitoba posts the core treatment-facility operating licence — the regulatory backbone for everything that follows." },
   { year: "2017", title: "Federal disposal contract won", body: "MEC wins a federal Hazardous Waste Disposal Services contract, since amended through 2026." },
   { year: "2019 — 2022", title: "Processing Cell 5 commissioned", body: "A new engineered processing cell is constructed and licensed, expanding treatment, storage, and disposal capacity at the Montcalm facility." },
-  { year: "August 2022", title: "Treatment Facility → VBEC", body: "The flagship facility is renamed the Vaughn Bullough Environmental Centre in recognition of Vaughn Bullough's 25-year leadership." },
+  { year: "August 2022", title: "Treatment Facility → VBEC", body: "The flagship facility is renamed the Vaughn Bullough Environmental Centre in recognition of Vaughn Bullough’s 25-year leadership." },
   { year: "2023", title: "MHCA COR safety certification", body: "MEC earns its MHCA COR 2023 safety certification and joins the Mining Association of Manitoba, broadening its sector standing." },
-  { year: "2024", title: "MEIA Lifetime Achievement Award", body: "President Paul Bauer receives the MEIA Lifetime Achievement Award, anchoring the company's credibility with regulators and large generators." },
+  { year: "2024", title: "MEIA Lifetime Achievement Award", body: "President Paul Bauer receives the MEIA Lifetime Achievement Award, anchoring the company’s credibility with regulators and large generators." },
   { year: "May 2025", title: "Solvent recycling online", body: "Manitoba approves an in-province solvent-recovery system reclaiming up to 4.5 million litres annually — moving MEC up the waste hierarchy." },
-  { year: "February 2026", title: "Charting the path forward", body: "President Paul Bauer lays out the company's strategy, with 96% of waste now managed in-house." },
+  { year: "February 2026", title: "Charting the path forward", body: "President Paul Bauer lays out the company’s strategy, with 96% of waste now managed in-house." },
 ];
 
 export const AFFILIATES = [
