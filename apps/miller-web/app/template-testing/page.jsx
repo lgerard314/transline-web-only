@@ -7,7 +7,7 @@ import { TimelineSplit01 } from "@/components-v2/06_sections/splits/timeline-spl
 import { PhotoBleedCards01 } from "@/components-v2/06_sections/callouts/photo-bleed-cards-01";
 import { RotatingBanner01 } from "@/components-v2/06_sections/banners/rotating-banner-01";
 import { MultiColumnCta01 } from "@/components-v2/06_sections/callouts/multi-column-cta-01";
-import { HERO, CERTS_BANNER } from "@/lib/content/template-testing-home";
+import { HERO, CERTS_BANNER, SERVICES_GRID } from "@/lib/content/template-testing-home";
 
 export const metadata = {
   title: "Template Testing — components-v2 sandbox",
@@ -20,7 +20,7 @@ export default function TemplateTestingPage() {
       <link rel="preload" href="/miller/hero/home-frame-1.png" as="image" fetchPriority="high" />
       <MonumentHero01 content={HERO} />
       <TallStaticBanner01 content={CERTS_BANNER} />
-      <BentoGrid01 />
+      <BentoGrid01 content={SERVICES_GRID} />
       <HoverCardGrid01 />
       <MediaSplit01 />
       <TimelineSplit01 />
