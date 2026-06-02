@@ -88,3 +88,27 @@ test("config: reverse layout flips facility split above breakpoint", async ({ pa
   });
   expect(contentLeft).toBeGreaterThan(mediaLeft);
 });
+
+test("dark scheme: section surface + text invert to walnut/cream", async ({ page }) => {
+  await page.goto(`${BASE}/template-testing-variants`);
+  // history section rendered with scheme:"dark"
+  const sec = page.locator('.mw-ten3[data-scheme="dark"]').first();
+  await expect(sec).toBeAttached();
+  const navy = await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue("--c-navy").trim());
+  const surface = await sec.evaluate((el) => getComputedStyle(el).getPropertyValue("--c-surface-warm").trim());
+  expect(surface).toBe(navy);   // token rebind took effect on the section subtree
+});
+
+test("dark scheme: history milestone body is no longer white", async ({ page }) => {
+  await page.goto(`${BASE}/template-testing-variants`);
+  const body = page.locator('.mw-ten3[data-scheme="dark"] .mw-ten3__milestone-body').first();
+  await expect(body).toBeAttached();
+  const bg = await body.evaluate((el) => getComputedStyle(el).backgroundColor);
+  // not white: rgb(255,255,255) / rgba(255,255,255,*) must NOT be the resolved bg
+  expect(bg).not.toMatch(/255,\s*255,\s*255/);
+});
+
+test("dark scheme: default /template-testing still emits no scheme attr (parity)", async ({ page }) => {
+  await page.goto(`${BASE}/template-testing`);
+  expect(await page.locator('main [data-scheme]').count()).toBe(0);
+});
