@@ -3,11 +3,12 @@ import { StopText01 } from "@/components-v2/01_marks/stops/stop-text-01";
 import { VerticalTimeline01 } from "@/components-v2/05_widgets/timelines/vertical-timeline-01";
 import { PlateStat01 } from "@/components-v2/04_blocks/stats/plate-stat-01";
 import { MissionBlock01 } from "@/components-v2/04_blocks/prose/mission-block-01";
+import { sectionProps } from "@/components-v2/section-config";
 
 export function TimelineSplit01({ content, config = {} }) {
   const { eyebrow, title, lead, timelineNote, milestones, plate, mission, headingId } = content;
   return (
-    <section className="mw-ten3" aria-labelledby={headingId}>
+    <section className="mw-ten3" aria-labelledby={headingId} {...sectionProps(config)}>
       <div className="mw-inner">
         <div className="mw-ten3__grid">
           <aside className="mw-ten3__timeline" aria-label="Company milestones">

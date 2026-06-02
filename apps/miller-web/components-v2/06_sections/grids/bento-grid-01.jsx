@@ -3,11 +3,12 @@ import { StopText01 } from "@/components-v2/01_marks/stops/stop-text-01";
 import { FeatureAnchor01 } from "@/components-v2/03_cards/feature/feature-anchor-01";
 import { FeatureCard01 } from "@/components-v2/03_cards/feature/feature-card-01";
 import { FeatureTile01 } from "@/components-v2/03_cards/feature/feature-tile-01";
+import { sectionProps } from "@/components-v2/section-config";
 
 export function BentoGrid01({ content, config = {} }) {
   const { services: s, title: t, externalTile: ext, eyebrow, headingId, intro } = content;
   return (
-    <section className="mw-services" aria-labelledby={headingId}>
+    <section className="mw-services" aria-labelledby={headingId} {...sectionProps(config)}>
       <div className="mw-inner">
         <HeadIntro01
           eyebrow={eyebrow}

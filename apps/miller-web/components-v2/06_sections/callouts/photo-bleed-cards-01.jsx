@@ -1,11 +1,12 @@
 import { Eyebrow01 } from "@/components-v2/01_marks/eyebrows/eyebrow-01";
 import { StopText01 } from "@/components-v2/01_marks/stops/stop-text-01";
 import { NoteCard01 } from "@/components-v2/03_cards/note/note-card-01";
+import { sectionProps } from "@/components-v2/section-config";
 
 export function PhotoBleedCards01({ content, config = {} }) {
   const { bleedPhotoSrc, eyebrow, title, lead, cards, headingId } = content;
   return (
-    <section className="mw-careers mw-careers--bleed" aria-labelledby={headingId}>
+    <section className="mw-careers mw-careers--bleed" aria-labelledby={headingId} {...sectionProps(config)}>
       <div className="mw-careers__bleed-photo" aria-hidden="true">
         <img src={bleedPhotoSrc} alt="" loading="lazy" />
       </div>

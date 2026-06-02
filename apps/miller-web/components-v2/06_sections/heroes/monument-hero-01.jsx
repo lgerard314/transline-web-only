@@ -4,11 +4,12 @@ import { StopText01 } from "@/components-v2/01_marks/stops/stop-text-01";
 import { SolidCta01 } from "@/components-v2/02_buttons/solid/solid-cta-01";
 import { GhostPhoneCta01 } from "@/components-v2/02_buttons/ghost/ghost-phone-cta-01";
 import { ActionArrow01 } from "@/components-v2/01_marks/arrows/action-arrow-01";
+import { sectionProps } from "@/components-v2/section-config";
 
 export function MonumentHero01({ content, config = {} }) {
   const { mark, title, lead, primaryCta, ghostPhone, article, photoSrc, titleId } = content;
   return (
-    <section className="mw-hero" aria-labelledby={titleId}>
+    <section className="mw-hero" aria-labelledby={titleId} {...sectionProps(config)}>
       <div className="mw-hero__photo" aria-hidden="true" style={{ backgroundImage: `url(${photoSrc})` }} />
       <div className="mw-hero__inner">
         <p className="mw-hero__mark" aria-hidden="true">

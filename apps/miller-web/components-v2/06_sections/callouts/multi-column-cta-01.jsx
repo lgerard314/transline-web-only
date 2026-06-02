@@ -3,12 +3,13 @@ import { SolidCta01 } from "@/components-v2/02_buttons/solid/solid-cta-01";
 import { GhostPhoneCta01 } from "@/components-v2/02_buttons/ghost/ghost-phone-cta-01";
 import { ActionArrow01 } from "@/components-v2/01_marks/arrows/action-arrow-01";
 import { IconLink01 } from "@/components-v2/03_cards/icon-link/icon-link-01";
+import { sectionProps } from "@/components-v2/section-config";
 
 export function MultiColumnCta01({ content, config = {} }) {
   const { truckImgSrc, logoImgSrc, eyebrow, title, body, primaryCta, ghostPhone, socials, socialsAriaLabel, headingId } = content;
   return (
-    <section className="mw-final" aria-labelledby={headingId}>
-      <div className="mw-final__grid" data-reveal-stagger>
+    <section className="mw-final" aria-labelledby={headingId} {...sectionProps(config)}>
+      <div className="mw-final__grid" data-reveal-stagger data-layout={config.layout}>
         <div className="mw-final__col mw-final__col--truck">
           <img className="mw-final__truck" src={truckImgSrc} alt="" aria-hidden="true" loading="lazy" />
         </div>

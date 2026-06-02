@@ -6,13 +6,14 @@ import { ActionArrow01 } from "@/components-v2/01_marks/arrows/action-arrow-01";
 import { FigureStat01 } from "@/components-v2/04_blocks/stats/figure-stat-01";
 import { CapItem01 } from "@/components-v2/04_blocks/stats/cap-item-01";
 import { ThumbGallery01 } from "@/components-v2/05_widgets/galleries/thumb-gallery-01";
+import { sectionProps } from "@/components-v2/section-config";
 
 export function MediaSplit01({ content, config = {} }) {
   const { eyebrow, title, lead, figures, capsTitle, capabilities, primaryCta, aboutLink, headingId, photos } = content;
   return (
-    <section className="mw-fac2" aria-labelledby={headingId}>
+    <section className="mw-fac2" aria-labelledby={headingId} {...sectionProps(config)}>
       <div className="mw-inner">
-        <div className="mw-fac2__split">
+        <div className="mw-fac2__split" data-layout={config.layout}>
           <div className="mw-fac2__content" data-reveal-stagger>
             <header className="mw-fac2__head">
               <Eyebrow01 label={eyebrow} />
