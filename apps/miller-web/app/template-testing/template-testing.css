@@ -2,18 +2,25 @@
    Surface-tone schemes re-bind core palette tokens on the section subtree, so all
    descendant mw-* color rules follow. Tokens are the existing warm-clay set. */
 
-/* Scheme presets retint TOKEN-DRIVEN surfaces only. `cream`/`warm` light-tone
-   swaps are reliable. `dark` is best-effort: sections with hardcoded color
-   literals (e.g. white card bodies, rgba washes) will not fully invert without
-   per-section overrides. */
+/* dark scheme — complete §12 walnut/cream rebind. Flips every token-driven
+   surface/text/border in the 7 light sections; per-section overrides below
+   handle the few hardcoded light literals the rebind can't reach. Clay-only. */
 [data-scheme="dark"] {
   --c-bg: var(--c-navy);
   --c-surface-warm: var(--c-navy);
   --c-surface: var(--c-navy-2);
   --c-ink: #ffffff;
   --c-ink-2: rgba(250, 243, 229, 0.91);
-  --c-ink-3: rgba(250, 243, 229, 0.7);
+  --c-ink-3: rgba(245, 230, 203, 0.72);
   --c-line: var(--c-navy-2);
+  --c-line-2: rgba(245, 230, 203, 0.12);
+  --c-grain-on-light: var(--c-grain-on-dark);
+}
+
+/* per-section literal overrides (hardcoded light values the rebind can't reach) */
+[data-scheme="dark"] .mw-ten3__milestone-body {
+  background: rgba(245, 230, 203, 0.035);   /* was #ffffff (04-home.css:934) */
+  box-shadow: none;
 }
 [data-scheme="cream"] {
   --c-surface-warm: var(--c-bg);
