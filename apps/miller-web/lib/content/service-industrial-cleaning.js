@@ -13,6 +13,7 @@ export const industrialCleaning = {
     eyebrow: "Industrial cleaning",
     title: "Industrial cleaning,",
     titleEm: "any vessel",
+    titleId: "ic-hero-title",
     lead:
       "Miller Environmental provides industrial cleaning to every sector — from confined-space cleaning of underground and above-ground holding tanks to high-pressure steam cleaning of equipment and piping, sludge pits, and bulk-liquid and gondola rail-car cleaning.",
     photo: "/miller/services/industrial-cleaning-hero.jpeg",
@@ -25,6 +26,7 @@ export const industrialCleaning = {
   capabilities: {
     eyebrow: "What we clean",
     title: "Confined spaces to rail cars",
+    titleId: "ic-cap-title",
     lead:
       "One crew, every cleaning method — sized to the vessel, the access, and the material inside it.",
     items: [
@@ -55,6 +57,7 @@ export const industrialCleaning = {
   fleet: {
     eyebrow: "The fleet",
     title: "Vacuum & pressure, on wheels",
+    titleId: "ic-fleet-title",
     lead:
       "We operate a fleet of vacuum trucks and pressure-washer units to clean tanks and other industrial equipment — mobilized to your site, backed by our own licensed treatment facility for whatever comes out.",
     items: [
@@ -62,12 +65,14 @@ export const industrialCleaning = {
       { mark: "02", name: "Pressure-washer units", body: "High-pressure and steam units that strip residue from equipment, piping, and vessel interiors." },
     ],
     image: "/miller/industrial-vaccum-truck-transparent.png",
+    mediaPhoto: "/miller/industrial-vaccum-truck-transparent.png",
   },
 
   // §4 — Why Miller (skilled-team band).
   why: {
     eyebrow: "The crew",
     title: "A team that handles it safely",
+    titleId: "ic-why-title",
     items: [
       { mark: "01", title: "Skilled technicians", body: "A qualified, experienced, highly skilled team of professional technicians." },
       { mark: "02", title: "Every sector", body: "Industrial cleaning for all industry sectors, whatever the vessel or material." },
@@ -82,9 +87,17 @@ export const industrialCleaning = {
     title: "Book a cleaning crew",
     titleEm: "for your site",
     titleAfter: "today",
+    titleId: "ic-cta-title",
     body:
       `Tell us about the tank, vessel, or rail car and we'll scope the cleaning — or call now at ${GENERAL_PHONE}. For an active spill or release, our 24/7 emergency team is standing by.`,
     formTitle: "Contact Miller",
     formNote: "A coordinator will reach out within one business day.",
+    hotlineNote: "Answered by a trained responder — every hour, every day of the year.",
+  },
+
+  // §6 — Related services rail.
+  related: {
+    currentSlug: "industrial-cleaning",
+    titleId: "ic-related-title",
   },
 };
