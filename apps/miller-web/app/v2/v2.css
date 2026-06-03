@@ -6,7 +6,7 @@
    - no other-namespace class prefixes; no descendant selectors leaving mx-
    This file bundles globally (Next App Router), so isolation is by the mx-
    namespace, not by import site. /v2 renders under the root layout (its nav,
-   footer, main landmark, and global motion drivers are present but inert here). */
+   footer, content landmark, and global motion drivers are present but inert here). */
 
 .mx-page {
   color: var(--c-ink);
@@ -173,3 +173,124 @@
   .mx-seal__legend { opacity: .8 !important; transition: none !important; }
   .mx-truck { clip-path: inset(0 0 0 0) !important; transition: none !important; }
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   SHARED PRIMITIVES — buttons, surfaces, field-heads, atmosphere
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* Section vertical rhythm — dense bands, generous quiet bands (the / lesson) */
+.mx-section { padding-block: clamp(72px, 9vw, 168px); }
+.mx-section--tight { padding-block: clamp(40px, 4.5vw, 72px); }
+
+/* Surface families */
+.mx-dark { background: var(--c-navy); color: var(--c-on-navy); }
+.mx-dark-2 { background: var(--c-navy-3); color: var(--c-on-navy); }
+.mx-cream { background: var(--c-bg); color: var(--c-ink); }
+.mx-warm { background: var(--c-surface-warm); color: var(--c-ink); }
+
+/* The signature field-head: a mono `field — value` document line above a
+   condensed title. This is the one type move unique to /v2. */
+.mx-field {
+  display: flex; align-items: center; gap: 12px; margin: 0 0 clamp(18px, 2vw, 30px);
+  font-family: var(--font-mono), monospace; font-size: clamp(11px, 0.82vw, 13px);
+  letter-spacing: .2em; text-transform: uppercase; color: var(--c-accent);
+}
+.mx-field::before { content: ""; width: 8px; height: 8px; background: var(--c-accent); transform: rotate(45deg); flex: none; }
+.mx-field--on-dark { color: var(--c-amber); }
+.mx-field__rule { flex: 1; height: 1px; background: currentColor; opacity: .28; }
+
+/* Section title — condensed display, uppercase, with optional accent clause */
+.mx-h2 {
+  font-family: var(--font-condensed), sans-serif; font-weight: 600; line-height: .92;
+  font-size: clamp(38px, 6.2vw, 96px); letter-spacing: -.005em; text-transform: uppercase;
+  margin: 0; color: inherit; text-wrap: balance;
+}
+.mx-h2__em { color: var(--c-accent); display: block; }
+.mx-dark .mx-h2__em, .mx-dark-2 .mx-h2__em { color: var(--c-amber); }
+.mx-lead {
+  font-family: var(--font-sans), sans-serif; font-size: clamp(17px, 1.35vw, 22px);
+  line-height: 1.6; max-width: 60ch; margin: clamp(20px, 2vw, 32px) 0 0; color: var(--c-ink-2);
+}
+.mx-dark .mx-lead, .mx-dark-2 .mx-lead { color: var(--c-body-on-dark); }
+
+/* Buttons (shared) */
+.mx-btn {
+  display: inline-flex; align-items: center; gap: 10px; text-decoration: none;
+  font-family: var(--font-condensed), sans-serif; font-weight: 600; text-transform: uppercase;
+  letter-spacing: .04em; font-size: clamp(15px, 1.1vw, 18px); padding: 16px 26px;
+  border: 1px solid transparent; transition: background .25s var(--mx-ease), color .25s var(--mx-ease), border-color .25s var(--mx-ease), transform .25s var(--mx-ease);
+}
+.mx-btn:hover { transform: translateY(-2px); }
+.mx-btn:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 3px; }
+.mx-btn--primary { background: var(--c-accent); color: #fff; }
+.mx-btn--primary:hover { background: var(--c-accent-2); }
+.mx-btn--ghost { flex-direction: column; align-items: flex-start; gap: 2px; border-color: rgba(245, 230, 203, .34); color: var(--c-on-navy); padding: 12px 22px; }
+.mx-btn--ghost:hover { border-color: var(--c-amber); }
+.mx-btn__sup { font-family: var(--font-mono), monospace; font-size: 10px; letter-spacing: .18em; opacity: .72; text-transform: uppercase; }
+.mx-btn__num { font-size: clamp(16px, 1.2vw, 20px); letter-spacing: .02em; }
+.mx-btn--ink { color: var(--c-ink); border-color: var(--c-line); }
+.mx-btn--ink .mx-btn__sup { color: var(--c-ink-3); }
+.mx-btn--text { padding: 0; color: var(--c-accent); border: 0; background: none; }
+.mx-btn--text:hover { transform: none; color: var(--c-accent-2); }
+
+/* ════════════════════════════════════════════════════════════════════════
+   00 · ORIGIN — HERO MANIFEST
+   ════════════════════════════════════════════════════════════════════════ */
+.mx-hero {
+  position: relative; overflow: hidden; isolation: isolate;
+  background: var(--c-navy); color: var(--c-on-navy);
+  min-height: clamp(660px, 94vh, 1040px); display: flex; align-items: stretch;
+  padding-block: clamp(96px, 12vh, 168px) clamp(40px, 5vw, 72px);
+}
+.mx-hero__bg { position: absolute; inset: -8% 0 0; z-index: 0; will-change: transform; }
+.mx-hero__img { object-fit: cover; object-position: 60% 50%; }
+/* warm scrim — heaviest in the upper-left text quadrant, fading lower-right */
+.mx-hero__scrim {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(105deg, rgba(28, 17, 11, .94) 0%, rgba(28, 17, 11, .72) 34%, rgba(28, 17, 11, .26) 62%, rgba(28, 17, 11, .42) 100%),
+    radial-gradient(120% 90% at 18% 24%, rgba(42, 27, 18, .55), transparent 60%),
+    linear-gradient(to top, rgba(28, 17, 11, .8), transparent 40%);
+}
+.mx-hero__regmark { position: absolute; z-index: 2; width: 26px; height: 26px; border: 1px solid rgba(245, 230, 203, .26); pointer-events: none; }
+.mx-hero__regmark--tl { top: clamp(84px, 11vh, 132px); left: clamp(20px, 4vw, 60px); border-right: 0; border-bottom: 0; }
+.mx-hero__regmark--br { bottom: clamp(28px, 4vw, 56px); right: clamp(20px, 4vw, 60px); border-left: 0; border-top: 0; }
+
+.mx-hero__inner { position: relative; z-index: 2; display: flex; flex-direction: column; justify-content: space-between; gap: clamp(36px, 6vh, 88px); width: min(100% - clamp(40px, 8vw, 120px), 1560px); margin-inline: auto; }
+
+.mx-hero__masthead { display: block; }
+.mx-hero__hr { display: block; height: 2px; background: linear-gradient(to right, var(--c-accent) 0 64px, rgba(245, 230, 203, .28) 64px); margin-bottom: 14px; }
+.mx-hero__metarow { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+.mx-hero__manifest, .mx-hero__formno { margin: 0; font-family: var(--font-mono), monospace; font-size: clamp(11px, 0.82vw, 13px); letter-spacing: .22em; text-transform: uppercase; }
+.mx-hero__manifest { color: var(--c-amber); }
+.mx-hero__formno { color: rgba(245, 230, 203, .6); }
+
+.mx-hero__body { position: relative; }
+.mx-hero__type { max-width: min(72%, 900px); }
+.mx-hero__title { font-family: var(--font-condensed), sans-serif; font-weight: 600; text-transform: uppercase; font-size: clamp(46px, 7.4vw, 116px); line-height: .88; letter-spacing: -.012em; margin: 0; color: var(--c-on-navy); }
+.mx-hero__title .mx-line:nth-child(2) .mx-line__in { color: var(--c-amber); }
+.mx-hero__lead { font-family: var(--font-sans), sans-serif; font-size: clamp(16px, 1.25vw, 20px); line-height: 1.62; color: var(--c-body-on-dark); max-width: 46ch; margin: clamp(22px, 2.6vw, 36px) 0 0; }
+.mx-hero__actions { display: flex; flex-wrap: wrap; gap: 16px; align-items: stretch; margin-top: clamp(26px, 3vw, 40px); }
+
+/* floated issuing stamp — lower-right quadrant, never steals title width */
+.mx-hero__sealwrap { position: absolute; right: clamp(0px, 1vw, 16px); bottom: clamp(64px, 11vh, 132px); z-index: 3; }
+.mx-hero__sealmark { display: inline-flex; }
+.mx-hero__seallogo { width: clamp(76px, 8vw, 116px); height: auto; filter: brightness(0) invert(1); opacity: .94; }
+.mx-hero .mx-seal { padding: clamp(30px, 3.4vw, 52px); }
+.mx-hero .mx-seal__edge { stroke: var(--c-amber); stroke-width: 1.4; }
+.mx-hero .mx-seal__legend { color: var(--c-amber); bottom: -8px; }
+
+.mx-hero__reg { display: flex; align-items: baseline; gap: 10px; font-family: var(--font-mono), monospace; font-size: clamp(11px, 0.82vw, 13px); letter-spacing: .14em; text-transform: uppercase; color: rgba(245, 230, 203, .6); border-top: 1px solid rgba(245, 230, 203, .16); padding-top: 14px; }
+.mx-hero__reg-strong { color: var(--c-amber); font-weight: 600; letter-spacing: .2em; }
+
+@media (max-width: 1100px) {
+  .mx-hero__type { max-width: 84%; }
+  .mx-hero__sealwrap { bottom: clamp(56px, 9vh, 96px); }
+  .mx-hero__seallogo { width: 72px; }
+}
+@media (max-width: 740px) {
+  .mx-hero__type { max-width: 100%; }
+  .mx-hero__sealwrap { display: none; }
+  .mx-hero__regmark { display: none; }
+}
+@media (max-width: 600px) { .mx-hero { min-height: 0; } }
