@@ -1,4 +1,4 @@
-// Homepage content. Strings + arrays only — markup belongs in app/(home)/sections/.
+// Homepage content. Strings + arrays only — markup lives in the components-v2 templates composed by app/(home)/page.jsx (via lib/content/template-testing-home.js).
 // Shared phrases / phone numbers come from `./brand`.
 
 import {

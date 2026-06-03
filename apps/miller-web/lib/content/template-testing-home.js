@@ -20,7 +20,7 @@ function orderedServices() {
   return [...head, ...rest];
 }
 
-// Mirrors HOME_FIRST in app/(home)/sections/02-services.jsx — keep in sync.
+// HOME_FIRST — the services-section ordering for the home BentoGrid (now the source of truth; formerly mirrored in the old app/(home)/sections/02-services.jsx).
 export const HOME_FIRST = [
   "industrial-waste-treatment",
   "environmental-remediation-services",
