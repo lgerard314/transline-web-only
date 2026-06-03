@@ -20,6 +20,7 @@ export const IWT = {
     emergencyDisplay: EMERGENCY_PHONE,
     emergencyHref: EMERGENCY_TEL,
     secondaryCta: { label: "Contact Miller", labelShort: "Contact", href: "/contact-us/" },
+    titleId: "iwt-hero-title",
   },
 
   // §2 — The VBEC facility (unique stat band).
@@ -29,6 +30,7 @@ export const IWT = {
     lead:
       "Treating industrial organic and inorganic waste — both liquid and solid — at one location is a unique benefit in the overall management of incoming streams. Waste arrives in everything from pails to bulk trucks, profiled on intake to determine its recycling or reprocessing potential.",
     photo: "/miller/facility/vbec-aerial.webp",
+    caption: "Vaughn Bullough Environmental Centre",
     stats: [
       { value: "160", unit: "acres", label: "Licensed processing footprint" },
       { value: "1", unit: "site", label: "Organic + inorganic, liquid + solid" },
@@ -37,6 +39,7 @@ export const IWT = {
     ],
     processEyebrow: "Treatment processes",
     processes: ["Inorganic", "Aqueous", "Liquid organic", "Solid organics", "Recycling"],
+    titleId: "iwt-fac-title",
   },
 
   // §3 — Treatment & processing capabilities. Seven groups; the first is the
@@ -46,6 +49,7 @@ export const IWT = {
     title: "Treatment & processing",
     lead:
       "Specific chemistries, formulated per stream — from contaminated soils to spent catalysts. If it can be recovered, recycled, or safely disposed, it has a route through VBEC.",
+    titleId: "iwt-cap-title",
     groups: [
       {
         heading: "Specialty Soil, Sludges & Solids",
@@ -137,5 +141,13 @@ export const IWT = {
       `Send us your stream and we'll determine its treatment, recycling, or disposal route through VBEC — or call now at ${GENERAL_PHONE}. For an active spill or release, our 24/7 emergency team is standing by.`,
     formTitle: "Contact Miller",
     formNote: "A treatment coordinator will reach out within one business day.",
+    titleId: "iwt-cta-title",
+    hotlineNote: "Answered by a trained responder — every hour, every day of the year.",
+  },
+
+  // §5 — Related services rail.
+  related: {
+    currentSlug: "industrial-waste-treatment",
+    titleId: "iwt-related-title",
   },
 };
