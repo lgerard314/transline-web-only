@@ -11,9 +11,12 @@ import { FacilitySplit } from "./_sections/FacilitySplit";
 import { InTransit } from "./_sections/InTransit";
 import { HistoryTimeline } from "./_sections/HistoryTimeline";
 import { ScaleTally } from "./_sections/ScaleTally";
+import { CareersCallout } from "./_sections/CareersCallout";
+import { AffiliatesMarquee } from "./_sections/AffiliatesMarquee";
+import { DispositionCta } from "./_sections/DispositionCta";
 import {
   V2_HERO, V2_CERTS, V2_CREED, V2_SERVICES, V2_SECTORS, V2_FACILITY,
-  V2_HISTORY, V2_SCALE,
+  V2_HISTORY, V2_SCALE, V2_CAREERS, V2_AFFILIATES, V2_DISPOSITION,
 } from "./_content";
 
 export default function V2Home() {
@@ -30,6 +33,9 @@ export default function V2Home() {
       <InTransit />
       <HistoryTimeline content={V2_HISTORY} />
       <ScaleTally content={V2_SCALE} />
+      <CareersCallout content={V2_CAREERS} />
+      <AffiliatesMarquee content={V2_AFFILIATES} />
+      <DispositionCta content={V2_DISPOSITION} />
     </>
   );
 }

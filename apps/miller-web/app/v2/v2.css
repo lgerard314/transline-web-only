@@ -451,3 +451,46 @@
 .mx-scale .mx-tally__divider { max-width: 720px; margin-inline: auto; }
 .mx-scale .mx-tally__trio { max-width: 640px; margin-inline: auto; }
 @media (max-width: 600px) { .mx-scale .mx-seal { aspect-ratio: auto; width: auto; padding: 0 0 16px; } .mx-scale .mx-tally__num { font-size: clamp(56px, 16vw, 92px); } }
+
+/* ════════════════════════════════════════════════════════════════════════
+   · THE CREW — CAREERS CALLOUT (photo-bleed)
+   ════════════════════════════════════════════════════════════════════════ */
+.mx-crew__grid { display: grid; grid-template-columns: minmax(0, .86fr) minmax(0, 1fr); gap: clamp(28px, 4vw, 72px); align-items: center; }
+.mx-crew__media { position: relative; aspect-ratio: 4 / 5; overflow: hidden; align-self: stretch; min-height: 420px; }
+.mx-crew__img { object-fit: cover; }
+.mx-crew__cards { list-style: none; margin: clamp(28px, 3vw, 44px) 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 2vw, 28px); }
+.mx-crew__card { display: flex; flex-direction: column; gap: 8px; padding: clamp(18px, 1.6vw, 26px); background: var(--c-surface); border: 1px solid var(--c-line); }
+.mx-crew__tag { font-family: var(--font-mono), monospace; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--c-accent); }
+.mx-crew__ctitle { font-family: var(--font-condensed), sans-serif; font-weight: 600; text-transform: uppercase; font-size: clamp(18px, 1.6vw, 24px); line-height: 1.05; color: var(--c-ink); }
+.mx-crew__ctext { font-family: var(--font-sans), sans-serif; font-size: clamp(14px, 1vw, 15.5px); line-height: 1.5; color: var(--c-ink-3); }
+.mx-crew__card .mx-btn--text { margin-top: auto; }
+@media (max-width: 920px) { .mx-crew__grid { grid-template-columns: 1fr; } .mx-crew__media { aspect-ratio: 16 / 9; min-height: 0; } }
+@media (max-width: 520px) { .mx-crew__cards { grid-template-columns: 1fr; } }
+
+/* ════════════════════════════════════════════════════════════════════════
+   · COUNTERSIGNED — AFFILIATES MARQUEE (buffer)
+   ════════════════════════════════════════════════════════════════════════ */
+.mx-aff__viewport { margin-top: clamp(18px, 2vw, 30px); overflow: hidden; -webkit-mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent); mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent); }
+.mx-aff__track { list-style: none; margin: 0; padding: 0; display: flex; align-items: center; gap: clamp(36px, 5vw, 80px); width: max-content; animation: mx-marquee 40s linear infinite; }
+.mx-aff__item { flex: none; }
+.mx-aff__logo { height: clamp(40px, 4vw, 58px); width: auto; object-fit: contain; opacity: .58; transition: opacity .25s var(--mx-ease); }
+.mx-aff__item:hover .mx-aff__logo { opacity: 1; }
+@keyframes mx-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .mx-aff__track { animation: none; flex-wrap: wrap; width: auto; justify-content: center; row-gap: 28px; } }
+
+/* ════════════════════════════════════════════════════════════════════════
+   · DISPOSITION — CTA CLOSE (truck self-draw + DELIVERED stamp; dark)
+   ════════════════════════════════════════════════════════════════════════ */
+.mx-disp { overflow: hidden; isolation: isolate; }
+.mx-disp__blueprint { position: absolute; inset: 0; z-index: 0; pointer-events: none; max-width: 100%; opacity: .6; background-image: linear-gradient(rgba(245, 230, 203, .05) 1px, transparent 1px), linear-gradient(90deg, rgba(245, 230, 203, .05) 1px, transparent 1px); background-size: 48px 48px; }
+.mx-disp__inner { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 4vw, 72px); align-items: center; }
+.mx-disp__truckwrap { position: relative; }
+.mx-disp__truck { width: 100%; height: auto; }
+.mx-disp__stamp { position: absolute; right: 4%; top: 4%; font-family: var(--font-condensed), sans-serif; font-weight: 600; text-transform: uppercase; font-size: clamp(20px, 2.4vw, 40px); letter-spacing: .12em; color: var(--c-amber); border: 2px solid var(--c-amber); padding: 4px 16px; border-radius: 2px; opacity: 0; transform: rotate(-9deg) scale(1.35); transition: opacity .4s var(--mx-ease) 1.15s, transform .4s var(--mx-ease) 1.15s; }
+.mx-disp__stamp[data-mx-in="1"] { opacity: .96; transform: rotate(-9deg) scale(1); }
+.mx-disp__actions { display: flex; flex-wrap: wrap; gap: 16px; margin-top: clamp(24px, 3vw, 36px); }
+.mx-disp__socials { list-style: none; margin: clamp(28px, 3vw, 40px) 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 14px; }
+.mx-disp__social { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border: 1px solid rgba(245, 230, 203, .28); color: var(--c-on-navy); transition: border-color .25s var(--mx-ease), color .25s var(--mx-ease); }
+.mx-disp__social:hover { border-color: var(--c-amber); color: var(--c-amber); }
+.mx-disp__social:focus-visible { outline: 2px solid var(--c-amber); outline-offset: 2px; }
+@media (max-width: 880px) { .mx-disp__inner { grid-template-columns: 1fr; } .mx-disp__truckwrap { order: 2; margin-top: 12px; } }
