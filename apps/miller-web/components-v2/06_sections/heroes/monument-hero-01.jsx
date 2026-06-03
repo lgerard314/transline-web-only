@@ -10,7 +10,9 @@ export function MonumentHero01({ content, config = {} }) {
   const { mark, title, lead, primaryCta, ghostPhone, article, photoSrc, titleId } = content;
   return (
     <section className="mw-hero" aria-labelledby={titleId} {...sectionProps(config)}>
-      <div className="mw-hero__photo" aria-hidden="true" style={{ backgroundImage: `url(${photoSrc})` }} />
+      <div className="mw-hero__photo-wrap" aria-hidden="true" data-parallax data-parallax-speed="0.16">
+        <div className="mw-hero__photo" style={{ backgroundImage: `url(${photoSrc})` }} />
+      </div>
       <div className="mw-hero__inner">
         <p className="mw-hero__mark" aria-hidden="true">
           <img className="mw-hero__mark-logo" src={mark.logoSrc} alt="" />
@@ -26,9 +28,9 @@ export function MonumentHero01({ content, config = {} }) {
         </p>
 
         <h1 id={titleId} className="mw-hero__title">
-          <span className="mw-hero__line">{title.line1}</span>
-          <span className="mw-hero__line"><PhraseCycle01 phrases={title.cyclePhrases} /></span>
-          <span className="mw-hero__line"><StopText01 stopClassName="mw-hero__stop">{title.line3}</StopText01></span>
+          <span className="mw-hero__line"><span className="mw-hero__line-in">{title.line1}</span></span>
+          <span className="mw-hero__line"><span className="mw-hero__line-in"><PhraseCycle01 phrases={title.cyclePhrases} /></span></span>
+          <span className="mw-hero__line"><span className="mw-hero__line-in"><StopText01 stopClassName="mw-hero__stop">{title.line3}</StopText01></span></span>
         </h1>
 
         <p className="mw-hero__lead">{lead}</p>

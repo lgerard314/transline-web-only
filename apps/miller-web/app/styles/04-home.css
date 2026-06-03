@@ -1694,15 +1694,41 @@
   align-items: stretch;
 }
 /* Operating-site photograph. Warm-toned via saturation/brightness so it sits inside the clay palette rather than competing with it. */
+/* Wrapper clips the slow push-in zoom and carries the scroll parallax.
+   It overhangs the hero by 14% top & bottom so its transform:translateY
+   (set per-frame by MillerParallax, clamped within that headroom) can
+   drift the photo on scroll without ever exposing a hard edge — the hero
+   itself (overflow:hidden) clips the overhang. The inner .mw-hero__photo
+   owns the zoom transform; keeping the two transforms on separate
+   elements avoids a cascade fight between the load animation and the
+   JS-driven parallax. */
+.mw-hero__photo-wrap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -14%;
+  height: 128%;
+  z-index: 0;
+  overflow: hidden;
+  will-change: transform;
+}
 .mw-hero__photo {
   position: absolute;
   inset: 0;
-  z-index: 0;
   background-size: cover;
   background-position: center 35%;
   background-repeat: no-repeat;
-  filter: saturate(0.82) brightness(0.72) contrast(1.06) sepia(0.12);
+  /* Cinematic grade — moodier/darker/warmer than the generic --mw-photo-grade
+     so the type reads and the hero feels like a film frame, not a stock photo.
+     (Hero is deliberately excluded from the generic grade group.) */
+  filter: saturate(0.8) brightness(0.66) contrast(1.14) sepia(0.14);
+  /* Slow push-in on load, settling 6% zoomed — gives parallax headroom and a
+     cinematic entrance. Parallax translateY is applied to the wrapper. */
+  transform: scale(1.06);
+  animation: mw-hero-zoom 2.4s cubic-bezier(.2, .7, .2, 1) both;
+  will-change: transform;
 }
+@keyframes mw-hero-zoom { from { transform: scale(1.18); } to { transform: scale(1.06); } }
 /* Warm overlay tuned so the operating-site photo reads under the type — lighter than v2 so the facility is visible. */
 .mw-hero__photo::after {
   content: "";
@@ -1731,6 +1757,49 @@
   width: 1px;
   background: linear-gradient(to bottom, transparent 0, rgba(168,90,44,0.85) 16%, rgba(168,90,44,0.85) 84%, transparent 100%);
   z-index: 1;
+}
+/* ── Chain-of-custody thread — fixed clay hairline at the left margin that
+   "draws" downward as the page scrolls, a diamond stamp travelling at its
+   leading edge. Continues the hero's vertical hairline into a page-long
+   through-line for the documented-line motif. Driven by MillerCustodyThread
+   (writes --mw-thread-p, 0→1). Decorative; home only. Hidden where the left
+   gutter can't clear the content; static (no travelling stamp) under
+   reduced motion. ── */
+.mw-thread {
+  position: fixed;
+  left: clamp(20px, 3vw, 60px);
+  top: clamp(112px, 16vh, 168px);
+  bottom: clamp(40px, 6vh, 72px);
+  width: 1px;
+  z-index: 4;
+  pointer-events: none;
+  background: rgba(168, 90, 44, 0.15);
+  --mw-thread-p: 0;
+}
+.mw-thread__fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(168, 90, 44, 0.9), rgba(168, 90, 44, 0.5));
+  transform: scaleY(var(--mw-thread-p));
+  transform-origin: top center;
+}
+.mw-thread__tip {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--mw-thread-p) * 100%);
+  width: 7px;
+  height: 7px;
+  background: var(--c-accent);
+  transform: translate(-50%, -50%) rotate(45deg);
+  box-shadow: 0 0 0 4px rgba(168, 90, 44, 0.1);
+}
+@media (max-width: 1200px) { .mw-thread { display: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .mw-thread__fill { transform: scaleY(1); }
+  .mw-thread__tip { display: none; }
 }
 .mw-hero__inner {
   position: relative;
@@ -1815,7 +1884,28 @@
   margin: 0;
   text-transform: uppercase;
 }
-.mw-hero__line { display: block; }
+/* ── Hero entrance choreography — kinetic type + staggered fades.
+   Headline lines mask-reveal upward; mark, lead and CTAs fade up after.
+   CSS-only, runs once on load (the hero is above the fold). The
+   reduced-motion off-switch is at the end of this block. ── */
+.mw-hero__line { display: block; overflow: hidden; padding-bottom: 0.12em; margin-bottom: -0.12em; }
+.mw-hero__line-in { display: block; transform: translateY(116%); animation: mw-hero-rise 0.95s cubic-bezier(.16, .84, .3, 1) both; }
+.mw-hero__title .mw-hero__line:nth-child(1) .mw-hero__line-in { animation-delay: 0.45s; }
+.mw-hero__title .mw-hero__line:nth-child(2) .mw-hero__line-in { animation-delay: 0.57s; }
+.mw-hero__title .mw-hero__line:nth-child(3) .mw-hero__line-in { animation-delay: 0.69s; }
+.mw-hero__mark { animation: mw-hero-fade 0.8s ease 0.2s both; }
+.mw-hero__lead { animation: mw-hero-fade 0.8s ease 0.95s both; }
+.mw-hero__foot { animation: mw-hero-fade 0.8s ease 1.08s both; }
+@keyframes mw-hero-rise { from { transform: translateY(116%); } to { transform: translateY(0); } }
+@keyframes mw-hero-fade { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) {
+  .mw-hero__photo,
+  .mw-hero__line-in,
+  .mw-hero__mark,
+  .mw-hero__lead,
+  .mw-hero__foot { animation: none; }
+  .mw-hero__line-in { transform: none; }
+}
 /* Terracotta square stamp — same brand mark as the eyebrow dot. Sits on the baseline next to "disposal" as a period replacement. */
 .mw-hero__stop {
   display: inline-block;
@@ -2964,7 +3054,6 @@
 html[data-brand="miller"] {
   --mw-photo-grade: saturate(0.9) contrast(1.05) sepia(0.1) brightness(1.01);
 }
-.mw-hero__photo,
 .mw-svcs-anchor__photo,
 .mw-svcs-card__photo,
 .mw-svcs-tile__photo,
