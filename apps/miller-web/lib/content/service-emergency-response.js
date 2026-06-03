@@ -9,6 +9,7 @@ export const emergencyResponse = {
     eyebrow: "24/7 emergency response",
     title: "When it spills,",
     titleEm: "we're already moving",
+    titleId: "er-hero-title",
     lead:
       "Trained spill responders and a prairie-wide subcontractor network on call around the clock — containment, cleanup, and disposal for flammable, corrosive, and toxic dangerous goods across central Canada.",
     photo: "/miller/fleet-trucks-gravel-transparent.png",
@@ -21,6 +22,8 @@ export const emergencyResponse = {
   timeline: {
     eyebrow: "When you call",
     title: "From your call to all-clear",
+    titleId: "er-tl-title",
+    interval: 4200,
     lead:
       "Every incident is different — but the response cadence never changes. Answered fast, dispatched fast, contained first.",
     steps: [
@@ -58,6 +61,8 @@ export const emergencyResponse = {
   incidents: {
     eyebrow: "What we respond to",
     title: "Prepared for the call\nwe hope you never have to make",
+    titleId: "er-inc-title",
+    headMedia: "/miller/pickup-truck-transparent-removebg.png",
     lead:
       "Spill responses vary with the environment, material, and scale. Every one gets a customized approach — these are the situations our crews are equipped for.",
     items: [
@@ -78,6 +83,7 @@ export const emergencyResponse = {
   coverage: {
     eyebrow: "Coverage & readiness",
     title: "Ready across Manitoba\nand the prairies",
+    titleId: "er-cov-title",
     lead:
       "From Winnipeg out across central Canada — local crews backed by a coordinated subcontractor network for large, remote, or multi-site incidents.",
     cta: { label: "Plan your spill response", href: "/contact-us/" },
@@ -134,8 +140,16 @@ export const emergencyResponse = {
     title: "Save our number…",
     titleEm: "before",
     titleAfter: "you need it",
+    titleId: "er-cta-title",
+    hotlineNote: "Answered by a trained responder — every hour, every day of the year.",
     body: "Program Miller's 24/7 line into your phone today. When minutes matter, one call puts a trained crew on the road.",
     formTitle: "Request pre-incident planning",
     formNote: "Quotes, site planning, and general inquiries — we'll be in touch.",
+  },
+
+  // §6 — Related services.
+  related: {
+    currentSlug: "emergency-response",
+    titleId: "er-related-title",
   },
 };
