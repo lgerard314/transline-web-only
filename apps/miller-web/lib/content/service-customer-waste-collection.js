@@ -7,6 +7,7 @@ export const customerWasteCollection = {
   slug: "customer-waste-collection",
 
   hero: {
+    titleId: "cwc-hero-title",
     eyebrow: "Collection & logistics",
     title: "Containerized pickup,",
     titleEm: "on your schedule",
@@ -20,6 +21,8 @@ export const customerWasteCollection = {
 
   // §2 — "Any volume" container capacity ladder.
   scale: {
+    titleId: "cwc-scale-title",
+    headPhoto: "/miller/dumptruck-2.png",
     eyebrow: "Any volume",
     title: "From a single pail to full van loads",
     lead:
@@ -36,6 +39,7 @@ export const customerWasteCollection = {
 
   // §3 — How it works (dock → VBEC routing manifest).
   process: {
+    titleId: "cwc-steps-title",
     eyebrow: "How it works",
     title: "Four steps from dock to disposition",
     lead: "Every collection runs the same documented route — from the first profile to a signed manifest at the facility gate.",
@@ -57,6 +61,7 @@ export const customerWasteCollection = {
 
   // §4 — Industries.
   industries: {
+    titleId: "cwc-inds-title",
     eyebrow: "Who we collect from",
     title: "Built for regulated generators",
     lead: `On-site technicians handle the packaging and paperwork so your team doesn't have to — across every sector that ${VBEC_FULL_NAME} serves.`,
@@ -74,8 +79,15 @@ export const customerWasteCollection = {
     cta: { label: "Talk to Miller", href: "/contact-us/" },
   },
 
+  // §6 — Related services rail.
+  related: {
+    currentSlug: "customer-waste-collection",
+    titleId: "cwc-related-title",
+  },
+
   // §5 — Closing CTA: split panel with a purpose-built scheduling form.
   cta: {
+    titleId: "cwc-cta-title",
     eyebrow: "Get on the schedule",
     title: "Set up a collection",
     titleEm: "schedule",
