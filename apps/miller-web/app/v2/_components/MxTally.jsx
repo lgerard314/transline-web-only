@@ -1,6 +1,7 @@
 "use client";
 import { useRef, useState, useCallback, useEffect } from "react";
 import { MxCountUp } from "./MxCountUp";
+import { DiamondSeal } from "./DiamondSeal";
 
 // Owns the WHOLE tally signature sequence as ONE component (no desynced
 // observers): the figure counts up → on completion the diamond seal draws
@@ -36,10 +37,12 @@ export function MxTally({ eyebrow, figure, unit, body, support = [] }) {
     >
       {eyebrow}
       <p className="mx-tally__fig">
-        {/* DiamondSeal wraps this in Phase 5; the seal stroke reads data-mx-seal. */}
-        <span className="mx-tally__num">
-          <MxCountUp value={figure.value} suffix={figure.suffix} onComplete={onCountDone} />
-        </span>
+        {/* The seal's draw-closed is gated by data-mx-seal on .mx-tally above. */}
+        <DiamondSeal>
+          <span className="mx-tally__num">
+            <MxCountUp value={figure.value} suffix={figure.suffix} onComplete={onCountDone} />
+          </span>
+        </DiamondSeal>
         {unit ? <span className="mx-tally__unit">{unit}</span> : null}
       </p>
       {body ? <p className="mx-tally__body">{body}</p> : null}
