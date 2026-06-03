@@ -1,5 +1,5 @@
 import { MxTally } from "../_components/MxTally";
-import { CustodyRule, CustodyNode } from "../_components/CustodyThread";
+import { CustodyRule } from "../_components/CustodyThread";
 
 // Σ · TO DATE — THE money shot. The single crescendo number: it counts up inside
 // the diamond seal, the seal draws closed on the final value (one continuous
@@ -11,7 +11,6 @@ export function ScaleTally({ content }) {
   return (
     <section className="mx-scale mx-section mx-dark-2 mx-section" aria-labelledby={c.headingId}>
       <CustodyRule />
-      <CustodyNode />
       <span className="mx-scale__glow" aria-hidden="true" />
       <div className="mx-inner mx-scale__inner">
         <MxTally

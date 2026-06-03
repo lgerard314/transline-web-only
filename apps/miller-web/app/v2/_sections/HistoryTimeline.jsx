@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { CustodyRule, CustodyNode } from "../_components/CustodyThread";
+import { CustodyRule } from "../_components/CustodyThread";
 import { MxArrow } from "../_components/marks";
 
 // RECORD · SINCE 1996 — the proof. A vertical record of milestones (plain ticks,
@@ -12,7 +12,6 @@ export function HistoryTimeline({ content }) {
   return (
     <section className="mx-hist mx-section mx-cream" aria-labelledby={c.headingId}>
       <CustodyRule />
-      <CustodyNode />
       <div className="mx-inner">
         <div className="mx-hist__head">
           <p className="mx-field">

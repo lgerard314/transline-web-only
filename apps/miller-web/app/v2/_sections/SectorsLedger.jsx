@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { CustodyRule, CustodyNode } from "../_components/CustodyThread";
+import { CustodyRule } from "../_components/CustodyThread";
 
 // 03 · GENERATORS — who originates the waste, as a three-card ledger over the
 // matched sector photo set (art-directed as one triptych). Each card is a
@@ -11,7 +11,6 @@ export function SectorsLedger({ content }) {
   return (
     <section className="mx-sect mx-section mx-warm" aria-labelledby={c.headingId}>
       <CustodyRule />
-      <CustodyNode />
       <div className="mx-inner">
         <div className="mx-sect__head">
           <p className="mx-field">

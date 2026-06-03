@@ -1,4 +1,4 @@
-import { CustodyRule, CustodyNode } from "../_components/CustodyThread";
+import { CustodyRule } from "../_components/CustodyThread";
 import { MxArrow } from "../_components/marks";
 
 // 02 · SERVICES — the line-item ledger. Each service is a numbered ledger entry
@@ -12,7 +12,6 @@ export function ServicesIndex({ content }) {
   return (
     <section className="mx-svcs mx-section mx-cream" aria-labelledby={c.headingId}>
       <CustodyRule />
-      <CustodyNode />
       <div className="mx-inner">
         <div className="mx-svcs__head">
           <p className="mx-field">

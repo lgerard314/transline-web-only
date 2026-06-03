@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { CustodyRule, CustodyNode } from "../_components/CustodyThread";
+import { CustodyRule } from "../_components/CustodyThread";
 
 // 01 · CERTIFIED — a deliberately THIN band reading as the manifest's filed
 // certifications. Each seal is a "document on file": mark + standard + scope +
@@ -10,7 +10,6 @@ export function CertSeals({ content }) {
   return (
     <section className="mx-certs mx-section mx-section--tight mx-warm" aria-label={c.ariaLabel}>
       <CustodyRule />
-      <CustodyNode />
       <div className="mx-inner">
         <p className="mx-field">
           <span>{c.stage}</span>

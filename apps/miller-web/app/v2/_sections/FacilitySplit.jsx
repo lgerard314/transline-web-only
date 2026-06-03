@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { CustodyRule, CustodyNode } from "../_components/CustodyThread";
+import { CustodyRule } from "../_components/CustodyThread";
 import { MxArrow } from "../_components/marks";
 
 // 04 · TREATMENT — VBEC, the dark mid-anchor that breaks the light run. A media
@@ -12,7 +12,6 @@ export function FacilitySplit({ content }) {
   return (
     <section className="mx-fac mx-section mx-dark" aria-labelledby={c.headingId}>
       <CustodyRule />
-      <CustodyNode />
       <span className="mx-fac__atmos" aria-hidden="true" />
       <span className="mx-fac__regmark mx-fac__regmark--tr" aria-hidden="true" />
       <div className="mx-inner mx-fac__grid">
