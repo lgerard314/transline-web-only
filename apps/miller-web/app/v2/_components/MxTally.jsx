@@ -37,13 +37,17 @@ export function MxTally({ eyebrow, figure, unit, body, support = [] }) {
     >
       {eyebrow}
       <p className="mx-tally__fig">
-        {/* The seal's draw-closed is gated by data-mx-seal on .mx-tally above. */}
+        {/* The seal's draw-closed is gated by data-mx-seal on .mx-tally above.
+            Number + unit stack INSIDE the seal so the frame stays a true square
+            (a wide numeral alone would stretch the diamond into a lozenge). */}
         <DiamondSeal>
-          <span className="mx-tally__num">
-            <MxCountUp value={figure.value} suffix={figure.suffix} onComplete={onCountDone} />
+          <span className="mx-tally__figstack">
+            <span className="mx-tally__num">
+              <MxCountUp value={figure.value} suffix={figure.suffix} onComplete={onCountDone} />
+            </span>
+            {unit ? <span className="mx-tally__unit">{unit}</span> : null}
           </span>
         </DiamondSeal>
-        {unit ? <span className="mx-tally__unit">{unit}</span> : null}
       </p>
       {body ? <p className="mx-tally__body">{body}</p> : null}
       <span className="mx-tally__divider" aria-hidden="true" />

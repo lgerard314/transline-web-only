@@ -9,8 +9,11 @@ import { ServicesIndex } from "./_sections/ServicesIndex";
 import { SectorsLedger } from "./_sections/SectorsLedger";
 import { FacilitySplit } from "./_sections/FacilitySplit";
 import { InTransit } from "./_sections/InTransit";
+import { HistoryTimeline } from "./_sections/HistoryTimeline";
+import { ScaleTally } from "./_sections/ScaleTally";
 import {
   V2_HERO, V2_CERTS, V2_CREED, V2_SERVICES, V2_SECTORS, V2_FACILITY,
+  V2_HISTORY, V2_SCALE,
 } from "./_content";
 
 export default function V2Home() {
@@ -25,6 +28,8 @@ export default function V2Home() {
       <SectorsLedger content={V2_SECTORS} />
       <FacilitySplit content={V2_FACILITY} />
       <InTransit />
+      <HistoryTimeline content={V2_HISTORY} />
+      <ScaleTally content={V2_SCALE} />
     </>
   );
 }

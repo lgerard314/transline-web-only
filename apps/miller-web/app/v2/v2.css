@@ -404,3 +404,50 @@
 .mx-transit__truck { position: absolute; left: 0; bottom: 16px; width: clamp(80px, 12vw, 150px); z-index: 1; }
 .mx-transit__truck .mx-truck { opacity: .16; }
 @media (max-width: 600px) { .mx-transit__end--from { display: none; } }
+
+/* ════════════════════════════════════════════════════════════════════════
+   RECORD — HISTORY TIMELINE (cream proof; ticks, not diamonds)
+   ════════════════════════════════════════════════════════════════════════ */
+.mx-hist__head { max-width: 62ch; margin-bottom: clamp(36px, 4vw, 64px); }
+.mx-hist__head .mx-h2 { margin-top: 4px; font-size: clamp(34px, 4.6vw, 68px); }
+.mx-hist__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .82fr); gap: clamp(32px, 4vw, 72px); align-items: start; }
+.mx-hist__line { list-style: none; margin: 0; padding: 0 0 0 30px; position: relative; }
+.mx-hist__line::before { content: ""; position: absolute; left: 5px; top: 6px; bottom: 8px; width: 1px; background: var(--c-line); }
+.mx-hist__item { position: relative; padding: 0 0 clamp(20px, 2.2vw, 32px); }
+.mx-hist__tick { position: absolute; left: -25px; top: .58em; width: 14px; height: 1px; background: var(--c-accent); }
+.mx-hist__year { display: block; font-family: var(--font-mono), monospace; font-size: 13px; letter-spacing: .1em; color: var(--c-accent); margin-bottom: 4px; }
+.mx-hist__ititle { display: block; font-family: var(--font-condensed), sans-serif; font-weight: 600; text-transform: uppercase; font-size: clamp(18px, 1.6vw, 24px); line-height: 1.05; color: var(--c-ink); }
+.mx-hist__ibody { display: block; font-family: var(--font-sans), sans-serif; font-size: clamp(14px, 1vw, 15.5px); line-height: 1.5; color: var(--c-ink-3); margin-top: 6px; max-width: 58ch; }
+.mx-hist__aside { position: sticky; top: clamp(80px, 11vh, 120px); }
+.mx-hist__plate { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: var(--c-navy); }
+.mx-hist__plateimg { object-fit: cover; }
+.mx-hist__platestats { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; padding: clamp(14px, 1.4vw, 22px); list-style: none; display: flex; gap: clamp(12px, 1.6vw, 30px); background: linear-gradient(to top, rgba(28, 17, 11, .9), rgba(28, 17, 11, .2) 70%, transparent); }
+.mx-hist__pstat { display: flex; flex-direction: column; }
+.mx-hist__pnum { font-family: var(--font-condensed), sans-serif; font-weight: 600; font-size: clamp(26px, 2.6vw, 40px); color: #fff; line-height: 1; }
+.mx-hist__punit { font-size: .5em; color: var(--c-amber); margin-left: 2px; }
+.mx-hist__plabel { font-family: var(--font-mono), monospace; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: rgba(245, 230, 203, .82); margin-top: 5px; }
+.mx-hist__mission { margin-top: clamp(24px, 2.6vw, 36px); }
+.mx-hist__mtitle { font-family: var(--font-condensed), sans-serif; font-weight: 600; text-transform: uppercase; font-size: clamp(20px, 1.8vw, 28px); color: var(--c-ink); margin: 0 0 12px; }
+.mx-hist__mpara { font-family: var(--font-sans), sans-serif; font-size: clamp(14px, 1vw, 16px); line-height: 1.6; color: var(--c-ink-2); margin: 0 0 10px; }
+.mx-hist__mission .mx-btn--text { margin-top: 6px; }
+@media (max-width: 960px) { .mx-hist__grid { grid-template-columns: 1fr; } .mx-hist__aside { position: static; order: -1; margin-bottom: clamp(24px, 4vw, 40px); } }
+
+/* ════════════════════════════════════════════════════════════════════════
+   Σ · TO DATE — SCALE TALLY (the money shot; true-square diamond seal)
+   ════════════════════════════════════════════════════════════════════════ */
+.mx-scale { overflow: hidden; isolation: isolate; }
+.mx-scale__glow { position: absolute; inset: 0; z-index: 0; pointer-events: none; max-width: 100%; background: radial-gradient(46% 46% at 50% 42%, rgba(168, 90, 44, .26), transparent 72%); }
+.mx-scale__inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.mx-scale .mx-tally { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 880px; }
+.mx-scale__field { justify-content: center; }
+.mx-scale .mx-tally__fig { justify-content: center; margin-top: clamp(20px, 2.4vw, 36px); }
+/* the seal becomes a true square so the rotated frame reads as a clean diamond */
+.mx-scale .mx-seal { aspect-ratio: 1; width: clamp(300px, 40vw, 500px); padding: 0; display: grid; place-items: center; }
+.mx-scale .mx-seal__edge { stroke-width: 1.6; }
+.mx-tally__figstack { display: flex; flex-direction: column; align-items: center; gap: 0; }
+.mx-scale .mx-tally__num { font-size: clamp(58px, 8.6vw, 148px); }
+.mx-scale .mx-tally__unit { font-size: clamp(18px, 2.2vw, 34px); color: var(--c-amber); letter-spacing: .14em; }
+.mx-scale .mx-tally__body { margin-inline: auto; }
+.mx-scale .mx-tally__divider { max-width: 720px; margin-inline: auto; }
+.mx-scale .mx-tally__trio { max-width: 640px; margin-inline: auto; }
+@media (max-width: 600px) { .mx-scale .mx-seal { aspect-ratio: auto; width: auto; padding: 0 0 16px; } .mx-scale .mx-tally__num { font-size: clamp(56px, 16vw, 92px); } }
