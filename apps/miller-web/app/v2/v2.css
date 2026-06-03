@@ -1,0 +1,20 @@
+/* app/v2/v2.css — isolated /v2 award page styles.
+   ISOLATION CONTRACT (enforced by the grep-gate):
+   - every selector is a mx- class; no bare element selectors; no root pseudo
+   - every keyframes name is mx- prefixed
+   - consume global tokens (the c- and font- custom properties); never redefine
+   - no other-namespace class prefixes; no descendant selectors leaving mx-
+   This file bundles globally (Next App Router), so isolation is by the mx-
+   namespace, not by import site. /v2 renders under the root layout (its nav,
+   footer, main landmark, and global motion drivers are present but inert here). */
+
+.mx-page {
+  color: var(--c-ink);
+}
+.mx-section {
+  position: relative;
+}
+.mx-inner {
+  width: min(100% - clamp(48px, 8vw, 144px), 1560px);
+  margin-inline: auto;
+}
