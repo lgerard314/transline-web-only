@@ -17,7 +17,7 @@ The authoritative source files (read these when you need exact values):
 | Miller CSS entry point — `@import` barrel + table of contents only, **no rule blocks** | `apps/miller-web/app/globals.css` |
 | Miller palette/type overrides + every `mw-*` component + chrome repaint + scroll-reveal, split into 9 layered partials (`01-tokens` → `09-service-project-management`) | `apps/miller-web/app/styles/*.css` |
 | Fonts loaded, `<html>` data-attributes, page shell | `apps/miller-web/app/layout.jsx` |
-| Home page markup (section order, components) | `apps/miller-web/app/(home)/page.jsx` + `sections/` + `banners/` |
+| Home page markup (section order, components) | `apps/miller-web/app/(home)/page.jsx` (a thin composition of `components-v2/06_sections` templates fed by `lib/content/template-testing-home.js` — no per-route `sections/`) |
 | Header markup + behavior | `apps/miller-web/components/TopNav.jsx` |
 | Footer markup | `apps/miller-web/components/SiteFooter.jsx` |
 | Shared components (Marquee, FamilyOfCompanies) | `apps/brand/components/` |
@@ -48,6 +48,8 @@ TransLine49 currently has **no** per-app override file — it renders straight f
 ## 2. Color — the warm clay palette
 
 The palette is **load-bearing and warm**. Everything lives in a clay / terracotta / walnut / cream family. There is **no blue, teal, or turquoise anywhere** — and crucially, several token *names* are historical leftovers whose *values* are warm browns. `--c-navy` is a deep walnut, not navy. `--c-blue` is a mid clay-brown, not blue. Trust the hex, not the name. Introducing a cool color anywhere breaks the brand.
+
+**Sanctioned exceptions — third-party marks keep their official colours.** The no-blue rule governs everything *you* author: backgrounds, UI, type, accents, and graded photography. Third-party marks render in their real brand colours and are not "mistakes to fix": the **blue ISO 9001 / 14001 / 45001 certification seals** in the Trust band are intentional and load-bearing — the cool accent is what keeps the all-clay strip from going flat, so do not recolour or warm-grade them — and the **affiliate/partner logos** in the marquee likewise keep their official colours. These are the only cool colours allowed on the page.
 
 Miller pins these values under `html[data-brand="miller"]` (defensively, so a stray palette switch can never force a cool accent):
 
@@ -126,12 +128,14 @@ These small, repeated details are what make the page feel authored. Reuse them; 
 4. **Numbered "article" framing.** Items and cards carry zero-padded numbers (`01`, `02`, …) in mono; the hero carries a small mono caption (`mw-hero__article`). The whole page is composed to read like a numbered document/dossier, not a generic marketing scroll.
 5. **The "→" arrow.** A mono right-arrow trails CTAs and forward links (`tl-btn-arr`, or an inline `<span aria-hidden="true">→</span>`). It's the standard "go" affordance.
 6. **The chain-of-custody hairline.** A 1px vertical clay gradient line in the hero — a thin terracotta thread that reinforces the "documented chain from dock to disposal" story.
+7. **The unified photographic grade.** Every photograph wears one warm "LUT" — a single `--mw-photo-grade` filter token (`saturate(0.9) contrast(1.05) sepia(0.1) brightness(1.01)`) that calms over-saturated shots, adds a little contrast to flat ones, and pulls cool/neutral images toward the clay palette, so the imagery reads as one art-directed set instead of mixed stock. It is applied **only to photographic layers** (hero, bento tiles, sector cards, facility gallery, careers bleed) and **never** to logos, the blue ISO seals, affiliate marks, social icons, or the truck/vector graphics — those keep their true colour (§2). It is non-destructive (a CSS `filter`, no asset edits); tune the whole page from the one token in `04-home.css`.
+8. **Hairline rules.** Decorative divider/separator rules — the cert-band dividers, the statement-band and scale-band dividers, the facility "spec row" rules — are **0.5px** hairlines in `--c-line` for a fine, refined finish. Structural and interactive borders (cards, buttons) stay **1px** so they hold their 3:1 contrast. On dark surfaces the hairline alpha is nudged up slightly so 0.5px stays visible.
 
 ---
 
 ## 6. Core primitives & components
 
-Open and build sections from these. Class names are the Miller (`mw-*`) versions used on the home page.
+These are the visual primitives the design is built from. On miller-web they are now packaged as the **`components-v2` template library** — you compose pages from `06_sections` templates rather than hand-assembling these classes (see `apps/miller-web/components-v2/README.md` and the live catalog at `/template-gallery`). The class vocabulary below still describes what those templates render and is the reference when building or extending a template. Class names are the Miller (`mw-*`) versions used on the home page.
 
 **Eyebrow tag** — `mw-section-tag` containing `mw-section-tag-mark` (the diamond) + `mw-section-tag-label` (mono uppercase). Use `mw-section-tag-label--invert` for the cream variant on dark surfaces. Every section opens with one.
 
@@ -143,7 +147,7 @@ Open and build sections from these. Class names are the Miller (`mw-*`) versions
 
 **Cards.** Light card = `--c-surface-warm` + `1px solid --c-line` + radius 12 + a tight warm shadow. Dark card = `--c-navy` + `--c-on-navy` text + `--c-navy-2` border. Accent borders (a 2px clay edge on one side) mark active/hover-revealed cards.
 
-**Interactive accents** (all are client components, all pause under `prefers-reduced-motion`): `HeroPhraseCycle` (the hero's cycling word, with an accent-tone variant), `SectorStatCycle` (rotating stat with a progress-dot row), `FacilityGallery` (thumbnail switcher with crossfade), `HistoryTimeline` (hover-reveal milestone cards alternating across a center spine). These are the sanctioned flavor of interactivity — restrained, single-purpose, accessible.
+**Interactive accents** (the `05_widgets` layer — all client components, all pause under `prefers-reduced-motion`): `PhraseCycle01` (the hero's cycling word, with an accent-tone variant), `StatCycle01` / `SectorStatCycle` (rotating stat with a progress-dot row), `ThumbGallery01` (thumbnail switcher with crossfade), `HoverCard01` (hover-swap photo card), `VerticalTimeline01` (hover-reveal milestone cards alternating across a center spine), `MarqueeBand01` (logo marquee), `CountUp01` (a figure that counts from 0 to its target on scroll-in; see §9). These are the sanctioned flavor of interactivity — restrained, single-purpose, accessible. See them all at `/template-gallery/widgets`. The page-level service interactives (`ResponseTimeline`, `CoverageGallery`, `RelatedServices`, `ContactForm`, `LiteYouTube`) are wrapped by `06_sections` templates — drive them through the template, don't fork them.
 
 ---
 
@@ -153,17 +157,25 @@ The home page alternates **dark walnut anchors** against a family of **warm ligh
 
 | # | Section | Surface | Tone |
 | --- | --- | --- | --- |
-| 1 | Hero | `--c-navy` + darkened photo | dark |
+| 1 | Hero | `--c-navy` + graded photo | dark |
 | 2 | Trust (certifications band) | `--c-bg` cream, thin | light |
-| 3 | Services (bento grid) | `--c-surface-warm` | light |
-| 4 | Who we serve | `--c-surface-warm` | light |
-| 5 | Facility (VBEC) | `--c-surface-warm` | light |
-| 6 | Our history (timeline + stats + mission) | `--c-bg` cream | light |
-| 7 | Careers | `--c-navy-2` walnut | dark |
-| 8 | Affiliates marquee | `--c-bg` cream, thin band | light |
-| 9 | Final CTA | `--c-surface-warm` | light |
+| 3 | Statement band ("creed") | `--c-surface-warm` | light |
+| 4 | Services (bento grid) | `--c-surface-warm` | light |
+| 5 | Scale band (signature count-up) | `--c-navy-2` walnut | dark |
+| 6 | Who we serve | `--c-surface-warm` | light |
+| 7 | Facility (VBEC) | `--c-surface-warm` | light |
+| 8 | Our history (timeline + stats + mission) | `--c-bg` cream | light |
+| 9 | Careers | `--c-navy-2` walnut | dark |
+| 10 | Affiliates marquee | `--c-bg` cream, thin band | light |
+| 11 | Final CTA | `--c-surface-warm` | light |
 
-To add or convert a section so it slots into this rhythm: wrap content in `.mw-inner`; pick a surface token consistent with its neighbors (a long light run is fine — dark anchors are used as deliberate punctuation, e.g. hero and careers); open with an eyebrow → title (+ stop) → lead; reach for the existing primitives before inventing; and wire scroll-reveal (§9). Two adjacent dark sections or a jarring surface jump break the cadence — avoid them.
+The dark anchors (hero #1, scale band #5, careers #9) are evenly spaced punctuation across the long light run — that spacing is deliberate; don't cluster them or place two dark sections adjacent.
+
+**Two editorial section types carry the rhythm** (both `06_sections/statements/*`): the **statement band** (`StatementBand01`, `mw-creed`) is a quiet, photo-free typographic interlude — an oversized condensed statement (with `mw-stop` and a clay-emphasised phrase) beside one crescendo stat — dropped between dense grids to let the page breathe; the **scale band** (`ScaleBand01`, `mw-scale`) is the page's single dramatic moment — a full-bleed walnut field with a hero-scale `CountUp01` figure and a quiet supporting trio. Use at most **one** scale band per page, and don't let a stat it owns (e.g. the lifetime tonnage) reappear as a headline figure elsewhere on the same page.
+
+Standard content sections share one vertical rhythm — `padding-block: clamp(64px, 6.5vw, 112px)` — so spacing stays uniform; the dense Services grid (7vw) and the dramatic Scale band (8vw) run slightly more generous on purpose. Keep new sections on the shared value unless they are a deliberate special case — a section padded noticeably more than its neighbours reads as an empty outlier, not as "air."
+
+On miller-web you assemble this rhythm by **composing `06_sections` templates** in a thin `page.jsx`, each fed a `content` object (see `components-v2/README.md`). To add or convert a section so it slots in: reach for an existing `06_sections` template first (`/template-gallery`); pick a surface consistent with its neighbors (a long light run is fine — dark anchors are deliberate punctuation); the template already handles `.mw-inner`, the eyebrow → title (+ stop) → lead opening, and scroll-reveal (§9). Templates may carry backwards-compatible variants — e.g. `HoverCardGrid01` drops its stat cycle and collapses to a single-column header when no `stats` are supplied. Only when no template fits do you extend one (a backwards-compatible config knob) or add a new `*-02` template — never hand-build a bespoke section into the route. Two adjacent dark sections or a jarring surface jump break the cadence — avoid them.
 
 ---
 
@@ -181,9 +193,11 @@ Header and footer are **done** — match their type, spacing, colors, and intera
 
 **The reveal.** One keyframe, `mw-rv`: opacity 0→1 with a 12px upward settle, `320ms cubic-bezier(.22,.61,.36,1)`. Any element that should animate in on scroll gets `data-reveal`; a container whose direct children should stagger gets `data-reveal-stagger` (children trail by `--reveal-order * 60ms`, set per column by `components/MillerScrollReveal.jsx`, which flips `data-in="1"` via IntersectionObserver). This is the **only** scroll-in motion — don't add bespoke entrance animations. Sprinkle `data-reveal` on cards, headers, and list groups.
 
-**Micro-interactions.** Hover lifts are a small `translateY(-1px)`; emphasis is a clay underline wiping in with `scaleX`; transitions sit in the 120–320ms range on ease / `cubic-bezier(.2,.7,.2,1)`. Keep motion subtle and functional.
+**Micro-interactions.** Restrained and slow — a few, well-chosen. Card lifts are a small `translateY` eased over ~420ms (`cubic-bezier(.2,.7,.2,1)`); photo tiles scale gently (~1.03, 600–1200ms) and brighten on hover; the **clay underline-draw** — a 1px clay rule that sweeps in from the left with `scaleX(0→1)` over ~420ms — is the standard hover/focus emphasis for both nav links and editorial text links (`mw-fac2__about`, the mission link). Simple state changes (colour, border) sit in the 180–320ms range. High-end reads as *slow and few*, not fast and many.
 
-**Reduced motion is mandatory.** Every animation on the page has a `@media (prefers-reduced-motion: reduce)` branch that disables it (reveals snap to visible, cycles freeze on their first item). Any new animation **must** ship its reduced-motion off-switch in the same change.
+**Count-up.** The scale band's hero figure counts from 0 to its value once it scrolls into view (`CountUp01` — IntersectionObserver + `requestAnimationFrame`, easeOutCubic, written straight to the DOM node so there are **no per-frame React re-renders**; tabular figures so the width never jitters). The animating digits are `aria-hidden`; a `tl-sr-only` span carries the final value so screen readers announce it once, never the ticking intermediates.
+
+**Reduced motion is mandatory.** Every animation has a `@media (prefers-reduced-motion: reduce)` branch that disables it: reveals snap to visible, cycles freeze on their first item, the count-up renders its final value immediately, and the underline-draws appear instantly. Any new animation **must** ship its reduced-motion off-switch in the same change.
 
 ---
 
@@ -194,7 +208,7 @@ The home page meets these; new work must too (this aligns with the repo's access
 - **Focus:** `:focus-visible` shows a 2px clay outline at 3px offset. Never remove a focus ring without an equally visible replacement.
 - **Semantics & landmarks:** real `header` / `nav` / `main` / `footer`; each `section` is labelled (`aria-labelledby` to its heading, or `aria-label`). Use `<button>`/`<a>` for interactive elements, not click-bound divs.
 - **Contrast:** the tuned tokens exist for a reason — `--c-ink-3` is darkened on Miller, dark surfaces use `--c-on-navy` (≥0.55 alpha) for AA. Don't reach below those for body text.
-- **Live regions:** cycling/auto-changing text mirrors its current value into a `tl-sr-only` `aria-live="polite"` node (see `HeroPhraseCycle` / `SectorStatCycle`).
+- **Live regions:** cycling/auto-changing text mirrors its current value into a `tl-sr-only` `aria-live="polite"` node (see `PhraseCycle01` / `StatCycle01`).
 - **Imagery:** decorative images get `alt=""` + `aria-hidden`; meaningful images get real `alt`. Icon-only buttons get `aria-label`.
 - **Keyboard:** the mobile drawer uses `inert` when closed; menus close on Escape and outside-click; tab order is logical.
 - **Skip link:** `tl-skip` to `#main` is present in the shell — keep it.
@@ -204,6 +218,7 @@ The home page meets these; new work must too (this aligns with the repo's access
 ## 11. Authoring checklist (new or converted pages)
 
 Do:
+- **Compose from the `components-v2` templates first** (miller-web): build the page as a thin `page.jsx` ordering `06_sections` templates fed by `content` (see `components-v2/README.md`; browse `/template-gallery`). Extend a template only via a backwards-compatible config knob, or add a new `*-02` template when the DOM diverges — and run `npm run template-map` + Playwright-verify affected pages before/after any template change. The visual rules below are what those templates already embody.
 - Open every section with the eyebrow (diamond + mono label) → condensed uppercase title (+ `mw-stop`) → Plex Sans lead.
 - Wrap section content in `.mw-inner` (1560 cap, 24px gutters).
 - Use the warm surfaces (`--c-bg` / `--c-surface-warm`) and the `--c-navy`/`--c-navy-2` dark anchors; keep the light/dark cadence sensible.
@@ -218,6 +233,7 @@ Don't:
 - Add rounded pills, gray generic shadows, or a third button style.
 - Put Miller-only styling on a bare `tl-*` selector (scope under `html[data-brand="miller"]` or make an `mw-*` class).
 - Invent new entrance animations, decorations, or eyebrow treatments when a motif already exists.
+- Hand-build a bespoke section into a miller route, or edit a shared template's default output without checking its blast radius (`npm run template-map`) and re-verifying every affected page.
 - Redesign the header or footer.
 
 ---
@@ -240,27 +256,27 @@ These govern every non-home page (service pages and other interior pages). The h
 
 ## 13. The emergency-response page — the worked interior reference
 
-`apps/miller-web/app/industrial-services/emergency-response/` is the first fully-built interior page in the new look and the canonical reference for service/interior pages — the interior counterpart to the home page. It puts the §11 authoring checklist and the §12 interior rules into practice. **When building a new service or interior page, open this page first and reuse its section patterns before inventing new ones.** Its copy lives in one file, `lib/content/service-emergency-response.js`; its `page.jsx` is thin composition only, ordering six numbered sections (no banners). All `mw-svc-*` classes below are Miller interior namespacing.
+`apps/miller-web/app/industrial-services/emergency-response/` is the canonical reference for service/interior pages — the interior counterpart to the home page. It puts the §11 authoring checklist and the §12 interior rules into practice. **When building a new service or interior page, open this page (and `/template-gallery`) first and reuse its templates before inventing new ones.** Its copy lives in one file, `lib/content/service-emergency-response.js`; its `page.jsx` is thin composition only, ordering **six `components-v2/06_sections` templates** (no banners). The table maps each worked pattern to the template that now produces it; the `mw-svc-*` classes are what those templates render (Miller interior namespacing).
 
-| # | Section file | Pattern it establishes (reuse this) | Key classes / component |
+| # | Template | Pattern it establishes (reuse this) | Key classes / component |
 | --- | --- | --- | --- |
-| 1 | `01-hero` | **Interior "alert" masthead** — the light split hero of §12 (`mw-svc-hero mw-svc-hero--alert`): one eyebrow → condensed title with a clay-emphasized fragment (`*__title-em`) + `mw-stop` → lead → a **same-height** button row pairing a stacked ghost 24/7 phone (`mw-cta--ghost`: small mono `__sup` over tabular `__num`) with a solid clay CTA (`mw-cta--solid` + `→`), plus a bleed photo. Never dark-brown. | `.mw-svc-hero`, `.mw-svc-hero--alert` |
-| 2 | `02-timeline` | **Response timeline (single-clock)** — `ResponseTimeline` owns one `index` (a `setInterval`, frozen under reduced motion) that drives *both* the cycling notification banners (`TimelineNotifyCycle`) and the axis line-fill (via `data-tl-active` on the `<ol>`), so the two never drift. Eyebrow → title → lead, then a numbered staircase `<ol class="mw-svc-tl">`. | `ResponseTimeline`, `TimelineNotifyCycle`, `.mw-svc-tl` |
-| 3 | `03-incidents` | **Two-column head + photo-card grid** — the header splits into a copy column (eyebrow/title/lead; a later title line can go italic via `*__title-em`) and a decorative transparent-PNG image column (`__head-media`, `aria-hidden`). Cards stay **horizontal**: a 4:3 photo half with the card title overlaid on a bottom-up scrim (`mw-svc-ind__name`) beside an **equal-width** white half carrying the **tick marker** (a clay diamond + short hairline, `mw-svc-ind__tick` = `__tick-dot` + `__tick-line`) above a one-line description. On card hover the diamond rotates and the caption weight bumps +100. | `.mw-svc-inds--photo`, `.mw-svc-ind`, `.mw-svc-ind__tick` |
-| 4 | `04-coverage` | **Selectable hover-swap gallery** — `CoverageGallery`: a list of capabilities on one side and a large photo on the other that swaps on hover/select, with a **default-selected** item (`default: true` in content), a darker-brown phone number (`--c-navy`), and a signature diamond (`mw-svc-cov__cap-mark`) before the big photo's caption. | `CoverageGallery`, `.mw-svc-cov` |
-| 5 | `05-cta` | **Dark dispatch CTA** — the page's single dark-walnut anchor (`mw-svc-cta--dark`, using the home-Careers dark text colors per §12). A dispatch block aligns the logomark to the 24/7 hotline (`__dispatch` / `__dispatch-row` / `__dispatch-logo`) with the "answered by a responder" note beneath, beside a warm cream contact-form card (`ContactForm showOptionalFields={false}`). The card's hover/focus lift lives on a **non-reveal wrapper** (`__form-col` holds `data-reveal`; the inner `__form` does the transform) because `mw-rv`'s fill-mode would otherwise override a hover transform. This dark panel is mid-page punctuation — the light related rail still closes the page. | `.mw-svc-cta--dark`, `.mw-svc-cta__dispatch`, `ContactForm` |
-| 6 | `06-related` | **Related-services rail** — the shared `RelatedServices` close of §12: a light surface, a horizontal scroll-snap track listing every service except the current one. Don't hand-roll a per-page grid. | `RelatedServices`, `.mw-svc-related-sec` |
+| 1 | `ServiceHero01` (heroes) | **Interior "alert" masthead** — the light split hero of §12 (`mw-svc-hero mw-svc-hero--alert`): one eyebrow → condensed title with a clay-emphasized fragment (`*__title-em`) + `mw-stop` → lead → a **same-height** button row pairing a stacked ghost 24/7 phone (`mw-cta--ghost`: small mono `__sup` over tabular `__num`) with a solid clay CTA (`mw-cta--solid` + `→`), plus a bleed photo. Never dark-brown. Config: `media` (photo-bleed/transparent-png/video), `alert`, `photoHalf`, `reveal`, `ghostPhone`. | `.mw-svc-hero`, `.mw-svc-hero--alert` |
+| 2 | `ResponseTimeline01` (flows) | **Response timeline (single-clock)** — wraps `ResponseTimeline`, which owns one `index` (a `setInterval`, frozen under reduced motion) driving *both* the cycling notification banners (`TimelineNotifyCycle`) and the axis line-fill (via `data-tl-active` on the `<ol>`), so the two never drift. Eyebrow → title → lead, then a numbered staircase `<ol class="mw-svc-tl">`. | `ResponseTimeline`, `TimelineNotifyCycle`, `.mw-svc-tl` |
+| 3 | `PhotoCardGrid01` (grids) | **Two-column head + photo-card grid** — the header splits into a copy column (eyebrow/title/lead; a later title line can go italic via `*__title-em`) and a decorative transparent-PNG image column (`__head-media`, `aria-hidden`). Cards stay **horizontal**: a 4:3 photo half with the card title overlaid on a bottom-up scrim (`mw-svc-ind__name`) beside an **equal-width** white half carrying the **tick marker** (a clay diamond + short hairline, `mw-svc-ind__tick` = `__tick-dot` + `__tick-line`) above a one-line description. On card hover the diamond rotates and the caption weight bumps +100. Config: `cardStyle` (thumb/gallery/wwd/case), `head`, `trailingCta`. | `.mw-svc-inds--photo`, `.mw-svc-ind`, `.mw-svc-ind__tick` |
+| 4 | `PickerGallery01` (pickers) | **Selectable hover-swap gallery** — wraps `CoverageGallery`: a list of capabilities on one side and a large photo on the other that swaps on hover/select, with a **default-selected** item (`default: true` in content), a darker-brown phone number (`--c-navy`), and a signature diamond (`mw-svc-cov__cap-mark`) before the big photo's caption. Config: `serve`. | `CoverageGallery`, `.mw-svc-cov` |
+| 5 | `DispatchCta01` (callouts) | **Dark dispatch CTA** — the page's single dark-walnut anchor (`mw-svc-cta--dark`, using the home-Careers dark text colors per §12). A dispatch block aligns the logomark to the 24/7 hotline (`__dispatch` / `__dispatch-row` / `__dispatch-logo`) with the "answered by a responder" note beneath, beside a warm cream contact-form card (`ContactForm showOptionalFields={false}`). The card's hover/focus lift lives on a **non-reveal wrapper** (`__form-col` holds `data-reveal`; the inner `__form` does the transform) because `mw-rv`'s fill-mode would otherwise override a hover transform. This dark panel is mid-page punctuation — the light related rail still closes the page. Config: `reverse`. | `.mw-svc-cta--dark`, `.mw-svc-cta__dispatch`, `ContactForm` |
+| 6 | `RelatedRail01` (rails) | **Related-services rail** — wraps the shared `RelatedServices` close of §12: a light surface, a horizontal scroll-snap track listing every service except the current one. Don't hand-roll a per-page grid. | `RelatedServices`, `.mw-svc-related-sec` |
 
 Two standing rules this page proves out:
 
-- **Compose the interactive components, don't fork them.** `ResponseTimeline`, `CoverageGallery`, `RelatedServices`, and `ContactForm` are existing, accessible, reduced-motion-safe components. Drive them with new content (`lib/content/<page>.js`); only add a new `mw-svc-*` pattern when none of the existing ones fit.
+- **Compose the templates (and the interactive components they wrap), don't fork them.** `ResponseTimeline`, `CoverageGallery`, `RelatedServices`, and `ContactForm` are existing, accessible, reduced-motion-safe components wrapped by the templates above. Drive them with new content (`lib/content/<page>.js`); only extend a template (backwards-compatible config) or add a new one when none of the existing patterns fit — see `components-v2/README.md`.
 - **A reveal element can't also be a hover-transform element.** Because the `mw-rv` reveal ends at `translate3d(0,0,0)` with `fill: both`, it permanently wins over any `:hover { transform }` on the *same* node. Put `data-reveal` on a wrapper and do the hover lift on an inner non-reveal child (the §5 CTA form and the photo cards both do this).
 
 ---
 
 ## 14. Applying this to TransLine49
 
-TL49 already shares the clay palette (`data-palette="clay"`), so the **color system is common** — keep it warm there too. The gaps to close to bring a TL49 page to this baseline: it currently uses Geist (`data-type="utility"` default) rather than Barlow Condensed + IBM Plex, and it has no editorial `mw-*` layer (it renders straight from the brand package). To match: adopt the condensed-uppercase-display / Plex-body / mono-label type system, and reproduce the motifs and section grammar above. Use the **same two Miller reference pages** as the target — a TL49 home/marketing page mirrors the Miller home page, and a TL49 interior/service page mirrors the emergency-response page (§13) — so the two sites feel like one design language with two brands. Because `mw-*` classes are Miller-namespaced, replicate the patterns for TL49 either by promoting the truly shared pieces into the brand package as new `tl-*` primitives, or by adding a TL49-scoped equivalent (e.g. a `tl49-*` layer mirroring `mw-*`) — don't reach across and apply `mw-*` to TL49.
+TL49 already shares the clay palette (`data-palette="clay"`), so the **color system is common** — keep it warm there too. The gaps to close to bring a TL49 page to this baseline: it currently uses Geist (`data-type="utility"` default) rather than Barlow Condensed + IBM Plex, and it has no editorial `mw-*` layer (it renders straight from the brand package). To match: adopt the condensed-uppercase-display / Plex-body / mono-label type system, and reproduce the motifs and section grammar above. Use the **same two Miller reference pages** as the target — a TL49 home/marketing page mirrors the Miller home page, and a TL49 interior/service page mirrors the emergency-response page (§13) — so the two sites feel like one design language with two brands. Because `mw-*` classes are Miller-namespaced, replicate the patterns for TL49 either by promoting the truly shared pieces into the brand package as new `tl-*` primitives, or by adding a TL49-scoped equivalent (e.g. a `tl49-*` layer mirroring `mw-*`) — don't reach across and apply `mw-*` to TL49. The `components-v2` template library is **miller-only and not yet promoted to the shared package** — don't import `@/components-v2` into TL49; when TL49 adopts the templates we'll revisit promoting the shared pieces. Until then TL49 stays bespoke.
 
 ---
 

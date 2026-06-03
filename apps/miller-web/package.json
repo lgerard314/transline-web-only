@@ -6,7 +6,8 @@
     "dev": "next dev --port 3001",
     "build": "next build",
     "start": "next start",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "template-map": "node scripts/template-map.mjs"
   },
   "dependencies": {
     "@white-owl/brand": "*",

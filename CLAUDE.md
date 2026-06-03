@@ -15,32 +15,25 @@ Non-negotiables (full detail in the doc):
 - **Motion:** one scroll-reveal (`data-reveal` / `data-reveal-stagger`); every animation ships a `prefers-reduced-motion` off-switch.
 - **A11y:** visible clay focus ring, semantic landmarks, labelled sections, AA-tuned text tokens, live regions for cycling text.
 
-## Page route structure (both apps)
+## Page route structure
 
-Every marketing page in `apps/miller-web` and `apps/transline49-web` follows the same App Router layout. Reference implementation: `apps/miller-web/app/industrial-services/emergency-response/`.
+**miller-web is template-first.** Pages are **composed from the shared `components-v2` template library**, not hand-built section by section. The home page and all 6 redesigned service pages are thin `page.jsx` files that order a few `06_sections` templates and feed each a `content` object from `lib/content/`. The authoritative build guide is **`apps/miller-web/components-v2/README.md` — read it before building or changing any miller page or template.** Browse every template rendered at `/template-gallery`.
 
 ```
 app/<route>/
-  page.jsx              # metadata + thin composition only (imports sections/banners)
-  home.js               # optional: route-local copy (strings/arrays). Prefer lib/content/ for shared or large pages.
-  sections/
-    01-hero.jsx         # numbered in scroll order; export named *Section (e.g. HeroSection)
-    02-….jsx
-    …
-  banners/              # optional: full-width strips that are not “article” sections (certs, logo marquees, trust strips)
-    certs.jsx           # export named *Banner (e.g. CertsBanner)
+  page.jsx              # metadata (+ any hero preload) + thin composition only:
+                        #   import templates from @/components-v2/06_sections/…,
+                        #   order them in JSX, feed each a `content` object.
 ```
 
-Rules:
+Rules for miller-web:
 
-- **`page.jsx` orchestrates only** — no section markup inline. Order sections and banners explicitly in JSX.
-- **One primary section per file** under `sections/`, prefixed `NN-kebab-case.jsx` matching DOM order.
-- **Banner strips live in `banners/`**, not mixed into numbered sections (e.g. certification row under hero, affiliate marquee between careers and final CTA).
-- **Client-only helpers** (cycles, galleries, timelines) sit beside their section under `sections/` as unnumbered `kebab-case.jsx` files; keep `"use client"` scoped to the smallest file.
-- **Copy** lives in `lib/content/<page>.js` (service pages) or route-local `home.js` / equivalent — never duplicated inside section files except trivial constants.
-- **Do not add monolithic `*Template.jsx` files** at the route root; split new work into sections (and banners) from the start.
+- **`page.jsx` orchestrates only** — no section markup inline. Find a `06_sections` template that fits (check `/template-gallery`) before inventing anything.
+- **Copy** lives in `lib/content/<page>.js` (service pages) or the home content modules — never duplicated inside `page.jsx`.
+- **Do not reintroduce per-route `sections/NN-*.jsx` / `banners/` files or monolithic `*Template.jsx`** for miller pages — the template cutover removed them. Build by composition.
+- **Changing a template is a shared, multi-page change.** Prefer adding a **config knob that defaults to current behavior** (existing callers must render byte-identically) over editing default output; add a new `*-02.jsx` template when the DOM structurally diverges; a "hard change" to default output touches every consumer. **Before changing a template, run `npm run template-map`** (in `apps/miller-web`) to see which pages it affects, and Playwright-verify each affected page after. Full protocol in the components-v2 README.
 
-When adding a page to `apps/transline49-web`, mirror this structure even if the page is still a single section — create `sections/01-hero.jsx` (etc.) and a thin `page.jsx`.
+**transline49-web is still bespoke** — it has not adopted the templates yet, and we are **not** refactoring the library into a shared package right now. Build/convert TL49 pages by mirroring the Miller reference pages per `docs/DESIGN-SYSTEM.md` §14 (its own `tl49-*` layer or promoting truly-shared pieces to `tl-*`); do not import `@/components-v2` (miller-namespaced) into TL49. When TL49 adopts the templates we will revisit sharing.
 
 ## Verifying UI
 

@@ -27,12 +27,6 @@ export const HOME_FIRST = [
   "emergency-response",
 ];
 
-export const SECTOR_STATS = [
-  { label: "Active clients", value: "450+", text: "industrial manufacturers, public agencies, and community programs across Canada and the United States rely on Miller for hazardous waste service." },
-  { label: "Lifetime disposal", value: "49M+", unit: "tons", text: "of hazardous and regulated waste processed through documented chain of custody since operations began." },
-  { label: "Lifetime recycling", value: "40M+", unit: "tons", text: "diverted from landfill through specialty recycling — solvents, metals, plastics, and oils recovered back into use." },
-];
-
 export const SECTOR_CARDS = [
   { title: "Industrial", items: [
     { slug: "industrial-manufacturing", name: "Industrial Manufacturing" },
@@ -125,6 +119,26 @@ export const HERO = {
 
 export const CERTS_BANNER = { ariaLabel: "Certifications", certs: CERTS };
 
+export const CREED = {
+  headingId: "mw-creed-heading",
+  eyebrow: "The Miller difference",
+  statement: { lead: "We don’t hand your waste to", em: "someone else" },
+  body: "Ninety-six percent of every stream is treated, recycled, or disposed in-house at VBEC — one operator, one documented chain of custody, from intake to final disposition.",
+  stat: { label: "Managed in-house", value: "96", unit: "%", note: "treated · recycled · disposed under one roof" },
+};
+
+export const LIFETIME_SCALE = {
+  headingId: "mw-scale-heading",
+  eyebrow: "Lifetime impact · since 1996",
+  figure: { value: 49, suffix: "M+", unit: "tons" },
+  body: "Hazardous and regulated waste collected, treated, and dispositioned under one documented chain of custody — the measured weight of Manitoba’s first licensed hazardous-waste operation.",
+  support: [
+    { value: "40M+", label: "Tons recycled" },
+    { value: "450+", label: "Active clients" },
+    { value: "100%", label: "Chain of custody" },
+  ],
+};
+
 export const SERVICES_GRID = {
   headingId: "mw-services-heading",
   eyebrow: "Services",
@@ -144,7 +158,6 @@ export const SECTORS = {
   eyebrow: "Who we serve",
   title: "From refineries to households — and everything between",
   lead: "Large industrial manufacturers, public agencies, small businesses, and even the household-hazardous-waste drop-off down the street — one operator, one chain of custody.",
-  stats: SECTOR_STATS,
   cards: SECTOR_CARDS,
 };
 

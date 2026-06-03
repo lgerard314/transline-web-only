@@ -14,12 +14,14 @@ npm run dev:miller
 
 Visit `http://localhost:3000` (or the next free port).
 
-## Phase status
+## Building pages
 
-Phase 01 scaffold — placeholder home page only. See
-`docs/superpowers/specs/miller-web-phase-01.md` and the design spec at
-`docs/superpowers/specs/2026-05-15-miller-web-design.md` for the full
-layout.
+miller-web is **template-first**: the home page and the redesigned service pages
+are composed from the shared `components-v2` template library, fed by content in
+`lib/content/`. Before building or changing a page or template, read
+**`components-v2/README.md`** (the authoritative build + change guide), browse
+the live catalog at **`/template-gallery`**, and use **`npm run template-map`** to
+see which pages a template change would affect. Visual baseline: `docs/DESIGN-SYSTEM.md`.
 
 ## Imagery
 

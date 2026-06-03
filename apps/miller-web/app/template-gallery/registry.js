@@ -14,6 +14,8 @@ import { MonumentHero01 } from "@/components-v2/06_sections/heroes/monument-hero
 import { ServiceHero01 } from "@/components-v2/06_sections/heroes/service-hero-01";
 import { RotatingBanner01 } from "@/components-v2/06_sections/banners/rotating-banner-01";
 import { TallStaticBanner01 } from "@/components-v2/06_sections/banners/tall-static-banner-01";
+import { StatementBand01 } from "@/components-v2/06_sections/statements/statement-band-01";
+import { ScaleBand01 } from "@/components-v2/06_sections/statements/scale-band-01";
 import { MediaSplit01 } from "@/components-v2/06_sections/splits/media-split-01";
 import { TimelineSplit01 } from "@/components-v2/06_sections/splits/timeline-split-01";
 import { FleetSplit01 } from "@/components-v2/06_sections/splits/fleet-split-01";
@@ -511,8 +513,28 @@ const VIDEO_PICKER = {
 
 const RELATED_RAIL = { currentSlug: "emergency-response", titleId: "tg-related" };
 
+const STATEMENT_BAND = {
+  headingId: "tg-statement",
+  eyebrow: "Placeholder eyebrow",
+  statement: { lead: "A short editorial statement that", em: "lands hard" },
+  body: "Placeholder supporting sentence beneath the oversized statement — one short prose line that frames the figure on the right.",
+  stat: { label: "Sample metric", value: "96", unit: "%", note: "placeholder note · three short tokens" },
+};
+
+const SCALE_BAND = {
+  headingId: "tg-scale",
+  eyebrow: "Placeholder eyebrow · since 0000",
+  figure: { value: 49, suffix: "M+", unit: "units" },
+  body: "Placeholder supporting sentence beneath the hero figure — one short prose line describing what the big number measures.",
+  support: [
+    { value: "40M+", label: "Sample metric one" },
+    { value: "450+", label: "Sample metric two" },
+    { value: "96%", label: "Sample metric three" },
+  ],
+};
+
 // ── registry ────────────────────────────────────────────────────────────────
-export const GROUPS = ["Heroes", "Banners", "Splits", "Grids", "Callouts", "Flows", "Pickers", "Rails"];
+export const GROUPS = ["Heroes", "Banners", "Statements", "Splits", "Grids", "Callouts", "Flows", "Pickers", "Rails"];
 
 export const GALLERY = [
   // Heroes
@@ -532,6 +554,10 @@ export const GALLERY = [
   // Banners
   { group: "Banners", name: "RotatingBanner01", path: "components-v2/06_sections/banners/rotating-banner-01.jsx", Component: RotatingBanner01, content: ROTATING_BANNER, controls: [schemeDark] },
   { group: "Banners", name: "TallStaticBanner01", path: "components-v2/06_sections/banners/tall-static-banner-01.jsx", Component: TallStaticBanner01, content: TALL_STATIC_BANNER, controls: [schemeDark] },
+
+  // Statements
+  { group: "Statements", name: "StatementBand01", path: "components-v2/06_sections/statements/statement-band-01.jsx", Component: StatementBand01, content: STATEMENT_BAND, controls: [] },
+  { group: "Statements", name: "ScaleBand01", path: "components-v2/06_sections/statements/scale-band-01.jsx", Component: ScaleBand01, content: SCALE_BAND, controls: [] },
 
   // Splits
   { group: "Splits", name: "MediaSplit01", path: "components-v2/06_sections/splits/media-split-01.jsx", Component: MediaSplit01, content: MEDIA_SPLIT, controls: [
