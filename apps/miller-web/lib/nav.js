@@ -89,8 +89,8 @@ export function pageIdFromPath(pathname) {
 // authoritative source; route layouts read it to decide which value to
 // emit.
 const EMERGENCY_BANNER_ROUTES = {
-  exact: new Set(["/", "/treatment-facility", "/template-testing"]),
-  prefix: ["/industrial-services", "/template-testing"],
+  exact: new Set(["/", "/treatment-facility"]),
+  prefix: ["/industrial-services"],
 };
 
 export function shouldShowEmergencyBanner(pathname) {
