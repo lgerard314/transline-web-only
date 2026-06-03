@@ -13,6 +13,7 @@ export const projectManagement = {
     eyebrow: "Project management",
     title: "Engineered projects,",
     titleEm: "start to closeout",
+    titleId: "pm-hero-title",
     lead:
       "Miller Environmental operates a Projects Group led by a team of Civil, Chemical, and Processing Engineers with a wealth of knowledge and experience — managing every project type on time and on budget.",
     photo: "/miller/services/project-management-hero.webp",
@@ -25,6 +26,7 @@ export const projectManagement = {
   group: {
     eyebrow: "The Projects Group",
     title: "Engineers who own the outcome",
+    titleId: "pm-group-title",
     lead:
       "Miller's Projects Group has managed a wide variety of projects over the years — on time and on budget. The team also expands on our Emergency Response division, stepping in when an initial response becomes a larger project and priority for our clients.",
     disciplines: [
@@ -38,6 +40,7 @@ export const projectManagement = {
   projects: {
     eyebrow: "What we manage",
     title: "Projects we've delivered",
+    titleId: "pm-projects-title",
     lead:
       "From a single demolition to a multi-discipline build, the Projects Group has delivered across the full range of environmental and industrial work.",
     items: [
@@ -56,9 +59,17 @@ export const projectManagement = {
     title: "Scope your next project",
     titleEm: "with our team",
     titleAfter: "today",
+    titleId: "pm-cta-title",
     body:
       `Tell us what you're planning and our Projects Group will scope it end to end — or call now at ${GENERAL_PHONE}. When an emergency response becomes a full project, the same team carries it through.`,
     formTitle: "Contact Miller",
     formNote: "A project coordinator will reach out within one business day.",
+    hotlineNote: "Answered by a trained responder — every hour, every day of the year.",
+  },
+
+  // §5 — Related services rail.
+  related: {
+    currentSlug: "project-management",
+    titleId: "pm-related-title",
   },
 };
