@@ -3,7 +3,6 @@ import "./globals.css";
 import { Geist, Geist_Mono, Barlow_Condensed, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import { MillerScrollReveal } from "../components/MillerScrollReveal";
 import { MillerParallax } from "../components/MillerParallax";
-import { MillerCustodyThread } from "../components/MillerCustodyThread";
 import { cookies, headers } from "next/headers";
 import { TopNav } from "../components/TopNav";
 import { SiteFooter } from "../components/SiteFooter";
@@ -118,7 +117,6 @@ export default async function RootLayout({ children }) {
         </div>
         <MillerScrollReveal />
         <MillerParallax />
-        <MillerCustodyThread />
         {SiteTweaksProvider && <SiteTweaksProvider namespace="tweaks:miller" />}
       </body>
     </html>

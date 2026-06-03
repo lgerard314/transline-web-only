@@ -1758,49 +1758,6 @@
   background: linear-gradient(to bottom, transparent 0, rgba(168,90,44,0.85) 16%, rgba(168,90,44,0.85) 84%, transparent 100%);
   z-index: 1;
 }
-/* ── Chain-of-custody thread — fixed clay hairline at the left margin that
-   "draws" downward as the page scrolls, a diamond stamp travelling at its
-   leading edge. Continues the hero's vertical hairline into a page-long
-   through-line for the documented-line motif. Driven by MillerCustodyThread
-   (writes --mw-thread-p, 0→1). Decorative; home only. Hidden where the left
-   gutter can't clear the content; static (no travelling stamp) under
-   reduced motion. ── */
-.mw-thread {
-  position: fixed;
-  left: clamp(20px, 3vw, 60px);
-  top: clamp(112px, 16vh, 168px);
-  bottom: clamp(40px, 6vh, 72px);
-  width: 1px;
-  z-index: 4;
-  pointer-events: none;
-  background: rgba(168, 90, 44, 0.15);
-  --mw-thread-p: 0;
-}
-.mw-thread__fill {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 1px;
-  height: 100%;
-  background: linear-gradient(to bottom, rgba(168, 90, 44, 0.9), rgba(168, 90, 44, 0.5));
-  transform: scaleY(var(--mw-thread-p));
-  transform-origin: top center;
-}
-.mw-thread__tip {
-  position: absolute;
-  left: 50%;
-  top: calc(var(--mw-thread-p) * 100%);
-  width: 7px;
-  height: 7px;
-  background: var(--c-accent);
-  transform: translate(-50%, -50%) rotate(45deg);
-  box-shadow: 0 0 0 4px rgba(168, 90, 44, 0.1);
-}
-@media (max-width: 1200px) { .mw-thread { display: none; } }
-@media (prefers-reduced-motion: reduce) {
-  .mw-thread__fill { transform: scaleY(1); }
-  .mw-thread__tip { display: none; }
-}
 .mw-hero__inner {
   position: relative;
   z-index: 2;
