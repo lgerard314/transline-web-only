@@ -7,8 +7,10 @@ import { CertSeals } from "./_sections/CertSeals";
 import { CreedVow } from "./_sections/CreedVow";
 import { ServicesIndex } from "./_sections/ServicesIndex";
 import { SectorsLedger } from "./_sections/SectorsLedger";
+import { FacilitySplit } from "./_sections/FacilitySplit";
+import { InTransit } from "./_sections/InTransit";
 import {
-  V2_HERO, V2_CERTS, V2_CREED, V2_SERVICES, V2_SECTORS,
+  V2_HERO, V2_CERTS, V2_CREED, V2_SERVICES, V2_SECTORS, V2_FACILITY,
 } from "./_content";
 
 export default function V2Home() {
@@ -21,6 +23,8 @@ export default function V2Home() {
       <CreedVow content={V2_CREED} />
       <ServicesIndex content={V2_SERVICES} />
       <SectorsLedger content={V2_SECTORS} />
+      <FacilitySplit content={V2_FACILITY} />
+      <InTransit />
     </>
   );
 }
