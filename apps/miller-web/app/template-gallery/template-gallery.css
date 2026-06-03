@@ -1,0 +1,249 @@
+/* Template gallery chrome. `tg-` namespace so nothing collides with mw-/tl-.
+   The stage wrapper (.tg-stage) is intentionally a bare full-width container —
+   no padding/margin — so each section renders at the exact width it has on the
+   real site (sections supply their own internal `mw-inner` width). Only the
+   control bar and the top index are constrained chrome. Warm-clay palette only. */
+
+.tg-page {
+  --tg-bar-bg: #2a190f;          /* deep walnut tool strip */
+  --tg-bar-ink: #f7eeda;
+  --tg-bar-ink-dim: rgba(247, 238, 218, 0.62);
+  --tg-bar-line: rgba(247, 238, 218, 0.16);
+}
+
+/* ── top / intro / index ─────────────────────────────────────────────────── */
+.tg-top {
+  padding: clamp(2rem, 5vw, 4rem) clamp(1.25rem, 5vw, 4rem) 2.25rem;
+  background: var(--c-bg, #f4ece0);
+  border-bottom: 1px solid var(--c-line, rgba(59, 36, 24, 0.14));
+}
+.tg-top__eyebrow {
+  font-family: var(--font-mono, monospace);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.72rem;
+  color: var(--c-accent, #a85a2c);
+  margin: 0 0 0.5rem;
+}
+.tg-top__title {
+  font-family: var(--font-condensed, sans-serif);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  line-height: 0.98;
+  color: var(--c-ink, #2a190f);
+  margin: 0 0 0.75rem;
+}
+.tg-top__lead {
+  font-family: var(--font-sans, sans-serif);
+  max-width: 60ch;
+  color: var(--c-ink-2, #4a3526);
+  line-height: 1.5;
+  margin: 0 0 1.75rem;
+}
+.tg-top__lead code {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.9em;
+  background: rgba(168, 90, 44, 0.1);
+  padding: 0.05em 0.35em;
+  border-radius: 3px;
+}
+
+.tg-toc {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1.25rem 1.5rem;
+}
+.tg-toc__heading {
+  display: block;
+  font-family: var(--font-mono, monospace);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.7rem;
+  color: var(--c-accent, #a85a2c);
+  margin-bottom: 0.4rem;
+}
+.tg-toc__list { list-style: none; margin: 0; padding: 0; }
+.tg-toc__list li { margin: 0.1rem 0; }
+.tg-toc__list a {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 0.86rem;
+  color: var(--c-ink-2, #4a3526);
+  text-decoration: none;
+}
+.tg-toc__list a:hover { color: var(--c-accent, #a85a2c); text-decoration: underline; }
+
+/* ── per-template control bar (chrome) ───────────────────────────────────── */
+/* The bar sits at the top of each entry (not sticky — the app's overflow-x:clip
+   ancestors break position:sticky, and stacking it under the fixed nav would
+   double up chrome and cover hero tops). scroll-margin keeps TOC anchor jumps
+   from landing behind the fixed nav. */
+.tg-entry { display: block; scroll-margin-top: 96px; }
+.tg-entry__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  padding: 0.7rem clamp(1rem, 4vw, 2.5rem);
+  background: var(--tg-bar-bg);
+  color: var(--tg-bar-ink);
+  border-top: 2px solid var(--c-accent, #a85a2c);
+}
+.tg-entry__meta { display: flex; align-items: baseline; gap: 0.7rem; min-width: 0; }
+.tg-entry__group {
+  font-family: var(--font-mono, monospace);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.66rem;
+  color: var(--tg-bar-ink-dim);
+}
+.tg-entry__name {
+  position: relative;
+  font-family: var(--font-condensed, sans-serif);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-size: 1.15rem;
+  color: var(--tg-bar-ink);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: copy;
+}
+/* path revealed on hover/focus of the name */
+.tg-entry__path {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 4px);
+  white-space: nowrap;
+  font-family: var(--font-mono, monospace);
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.72rem;
+  color: var(--tg-bar-ink);
+  background: #1c1009;
+  border: 1px solid var(--tg-bar-line);
+  border-radius: 4px;
+  padding: 0.3rem 0.5rem;
+  opacity: 0;
+  transform: translateY(-2px);
+  pointer-events: none;
+  transition: opacity 120ms ease, transform 120ms ease;
+  z-index: 5;
+}
+.tg-entry__name:hover .tg-entry__path,
+.tg-entry__name:focus-visible .tg-entry__path { opacity: 1; transform: translateY(0); }
+
+.tg-entry__controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.25rem; }
+.tg-ctrl { display: flex; align-items: center; gap: 0.5rem; }
+.tg-ctrl__label {
+  font-family: var(--font-mono, monospace);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.64rem;
+  color: var(--tg-bar-ink-dim);
+}
+.tg-ctrl__opts { display: inline-flex; border: 1px solid var(--tg-bar-line); border-radius: 5px; overflow: hidden; }
+.tg-opt {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 0.76rem;
+  line-height: 1;
+  padding: 0.4rem 0.6rem;
+  background: transparent;
+  color: var(--tg-bar-ink-dim);
+  border: 0;
+  border-left: 1px solid var(--tg-bar-line);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.tg-opt:first-child { border-left: 0; }
+.tg-opt:hover { color: var(--tg-bar-ink); background: rgba(247, 238, 218, 0.06); }
+.tg-opt.is-active { color: #1c1009; background: var(--c-accent, #a85a2c); }
+.tg-opt:focus-visible { outline: 2px solid var(--c-accent, #a85a2c); outline-offset: 1px; }
+
+/* ── stage: bare, full-width, no padding/margin ──────────────────────────── */
+.tg-stage { display: block; }
+
+/* The gallery re-renders templates on toggle, but the global scroll-reveal
+   observer only attaches on mount — toggled-in [data-reveal] nodes would stay
+   at opacity:0. Inside the stage, force the revealed resting state so every
+   template is always fully visible regardless of observer timing. */
+.tg-stage [data-reveal],
+.tg-stage [data-reveal-stagger] > *,
+.tg-canvas [data-reveal],
+.tg-canvas [data-reveal-stagger] > * {
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+}
+
+/* ── cross-page tab nav ──────────────────────────────────────────────────── */
+.tg-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  padding: 0.55rem clamp(1.25rem, 5vw, 4rem);
+  background: var(--tg-bar-bg, #2a190f);
+  border-bottom: 1px solid var(--tg-bar-line, rgba(247, 238, 218, 0.16));
+}
+.tg-nav__link {
+  font-family: var(--font-mono, monospace);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.72rem;
+  color: var(--tg-bar-ink-dim, rgba(247, 238, 218, 0.62));
+  text-decoration: none;
+  padding: 0.4rem 0.7rem;
+  border-radius: 5px;
+}
+.tg-nav__link:hover { color: var(--tg-bar-ink, #f7eeda); background: rgba(247, 238, 218, 0.06); }
+.tg-nav__link.is-active { color: #1c1009; background: var(--c-accent, #a85a2c); }
+
+/* ── item canvas (atoms / molecules — contained swatch, not full-bleed) ──── */
+.tg-canvas {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+  padding: clamp(1.5rem, 4vw, 3.25rem) clamp(1rem, 4vw, 2.5rem);
+}
+.tg-canvas[data-surface="light"] { background: var(--c-bg, #f4ece0); color: var(--c-ink, #2a190f); }
+.tg-canvas[data-surface="dark"] { background: var(--c-navy, #3b2418); color: #f7eeda; }
+.tg-canvas__inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1.5rem;
+  width: 100%;
+}
+.tg-canvas__note {
+  margin: 0;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  opacity: 0.62;
+  text-align: center;
+}
+
+/* demo wrappers so inline marks/atoms are visible in isolation */
+.tg-demo-h {
+  font-family: var(--font-condensed, sans-serif);
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  line-height: 1;
+  color: inherit;
+}
+.tg-demo-t {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 1.05rem;
+  color: inherit;
+  margin: 0;
+}
+.tg-demo-num {
+  font-family: var(--font-mono, monospace);
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: var(--c-accent, #a85a2c);
+}
