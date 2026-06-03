@@ -1,4 +1,4 @@
-import { SectorStatCycle } from "./sector-stat-cycle";
+import { SectorStatCycle } from "@/components-v2/05_widgets/cycles/sector-stat-cycle";
 import { SectorCard } from "./sector-card";
 
 const SECTOR_STATS = [

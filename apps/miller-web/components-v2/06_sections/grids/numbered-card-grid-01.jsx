@@ -7,7 +7,7 @@ import { sectionProps } from "@/components-v2/section-config";
 export function NumberedCardGrid01({ content, config = {} }) {
   const p = content;
   return (
-    <section className="mw-pm" aria-labelledby="pm-projects-title" {...sectionProps(config)}>
+    <section className="mw-pm" aria-labelledby={p.titleId} {...sectionProps(config)}>
       <div className="mw-pm__inner mw-inner">
         <header className="mw-pm__head">
           <div className="mw-pm__head-left">
@@ -15,7 +15,7 @@ export function NumberedCardGrid01({ content, config = {} }) {
               <span className="mw-section-tag-mark" />
               <span className="mw-section-tag-label">{p.eyebrow}</span>
             </p>
-            <h2 id="pm-projects-title" className="mw-section-title" data-reveal>
+            <h2 id={p.titleId} className="mw-section-title" data-reveal>
               <StopText>{p.title}</StopText>
             </h2>
           </div>

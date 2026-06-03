@@ -49,9 +49,10 @@ export const process = {
 };
 
 // §5 — VideoPicker01  (no config needed)
-// VideoPicker01 hardcodes titleId "rem-vid-title" internally — no need to supply it here.
+// titleId "rem-vid-title" is a literal from 05-videos.jsx — RECONCILE-IN-D:
 export const videos = {
   ...REMEDIATION.videos,
+  titleId: "rem-vid-title", // RECONCILE-IN-D: literal from sections/05-videos.jsx
 };
 
 // §6 — PhotoCardGrid01  config: { cardStyle:"case", head:"split", variant:"mw-rem-case" }

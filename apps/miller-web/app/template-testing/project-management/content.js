@@ -30,14 +30,14 @@ export const group = {
 };
 
 // §3 — NumberedCardGrid01
-// NumberedCardGrid01 hardcodes aria-labelledby="pm-projects-title" and id="pm-projects-title"
-// internally (verified from numbered-card-grid-01.jsx lines 10 + 18) — no titleId needed here.
+// titleId "pm-projects-title" is a literal from 03-projects.jsx — RECONCILE-IN-D:
 // items shape {num, name, body} matches projectManagement.projects.items directly.
 export const projects = {
   eyebrow: projectManagement.projects.eyebrow,
   title: projectManagement.projects.title,
   lead: projectManagement.projects.lead,
   items: projectManagement.projects.items,
+  titleId: "pm-projects-title", // RECONCILE-IN-D: literal from sections/03-projects.jsx
 };
 
 // §4 — DispatchCta01
