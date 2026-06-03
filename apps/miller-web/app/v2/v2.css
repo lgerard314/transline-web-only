@@ -125,8 +125,11 @@
 
 /* ── Custody thread: per-section rule + stamping diamond node ── */
 .mx-rule {
-  position: absolute; left: clamp(20px, 3vw, 60px); top: 0; bottom: 0; width: 1px;
-  background: linear-gradient(to bottom, transparent, rgba(168, 90, 44, .28) 8%, rgba(168, 90, 44, .28) 92%, transparent);
+  position: absolute; top: 0; bottom: 0; width: 1px;
+  /* align ~24px left of the content column so it reads as the document's left
+     margin/binding rule at every width (not a hairline adrift in the margin) */
+  left: calc(max(clamp(24px, 4vw, 72px), (100% - 1560px) / 2) - 24px);
+  background: linear-gradient(to bottom, transparent, rgba(168, 90, 44, .3) 6%, rgba(168, 90, 44, .3) 94%, transparent);
   pointer-events: none;
 }
 .mx-node {
