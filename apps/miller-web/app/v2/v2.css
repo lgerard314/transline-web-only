@@ -18,3 +18,84 @@
   width: min(100% - clamp(48px, 8vw, 144px), 1560px);
   margin-inline: auto;
 }
+
+/* ── Shared motion tokens ── */
+.mx-page {
+  --mx-ease: cubic-bezier(.22, .61, .36, 1);
+  --mx-dur: .52s;
+}
+
+/* ── Reveal vocabulary (data-mx-reveal); base = hidden, [data-mx-in="1"] = settled ── */
+/* fade — single element */
+[data-mx-reveal="fade"] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity var(--mx-dur) var(--mx-ease), transform var(--mx-dur) var(--mx-ease);
+}
+[data-mx-reveal="fade"][data-mx-in="1"] { opacity: 1; transform: none; }
+
+/* cards — stagger container; direct children cascade by --mx-i index */
+[data-mx-reveal-stagger] > * {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .56s var(--mx-ease), transform .56s var(--mx-ease);
+  transition-delay: calc(var(--mx-i, 0) * 90ms);
+}
+[data-mx-reveal-stagger] > [data-mx-in="1"] { opacity: 1; transform: none; }
+
+/* line — per-line mask-rise (wrap lines: .mx-line > .mx-line__in) */
+.mx-line { display: block; overflow: hidden; padding-bottom: 0.08em; margin-bottom: -0.08em; }
+.mx-line__in { display: block; transform: translateY(112%); transition: transform .62s var(--mx-ease); }
+[data-mx-reveal="line"][data-mx-in="1"] .mx-line__in { transform: none; }
+[data-mx-reveal="line"] .mx-line:nth-child(2) .mx-line__in { transition-delay: .09s; }
+[data-mx-reveal="line"] .mx-line:nth-child(3) .mx-line__in { transition-delay: .18s; }
+[data-mx-reveal="line"] .mx-line:nth-child(4) .mx-line__in { transition-delay: .27s; }
+
+/* clip — image wipe top -> bottom */
+[data-mx-reveal="clip"] { clip-path: inset(0 0 100% 0); transition: clip-path .62s var(--mx-ease); }
+[data-mx-reveal="clip"][data-mx-in="1"] { clip-path: inset(0 0 0 0); }
+
+/* reduced-motion: every verb rests settled, no transition */
+@media (prefers-reduced-motion: reduce) {
+  [data-mx-reveal],
+  [data-mx-reveal-stagger] > *,
+  .mx-line__in,
+  [data-mx-reveal="clip"] {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    transition: none !important;
+  }
+}
+
+/* ── Count-up: sizer reserves the final width so the frame never reflows ── */
+.mx-cu { position: relative; display: inline-block; font-variant-numeric: tabular-nums; }
+.mx-cu__sizer { visibility: hidden; }
+.mx-cu__live { position: absolute; inset: 0; }
+
+/* ── Tally staged states (the diamond seal stroke is wired with DiamondSeal in Phase 3) ── */
+.mx-tally__divider {
+  display: block;
+  height: 1px;
+  background: var(--c-line, rgba(168, 90, 44, 0.4));
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform .5s var(--mx-ease);
+}
+.mx-tally[data-mx-tally="divider"] .mx-tally__divider,
+.mx-tally[data-mx-tally="trio"] .mx-tally__divider { transform: scaleX(1); }
+.mx-tally__trio {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(24px, 3vw, 56px);
+}
+.mx-tally__trio-item {
+  opacity: 0; transform: translateY(12px);
+  transition: opacity .5s var(--mx-ease), transform .5s var(--mx-ease);
+}
+.mx-tally[data-mx-tally="trio"] .mx-tally__trio-item { opacity: 1; transform: none; }
+.mx-tally__trio-item:nth-child(2) { transition-delay: .09s; }
+.mx-tally__trio-item:nth-child(3) { transition-delay: .18s; }
+@media (prefers-reduced-motion: reduce) {
+  .mx-tally__divider { transform: scaleX(1) !important; transition: none !important; }
+  .mx-tally__trio-item { opacity: 1 !important; transform: none !important; transition: none !important; }
+}
