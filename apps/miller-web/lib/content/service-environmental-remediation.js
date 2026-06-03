@@ -20,11 +20,14 @@ export const REMEDIATION = {
     emergencyHref: EMERGENCY_TEL,
     secondaryCta: { label: "Book a consult", labelShort: "Book a consult", href: "/contact-us/" },
     caption: "Remediation in the field · Falcon Beach, MB",
+    titleId: "rem-hero-title",
+    video: { id: "VQhFqQjvFHg", title: "Environmental Remediation — Falcon Beach, MB" },
   },
 
   // §2 — What we do: six remediation capabilities. Full-bleed photo cards whose
   // overlay swaps from a short blurb to the full capability paragraph on hover.
   whatWeDo: {
+    titleId: "rem-wwd-title",
     eyebrow: "What we do",
     title: "Six remediation capabilities",
     lead:
@@ -84,6 +87,7 @@ export const REMEDIATION = {
   // §3 — Who we serve. Coverage-gallery layout: the industry list doubles as a
   // picker that swaps the large photo on the right.
   whoWeServe: {
+    titleId: "rem-serve-title",
     eyebrow: "Who we serve",
     title: "Industries & situations\nwe serve",
     lead:
@@ -139,6 +143,7 @@ export const REMEDIATION = {
   // §4 — Our process. Linear 5-step route (rendered as <ol>); one banner per
   // step, cycled in lock-step with the route-line animation.
   process: {
+    titleId: "rem-steps-title",
     eyebrow: "Our process",
     title: "Assessment to closure",
     lead:
@@ -163,6 +168,7 @@ export const REMEDIATION = {
   // §5 — On film: real Miller Environmental project + brand films. Left-column
   // picker cards swap the large player on the right.
   videos: {
+    titleId: "rem-vid-title",
     eyebrow: "On film",
     title: "Remediation in the field",
     lead:
@@ -191,6 +197,7 @@ export const REMEDIATION = {
 
   // §6 — Case studies that prove our expertise.
   caseStudies: {
+    titleId: "rem-case-title",
     eyebrow: "Proof of work",
     title: "Case studies that prove it",
     lead: "Complex, high-risk sites brought back to compliance — under provincial and CCME oversight.",
@@ -228,6 +235,7 @@ export const REMEDIATION = {
 
   // §7 — Why choose Miller.
   whyChoose: {
+    titleId: "rem-why-title",
     eyebrow: "Why Miller",
     title: "Why crews call us first",
     lead:
@@ -266,6 +274,7 @@ export const REMEDIATION = {
 
   // §8 — Closing CTA (dark dispatch panel + callback form).
   cta: {
+    titleId: "rem-cta-title",
     eyebrow: "Request a callback",
     title: "Book a consult or",
     titleEm: "request a callback",
@@ -274,5 +283,12 @@ export const REMEDIATION = {
       `Tell us about your site and we'll be in touch — or call now at ${GENERAL_PHONE} for immediate assistance. For an active spill or release, our 24/7 emergency team is standing by.`,
     formTitle: "Request a callback",
     formNote: "A remediation coordinator will reach out within one business day.",
+    hotlineNote: "Answered by a trained responder — every hour, every day of the year.",
+  },
+
+  // §9 — Related services rail.
+  related: {
+    currentSlug: "environmental-remediation-services",
+    titleId: "rem-related-title",
   },
 };
