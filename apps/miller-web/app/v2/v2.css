@@ -294,3 +294,73 @@
   .mx-hero__regmark { display: none; }
 }
 @media (max-width: 600px) { .mx-hero { min-height: 0; } }
+
+/* ════════════════════════════════════════════════════════════════════════
+   01 · CERTIFIED — CERT SEALS (thin filed-certifications band)
+   ════════════════════════════════════════════════════════════════════════ */
+.mx-certs__row { list-style: none; margin: clamp(20px, 2.4vw, 36px) 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(14px, 1.6vw, 26px); }
+.mx-certs__link { display: flex; align-items: center; gap: 16px; text-decoration: none; color: inherit; padding: clamp(14px, 1.4vw, 20px); background: var(--c-surface); border: 1px solid var(--c-line); transition: border-color .25s var(--mx-ease), transform .25s var(--mx-ease); }
+.mx-certs__link:hover { border-color: var(--c-accent); transform: translateY(-2px); }
+.mx-certs__link:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 3px; }
+.mx-certs__mark { flex: none; width: 54px; height: 54px; display: block; overflow: hidden; }
+.mx-certs__img { width: 100%; height: 100%; object-fit: contain; }
+.mx-certs__text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.mx-certs__name { font-family: var(--font-condensed), sans-serif; font-weight: 600; text-transform: uppercase; font-size: clamp(15px, 1.05vw, 18px); letter-spacing: .01em; line-height: 1; }
+.mx-certs__long { font-family: var(--font-sans), sans-serif; font-size: 12px; color: var(--c-ink-3); line-height: 1.3; }
+.mx-certs__year { margin-left: auto; align-self: flex-start; font-family: var(--font-mono), monospace; font-size: 11px; color: var(--c-accent); letter-spacing: .12em; }
+@media (max-width: 900px) { .mx-certs__row { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .mx-certs__row { grid-template-columns: 1fr; } .mx-certs__year { margin-left: auto; } }
+
+/* ════════════════════════════════════════════════════════════════════════
+   CLAUSE — CREED VOW (de-statted typographic manifesto)
+   ════════════════════════════════════════════════════════════════════════ */
+.mx-creed__inner { max-width: 1240px; }
+.mx-creed__statement { font-family: var(--font-condensed), sans-serif; font-weight: 600; text-transform: uppercase; font-size: clamp(44px, 8.4vw, 138px); line-height: .9; letter-spacing: -.012em; margin: clamp(6px, 1vw, 18px) 0 0; color: var(--c-ink); }
+.mx-creed__em { color: var(--c-ink); transition: color .65s var(--mx-ease) .25s; }
+[data-mx-in="1"] .mx-creed__em { color: var(--c-accent); }
+.mx-creed__body { font-family: var(--font-sans), sans-serif; font-size: clamp(17px, 1.45vw, 24px); line-height: 1.58; max-width: 52ch; margin: clamp(28px, 3.4vw, 52px) 0 0; color: var(--c-ink-2); }
+
+/* ════════════════════════════════════════════════════════════════════════
+   02 · SERVICES — SERVICES INDEX (line-item ledger + row-local hover)
+   ════════════════════════════════════════════════════════════════════════ */
+.mx-svcs__head { max-width: 66ch; margin-bottom: clamp(30px, 3.6vw, 56px); }
+.mx-svcs__head .mx-h2 { margin-top: 4px; }
+.mx-svcs__ledger { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--c-line); }
+.mx-svcs__link { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: clamp(16px, 2.6vw, 44px); padding: clamp(18px, 2.2vw, 32px) 0; text-decoration: none; color: var(--c-ink); }
+.mx-svcs__no { font-family: var(--font-mono), monospace; font-size: clamp(12px, 1vw, 15px); color: var(--c-accent); letter-spacing: .1em; align-self: start; padding-top: .5em; }
+.mx-svcs__main { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.mx-svcs__title { font-family: var(--font-condensed), sans-serif; font-weight: 600; text-transform: uppercase; font-size: clamp(22px, 2.7vw, 42px); line-height: 1; letter-spacing: .004em; transition: transform .3s var(--mx-ease), color .3s var(--mx-ease); }
+.mx-svcs__ext { font-family: var(--font-mono), monospace; font-size: clamp(11px, 0.9vw, 13px); color: var(--c-accent); letter-spacing: .08em; vertical-align: middle; }
+.mx-svcs__sum { font-family: var(--font-sans), sans-serif; font-size: clamp(14px, 1.02vw, 16px); color: var(--c-ink-3); max-width: 70ch; line-height: 1.5; }
+.mx-svcs__go { color: var(--c-accent); font-family: var(--font-mono), monospace; font-size: clamp(18px, 1.6vw, 24px); opacity: 0; transform: translateX(-10px); transition: opacity .3s var(--mx-ease), transform .3s var(--mx-ease); }
+.mx-svcs__base { position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--c-line); }
+.mx-svcs__base::after { content: ""; position: absolute; left: 0; bottom: 0; height: 1px; width: 100%; background: var(--c-accent); transform: scaleX(0); transform-origin: left center; transition: transform .45s var(--mx-ease); }
+.mx-svcs__link:hover .mx-svcs__base::after { transform: scaleX(1); }
+.mx-svcs__link:hover .mx-svcs__title { transform: translateX(10px); color: var(--c-accent); }
+.mx-svcs__link:hover .mx-svcs__go { opacity: 1; transform: translateX(0); }
+.mx-svcs__link:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 4px; }
+.mx-svcs__row--ext .mx-svcs__title { color: var(--c-ink); }
+@media (max-width: 600px) { .mx-svcs__go { display: none; } .mx-svcs__link { grid-template-columns: auto minmax(0, 1fr); } }
+
+/* ════════════════════════════════════════════════════════════════════════
+   03 · GENERATORS — SECTORS LEDGER (matched 3-photo triptych)
+   ════════════════════════════════════════════════════════════════════════ */
+.mx-sect__head { max-width: 62ch; margin-bottom: clamp(30px, 3.6vw, 56px); }
+.mx-sect__head .mx-h2 { margin-top: 4px; font-size: clamp(34px, 4.6vw, 68px); }
+.mx-sect__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(18px, 2.2vw, 36px); }
+.mx-sect__card { display: flex; flex-direction: column; background: var(--c-surface); border: 1px solid var(--c-line); }
+.mx-sect__media { position: relative; display: block; aspect-ratio: 4 / 3; overflow: hidden; }
+.mx-sect__img { object-fit: cover; }
+.mx-sect__cardbody { padding: clamp(18px, 1.5vw, 28px); display: flex; flex-direction: column; gap: 16px; }
+.mx-sect__cardhead { display: flex; align-items: baseline; gap: 12px; margin: 0; }
+.mx-sect__no { font-family: var(--font-mono), monospace; font-size: 13px; color: var(--c-accent); letter-spacing: .12em; }
+.mx-sect__cardtitle { font-family: var(--font-condensed), sans-serif; font-weight: 600; text-transform: uppercase; font-size: clamp(20px, 1.9vw, 30px); line-height: 1; }
+.mx-sect__items { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 9px; }
+.mx-sect__item { font-family: var(--font-sans), sans-serif; font-size: clamp(14px, 1vw, 16px); color: var(--c-ink-2); padding-left: 20px; position: relative; }
+.mx-sect__item::before { content: ""; position: absolute; left: 0; top: .62em; width: 11px; height: 1px; background: var(--c-accent); }
+@media (max-width: 900px) { .mx-sect__grid { grid-template-columns: 1fr; } .mx-sect__media { aspect-ratio: 16 / 9; } }
+
+/* Reveal-driven color settle (creed clause) rests final under reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .mx-creed__em { color: var(--c-accent) !important; transition: none !important; }
+}
