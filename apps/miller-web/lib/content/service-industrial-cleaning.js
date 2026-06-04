@@ -16,7 +16,7 @@ export const industrialCleaning = {
     titleId: "ic-hero-title",
     lead:
       "Miller Environmental provides industrial cleaning to every sector — from confined-space cleaning of underground and above-ground holding tanks to high-pressure steam cleaning of equipment and piping, sludge pits, and bulk-liquid and gondola rail-car cleaning.",
-    photo: "/miller/services/industrial-cleaning-hero.jpeg",
+    photo: "/miller/home-frame-2-2.webp",
     emergencyDisplay: EMERGENCY_PHONE,
     emergencyHref: EMERGENCY_TEL,
     secondaryCta: { label: "Contact Miller", labelShort: "Contact", href: "/contact-us/" },

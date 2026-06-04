@@ -16,7 +16,7 @@ export const CERTS = [
     long: "Quality Management System",
     href: "/certs/iso-9001-2015.pdf",
     sizeKB: 149,
-    mark: "/miller/certs/iso-9001-2015.webp",
+    mark: "/miller/certs/iso-9001-2015-1.webp",
   },
   {
     slug: "iso-14001-2015",
@@ -25,7 +25,7 @@ export const CERTS = [
     long: "Environmental Management System",
     href: "/certs/iso-14001-2015.pdf",
     sizeKB: 149,
-    mark: "/miller/certs/iso-14001-2015.webp",
+    mark: "/miller/certs/iso-14001-2015-1.webp",
   },
   {
     slug: "iso-45001-2018",
@@ -34,7 +34,7 @@ export const CERTS = [
     long: "Occupational Health & Safety",
     href: "/certs/iso-45001-2018.pdf",
     sizeKB: 149,
-    mark: "/miller/certs/iso-45001-2018.webp",
+    mark: "/miller/certs/iso-45001-2018-1.webp",
   },
   {
     slug: "mhca-cor-2023",

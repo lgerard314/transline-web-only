@@ -7,7 +7,7 @@ export const caseHwy16Diesel = {
     title: "Highway 16 Diesel Spill Response & Remediation",
     lead:
       "On November 15, 2024, a highway tractor traveling on Highway 16 suffered a severe saddle tank rupture, spilling over 500 liters of diesel fuel into a roadside ditch. The risk of diesel leaching into nearby soil and water sources was high, prompting Manitoba Public Insurance (MPI) to dispatch an immediate cleanup effort.",
-    photo: "/miller/case-studies/hwy-16-diesel-spill-response.webp",
+    photo: "/miller/diesel-spill-remediation.png",
     meta: [
       { k: "Location ", v: "Highway 16, MB" },
       { k: "Year ", v: "2024" },

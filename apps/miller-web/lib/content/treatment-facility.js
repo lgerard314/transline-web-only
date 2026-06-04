@@ -14,7 +14,7 @@ export const treatmentFacility = {
     // Subhead per phase 03.3 — one-line "named for…" line.
     lead:
       "Named for our co-founder Vaughn Bullough — a fully licensed hazardous waste treatment facility 70 kilometres south of Winnipeg on 64 hectares in the rural municipality of Montcalm.",
-    photo: "/miller/facility/vbec-aerial.webp",
+    photo: "/miller/vbec-aerial-2.webp",
   },
   address: {
     lines: ["Hwy 14 & 75", "Saint Jean Baptiste, MB R0G 2B0"],

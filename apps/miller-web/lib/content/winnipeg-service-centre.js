@@ -9,7 +9,7 @@ export const winnipegServiceCentre = {
     title: "Winnipeg Service Centre",
     lead:
       "A hub for the coordination and movement of inbound/outbound waste headed to its final disposal location. Licensed PCB storage facility. Home to our Customer Service Technicians and Projects / Field Services Team.",
-    photo: "/miller/facility/winnipeg-service-centre.webp",
+    photo: "/miller/winnipeg-service-centre-2.webp",
   },
   address: {
     lines: ["1803 Hekla Ave", "Winnipeg, MB R2R 0K3"],

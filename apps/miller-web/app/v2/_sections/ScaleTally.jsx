@@ -1,11 +1,13 @@
-import { MxTally } from "../_components/MxTally";
+import { MxTallyReel } from "../_components/MxTallyReel";
 import { CustodyRule } from "../_components/CustodyThread";
 
-// Σ · TO DATE — THE money shot. The single crescendo number: it counts up inside
-// the diamond seal, the seal draws closed on the final value (one continuous
-// gesture), a divider draws, and the supporting trio staggers in. This is the
-// frame you would submit to Awwwards. Dark surface with a soft radial warmth
-// behind the seal. Sequence + reduced-motion handling live in MxTally.
+// Σ · TO DATE — THE money shot. A three-diamond "reel" of lifetime highlights
+// that auto-advances once the section scrolls into view: each crescendo number
+// counts up inside its diamond seal while the seal draws closed in lockstep,
+// then the diamond parks aside as the next enters centred. Short labels sit
+// beneath each; the fuller story surfaces on hover/tap over the numeral. The
+// frame you would submit to Awwwards. Dark surface with a soft radial warmth.
+// Sequence, responsive collapse, and reduced-motion handling live in MxTallyReel.
 export function ScaleTally({ content }) {
   const c = content;
   return (
@@ -13,7 +15,7 @@ export function ScaleTally({ content }) {
       <CustodyRule />
       <span className="mx-scale__glow" aria-hidden="true" />
       <div className="mx-inner mx-scale__inner">
-        <MxTally
+        <MxTallyReel
           eyebrow={
             <p className="mx-field mx-field--on-dark mx-scale__field" id={c.headingId}>
               <span>{c.field}</span>
@@ -21,10 +23,7 @@ export function ScaleTally({ content }) {
               <span>{c.eyebrow}</span>
             </p>
           }
-          figure={c.figure}
-          unit={c.figure.unit}
-          body={c.body}
-          support={c.support}
+          highlights={c.highlights}
         />
       </div>
     </section>

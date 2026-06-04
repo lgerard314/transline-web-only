@@ -142,7 +142,7 @@ export function TopNav() {
             <span className="mw-navlogo" data-swapped={logoSwapped ? "1" : "0"} aria-hidden="true">
               <span className="mw-navlogo__diamond" />
               <img className="mw-navlogo__leaf" src="/miller/maple-leaf-graphic.png" alt="" />
-              <img className="mw-navlogo__mark" src="/miller/logo/miller-logomark.webp" alt="" />
+              <img className="mw-navlogo__mark" src="/miller/logo/miller-logomark-1.webp" alt="" />
             </span>
             <span>Miller Environmental</span>
           </Link>

@@ -67,10 +67,10 @@ export const metadata = {
     title: "Miller Environmental",
     description:
       "Hazardous waste management, environmental remediation, and 24/7 emergency response across Western Canada.",
-    images: ["/miller/logo/miller-logomark.webp"],
+    images: ["/miller/logo/miller-logomark-1.webp"],
   },
   twitter: { card: "summary" },
-  icons: { icon: "/miller/logo/miller-logomark.webp" },
+  icons: { icon: "/miller/logo/miller-logomark-1.webp" },
 };
 
 export const viewport = {

@@ -9,7 +9,7 @@ export const processInorganicOxidizers = {
     title: "Disposal of Inorganic Oxidizers",
     lead:
       "Miller Environmental is proud to offer expert chemical decomposition and disposal of inorganic oxidizers such as hypochlorite, peroxyacetic acid, and hydrogen peroxide.",
-    photo: "/miller/oxidizers/highlight-2.webp",
+    photo: "/miller/highlight-2-1.webp",
   },
   highlights: [
     {

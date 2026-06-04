@@ -6,7 +6,7 @@ export const caseBrandonPower = {
     eyebrow: "Case study",
     title: "Brandon Power Facility Lime Dust Remediation",
     lead: "A silo rupture and an urgent threat to safety and operations.",
-    photo: "/miller/case-studies/brandon-power-vbec.webp",
+    photo: "/miller/home-frame-2-2.webp",
     meta: [{ k: "Location ", v: "Brandon, MB" }, { k: "Year ", v: "2023" }],
   },
   problem: {

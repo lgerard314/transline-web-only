@@ -97,16 +97,13 @@ Systems and TransLine49° marks live in `logo/`; the other 8 are here.
 (MHCA COR 2023 mark not yet downloaded — the live site uses a sibling
 URL pattern; phase 04 picks it up or links to the PDF directly.)
 
-### `case-studies/`
+### `case-studies/` (+ Brandon Power at `miller/` root)
 | File | Case |
 | ---- | ---- |
-| `brandon-power-2.webp` | Brandon Power Facility lime dust — hero |
-| `brandon-power-vbec.webp` | Brandon Power — VBEC facility photo used in this case |
-| `grain-elevator-arsenic.webp` | Grain Elevator arsenic remediation — hero |
-| `hwy-16-diesel-spill.webp` | Highway 16 diesel — hero |
-| `hwy-16-diesel-spill-response.webp` | Highway 16 — secondary detail |
-| `steinbach-strip-mall-fire.webp` | Steinbach strip mall — hero |
-| `steinbach-mall-fire-alt.webp` | Steinbach — secondary (Elementor cache, only available scaled) |
+| `../vbec-entrance-hd-and-brandon-power-facility.png` | Brandon Power Facility — VBEC entrance + facility (hero + related cards) |
+| `../arsenic-contaiminated-soil-removal.png` | Grain Elevator arsenic remediation — hero + related cards |
+| `../diesel-spill-remediation.png` | Highway 16 diesel spill — hero + related cards |
+| `../what-we-do/fire-damaged-site-remediation.png` | Steinbach strip mall — hero + related cards |
 
 ### `careers/`
 | File | Use |

@@ -73,39 +73,8 @@
 .mx-cu__sizer { visibility: hidden; }
 .mx-cu__live { position: absolute; inset: 0; }
 
-/* ── Tally staged states (the diamond seal stroke is wired with DiamondSeal in Phase 3) ── */
-.mx-tally__fig { display: flex; align-items: center; gap: clamp(8px, 1.4vw, 28px); flex-wrap: wrap; margin: clamp(20px, 2.4vw, 40px) 0 0; }
-.mx-tally__num { font-family: var(--font-condensed), sans-serif; font-weight: 600; font-size: clamp(72px, 14vw, 220px); line-height: .82; color: var(--c-accent); letter-spacing: -.01em; }
-.mx-tally__unit { font-family: var(--font-condensed), sans-serif; font-weight: 600; font-size: clamp(28px, 4vw, 72px); color: #fff; text-transform: uppercase; letter-spacing: .01em; }
-.mx-tally__body { max-width: 52ch; font-family: var(--font-sans), sans-serif; font-size: clamp(16px, 1.2vw, 20px); line-height: 1.6; color: rgba(250, 243, 229, .88); margin: clamp(20px, 2.4vw, 36px) 0 0; }
-.mx-tally__trio-val { font-family: var(--font-condensed), sans-serif; font-weight: 600; font-size: clamp(28px, 3.2vw, 48px); color: #fff; line-height: 1; display: block; }
-.mx-tally__trio-label { font-family: var(--font-mono), monospace; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: rgba(245, 230, 203, .66); }
-.mx-tally__divider {
-  display: block;
-  height: 1px;
-  margin: clamp(32px, 4vw, 64px) 0 clamp(28px, 3vw, 44px);
-  background: var(--c-line, rgba(168, 90, 44, 0.4));
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform .5s var(--mx-ease);
-}
-.mx-tally[data-mx-tally="divider"] .mx-tally__divider,
-.mx-tally[data-mx-tally="trio"] .mx-tally__divider { transform: scaleX(1); }
-.mx-tally__trio {
-  list-style: none; margin: 0; padding: 0;
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(24px, 3vw, 56px);
-}
-.mx-tally__trio-item {
-  opacity: 0; transform: translateY(12px);
-  transition: opacity .5s var(--mx-ease), transform .5s var(--mx-ease);
-}
-.mx-tally[data-mx-tally="trio"] .mx-tally__trio-item { opacity: 1; transform: none; }
-.mx-tally__trio-item:nth-child(2) { transition-delay: .09s; }
-.mx-tally__trio-item:nth-child(3) { transition-delay: .18s; }
-@media (prefers-reduced-motion: reduce) {
-  .mx-tally__divider { transform: scaleX(1) !important; transition: none !important; }
-  .mx-tally__trio-item { opacity: 1 !important; transform: none !important; transition: none !important; }
-}
+/* (The single-figure tally was promoted to the three-diamond reel — see the
+   SCALE TALLY / lifetime reel block lower in this file.) */
 
 /* ── Atom marks ── */
 .mx-stop {
@@ -441,19 +410,231 @@
 .mx-scale { overflow: hidden; isolation: isolate; }
 .mx-scale__glow { position: absolute; inset: 0; z-index: 0; pointer-events: none; max-width: 100%; background: radial-gradient(46% 46% at 50% 42%, rgba(168, 90, 44, .26), transparent 72%); }
 .mx-scale__inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
-.mx-scale .mx-tally { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 880px; }
 .mx-scale__field { justify-content: center; }
-.mx-scale .mx-tally__fig { justify-content: center; margin-top: clamp(20px, 2.4vw, 36px); }
-/* the seal becomes a true square so the rotated frame reads as a clean diamond */
-.mx-scale .mx-seal { aspect-ratio: 1; width: clamp(300px, 40vw, 500px); padding: 0; display: grid; place-items: center; }
-.mx-scale .mx-seal__edge { stroke-width: 1.6; }
-.mx-tally__figstack { display: flex; flex-direction: column; align-items: center; gap: 0; }
-.mx-scale .mx-tally__num { font-size: clamp(58px, 8.6vw, 148px); }
-.mx-scale .mx-tally__unit { font-size: clamp(18px, 2.2vw, 34px); color: var(--c-amber); letter-spacing: .14em; }
-.mx-scale .mx-tally__body { margin-inline: auto; }
-.mx-scale .mx-tally__divider { max-width: 720px; margin-inline: auto; }
-.mx-scale .mx-tally__trio { max-width: 640px; margin-inline: auto; }
-@media (max-width: 600px) { .mx-scale .mx-seal { aspect-ratio: auto; width: auto; padding: 0 0 16px; } .mx-scale .mx-tally__num { font-size: clamp(56px, 16vw, 92px); } }
+
+/* ── Lifetime reel: three auto-advancing highlight diamonds ──────────────────
+   D1 center→left, D2 center→right, D3 center (final L→R: D1, D3, D2). Diamonds
+   are uniform size (no morph → stable stage height); the centred/focal one is
+   full scale, parked ones step back to .92. Position is animated on the item
+   (translateX); entrance fade + settle-scale on the card; the seal stroke draws
+   in lockstep with the 1600ms count (transition-duration matches MxCountUp). */
+.mx-reel {
+  --reel-S: clamp(255px, 29.7vw, 383px); /* diamond edge length (+10%) */
+  /* four equal gutters: outer L/R + two between the three diamonds */
+  --reel-gap-even: max(0px, calc((100% - 3 * var(--reel-S)) / 4));
+  --reel-step: calc(var(--reel-S) + var(--reel-gap-even)); /* center→side offset */
+  --reel-labelband: 0px;
+  /* Match DiamondSeal SVG: rect 120×120, rx=10, inset 40 in 200 viewBox. */
+  --mx-seal-diamond-size: 60%;
+  --mx-seal-rx: 8.333%;
+  --mx-reveal-expand: 1.12; /* hover overlay overshoots the diamond by this factor */
+  position: relative; width: 100%; display: flex; flex-direction: column; align-items: center;
+}
+.mx-scale__field { margin-bottom: clamp(20px, 2.4vw, 36px); }
+
+.mx-reel__stage { position: relative; width: 100%; height: calc(var(--reel-S) + var(--reel-labelband)); }
+
+/* Connector hairlines bridging the gaps at the diamonds' mid-height, so the
+   three borders read as ONE continuous stroke. Geometry (left/top/width/height)
+   is measured from the live diamond edges in JS (MxTallyReel) — robust to the
+   clamp/vw-resolved sizes. CSS only owns the stroke look + the draw animation:
+   the bar matches the border exactly (same accent, same .5 opacity, height set
+   to the rendered stroke width) and grows (scaleX) from the incoming side. */
+/* z-index 1: connectors sit BEHIND the diamonds + their hover overlays (z 2) so
+   the line tucks under each diamond edge and disappears behind the reveal scrim. */
+.mx-reel__link { position: absolute; left: 0; top: 0; width: 0; pointer-events: none; z-index: 1; }
+.mx-reel__link i {
+  display: block; width: 100%; height: 100%;
+  /* SOLID equivalent of the border's accent @ 50% over the section's dark brown —
+     no transparency, so the line reads at full weight and matches the edges. */
+  background: color-mix(in srgb, var(--c-accent) 50%, var(--c-navy-3));
+  transform: scaleX(0);
+  transition: transform .5s var(--mx-ease);
+}
+/* each connector grows FROM the diamond the single pen is leaving: link A out of
+   D1 on the left, link B out of D2 on the right — so it reads as one line being
+   drawn into the next diamond, never a gap. */
+.mx-reel__link--a i { transform-origin: left center; }
+.mx-reel__link--b i { transform-origin: right center; }
+.mx-reel[data-link1] .mx-reel__link--a i { transform: scaleX(1); }
+.mx-reel[data-link2] .mx-reel__link--b i { transform: scaleX(1); }
+
+/* Equal visual gutters: the four gaps (container-left→D1, D1→centre, centre→D2,
+   D2→container-right) are equal. A diamond's visible half-width to its apex is
+   0.40355·S (apex at 180.71/200); the derivation makes each side slot's CENTRE
+   sit at 25%∓0.2018·S of the container (the side-scale cancels out). `left` is %
+   of the stage (= body container), so the slide animates `left`. */
+.mx-reel__item {
+  position: absolute; top: 0; width: var(--reel-S);
+  display: flex; flex-direction: column; align-items: center;
+  transform: translateX(-50%);
+  transition: left .7s var(--mx-ease);
+  z-index: 2; /* above the connector hairlines */
+  --mx-card-scale: .92; /* parked side diamonds step back; centre is full size */
+}
+.mx-reel__item[data-pos="center"] { left: 50%; --mx-card-scale: 1; }
+.mx-reel__item[data-pos="left"]   { left: calc(25% - 0.2018 * var(--reel-S)); }
+.mx-reel__item[data-pos="right"]  { left: calc(75% + 0.2018 * var(--reel-S)); }
+
+.mx-reel__cardwrap {
+  position: relative;
+  width: var(--reel-S);
+  height: var(--reel-S);
+  overflow: visible;
+}
+.mx-reel__item[data-settled="1"] .mx-reel__cardwrap:has(.mx-reel__card:hover),
+.mx-reel__item[data-settled="1"] .mx-reel__cardwrap:has(.mx-reel__card[data-open="1"]),
+.mx-reel__item[data-settled="1"] .mx-reel__cardwrap:has(.mx-reel__card:focus-visible) {
+  overflow: visible;
+  z-index: 3;
+}
+
+.mx-reel__card {
+  display: grid; place-items: center;
+  width: 100%; height: 100%; padding: 0; margin: 0;
+  background: none; border: 0; color: inherit; cursor: pointer;
+  transform: scale(var(--mx-card-scale)); transform-origin: center center;
+  transition: transform .7s var(--mx-ease);
+  animation: mxReelFade .55s var(--mx-ease) both; /* entrance fade on mount */
+}
+@keyframes mxReelFade { from { opacity: 0; } to { opacity: 1; } }
+.mx-reel__card:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 8px; }
+
+/* the seal renders as a true square so the rotated frame reads as a clean diamond */
+.mx-scale .mx-reel .mx-seal { aspect-ratio: 1; width: var(--reel-S); padding: 0; display: grid; place-items: center; }
+.mx-scale .mx-reel .mx-seal__edge { stroke-width: 1.6; stroke-opacity: .5; stroke-linecap: round; stroke-linejoin: round; transition-duration: 1.6s; }
+.mx-scale .mx-reel .mx-seal__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  max-width: none;
+  overflow: visible;
+  text-align: center;
+  gap: clamp(2px, 0.35vw, 6px);
+}
+.mx-scale .mx-reel .mx-reel__figstack {
+  width: var(--mx-seal-diamond-size);
+  max-width: var(--mx-seal-diamond-size);
+}
+
+.mx-reel__figstack { display: flex; flex-direction: column; align-items: center; gap: 2px; transition: opacity .3s var(--mx-ease); }
+/* a diamond stays fully dark until its turn: border invisible (seal "open") AND
+   the number/unit hidden — so a mounted-but-not-yet-drawn diamond shows nothing */
+.mx-reel__card[data-mx-seal="open"] .mx-reel__figstack { opacity: 0; }
+.mx-reel__num { font-family: var(--font-condensed), sans-serif; font-weight: 600; font-size: clamp(44px, 5.4vw, 88px); line-height: .84; color: #fff; letter-spacing: -.01em; }
+.mx-reel__unit { font-family: var(--font-condensed), sans-serif; font-weight: 600; font-size: clamp(15px, 1.7vw, 26px); color: var(--c-amber); text-transform: uppercase; letter-spacing: .14em; }
+
+.mx-reel__label {
+  margin: clamp(8px, 0.75vw, 14px) 0 0;
+  font-family: var(--font-mono), monospace; font-size: clamp(10px, .82vw, 12px);
+  letter-spacing: .18em; text-transform: uppercase; color: rgba(245, 230, 203, .72);
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: visible;
+  width: max-content;
+  max-width: none;
+  opacity: 0; transition: opacity .4s var(--mx-ease) .12s;
+}
+/* labels stay hidden while the lone D1 + lead are showing; appear once parked */
+.mx-reel:not([data-phase="d1"]) .mx-reel__item[data-settled="1"] .mx-reel__label { opacity: 1; }
+
+/* reveal: rounded diamond fill (same rx as outline stroke), copy stays upright */
+.mx-reel__reveal {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 18%;
+  box-sizing: border-box;
+  font-family: var(--font-sans), sans-serif;
+  font-size: clamp(12px, .98vw, 15px);
+  line-height: 1.5;
+  color: rgba(250, 243, 229, .94);
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 2;
+  /* scale the overlay WITH its diamond (card-scale) AND past it by --mx-reveal-expand
+     (>1) so the scrim spills beyond the diamond shape; the centre diamond is full
+     size so its overlay is correspondingly bigger. Scaling about the centre keeps
+     all three identically centred. --mx-reveal-nudge is a fine horizontal trim. */
+  transform: translateX(var(--mx-reveal-nudge, 0px)) scale(calc(var(--mx-card-scale) * var(--mx-reveal-expand, 1.12)));
+  transform-origin: center center;
+  transition: opacity .3s var(--mx-ease);
+}
+.mx-reel__reveal::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--mx-seal-diamond-size);
+  height: var(--mx-seal-diamond-size);
+  transform: translate(-50%, -50%) rotate(45deg);
+  border-radius: var(--mx-seal-rx);
+  background: rgba(26, 15, 9, .88);
+  z-index: -1;
+}
+.mx-reel__card[data-open="1"] + .mx-reel__reveal,
+.mx-reel__card:focus-visible + .mx-reel__reveal { opacity: 1; overflow: visible; }
+.mx-reel__card[data-open="1"] .mx-reel__figstack,
+.mx-reel__card:focus-visible .mx-reel__figstack,
+.mx-reel__card[data-open="1"] .mx-reel__label,
+.mx-reel__card:focus-visible .mx-reel__label { opacity: .08; }
+@media (hover: hover) {
+  .mx-reel__item[data-settled="1"] .mx-reel__card:hover + .mx-reel__reveal { opacity: 1; overflow: visible; }
+  .mx-reel__item[data-settled="1"] .mx-reel__card:hover .mx-reel__figstack,
+  .mx-reel__item[data-settled="1"] .mx-reel__card:hover .mx-reel__label { opacity: .08; }
+}
+
+/* step-1 lead paragraph; collapses (no diamond jump — stage height is fixed) */
+.mx-reel__lead {
+  max-width: 52ch; margin: clamp(18px, 2.2vw, 30px) auto 0;
+  font-family: var(--font-sans), sans-serif; font-size: clamp(16px, 1.2vw, 20px); line-height: 1.6;
+  color: rgba(250, 243, 229, .88); text-align: center;
+  opacity: 0; max-height: 0; overflow: hidden;
+  transition: opacity .4s var(--mx-ease), max-height .5s var(--mx-ease), margin .4s var(--mx-ease);
+}
+.mx-reel[data-lead="1"] .mx-reel__lead { opacity: 1; max-height: 14em; }
+
+/* mobile-only revisit dots */
+.mx-reel__dots { display: none; gap: 14px; margin-top: clamp(22px, 4vw, 34px); }
+.mx-reel__dot { width: 9px; height: 9px; padding: 0; border: 0; background: rgba(245, 230, 203, .3); transform: rotate(45deg); cursor: pointer; transition: background .25s var(--mx-ease); }
+.mx-reel__dot[data-on] { background: var(--c-accent); }
+.mx-reel__dot:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 4px; }
+
+/* ── one-at-a-time below 720px: only the current diamond shows; dots revisit ── */
+@media (max-width: 720px) {
+  .mx-reel { --reel-S: min(81.4vw, 352px); }
+  .mx-reel__stage { height: calc(var(--reel-S) + var(--reel-labelband)); }
+  /* keep the diamond frame on mobile (override the legacy single-tally ≤600 fallback) */
+  .mx-reel .mx-seal { padding: 0; }
+  .mx-reel .mx-seal__frame { display: block; }
+  .mx-reel .mx-seal__inner::after { content: none; }
+  .mx-reel .mx-seal__legend { display: none; }
+  .mx-reel__item {
+    left: 50% !important; transform: translateX(-50%) !important; /* always centred; no parking shift */
+    opacity: 0; pointer-events: none; transition: opacity .45s var(--mx-ease);
+    --mx-card-scale: 1; /* full-size diamonds on mobile (no parked side scale) */
+  }
+  .mx-reel[data-current="0"] .mx-reel__item[data-idx="0"],
+  .mx-reel[data-current="1"] .mx-reel__item[data-idx="1"],
+  .mx-reel[data-current="2"] .mx-reel__item[data-idx="2"] { opacity: 1; pointer-events: auto; }
+  /* show the in-diamond label on the current item once it has settled */
+  .mx-reel__item[data-settled="1"] .mx-reel__label { opacity: 1; }
+  .mx-reel__lead { display: none; }       /* the long copy is the tap reveal on mobile */
+  .mx-reel__dots { display: flex; }
+  .mx-reel__link { display: none; }       /* no horizontal layout to bridge on mobile */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mx-reel__card { animation: none !important; }
+  .mx-reel__item, .mx-reel__lead, .mx-reel__link i { transition: none !important; }
+}
 
 /* ════════════════════════════════════════════════════════════════════════
    · THE CREW — CAREERS CALLOUT (photo-bleed)

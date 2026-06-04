@@ -16,6 +16,7 @@ import { RotatingBanner01 } from "@/components-v2/06_sections/banners/rotating-b
 import { TallStaticBanner01 } from "@/components-v2/06_sections/banners/tall-static-banner-01";
 import { StatementBand01 } from "@/components-v2/06_sections/statements/statement-band-01";
 import { ScaleBand01 } from "@/components-v2/06_sections/statements/scale-band-01";
+import { LifetimeReel01 } from "@/components-v2/06_sections/statements/lifetime-reel-01";
 import { MediaSplit01 } from "@/components-v2/06_sections/splits/media-split-01";
 import { TimelineSplit01 } from "@/components-v2/06_sections/splits/timeline-split-01";
 import { FleetSplit01 } from "@/components-v2/06_sections/splits/fleet-split-01";
@@ -65,8 +66,8 @@ const layoutReverse = {
 
 const MONUMENT_HERO = {
   titleId: "tg-monument-hero",
-  photoSrc: "/miller/hero/home-frame-1.png",
-  mark: { logoSrc: "/miller/logo/miller-logomark.webp", name: "Placeholder Co", corpLong: "Incorporated", corpShort: "Inc.", since: "Since 2001" },
+  photoSrc: "/miller/home-frame-1.png",
+  mark: { logoSrc: "/miller/logo/miller-logomark-1.webp", name: "Placeholder Co", corpLong: "Incorporated", corpShort: "Inc.", since: "Since 2001" },
   title: {
     line1: "leaders in",
     cyclePhrases: [{ text: "reliable" }, { text: "scalable", tone: "accent" }, { text: "trusted", tone: "accent" }],
@@ -96,7 +97,7 @@ const SERVICE_HERO = {
 // edge-to-edge photograph. Swap the asset to match so every mode looks right.
 function serviceHeroContent(config) {
   const photo = config.media === "photo-bleed"
-    ? "/miller/services/customer-waste-collection-hero.webp"
+    ? "/miller/customer-waste-collection-hero-2.webp"
     : "/miller/fleet-trucks-gravel-transparent.png";
   return { ...SERVICE_HERO, photo };
 }
@@ -114,8 +115,8 @@ const ROTATING_BANNER = {
 const TALL_STATIC_BANNER = {
   ariaLabel: "Placeholder certifications",
   certs: [
-    { slug: "iso-demo-9001", name: "ISO 9001:2015", year: "2015", long: "Placeholder Management System", href: "#", sizeKB: 149, mark: "/miller/certs/iso-9001-2015.webp" },
-    { slug: "iso-demo-14001", name: "ISO 14001:2015", year: "2015", long: "Placeholder Environmental System", href: "#", sizeKB: 149, mark: "/miller/certs/iso-14001-2015.webp" },
+    { slug: "iso-demo-9001", name: "ISO 9001:2015", year: "2015", long: "Placeholder Management System", href: "#", sizeKB: 149, mark: "/miller/certs/iso-9001-2015-1.webp" },
+    { slug: "iso-demo-14001", name: "ISO 14001:2015", year: "2015", long: "Placeholder Environmental System", href: "#", sizeKB: 149, mark: "/miller/certs/iso-14001-2015-1.webp" },
     { slug: "cor-demo", name: "MHCA COR 2023", year: "2023", long: "Placeholder Safety Recognition", href: "#", sizeKB: 9, mark: "/miller/certs/mhca-cor-2023.webp" },
   ],
 };
@@ -135,10 +136,10 @@ const MEDIA_SPLIT = {
   primaryCta: { longLabel: "Primary action label", shortLabel: "Primary", href: "#" },
   aboutLink: { longLabel: "Secondary text link", shortLabel: "More", href: "#" },
   photos: [
-    { src: "/miller/facility/vbec-drone-overview.png", alt: "Drone overview", caption: "Aerial drone overview" },
-    { src: "/miller/facility/vbec-office-front.png", alt: "Office front", caption: "Office front entrance" },
-    { src: "/miller/facility/vbec-stone-sign.png", alt: "Stone sign", caption: "Entrance stone sign" },
-    { src: "/miller/facility/vbec-lake.png", alt: "Lake", caption: "Reflection pond" },
+    { src: "/miller/vbec-drone-overview.png", alt: "Drone overview", caption: "Aerial drone overview" },
+    { src: "/miller/vbec-office-front.png", alt: "Office front", caption: "Office front entrance" },
+    { src: "/miller/vbec-stone-sign.png", alt: "Stone sign", caption: "Entrance stone sign" },
+    { src: "/miller/vbec-lake.png", alt: "Lake", caption: "Reflection pond" },
   ],
 };
 
@@ -192,18 +193,18 @@ const BENTO = {
   title: { lead: "everything you need,", em: "in one place" },
   intro: "A short placeholder intro paragraph describing the breadth of the offering across the full grid of services shown below.",
   services: [
-    { id: "svc-01", slug: "service-one", title: "Service One Alpha", summary: "Placeholder summary for the first service tile in the grid.", photo: "/miller/services/industrial-waste-treatment-hero.webp" },
-    { id: "svc-02", slug: "service-two", title: "Service Two Beta", summary: "Placeholder summary for the second service tile.", photo: "/miller/services/remediation-contaminated-soil.webp" },
+    { id: "svc-01", slug: "service-one", title: "Service One Alpha", summary: "Placeholder summary for the first service tile in the grid.", photo: "/miller/industrial-waste-treatment-hero-1.webp" },
+    { id: "svc-02", slug: "service-two", title: "Service Two Beta", summary: "Placeholder summary for the second service tile.", photo: "/miller/remediation-contaminated-soil-2.webp" },
     { id: "svc-03", slug: "service-three", title: "Service Three Gamma", summary: "Placeholder summary for the third service tile.", photo: "/miller/fleet-trucks-gravel-transparent.png" },
-    { id: "svc-04", slug: "service-four", title: "Service Four Delta", summary: "Placeholder summary for the fourth service tile.", photo: "/miller/services/vacuum-truck-hero.webp" },
-    { id: "svc-05", slug: "service-five", title: "Service Five Epsilon", summary: "Placeholder summary for the fifth service tile.", photo: "/miller/services/specialty-recycling-hero.webp" },
-    { id: "svc-06", slug: "service-six", title: "Service Six Zeta", summary: "Placeholder summary for the sixth service tile.", photo: "/miller/services/research-development-hero.webp" },
-    { id: "svc-07", slug: "service-seven", title: "Service Seven Eta", summary: "Placeholder summary for the seventh service tile.", photo: "/miller/services/stewardship-hero.webp" },
-    { id: "svc-08", slug: "service-eight", title: "Service Eight Theta", summary: "Placeholder summary for the eighth service tile.", photo: "/miller/services/customer-waste-collection-hero.webp" },
-    { id: "svc-09", slug: "service-nine", title: "Service Nine Iota", summary: "Placeholder summary for the ninth service tile.", photo: "/miller/services/industrial-cleaning-hero.jpeg" },
-    { id: "svc-10", slug: "service-ten", title: "Service Ten Kappa", summary: "Placeholder summary for the tenth service tile.", photo: "/miller/services/project-management-hero.webp" },
+    { id: "svc-04", slug: "service-four", title: "Service Four Delta", summary: "Placeholder summary for the fourth service tile.", photo: "/miller/vacuum-truck-hero-2.jpg" },
+    { id: "svc-05", slug: "service-five", title: "Service Five Epsilon", summary: "Placeholder summary for the fifth service tile.", photo: "/miller/specialty-recycling-hero-2.webp" },
+    { id: "svc-06", slug: "service-six", title: "Service Six Zeta", summary: "Placeholder summary for the sixth service tile.", photo: "/miller/research-development-hero-2.webp" },
+    { id: "svc-07", slug: "service-seven", title: "Service Seven Eta", summary: "Placeholder summary for the seventh service tile.", photo: "/miller/stewardship-hero-2.webp" },
+    { id: "svc-08", slug: "service-eight", title: "Service Eight Theta", summary: "Placeholder summary for the eighth service tile.", photo: "/miller/customer-waste-collection-hero-2.webp" },
+    { id: "svc-09", slug: "service-nine", title: "Service Nine Iota", summary: "Placeholder summary for the ninth service tile.", photo: "/miller/home-frame-2-2.webp" },
+    { id: "svc-10", slug: "service-ten", title: "Service Ten Kappa", summary: "Placeholder summary for the tenth service tile.", photo: "/miller/project-management-hero-2.webp" },
   ],
-  externalTile: { href: "https://example.com", photo: "/miller/services/vacuum-truck-new-logo.webp", titleLines: ["Cross-Border", "Services"], summary: "Placeholder summary for the external cross-border tile that links offsite." },
+  externalTile: { href: "https://example.com", photo: "/miller/vacuum-truck-new-logo-2.webp", titleLines: ["Cross-Border", "Services"], summary: "Placeholder summary for the external cross-border tile that links offsite." },
 };
 
 const HOVERCARD = {
@@ -244,10 +245,10 @@ const CAPABILITY = {
   title: "What we handle",
   lead: "A short placeholder lead introducing the capability groups, with the first group rendered as a large feature card.",
   groups: [
-    { heading: "Feature Group Alpha", photo: "/miller/facility/cap-specialty-soil.webp", body: "Placeholder body paragraph describing the featured capability group in a sentence or two.", items: ["Capability one", "Capability two", "Capability three", "Capability four", "Capability five", "Capability six"] },
-    { heading: "Group Beta", photo: "/miller/facility/cap-inorganic.webp", items: ["Item one", "Item two", "Item three"] },
-    { heading: "Group Gamma", photo: "/miller/facility/cap-liquid-organic.webp", items: ["Item one", "Item two", "Item three", "Item four"] },
-    { heading: "Group Delta", photo: "/miller/facility/cap-solid-organic.webp", body: "Optional placeholder body for this grid card.", items: ["Item one", "Item two"] },
+    { heading: "Feature Group Alpha", photo: "/miller/about-health-safety-2.webp", body: "Placeholder body paragraph describing the featured capability group in a sentence or two.", items: ["Capability one", "Capability two", "Capability three", "Capability four", "Capability five", "Capability six"] },
+    { heading: "Group Beta", photo: "/miller/20190801_130310-scaled.jpg", items: ["Item one", "Item two", "Item three"] },
+    { heading: "Group Gamma", photo: "/miller/about-quality-assurance-2.webp", items: ["Item one", "Item two", "Item three", "Item four"] },
+    { heading: "Group Delta", photo: "/miller/cap-solid-organic-1.webp", body: "Optional placeholder body for this grid card.", items: ["Item one", "Item two"] },
   ],
 };
 
@@ -270,7 +271,7 @@ const FACILITY = {
   eyebrow: "The facility",
   title: "Built for the whole job",
   lead: "A single location handles intake, sorting, and processing — sized to take everything from a single container to a full bulk load without rerouting the work.",
-  photo: "/miller/facility/vbec-aerial.webp",
+  photo: "/miller/vbec-aerial-2.webp",
   caption: "Sample facility caption line",
   stats: [
     { value: "160", unit: "acres", label: "Sample footprint metric" },
@@ -318,10 +319,10 @@ const PCG_WWD = {
   lead: "Placeholder lead sentence introducing the hover-swap capability cards.",
   cta: { label: "Talk to us", href: "#" },
   items: [
-    { name: "Capability One", photo: "/miller/what-we-do/contaminated-soil-remediation.png", blurb: "Short rest-state blurb shown before hover.", detail: "Longer placeholder paragraph revealed on hover, describing the capability in full sentences for demo purposes." },
-    { name: "Capability Two", photo: "/miller/what-we-do/hazardous-material-excavation-disposal.png", blurb: "Short rest-state blurb shown before hover.", detail: "Longer placeholder paragraph revealed on hover, describing the capability in full sentences for demo purposes." },
-    { name: "Capability Three", photo: "/miller/what-we-do/emergency-spiill-response-cleanup.png", blurb: "Short rest-state blurb shown before hover.", detail: "Longer placeholder paragraph revealed on hover, describing the capability in full sentences for demo purposes." },
-    { name: "Capability Four", photo: "/miller/what-we-do/fire-damaged-site-remediation.png", blurb: "Short rest-state blurb shown before hover.", detail: "Longer placeholder paragraph revealed on hover, describing the capability in full sentences for demo purposes." },
+    { name: "Capability One", photo: "/miller/contaminated-soil-remediation.png", blurb: "Short rest-state blurb shown before hover.", detail: "Longer placeholder paragraph revealed on hover, describing the capability in full sentences for demo purposes." },
+    { name: "Capability Two", photo: "/miller/hazardous-material-excavation-disposal.png", blurb: "Short rest-state blurb shown before hover.", detail: "Longer placeholder paragraph revealed on hover, describing the capability in full sentences for demo purposes." },
+    { name: "Capability Three", photo: "/miller/emergency-spiill-response-cleanup.png", blurb: "Short rest-state blurb shown before hover.", detail: "Longer placeholder paragraph revealed on hover, describing the capability in full sentences for demo purposes." },
+    { name: "Capability Four", photo: "/miller/fire-damaged-site-remediation.png", blurb: "Short rest-state blurb shown before hover.", detail: "Longer placeholder paragraph revealed on hover, describing the capability in full sentences for demo purposes." },
   ],
 };
 const PCG_CASE = {
@@ -332,10 +333,10 @@ const PCG_CASE = {
   lead: "Placeholder lead sentence introducing the case-study cards.",
   cta: { label: "All case studies", href: "#" },
   items: [
-    { href: "#sample-one", title: "Sample Project One", location: "Sample Location, MB", photo: "/miller/case-studies/grain-elevator-arsenic.webp", desc: "Placeholder one-sentence summary of the case study." },
-    { href: "#sample-two", title: "Sample Project Two", location: "Sample Location, MB", photo: "/miller/case-studies/hwy-16-diesel-spill-response.webp", desc: "Placeholder one-sentence summary of the case study." },
-    { href: "#sample-three", title: "Sample Project Three", location: "Sample Location, MB", photo: "/miller/case-studies/steinbach-strip-mall-fire.webp", desc: "Placeholder one-sentence summary of the case study." },
-    { href: "#sample-four", title: "Sample Project Four", location: "Sample Location, MB", photo: "/miller/case-studies/brandon-power-vbec.webp", desc: "Placeholder one-sentence summary of the case study." },
+    { href: "#sample-one", title: "Sample Project One", location: "Sample Location, MB", photo: "/miller/arsenic-contaiminated-soil-removal-1.png", desc: "Placeholder one-sentence summary of the case study." },
+    { href: "#sample-two", title: "Sample Project Two", location: "Sample Location, MB", photo: "/miller/diesel-spill-remediation.png", desc: "Placeholder one-sentence summary of the case study." },
+    { href: "#sample-three", title: "Sample Project Three", location: "Sample Location, MB", photo: "/miller/fire-damaged-site-remediation.png", desc: "Placeholder one-sentence summary of the case study." },
+    { href: "#sample-four", title: "Sample Project Four", location: "Sample Location, MB", photo: "/miller/home-frame-2-2.webp", desc: "Placeholder one-sentence summary of the case study." },
   ],
 };
 function photoCardContent(config) {
@@ -384,7 +385,7 @@ const NUMBERED = {
 const MULTI_COLUMN_CTA = {
   headingId: "tg-multicol",
   truckImgSrc: "/miller/truck-graphic-angled.png",
-  logoImgSrc: "/miller/logo/miller-logomark.webp",
+  logoImgSrc: "/miller/logo/miller-logomark-1.webp",
   eyebrow: "Reach out",
   title: "Let's start the conversation.",
   body: "Routine service, a scheduled job, or an urgent call — one number connects you to the whole team.",
@@ -400,7 +401,7 @@ const MULTI_COLUMN_CTA = {
 
 const PHOTO_BLEED = {
   headingId: "tg-photobleed",
-  bleedPhotoSrc: "/miller/careers/team-at-conv-booth-big-5.jpg",
+  bleedPhotoSrc: "/miller/team-at-conv-booth-big-5.jpg",
   eyebrow: "Careers",
   title: { lead: "Build a career", em: "that matters" },
   lead: "We hire people who take pride in doing the work right. Competitive pay, room to grow, and a team that has your back.",
@@ -492,10 +493,10 @@ const PICKER_GALLERY = {
   phoneHref: "tel:18005551234",
   phoneDisplay: "1-800-555-1234",
   items: [
-    { text: "First industry", photo: "/miller/who-we-serve-industries/industrial-manufacturing.png", bigAnchor: "50% 50%", thumbAnchor: "50% 50%", caption: "Placeholder caption describing the first industry served.", default: true },
-    { text: "Second industry", photo: "/miller/who-we-serve-industries/municipal-programs.png", bigAnchor: "50% 50%", thumbAnchor: "50% 50%", caption: "Placeholder caption describing the second industry served." },
-    { text: "Third industry", photo: "/miller/who-we-serve-industries/construction-and-demolition.png", bigAnchor: "50% 50%", thumbAnchor: "50% 50%", caption: "Placeholder caption describing the third industry served." },
-    { text: "Fourth industry", photo: "/miller/who-we-serve-industries/agriculture.png", bigAnchor: "50% 50%", thumbAnchor: "50% 50%", caption: "Placeholder caption describing the fourth industry served." },
+    { text: "First industry", photo: "/miller/industrial-manufacturing.png", bigAnchor: "50% 50%", thumbAnchor: "50% 50%", caption: "Placeholder caption describing the first industry served.", default: true },
+    { text: "Second industry", photo: "/miller/municipal-programs.png", bigAnchor: "50% 50%", thumbAnchor: "50% 50%", caption: "Placeholder caption describing the second industry served." },
+    { text: "Third industry", photo: "/miller/construction-and-demolition.png", bigAnchor: "50% 50%", thumbAnchor: "50% 50%", caption: "Placeholder caption describing the third industry served." },
+    { text: "Fourth industry", photo: "/miller/agriculture.png", bigAnchor: "50% 50%", thumbAnchor: "50% 50%", caption: "Placeholder caption describing the fourth industry served." },
   ],
 };
 
@@ -533,6 +534,17 @@ const SCALE_BAND = {
   ],
 };
 
+const LIFETIME_REEL = {
+  headingId: "tg-lifetime-reel",
+  srHeading: "Placeholder lifetime impact",
+  eyebrow: "Placeholder eyebrow · since 0000",
+  highlights: [
+    { value: 49, suffix: "M+", unit: "units", label: "of placeholder", reveal: "Placeholder reveal paragraph for the first diamond — the long copy surfaced on hover or tap over the numeral." },
+    { value: 40, suffix: "M+", unit: "units", label: "recovered", reveal: "Placeholder reveal paragraph for the second diamond, describing the figure in one short sentence." },
+    { value: 100, suffix: "%", unit: "", label: "sample metric", reveal: "Placeholder reveal paragraph for the third diamond, describing the figure in one short sentence." },
+  ],
+};
+
 // ── registry ────────────────────────────────────────────────────────────────
 export const GROUPS = ["Heroes", "Banners", "Statements", "Splits", "Grids", "Callouts", "Flows", "Pickers", "Rails"];
 
@@ -558,6 +570,7 @@ export const GALLERY = [
   // Statements
   { group: "Statements", name: "StatementBand01", path: "components-v2/06_sections/statements/statement-band-01.jsx", Component: StatementBand01, content: STATEMENT_BAND, controls: [] },
   { group: "Statements", name: "ScaleBand01", path: "components-v2/06_sections/statements/scale-band-01.jsx", Component: ScaleBand01, content: SCALE_BAND, controls: [] },
+  { group: "Statements", name: "LifetimeReel01", path: "components-v2/06_sections/statements/lifetime-reel-01.jsx", Component: LifetimeReel01, content: LIFETIME_REEL, controls: [] },
 
   // Splits
   { group: "Splits", name: "MediaSplit01", path: "components-v2/06_sections/splits/media-split-01.jsx", Component: MediaSplit01, content: MEDIA_SPLIT, controls: [

@@ -55,12 +55,12 @@ export const SECTOR_CARDS = [
 ];
 
 export const FACILITY_PHOTOS = [
-  { src: "/miller/facility/vbec-drone-overview.png", alt: "VBEC drone overview", caption: "Aerial drone overview" },
-  { src: "/miller/facility/vbec-office-front-aerial.png", alt: "Office front, aerial view", caption: "Office front, from above" },
-  { src: "/miller/facility/vbec-office-front.png", alt: "Office front, ground view", caption: "Office front entrance" },
-  { src: "/miller/facility/vbec-stone-sign.png", alt: "Vaughn Bullough Environmental Centre stone sign", caption: "Entrance stone sign" },
-  { src: "/miller/facility/vbec-lake.png", alt: "Lake on the VBEC grounds", caption: "Reflection pond on the grounds" },
-  { src: "/miller/facility/vbec-windmills.png", alt: "Wind turbines visible from VBEC", caption: "Wind turbines on the horizon" },
+  { src: "/miller/vbec-drone-overview.png", alt: "VBEC drone overview", caption: "Aerial drone overview" },
+  { src: "/miller/vbec-office-front-aerial.png", alt: "Office front, aerial view", caption: "Office front, from above" },
+  { src: "/miller/vbec-office-front.png", alt: "Office front, ground view", caption: "Office front entrance" },
+  { src: "/miller/vbec-stone-sign.png", alt: "Vaughn Bullough Environmental Centre stone sign", caption: "Entrance stone sign" },
+  { src: "/miller/vbec-lake.png", alt: "Lake on the VBEC grounds", caption: "Reflection pond on the grounds" },
+  { src: "/miller/vbec-windmills-1.png", alt: "Wind turbines visible from VBEC", caption: "Wind turbines on the horizon" },
 ];
 
 export const MILESTONES = [
@@ -98,9 +98,9 @@ export const SOCIALS = [
 
 export const HERO = {
   titleId: "mw-hero-title",
-  photoSrc: "/miller/hero/home-frame-1.png",
+  photoSrc: "/miller/home-frame-1.png",
   mark: {
-    logoSrc: "/miller/logo/miller-logomark.webp",
+    logoSrc: "/miller/logo/miller-logomark-1.webp",
     name: "Miller Environmental",
     corpLong: "Corporation",
     corpShort: "Corp.",
@@ -139,6 +139,17 @@ export const LIFETIME_SCALE = {
   ],
 };
 
+export const LIFETIME_REEL = {
+  headingId: "mw-lifetime-reel-heading",
+  srHeading: "Lifetime impact since 1996",
+  eyebrow: LIFETIME_SCALE.eyebrow,   // "Lifetime impact · since 1996"
+  highlights: [
+    { value: 49, suffix: "M+", unit: "tons", label: "of disposal", reveal: LIFETIME_SCALE.body },
+    { value: 40, suffix: "M+", unit: "tons", label: "recycled", reveal: "Over 40 million tons recovered and returned to productive use — sorted and treated for reuse rather than landfilled." },
+    { value: 100, suffix: "%", unit: "", label: "chain of custody", reveal: "Every load tracked end to end — from the generator’s dock to final disposition, under one unbroken, documented chain of custody." },
+  ],
+};
+
 export const SERVICES_GRID = {
   headingId: "mw-services-heading",
   eyebrow: "Services",
@@ -147,7 +158,7 @@ export const SERVICES_GRID = {
   services: orderedServices(),
   externalTile: {
     href: "https://www.transline49.com",
-    photo: "/miller/services/vacuum-truck-new-logo.webp",
+    photo: "/miller/vacuum-truck-new-logo-2.webp",
     titleLines: ["Cross-Border", "Services"],
     summary: "Transboundary movement of waste from the United States to Canada to mitigate your US liabilities.",
   },
@@ -206,7 +217,7 @@ export const HISTORY = {
 
 export const CAREERS = {
   headingId: "mw-careers-bleed-heading",
-  bleedPhotoSrc: "/miller/careers/team-at-conv-booth-big-5.jpg",
+  bleedPhotoSrc: "/miller/team-at-conv-booth-big-5.jpg",
   eyebrow: "Careers",
   title: { lead: "Join the", em: "Miller team" },
   lead: HOME.joinFamily.intro,
@@ -221,7 +232,7 @@ export const AFFILIATES_BANNER = { ariaLabel: "Affiliates", label: ["Proud", "af
 export const FINAL_CTA = {
   headingId: "mw-final-heading",
   truckImgSrc: "/miller/truck-graphic-angled.png",
-  logoImgSrc: "/miller/logo/miller-logomark.webp",
+  logoImgSrc: "/miller/logo/miller-logomark-1.webp",
   eyebrow: HOME.finalCta.eyebrow,
   title: HOME.finalCta.title,
   body: HOME.finalCta.body,

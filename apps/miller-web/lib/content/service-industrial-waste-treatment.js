@@ -16,7 +16,7 @@ export const IWT = {
     titleEm: "every stream",
     lead:
       `Miller Environmental operates the licensed ${VBEC_FULL_NAME} (${VBEC_SHORT}) on a 160-acre footprint — with the capacity and capability to receive large volumes of industrial waste in every form, organic and inorganic, liquid and solid, at a single location.`,
-    photo: "/miller/services/industrial-waste-treatment-hero.webp",
+    photo: "/miller/industrial-waste-treatment-hero-1.webp",
     emergencyDisplay: EMERGENCY_PHONE,
     emergencyHref: EMERGENCY_TEL,
     secondaryCta: { label: "Contact Miller", labelShort: "Contact", href: "/contact-us/" },
@@ -29,7 +29,7 @@ export const IWT = {
     title: "Built to take it all in",
     lead:
       "Treating industrial organic and inorganic waste — both liquid and solid — at one location is a unique benefit in the overall management of incoming streams. Waste arrives in everything from pails to bulk trucks, profiled on intake to determine its recycling or reprocessing potential.",
-    photo: "/miller/facility/vbec-aerial.webp",
+    photo: "/miller/vbec-aerial-2.webp",
     caption: "Vaughn Bullough Environmental Centre",
     stats: [
       { value: "160", unit: "acres", label: "Licensed processing footprint" },
@@ -53,7 +53,7 @@ export const IWT = {
     groups: [
       {
         heading: "Specialty Soil, Sludges & Solids",
-        photo: "/miller/facility/cap-specialty-soil.webp",
+        photo: "/miller/about-health-safety-2.webp",
         body:
           "Miller formulates specific chemistries to treat unique contaminated soils, hazardous solids, and sludges — with exclusive capability to receive material 24/7 for emergency sequestration. Treatable solids include:",
         items: [
@@ -69,7 +69,7 @@ export const IWT = {
       },
       {
         heading: "Inorganic Waste Processing",
-        photo: "/miller/facility/cap-inorganic.webp",
+        photo: "/miller/20190801_130310-scaled.jpg",
         items: [
           "Stabilization of metals",
           "Wet or dry inorganic sludge solidification & disposal",
@@ -81,7 +81,7 @@ export const IWT = {
       },
       {
         heading: "Liquid Organic Waste Processing",
-        photo: "/miller/facility/cap-liquid-organic.webp",
+        photo: "/miller/about-quality-assurance-2.webp",
         items: [
           "Sludge / water separation",
           "Solvent / fuel blending (waste to energy)",
@@ -92,7 +92,7 @@ export const IWT = {
       },
       {
         heading: "Solid Organic Waste Processing",
-        photo: "/miller/facility/cap-solid-organic.webp",
+        photo: "/miller/cap-solid-organic-1.webp",
         items: [
           "Solidification and disposal of oily debris",
           "Dissolution of solid materials for incineration",
@@ -101,7 +101,7 @@ export const IWT = {
       },
       {
         heading: "Special Waste Processing",
-        photo: "/miller/facility/cap-special-waste.webp",
+        photo: "/miller/cap-special-waste-1.webp",
         items: [
           "Flammable solids",
           "Spent catalyst recycling and / or disposal",
@@ -112,7 +112,7 @@ export const IWT = {
       },
       {
         heading: "Miscellaneous Processing & Recycling",
-        photo: "/miller/facility/cap-misc-recycling.webp",
+        photo: "/miller/cap-misc-recycling-1.webp",
         items: [
           "Industrial plastic shredding, washing & recycling",
           "Lead-acid and alkaline battery recycling",
@@ -123,7 +123,7 @@ export const IWT = {
       },
       {
         heading: "Special Processing Projects",
-        photo: "/miller/facility/cap-special-projects.webp",
+        photo: "/miller/cap-special-projects-1.webp",
         body:
           `Development of specialized chemistries for unique waste streams through the SR&ED Canadian Federal Government initiative. ${VBEC_SHORT}'s on-site R&D group profiles incoming streams to find recycling or repurposing opportunities.`,
         items: [],

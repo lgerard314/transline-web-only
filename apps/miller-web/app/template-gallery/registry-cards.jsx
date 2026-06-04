@@ -25,7 +25,7 @@ export const CARDS = [
     controls: [{ key: "n", label: "n", options: [{ label: "01", value: { n: 1 } }, { label: "02", value: { n: 2 } }] }],
     render: (cfg) => (
       <div style={{ width: "min(640px, 100%)", height: 460 }}>
-        <FeatureAnchor01 n={cfg.n ?? 1} service={{ slug: "service-one", title: "Feature Service Alpha", summary: "Placeholder summary describing the headline feature service in one or two sentences.", photo: "/miller/services/industrial-waste-treatment-hero.webp" }} />
+        <FeatureAnchor01 n={cfg.n ?? 1} service={{ slug: "service-one", title: "Feature Service Alpha", summary: "Placeholder summary describing the headline feature service in one or two sentences.", photo: "/miller/industrial-waste-treatment-hero-1.webp" }} />
       </div>
     ),
   },
@@ -37,7 +37,7 @@ export const CARDS = [
     controls: [],
     render: () => (
       <div style={{ width: "min(440px, 100%)", height: 280 }}>
-        <FeatureCard01 n={2} service={{ slug: "service-two", title: "Feature Service Beta", summary: "Placeholder summary for a supporting feature card.", photo: "/miller/services/remediation-contaminated-soil.webp" }} />
+        <FeatureCard01 n={2} service={{ slug: "service-two", title: "Feature Service Beta", summary: "Placeholder summary for a supporting feature card.", photo: "/miller/remediation-contaminated-soil-2.webp" }} />
       </div>
     ),
   },
@@ -50,9 +50,9 @@ export const CARDS = [
     render: (cfg) => (
       <div style={{ width: "min(380px, 100%)", height: 280 }}>
         {cfg.external ? (
-          <FeatureTile01 external n={7} href="#" photo="/miller/services/vacuum-truck-hero.webp" titleLines={["Cross-Border", "Services"]} summary="Placeholder summary for the external tile that links offsite." />
+          <FeatureTile01 external n={7} href="#" photo="/miller/vacuum-truck-hero-2.jpg" titleLines={["Cross-Border", "Services"]} summary="Placeholder summary for the external tile that links offsite." />
         ) : (
-          <FeatureTile01 n={4} service={{ slug: "service-four", title: "Feature Tile Delta", summary: "Placeholder summary for a standard feature tile.", photo: "/miller/services/vacuum-truck-hero.webp" }} />
+          <FeatureTile01 n={4} service={{ slug: "service-four", title: "Feature Tile Delta", summary: "Placeholder summary for a standard feature tile.", photo: "/miller/vacuum-truck-hero-2.jpg" }} />
         )}
       </div>
     ),
@@ -81,7 +81,7 @@ export const CARDS = [
     controls: [],
     render: () => (
       <ul className="mw-svc-inds__grid" style={{ ...ulBare, width: 260 }}>
-        <IndGalleryCard01 item={{ name: "Sample Sector", blurb: "Placeholder one-line sector blurb.", photo: "/miller/who-we-serve-industries/mining.png" }} />
+        <IndGalleryCard01 item={{ name: "Sample Sector", blurb: "Placeholder one-line sector blurb.", photo: "/miller/mining.png" }} />
       </ul>
     ),
   },
@@ -93,7 +93,7 @@ export const CARDS = [
     controls: [],
     render: () => (
       <ul style={{ ...ulBare, width: 380 }}>
-        <WwdCard01 item={{ name: "Capability One", blurb: "Short rest-state blurb shown before hover.", detail: "Longer placeholder paragraph revealed on hover or focus, describing the capability in a couple of sentences.", photo: "/miller/what-we-do/contaminated-soil-remediation.png" }} />
+        <WwdCard01 item={{ name: "Capability One", blurb: "Short rest-state blurb shown before hover.", detail: "Longer placeholder paragraph revealed on hover or focus, describing the capability in a couple of sentences.", photo: "/miller/contaminated-soil-remediation.png" }} />
       </ul>
     ),
   },
@@ -105,7 +105,7 @@ export const CARDS = [
     controls: [],
     render: () => (
       <ul className="mw-svc-inds__grid" style={{ ...ulBare, width: 320 }}>
-        <CaseCard01 item={{ href: "#", title: "Sample Case Study One", location: "Sample Location, MB", photo: "/miller/case-studies/grain-elevator-arsenic.webp", desc: "Placeholder one-sentence summary of the case study outcome." }} />
+        <CaseCard01 item={{ href: "#", title: "Sample Case Study One", location: "Sample Location, MB", photo: "/miller/arsenic-contaiminated-soil-removal-1.png", desc: "Placeholder one-sentence summary of the case study outcome." }} />
       </ul>
     ),
   },
@@ -132,7 +132,7 @@ export const CARDS = [
     render: (cfg) => {
       const cert = cfg.kind === "cor"
         ? { slug: "cor", name: "MHCA COR 2023", year: "2023", long: "Placeholder Safety Recognition", sizeKB: 9, mark: "/miller/certs/mhca-cor-2023.webp", href: "#" }
-        : { slug: "iso", name: "ISO 9001:2015", year: "2015", long: "Placeholder Management System", sizeKB: 149, mark: "/miller/certs/iso-9001-2015.webp", href: "#" };
+        : { slug: "iso", name: "ISO 9001:2015", year: "2015", long: "Placeholder Management System", sizeKB: 149, mark: "/miller/certs/iso-9001-2015-1.webp", href: "#" };
       // .mw-certs is a hard 4-col grid; force a single column so the lone card
       // gets full width (otherwise it collapses to ~80px and only the mark shows).
       return (

@@ -7,7 +7,7 @@ export const careersWorkingAtMiller = {
     title: "Working At Miller",
     lead:
       "At Miller, we don't just talk about sustainability; we live it. We're looking for like-minded individuals who are passionate about making a difference, solving complex environmental challenges, and being part of a team that values respect, accountability, teamwork, and a healthy work culture.",
-    photo: "/miller/careers/working-at-miller-1.webp",
+    photo: "/miller/animated-graphics/working-at-miller-1-1.webp",
   },
   sections: [
     {

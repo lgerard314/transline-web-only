@@ -9,7 +9,7 @@ export const stewardship = {
     title: "Stewardship",
     lead:
       `Miller Environmental has relationships with a variety of different Stewardship Programs that oversee the ${CRADLE_TO_GRAVE_PHRASE} management of waste with a focus on recycling.`,
-    photo: "/miller/services/stewardship-hero.webp",
+    photo: "/miller/stewardship-hero-2.webp",
   },
   sections: [
     {

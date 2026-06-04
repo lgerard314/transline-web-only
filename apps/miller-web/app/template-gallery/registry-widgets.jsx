@@ -53,9 +53,9 @@ export const WIDGETS = [
     render: () => (
       <div style={{ width: "min(560px, 100%)" }}>
         <ThumbGallery01 photos={[
-          { src: "/miller/facility/vbec-drone-overview.png", alt: "Drone overview", caption: "Aerial drone overview" },
-          { src: "/miller/facility/vbec-office-front.png", alt: "Office front", caption: "Office front entrance" },
-          { src: "/miller/facility/vbec-stone-sign.png", alt: "Stone sign", caption: "Entrance stone sign" },
+          { src: "/miller/vbec-drone-overview.png", alt: "Drone overview", caption: "Aerial drone overview" },
+          { src: "/miller/vbec-office-front.png", alt: "Office front", caption: "Office front entrance" },
+          { src: "/miller/vbec-stone-sign.png", alt: "Stone sign", caption: "Entrance stone sign" },
         ]} />
       </div>
     ),

@@ -1397,7 +1397,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(to right, var(--c-navy-2) 0%, rgba(74,47,31,0.55) 12%, rgba(74,47,31,0) 35%);
+  background: linear-gradient(to right, var(--c-navy-2) 0%, rgba(46,25,16,0.55) 12%, rgba(46,25,16,0) 35%);
   pointer-events: none;
 }
 .mw-careers__bleed-photo img {

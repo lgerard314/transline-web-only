@@ -135,13 +135,40 @@ export const V2_HISTORY = {
 };
 
 // ── Σ · TO DATE — THE money shot (dark) ─────────────────────────────────────
+// The lifetime "reel": three highlight diamonds that auto-advance once the
+// section scrolls into view (D1 lands centred with the long lead below it → D1
+// parks left + D2 enters → D2 parks right + D3 enters; final L→R: D1, D3, D2).
+// Each diamond carries a short `label` shown beneath it and a longer `reveal`
+// paragraph surfaced on hover/tap over the numeral. D1's number/label/reveal are
+// the existing LIFETIME_SCALE copy; D2/D3 promote two of the existing support
+// stats, with concise reveal prose authored from the same facts.
 export const V2_SCALE = {
   field: "Σ — LIFETIME TO DATE",
   eyebrow: LIFETIME_SCALE.eyebrow,
   headingId: "v2-scale-heading",
-  figure: LIFETIME_SCALE.figure, // { value: 49, suffix: "M+", unit: "tons" }
-  body: LIFETIME_SCALE.body,
-  support: LIFETIME_SCALE.support, // [{ value, label } × 3]
+  highlights: [
+    {
+      value: LIFETIME_SCALE.figure.value,   // 49
+      suffix: LIFETIME_SCALE.figure.suffix, // "M+"
+      unit: LIFETIME_SCALE.figure.unit,     // "tons"
+      label: "of disposal",
+      reveal: LIFETIME_SCALE.body,          // the existing "Hazardous and regulated…" paragraph
+    },
+    {
+      value: 40,
+      suffix: "M+",
+      unit: "tons",
+      label: "recycled",
+      reveal: "Over 40 million tons recovered and returned to productive use — sorted and treated for reuse rather than landfilled.",
+    },
+    {
+      value: 100,
+      suffix: "%",
+      unit: "",
+      label: "chain of custody",
+      reveal: "Every load tracked end to end — from the generator’s dock to final disposition, under one unbroken, documented chain of custody.",
+    },
+  ],
 };
 
 // ── · THE CREW — the people ─────────────────────────────────────────────────

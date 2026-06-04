@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 
-const PHOTO_BASE = "/miller/who-we-serve-industries";
+const PHOTO_BASE = "/miller";
 
 export function HoverCard01({ title, items }) {
   const [active, setActive] = useState(0);

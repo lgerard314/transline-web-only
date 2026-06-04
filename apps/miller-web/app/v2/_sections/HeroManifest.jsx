@@ -58,7 +58,7 @@ export function HeroManifest({ content }) {
         <div className="mx-hero__sealwrap" data-mx-seal="closed" aria-hidden="true">
           <DiamondSeal legend={c.sealLegend}>
             <span className="mx-hero__sealmark">
-              <Image src="/miller/miller-logomark.webp" alt="" width={132} height={132} className="mx-hero__seallogo" />
+              <Image src="/miller/logo/miller-logomark-1.webp" alt="" width={132} height={132} className="mx-hero__seallogo" />
             </span>
           </DiamondSeal>
         </div>

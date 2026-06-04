@@ -10,7 +10,7 @@ export const ABOUT_INDEX = {
   title: "Hazardous Waste Management — done deliberately.",
   lead:
     `Miller Environmental is a Manitoba operator with three ISO certifications and ${OVER_25_YEARS.toLowerCase()} of operating history. Our facility — the ${VBEC_FULL_NAME} (${VBEC_SHORT}) — sits 70 km south of Winnipeg on 64 hectares.`,
-  photo: "/miller/services/customer-waste-collection-hero.webp",
+  photo: "/miller/customer-waste-collection-hero-2.webp",
 
   sections: [
     {

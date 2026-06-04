@@ -9,7 +9,7 @@ export const researchDevelopment = {
     title: "Research & Development",
     lead:
       "Research and Development is an integral part of Miller Environmental focusing on customizing specialized chemical treatments to process waste streams providing niche waste treatment options to our customers.",
-    photo: "/miller/services/research-development-hero.webp",
+    photo: "/miller/research-development-hero-2.webp",
   },
   inlineTrustBadge: ONLY_IN_CANADA_CLAIM,
   sections: [

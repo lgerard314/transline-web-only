@@ -48,7 +48,7 @@ export function DispatchCta01({ content, config = {} }) {
             <div className="mw-svc-cta__dispatch-row">
               <img
                 className="mw-svc-cta__dispatch-logo"
-                src="/miller/logo/miller-logomark.webp"
+                src="/miller/logo/miller-logomark-1.webp"
                 alt=""
                 aria-hidden="true"
               />

@@ -16,7 +16,7 @@ export const projectManagement = {
     titleId: "pm-hero-title",
     lead:
       "Miller Environmental operates a Projects Group led by a team of Civil, Chemical, and Processing Engineers with a wealth of knowledge and experience — managing every project type on time and on budget.",
-    photo: "/miller/services/project-management-hero.webp",
+    photo: "/miller/project-management-hero-2.webp",
     emergencyDisplay: EMERGENCY_PHONE,
     emergencyHref: EMERGENCY_TEL,
     secondaryCta: { label: "Contact Miller", labelShort: "Contact", href: "/contact-us/" },

@@ -10,7 +10,7 @@ export const CAREERS = {
   title: "Committed to Leadership in Our Industry",
   lead:
     "If you are looking for a career that will challenge you to grow and give your all, then contact us today and start your career at Miller.",
-  photo: "/miller/careers/working-at-miller-1.webp",
+  photo: "/miller/animated-graphics/working-at-miller-1-1.webp",
 
   whyTitle: "Core values that define us",
   whyLead:

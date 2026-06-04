@@ -7,7 +7,7 @@ export const aboutHealthSafety = {
     title: "Health & Safety",
     lead:
       "Safety is Miller's top priority and primary core value, demonstrated by our Total Recordable Incident Rating (TRIR). Our safety program aims to protect all stakeholders — employees, clients, and community members.",
-    photo: "/miller/hero/about-health-safety.webp",
+    photo: "/miller/about-health-safety-2.webp",
   },
   sections: [
     {

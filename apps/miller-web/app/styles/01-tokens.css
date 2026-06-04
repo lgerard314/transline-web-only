@@ -43,9 +43,19 @@ html[data-brand="miller"] {
   --c-grain-on-dark: rgba(245, 230, 203, 0.025);
 }
 
-/* The brand stylesheet hardcodes the topbar / mobile-nav / footer to `rgba(11,31,42,...)` cool navy. Override on Miller pages so the chrome reads as warm walnut alongside the home hero. */
-html[data-brand="miller"] .tl-topbar { background: rgba(59, 36, 24, 0.94); }
-html[data-brand="miller"] .tl-mobile-nav { background: rgba(59, 36, 24, 0.985); }
+/* Deepen Miller's dark surfaces to the espresso brown used on the /v2 lifetime
+   section (#2E1910). Both --c-navy (hero, footer, etc.) AND --c-navy-2 (the
+   Careers / scale "walnut anchor" bands) are repainted so every dark-brown
+   section matches v2. Scoped to Miller + clay with extra specificity so it beats
+   the shared clay palette WITHOUT changing transline49 (which also rides clay). */
+html[data-brand="miller"][data-palette="clay"] {
+  --c-navy: #2E1910;
+  --c-navy-2: #2E1910;
+}
+
+/* The brand stylesheet hardcodes the topbar / mobile-nav / footer to `rgba(11,31,42,...)` cool navy. Override on Miller pages so the chrome reads as warm walnut alongside the home hero. (Values track --c-navy = #2E1910 → rgb 46,25,16.) */
+html[data-brand="miller"] .tl-topbar { background: rgba(46, 25, 16, 0.94); }
+html[data-brand="miller"] .tl-mobile-nav { background: rgba(46, 25, 16, 0.985); }
 html[data-brand="miller"] .tl-footer { background: var(--c-navy); }
 html[data-brand="miller"] .tl-btn--primary { color: #fff; }
 html[data-brand="miller"] .tl-hero { background: var(--c-navy); }

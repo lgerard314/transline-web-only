@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const LOGO = "/miller/logo/miller-logomark.webp";
+const LOGO = "/miller/logo/miller-logomark-1.webp";
 const ANIM_MS = 500;
 
 // Cycles iOS-style notification banners for the emergency-response timeline.

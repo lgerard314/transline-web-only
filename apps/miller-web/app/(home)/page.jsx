@@ -3,14 +3,14 @@ import { MonumentHero01 } from "@/components-v2/06_sections/heroes/monument-hero
 import { TallStaticBanner01 } from "@/components-v2/06_sections/banners/tall-static-banner-01";
 import { StatementBand01 } from "@/components-v2/06_sections/statements/statement-band-01";
 import { BentoGrid01 } from "@/components-v2/06_sections/grids/bento-grid-01";
-import { ScaleBand01 } from "@/components-v2/06_sections/statements/scale-band-01";
+import { LifetimeReel01 } from "@/components-v2/06_sections/statements/lifetime-reel-01";
 import { HoverCardGrid01 } from "@/components-v2/06_sections/grids/hover-card-grid-01";
 import { MediaSplit01 } from "@/components-v2/06_sections/splits/media-split-01";
 import { TimelineSplit01 } from "@/components-v2/06_sections/splits/timeline-split-01";
 import { PhotoBleedCards01 } from "@/components-v2/06_sections/callouts/photo-bleed-cards-01";
 import { RotatingBanner01 } from "@/components-v2/06_sections/banners/rotating-banner-01";
 import { MultiColumnCta01 } from "@/components-v2/06_sections/callouts/multi-column-cta-01";
-import { HERO, CERTS_BANNER, CREED, SERVICES_GRID, LIFETIME_SCALE, SECTORS, FACILITY, HISTORY, CAREERS, AFFILIATES_BANNER, FINAL_CTA } from "@/lib/content/template-testing-home";
+import { HERO, CERTS_BANNER, CREED, SERVICES_GRID, LIFETIME_REEL, SECTORS, FACILITY, HISTORY, CAREERS, AFFILIATES_BANNER, FINAL_CTA } from "@/lib/content/template-testing-home";
 
 export const metadata = {
   title: "Miller Environmental — Hazardous Waste Management",
@@ -22,12 +22,12 @@ export default function HomePage() {
   return (
     <>
       {/* High-priority preload for the hero background — the LCP element on mobile. React 19 hoists <link> tags into <head>. */}
-      <link rel="preload" href="/miller/hero/home-frame-1.png" as="image" fetchPriority="high" />
+      <link rel="preload" href="/miller/home-frame-1.png" as="image" fetchPriority="high" />
       <MonumentHero01 content={HERO} />
       <TallStaticBanner01 content={CERTS_BANNER} />
       <StatementBand01 content={CREED} />
       <BentoGrid01 content={SERVICES_GRID} />
-      <ScaleBand01 content={LIFETIME_SCALE} />
+      <LifetimeReel01 content={LIFETIME_REEL} />
       <HoverCardGrid01 content={SECTORS} />
       <MediaSplit01 content={FACILITY} />
       <TimelineSplit01 content={HISTORY} />

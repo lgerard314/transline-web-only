@@ -7,7 +7,7 @@ export const careersBenefitsRewards = {
     title: "Benefits & Rewards",
     lead:
       "Joining Miller means joining a company that prioritizes the growth and development of all its employees.",
-    photo: "/miller/careers/benefits-rewards.webp",
+    photo: "/miller/animated-graphics/benefits-rewards-1.webp",
   },
   sections: [
     {

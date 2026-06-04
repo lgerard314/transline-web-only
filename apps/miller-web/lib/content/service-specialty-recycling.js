@@ -9,7 +9,7 @@ export const specialtyRecycling = {
     title: "Specialty Recycling",
     lead:
       "Miller Environmental is a strong supporter of recycling and continuously investigates options that can be offered to our customers.",
-    photo: "/miller/services/specialty-recycling-hero.webp",
+    photo: "/miller/specialty-recycling-hero-2.webp",
   },
   inlineTrustBadge: ONLY_IN_CANADA_CLAIM,
   sections: [
