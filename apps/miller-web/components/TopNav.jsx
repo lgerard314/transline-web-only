@@ -41,8 +41,8 @@ export function TopNav() {
         : window.innerHeight * 0.6;
       setScrollState(window.scrollY > threshold ? "past-hero" : "top");
 
-      // Logo swap: the hero "mark" line (logomark → corp name → since 1996)
-      // sits at the top of the home hero. While it is still below the fixed
+      // Logo swap: the hero mark (logomark + since 1996) sits at the
+      // lower-right of the home hero. While it is still below the fixed
       // bar the nav shows the maple leaf; once it has scrolled up behind the
       // bar, swap to the Miller logomark — reading as the hero logo rising
       // into the nav and replacing the leaf. Routes with no hero mark (every

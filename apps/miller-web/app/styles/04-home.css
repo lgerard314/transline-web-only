@@ -18,32 +18,58 @@
   isolation: isolate;
 }
 .mw-fac2__head {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(20px, 1.5vw, 24px);
+  display: block;
   margin-bottom: 0;
+}
+/* Field-head — the /v2 manifest grammar ported to the light scheme: a
+   mono `stage —— field` document line above the condensed title, led by
+   a small clay diamond, with the rule filling the gap so the field name
+   parks at the right edge of the content column. */
+.mw-fac2__field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 clamp(18px, 2vw, 30px);
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+}
+.mw-fac2__field::before {
+  content: "";
+  width: 8.1px;
+  height: 8.1px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex: none;
+}
+.mw-fac2__field-rule {
+  flex: 1;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.28;
 }
 .mw-fac2__title {
   margin: 0;
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
   font-weight: 600;
-  font-size: clamp(36px, 4vw, 72px);
-  line-height: 1;
-  letter-spacing: 0.005em;
-  color: var(--c-ink);
-  text-transform: uppercase;
-}
-.mw-fac2__title-em {
+  font-size: clamp(38px, 4.6vw, 80px);
+  line-height: 0.92;
+  letter-spacing: -0.005em;
   color: var(--c-accent);
+  text-transform: uppercase;
+  text-wrap: balance;
 }
 
 /* Split: content left, photo composition right */
 .mw-fac2__split {
   display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  grid-template-columns: minmax(0, 5.5fr) minmax(0, 6.5fr);
   gap: clamp(40px, 5vw, 96px);
-  align-items: center;
-  margin-bottom: clamp(64px, 6vw, 96px);
+  align-items: start;
+  margin-bottom: 0;
 }
 @media (max-width: 900px) {
   .mw-fac2__split { grid-template-columns: 1fr; gap: 40px; }
@@ -69,8 +95,9 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(20px, 2vw, 36px);
   margin: 0;
-  padding-top: clamp(14px, 1.4vw, 22px);
+  padding-block: clamp(16px, 1.8vw, 26px);
   border-top: 0.5px solid var(--c-line);
+  border-bottom: 0.5px solid var(--c-line);
 }
 .mw-fac2__fig {
   display: flex;
@@ -126,10 +153,10 @@
   flex-wrap: wrap;
 }
 .mw-fac2__about {
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
-  font-size: 12px;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.1vw, 18px);
   font-weight: 600;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--c-accent-2);
   text-decoration: none;
@@ -154,6 +181,69 @@
 .mw-fac2__about:hover::after,
 .mw-fac2__about:focus-visible::after { transform: scaleX(1); }
 .mw-fac2__lbl-short { display: none; }
+
+/* Right column — the photo gallery with the 3 highlights (spec band)
+   stacked beneath it. */
+.mw-fac2__media-col {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 2vw, 32px);
+}
+
+/* Capabilities list — a plain small header over a single-column list whose
+   numbers use the original section's treatment: large, faded condensed
+   numerals (NumToken01 style) rather than small editorial indices. */
+.mw-fac2__caplist-block {
+  position: relative;
+}
+.mw-fac2__caplist-title {
+  margin: 0 0 clamp(10px, 1vw, 14px);
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.4vw, 19px);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--c-ink);
+}
+.mw-fac2__caplist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.mw-fac2__cap {
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 1.4vw, 20px);
+  padding: clamp(7px, 0.7vw, 10px) 0;
+  border-top: 0.5px solid var(--c-line);
+  transition: color 0.24s ease;
+}
+.mw-fac2__cap:first-child { border-top: 0; }
+/* The numbers from the original section — large, faded condensed numerals. */
+.mw-fac2__cap-idx {
+  flex: none;
+  width: clamp(34px, 2.8vw, 46px);
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(28px, 2.6vw, 40px);
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+  color: var(--c-accent);
+  opacity: 0.22;
+  font-variant-numeric: tabular-nums;
+  transition: opacity 0.24s ease;
+}
+.mw-fac2__cap-name {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(14px, 1vw, 16px);
+  line-height: 1.3;
+  color: var(--c-ink-2);
+  transition: color 0.24s ease;
+}
+.mw-fac2__cap:hover .mw-fac2__cap-idx { opacity: 0.5; }
+.mw-fac2__cap:hover .mw-fac2__cap-name { color: var(--c-ink); }
 
 /* Photo gallery — main photo (3:2) on top with a caption overlaid
    at the bottom, then a framed thumbnail row below with a soft
@@ -194,9 +284,10 @@
   display: block;
   animation: mw-fac2-fade-in 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
+/* opacity-only so it never sets `transform` (which the photo parallax owns) */
 @keyframes mw-fac2-fade-in {
-  0% { opacity: 0; transform: scale(1.015); }
-  100% { opacity: 1; transform: scale(1); }
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
   .mw-fac2__photo-main { animation: none; }
@@ -538,23 +629,46 @@
   position: relative;
   transition: border-color 0.3s ease, transform 0.42s cubic-bezier(.2, .7, .2, 1), box-shadow 0.42s ease;
 }
-.mw-sec2__card::before {
+/* Hover border that draws from the top-left + bottom-right corners and meets
+   at the other two corners (matches the careers cards / lifetime-reel split). */
+.mw-sec2__card::before,
+.mw-sec2__card::after {
   content: "";
   position: absolute;
-  left: 0;
-  top: 0;
-  height: 3px;
+  box-sizing: border-box;
   width: 0;
-  background: var(--c-accent);
-  z-index: 2;
-  transition: width 0.32s cubic-bezier(0.2, 0.7, 0.2, 1);
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 3;
+  transition: width 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), height 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.18s ease;
+}
+.mw-sec2__card::before {
+  top: 0;
+  left: 0;
+  border-top: 2px solid var(--c-accent);
+  border-left: 2px solid var(--c-accent);
+}
+.mw-sec2__card::after {
+  right: 0;
+  bottom: 0;
+  border-right: 2px solid var(--c-accent);
+  border-bottom: 2px solid var(--c-accent);
 }
 .mw-sec2__card:hover {
-  border-color: var(--c-accent);
   transform: translateY(-3px);
   box-shadow: 0 22px 40px -28px rgba(42, 27, 18, 0.3);
 }
-.mw-sec2__card:hover::before { width: 100%; }
+.mw-sec2__card:hover::before,
+.mw-sec2__card:hover::after {
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-sec2__card::before,
+  .mw-sec2__card::after { transition: opacity 0.18s ease; }
+}
 
 .mw-sec2__card-photo {
   position: relative;
@@ -570,13 +684,12 @@
   object-fit: cover;
   display: block;
   opacity: 0;
-  transition: opacity 0.45s ease, transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition: opacity 0.45s ease;
 }
 .mw-sec2__card-photo-img[data-active] {
   opacity: 1;
   z-index: 1;
 }
-.mw-sec2__card:hover .mw-sec2__card-photo-img[data-active] { transform: scale(1.04); }
 @media (prefers-reduced-motion: reduce) {
   .mw-sec2__card-photo-img { transition: none; }
 }
@@ -678,10 +791,10 @@
 .mw-ten2__mission-link {
   align-self: flex-start;
   margin-top: clamp(4px, 0.4vw, 8px);
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
-  font-size: 13px;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.1vw, 18px);
   font-weight: 600;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--c-accent);
   text-decoration: none;
@@ -729,17 +842,16 @@
 }
 .mw-ten3__grid {
   display: grid;
+  /* aside (plate + mission) on the LEFT, the milestone record on the RIGHT —
+     left column ~matches the 64ch header so the right (pulled-up) timeline clears it */
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: clamp(40px, 5vw, 96px);
-  align-items: stretch;
+  gap: clamp(32px, 4vw, 72px);
+  align-items: start;
 }
-.mw-ten3__grid > .mw-ten3__body { order: 1; }
-.mw-ten3__grid > .mw-ten3__timeline { order: 2; }
+.mw-ten3__aside { order: 1; }
+.mw-ten3__line { order: 2; }
 @media (max-width: 900px) {
-  /* Stacked: main body first, milestone timeline after it. */
-  .mw-ten3__grid { grid-template-columns: 1fr; gap: 40px; align-items: start; }
-  .mw-ten3__grid > .mw-ten3__body { order: 0; }
-  .mw-ten3__grid > .mw-ten3__timeline { order: 1; }
+  .mw-ten3__grid { grid-template-columns: 1fr; gap: clamp(28px, 5vw, 44px); }
 }
 
 /* Timeline column. Stretches to match the right column's height. The
@@ -1007,25 +1119,47 @@
   border-left: 2px solid var(--c-accent);
 }
 
-.mw-ten3__body {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(32px, 3vw, 48px);
-}
+/* Full-width header — the /v2 "record" grammar ported to light: a mono
+   field-head document line above the condensed title + lead, sitting full
+   width above the milestone/aside grid. */
 .mw-ten3__head {
   display: flex;
   flex-direction: column;
   gap: clamp(20px, 1.5vw, 24px);
+  max-width: 64ch;
+  margin-bottom: clamp(36px, 4vw, 64px);
 }
+.mw-ten3__field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+}
+.mw-ten3__field::before {
+  content: "";
+  width: 8.1px;
+  height: 8.1px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex: none;
+}
+.mw-ten3__field-rule { flex: 1; height: 1px; background: currentColor; opacity: 0.28; }
 .mw-ten3__title {
   margin: 0;
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
   font-weight: 600;
-  font-size: clamp(36px, 4vw, 72px);
-  line-height: 1;
-  letter-spacing: 0.005em;
+  font-size: clamp(34px, 4.6vw, 68px);
+  line-height: 0.95;
+  letter-spacing: -0.005em;
   color: var(--c-ink);
   text-transform: uppercase;
+  text-wrap: balance;
 }
 .mw-ten3__title-em { color: var(--c-accent); }
 .mw-ten3__lead {
@@ -1034,6 +1168,44 @@
   font-size: clamp(16px, 1.2vw, 20px);
   line-height: 1.6;
   color: var(--c-ink-2);
+}
+
+/* Static milestone record — plain ticks down a hairline spine; every entry
+   shows year + title + body (the /v2 evidentiary list). The interactive
+   zigzag timeline styles below are retained for the standalone
+   VerticalTimeline01 widget in the template gallery. */
+/* The timeline is pulled UP so its top aligns with the vertical middle of the
+   header's lead (= head margin-bottom + half the lead height). Reset where it stacks. */
+.mw-ten3__line { list-style: none; margin: calc(-1 * (clamp(36px, 4vw, 64px) + clamp(51px, 3.84vw, 64px))) 0 0; padding: 0 0 0 30px; position: relative; }
+.mw-ten3__line::before { content: ""; position: absolute; left: 5px; top: 6px; bottom: 8px; width: 1px; background: var(--c-line); }
+.mw-ten3__item { position: relative; padding: 0 0 clamp(20px, 2.2vw, 32px); }
+.mw-ten3__item:last-child { padding-bottom: 0; }
+.mw-ten3__tick { position: absolute; left: -25px; top: 0.58em; width: 14px; height: 1px; background: var(--c-accent); }
+.mw-ten3__year { display: block; font-family: var(--font-plex-mono), ui-monospace, monospace; font-size: 13px; letter-spacing: 0.1em; color: var(--c-accent); margin-bottom: 4px; }
+.mw-ten3__ititle { display: block; font-family: var(--font-condensed), ui-sans-serif, sans-serif; font-weight: 600; text-transform: uppercase; font-size: clamp(18px, 1.6vw, 24px); line-height: 1.05; letter-spacing: 0.005em; color: var(--c-ink); }
+.mw-ten3__ibody { display: block; font-family: var(--font-plex-sans), ui-sans-serif, sans-serif; font-size: clamp(14px, 1vw, 15.5px); line-height: 1.5; color: var(--c-ink-2); margin-top: 6px; max-width: 58ch; }
+
+/* Sticky aside — truck plate + mission ride along while the record scrolls.
+   Pulled up so the TOP of the mission photo aligns with the vertical MIDDLE
+   of the head's lead paragraph. The shift = head margin-bottom (clamp 36–64)
+   + half the lead height. The lead is capped at 64ch so it holds ~4 lines
+   across the desktop range; half of it is 2 lines ≈ clamp(51px,3.84vw,64px).
+   Applies only in the two-column regime; reset where the aside stacks. */
+.mw-ten3__aside { position: sticky; top: clamp(80px, 11vh, 120px); display: flex; flex-direction: column; margin-top: 0; }
+.mw-ten3__plate2 { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: var(--c-navy); }
+/* The mission plate gets a stronger zoom + a near-top-right origin so its
+   diagonal drift (data-parallax-x="1" → 45° toward the bottom-right) reads as the
+   trucks driving out of the frame while the aside is pinned. */
+.mw-ten3__plate2-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; --px-scale: 1.3; transform-origin: 80% 20%; }
+.mw-ten3__plate2-stats { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; padding: clamp(14px, 1.4vw, 22px); list-style: none; display: flex; gap: clamp(12px, 1.6vw, 30px); background: linear-gradient(to top, rgba(28, 17, 11, 0.9), rgba(28, 17, 11, 0.2) 70%, transparent); }
+.mw-ten3__plate2-stat { display: flex; flex-direction: column; }
+.mw-ten3__plate2-num { font-family: var(--font-condensed), ui-sans-serif, sans-serif; font-weight: 600; font-size: clamp(26px, 2.6vw, 40px); color: #fff; line-height: 1; }
+.mw-ten3__plate2-unit { font-size: 0.5em; color: var(--c-accent); margin-left: 2px; }
+.mw-ten3__plate2-label { font-family: var(--font-plex-mono), ui-monospace, monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(245, 230, 203, 0.82); margin-top: 5px; }
+.mw-ten3__aside .mw-ten2__mission { margin-top: clamp(24px, 2.6vw, 36px); }
+@media (max-width: 900px) {
+  .mw-ten3__aside { position: static; order: -1; margin-top: 0; margin-bottom: clamp(8px, 2vw, 20px); }
+  .mw-ten3__line { margin-top: 0; }
 }
 
 /* Truck plate — flipped truck side-view with three track-record
@@ -1245,7 +1417,31 @@
 }
 .mw-careers__title-em {
   color: var(--c-accent);
+  display: block;
 }
+/* Field-head — /v2 manifest grammar, dark-adapted: a mono `stage —— field`
+   document line led by a clay diamond, muted cream text on the dark surface. */
+.mw-careers__field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(245, 230, 203, 0.72);
+}
+.mw-careers__field::before {
+  content: "";
+  width: 8.1px;
+  height: 8.1px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex: none;
+}
+.mw-careers__field-rule { flex: 1; height: 1px; background: currentColor; opacity: 0.3; }
 .mw-careers__lead {
   margin: 0;
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
@@ -1272,28 +1468,53 @@
   border: 1px solid rgba(245, 230, 203, 0.12);
   transition: background 0.3s ease, border-color 0.3s ease, transform 0.42s cubic-bezier(.2, .7, .2, 1);
 }
-/* Terracotta top-border accent — short by default, grows to the card's
-   full width on hover. Sits on top of the 1px subtle border so it reads
-   as the top edge of the card. */
-.mw-careers__card::before {
+/* Hover border that DRAWS from two opposite corners — top-left and
+   bottom-right — each tracing its two edges outward and meeting at the
+   other two corners (top-right + bottom-left). The rectangular echo of the
+   lifetime-reel "split" diamond seal, which forms from its two opposite
+   vertices at once. ::before owns the top + left edges (grown from the
+   top-left corner); ::after owns the bottom + right (grown from bottom-right). */
+.mw-careers__card::before,
+.mw-careers__card::after {
   content: "";
   position: absolute;
-  top: -1px;
-  left: -1px;
-  height: 3px;
-  width: clamp(40px, 3.5vw, 56px);
-  background: var(--c-accent);
-  transition: width 0.32s cubic-bezier(0.2, 0.7, 0.2, 1);
+  box-sizing: border-box;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+  transition: width 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), height 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.18s ease;
+}
+.mw-careers__card::before {
+  top: 0;
+  left: 0;
+  border-top: 2px solid var(--c-accent);
+  border-left: 2px solid var(--c-accent);
+}
+.mw-careers__card::after {
+  right: 0;
+  bottom: 0;
+  border-right: 2px solid var(--c-accent);
+  border-bottom: 2px solid var(--c-accent);
 }
 .mw-careers__card:hover {
   background: rgba(245, 230, 203, 0.06);
-  border-color: rgba(168, 90, 44, 0.45);
   transform: translateY(-2px);
 }
-.mw-careers__card:hover::before { width: calc(100% + 2px); }
+.mw-careers__card:hover::before,
+.mw-careers__card:hover::after {
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-careers__card::before,
+  .mw-careers__card::after { transition: none; }
+}
 .mw-careers__card-tag {
   font-family: var(--font-plex-mono), ui-monospace, monospace;
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.28em;
   text-transform: uppercase;
@@ -1303,7 +1524,7 @@
   margin: 0;
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
   font-weight: 600;
-  font-size: clamp(22px, 2vw, 32px);
+  font-size: clamp(18px, 1.6vw, 24px);
   line-height: 1.05;
   letter-spacing: 0.005em;
   color: #ffffff;
@@ -1312,16 +1533,18 @@
 .mw-careers__card-text {
   margin: 0;
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
-  font-size: clamp(15px, 1.1vw, 17px);
+  font-size: clamp(14px, 1vw, 15.5px);
   line-height: 1.6;
   color: rgba(250, 243, 229, 0.89);
   flex: 1;
 }
+/* Text-link font matched to the VBEC text-link (.mw-fac2__about): condensed,
+   uppercase, 0.04em — colour kept per the dark surface. */
 .mw-careers__card-link {
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
-  font-size: 13px;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.1vw, 18px);
   font-weight: 600;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--c-on-navy);
   text-decoration: none;
@@ -1348,56 +1571,49 @@
   flex-direction: column;
   gap: clamp(40px, 4vw, 72px);
 }
+/* 55/45 split: content owns the left ~55%, the photo the right 45%, with a
+   solid vertical divider on the seam. The cards do not overlap the photo. */
 .mw-careers--bleed .mw-careers__head {
   margin-bottom: 0;
-  max-width: 50%;
 }
-@media (max-width: 900px) {
-  .mw-careers--bleed .mw-careers__head { max-width: 100%; }
+.mw-careers--bleed .mw-careers__head,
+.mw-careers--bleed .mw-careers__cards {
+  max-width: 52%;
+  padding-right: clamp(24px, 3vw, 56px);
 }
-.mw-careers--bleed .mw-careers__head-text,
-.mw-careers--bleed .mw-careers__cards { max-width: none; }
-/* Cards row spans full width and overflows into the right-side photo
-   area. Two cards side by side, the right one sits on top of the photo. */
 .mw-careers--bleed .mw-careers__cards {
   grid-template-columns: 1fr 1fr;
-  gap: clamp(16px, 1.6vw, 28px);
-  width: 100%;
-  justify-self: stretch;
+  gap: clamp(16px, 1.6vw, 24px);
+}
+@media (max-width: 900px) {
+  .mw-careers--bleed .mw-careers__head,
+  .mw-careers--bleed .mw-careers__cards { max-width: 100%; padding-right: 0; }
+  .mw-careers--bleed > .mw-inner { gap: 24px; }
 }
 @media (max-width: 800px) {
   .mw-careers--bleed .mw-careers__cards { grid-template-columns: 1fr; }
-}
-/* Cards on photo — translucent dark backdrop + blur so the photo
-   reads through but the text stays legible. */
-.mw-careers--bleed .mw-careers__card {
-  background: rgba(42, 27, 18, 0.92);
-  border-color: rgba(245, 230, 203, 0.18);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-.mw-careers--bleed .mw-careers__card:hover {
-  background: rgba(42, 27, 18, 0.82);
-  border-color: rgba(168, 90, 44, 0.55);
-}
-@media (max-width: 900px) {
-  .mw-careers--bleed > .mw-inner { grid-template-columns: 1fr; gap: 24px; }
 }
 
 .mw-careers__bleed-photo {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 50%;
+  left: 55%;
   right: 0;
   z-index: 0;
   overflow: hidden;
 }
-.mw-careers__bleed-photo::after {
+/* Vertical divider on the content/photo seam — a solid amber rule running the
+   full height of the section. */
+.mw-careers__bleed-photo::before {
   content: "";
   position: absolute;
-  inset: 0;
-  background: linear-gradient(to right, var(--c-navy-2) 0%, rgba(46,25,16,0.55) 12%, rgba(46,25,16,0) 35%);
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  z-index: 2;
+  background: var(--c-amber);
   pointer-events: none;
 }
 .mw-careers__bleed-photo img {
@@ -1418,7 +1634,7 @@
     margin-top: 0;
     margin-bottom: clamp(40px, 9vw, 60px);
   }
-  .mw-careers__bleed-photo::after { display: none; }
+  .mw-careers__bleed-photo::before { display: none; }
 }
 
 /* ─────────────────────────────────────────────────────────────────
@@ -1446,10 +1662,10 @@
           mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
 }
 .mw-marquee .tl-marquee__track {
-  /* Reverse the shared left-scrolling animation so the affiliates
-     scroll the opposite direction. Seamless because the track is a
-     doubled item list. */
-  animation-direction: reverse;
+  /* Use the shared left-scrolling direction (no reverse) so the
+     affiliates scroll the opposite way to before. Seamless because the
+     track is a doubled item list. */
+  animation-direction: normal;
   gap: clamp(48px, 5vw, 88px);
   padding: clamp(24px, 2.4vw, 38px) 0;
   font-family: var(--font-plex-mono), ui-monospace, monospace;
@@ -1463,24 +1679,10 @@
   display: inline-flex;
   align-items: center;
 }
-/* Replace the middle-dot character with a small terracotta diamond. */
+/* No separators between logos — the track gap alone spaces them.
+   The shared brand <Marquee> still emits .dot spans; hide them. */
 .mw-marquee .tl-marquee__track .dot {
-  display: inline-flex;
-  align-items: center;
-  font-size: 0;
-  line-height: 0;
-  color: transparent;
-  width: 9px;
-  height: 9px;
-}
-.mw-marquee .tl-marquee__track .dot::before {
-  content: "";
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  background: var(--c-accent);
-  transform: rotate(45deg);
-  flex-shrink: 0;
+  display: none;
 }
 /* Locked "Proud affiliates." label inline with the scrolling logos. The
    label stays put (outside the marquee's overflow box); the logo track
@@ -1492,17 +1694,33 @@
   padding-left: clamp(24px, 5vw, 96px);
 }
 .mw-marquee__row .tl-marquee { flex: 1 1 auto; min-width: 0; }
+/* Eyebrow label — mono tag with the rotated-diamond section mark, in
+   place of the former condensed header. Reads as a small "affiliates"
+   eyebrow beside the scrolling logos. */
 .mw-marquee__label {
   margin: 0;
   flex-shrink: 0;
-  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
-  font-weight: 600;
-  font-size: clamp(22px, 2.2vw, 32px);
-  line-height: 1.02;
-  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-weight: 500;
+  font-size: clamp(12px, 1vw, 14px);
+  line-height: 1;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--c-ink);
+  color: var(--c-accent);
 }
+.mw-marquee__label::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+}
+/* The eyebrow has no square-colon terminator. */
+.mw-marquee__label .mw-stop-colon { display: none; }
 /* Square-shaped ":" — two stacked terracotta squares, replacing the single square period. */
 .mw-stop-colon {
   display: inline-flex;
@@ -1758,6 +1976,40 @@
   background: linear-gradient(to bottom, transparent 0, rgba(168,90,44,0.85) 16%, rgba(168,90,44,0.85) 84%, transparent 100%);
   z-index: 1;
 }
+/* ── Page-load hero reveal (config.revealOnLoad) ──────────────
+   On load the photo opens from a centered clip-path window to full-bleed while a
+   zoom layer scales 1.6→1 — a one-shot CSS entrance (no scroll, no JS). The hero
+   stays a normal full-viewport section. ── */
+.mw-hero--reveal .mw-hero__photo-wrap {
+  top: 0;
+  height: 100%;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  animation: mw-hero-clip 1.8s cubic-bezier(0.65, 0, 0.35, 1) both;
+  will-change: clip-path;
+}
+.mw-hero--reveal .mw-hero__photo-zoom {
+  position: absolute;
+  inset: 0;
+  transform-origin: center;
+  animation: mw-hero-open 1.8s cubic-bezier(0.65, 0, 0.35, 1) both;
+  will-change: transform;
+}
+/* The photo's own load-zoom is redundant here — the zoom layer owns the entrance;
+   keep the resting 1.06 scale it would have settled to. */
+.mw-hero--reveal .mw-hero__photo { animation: none; transform: scale(1.06); }
+@keyframes mw-hero-clip {
+  from { clip-path: polygon(25% 25%, 75% 25%, 75% 75%, 25% 75%); }
+  to   { clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%); }
+}
+@keyframes mw-hero-open {
+  from { transform: scale(1.6); }
+  to   { transform: scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-hero--reveal .mw-hero__photo-wrap { animation: none; clip-path: none; }
+  .mw-hero--reveal .mw-hero__photo-zoom { animation: none; transform: none; }
+}
+
 .mw-hero__inner {
   position: relative;
   z-index: 2;
@@ -1766,70 +2018,74 @@
   margin-inline: auto;
   padding-block: clamp(40px, 4vw, 72px);
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 0.7fr);
+  grid-template-columns: 1fr;
   gap: clamp(28px, 3.5vw, 56px);
   align-content: space-between;
   align-items: end;
 }
-.mw-hero__mark {
+/* Intro + mark share one row so the logomark can stretch from the
+   lead top to the CTA bottom; article sits on the row beneath. */
+.mw-hero__body {
   grid-column: 1 / -1;
-  display: inline-flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.7fr);
+  column-gap: clamp(28px, 3.5vw, 56px);
+  row-gap: clamp(16px, 1.6vw, 22px);
+  align-self: end;
+  align-items: stretch;
+}
+.mw-hero__intro {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(20px, 2.2vw, 28px);
+}
+.mw-hero__mark {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 16px;
+  justify-content: flex-start;
+  justify-self: end;
+  width: min(100%, clamp(120px, 14vw, 200px));
   margin: 0;
+  padding-top: 0;
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
   text-transform: uppercase;
-  align-self: start;
 }
-/* Nudge the diamond + SINCE 1996 down slightly so their optical
-   centers match the visual mid of the larger condensed corp text
-   (whose glyph descenders push its visual center fractionally
-   below its line-box center). */
-.mw-hero__mark-since { transform: translateY(4px); }
-/* Logomark to the left of the corp name — 2.5x the corp text height. */
-.mw-hero__mark-logo {
-  height: calc(clamp(24px, 1.8vw, 29px) * 2.5);
-  width: auto;
-  flex-shrink: 0;
-}
-.mw-hero__mark-corp {
-  font-family: var(--font-condensed), ui-sans-serif, system-ui, sans-serif;
-  font-size: clamp(24px, 1.8vw, 29px);
-  font-weight: 400;
-  letter-spacing: 0;
-  color: var(--c-on-navy);
-  text-transform: none;
-  line-height: 1;
-  display: inline-flex;
+.mw-hero__mark-brand {
+  flex: 1 1 auto;
+  display: flex;
   align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 0;
+}
+.mw-hero__mark-logo {
+  display: block;
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
 }
 .mw-hero__mark-since {
-  font-family: var(--font-plex-sans), sans-serif;
-  font-size: clamp(11px, 0.8vw, 13px);
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  color: #fff;
-  line-height: 1;
-  display: inline-flex;
-  align-items: center;
-}
-.mw-hero__mark-dot {
-  width: 9px;
-  height: 9px;
-  background: var(--c-accent);
   flex-shrink: 0;
-  border-radius: 0;
-  /* Diamond stamp — matches the section eyebrow marks. */
-  transform: translateY(4px) rotate(45deg);
+  margin-top: clamp(8px, 0.9vw, 12px);
+  font-family: var(--font-plex-sans), sans-serif;
+  font-size: clamp(8px, 0.5vw, 9.5px);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  color: rgba(255, 255, 255, 0.88);
+  line-height: 1;
+  text-align: center;
 }
-/* Groups the diamond + "since 1996" so they can wrap together (desktop:
-   identical inline row; mobile: a second line under the corp name). */
-.mw-hero__mark-meta {
-  display: inline-flex;
-  align-items: center;
-  gap: 16px;
+.mw-hero__article {
+  grid-column: 1;
+  grid-row: 2;
 }
-.mw-hero__mark-corp-short { display: none; }
 .mw-hero__title {
   grid-column: 1 / -1;
   font-family: var(--font-condensed), ui-sans-serif, system-ui, sans-serif;
@@ -1850,9 +2106,10 @@
 .mw-hero__title .mw-hero__line:nth-child(1) .mw-hero__line-in { animation-delay: 0.45s; }
 .mw-hero__title .mw-hero__line:nth-child(2) .mw-hero__line-in { animation-delay: 0.57s; }
 .mw-hero__title .mw-hero__line:nth-child(3) .mw-hero__line-in { animation-delay: 0.69s; }
-.mw-hero__mark { animation: mw-hero-fade 0.8s ease 0.2s both; }
 .mw-hero__lead { animation: mw-hero-fade 0.8s ease 0.95s both; }
-.mw-hero__foot { animation: mw-hero-fade 0.8s ease 1.08s both; }
+.mw-hero__intro .mw-hero__ctas,
+.mw-hero__article { animation: mw-hero-fade 0.8s ease 1.08s both; }
+.mw-hero__mark { animation: mw-hero-fade 0.8s ease 1.08s both; }
 @keyframes mw-hero-rise { from { transform: translateY(116%); } to { transform: translateY(0); } }
 @keyframes mw-hero-fade { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) {
@@ -1860,7 +2117,8 @@
   .mw-hero__line-in,
   .mw-hero__mark,
   .mw-hero__lead,
-  .mw-hero__foot { animation: none; }
+  .mw-hero__intro .mw-hero__ctas,
+  .mw-hero__article { animation: none; }
   .mw-hero__line-in { transform: none; }
 }
 /* Terracotta square stamp — same brand mark as the eyebrow dot. Sits on the baseline next to "disposal" as a period replacement. */
@@ -1923,7 +2181,6 @@
   }
 }
 .mw-hero__lead {
-  grid-column: 1;
   font-family: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(17px, 1.3vw, 21px);
   line-height: 1.55;
@@ -1931,18 +2188,11 @@
   color: rgba(245, 230, 203, 0.84);
   margin: 0;
 }
-.mw-hero__foot {
-  grid-column: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 16px;
-}
 .mw-hero__ctas {
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
-  justify-content: flex-end;
+  justify-content: flex-start;
   align-items: center;
 }
 .mw-cta {
@@ -2027,43 +2277,37 @@
 @media (max-width: 960px) {
   .mw-hero { min-height: 0; }
   .mw-hero__inner {
-    grid-template-columns: 1fr;
     padding-block: clamp(72px, 12vw, 112px);
     gap: 32px;
   }
+  .mw-hero__body {
+    grid-template-columns: 1fr;
+    row-gap: 24px;
+  }
+  .mw-hero__intro,
+  .mw-hero__mark,
+  .mw-hero__article { grid-column: 1; }
+  .mw-hero__intro { grid-row: 1; }
+  .mw-hero__mark {
+    grid-row: 2;
+    justify-self: end;
+    width: min(100%, 168px);
+    min-height: clamp(120px, 28vw, 168px);
+  }
+  .mw-hero__article { grid-row: 3; }
   .mw-hero__title { font-size: clamp(56px, 13vw, 96px); line-height: 0.8; }
-  .mw-hero__lead { grid-column: 1; }
-  .mw-hero__foot { grid-column: 1; align-items: flex-start; }
-  .mw-hero__ctas { justify-content: flex-start; }
 }
 @media (max-width: 600px) {
   .mw-hero__inner { padding-block: 80px 56px; }
-  /* Wordmark stacks: logo at left (spanning two rows), corp name on top,
-     diamond + "since 1996" beneath it. "Corporation" → "Corp.". */
   .mw-hero__mark {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    grid-template-areas: "logo corp" "logo meta";
-    column-gap: 13px;
-    row-gap: 5px;
-    align-items: center;
-    justify-items: start;
+    justify-self: end;
+    width: min(100%, 140px);
+    min-height: clamp(108px, 32vw, 148px);
   }
-  .mw-hero__mark-logo { grid-area: logo; }
-  .mw-hero__mark-corp { grid-area: corp; display: block; align-self: end; }
-  .mw-hero__mark-meta { grid-area: meta; align-self: start; }
-  .mw-hero__mark-corp-long { display: none; }
-  .mw-hero__mark-corp-short { display: inline; }
-  .mw-hero__mark-dot { transform: rotate(45deg); }
-  .mw-hero__mark-since { transform: none; }
   .mw-hero__title { font-size: clamp(48px, 14vw, 72px); }
   .mw-hero__lead { font-size: 16px; }
   .mw-hero::after { left: 12px; }
-  /* Full-width, equal-weight CTAs: larger tap targets and a more
-     deliberate composition than auto-width buttons on a phone. The
-     24/7 emergency call is a primary action for this business, so it
-     gets equal visual weight to "Talk to Miller". */
-  .mw-hero__foot { width: 100%; gap: 12px; }
+  .mw-hero__intro { width: 100%; gap: 12px; }
   .mw-hero__ctas { width: 100%; flex-direction: column; align-items: stretch; gap: 12px; }
   .mw-hero__ctas .mw-cta { width: 100%; justify-content: center; }
   .mw-hero__ctas .mw-cta--ghost { align-items: center; text-align: center; border-color: rgba(245,230,203,0.34); }
@@ -2219,6 +2463,28 @@
   .mw-cert__num { font-size: clamp(34px, 11vw, 46px); }
   .mw-cert__desc { font-size: 12px; max-width: none; margin-top: 4px; }
   .mw-cert__pdf { margin-top: 8px; }
+}
+
+/* tall-static-banner-01 — full-width cert link (hover); inner block centered + equal width */
+.mw-trust--tsb01 .mw-cert {
+  justify-content: center;
+}
+.mw-trust--tsb01 .mw-certs__inner {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: clamp(12px, 1.4vw, 22px);
+  width: max-content;
+  max-width: 100%;
+}
+.mw-trust--tsb01 .mw-cert__desc {
+  max-width: none;
+}
+@media (max-width: 600px) {
+  .mw-trust--tsb01 .mw-certs__inner {
+    flex-direction: column;
+    gap: 6px;
+  }
 }
 
 /* ─────────────────────────────────────────────────────────────────
@@ -2792,6 +3058,592 @@
   }
 }
 
+/* ── Bento grid 02 — section head above a uniform 3×4 card grid; cell 12
+   is intro copy + Learn more CTA (border only, no fill). ── */
+.mw-services--02 .mw-services__head--02 {
+  display: block;
+  margin-bottom: clamp(29px, 3vw, 58px);
+}
+.mw-services--02 .mw-services__head--02 .mw-section-title {
+  margin-top: 28px;
+  max-width: none;
+  /* Scale down on narrow viewports so both nowrap lines still fit. */
+  font-size: clamp(20px, 4.2vw, 72px);
+  line-height: 0.94;
+}
+.mw-services--02 .mw-services__title-line {
+  display: block;
+  white-space: nowrap;
+}
+.mw-services--02 .mw-svcs-grid--02 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(4, minmax(220px, 1fr));
+  grid-template-areas: none;
+}
+/* bento-grid-01 assigns named areas per li; clear those on the 02 grid. */
+.mw-services--02 .mw-svcs-grid--02 > li {
+  grid-area: auto;
+}
+/* Uniform photo cards — bento-grid-02 only (bento-grid-card-02.jsx). */
+.mw-services--02 .mw-svcs-grid02-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+  padding: clamp(24px, 2.4vw, 40px);
+  outline: 1px solid rgba(245, 230, 203, 0.14);
+  overflow: hidden;
+  isolation: isolate;
+  transition: outline-color 240ms ease, transform 360ms cubic-bezier(.2, .7, .2, 1);
+}
+.mw-services--02 .mw-svcs-grid02-card__photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+  filter: saturate(0.95) brightness(0.96) contrast(1.02) sepia(0.04);
+  transition: filter 320ms ease;
+}
+.mw-services--02 .mw-svcs-grid--02 > li .mw-svcs-grid02-card:hover .mw-svcs-grid02-card__photo {
+  filter: saturate(1.05) brightness(1.1) contrast(1) sepia(0.02);
+}
+.mw-services--02 .mw-svcs-grid02-card__photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(42, 27, 18, 0.3) 0%, rgba(42, 27, 18, 0.08) 100%);
+  opacity: 1;
+  transition: opacity 320ms ease;
+}
+.mw-services--02 .mw-svcs-grid--02 > li .mw-svcs-grid02-card:hover .mw-svcs-grid02-card__photo::after {
+  opacity: 0.2;
+}
+.mw-services--02 .mw-svcs-grid02-card__body::before {
+  content: "";
+  position: absolute;
+  left: -200px;
+  right: -200px;
+  bottom: -200px;
+  top: -80px;
+  background: linear-gradient(
+    to top,
+    rgba(6, 3, 1, 0.96) 0%,
+    rgba(6, 3, 1, 0.94) 35%,
+    rgba(6, 3, 1, 0.72) 60%,
+    rgba(6, 3, 1, 0.28) 85%,
+    rgba(6, 3, 1, 0) 100%
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+.mw-services--02 .mw-svcs-grid02-card__body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  gap: 10px;
+}
+.mw-services--02 .mw-svcs-grid02-card__foot {
+  position: relative;
+  width: 100%;
+}
+/* Hover border that draws from the top-left + bottom-right corners and meets
+   at the other two corners (matches the careers cards / lifetime-reel split). */
+.mw-services--02 .mw-svcs-grid02-card::before,
+.mw-services--02 .mw-svcs-grid02-card::after {
+  content: "";
+  position: absolute;
+  box-sizing: border-box;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+  transition: width 0.5s cubic-bezier(.2, .7, .2, 1), height 0.5s cubic-bezier(.2, .7, .2, 1), opacity 0.18s ease;
+}
+.mw-services--02 .mw-svcs-grid02-card::before {
+  top: 0;
+  left: 0;
+  border-top: 2px solid var(--c-accent);
+  border-left: 2px solid var(--c-accent);
+}
+.mw-services--02 .mw-svcs-grid02-card::after {
+  right: 0;
+  bottom: 0;
+  border-right: 2px solid var(--c-accent);
+  border-bottom: 2px solid var(--c-accent);
+}
+.mw-services--02 .mw-svcs-grid02-card:hover {
+  transform: translateY(-2px);
+}
+.mw-services--02 .mw-svcs-grid02-card:hover::before,
+.mw-services--02 .mw-svcs-grid02-card:hover::after {
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+}
+.mw-services--02 .mw-svcs-grid02-card:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: -1px;
+}
+.mw-services--02 .mw-svcs-grid02-card__num {
+  display: none !important;
+}
+.mw-services--02 .mw-svcs-grid02-card__title {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(24px, 2.2vw, 36px);
+  line-height: 1.05;
+  letter-spacing: 0.005em;
+  color: #fff;
+  text-transform: uppercase;
+}
+.mw-services--02 .mw-svcs-grid02-card__text {
+  margin: 0;
+  padding-right: clamp(36px, 3.2vw, 52px);
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(245, 230, 203, 0.84);
+}
+.mw-services--02 .mw-svcs-grid02-card__arr {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: inline-block;
+  white-space: nowrap;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-size: clamp(24px, 2.2vw, 36px);
+  line-height: 1.05;
+  font-weight: 700;
+  color: #ca8260;
+  text-shadow: 0 1px 3px rgba(20, 12, 6, 0.6);
+  transition: transform 240ms cubic-bezier(.2, .7, .2, 1);
+}
+.mw-services--02 .mw-svcs-grid02-card:hover .mw-svcs-grid02-card__arr {
+  transform: translateX(6px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-services--02 .mw-svcs-grid02-card,
+  .mw-services--02 .mw-svcs-grid02-card__photo,
+  .mw-services--02 .mw-svcs-grid02-card__arr,
+  .mw-services--02 .mw-svcs-grid02-card::before,
+  .mw-services--02 .mw-svcs-grid02-card::after {
+    transition: opacity 0.18s ease;
+  }
+  .mw-services--02 .mw-svcs-grid--02 > li .mw-svcs-grid02-card:hover {
+    transform: none;
+  }
+  .mw-services--02 .mw-svcs-grid--02 > li .mw-svcs-grid02-card:hover .mw-svcs-grid02-card__photo {
+    transform: none;
+  }
+}
+.mw-services--02 .mw-svcs-grid-close {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: clamp(20px, 2vw, 28px);
+  height: 100%;
+  min-height: 100%;
+  padding: clamp(24px, 2.4vw, 40px);
+  background: transparent;
+  outline: none;
+  border: 1px solid var(--c-navy-3);
+}
+.mw-services--02 .mw-svcs-grid-close__text {
+  margin: 0;
+  font-family: var(--font-body), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.05vw, 18px);
+  line-height: 1.55;
+  color: var(--c-ink-2);
+}
+@media (max-width: 900px) {
+  .mw-services--02 .mw-svcs-grid--02 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(6, minmax(200px, auto));
+  }
+}
+@media (max-width: 600px) {
+  .mw-services--02 .mw-svcs-grid--02 {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(12, minmax(200px, auto));
+  }
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   ROSTER COLLAGE — services as a "team roster" showcase (roster-collage-01).
+   A staggered, lightly-rotated collage of photo cards on the left; a navigable
+   roster menu on the right. Hover/focus either side to spotlight one service:
+   the active card pops forward in full colour, the rest recede (dimmed, NOT
+   greyscale). Keeps the number+name content-overlay on every card. Warm clay
+   palette, square "stamp" markers, 49° paper grain. Reduced-motion safe.
+   ════════════════════════════════════════════════════════════ */
+.mw-roster {
+  position: relative;
+  background: var(--c-surface-warm);
+  padding-block: clamp(64px, 6.5vw, 112px);
+  overflow: clip;
+  isolation: isolate;
+}
+.mw-roster::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+  pointer-events: none;
+  z-index: 0;
+}
+.mw-roster > .mw-inner { position: relative; z-index: 1; }
+
+.mw-roster__head { margin-bottom: clamp(40px, 4vw, 64px); }
+.mw-roster__title {
+  margin-top: 28px;
+  max-width: none;
+  font-size: clamp(26px, 4.4vw, 72px);
+  line-height: 0.94;
+}
+.mw-roster__title-line { display: block; }
+
+.mw-roster__layout {
+  display: grid;
+  /* list column (left) · collage column (right) */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.55fr);
+  gap: clamp(28px, 4vw, 76px);
+  align-items: start;
+  /* Only a small breathing gap at the top of the pinned container (the real
+     header→grid gap is the header's margin-bottom, which scrolls away). */
+  padding-top: clamp(10px, 1vw, 18px);
+}
+
+/* ── LEFT · collage ───────────────────────────────────────── */
+/* Clip frame — in the pinned section JS sizes it to exactly 2 rows and clips the
+   inner grid; everywhere else it's transparent (full grid shows). */
+.mw-roster__collage { position: relative; }
+.mw-roster__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* Identical row & column gaps. The column stagger (--ty) makes adjacent rows
+     overlap slightly — that woven offset is the intended look; the snap pitch
+     follows the row pitch so it still lands by whole rows. */
+  gap: clamp(10px, 1vw, 18px);
+  /* room for the column stagger (translateY) at the bottom */
+  padding-bottom: clamp(44px, 6vw, 104px);
+}
+.mw-roster__card {
+  --ty: 0px;
+  --lift: 0px;
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  text-decoration: none;
+  isolation: isolate;
+  transform: translateY(calc(var(--ty) + var(--lift)));
+  transform-origin: center;
+  transition: transform 440ms cubic-bezier(.2, .7, .2, 1), box-shadow 440ms ease;
+}
+/* Outer columns (1 & 3) drop ~64px; the middle column keeps its raised "peak",
+   nudged down only ~8–18px — just enough that the on-hover lift never clips
+   against the container's top edge. */
+.mw-roster__card:nth-child(3n + 1),
+.mw-roster__card:nth-child(3n + 3) { --ty: clamp(30px, 4.5vw, 84px); }
+.mw-roster__card:nth-child(3n + 2) { --ty: clamp(8px, 1.2vw, 18px); }
+/* Spotlit card lifts (card-7 hover:-translate-y) + brightens + clay ring. The
+   image zoom + paragraph reveal are the two extracted motions (below). */
+.mw-roster__card.is-active {
+  --lift: -8px;
+  z-index: 3;
+  box-shadow: 0 28px 70px -18px rgba(42, 27, 18, 0.7);
+}
+.mw-roster__card-photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+  /* Exact normal-state photo grade from bento-grid-02. */
+  filter: saturate(0.95) brightness(0.96) contrast(1.02) sepia(0.04);
+  transform: scale(1);
+  transition: filter 320ms ease, transform 520ms ease;
+}
+/* Extracted motion #1 — image zoom (card-7 group-hover:scale-110), plus the
+   exact hover-state photo grade. */
+.mw-roster__card.is-active .mw-roster__card-photo {
+  filter: saturate(1.05) brightness(1.1) contrast(1) sepia(0.02);
+  transform: scale(1.1);
+}
+/* Light top wash over the photo (bento-grid-02 photo::after), lifts on hover. */
+.mw-roster__card-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(42, 27, 18, 0.3) 0%, rgba(42, 27, 18, 0.08) 100%);
+  opacity: 1;
+  transition: opacity 320ms ease;
+}
+.mw-roster__card.is-active .mw-roster__card-photo::after { opacity: 0.2; }
+/* Accent ring on the spotlit card. */
+.mw-roster__card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border: 2px solid transparent;
+  border-radius: inherit;
+  pointer-events: none;
+  transition: border-color 240ms ease;
+}
+.mw-roster__card.is-active::after { border-color: var(--c-accent); border-width: 3px; }
+.mw-roster__card:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
+
+/* Action arrow pinned to each card's top-right corner. */
+.mw-roster__card-arr {
+  position: absolute;
+  top: clamp(9px, 0.9vw, 15px);
+  right: clamp(11px, 1.1vw, 18px);
+  z-index: 2;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-size: clamp(20px, 1.9vw, 32px);
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 1px 5px rgba(20, 12, 6, 0.75);
+  transition: transform 240ms cubic-bezier(.2, .7, .2, 1), color 240ms ease;
+}
+.mw-roster__card.is-active .mw-roster__card-arr {
+  color: var(--c-accent);
+  transform: translate(3px, -3px);
+}
+
+/* Content overlay — title + summary + arrow over the exact bento-grid-02
+   content scrim (__body::before): bottom-anchored, gradient extended past the
+   edges so it reads identically. */
+.mw-roster__card-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(7px, 0.7vw, 11px);
+  padding: clamp(13px, 1.2vw, 20px);
+}
+.mw-roster__card-overlay::before {
+  content: "";
+  position: absolute;
+  left: -200px;
+  right: -200px;
+  bottom: -200px;
+  top: -80px;
+  z-index: -1;
+  background: linear-gradient(
+    to top,
+    rgba(6, 3, 1, 0.96) 0%,
+    rgba(6, 3, 1, 0.94) 35%,
+    rgba(6, 3, 1, 0.72) 60%,
+    rgba(6, 3, 1, 0.28) 85%,
+    rgba(6, 3, 1, 0) 100%
+  );
+  pointer-events: none;
+}
+.mw-roster__card-title {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(22px, 2.3vw, 38px);
+  line-height: 0.98;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: #fff;
+}
+/* Extracted motion #2 — reveal on hover (card-7's slide-up bottom section),
+   applied to the body paragraph: collapsed (0fr grid row) + faded at rest,
+   expands + fades in when the card is spotlit. The title stays put. */
+.mw-roster__card-reveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: grid-template-rows 440ms cubic-bezier(.2, .7, .2, 1), opacity 360ms ease, transform 440ms ease;
+}
+.mw-roster__card-reveal > * { overflow: hidden; min-height: 0; }
+.mw-roster__card.is-active .mw-roster__card-reveal {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transform: none;
+}
+.mw-roster__card-text {
+  margin: 0;
+  font-family: var(--font-plex-sans), var(--font-body), ui-sans-serif, sans-serif;
+  font-size: clamp(11.5px, 0.86vw, 13.5px);
+  line-height: 1.42;
+  color: rgba(245, 230, 203, 0.85);
+}
+
+/* ── RIGHT · roster menu ──────────────────────────────────── */
+.mw-roster__rail { position: relative; }
+.mw-roster__menu { list-style: none; margin: 0; padding: 0; }
+.mw-roster__row {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(12px, 1vw, 18px);
+  padding: clamp(11px, 1.05vw, 16px) 0;
+  text-decoration: none;
+  border-bottom: 1px solid var(--c-line);
+  transition: opacity 220ms ease;
+}
+.mw-roster__menu > li:first-child .mw-roster__row { border-top: 1px solid var(--c-line); }
+.mw-roster__row:not(.is-active) { opacity: 0.58; }
+.mw-roster__row:not(.is-active):hover { opacity: 0.86; }
+/* Diamond marker — small + border-only at rest; spins into a larger filled
+   diamond when spotlit. Fixed-width grid cell keeps the name from shifting. */
+.mw-roster__row-mark {
+  justify-self: center;
+  width: 8px;
+  height: 8px;
+  border: 1.5px solid var(--c-navy);
+  background: transparent;
+  transform: rotate(45deg);
+  transition: width 280ms cubic-bezier(.2, .7, .2, 1), height 280ms cubic-bezier(.2, .7, .2, 1),
+    background-color 240ms ease, border-color 240ms ease, transform 420ms cubic-bezier(.2, .7, .2, 1);
+}
+.mw-roster__row.is-active .mw-roster__row-mark {
+  width: 15px;
+  height: 15px;
+  background: var(--c-accent);
+  border-color: var(--c-accent);
+  transform: rotate(225deg);
+}
+.mw-roster__row-name {
+  min-width: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(18px, 1.5vw, 26px);
+  line-height: 1.02;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+  transition: color 200ms ease;
+}
+.mw-roster__row.is-active .mw-roster__row-name { color: var(--c-navy); }
+.mw-roster__row-arr {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-size: clamp(20px, 1.6vw, 26px);
+  font-weight: 700;
+  color: var(--c-accent);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+.mw-roster__row.is-active .mw-roster__row-arr { opacity: 1; transform: none; }
+
+/* Section lead — body-intro under the header, matching the other sections
+   (font-size + rhythm mirror .mw-secd__lead). */
+.mw-roster__lead {
+  margin: clamp(18px, 1.6vw, 24px) 0 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(16px, 1.15vw, 19px);
+  line-height: 1.6;
+  color: var(--c-ink-2);
+  max-width: 64ch;
+}
+/* Learn-more CTA — stays at the bottom of the list column. */
+.mw-roster__foot {
+  margin-top: clamp(22px, 2.4vw, 34px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(16px, 1.6vw, 22px);
+}
+
+/* ── Scroll-pin (config.pin) ──────────────────────────────────
+   A tall wrapper holds a sticky pane that fills the viewport. The header stays
+   put (eyebrow fades out once pinned) while JS translates the collage+menu up
+   so they sweep top→bottom within the pinned frame, then it unpins. ── */
+.mw-roster-pinwrap { position: relative; }
+/* The section is the tall scroll region (height set inline by JS). The header sits
+   in normal flow at the top and scrolls away; only the .mw-roster__pin container
+   (list+grid) is sticky. .mw-inner is stretched tall so the sticky element can
+   stick across the whole region. */
+.mw-roster--pin { height: 100%; padding-block: clamp(40px, 5vw, 80px) 0; }
+.mw-roster--pin .mw-inner { height: 100%; }
+.mw-roster--pin .mw-roster__pin {
+  position: sticky;
+  top: calc(var(--mw-eb-h, 39px) + 76px);
+  height: calc(100svh - var(--mw-eb-h, 39px) - 76px);
+}
+.mw-roster--pin .mw-roster__scroller {
+  position: relative;
+  height: 100%;
+  overflow: clip;
+}
+/* The container fills the screen; the inner grid is bottom-anchored (JS sets the
+   transform) and snaps one card-row at a time, with an eased transition. Cards that
+   scroll past the top overflow ABOVE the frame and are clipped by the scroller (at
+   the nav). The list/rail is NOT transformed — it stays static beside the grid. */
+.mw-roster--pin .mw-roster__collage { overflow: visible; }
+.mw-roster--pin .mw-roster__grid {
+  will-change: transform;
+  transition: transform 560ms cubic-bezier(.22, .61, .36, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  /* No scroll-jacking: fall back to a normal flowed section. */
+  .mw-roster-pinwrap { height: auto !important; }
+  .mw-roster--pin { height: auto; padding-block: clamp(64px, 6.5vw, 112px); }
+  .mw-roster--pin .mw-inner { height: auto; }
+  .mw-roster--pin .mw-roster__pin { position: static; height: auto !important; }
+  .mw-roster--pin .mw-roster__scroller { overflow: visible; }
+  .mw-roster--pin .mw-roster__collage { overflow: visible; height: auto !important; }
+  .mw-roster--pin .mw-roster__grid { transition: none; transform: none !important; }
+}
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .mw-roster__layout { grid-template-columns: 1fr; gap: clamp(28px, 5vw, 48px); }
+  .mw-roster__grid { padding-bottom: clamp(34px, 8vw, 80px); }
+  /* No snap-pin below the single-column breakpoint — flow normally. */
+  .mw-roster-pinwrap { height: auto !important; }
+  .mw-roster--pin { height: auto; padding-block: clamp(64px, 6.5vw, 112px); }
+  .mw-roster--pin .mw-inner { height: auto; }
+  .mw-roster--pin .mw-roster__pin { position: static; height: auto !important; }
+  .mw-roster--pin .mw-roster__scroller { overflow: visible; }
+  .mw-roster--pin .mw-roster__collage { overflow: visible; height: auto !important; }
+  .mw-roster--pin .mw-roster__grid { transform: none !important; }
+}
+@media (max-width: 560px) {
+  .mw-roster__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mw-roster__card:nth-child(3n + 2),
+  .mw-roster__card:nth-child(3n + 3) { --ty: 0px; }
+  .mw-roster__card:nth-child(2n) { --ty: clamp(20px, 6vw, 40px); }
+}
+/* Touch / no-hover devices can't trigger the reveal — show every paragraph. */
+@media (hover: none) {
+  .mw-roster__card-reveal { grid-template-rows: 1fr; opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-roster__card,
+  .mw-roster__card-photo,
+  .mw-roster__card-reveal,
+  .mw-roster__row-mark,
+  .mw-roster__row-arr,
+  .mw-roster__row,
+  .mw-roster__row-name,
+  .mw-roster__row-tag { transition: none; }
+  .mw-roster__card { --lift: 0px; }
+  .mw-roster__card.is-active .mw-roster__card-photo { transform: none; }
+  .mw-roster__row.is-active .mw-roster__row-mark { transform: none; }
+}
 
 /* ════════════════════════════════════════════════════════════
    CREED — editorial statement interlude (statement-band-01).
@@ -3021,9 +3873,202 @@ html[data-brand="miller"] {
   filter: var(--mw-photo-grade);
 }
 
+/* ── Scroll parallax for photos ──────────────────────────────────────────────
+   Every photo tagged [data-parallax-img] drifts a little as it scrolls through
+   the viewport (the same depth feel as the hero). MillerParallax writes --px-y;
+   the base scale gives the drift its headroom so a clipped edge is never exposed,
+   and hover zooms stack by overriding --px-scale. The container must clip. */
+[data-parallax-img] {
+  transform: translate3d(var(--px-x, 0px), var(--px-y, 0px), 0) scale(var(--px-scale, 1.12));
+  will-change: transform;
+  backface-visibility: hidden;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-parallax-img] { transform: none; }
+}
+
 /* Reduced motion: the clay underline-draws appear instantly (no sweep). */
 @media (prefers-reduced-motion: reduce) {
   .mw-fac2__about::after,
   .mw-ten2__mission-link::after { transition: none; }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Sector Diamonds (mw-secd*) — "who we serve" rebuilt on the diamond
+   motif as a TESSELLATED FIELD (per the mockup). Each category is a
+   cluster of four hard-edged photo diamonds sharing edges to form a
+   larger diamond, with the category's rounded-corner WALNUT diamond
+   embedded as a peer tile (lower-left) whose terracotta ring draws
+   closed on scroll-reveal. Sub-sector names are set at 45° in the
+   cream seams along each photo's outward edge. The four clusters
+   alternate high/low into a staggered ribbon. Server shell
+   (SectorDiamonds01) + SectorRosette01 client widget.
+   ════════════════════════════════════════════════════════════════ */
+.mw-secd {
+  /* Inset on every diamond → cream gap between them. Diamonds meet at 45° edges, so
+     the visible gap = inset × √2; this is the services-grid gap (clamp(3px,0.35vw,6px))
+     divided by √2 so the spacing matches the cards above. */
+  --secd-gap: clamp(2.12px, 0.247vw, 4.24px);
+  position: relative;
+  background: var(--c-surface-warm);
+  padding-block: clamp(64px, 6.5vw, 112px);
+  color: var(--c-ink);
+  overflow: clip;
+  isolation: isolate;
+}
+/* 49° paper-grain wash — the same faint diagonal hatch as the other warm sections. */
+.mw-secd::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+.mw-secd > .mw-inner { position: relative; z-index: 1; }
+
+/* ── header: eyebrow → stop-title → lead (matches the mw-sec2 solo rhythm) ── */
+.mw-secd__head {
+  margin-bottom: clamp(40px, 4vw, 64px);
+  display: grid;
+  gap: 22px;
+}
+.mw-secd__head-solo { display: flex; flex-direction: column; gap: 22px; }
+.mw-secd__title {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(36px, 4vw, 72px);
+  line-height: 1;
+  letter-spacing: 0.005em;
+  color: var(--c-ink);
+  text-transform: uppercase;
+  max-width: 22ch;
+}
+.mw-secd__lead {
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(16px, 1.15vw, 19px);
+  line-height: 1.6;
+  color: var(--c-ink-2);
+  max-width: 64ch;
+}
+
+/* ── ONE uniform diamond grid ── cells are absolutely placed on a shared argyle
+   lattice (left/top/width set inline from the lattice coords); cells with no content
+   are simply not rendered, so they read as transparent gaps. Every diamond is inset
+   by --secd-gap so cream shows between them. */
+.mw-secd__grid {
+  position: relative;
+  width: 100%;
+  margin-top: clamp(8px, 1.5vw, 28px);
+  /* aspect-ratio is set inline (cols / rows) so the lattice stays square-celled */
+}
+
+.mw-secd__photo,
+.mw-secd__cat,
+.mw-secd__ghost {
+  position: absolute;
+  aspect-ratio: 1;          /* width is set inline; square box → diamond after clip */
+}
+
+/* photo diamonds — hard-edged clip, upright photo. The square boxes overlap at the
+   corners (diamonds only touch at edges), so the box ignores pointer events and only
+   the clipped diamond is hoverable. */
+.mw-secd__photo { z-index: 2; pointer-events: none; }
+.mw-secd__photo-clip {
+  position: absolute;
+  inset: var(--secd-gap);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  overflow: hidden;
+  background: var(--c-navy);
+  pointer-events: auto;
+  transition: box-shadow 0.4s ease;
+}
+.mw-secd__photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.92) brightness(0.96);
+  transition: filter 0.4s ease, transform 0.55s cubic-bezier(.2,.7,.2,1);
+}
+.mw-secd__photo-clip::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(150deg, rgba(59,36,24,0.05), rgba(168,90,44,0.12));
+  opacity: 1;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.mw-secd__photo-clip:hover { box-shadow: 0 10px 24px rgba(33, 20, 12, 0.32); }
+.mw-secd__photo-clip:hover .mw-secd__photo-img { filter: saturate(1.05) brightness(1.06); transform: scale(1.08); }
+.mw-secd__photo-clip:hover::after { opacity: 0; }
+
+/* category — solid rounded-corner walnut diamond, name only (no number, no ring) */
+.mw-secd__cat { z-index: 4; display: grid; place-items: center; }
+.mw-secd__cat-svg {
+  position: absolute;
+  inset: var(--secd-gap);
+  width: auto;
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 7px 16px rgba(33, 20, 12, 0.28));
+}
+.mw-secd__cat-fill { fill: var(--c-navy); }
+.mw-secd__cat-face {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 0 15%;
+}
+.mw-secd__cat-name {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(11px, 1.1vw, 18px);
+  line-height: 0.98;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--c-bg);
+}
+
+/* ── decorative gutter diamonds: the lattice continues off the left of the page as
+   faint walnut outlines (no content), clipped at the section edge ── */
+.mw-secd__ghost { z-index: 1; pointer-events: none; }
+.mw-secd__ghost-svg {
+  position: absolute;
+  inset: var(--secd-gap);
+  width: auto;
+  height: auto;
+  overflow: visible;
+}
+.mw-secd__ghost-shape {
+  fill: none;
+  stroke: var(--c-navy);
+  stroke-width: 2.4;
+  opacity: 0.3;
+}
+
+/* On-scroll reveal — a one-shot CSS keyframe cascade (no scroll handler, no per-frame
+   JS). SectorGridMotion adds .is-armed (cells held hidden), then .is-in when the grid
+   scrolls into view; each diamond fades + slides in from the left, delayed by its
+   x-fraction (--fx) so the band sweeps gutter-first to the right. The browser composites
+   the animation, so it stays smooth at any scroll speed. */
+@keyframes mw-secd-in {
+  from { opacity: 0; transform: translate3d(-34px, 0, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+.mw-secd__grid.is-armed > * { opacity: 0; }
+.mw-secd__grid.is-armed.is-in > * {
+  animation: mw-secd-in 1.2s cubic-bezier(.22, .61, .36, 1) both;
+  animation-delay: calc(var(--fx, 0) * 1s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mw-secd__photo-img { transition: none; }
+  .mw-secd__grid.is-armed > *,
+  .mw-secd__grid.is-armed.is-in > * { opacity: 1; animation: none; }
 }
 

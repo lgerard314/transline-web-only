@@ -44,27 +44,49 @@
   position: relative;
   background: var(--c-navy-3);
   color: var(--c-on-navy);
-  padding-block: clamp(72px, 8vw, 144px);
+  padding-block: clamp(50px, 5.6vw, 101px); /* 30% less than the standard band padding */
   overflow: clip;
   isolation: isolate;
 }
-.mw-lr::before {
-  content: "";
+/* Background wash: a faint Canada outline map (cream-filled SVG over the dark
+   walnut band) standing in for the old diagonal paper-grain. Kept very low
+   opacity so it reads as subtle depth, not a legible graphic — most viewers
+   shouldn't clock that it's a map. It drifts with the shared viewport parallax:
+   [data-parallax-img] (in 04-home.css) composes translate + a 1.12 base scale,
+   and .mw-lr's `overflow: clip` hides the scaled/drifted edges. */
+.mw-lr__bg {
   position: absolute;
-  inset: 0;
+  /* Match the body content width (same formula as .mw-inner), centred — the map
+     spans the content column, not the full bleed. Centring is via auto margins,
+     NOT transform: the parallax engine owns `transform`. The layer is taller than
+     the band (±16% bleed ≈ ±116px) so the vertical parallax drift (±~95px,
+     data-parallax-max .1) has headroom without a transform-scale. The map is
+     taller-proportioned than the band so it crops top/bottom — intended. */
+  top: -16%;
+  bottom: -16%;
+  left: 0;
+  right: 0;
+  margin-inline: auto;
+  width: min(100% - clamp(48px, 8vw, 144px), 1560px);
   z-index: 0;
   pointer-events: none;
-  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-dark) 38px, var(--c-grain-on-dark) 39px);
+  background-image: url("/miller/custom/canada-bg-line-map.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% auto; /* fit the content-column width */
+  opacity: 0.07;
+  --px-scale: 1;
 }
 .mw-lr__inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
 .mw-lr .mw-section-tag { margin-bottom: clamp(20px, 2.4vw, 36px); }
 
-/* ── Lifetime reel: three auto-advancing highlight diamonds ──────────────────
-   D1 center→left, D2 center→right, D3 center (final L→R: D1, D3, D2). Diamonds
-   are uniform size (no morph → stable stage height); the centred/focal one is
-   full scale, parked ones step back to .92. Position is animated on the item
-   (translateX); entrance fade + settle-scale on the card; the seal stroke draws
-   in lockstep with the 1600ms count (transition-duration matches LrCountUp). */
+/* ── Lifetime reel: three static highlight diamonds, drawn LEFT → RIGHT ───────
+   The diamonds sit fixed in their left / centre / right slots; the composition
+   draws as one pen sweeping left→right: each diamond's border starts at its LEFT
+   apex (50% height) and races to the RIGHT apex (two halves, top + bottom), then
+   the connector grows rightward to the next diamond. Uniform size (stable stage
+   height); the focal/active one scales up on hover. The seal stroke draws in
+   lockstep with the count (its transition-duration is set below). */
 .mw-lr-reel {
   --lr-S: clamp(255px, 29.7vw, 383px); /* diamond edge length (+10%) */
   /* four equal gutters: outer L/R + two between the three diamonds */
@@ -74,40 +96,75 @@
   /* Match LrDiamondSeal SVG: rect 120×120, rx=10, inset 40 in 200 viewBox. */
   --lr-seal-diamond-size: 60%;
   --lr-seal-rx: 8.333%;
-  --lr-reveal-expand: 1.12; /* hover overlay overshoots the diamond by this factor */
   /* Easing/duration defined here (the v2 source defined --mx-ease on .mx-page,
      which does not exist on the v1 home — without these the transitions break). */
   --lr-ease: cubic-bezier(.22, .61, .36, 1);
   --lr-dur: .52s;
+  /* Connector grow duration — keep in sync with LINK in lifetime-reel.jsx. */
+  --lr-link-dur: .55s;
+  /* Legacy park-slide vars (no longer used now the diamonds are static). */
+  --lr-slide-dur: .6s;
+  --lr-slide-ease: linear;
   position: relative; width: 100%; display: flex; flex-direction: column; align-items: center;
 }
 
 .mw-lr-reel__stage { position: relative; width: 100%; height: calc(var(--lr-S) + var(--lr-labelband)); }
 
-/* Connector hairlines bridging the gaps at the diamonds' mid-height, so the
-   three borders read as ONE continuous stroke. Geometry (left/top/width/height)
-   is measured from the live diamond edges in JS (LifetimeReel) — robust to the
-   clamp/vw-resolved sizes. CSS only owns the stroke look + the draw animation:
-   the bar matches the border exactly (same accent, same .5 opacity, height set
-   to the rendered stroke width) and grows (scaleX) from the incoming side. */
-/* z-index 1: connectors sit BEHIND the diamonds + their hover overlays (z 2) so
-   the line tucks under each diamond edge and disappears behind the reveal scrim. */
-.mw-lr-reel__link { position: absolute; left: 0; top: 0; width: 0; pointer-events: none; z-index: 1; }
-.mw-lr-reel__link i {
-  display: block; width: 100%; height: 100%;
-  /* SOLID equivalent of the border's accent @ 50% over the section's dark brown —
-     no transparency, so the line reads at full weight and matches the edges. */
-  background: color-mix(in srgb, var(--c-accent) 50%, var(--c-navy-3));
-  transform: scaleX(0);
-  transition: transform .5s var(--lr-ease);
+/* ── Unified chain (desktop) ─────────────────────────────────────────────────
+   The whole composition — three diamond outlines + the two connecting lines + the
+   diamond fill overlays — is built from one measured geometry and revealed by ONE
+   left→right wipe, so thickness, gradient, and the diamond→line seams all match.
+   It is split into z LAYERS so the fill overlay sits between the lines and the
+   borders (back → front: lines → fill → borders → content):
+     --lines    : connector segments only        — z 1 (furthest back)
+     --fills    : opaque diamond interiors        — z 2 (the "diamond overlay")
+     --diamonds : diamond outlines only           — z 3 (in front of the fill)
+     .mw-lr-reel__item (content/text)             — z 4 (front)
+   Each --base layer is terracotta clipped to [0, frontier]; each --gold layer is a
+   gold copy masked to a soft band riding the frontier; both transition off the same
+   frontier (set in JS, constant speed). Gold fades out on settle (data-done). */
+.mw-lr-reel__chain {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
 }
-/* each connector grows FROM the diamond the single pen is leaving: link A out of
-   D1 on the left, link B out of D2 on the right — so it reads as one line being
-   drawn into the next diamond, never a gap. */
-.mw-lr-reel__link--a i { transform-origin: left center; }
-.mw-lr-reel__link--b i { transform-origin: right center; }
-.mw-lr-reel[data-link1] .mw-lr-reel__link--a i { transform: scaleX(1); }
-.mw-lr-reel[data-link2] .mw-lr-reel__link--b i { transform: scaleX(1); }
+.mw-lr-reel__chain--lines { z-index: 1; }
+.mw-lr-reel__chain--fills { z-index: 2; }
+.mw-lr-reel__chain--diamonds { z-index: 3; }
+.mw-lr-reel__chain path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.mw-lr-reel__chain--base path { stroke: var(--c-accent); stroke-opacity: .5; }
+.mw-lr-reel__chain--gold path { stroke: #D89A3F; } /* mirrors --c-amber (#D89A3F) */
+.mw-lr-reel__chain--fills path { fill: var(--c-navy-3); stroke: none; } /* opaque diamond overlay */
+/* every CLIP layer is hidden until JS sets the frontier */
+.mw-lr-reel__chain[data-reveal="clip"] { clip-path: inset(0 100% 0 0); }
+/* every GOLD/MASK layer rides a soft band at the frontier */
+.mw-lr-reel__chain[data-reveal="mask"] {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000);
+          mask-image: linear-gradient(to right, transparent, #000);
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+  -webkit-mask-size: 90px 100%; /* keep in sync with BAND in lifetime-reel.jsx */
+          mask-size: 90px 100%;
+  -webkit-mask-position: -200px 0; /* parked off-screen until JS rides it to the frontier */
+          mask-position: -200px 0;
+  opacity: 1;
+}
+.mw-lr-reel[data-done] .mw-lr-reel__chain--gold { opacity: 0; transition: opacity .5s linear; }
+/* Desktop draws the chain → hide the per-diamond seal edges + the per-diamond fill
+   (the --fills layer provides the overlay so it can sit under the borders). */
+@media (min-width: 721px) {
+  .mw-lr-reel .mw-lr-seal__frame { display: none; }
+  .mw-lr .mw-lr-reel .mw-lr-seal::before { display: none; }
+}
+/* Mobile uses the per-diamond seal edges + ::before fill (one at a time) → hide the chain. */
+@media (max-width: 720px) { .mw-lr-reel__chain { display: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .mw-lr-reel__chain--gold { opacity: 0 !important; }
+  .mw-lr-reel__chain[data-reveal="clip"] { clip-path: none !important; }
+}
 
 /* Equal visual gutters: the four gaps (container-left→D1, D1→centre, centre→D2,
    D2→container-right) are equal. A diamond's visible half-width to its apex is
@@ -118,8 +175,8 @@
   position: absolute; top: 0; width: var(--lr-S);
   display: flex; flex-direction: column; align-items: center;
   transform: translateX(-50%);
-  transition: left .7s var(--lr-ease);
-  z-index: 2; /* above the connector hairlines */
+  transition: left var(--lr-slide-dur) var(--lr-slide-ease);
+  z-index: 4; /* content/text sits in FRONT of the chain layers (lines/fill/borders) */
   --lr-card-scale: .92; /* parked side diamonds step back; centre is full size */
 }
 .mw-lr-reel__item[data-pos="center"] { left: 50%; --lr-card-scale: 1; }
@@ -131,12 +188,7 @@
   width: var(--lr-S);
   height: var(--lr-S);
   overflow: visible;
-}
-.mw-lr-reel__item[data-settled="1"] .mw-lr-reel__cardwrap:has(.mw-lr-reel__card:hover),
-.mw-lr-reel__item[data-settled="1"] .mw-lr-reel__cardwrap:has(.mw-lr-reel__card[data-open="1"]),
-.mw-lr-reel__item[data-settled="1"] .mw-lr-reel__cardwrap:has(.mw-lr-reel__card:focus-visible) {
-  overflow: visible;
-  z-index: 3;
+  transition: opacity .3s var(--lr-ease);
 }
 
 .mw-lr-reel__card {
@@ -152,7 +204,59 @@
 
 /* the seal renders as a true square so the rotated frame reads as a clean diamond */
 .mw-lr .mw-lr-reel .mw-lr-seal { aspect-ratio: 1; width: var(--lr-S); padding: 0; display: grid; place-items: center; }
-.mw-lr .mw-lr-reel .mw-lr-seal__edge { stroke-width: 1.6; stroke-opacity: .5; stroke-linecap: round; stroke-linejoin: round; transition-duration: 1.6s; }
+/* Border draws 33% faster than the count (1.6s → ~1.07s); the count speed is left
+   unchanged, so the border completes a touch before the numeral finishes. LINEAR
+   timing so the stroke draws at a CONSTANT speed (no ease-out "fast then slow") —
+   matches the connector lines, so the whole left→right sweep moves at one pace. */
+.mw-lr .mw-lr-reel .mw-lr-seal__edge { stroke-width: 1.6; stroke-opacity: .5; stroke-linecap: round; stroke-linejoin: round; transition-duration: 1.07s; transition-timing-function: linear; }
+/* Gold "charge" comet: a short gold dash (length 24 of the 100-unit path) that
+   rides just behind the LEADING edge of each half as it draws — so the growing
+   edge reads as drawn in gold trailing into the settled terracotta base. The dash
+   window [prog−24, prog] tracks the tip because its offset (24 → −76) animates in
+   lockstep with the base draw. Fades out once the whole reel settles (data-done),
+   leaving the diamonds their normal colour. */
+.mw-lr .mw-lr-reel .mw-lr-seal__edge--glow {
+  /* stroke is the gold gradient, set via inline style on the path (an inline
+     style beats the stylesheet's stroke on .mw-lr-seal__edge; a stroke attribute
+     would not). */
+  stroke-width: 2.4;
+  stroke-opacity: 1;
+  stroke-linecap: round;
+  stroke-dasharray: 24 100;
+  stroke-dashoffset: 24; /* undrawn: comet parked just off the path start */
+  opacity: 1;
+  transition: stroke-dashoffset 1.07s linear, opacity .55s linear;
+}
+.mw-lr .mw-lr-reel .mw-lr-reel__card[data-mw-lr-seal="closed"] .mw-lr-seal__edge--glow { stroke-dashoffset: -76; }
+.mw-lr-reel[data-done] .mw-lr-seal__edge--glow { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .mw-lr .mw-lr-reel .mw-lr-seal__edge--glow { opacity: 0 !important; transition: none !important; }
+}
+/* Opaque diamond fill behind the numerals. Geometry matches the SVG outline (60%
+   square, rx 8.333% → same rounded apexes), and the diamond sits above the
+   connector line (item z-index 2 > link z-index 1), so it HIDES the line's
+   overshoot into each apex — the three borders read as one gap-free stroke, even
+   when a hovered diamond scales up over the line. */
+.mw-lr .mw-lr-reel .mw-lr-seal::before {
+  content: "";
+  position: absolute;
+  left: 50%; top: 50%;
+  width: var(--lr-seal-diamond-size);
+  height: var(--lr-seal-diamond-size);
+  transform: translate(-50%, -50%) rotate(45deg);
+  border-radius: var(--lr-seal-rx);
+  /* unselected diamonds blend into the band (same bg); the selected diamond gets a
+     slightly darker fill. The fill is TRANSPARENT until the diamond starts drawing
+     (seal closes), so a not-yet-drawn diamond at centre does NOT hide the connector
+     pushing through toward the screen middle; once it draws, the fill turns opaque
+     and covers the line's overshoot. */
+  background: var(--c-navy-3);
+  opacity: 0;
+  transition: opacity .4s var(--lr-ease);
+  z-index: 0;
+}
+.mw-lr .mw-lr-reel .mw-lr-reel__card[data-mw-lr-seal="closed"] .mw-lr-seal::before { opacity: 1; }
+.mw-lr .mw-lr-reel .mw-lr-reel__item[data-active] .mw-lr-seal::before { background: #26130b; }
 .mw-lr .mw-lr-reel .mw-lr-seal__inner {
   display: flex;
   flex-direction: column;
@@ -187,69 +291,49 @@
   max-width: none;
   opacity: 0; transition: opacity .4s var(--lr-ease) .12s;
 }
-/* labels stay hidden while the lone D1 + lead are showing; appear once parked */
-.mw-lr-reel:not([data-phase="d1"]) .mw-lr-reel__item[data-settled="1"] .mw-lr-reel__label { opacity: 1; }
+/* the short 1-liner appears the instant a diamond starts loading (seal closes) */
+.mw-lr-reel__card[data-mw-lr-seal="closed"] .mw-lr-reel__label { opacity: 1; }
 
-/* reveal: rounded diamond fill (same rx as outline stroke), copy stays upright */
-.mw-lr-reel__reveal {
-  position: absolute;
-  inset: 0;
+/* ── After all three load: hover / focus / tap emphasises ONE diamond — it scales
+   up (about its centre, so it stays vertically aligned with the row) and its border
+   brightens. The other diamonds are LEFT UNCHANGED (same size text colours); the
+   body copy surfaces in the caption band below. No dimming of the others. ─────── */
+.mw-lr-reel__item[data-active] { z-index: 5; }
+/* Active emphasis scale is MOBILE-ONLY: on desktop the border lives in the unified
+   chain SVG (which doesn't scale per-diamond), so scaling just the card content
+   would detach it from its border. On mobile the seal edge scales with the card. */
+@media (max-width: 720px) {
+  .mw-lr-reel__item[data-active] .mw-lr-reel__card {
+    transform: scale(calc(var(--lr-card-scale) * 1.08));
+    transition: transform .32s var(--lr-ease);
+  }
+}
+.mw-lr .mw-lr-reel .mw-lr-reel__item[data-active] .mw-lr-seal__edge { stroke-opacity: 1; }
+
+/* reveal captions: one absolutely-positioned <p> per diamond stacked in the band.
+   The band's height is locked in JS to the TALLEST copy, so the section height is
+   constant whichever caption shows. Each caption is centred then slid (--lr-cap-dx,
+   set in JS) to sit under its own diamond, clamped inside the band. */
+.mw-lr-reel__captions {
+  position: relative;
+  width: 100%;
+  margin: clamp(12px, 1.6vw, 24px) auto 0; /* tighter gap between the diamonds and the reveal */
+}
+.mw-lr-reel__caption {
+  position: absolute; top: 0; left: 50%;
+  width: clamp(280px, 32vw, 460px);
   margin: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 18%;
-  box-sizing: border-box;
   font-family: var(--font-sans), sans-serif;
-  font-size: clamp(12px, .98vw, 15px);
-  line-height: 1.5;
-  color: rgba(250, 243, 229, .94);
+  font-size: clamp(16px, 1.15vw, 19px); line-height: 1.6;
+  color: rgba(250, 243, 229, .92); text-align: center;
   opacity: 0;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: 2;
-  /* scale the overlay WITH its diamond (card-scale) AND past it by --lr-reveal-expand
-     (>1) so the scrim spills beyond the diamond shape; the centre diamond is full
-     size so its overlay is correspondingly bigger. Scaling about the centre keeps
-     all three identically centred. --lr-reveal-nudge is a fine horizontal trim. */
-  transform: translateX(var(--lr-reveal-nudge, 0px)) scale(calc(var(--lr-card-scale) * var(--lr-reveal-expand, 1.12)));
-  transform-origin: center center;
-  transition: opacity .3s var(--lr-ease);
+  transform: translateX(calc(-50% + var(--lr-cap-dx, 0px))) translateY(8px);
+  transition: opacity .35s var(--lr-ease), transform .35s var(--lr-ease);
 }
-.mw-lr-reel__reveal::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: var(--lr-seal-diamond-size);
-  height: var(--lr-seal-diamond-size);
-  transform: translate(-50%, -50%) rotate(45deg);
-  border-radius: var(--lr-seal-rx);
-  background: rgba(26, 15, 9, .88);
-  z-index: -1;
+.mw-lr-reel__caption[data-on] {
+  opacity: 1;
+  transform: translateX(calc(-50% + var(--lr-cap-dx, 0px))) translateY(0);
 }
-.mw-lr-reel__card[data-open="1"] + .mw-lr-reel__reveal,
-.mw-lr-reel__card:focus-visible + .mw-lr-reel__reveal { opacity: 1; overflow: visible; }
-.mw-lr-reel__card[data-open="1"] .mw-lr-reel__figstack,
-.mw-lr-reel__card:focus-visible .mw-lr-reel__figstack,
-.mw-lr-reel__card[data-open="1"] .mw-lr-reel__label,
-.mw-lr-reel__card:focus-visible .mw-lr-reel__label { opacity: .08; }
-@media (hover: hover) {
-  .mw-lr-reel__item[data-settled="1"] .mw-lr-reel__card:hover + .mw-lr-reel__reveal { opacity: 1; overflow: visible; }
-  .mw-lr-reel__item[data-settled="1"] .mw-lr-reel__card:hover .mw-lr-reel__figstack,
-  .mw-lr-reel__item[data-settled="1"] .mw-lr-reel__card:hover .mw-lr-reel__label { opacity: .08; }
-}
-
-/* step-1 lead paragraph; collapses (no diamond jump — stage height is fixed) */
-.mw-lr-reel__lead {
-  max-width: 52ch; margin: clamp(18px, 2.2vw, 30px) auto 0;
-  font-family: var(--font-sans), sans-serif; font-size: clamp(16px, 1.2vw, 20px); line-height: 1.6;
-  color: rgba(250, 243, 229, .88); text-align: center;
-  opacity: 0; max-height: 0; overflow: hidden;
-  transition: opacity .4s var(--lr-ease), max-height .5s var(--lr-ease), margin .4s var(--lr-ease);
-}
-.mw-lr-reel[data-lead="1"] .mw-lr-reel__lead { opacity: 1; max-height: 14em; }
 
 /* mobile-only revisit dots */
 .mw-lr-reel__dots { display: none; gap: 14px; margin-top: clamp(22px, 4vw, 34px); }
@@ -276,12 +360,11 @@
   .mw-lr-reel[data-current="2"] .mw-lr-reel__item[data-idx="2"] { opacity: 1; pointer-events: auto; }
   /* show the in-diamond label on the current item once it has settled */
   .mw-lr-reel__item[data-settled="1"] .mw-lr-reel__label { opacity: 1; }
-  .mw-lr-reel__lead { display: none; }       /* the long copy is the tap reveal on mobile */
   .mw-lr-reel__dots { display: flex; }
   .mw-lr-reel__link { display: none; }       /* no horizontal layout to bridge on mobile */
 }
 
 @media (prefers-reduced-motion: reduce) {
   .mw-lr-reel__card { animation: none !important; }
-  .mw-lr-reel__item, .mw-lr-reel__lead, .mw-lr-reel__link i { transition: none !important; }
+  .mw-lr-reel__item, .mw-lr-reel__caption, .mw-lr-reel__link i { transition: none !important; }
 }

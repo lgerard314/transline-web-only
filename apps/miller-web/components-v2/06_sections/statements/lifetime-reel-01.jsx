@@ -21,6 +21,9 @@ export function LifetimeReel01({ content, config = {} }) {
   const { headingId, srHeading, eyebrow, highlights } = content;
   return (
     <section className="mw-lr" aria-labelledby={headingId} {...sectionProps(config)}>
+      {/* Faint Canada outline map wash — drifts with the shared viewport
+          parallax (same depth feel as the hero photo). Decorative only. */}
+      <div className="mw-lr__bg" data-parallax-img data-parallax-speed="0.18" data-parallax-max="0.1" aria-hidden="true" />
       <h2 id={headingId} className="tl-sr-only">{srHeading}</h2>
       <div className="mw-inner mw-lr__inner">
         <Eyebrow01 label={eyebrow} invert reveal />

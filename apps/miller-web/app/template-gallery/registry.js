@@ -21,7 +21,10 @@ import { MediaSplit01 } from "@/components-v2/06_sections/splits/media-split-01"
 import { TimelineSplit01 } from "@/components-v2/06_sections/splits/timeline-split-01";
 import { FleetSplit01 } from "@/components-v2/06_sections/splits/fleet-split-01";
 import { BentoGrid01 } from "@/components-v2/06_sections/grids/bento-grid-01";
+import { BentoGrid02 } from "@/components-v2/06_sections/grids/bento-grid-02";
 import { HoverCardGrid01 } from "@/components-v2/06_sections/grids/hover-card-grid-01";
+import { SectorDiamonds01 } from "@/components-v2/06_sections/grids/sector-diamonds-01";
+import { RosterCollage01 } from "@/components-v2/06_sections/grids/roster-collage-01";
 import { CapabilityGrid01 } from "@/components-v2/06_sections/grids/capability-grid-01";
 import { CapacityLadder01 } from "@/components-v2/06_sections/grids/capacity-ladder-01";
 import { FacilityShowcase01 } from "@/components-v2/06_sections/grids/facility-showcase-01";
@@ -66,8 +69,8 @@ const layoutReverse = {
 
 const MONUMENT_HERO = {
   titleId: "tg-monument-hero",
-  photoSrc: "/miller/home-frame-1.png",
-  mark: { logoSrc: "/miller/logo/miller-logomark-1.webp", name: "Placeholder Co", corpLong: "Incorporated", corpShort: "Inc.", since: "Since 2001" },
+  photoSrc: "/miller/custom/home-frame-1.png",
+  mark: { logoSrc: "/miller/logo/miller-logomark-1.webp", since: "Since 2001" },
   title: {
     line1: "leaders in",
     cyclePhrases: [{ text: "reliable" }, { text: "scalable", tone: "accent" }, { text: "trusted", tone: "accent" }],
@@ -192,6 +195,7 @@ const BENTO = {
   eyebrow: "Services",
   title: { lead: "everything you need,", em: "in one place" },
   intro: "A short placeholder intro paragraph describing the breadth of the offering across the full grid of services shown below.",
+  learnMore: { label: "Learn more", href: "/industrial-services/" },
   services: [
     { id: "svc-01", slug: "service-one", title: "Service One Alpha", summary: "Placeholder summary for the first service tile in the grid.", photo: "/miller/industrial-waste-treatment-hero-1.webp" },
     { id: "svc-02", slug: "service-two", title: "Service Two Beta", summary: "Placeholder summary for the second service tile.", photo: "/miller/remediation-contaminated-soil-2.webp" },
@@ -234,6 +238,39 @@ const HOVERCARD = {
       { slug: "crown-insurers", name: "Crown Insurers" },
       { slug: "education-and-healthcare", name: "Education & Healthcare" },
       { slug: "federal-and-provincial-agencies", name: "Federal & Provincial Agencies" },
+      { slug: "construction-and-demolition", name: "Construction & Demolition" },
+    ] },
+  ],
+};
+
+const SECTOR_DIAMONDS = {
+  headingId: "tg-sector-diamonds",
+  eyebrow: "Who we serve",
+  title: "From refineries to households — and everything between",
+  lead: "A short placeholder lead describing the breadth of sectors served, rendered as a field of per-category diamond rosettes below.",
+  cards: [
+    { title: "Industrial", items: [
+      { slug: "industrial-manufacturing", name: "Industrial Manufacturing" },
+      { slug: "mining", name: "Mining" },
+      { slug: "oil-and-gas", name: "Oil & Gas" },
+      { slug: "chemical-distribution", name: "Chemical Distribution" },
+    ] },
+    { title: "Infrastructure", items: [
+      { slug: "aerospace-and-defence", name: "Aerospace & Defence" },
+      { slug: "transportation-and-rail", name: "Transportation & Rail" },
+      { slug: "utlities-and-power", name: "Utilities & Power" },
+      { slug: "agriculture", name: "Agriculture" },
+    ] },
+    { title: "Institutional", items: [
+      { slug: "biotech-and-pharma", name: "Biotech & Pharma" },
+      { slug: "crown-insurers", name: "Crown Insurers" },
+      { slug: "federal-and-provincial-agencies", name: "Federal & Provincial Agencies" },
+      { slug: "education-and-healthcare", name: "Education & Healthcare" },
+    ] },
+    { title: "Community", items: [
+      { slug: "small-business", name: "Small Business" },
+      { slug: "households", name: "Households (HHW)" },
+      { slug: "municipal-programs", name: "Municipal Programs" },
       { slug: "construction-and-demolition", name: "Construction & Demolition" },
     ] },
   ],
@@ -582,7 +619,10 @@ export const GALLERY = [
 
   // Grids
   { group: "Grids", name: "BentoGrid01", path: "components-v2/06_sections/grids/bento-grid-01.jsx", Component: BentoGrid01, content: BENTO, controls: [schemeDark] },
+  { group: "Grids", name: "BentoGrid02", path: "components-v2/06_sections/grids/bento-grid-02.jsx", Component: BentoGrid02, content: BENTO, controls: [schemeDark] },
+  { group: "Grids", name: "RosterCollage01", path: "components-v2/06_sections/grids/roster-collage-01.jsx", Component: RosterCollage01, content: BENTO, controls: [] },
   { group: "Grids", name: "HoverCardGrid01", path: "components-v2/06_sections/grids/hover-card-grid-01.jsx", Component: HoverCardGrid01, content: HOVERCARD, controls: [layoutReverse, schemeDark] },
+  { group: "Grids", name: "SectorDiamonds01", path: "components-v2/06_sections/grids/sector-diamonds-01.jsx", Component: SectorDiamonds01, content: SECTOR_DIAMONDS, controls: [] },
   { group: "Grids", name: "CapabilityGrid01", path: "components-v2/06_sections/grids/capability-grid-01.jsx", Component: CapabilityGrid01, content: CAPABILITY, controls: [] },
   { group: "Grids", name: "CapacityLadder01", path: "components-v2/06_sections/grids/capacity-ladder-01.jsx", Component: CapacityLadder01, content: CAPACITY, controls: [] },
   { group: "Grids", name: "FacilityShowcase01", path: "components-v2/06_sections/grids/facility-showcase-01.jsx", Component: FacilityShowcase01, content: FACILITY, controls: [] },

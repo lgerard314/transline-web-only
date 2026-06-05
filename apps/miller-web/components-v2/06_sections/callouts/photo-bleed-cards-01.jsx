@@ -1,21 +1,24 @@
-import { Eyebrow01 } from "@/components-v2/01_marks/eyebrows/eyebrow-01";
-import { StopText01 } from "@/components-v2/01_marks/stops/stop-text-01";
 import { NoteCard01 } from "@/components-v2/03_cards/note/note-card-01";
 import { sectionProps } from "@/components-v2/section-config";
 
 export function PhotoBleedCards01({ content, config = {} }) {
-  const { bleedPhotoSrc, eyebrow, title, lead, cards, headingId } = content;
+  const { bleedPhotoSrc, eyebrow, stage, title, lead, cards, headingId } = content;
   return (
     <section className="mw-careers mw-careers--bleed" aria-labelledby={headingId} {...sectionProps(config)}>
       <div className="mw-careers__bleed-photo" aria-hidden="true">
-        <img src={bleedPhotoSrc} alt="" loading="lazy" />
+        <img src={bleedPhotoSrc} alt="" loading="lazy" data-parallax-img />
       </div>
       <div className="mw-inner">
         <header className="mw-careers__head">
           <div className="mw-careers__head-text" data-reveal>
-            <Eyebrow01 label={eyebrow} invert />
+            {/* Field-head: the /v2 manifest grammar — a mono `stage —— field` document line above the title. */}
+            <p className="mw-careers__field">
+              {stage ? <span>{stage}</span> : null}
+              <span className="mw-careers__field-rule" />
+              <span>{eyebrow}</span>
+            </p>
             <h2 id={headingId} className="mw-careers__title">
-              {title.lead}<br /><span className="mw-careers__title-em"><StopText01>{title.em}</StopText01></span>
+              {title.lead} <span className="mw-careers__title-em">{title.em}</span>
             </h2>
             <p className="mw-careers__lead">{lead}</p>
           </div>

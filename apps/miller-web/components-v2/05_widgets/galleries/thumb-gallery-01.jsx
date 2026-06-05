@@ -8,7 +8,7 @@ export function ThumbGallery01({ photos }) {
   return (
     <div className="mw-fac2__media" data-reveal>
       <figure className="mw-fac2__photo-frame">
-        <img key={index} className="mw-fac2__photo-main" src={active.src} alt={active.alt || ""} loading="lazy" />
+        <img key={index} className="mw-fac2__photo-main" src={active.src} alt={active.alt || ""} loading="lazy" data-parallax-img />
         {active.caption && (
           <figcaption className="mw-fac2__photo-cap" key={`cap-${index}`}>
             <span className="mw-fac2__photo-cap-mark" aria-hidden="true" />
@@ -19,7 +19,7 @@ export function ThumbGallery01({ photos }) {
       <div className="mw-fac2__thumbs" role="group" aria-label="Switch facility photo">
         {photos.map((photo, i) => (
           <button key={i} type="button" onClick={() => setIndex(i)} aria-pressed={i === index} aria-label={photo.alt || `Photo ${i + 1}`} className={"mw-fac2__thumb" + (i === index ? " is-active" : "")}>
-            <img src={photo.src} alt="" loading="lazy" />
+            <img src={photo.src} alt="" loading="lazy" data-parallax-img data-parallax-max="0.05" />
           </button>
         ))}
       </div>

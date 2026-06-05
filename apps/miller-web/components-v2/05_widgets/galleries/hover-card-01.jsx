@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 
-const PHOTO_BASE = "/miller";
+const PHOTO_BASE = "/miller/custom";
 
 export function HoverCard01({ title, items }) {
   const [active, setActive] = useState(0);
@@ -9,7 +9,7 @@ export function HoverCard01({ title, items }) {
     <article className="mw-sec2__card">
       <div className="mw-sec2__card-photo" aria-hidden="true">
         {items.map((item, i) => (
-          <img key={item.slug} className="mw-sec2__card-photo-img" src={`${PHOTO_BASE}/${item.slug}.png`} alt="" data-active={i === active ? "1" : undefined} loading="lazy" />
+          <img key={item.slug} className="mw-sec2__card-photo-img" src={`${PHOTO_BASE}/${item.slug}.png`} alt="" data-active={i === active ? "1" : undefined} loading="lazy" data-parallax-img data-parallax-x="0.7" />
         ))}
       </div>
       <div className="mw-sec2__card-body">

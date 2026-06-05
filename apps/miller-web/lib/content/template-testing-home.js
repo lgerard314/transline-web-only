@@ -55,12 +55,12 @@ export const SECTOR_CARDS = [
 ];
 
 export const FACILITY_PHOTOS = [
-  { src: "/miller/vbec-drone-overview.png", alt: "VBEC drone overview", caption: "Aerial drone overview" },
-  { src: "/miller/vbec-office-front-aerial.png", alt: "Office front, aerial view", caption: "Office front, from above" },
-  { src: "/miller/vbec-office-front.png", alt: "Office front, ground view", caption: "Office front entrance" },
-  { src: "/miller/vbec-stone-sign.png", alt: "Vaughn Bullough Environmental Centre stone sign", caption: "Entrance stone sign" },
-  { src: "/miller/vbec-lake.png", alt: "Lake on the VBEC grounds", caption: "Reflection pond on the grounds" },
-  { src: "/miller/vbec-windmills-1.png", alt: "Wind turbines visible from VBEC", caption: "Wind turbines on the horizon" },
+  { src: "/miller/custom/vbec-drone-overview.png", alt: "VBEC drone overview", caption: "Aerial drone overview" },
+  { src: "/miller/custom/vbec-office-front-aerial.png", alt: "Office front, aerial view", caption: "Office front, from above" },
+  { src: "/miller/custom/vbec-office-front.png", alt: "Office front, ground view", caption: "Office front entrance" },
+  { src: "/miller/custom/vbec-stone-sign.png", alt: "Vaughn Bullough Environmental Centre stone sign", caption: "Entrance stone sign" },
+  { src: "/miller/custom/vbec-lake.png", alt: "Lake on the VBEC grounds", caption: "Reflection pond on the grounds" },
+  { src: "/miller/custom/vbec-windmills-1.png", alt: "Wind turbines visible from VBEC", caption: "Wind turbines on the horizon" },
 ];
 
 export const MILESTONES = [
@@ -98,12 +98,9 @@ export const SOCIALS = [
 
 export const HERO = {
   titleId: "mw-hero-title",
-  photoSrc: "/miller/home-frame-1.png",
+  photoSrc: "/miller/custom/home-frame-1.png",
   mark: {
     logoSrc: "/miller/logo/miller-logomark-1.webp",
-    name: "Miller Environmental",
-    corpLong: "Corporation",
-    corpShort: "Corp.",
     since: "Since 1996",
   },
   title: {
@@ -153,8 +150,9 @@ export const LIFETIME_REEL = {
 export const SERVICES_GRID = {
   headingId: "mw-services-heading",
   eyebrow: "Services",
-  title: { lead: "whatever your waste needs,", em: "we’ve got you covered" },
+  title: { lead: "From routine to emergencies,", em: "we’ve got you covered" },
   intro: "From routine industrial streams to one-off emergency calls, Miller’s licensed VBEC facility and field crews handle the full spectrum — collection, treatment, and final disposition, all under one roof.",
+  learnMore: { label: "Learn more", href: "/industrial-services/" },
   services: orderedServices(),
   externalTile: {
     href: "https://www.transline49.com",
@@ -174,6 +172,7 @@ export const SECTORS = {
 
 export const FACILITY = {
   headingId: "mw-facility-heading-copy",
+  stage: "VBEC",
   eyebrow: "Vaughn Bullough Environmental Centre",
   title: { top: "VBEC", em: "A facility built for the work" },
   lead: HOME.vbec.body,
@@ -191,13 +190,14 @@ export const FACILITY = {
 
 export const HISTORY = {
   headingId: "mw-tenure-heading-copy-b",
+  stage: "Record — Since 1996",
   eyebrow: "Our history",
   title: { lead: "Three decades in", em: "hazardous waste" },
   lead: "Miller Environmental was formed in 1996 as Manitoba’s first private-public hazardous-waste operator. Vaughn Bullough joined as General Manager in 1997 and led operations for twenty-five years. The facility was renamed in his honour in 2022. The work continues.",
   timelineNote: "*hover for more info",
   milestones: MILESTONES,
   plate: {
-    imgSrc: "/miller/full-truck-sideview.png",
+    imgSrc: "/miller/custom/3-trucks-pulling-out.png",
     stats: [
       { num: "25", unit: "+yrs", label: "Relationships" },
       { num: "96", unit: "%", label: "In-house" },
@@ -218,6 +218,7 @@ export const HISTORY = {
 export const CAREERS = {
   headingId: "mw-careers-bleed-heading",
   bleedPhotoSrc: "/miller/team-at-conv-booth-big-5.jpg",
+  stage: "The Crew",
   eyebrow: "Careers",
   title: { lead: "Join the", em: "Miller team" },
   lead: HOME.joinFamily.intro,
@@ -227,7 +228,7 @@ export const CAREERS = {
   ],
 };
 
-export const AFFILIATES_BANNER = { ariaLabel: "Affiliates", label: ["Proud", "affiliates"], items: AFFILIATES };
+export const AFFILIATES_BANNER = { ariaLabel: "Affiliates", label: "Affiliates", items: AFFILIATES };
 
 export const FINAL_CTA = {
   headingId: "mw-final-heading",

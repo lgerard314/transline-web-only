@@ -20,15 +20,31 @@
 //   "left"    — closed loop, starts & ends at the LEFT apex, clockwise (L→T→R→B).
 //   "split"   — TWO half loops drawn at once from the LEFT and RIGHT apexes,
 //               meeting at top & bottom (each half-speed, landing together).
+//   "lr"      — TWO half loops both starting at the LEFT apex (= 50% height) and
+//               sweeping the SAME way, left→right: one up-and-right over the top,
+//               one down-and-right under the bottom, meeting at the RIGHT apex.
+//               NOTE: on desktop the reel hides these per-diamond edges and draws
+//               the whole chain (diamonds + connectors) in ONE unified SVG so the
+//               stroke, gradient, and seams all match (see LifetimeReel). This "lr"
+//               edge is the MOBILE fallback (one diamond at a time, no chain).
 // Shared vertices (viewBox 200): apex L 19.29 / R 180.71 / T (100,19.29) /
 // B (100,180.71); corner tangents at ±7.07 from each apex along the edges.
 //
 // `legend` = the micro-text ringing the seal (default "ON THE RECORD").
+const LR_TOP = "M 19.29 100 A 10 10 0 0 1 22.22 92.93 L 92.93 22.22 A 10 10 0 0 1 107.07 22.22 L 177.78 92.93 A 10 10 0 0 1 180.71 100";
+const LR_BOTTOM = "M 19.29 100 A 10 10 0 0 0 22.22 107.07 L 92.93 177.78 A 10 10 0 0 0 107.07 177.78 L 177.78 107.07 A 10 10 0 0 0 180.71 100";
+
 export function LrDiamondSeal({ children, legend = "ON THE RECORD", draw = "default" }) {
   return (
     <span className="mw-lr-seal">
       <svg className="mw-lr-seal__frame" viewBox="0 0 200 200" aria-hidden="true" preserveAspectRatio="none">
-        {draw === "split" ? (
+        {draw === "lr" ? (
+          <>
+            {/* both halves, left apex → right apex (mobile fallback edge) */}
+            <path className="mw-lr-seal__edge" pathLength="100" d={LR_TOP} />
+            <path className="mw-lr-seal__edge" pathLength="100" d={LR_BOTTOM} />
+          </>
+        ) : draw === "split" ? (
           <>
             {/* bottom half: left apex → bottom → right apex */}
             <path className="mw-lr-seal__edge" pathLength="100"
