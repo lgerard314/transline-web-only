@@ -35,7 +35,7 @@ export const SERVICES = [
     title: "Emergency Response",
     summary: "24/7 emergency response across Manitoba and the prairies.",
     icon: "✕",
-    photo: "/miller/fleet-trucks-gravel-transparent.png",
+    photo: "/miller/custom/fleet-trucks-gravel-transparent.png",
     variant: "bespoke",
   },
   {

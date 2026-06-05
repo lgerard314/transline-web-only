@@ -1,14 +1,24 @@
-import { NoteCard01 } from "@/components-v2/03_cards/note/note-card-01";
+import { CareersDiamonds01 } from "@/components-v2/05_widgets/galleries/careers-diamonds-01";
+import { CareerReel01 } from "@/components-v2/05_widgets/galleries/career-reel-01";
 import { sectionProps } from "@/components-v2/section-config";
 
 export function PhotoBleedCards01({ content, config = {} }) {
-  const { bleedPhotoSrc, eyebrow, stage, title, lead, cards, headingId } = content;
+  const { bleedPhotoSrc, reelPhotos, eyebrow, stage, title, lead, cards, headingId } = content;
   return (
     <section className="mw-careers mw-careers--bleed" aria-labelledby={headingId} {...sectionProps(config)}>
-      <div className="mw-careers__bleed-photo" aria-hidden="true">
-        <img src={bleedPhotoSrc} alt="" loading="lazy" data-parallax-img />
-      </div>
+      {reelPhotos && reelPhotos.length > 0 ? null : (
+        <div className="mw-careers__bleed-photo" aria-hidden="true">
+          <img src={bleedPhotoSrc} alt="" loading="lazy" data-parallax-img />
+        </div>
+      )}
       <div className="mw-inner">
+        {reelPhotos && reelPhotos.length > 0 ? (
+          /* Reel lives inside .mw-inner so it fits the content container's box
+             (height + right edge) rather than bleeding the full section. */
+          <div className="mw-careers__reel-col">
+            <CareerReel01 photos={reelPhotos} />
+          </div>
+        ) : null}
         <header className="mw-careers__head">
           <div className="mw-careers__head-text" data-reveal>
             {/* Field-head: the /v2 manifest grammar — a mono `stage —— field` document line above the title. */}
@@ -23,8 +33,8 @@ export function PhotoBleedCards01({ content, config = {} }) {
             <p className="mw-careers__lead">{lead}</p>
           </div>
         </header>
-        <div className="mw-careers__cards" data-reveal-stagger>
-          {cards.map((card) => (<NoteCard01 key={card.tag} tag={card.tag} title={card.title} text={card.text} cta={card.cta} />))}
+        <div className="mw-careers__cards">
+          <CareersDiamonds01 cards={cards} />
         </div>
       </div>
     </section>

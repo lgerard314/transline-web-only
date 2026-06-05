@@ -6,7 +6,7 @@ export const caseGrainElevator = {
     eyebrow: "Case study",
     title: "Grain Elevator Remediation Project",
     lead: "Full site remediation and demolition restores land value in Winnipeg.",
-    photo: "/miller/arsenic-contaiminated-soil-removal-1.png",
+    photo: "/miller/custom/arsenic-contaiminated-soil-removal-1.png",
     meta: [{ k: "Location ", v: "Winnipeg, MB" }],
   },
   problem: {

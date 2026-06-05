@@ -88,7 +88,7 @@ const SERVICE_HERO = {
   title: "When it happens,",
   titleEm: "we respond fast",
   lead: "Industrial-grade reliability for demo purposes. Lorem ipsum dolor sit amet consectetur — generic placeholder copy standing in for a real service description.",
-  photo: "/miller/fleet-trucks-gravel-transparent.png",
+  photo: "/miller/custom/fleet-trucks-gravel-transparent.png",
   emergencyDisplay: "1-800-000-0000",
   emergencyHref: "tel:18000000000",
   secondaryCta: { label: "Pre-incident planning", labelShort: "Get prepared", href: "#" },
@@ -101,7 +101,7 @@ const SERVICE_HERO = {
 function serviceHeroContent(config) {
   const photo = config.media === "photo-bleed"
     ? "/miller/customer-waste-collection-hero-2.webp"
-    : "/miller/fleet-trucks-gravel-transparent.png";
+    : "/miller/custom/fleet-trucks-gravel-transparent.png";
   return { ...SERVICE_HERO, photo };
 }
 
@@ -139,10 +139,10 @@ const MEDIA_SPLIT = {
   primaryCta: { longLabel: "Primary action label", shortLabel: "Primary", href: "#" },
   aboutLink: { longLabel: "Secondary text link", shortLabel: "More", href: "#" },
   photos: [
-    { src: "/miller/vbec-drone-overview.png", alt: "Drone overview", caption: "Aerial drone overview" },
-    { src: "/miller/vbec-office-front.png", alt: "Office front", caption: "Office front entrance" },
-    { src: "/miller/vbec-stone-sign.png", alt: "Stone sign", caption: "Entrance stone sign" },
-    { src: "/miller/vbec-lake.png", alt: "Lake", caption: "Reflection pond" },
+    { src: "/miller/custom/vbec-drone-overview.png", alt: "Drone overview", caption: "Aerial drone overview" },
+    { src: "/miller/custom/vbec-office-front.png", alt: "Office front", caption: "Office front entrance" },
+    { src: "/miller/custom/vbec-stone-sign.png", alt: "Stone sign", caption: "Entrance stone sign" },
+    { src: "/miller/custom/vbec-lake.png", alt: "Lake", caption: "Reflection pond" },
   ],
 };
 
@@ -159,7 +159,7 @@ const TIMELINE_SPLIT = {
     { year: "2025", title: "Recent milestone", body: "Placeholder description of the most recent milestone." },
   ],
   plate: {
-    imgSrc: "/miller/full-truck-sideview.png",
+    imgSrc: "/miller/custom/full-truck-sideview.png",
     stats: [
       { num: "25", unit: "+yrs", label: "Placeholder A" },
       { num: "96", unit: "%", label: "Placeholder B" },
@@ -187,7 +187,7 @@ const FLEET_SPLIT = {
     { mark: "02", name: "Second unit type", body: "Placeholder description of the second piece of equipment and its use." },
     { mark: "03", name: "Third unit type", body: "Placeholder description of a third unit in the fleet." },
   ],
-  mediaPhoto: "/miller/industrial-vaccum-truck-transparent.png",
+  mediaPhoto: "/miller/custom/industrial-vaccum-truck-transparent.png",
 };
 
 const BENTO = {
@@ -199,7 +199,7 @@ const BENTO = {
   services: [
     { id: "svc-01", slug: "service-one", title: "Service One Alpha", summary: "Placeholder summary for the first service tile in the grid.", photo: "/miller/industrial-waste-treatment-hero-1.webp" },
     { id: "svc-02", slug: "service-two", title: "Service Two Beta", summary: "Placeholder summary for the second service tile.", photo: "/miller/remediation-contaminated-soil-2.webp" },
-    { id: "svc-03", slug: "service-three", title: "Service Three Gamma", summary: "Placeholder summary for the third service tile.", photo: "/miller/fleet-trucks-gravel-transparent.png" },
+    { id: "svc-03", slug: "service-three", title: "Service Three Gamma", summary: "Placeholder summary for the third service tile.", photo: "/miller/custom/fleet-trucks-gravel-transparent.png" },
     { id: "svc-04", slug: "service-four", title: "Service Four Delta", summary: "Placeholder summary for the fourth service tile.", photo: "/miller/vacuum-truck-hero-2.jpg" },
     { id: "svc-05", slug: "service-five", title: "Service Five Epsilon", summary: "Placeholder summary for the fifth service tile.", photo: "/miller/specialty-recycling-hero-2.webp" },
     { id: "svc-06", slug: "service-six", title: "Service Six Zeta", summary: "Placeholder summary for the sixth service tile.", photo: "/miller/research-development-hero-2.webp" },
@@ -294,7 +294,7 @@ const CAPACITY = {
   eyebrow: "Any volume",
   title: "From the smallest container to a full load",
   lead: "A short placeholder lead explaining that service scales across container sizes, illustrated by the proportional ladder below.",
-  headPhoto: "/miller/dumptruck-2.png",
+  headPhoto: "/miller/custom/dumptruck-2.png",
   tiers: [
     { glyph: "pail", name: "Pails", spec: "≤ 20 L", fill: 16, note: "Placeholder note for the smallest tier." },
     { glyph: "drum", name: "Drums", spec: "205 L", fill: 42, note: "Placeholder note for the mid tier." },
@@ -324,55 +324,55 @@ const PCG_THUMB = {
   titleId: "tg-photocard",
   eyebrow: "What we respond to",
   title: "Prepared for the call\nyou hope never comes",
-  headMedia: "/miller/pickup-truck-transparent-removebg.png",
+  headMedia: "/miller/custom/pickup-truck-transparent-removebg.png",
   lead: "Placeholder lead describing the range of situations these cards cover, in one short sentence.",
   cta: { label: "Talk to us", href: "#" },
   items: [
-    { name: "Chemical\nspills", blurb: "Placeholder blurb describing this response type.", photo: "/miller/chemical-spills.png" },
-    { name: "Fuel\nreleases", blurb: "Placeholder blurb describing this response type.", photo: "/miller/fuel-and-diesel-spills.png" },
-    { name: "Transport\nincidents", blurb: "Placeholder blurb describing this response type.", photo: "/miller/transport-incidents.png" },
-    { name: "Industrial\nleaks", blurb: "Placeholder blurb describing this response type.", photo: "/miller/industrial-leaks.png" },
+    { name: "Chemical\nspills", blurb: "Placeholder blurb describing this response type.", photo: "/miller/custom/chemical-spills.png" },
+    { name: "Fuel\nreleases", blurb: "Placeholder blurb describing this response type.", photo: "/miller/custom/fuel-and-diesel-spills.png" },
+    { name: "Transport\nincidents", blurb: "Placeholder blurb describing this response type.", photo: "/miller/custom/transport-incidents.png" },
+    { name: "Industrial\nleaks", blurb: "Placeholder blurb describing this response type.", photo: "/miller/custom/industrial-leaks.png" },
   ],
 };
 const PCG_GALLERY = {
   titleId: "tg-photocard",
   eyebrow: "Who we serve",
   title: "Built for regulated generators",
-  headMedia: "/miller/pickup-truck-transparent-removebg.png",
+  headMedia: "/miller/custom/pickup-truck-transparent-removebg.png",
   lead: "Placeholder lead sentence about the sectors served by this gallery grid.",
   cta: { label: "Talk to us", href: "#" },
   items: [
-    { name: "Manufacturing", photo: "/miller/industrial-leaks.png", blurb: "Placeholder sector blurb, one line." },
-    { name: "Aerospace", photo: "/miller/dangerous-goods.png", blurb: "Placeholder sector blurb, one line." },
-    { name: "Agriculture", photo: "/miller/contaminated-soul.png", blurb: "Placeholder sector blurb, one line." },
-    { name: "Healthcare", photo: "/miller/hazmat-cleaning.png", blurb: "Placeholder sector blurb, one line." },
+    { name: "Manufacturing", photo: "/miller/custom/industrial-leaks.png", blurb: "Placeholder sector blurb, one line." },
+    { name: "Aerospace", photo: "/miller/custom/dangerous-goods.png", blurb: "Placeholder sector blurb, one line." },
+    { name: "Agriculture", photo: "/miller/custom/contaminated-soul.png", blurb: "Placeholder sector blurb, one line." },
+    { name: "Healthcare", photo: "/miller/custom/hazmat-cleaning.png", blurb: "Placeholder sector blurb, one line." },
   ],
 };
 const PCG_WWD = {
   titleId: "tg-photocard",
   eyebrow: "What we do",
   title: "Six sample capabilities",
-  headMedia: "/miller/pickup-truck-transparent-removebg.png",
+  headMedia: "/miller/custom/pickup-truck-transparent-removebg.png",
   lead: "Placeholder lead sentence introducing the hover-swap capability cards.",
   cta: { label: "Talk to us", href: "#" },
   items: [
-    { name: "Capability One", photo: "/miller/contaminated-soil-remediation.png", blurb: "Short rest-state blurb shown before hover.", detail: "Longer placeholder paragraph revealed on hover, describing the capability in full sentences for demo purposes." },
-    { name: "Capability Two", photo: "/miller/hazardous-material-excavation-disposal.png", blurb: "Short rest-state blurb shown before hover.", detail: "Longer placeholder paragraph revealed on hover, describing the capability in full sentences for demo purposes." },
-    { name: "Capability Three", photo: "/miller/emergency-spiill-response-cleanup.png", blurb: "Short rest-state blurb shown before hover.", detail: "Longer placeholder paragraph revealed on hover, describing the capability in full sentences for demo purposes." },
-    { name: "Capability Four", photo: "/miller/fire-damaged-site-remediation.png", blurb: "Short rest-state blurb shown before hover.", detail: "Longer placeholder paragraph revealed on hover, describing the capability in full sentences for demo purposes." },
+    { name: "Capability One", photo: "/miller/custom/contaminated-soil-remediation.png", blurb: "Short rest-state blurb shown before hover.", detail: "Longer placeholder paragraph revealed on hover, describing the capability in full sentences for demo purposes." },
+    { name: "Capability Two", photo: "/miller/custom/hazardous-material-excavation-disposal.png", blurb: "Short rest-state blurb shown before hover.", detail: "Longer placeholder paragraph revealed on hover, describing the capability in full sentences for demo purposes." },
+    { name: "Capability Three", photo: "/miller/custom/emergency-spiill-response-cleanup.png", blurb: "Short rest-state blurb shown before hover.", detail: "Longer placeholder paragraph revealed on hover, describing the capability in full sentences for demo purposes." },
+    { name: "Capability Four", photo: "/miller/custom/fire-damaged-site-remediation.png", blurb: "Short rest-state blurb shown before hover.", detail: "Longer placeholder paragraph revealed on hover, describing the capability in full sentences for demo purposes." },
   ],
 };
 const PCG_CASE = {
   titleId: "tg-photocard",
   eyebrow: "Proof of work",
   title: "Sample case studies",
-  headMedia: "/miller/pickup-truck-transparent-removebg.png",
+  headMedia: "/miller/custom/pickup-truck-transparent-removebg.png",
   lead: "Placeholder lead sentence introducing the case-study cards.",
   cta: { label: "All case studies", href: "#" },
   items: [
-    { href: "#sample-one", title: "Sample Project One", location: "Sample Location, MB", photo: "/miller/arsenic-contaiminated-soil-removal-1.png", desc: "Placeholder one-sentence summary of the case study." },
-    { href: "#sample-two", title: "Sample Project Two", location: "Sample Location, MB", photo: "/miller/diesel-spill-remediation.png", desc: "Placeholder one-sentence summary of the case study." },
-    { href: "#sample-three", title: "Sample Project Three", location: "Sample Location, MB", photo: "/miller/fire-damaged-site-remediation.png", desc: "Placeholder one-sentence summary of the case study." },
+    { href: "#sample-one", title: "Sample Project One", location: "Sample Location, MB", photo: "/miller/custom/arsenic-contaiminated-soil-removal-1.png", desc: "Placeholder one-sentence summary of the case study." },
+    { href: "#sample-two", title: "Sample Project Two", location: "Sample Location, MB", photo: "/miller/custom/diesel-spill-remediation.png", desc: "Placeholder one-sentence summary of the case study." },
+    { href: "#sample-three", title: "Sample Project Three", location: "Sample Location, MB", photo: "/miller/custom/fire-damaged-site-remediation.png", desc: "Placeholder one-sentence summary of the case study." },
     { href: "#sample-four", title: "Sample Project Four", location: "Sample Location, MB", photo: "/miller/home-frame-2-2.webp", desc: "Placeholder one-sentence summary of the case study." },
   ],
 };
@@ -421,7 +421,7 @@ const NUMBERED = {
 
 const MULTI_COLUMN_CTA = {
   headingId: "tg-multicol",
-  truckImgSrc: "/miller/truck-graphic-angled.png",
+  truckImgSrc: "/miller/custom/truck-graphic-angled.png",
   logoImgSrc: "/miller/logo/miller-logomark-1.webp",
   eyebrow: "Reach out",
   title: "Let's start the conversation.",
@@ -530,10 +530,10 @@ const PICKER_GALLERY = {
   phoneHref: "tel:18005551234",
   phoneDisplay: "1-800-555-1234",
   items: [
-    { text: "First industry", photo: "/miller/industrial-manufacturing.png", bigAnchor: "50% 50%", thumbAnchor: "50% 50%", caption: "Placeholder caption describing the first industry served.", default: true },
-    { text: "Second industry", photo: "/miller/municipal-programs.png", bigAnchor: "50% 50%", thumbAnchor: "50% 50%", caption: "Placeholder caption describing the second industry served." },
-    { text: "Third industry", photo: "/miller/construction-and-demolition.png", bigAnchor: "50% 50%", thumbAnchor: "50% 50%", caption: "Placeholder caption describing the third industry served." },
-    { text: "Fourth industry", photo: "/miller/agriculture.png", bigAnchor: "50% 50%", thumbAnchor: "50% 50%", caption: "Placeholder caption describing the fourth industry served." },
+    { text: "First industry", photo: "/miller/custom/industrial-manufacturing.png", bigAnchor: "50% 50%", thumbAnchor: "50% 50%", caption: "Placeholder caption describing the first industry served.", default: true },
+    { text: "Second industry", photo: "/miller/custom/municipal-programs.png", bigAnchor: "50% 50%", thumbAnchor: "50% 50%", caption: "Placeholder caption describing the second industry served." },
+    { text: "Third industry", photo: "/miller/custom/construction-and-demolition.png", bigAnchor: "50% 50%", thumbAnchor: "50% 50%", caption: "Placeholder caption describing the third industry served." },
+    { text: "Fourth industry", photo: "/miller/custom/agriculture.png", bigAnchor: "50% 50%", thumbAnchor: "50% 50%", caption: "Placeholder caption describing the fourth industry served." },
   ],
 };
 

@@ -35,7 +35,7 @@ export const REMEDIATION = {
     items: [
       {
         name: "Contaminated Soil Remediation",
-        photo: "/miller/contaminated-soil-remediation.png",
+        photo: "/miller/custom/contaminated-soil-remediation.png",
         blurb:
           "Safe, effective removal of pollutants from soil at industrial, commercial, and residential sites — assessed individually for minimal impact, cost efficiency, and compliance.",
         detail:
@@ -43,7 +43,7 @@ export const REMEDIATION = {
       },
       {
         name: "Hazardous Material Excavation & Disposal",
-        photo: "/miller/hazardous-material-excavation-disposal.png",
+        photo: "/miller/custom/hazardous-material-excavation-disposal.png",
         blurb:
           "Heavy metals, PCBs, and industrial chemicals excavated with precision and transported to our fully licensed Vaughn Bullough Environmental Centre.",
         detail:
@@ -51,7 +51,7 @@ export const REMEDIATION = {
       },
       {
         name: "Emergency Spill Response & Cleanup",
-        photo: "/miller/emergency-spiill-response-cleanup.png",
+        photo: "/miller/custom/emergency-spiill-response-cleanup.png",
         blurb:
           "Rapid 24/7 response for diesel, petroleum hydrocarbons, and chemicals — contained and cleaned from first assessment to final treatment or disposal.",
         detail:
@@ -59,7 +59,7 @@ export const REMEDIATION = {
       },
       {
         name: "Fire-Damaged Site Remediation",
-        photo: "/miller/fire-damaged-site-remediation.png",
+        photo: "/miller/custom/fire-damaged-site-remediation.png",
         blurb:
           "Asbestos, soot, and contaminated runoff removed with advanced techniques that restore fire-damaged sites to a safe, usable condition.",
         detail:
@@ -67,7 +67,7 @@ export const REMEDIATION = {
       },
       {
         name: "Industrial Site Cleanup & Brownfield Prep",
-        photo: "/miller/industrial-site-cleanup-brownfield-redevelopment-prep-1.png",
+        photo: "/miller/custom/industrial-site-cleanup-brownfield-redevelopment-prep-1.png",
         blurb:
           "Underutilized, abandoned, or contaminated properties returned to productive use through detailed assessment, planning, and full remediation.",
         detail:
@@ -75,7 +75,7 @@ export const REMEDIATION = {
       },
       {
         name: "Underground Storage Tank (UST) Work",
-        photo: "/miller/underground-storage-tank-excavation-soil-remediation.png",
+        photo: "/miller/custom/underground-storage-tank-excavation-soil-remediation.png",
         blurb:
           "Leaks, corrosion, and hazardous contamination addressed end-to-end — tank pull, impacted-soil remediation, and verification under one contract.",
         detail:
@@ -96,14 +96,14 @@ export const REMEDIATION = {
     provides: [
       {
         text: "Municipalities & Public Works",
-        photo: "/miller/municipal-programs.png",
+        photo: "/miller/custom/municipal-programs.png",
         bigAnchor: "50% 50%",
         thumbAnchor: "50% 50%",
         caption: "Public-works departments and municipal sites returned to compliance after spills, fuel releases, and aging infrastructure.",
       },
       {
         text: "Industrial & Manufacturing Facilities",
-        photo: "/miller/industrial-manufacturing.png",
+        photo: "/miller/custom/industrial-manufacturing.png",
         bigAnchor: "50% 50%",
         thumbAnchor: "50% 50%",
         caption: "Plants and manufacturing facilities remediated around live operations — from process leaks to legacy soil contamination.",
@@ -111,28 +111,28 @@ export const REMEDIATION = {
       },
       {
         text: "Developers & Construction Firms",
-        photo: "/miller/construction-and-demolition.png",
+        photo: "/miller/custom/construction-and-demolition.png",
         bigAnchor: "50% 50%",
         thumbAnchor: "50% 50%",
         caption: "Developers and builders cleared to break ground — contaminated and brownfield parcels assessed and remediated for redevelopment.",
       },
       {
         text: "Insurance & Claims Adjusters",
-        photo: "/miller/crown-insurers.png",
+        photo: "/miller/custom/crown-insurers.png",
         bigAnchor: "50% 50%",
         thumbAnchor: "50% 50%",
         caption: "Adjusters and insurers supported with fast, fully documented cleanup and reporting on environmental claims.",
       },
       {
         text: "Agricultural Operations",
-        photo: "/miller/agriculture.png",
+        photo: "/miller/custom/agriculture.png",
         bigAnchor: "50% 50%",
         thumbAnchor: "50% 50%",
         caption: "Farm and acreage sites restored after fuel, chemical, and equipment-related contamination.",
       },
       {
         text: "Transportation & Logistics Companies",
-        photo: "/miller/transportation-and-rail.png",
+        photo: "/miller/custom/transportation-and-rail.png",
         bigAnchor: "50% 50%",
         thumbAnchor: "50% 50%",
         caption: "Carriers and logistics operators served after highway and rail releases — corridors cleared and impacted soil treated.",
@@ -206,21 +206,21 @@ export const REMEDIATION = {
         href: "/case-studies/grain-elevator-remediation-project/",
         title: "Arsenic-Contaminated Soil Removal",
         location: "Grain Elevator, Winnipeg",
-        photo: "/miller/arsenic-contaiminated-soil-removal-1.png",
+        photo: "/miller/custom/arsenic-contaiminated-soil-removal-1.png",
         desc: "Excavation and licensed disposal of arsenic-impacted soil at a decommissioned grain elevator, returning the site to provincial compliance.",
       },
       {
         href: "/case-studies/highway-16-diesel-spill-response-remediation/",
         title: "Diesel Spill Remediation",
         location: "Highway 16 Emergency Response",
-        photo: "/miller/diesel-spill-remediation.png",
+        photo: "/miller/custom/diesel-spill-remediation.png",
         desc: "Rapid containment and recovery of a highway diesel release, with impacted soil treated and the corridor restored under CCME standards.",
       },
       {
         href: "/case-studies/steinbach-strip-mall-fire-recovery-restoration-project/",
         title: "Fire Site Hazard Removal",
         location: "Steinbach Strip Mall",
-        photo: "/miller/fire-damaged-site-remediation.png",
+        photo: "/miller/custom/fire-damaged-site-remediation.png",
         desc: "Post-fire hazardous-material abatement and debris removal at a commercial strip mall, clearing the site for safe restoration.",
       },
       {

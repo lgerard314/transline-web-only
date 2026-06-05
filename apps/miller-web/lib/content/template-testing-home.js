@@ -218,6 +218,15 @@ export const HISTORY = {
 export const CAREERS = {
   headingId: "mw-careers-bleed-heading",
   bleedPhotoSrc: "/miller/team-at-conv-booth-big-5.jpg",
+  // Expanding vertical photo reel on the right; horse-and-flag leads. Hover/focus
+  // or tap a row to grow it. Captions ride in on the active row.
+  reelPhotos: [
+    { src: "/miller/girl-on-horse-with-miller-flag.jpg", caption: "Flying the colours" },
+    { src: "/miller/team-at-blue-bombers.jpg", caption: "Bombers blue" },
+    { src: "/miller/team-in-casual-clothes.jpg", caption: "The whole crew" },
+    { src: "/miller/team-at-charity-event.jpg", caption: "Here for Winnipeg" },
+    { src: "/miller/team-at-conv-booth-big-5.jpg", caption: "On the floor" },
+  ],
   stage: "The Crew",
   eyebrow: "Careers",
   title: { lead: "Join the", em: "Miller team" },
@@ -232,7 +241,7 @@ export const AFFILIATES_BANNER = { ariaLabel: "Affiliates", label: "Affiliates",
 
 export const FINAL_CTA = {
   headingId: "mw-final-heading",
-  truckImgSrc: "/miller/truck-graphic-angled.png",
+  truckImgSrc: "/miller/custom/truck-graphic-angled.png",
   logoImgSrc: "/miller/logo/miller-logomark-1.webp",
   eyebrow: HOME.finalCta.eyebrow,
   title: HOME.finalCta.title,

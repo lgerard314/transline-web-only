@@ -833,8 +833,14 @@
    ───────────────────────────────────────────────────────────────── */
 .mw-ten3 {
   position: relative;
+  /* --ptop = section top padding (also how far the banner bleeds up). --bh =
+     banner height; set as a fixed (content-clearing) value so the banner's
+     vertical middle is predictable — the angled-edge apex and the timeline's
+     shifted top both key off --bh/2. */
+  --ptop: clamp(64px, 6.5vw, 112px);
+  --bh: clamp(490px, 40vw, 620px);
   background: var(--c-bg);
-  padding-block: clamp(64px, 6.5vw, 112px);
+  padding-block: var(--ptop);
   color: var(--c-ink);
   overflow: clip;
   isolation: isolate;
@@ -842,15 +848,23 @@
 }
 .mw-ten3__grid {
   display: grid;
-  /* aside (plate + mission) on the LEFT, the milestone record on the RIGHT —
-     left column ~matches the 64ch header so the right (pulled-up) timeline clears it */
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  /* LEFT column = image-banner (body content nested inside) + mission stacked
+     below it; RIGHT column = the milestone record. align-items:start tops the
+     record level with the banner. The record column is sized to a tight band
+     (clamp floor ≥ the body's 58ch max-width + tick padding, so the timeline
+     NEVER shrinks); the left column takes the rest (1fr), so it is the wider of
+     the two on desktop. */
+  grid-template-columns: minmax(0, 1fr) clamp(36rem, 40%, 40rem);
   gap: clamp(32px, 4vw, 72px);
   align-items: start;
 }
-.mw-ten3__aside { order: 1; }
-.mw-ten3__line { order: 2; }
-@media (max-width: 900px) {
+/* The left column — two stacked containers. Stretched to the full row height
+   (overriding the grid's align-items:start) so the sticky mission/stats block
+   has room to travel for the whole timeline scroll. */
+.mw-ten3__col { display: flex; flex-direction: column; gap: clamp(28px, 3vw, 48px); min-width: 0; align-self: stretch; }
+/* Collapse to one column before the left column gets cramped by the record's
+   fixed band. */
+@media (max-width: 1200px) {
   .mw-ten3__grid { grid-template-columns: 1fr; gap: clamp(28px, 5vw, 44px); }
 }
 
@@ -1119,16 +1133,68 @@
   border-left: 2px solid var(--c-accent);
 }
 
-/* Full-width header — the /v2 "record" grammar ported to light: a mono
-   field-head document line above the condensed title + lead, sitting full
-   width above the milestone/aside grid. */
+/* Image-banner — the FIRST container in the left column. Full column width, no
+   padding; it just holds the background photo (an absolutely-filled <img> so the
+   parallax can move the photo without moving the type) with the body-content
+   container nested inside, reading over a scrim. */
+.mw-ten3__banner {
+  position: relative;
+  /* Bleed the image container to the section's TOP edge (up out of the section's
+     top padding) and to the LEFT screen edge (out past the inner gutter); its
+     right edge stays at the column boundary. --g is the inner side gutter: half
+     the .mw-inner reduction, or the centered-cap overflow, whichever wins. */
+  --g: max(clamp(24px, 4vw, 72px), calc((100vw - 1560px) / 2));
+  margin-top: calc(-1 * var(--ptop));
+  margin-left: calc(-1 * var(--g));
+  width: calc(100% + var(--g));
+  overflow: hidden;
+  background: var(--c-navy);
+  /* The right edge angles in from the top-right and bottom-right corners to a
+     point at the vertical middle (a shallow chevron that points toward the
+     record). --ang is how far the corners are inset from the right edge; the
+     apex stays at the full right. The cut triangles reveal the page behind. */
+  --ang: clamp(36px, 7%, 100px);
+  clip-path: polygon(0 0, calc(100% - var(--ang)) 0, 100% 50%, calc(100% - var(--ang)) 100%, 0 100%);
+}
+/* Warm cinematic overlay — same grade vocabulary as the hero (rgba(42,27,18)
+   warm-walnut wash + a bottom darkening band) so this photo reads like the hero
+   frame, not a flat stock photo. Darkest top-left where the type sits and at the
+   bottom under the stat strip; clears toward the middle-right so the truck shows. */
+.mw-ten3__banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(125deg, rgba(42, 27, 18, 0.82) 0%, rgba(42, 27, 18, 0.56) 44%, rgba(42, 27, 18, 0.3) 76%, rgba(42, 27, 18, 0.5) 100%),
+    linear-gradient(to bottom, rgba(42, 27, 18, 0) 38%, rgba(42, 27, 18, 0.8) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+/* Body-content container — the nested container inside the image-banner. Top-
+   anchored light type over the scrim; the deep bottom padding leaves room for
+   the stat strip pinned to the banner's base. */
 .mw-ten3__head {
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   gap: clamp(20px, 1.5vw, 24px);
-  max-width: 64ch;
-  margin-bottom: clamp(36px, 4vw, 64px);
+  min-height: var(--bh);
+  /* The photo bleeds full-width behind, but the TYPE is held to the general
+     body-content width and indented to the page's content margin (padding-left =
+     the inner gutter --g) — so the text aligns with the rest of the page and the
+     image just reads as a background to its left and right. Top padding includes
+     the section-padding the banner bled past, so the type sits inside the photo
+     with a band of image above it. */
+  max-width: calc(var(--g) + 34rem);
+  padding: clamp(84px, 8.5vw, 140px) clamp(24px, 2.4vw, 40px) clamp(86px, 8vw, 120px) var(--g);
+  color: rgba(245, 230, 203, 0.9);
 }
+/* Font colors matched to the hero: #fff display title, cream lead/eyebrow. */
+.mw-ten3__banner .mw-ten3__field { color: rgba(245, 230, 203, 0.8); }
+.mw-ten3__banner .mw-ten3__title { color: #fff; }
+.mw-ten3__banner .mw-ten3__lead { color: rgba(245, 230, 203, 0.84); }
 .mw-ten3__field {
   display: flex;
   align-items: center;
@@ -1174,38 +1240,89 @@
    shows year + title + body (the /v2 evidentiary list). The interactive
    zigzag timeline styles below are retained for the standalone
    VerticalTimeline01 widget in the template gallery. */
-/* The timeline is pulled UP so its top aligns with the vertical middle of the
-   header's lead (= head margin-bottom + half the lead height). Reset where it stacks. */
-.mw-ten3__line { list-style: none; margin: calc(-1 * (clamp(36px, 4vw, 64px) + clamp(51px, 3.84vw, 64px))) 0 0; padding: 0 0 0 30px; position: relative; }
+/* The record fills the RIGHT column, shifted DOWN so its top lands on the
+   vertical middle of the image-banner (= the angled edge's apex). The banner
+   middle is --bh/2 from the section top; the record's natural top is at --ptop
+   (the grid content top), so the shift is the difference. Reset to 0 when the
+   grid stacks (≤1200). */
+.mw-ten3__line { list-style: none; margin: calc(var(--bh) / 2 - var(--ptop)) 0 0; padding: 0 0 0 30px; position: relative; }
 .mw-ten3__line::before { content: ""; position: absolute; left: 5px; top: 6px; bottom: 8px; width: 1px; background: var(--c-line); }
 .mw-ten3__item { position: relative; padding: 0 0 clamp(20px, 2.2vw, 32px); }
 .mw-ten3__item:last-child { padding-bottom: 0; }
-.mw-ten3__tick { position: absolute; left: -25px; top: 0.58em; width: 14px; height: 1px; background: var(--c-accent); }
+.mw-ten3__tick { position: absolute; left: -25px; top: 0.58em; width: 14px; height: 1px; background: var(--c-accent); transition: width 0.3s cubic-bezier(0.22, 0.61, 0.36, 1), height 0.3s cubic-bezier(0.22, 0.61, 0.36, 1), left 0.3s cubic-bezier(0.22, 0.61, 0.36, 1), top 0.3s cubic-bezier(0.22, 0.61, 0.36, 1); }
 .mw-ten3__year { display: block; font-family: var(--font-plex-mono), ui-monospace, monospace; font-size: 13px; letter-spacing: 0.1em; color: var(--c-accent); margin-bottom: 4px; }
 .mw-ten3__ititle { display: block; font-family: var(--font-condensed), ui-sans-serif, sans-serif; font-weight: 600; text-transform: uppercase; font-size: clamp(18px, 1.6vw, 24px); line-height: 1.05; letter-spacing: 0.005em; color: var(--c-ink); }
 .mw-ten3__ibody { display: block; font-family: var(--font-plex-sans), ui-sans-serif, sans-serif; font-size: clamp(14px, 1vw, 15.5px); line-height: 1.5; color: var(--c-ink-2); margin-top: 6px; max-width: 58ch; }
 
-/* Sticky aside — truck plate + mission ride along while the record scrolls.
-   Pulled up so the TOP of the mission photo aligns with the vertical MIDDLE
-   of the head's lead paragraph. The shift = head margin-bottom (clamp 36–64)
-   + half the lead height. The lead is capped at 64ch so it holds ~4 lines
-   across the desktop range; half of it is 2 lines ≈ clamp(51px,3.84vw,64px).
-   Applies only in the two-column regime; reset where the aside stacks. */
-.mw-ten3__aside { position: sticky; top: clamp(80px, 11vh, 120px); display: flex; flex-direction: column; margin-top: 0; }
-.mw-ten3__plate2 { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: var(--c-navy); }
-/* The mission plate gets a stronger zoom + a near-top-right origin so its
-   diagonal drift (data-parallax-x="1" → 45° toward the bottom-right) reads as the
-   trucks driving out of the frame while the aside is pinned. */
-.mw-ten3__plate2-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; --px-scale: 1.3; transform-origin: 80% 20%; }
-.mw-ten3__plate2-stats { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; padding: clamp(14px, 1.4vw, 22px); list-style: none; display: flex; gap: clamp(12px, 1.6vw, 30px); background: linear-gradient(to top, rgba(28, 17, 11, 0.9), rgba(28, 17, 11, 0.2) 70%, transparent); }
+/* History items reveal with a small "wave": each entry grows in from the
+   record axis, overshoots a touch, then settles to size — so as the list
+   scrolls into view the milestones ripple down one after another (each fires
+   on its own crossing via MillerScrollReveal). Overrides the site's default
+   mw-rv fade for these items only; the extra [data-reveal] attr in the
+   selector wins specificity over the primitive's [data-in] rule. The global
+   prefers-reduced-motion rule (02-primitives) already kills this with
+   !important, so no reduced variant is needed for the entrance. */
+@keyframes mw-ten3-wave {
+  0%   { opacity: 0; transform: translate3d(0, 14px, 0) scale(0.965); }
+  58%  { opacity: 1; transform: translate3d(0, -2px, 0) scale(1.03); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+html[data-brand="miller"] .mw-ten3__item[data-reveal][data-in="1"] {
+  animation: mw-ten3-wave 460ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  transform-origin: left center;
+}
+
+/* Hover affordance — the connector tick swells into a smooth clay "hill" on the
+   record axis (an elliptical fill that fades out at the tips so the line ends
+   smoothly, peaking in the middle), and the entry's text zooms up. The hill IS
+   the tick growing — kept centred on the resting tick (centre ≈ -18px) so it
+   rises symmetrically. The text zoom lives on the wrapper (the <li> itself
+   can't scale — its reveal animation holds its transform). */
+.mw-ten3__item:hover .mw-ten3__tick,
+.mw-ten3__item:focus-within .mw-ten3__tick {
+  width: 28px;
+  height: 10px;
+  left: -32px;
+  top: calc(0.58em - 4.5px);
+  background: radial-gradient(closest-side, var(--c-accent) 38%, transparent 100%);
+}
+.mw-ten3__item-body { transition: transform 0.28s cubic-bezier(0.22, 0.61, 0.36, 1); transform-origin: left center; }
+.mw-ten3__item:hover .mw-ten3__item-body,
+.mw-ten3__item:focus-within .mw-ten3__item-body { transform: scale(1.07); }
+@media (prefers-reduced-motion: reduce) {
+  .mw-ten3__item-body { transition: none; }
+  .mw-ten3__item:hover .mw-ten3__item-body,
+  .mw-ten3__item:focus-within .mw-ten3__item-body { transform: none; }
+  .mw-ten3__tick { transition: none; }
+}
+
+/* Mission — the SECOND container in the left column (stats highlights + mission
+   block). Capped to 80% of the column width. Sticky: once the image-banner has
+   scrolled up out of view, this block pins below the header and rides along for
+   the remainder of the timeline scroll (its travel is bounded by the stretched
+   column, which ends with the record). */
+.mw-ten3__aside { display: flex; flex-direction: column; max-width: 80%; position: sticky; top: clamp(120px, 8.5vw, 144px); align-self: flex-start; }
+/* The banner photo gets a stronger zoom + a near-top-right origin so its
+   diagonal parallax drift (data-parallax-x="1" → 45° toward the bottom-right)
+   reads as the trucks driving out of the frame. */
+.mw-ten3__plate2-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; --px-scale: 1.3; transform-origin: 80% 20%; z-index: 0; filter: saturate(0.8) brightness(0.66) contrast(1.14) sepia(0.14); }
+/* Track-record stats — now an in-flow row at the top of the mission container
+   (dark on cream), separated from the mission by a hairline. */
+.mw-ten3__plate2-stats { margin: 0 0 clamp(20px, 1.8vw, 30px); padding: 0 0 clamp(20px, 1.8vw, 30px); list-style: none; display: flex; gap: clamp(16px, 1.8vw, 34px); border-bottom: 1px solid var(--c-line); }
 .mw-ten3__plate2-stat { display: flex; flex-direction: column; }
-.mw-ten3__plate2-num { font-family: var(--font-condensed), ui-sans-serif, sans-serif; font-weight: 600; font-size: clamp(26px, 2.6vw, 40px); color: #fff; line-height: 1; }
+.mw-ten3__plate2-num { font-family: var(--font-condensed), ui-sans-serif, sans-serif; font-weight: 600; font-size: clamp(26px, 2.6vw, 40px); color: var(--c-ink); line-height: 1; }
 .mw-ten3__plate2-unit { font-size: 0.5em; color: var(--c-accent); margin-left: 2px; }
-.mw-ten3__plate2-label { font-family: var(--font-plex-mono), ui-monospace, monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(245, 230, 203, 0.82); margin-top: 5px; }
-.mw-ten3__aside .mw-ten2__mission { margin-top: clamp(24px, 2.6vw, 36px); }
-@media (max-width: 900px) {
-  .mw-ten3__aside { position: static; order: -1; margin-top: 0; margin-bottom: clamp(8px, 2vw, 20px); }
+.mw-ten3__plate2-label { font-family: var(--font-plex-mono), ui-monospace, monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--c-ink-2); margin-top: 5px; }
+.mw-ten3__aside .mw-ten2__mission { margin-top: 0; }
+@media (max-width: 1200px) {
+  /* Single column: image-banner, then mission, then the record. The type spans
+     the full banner width here (still indented to the content margin); the
+     banner goes back to a square edge and the record sits below (no shift). */
+  .mw-ten3__head { min-height: clamp(300px, 40vw, 440px); max-width: none; }
+  .mw-ten3__banner { clip-path: none; }
   .mw-ten3__line { margin-top: 0; }
+  /* Stacked flow — nothing pins. */
+  .mw-ten3__aside { position: static; max-width: none; }
 }
 
 /* Truck plate — flipped truck side-view with three track-record
@@ -1635,6 +1752,345 @@
     margin-bottom: clamp(40px, 9vw, 60px);
   }
   .mw-careers__bleed-photo::before { display: none; }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Careers diamond cards — the two callouts rendered as rotated-square seals
+   (same geometry as the lifetime-reel diamonds). Default face = tag + title.
+   On hover/focus the fill darkens, the face hides, and the body copy + "learn
+   more" surface; the body is allowed to overflow the diamond's bounds.
+   ───────────────────────────────────────────────────────────────── */
+.mw-careers__cards { overflow: visible; }
+/* Row holds the two diamonds + the drawn chain overlay (positioning context for
+   the full-width chain SVGs). */
+.mw-cdia-row { position: relative; }
+.mw-cdia-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  column-gap: clamp(24px, 3vw, 56px);
+}
+.mw-cdia {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  max-width: 300px;
+  margin-inline: auto;
+  isolation: isolate;
+  text-decoration: none;
+  color: inherit;
+}
+/* the filled diamond behind the content (rotated rounded square) */
+.mw-cdia__fill {
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: 50%;
+  width: 60%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%) rotate(45deg);
+  border-radius: 8%;
+  background: rgba(245, 230, 203, 0.04);
+  box-shadow: inset 0 0 0 1px rgba(245, 230, 203, 0.05);
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+}
+/* default face — title centred inside the diamond */
+.mw-cdia__face {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  max-width: 64%;
+  text-align: center;
+  transition: opacity 0.35s ease;
+}
+.mw-cdia__title {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(20px, 1.8vw, 28px);
+  line-height: 1.04;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: #fff;
+}
+/* hover/focus reveal — body copy + learn-more, allowed to overflow the diamond */
+.mw-cdia__reveal {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: 50%;
+  width: 116%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(12px, 1.2vw, 18px);
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+.mw-cdia__text {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(14px, 1vw, 16px);
+  line-height: 1.55;
+  color: rgba(250, 243, 229, 0.94);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.55);
+}
+/* learn-more link — matches the original careers card link (condensed, uppercase) */
+.mw-cdia__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.1vw, 18px);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--c-on-navy);
+}
+/* — interaction: darken the fill, swap face → reveal (border is NOT touched) — */
+.mw-cdia:hover .mw-cdia__fill,
+.mw-cdia:focus-visible .mw-cdia__fill {
+  background: #26130b;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.4), 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+.mw-cdia:hover .mw-cdia__face,
+.mw-cdia:focus-visible .mw-cdia__face { opacity: 0; }
+.mw-cdia:hover .mw-cdia__reveal,
+.mw-cdia:focus-visible .mw-cdia__reveal { opacity: 1; pointer-events: auto; }
+.mw-cdia:hover .mw-cdia__more,
+.mw-cdia:focus-visible .mw-cdia__more { color: var(--c-accent); }
+/* keyboard focus ring on the seal */
+.mw-cdia:focus-visible { outline: none; }
+.mw-cdia:focus-visible .mw-cdia__fill { outline: 2px solid rgba(245, 230, 203, 0.5); outline-offset: 4px; }
+
+/* ── The drawn chain: lead-in line (screen edge → D1) + D1 outline + connector
+   + D2 outline, in one path, wiped in left→right on scroll (once) with a gold
+   charge band riding the growing edge that fades to settled terracotta. ── */
+.mw-cdia-chain {
+  position: absolute;
+  top: 0;
+  z-index: 1;
+  overflow: visible;
+  pointer-events: none;
+}
+.mw-cdia-chain path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.mw-cdia-chain--base path { stroke: var(--c-accent); }
+.mw-cdia-chain--base {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path var(--cdia-sweep, 1700ms) linear;
+}
+.mw-cdia-row[data-phase="draw"] .mw-cdia-chain--base,
+.mw-cdia-row[data-phase="done"] .mw-cdia-chain--base { clip-path: inset(0 0 0 0); }
+/* gold charge band masks the gold copy so a glint rides the frontier */
+.mw-cdia-chain--gold {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 42%, #000 58%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 42%, #000 58%, transparent);
+  -webkit-mask-size: 220px 100%;
+          mask-size: 220px 100%;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+  -webkit-mask-position: -220px 0;
+          mask-position: -220px 0;
+  opacity: 1;
+}
+.mw-cdia-row[data-phase="draw"] .mw-cdia-chain--gold {
+  -webkit-mask-position: calc(100% + 220px) 0;
+          mask-position: calc(100% + 220px) 0;
+  transition: -webkit-mask-position var(--cdia-sweep, 1700ms) linear, mask-position var(--cdia-sweep, 1700ms) linear;
+}
+.mw-cdia-row[data-phase="done"] .mw-cdia-chain--gold {
+  -webkit-mask-position: calc(100% + 220px) 0;
+          mask-position: calc(100% + 220px) 0;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+/* No-hover / narrow screens: drop the diamond geometry + chain; show a readable
+   stacked callout (title + body + link), left-aligned. */
+@media (max-width: 800px) {
+  .mw-cdia-chain { display: none; }
+  .mw-cdia-grid { grid-template-columns: 1fr; gap: 32px; }
+  .mw-cdia {
+    aspect-ratio: auto;
+    max-width: none;
+    display: block;
+    padding: 4px 0;
+  }
+  .mw-cdia__fill { display: none; }
+  .mw-cdia__face {
+    max-width: none;
+    align-items: flex-start;
+    text-align: left;
+    opacity: 1;
+  }
+  .mw-cdia__reveal {
+    position: static;
+    width: auto;
+    transform: none;
+    margin-top: 14px;
+    align-items: flex-start;
+    text-align: left;
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-cdia__fill,
+  .mw-cdia__face,
+  .mw-cdia__reveal { transition: none; }
+  .mw-cdia-chain--base { transition: none !important; }
+  .mw-cdia-chain--gold { display: none; }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Career reel — vertical expanding photo stack that fills the right-hand
+   photo column. Hover/focus or tap a row to grow it; the active row reveals
+   a mono caption. Used when CAREERS.reelPhotos is set (replaces the single
+   bleed photo). Motion: staggered slide-up on mount + smooth flex expansion.
+   ───────────────────────────────────────────────────────────────── */
+/* Reel column — sits inside .mw-inner, occupying the right ~45% of the content
+   container at the content's own height (not the full section bleed). z-index
+   keeps its panels hoverable; the left content (≤52% wide) never overlaps it. */
+.mw-careers__reel-col {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 55%;
+  right: 0;
+  z-index: 2;
+  overflow: hidden;
+}
+.mw-creel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.mw-creel__panel {
+  position: relative;
+  flex: 1 1 0;
+  min-height: 56px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background-color: #18120d;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  cursor: pointer;
+  overflow: hidden;
+  outline: none;
+  /* darken inactive rows so the active one reads as the focal frame */
+  filter: saturate(0.8) brightness(0.45);
+  /* mount-reveal start state */
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    flex-grow 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+    filter 0.6s ease,
+    opacity 0.6s ease,
+    transform 0.6s ease;
+  /* stagger only the reveal (opacity/transform); flex/filter have no delay */
+  transition-delay: 0s, 0s, calc(var(--i, 0) * 90ms), calc(var(--i, 0) * 90ms);
+  will-change: flex-grow, filter, opacity, transform;
+}
+.mw-creel__panel:first-child { border-top: 0; }
+.mw-creel[data-shown] .mw-creel__panel {
+  opacity: 1;
+  transform: none;
+}
+.mw-creel__panel[data-active] {
+  flex-grow: 5.2;
+  filter: none;
+  box-shadow: inset 0 0 0 2px var(--c-accent);
+  z-index: 2;
+}
+/* clay focus ring for keyboard users (design-system requirement) */
+.mw-creel__panel:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--c-accent), inset 0 0 0 5px rgba(245, 230, 203, 0.55);
+}
+/* bottom legibility wash — deepens on the active row to seat the caption */
+.mw-creel__shade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 60%;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(8, 5, 3, 0.82), rgba(8, 5, 3, 0));
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.mw-creel__panel[data-active] .mw-creel__shade { opacity: 1; }
+/* mono caption — rides in from the left on the active row */
+.mw-creel__cap {
+  position: absolute;
+  left: clamp(16px, 1.6vw, 24px);
+  bottom: clamp(16px, 1.6vw, 22px);
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  pointer-events: none;
+}
+.mw-creel__cap-mark {
+  width: 9px;
+  height: 9px;
+  flex: none;
+  background: var(--c-accent);
+  transform: rotate(45deg) scale(0.4);
+  opacity: 0;
+  transition: opacity 0.5s ease 0.12s, transform 0.5s ease 0.12s;
+}
+.mw-creel__cap-text {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.65);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(-14px);
+  transition: opacity 0.55s ease 0.1s, transform 0.55s ease 0.1s;
+}
+.mw-creel__panel[data-active] .mw-creel__cap-mark {
+  opacity: 1;
+  transform: rotate(45deg) scale(1);
+}
+.mw-creel__panel[data-active] .mw-creel__cap-text {
+  opacity: 1;
+  transform: none;
+}
+/* On mobile the reel stacks in-flow above the content; give it real height. */
+@media (max-width: 900px) {
+  .mw-careers__reel-col {
+    position: relative;
+    top: auto;
+    bottom: auto;
+    left: 0;
+    right: 0;
+    height: auto;
+    min-height: 440px;
+  }
+}
+/* Motion off-switch — layout still changes, but nothing animates/translates. */
+@media (prefers-reduced-motion: reduce) {
+  .mw-creel__panel {
+    opacity: 1;
+    transform: none;
+    transition: flex-grow 0.001s, filter 0.001s;
+  }
+  .mw-creel__shade,
+  .mw-creel__cap-mark,
+  .mw-creel__cap-text { transition: none; }
 }
 
 /* ─────────────────────────────────────────────────────────────────
@@ -3319,9 +3775,7 @@
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.55fr);
   gap: clamp(28px, 4vw, 76px);
   align-items: start;
-  /* Only a small breathing gap at the top of the pinned container (the real
-     header→grid gap is the header's margin-bottom, which scrolls away). */
-  padding-top: clamp(10px, 1vw, 18px);
+  padding-top: 0;
 }
 
 /* ── LEFT · collage ───────────────────────────────────────── */
@@ -3343,7 +3797,8 @@
   --lift: 0px;
   position: relative;
   display: block;
-  aspect-ratio: 4 / 5;
+  /* width fixed by the grid columns; height = 0.8 × the old 4/5 (1.25w → 1.0w) = 20% shorter */
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   text-decoration: none;
   isolation: isolate;
@@ -3498,7 +3953,7 @@
   grid-template-columns: 24px minmax(0, 1fr) auto;
   align-items: center;
   gap: clamp(12px, 1vw, 18px);
-  padding: clamp(11px, 1.05vw, 16px) 0;
+  padding: clamp(10px, 0.98vw, 15px) 0;
   text-decoration: none;
   border-bottom: 1px solid var(--c-line);
   transition: opacity 220ms ease;
@@ -3529,7 +3984,7 @@
   min-width: 0;
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
   font-weight: 700;
-  font-size: clamp(18px, 1.5vw, 26px);
+  font-size: clamp(17px, 1.45vw, 25px);
   line-height: 1.02;
   letter-spacing: 0.01em;
   text-transform: uppercase;
@@ -3578,33 +4033,80 @@
    stick across the whole region. */
 .mw-roster--pin { height: 100%; padding-block: clamp(40px, 5vw, 80px) 0; }
 .mw-roster--pin .mw-inner { height: 100%; }
+/* Cap the single grid row to the visible band (otherwise it grows to the full card
+   grid, ~1045px, and any vertical centering inside it lands off-screen). */
+.mw-roster--pin .mw-roster__layout { height: 100%; grid-template-rows: 100%; }
 .mw-roster--pin .mw-roster__pin {
   position: sticky;
-  top: calc(var(--mw-eb-h, 39px) + 76px);
-  height: calc(100svh - var(--mw-eb-h, 39px) - 76px);
+  /* Pin directly under the COMPACT topnav (the emergency bar is hidden and the
+     topnav has collapsed to 56px by the time this section is reached). */
+  top: 56px;
+  height: calc(100svh - 56px);
 }
 .mw-roster--pin .mw-roster__scroller {
   position: relative;
   height: 100%;
   overflow: clip;
 }
-/* The container fills the screen; the inner grid is bottom-anchored (JS sets the
-   transform) and snaps one card-row at a time, with an eased transition. Cards that
-   scroll past the top overflow ABOVE the frame and are clipped by the scroller (at
-   the nav). The list/rail is NOT transformed — it stays static beside the grid. */
-.mw-roster--pin .mw-roster__collage { overflow: visible; }
-.mw-roster--pin .mw-roster__grid {
-  will-change: transform;
-  transition: transform 560ms cubic-bezier(.22, .61, .36, 1);
+/* The clip frame's HEIGHT is set by JS to equal the list column (first menu row → CTA
+   button); align-self centers it in the band so the two columns are the same height and
+   vertically aligned. JS translates the inner grid as one continuous filmstrip (scrubbed
+   1:1 by scroll — no transition, or it would lag): it starts a small pad below the clip
+   top and ends a small pad above the clip bottom. The list/rail stays static beside it. */
+/* --mw-tk / --mw-bk gate the top / bottom edge fades (0 = off, 1 = on). Registered so
+   they animate: the fade eases in/out over the same time as a snap chunk. */
+@property --mw-tk { syntax: "<number>"; inherits: false; initial-value: 0; }
+@property --mw-bk { syntax: "<number>"; inherits: false; initial-value: 0; }
+.mw-roster--pin .mw-roster__collage {
+  align-self: center;
+  min-height: 0;
+  overflow: clip;
+  /* PER-COLUMN edge fade. Three mask layers tile the width into thirds (outer | middle |
+     outer) — their boundaries fall in the column gaps. Because the middle column is
+     staggered HIGHER, it gets a SHORTER top band (--mw-top-mid) and a LONGER bottom band
+     (--mw-bot-mid) than the outer columns (--mw-top-out / --mw-bot-out); all four are set
+     by JS from the measured stagger. --mw-tk/--mw-bk scale the top/bottom bands by snap
+     step: no top fade at the very start (nothing clipped above), no bottom fade once the
+     last row is reached. All inert when not pinned (vars fall back to 0). */
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent 0, #000 calc(var(--mw-top-out, 0px) * var(--mw-tk, 0)), #000 calc(100% - var(--mw-bot-out, 0px) * var(--mw-bk, 0)), transparent 100%),
+    linear-gradient(to bottom, transparent 0, #000 calc(var(--mw-top-mid, 0px) * var(--mw-tk, 0)), #000 calc(100% - var(--mw-bot-mid, 0px) * var(--mw-bk, 0)), transparent 100%),
+    linear-gradient(to bottom, transparent 0, #000 calc(var(--mw-top-out, 0px) * var(--mw-tk, 0)), #000 calc(100% - var(--mw-bot-out, 0px) * var(--mw-bk, 0)), transparent 100%);
+  mask-image:
+    linear-gradient(to bottom, transparent 0, #000 calc(var(--mw-top-out, 0px) * var(--mw-tk, 0)), #000 calc(100% - var(--mw-bot-out, 0px) * var(--mw-bk, 0)), transparent 100%),
+    linear-gradient(to bottom, transparent 0, #000 calc(var(--mw-top-mid, 0px) * var(--mw-tk, 0)), #000 calc(100% - var(--mw-bot-mid, 0px) * var(--mw-bk, 0)), transparent 100%),
+    linear-gradient(to bottom, transparent 0, #000 calc(var(--mw-top-out, 0px) * var(--mw-tk, 0)), #000 calc(100% - var(--mw-bot-out, 0px) * var(--mw-bk, 0)), transparent 100%);
+  -webkit-mask-size: 34% 100%, 34% 100%, 34% 100%;
+  mask-size: 34% 100%, 34% 100%, 34% 100%;
+  -webkit-mask-position: left, center, right;
+  mask-position: left, center, right;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  transition: --mw-tk 480ms cubic-bezier(.22, .61, .36, 1), --mw-bk 480ms cubic-bezier(.22, .61, .36, 1);
+}
+/* Snap transition: each scroll chunk jumps the grid by one card-row; this animates
+   the jump so the rows glide into place rather than teleporting. */
+.mw-roster--pin .mw-roster__grid { will-change: transform; transition: transform 480ms cubic-bezier(.22, .61, .36, 1); }
+/* List column is exactly the screen-height band, with its content (menu + CTA)
+   vertically CENTERED — equal space above the first item and below the button.
+   Sized off the viewport (not the grid row, which is tall enough to hold the card
+   grid) so centering can't push the list off-screen. */
+.mw-roster--pin .mw-roster__rail {
+  height: calc(100svh - 56px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 @media (prefers-reduced-motion: reduce) {
   /* No scroll-jacking: fall back to a normal flowed section. */
   .mw-roster-pinwrap { height: auto !important; }
   .mw-roster--pin { height: auto; padding-block: clamp(64px, 6.5vw, 112px); }
   .mw-roster--pin .mw-inner { height: auto; }
+  .mw-roster--pin .mw-roster__layout { height: auto; grid-template-rows: none; }
   .mw-roster--pin .mw-roster__pin { position: static; height: auto !important; }
   .mw-roster--pin .mw-roster__scroller { overflow: visible; }
-  .mw-roster--pin .mw-roster__collage { overflow: visible; height: auto !important; }
+  .mw-roster--pin .mw-roster__collage { overflow: visible; height: auto !important; -webkit-mask-image: none; mask-image: none; }
+  .mw-roster--pin .mw-roster__rail { height: auto; display: block; }
   .mw-roster--pin .mw-roster__grid { transition: none; transform: none !important; }
 }
 
@@ -3616,9 +4118,11 @@
   .mw-roster-pinwrap { height: auto !important; }
   .mw-roster--pin { height: auto; padding-block: clamp(64px, 6.5vw, 112px); }
   .mw-roster--pin .mw-inner { height: auto; }
+  .mw-roster--pin .mw-roster__layout { height: auto; grid-template-rows: none; }
   .mw-roster--pin .mw-roster__pin { position: static; height: auto !important; }
   .mw-roster--pin .mw-roster__scroller { overflow: visible; }
-  .mw-roster--pin .mw-roster__collage { overflow: visible; height: auto !important; }
+  .mw-roster--pin .mw-roster__collage { overflow: visible; height: auto !important; -webkit-mask-image: none; mask-image: none; }
+  .mw-roster--pin .mw-roster__rail { height: auto; display: block; }
   .mw-roster--pin .mw-roster__grid { transform: none !important; }
 }
 @media (max-width: 560px) {
@@ -3899,9 +4403,16 @@ html[data-brand="miller"] {
    cluster of four hard-edged photo diamonds sharing edges to form a
    larger diamond, with the category's rounded-corner WALNUT diamond
    embedded as a peer tile (lower-left) whose terracotta ring draws
-   closed on scroll-reveal. Sub-sector names are set at 45° in the
-   cream seams along each photo's outward edge. The four clusters
-   alternate high/low into a staggered ribbon. Server shell
+   closed on scroll-reveal. On desktop each photo's sub-sector name is
+   pulled OUT into the cream margin above/below the band and joined to
+   its diamond by a thin terracotta LEADER LINE (mw-secd__annot/tag/
+   leader) that leaves the edge centre perpendicular, then runs straight
+   to a label spread along a single top/bottom tier by an order-preserving
+   pass — so no two leaders ever cross; below 1024px (where the band is
+   too small for margin tags) that layer hides and each name falls back to
+   a walnut-wash FOOT in the lower half of its diamond (mw-secd__photo-
+   label). The four clusters alternate high/low into a staggered ribbon.
+   Server shell
    (SectorDiamonds01) + SectorRosette01 client widget.
    ════════════════════════════════════════════════════════════════ */
 .mw-secd {
@@ -4005,6 +4516,150 @@ html[data-brand="miller"] {
 .mw-secd__photo-clip:hover { box-shadow: 0 10px 24px rgba(33, 20, 12, 0.32); }
 .mw-secd__photo-clip:hover .mw-secd__photo-img { filter: saturate(1.05) brightness(1.06); transform: scale(1.08); }
 .mw-secd__photo-clip:hover::after { opacity: 0; }
+
+/* Sub-sector label — sits in the LOWER half of each photo diamond on a walnut wash
+   that fades up to clear, so the label foot mirrors the solid-walnut category diamonds
+   while the top of each photo stays clean. Because it lives inside the clipped rhombus
+   it can never bleed into a neighbour. The text parks just above the bottom tip, in the
+   diamond's wide middle band, so longer names stay readable. */
+.mw-secd__photo-label {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  /* push the text up off the narrow bottom tip into the wider band */
+  padding: 0 14% 23%;
+  text-align: center;
+  pointer-events: none;
+  background: linear-gradient(to top,
+    rgba(40, 24, 14, 0.92) 0%,
+    rgba(40, 24, 14, 0.86) 26%,
+    rgba(40, 24, 14, 0.55) 46%,
+    rgba(40, 24, 14, 0) 62%);
+  transition: background 0.4s ease;
+}
+.mw-secd__photo-label-text {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-weight: 500;
+  font-size: clamp(7.5px, 0.72vw, 11px);
+  line-height: 1.14;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+  color: var(--c-bg);
+  text-wrap: balance;
+  /* a hair of shadow so it holds over the brightest photos */
+  text-shadow: 0 1px 3px rgba(20, 11, 5, 0.55);
+}
+/* tiny terracotta tick above the name — the stamp motif, scaled down */
+.mw-secd__photo-label-text::before {
+  content: "";
+  display: block;
+  width: 5px;
+  height: 5px;
+  margin: 0 auto 4px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  transition: transform 0.4s cubic-bezier(.2, .7, .2, 1);
+}
+/* hover ties into the existing photo zoom: deepen the foot + spin the tick */
+.mw-secd__photo-clip:hover .mw-secd__photo-label {
+  background: linear-gradient(to top,
+    rgba(40, 24, 14, 0.95) 0%,
+    rgba(40, 24, 14, 0.9) 30%,
+    rgba(40, 24, 14, 0.62) 50%,
+    rgba(40, 24, 14, 0) 68%);
+}
+.mw-secd__photo-clip:hover .mw-secd__photo-label-text::before { transform: rotate(135deg); }
+
+/* ── Leader-line annotation (desktop) ── names live in the cream margins above/below the
+   band, joined to their diamond by a thin terracotta leader. The field reserves padding
+   for the label tiers; the annotation layer overlays the grid box exactly and its labels
+   overflow up/down into that reserved padding. */
+.mw-secd__field {
+  position: relative;
+  /* reserve room for the far-tier elbow labels (~1.9 lattice units ≈ 11% of width beyond
+     the band) plus the label itself */
+  --annot-top: clamp(76px, 13vw, 210px);
+  --annot-bot: clamp(80px, 13.5vw, 220px);
+  padding-top: var(--annot-top);
+  padding-bottom: var(--annot-bot);
+}
+/* inside the field the grid's own top margin is folded into --annot-top so the overlay
+   lines up with the grid box exactly */
+.mw-secd__field .mw-secd__grid { margin-top: 0; }
+
+.mw-secd__annot {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--annot-top);
+  bottom: var(--annot-bot);
+  pointer-events: none;
+}
+/* leaders — elbow hairlines drawn in the grid's lattice coordinates (viewBox = cols×rows,
+   uniform), so the 45° stub + 90° turn stay true; non-scaling-stroke keeps them crisp */
+.mw-secd__leaders {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.mw-secd__leader {
+  fill: none;
+  stroke: var(--c-accent);
+  stroke-width: 1.1px;
+  opacity: 0.5;
+}
+/* the clay stamp where the leader meets the diamond */
+.mw-secd__leader-dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: var(--c-accent);
+  border-radius: 1px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  box-shadow: 0 0 0 2px var(--c-surface-warm);
+}
+/* the floating name */
+.mw-secd__tag {
+  position: absolute;
+  display: block;
+  max-width: 13ch;
+  text-align: center;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: clamp(9px, 0.7vw, 11.5px);
+  font-weight: 500;
+  line-height: 1.16;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+  color: var(--c-ink);
+  text-wrap: balance;
+}
+.mw-secd__tag--top { transform: translate(-50%, -100%); }
+.mw-secd__tag--bottom { transform: translate(-50%, 0); }
+/* reveal: hold the annotation hidden until the grid sweeps in, then fade it on */
+.mw-secd__annot { opacity: 1; }
+.mw-secd__grid.is-armed ~ .mw-secd__annot { opacity: 0; }
+.mw-secd__grid.is-armed.is-in ~ .mw-secd__annot { opacity: 1; transition: opacity 0.7s ease 0.4s; }
+@media (prefers-reduced-motion: reduce) {
+  .mw-secd__grid.is-armed ~ .mw-secd__annot,
+  .mw-secd__grid.is-armed.is-in ~ .mw-secd__annot { opacity: 1; transition: none; }
+}
+
+/* On desktop the leader annotation carries the names, so the on-photo labels are hidden.
+   Below the breakpoint the band is too small for margin tags, so we hide the annotation
+   and fall back to the on-photo labels instead. */
+@media (min-width: 1025px) {
+  .mw-secd__photo-label { display: none; }
+}
+@media (max-width: 1024px) {
+  .mw-secd__annot { display: none; }
+  .mw-secd__field { padding-top: 0; padding-bottom: 0; }
+  .mw-secd__field .mw-secd__grid { margin-top: clamp(8px, 1.5vw, 28px); }
+}
 
 /* category — solid rounded-corner walnut diamond, name only (no number, no ring) */
 .mw-secd__cat { z-index: 4; display: grid; place-items: center; }

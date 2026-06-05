@@ -13,7 +13,7 @@ export const customerWasteCollection = {
     titleEm: "on your schedule",
     lead:
       "Scheduled, documented collection of hazardous and non-hazardous waste in any container — from a single pail to full van loads — moved from your loading dock to the licensed VBEC facility under one chain of custody.",
-    photo: "/miller/steel-drums-of-waste.png",
+    photo: "/miller/custom/steel-drums-of-waste.png",
     emergencyDisplay: EMERGENCY_PHONE,
     emergencyHref: `tel:${EMERGENCY_PHONE.replace(/[^0-9+]/g, "")}`,
     secondaryCta: { label: "Schedule a pickup", labelShort: "Schedule pickup", href: "/contact-us/" },
@@ -22,7 +22,7 @@ export const customerWasteCollection = {
   // §2 — "Any volume" container capacity ladder.
   scale: {
     titleId: "cwc-scale-title",
-    headPhoto: "/miller/dumptruck-2.png",
+    headPhoto: "/miller/custom/dumptruck-2.png",
     eyebrow: "Any volume",
     title: "From a single pail to full van loads",
     lead:
@@ -66,15 +66,15 @@ export const customerWasteCollection = {
     title: "Built for regulated generators",
     lead: `On-site technicians handle the packaging and paperwork so your team doesn't have to — across every sector that ${VBEC_FULL_NAME} serves.`,
     items: [
-      { name: "Manufacturing", photo: "/miller/industrial-leaks.png", blurb: "Process solvents, sludges, and off-spec plant waste." },
-      { name: "Aerospace & Defence", photo: "/miller/dangerous-goods.png", blurb: "Specialty chemicals, fuels, and secure-site streams." },
-      { name: "Agriculture", photo: "/miller/contaminated-soul.png", blurb: "Surplus pesticides, fertilizers, and used farm oils." },
-      { name: "Transportation & Rail", photo: "/miller/transport-incidents.png", blurb: "Yard spill residues, used fluids, and shop waste." },
-      { name: "Healthcare", photo: "/miller/hazmat-cleaning.png", blurb: "Pharmaceutical, lab, and regulated medical waste." },
-      { name: "Biotech & Pharma", photo: "/miller/chemical-spills.png", blurb: "Reactive reagents, solvents, and expired product." },
-      { name: "Education", photo: "/miller/clean-up-and-site-remediation.png", blurb: "Lab-pack service for campus chemistry and shops." },
-      { name: "Oil & Gas", photo: "/miller/fuel-and-diesel-spills.png", blurb: "Tank bottoms, drilling waste, and hydrocarbons." },
-      { name: "Other", photo: "/miller/dumptruck-on-ice.png", blurb: "Almost any regulated waste stream — just ask." },
+      { name: "Manufacturing", photo: "/miller/custom/industrial-leaks.png", blurb: "Process solvents, sludges, and off-spec plant waste." },
+      { name: "Aerospace & Defence", photo: "/miller/custom/dangerous-goods.png", blurb: "Specialty chemicals, fuels, and secure-site streams." },
+      { name: "Agriculture", photo: "/miller/custom/contaminated-soul.png", blurb: "Surplus pesticides, fertilizers, and used farm oils." },
+      { name: "Transportation & Rail", photo: "/miller/custom/transport-incidents.png", blurb: "Yard spill residues, used fluids, and shop waste." },
+      { name: "Healthcare", photo: "/miller/custom/hazmat-cleaning.png", blurb: "Pharmaceutical, lab, and regulated medical waste." },
+      { name: "Biotech & Pharma", photo: "/miller/custom/chemical-spills.png", blurb: "Reactive reagents, solvents, and expired product." },
+      { name: "Education", photo: "/miller/custom/clean-up-and-site-remediation.png", blurb: "Lab-pack service for campus chemistry and shops." },
+      { name: "Oil & Gas", photo: "/miller/custom/fuel-and-diesel-spills.png", blurb: "Tank bottoms, drilling waste, and hydrocarbons." },
+      { name: "Other", photo: "/miller/custom/dumptruck-on-ice.png", blurb: "Almost any regulated waste stream — just ask." },
     ],
     cta: { label: "Talk to Miller", href: "/contact-us/" },
   },

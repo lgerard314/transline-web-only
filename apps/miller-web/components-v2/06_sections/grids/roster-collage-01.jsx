@@ -74,61 +74,122 @@ export function RosterCollage01({ content, config = {} }) {
     const docTop = (el) => { let y = 0, n = el; while (n) { y += n.offsetTop; n = n.offsetParent; } return y; };
     const tyOf = (el) => new DOMMatrix(getComputedStyle(el).transform).m42; // card's --ty translate
 
-    let rowPitch = 1, maxStep = 0, dist = 1, v0 = 0, lastStep = -1, raf = 0, enabled = false, baseOffset = 0;
+    let T0 = 0, range = 0, rowPitch = 1, maxStep = 1, dist = 1, v0 = 0, lastT = null, lastTk = "", lastBk = "", raf = 0, enabled = false;
 
-    const apply = (step) => {
-      if (step === lastStep) return;
-      lastStep = step;
-      // baseOffset bottom-anchors the 2 rows (whitespace above); each step lifts one row.
-      grid.style.transform = `translate3d(0, ${(baseOffset - step * rowPitch).toFixed(1)}px, 0)`;
+    const apply = (ty) => {
+      if (ty === lastT) return;
+      lastT = ty;
+      grid.style.transform = `translate3d(0, ${ty.toFixed(1)}px, 0)`;
     };
     const update = () => {
       raf = 0;
       if (!enabled) return;
       const top = wrap.getBoundingClientRect().top;
       const p = Math.min(1, Math.max(0, (v0 - top) / dist));
-      const step = Math.min(maxStep, Math.floor(p * (maxStep + 1)));
-      apply(step);
+      // Chunked snap: advance the grid by whole card-rows (one chunk = rowPitch =
+      // card height + gap). The CSS transition animates each jump; the final chunk
+      // clamps to the exact end so the last row lands flush at the bottom pad.
+      const step = Math.min(maxStep, Math.round(p * maxStep));
+      apply(T0 - Math.min(range, step * rowPitch));
+      // Gate the edge fades by snap step: TOP fade off at step 0 (nothing clipped above),
+      // BOTTOM fade off at the last step (last row fully revealed). Transitioned in CSS.
+      const tk = step > 0 ? "1" : "0";
+      const bk = step < maxStep ? "1" : "0";
+      if (tk !== lastTk) { frame.style.setProperty("--mw-tk", tk); lastTk = tk; }
+      if (bk !== lastBk) { frame.style.setProperty("--mw-bk", bk); lastBk = bk; }
       if (section) section.classList.toggle("is-pinned", top <= v0 && top > v0 - dist);
     };
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+
+    const clearFade = () => {
+      ["--mw-top-mid", "--mw-top-out", "--mw-bot-mid", "--mw-bot-out", "--mw-tk", "--mw-bk"]
+        .forEach((p) => frame.style.removeProperty(p));
+      lastTk = lastBk = "";
+    };
+
+    const disable = () => { // small screen / reduced motion: clear everything, flow normally
+      enabled = false;
+      pinEl.style.height = "";
+      frame.style.height = "";
+      clearFade();
+      grid.style.transform = "";
+      lastT = null;
+      setPinHeight(null);
+      if (section) section.classList.remove("is-pinned");
+    };
+
     const measure = () => {
       const cards = [...grid.querySelectorAll(".mw-roster__card")];
-      // Below the single-column breakpoint the snap-pin is off (CSS flows normally).
-      if (window.innerWidth <= 1024 || cards.length < 4) {
-        enabled = false;
+      // Below the single-column breakpoint the filmstrip is off (CSS flows normally).
+      if (window.innerWidth <= 1024 || cards.length < 4) { disable(); return; }
+
+      // Per-card VISUAL geometry. --ty is the column-stagger transform (read from the
+      // matrix): the MIDDLE column has the smallest --ty so it pokes HIGHEST, the outer
+      // columns sit lowest. gridTop/gridBot are the true top/bottom pixels of the cards.
+      const cardH = cards[0].offsetHeight;
+      const tyVals = cards.map(tyOf);
+      const tops = cards.map((c, i) => c.offsetTop + tyVals[i]);
+      const gridTop = Math.min(...tops);                        // highest card pixel (middle col)
+      const gridBot = Math.max(...tops.map((t) => t + cardH));  // lowest card pixel (outer col)
+      const gridVisualH = gridBot - gridTop;
+      rowPitch = cards[3].offsetTop - cards[0].offsetTop;       // same column, next row = one chunk
+      const spread = Math.max(...tyVals) - Math.min(...tyVals); // column-stagger overhang
+
+      const chrome = parseFloat(getComputedStyle(pinEl).top) || 0;
+      const H = Math.round(window.innerHeight - chrome);        // pinned band = viewport below the nav
+      pinEl.style.height = `${H}px`;
+
+      // Clip window = the LIST column's height (first menu row → CTA button). CSS centers
+      // the frame in the band, so the cards column is the same height as the list column
+      // and vertically aligned with it. Fall back to the full band if the list is absent.
+      const menu = rail && rail.querySelector(".mw-roster__menu");
+      const footEl = rail && rail.querySelector(".mw-roster__foot");
+      const clipH = menu
+        ? Math.round((footEl || menu).getBoundingClientRect().bottom - menu.getBoundingClientRect().top)
+        : H;
+      frame.style.height = `${clipH}px`;
+
+      // Equal pad above the FIRST row (at the very start) and below the LAST row (at the
+      // very end). Kept small (≤40px) and capped so two whole staggered rows always fit.
+      const twoRows = rowPitch + cardH + spread;
+      const pad = Math.max(0, Math.min(40, Math.floor((clipH - twoRows) / 2)));
+      // PER-COLUMN edge-fade bands, derived from the stagger. The middle column sits
+      // `spread` higher than the outer columns, so at the TOP its full row lands at `pad`
+      // (short fade) while the outer rows land at `pad + spread` (longer fade). At the
+      // BOTTOM the middle column's partial row reaches higher, so it gets the longer fade
+      // and the outer columns the shorter one. Bottom bands span the whole partial row so
+      // it ramps fully out ("barely visible once pushed out").
+      const fullRows = Math.max(1, Math.floor((clipH - pad - spread - cardH) / rowPitch) + 1);
+      const botMid = Math.max(pad, Math.min(rowPitch, clipH - pad - fullRows * rowPitch));
+      const botOut = Math.max(0, botMid - spread);
+      frame.style.setProperty("--mw-top-mid", `${pad}px`);
+      frame.style.setProperty("--mw-top-out", `${pad + spread}px`);
+      frame.style.setProperty("--mw-bot-mid", `${botMid}px`);
+      frame.style.setProperty("--mw-bot-out", `${botOut}px`);
+
+      // Step 0 → highest card sits `pad` below the clip top; end → lowest card sits `pad`
+      // above the clip bottom. The grid SNAPS between these in whole-row chunks (below).
+      T0 = pad - gridTop;
+      range = gridVisualH - (clipH - 2 * pad);
+      if (range <= 0) { // whole grid already fits in the clip — nothing to scrub
         pinEl.style.height = "";
         frame.style.height = "";
+        clearFade();
         grid.style.transform = "";
-        lastStep = -1;
+        enabled = false;
         setPinHeight(null);
         if (section) section.classList.remove("is-pinned");
         return;
       }
       enabled = true;
-      const cardH = cards[0].offsetHeight;
-      rowPitch = cards[3].offsetTop - cards[0].offsetTop; // same column, next row
-      const totalRows = Math.ceil(cards.length / 3);
-      maxStep = Math.max(0, totalRows - 2); // 2 rows visible at a time
-      const maxTy = Math.max(0, ...cards.map(tyOf)); // staggered overhang of the lowest column
-      // Frame holds exactly 2 rows incl. the stagger overhang; the grid snaps by a
-      // full rowPitch so the previous row clips cleanly at the frame's top edge.
-      // The 2-row frame is bottom-anchored inside the full-screen container, so the
-      // leftover height becomes whitespace ABOVE the cards — the runway they scroll
-      // up into (and overflow past, clipped by the nav).
-      const frameH = Math.round(maxTy + rowPitch + cardH);
-      frame.style.height = `${frameH}px`;
-      const chrome = parseFloat(getComputedStyle(pinEl).top) || 0;
-      const fullH = Math.round(window.innerHeight - chrome); // container fills the screen below the nav
-      pinEl.style.height = `${fullH}px`;
-      const padTop = parseFloat(getComputedStyle(layout).paddingTop) || 0;
-      baseOffset = fullH - frameH - padTop; // drop the cards to the bottom → whitespace runway above
+
       const headerOffset = docTop(pinEl) - docTop(wrap);
-      const stepScroll = Math.max(320, Math.round(window.innerHeight * 0.45)); // scroll per snap
-      dist = Math.max(1, (maxStep + 1) * stepScroll);
+      maxStep = Math.max(1, Math.ceil(range / rowPitch));        // number of whole-row chunks
+      const scrollPerChunk = Math.max(300, Math.round(window.innerHeight * 0.5));
+      dist = maxStep * scrollPerChunk;                           // even page-scroll per chunk
       v0 = chrome - headerOffset;
-      setPinHeight(`${Math.round(headerOffset + fullH + dist)}px`);
-      lastStep = -1; // re-apply after a re-measure
+      setPinHeight(`${Math.round(headerOffset + H + dist)}px`);
+      lastT = null;
       update();
     };
 
@@ -137,6 +198,7 @@ export function RosterCollage01({ content, config = {} }) {
     window.addEventListener("resize", measure);
     const ro = new ResizeObserver(measure);
     ro.observe(grid);
+    if (rail) ro.observe(rail); // list height drives the clip window — re-measure if it reflows
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", measure);
@@ -144,6 +206,7 @@ export function RosterCollage01({ content, config = {} }) {
       if (raf) cancelAnimationFrame(raf);
       grid.style.transform = "";
       frame.style.height = "";
+      clearFade();
       pinEl.style.height = "";
       if (section) section.classList.remove("is-pinned");
     };

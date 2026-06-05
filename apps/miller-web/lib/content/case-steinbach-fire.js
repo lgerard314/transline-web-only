@@ -7,7 +7,7 @@ export const caseSteinbachFire = {
     title: "Steinbach Strip Mall Fire Recovery & Restoration Project",
     lead:
       "A major fire broke out in a Steinbach strip mall located within a busy business park — adjacent to both residential housing and a children's playground. This incident not only disrupted local businesses but also posed significant risks to public health and the surrounding environment.",
-    photo: "/miller/fire-damaged-site-remediation.png",
+    photo: "/miller/custom/fire-damaged-site-remediation.png",
     meta: [{ k: "Location ", v: "Steinbach, MB" }],
   },
   problem: {

@@ -61,7 +61,28 @@ export function LrCountUp({ value, suffix = "", duration = 1600, play = true, on
       }
     }, { threshold: 0.4 });
     io.observe(node);
-    return () => { io.disconnect(); if (raf) cancelAnimationFrame(raf); beginRef.current = null; };
+    // Fallback: the observer's async initial callback can be missed when the
+    // element is already on screen at mount — notably after a Fast-Refresh
+    // remount while the reel is in view, which otherwise leaves the count stuck
+    // at 0 forever (no scroll event to re-fire the observer). If a meaningful
+    // slice of the numeral is already visible, start synchronously. begin() is
+    // idempotent, so this never double-starts alongside the observer.
+    const vh = window.innerHeight || document.documentElement.clientHeight || 0;
+    const r = node.getBoundingClientRect();
+    if (vh && r.height && r.top < vh - r.height * 0.4 && r.bottom > r.height * 0.4) {
+      inViewRef.current = true;
+      begin();
+    }
+    return () => {
+      io.disconnect();
+      if (raf) cancelAnimationFrame(raf);
+      // If this effect is torn down before the count finished (StrictMode's
+      // double-invoke, a deps re-run, or a Fast-Refresh remount), allow the next
+      // run to restart — otherwise startedRef stays true, begin() bails, and the
+      // numeral freezes at whatever value it had reached.
+      if (!doneRef.current) startedRef.current = false;
+      beginRef.current = null;
+    };
   }, [value, suffix, duration, finalText]);
 
   // When play flips on (the reel reaches this diamond's turn), start if in view.

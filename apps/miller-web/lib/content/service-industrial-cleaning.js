@@ -32,22 +32,22 @@ export const industrialCleaning = {
     items: [
       {
         name: "Confined-Space Tank Cleaning",
-        photo: "/miller/confined-space-entry.png",
+        photo: "/miller/custom/confined-space-entry.png",
         blurb: "Underground and above-ground holding tanks entered and cleaned under full confined-space protocol.",
       },
       {
         name: "High-Pressure Steam Cleaning",
-        photo: "/miller/hazmat-cleaning.png",
+        photo: "/miller/custom/hazmat-cleaning.png",
         blurb: "Equipment and piping cut clean with high-pressure steam — scale, residue, and product removed.",
       },
       {
         name: "Sludge Pit Cleanouts",
-        photo: "/miller/spill-containment.png",
+        photo: "/miller/custom/spill-containment.png",
         blurb: "Sludge pits pumped, cleaned, and the recovered material routed to licensed treatment.",
       },
       {
         name: "Rail Car & Bulk-Liquid Cleaning",
-        photo: "/miller/transport-incidents.png",
+        photo: "/miller/custom/transport-incidents.png",
         blurb: "Gondola and bulk-liquid rail cars cleaned to spec for return to service or reload.",
       },
     ],
@@ -64,8 +64,8 @@ export const industrialCleaning = {
       { mark: "01", name: "Vacuum trucks", body: "High-volume liquid and slurry recovery from tanks, pits, and sumps — straight into sealed transport." },
       { mark: "02", name: "Pressure-washer units", body: "High-pressure and steam units that strip residue from equipment, piping, and vessel interiors." },
     ],
-    image: "/miller/industrial-vaccum-truck-transparent.png",
-    mediaPhoto: "/miller/industrial-vaccum-truck-transparent.png",
+    image: "/miller/custom/industrial-vaccum-truck-transparent.png",
+    mediaPhoto: "/miller/custom/industrial-vaccum-truck-transparent.png",
   },
 
   // §4 — Why Miller (skilled-team band).

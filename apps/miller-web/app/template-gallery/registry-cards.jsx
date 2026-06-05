@@ -68,7 +68,7 @@ export const CARDS = [
     render: (cfg) => (
       <div className="mw-svc-inds mw-svc-inds--photo" style={{ background: "transparent" }}>
         <ul className="mw-svc-inds__grid" style={{ ...ulBare, width: 360 }}>
-          <IndThumbCard01 item={{ name: cfg.multiline ? "Chemical\nspills" : "Chemical spills", blurb: "Placeholder one-line response description.", photo: "/miller/chemical-spills.png" }} />
+          <IndThumbCard01 item={{ name: cfg.multiline ? "Chemical\nspills" : "Chemical spills", blurb: "Placeholder one-line response description.", photo: "/miller/custom/chemical-spills.png" }} />
         </ul>
       </div>
     ),
@@ -81,7 +81,7 @@ export const CARDS = [
     controls: [],
     render: () => (
       <ul className="mw-svc-inds__grid" style={{ ...ulBare, width: 260 }}>
-        <IndGalleryCard01 item={{ name: "Sample Sector", blurb: "Placeholder one-line sector blurb.", photo: "/miller/mining.png" }} />
+        <IndGalleryCard01 item={{ name: "Sample Sector", blurb: "Placeholder one-line sector blurb.", photo: "/miller/custom/mining.png" }} />
       </ul>
     ),
   },
@@ -93,7 +93,7 @@ export const CARDS = [
     controls: [],
     render: () => (
       <ul style={{ ...ulBare, width: 380 }}>
-        <WwdCard01 item={{ name: "Capability One", blurb: "Short rest-state blurb shown before hover.", detail: "Longer placeholder paragraph revealed on hover or focus, describing the capability in a couple of sentences.", photo: "/miller/contaminated-soil-remediation.png" }} />
+        <WwdCard01 item={{ name: "Capability One", blurb: "Short rest-state blurb shown before hover.", detail: "Longer placeholder paragraph revealed on hover or focus, describing the capability in a couple of sentences.", photo: "/miller/custom/contaminated-soil-remediation.png" }} />
       </ul>
     ),
   },
@@ -105,7 +105,7 @@ export const CARDS = [
     controls: [],
     render: () => (
       <ul className="mw-svc-inds__grid" style={{ ...ulBare, width: 320 }}>
-        <CaseCard01 item={{ href: "#", title: "Sample Case Study One", location: "Sample Location, MB", photo: "/miller/arsenic-contaiminated-soil-removal-1.png", desc: "Placeholder one-sentence summary of the case study outcome." }} />
+        <CaseCard01 item={{ href: "#", title: "Sample Case Study One", location: "Sample Location, MB", photo: "/miller/custom/arsenic-contaiminated-soil-removal-1.png", desc: "Placeholder one-sentence summary of the case study outcome." }} />
       </ul>
     ),
   },
