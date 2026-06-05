@@ -1,0 +1,2159 @@
+{
+  "site": "millerwaste",
+  "startUrl": "https://millerwaste.ca/",
+  "started": "2026-06-05T14:26:33.512Z",
+  "errors": [
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "careers",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "careers",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "careers",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "careers",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "careers",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "careers",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "careers",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "business-waste-and-recycling",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "business-waste-and-recycling",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "business-waste-and-recycling",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "business-waste-and-recycling",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "business-waste-and-recycling",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "dumpster-bin-rental",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "dumpster-bin-rental",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "dumpster-bin-rental",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "dumpster-bin-rental",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "dumpster-bin-rental",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "dumpster-bin-rental",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "product-destruction-2",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "product-destruction-2",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "product-destruction-2",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "product-destruction-2",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "biomass",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "organics-facilities",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "organics-facilities",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "organics-facilities",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2025/07/MWS_Forced-Labour-Report_V1_061325.pdf",
+      "reason": "page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millerwaste.ca/wp-content/uploads/2025/07/MWS_Forced-Labour-Report_V1_061325.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "product-destruction",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "product-destruction",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "product-destruction",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "product-destruction",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/manitoba/winnipeg",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/manitoba/winnipeg",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/manitoba/winnipeg",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2026/02/Miller-Waste-Black-Youth-Trades-Bursary-Application-Form.pdf",
+      "reason": "page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millerwaste.ca/wp-content/uploads/2026/02/Miller-Waste-Black-Youth-Trades-Bursary-Application-Form.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2021/12/2021-AODA-Policy.pdf",
+      "reason": "page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millerwaste.ca/wp-content/uploads/2021/12/2021-AODA-Policy.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2021/12/2021-Individual-Accommodation-Program-with-Forms.pdf",
+      "reason": "page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millerwaste.ca/wp-content/uploads/2021/12/2021-Individual-Accommodation-Program-with-Forms.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2022/11/AODA-Multi-Year-Accessibility-Plan.pdf",
+      "reason": "page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millerwaste.ca/wp-content/uploads/2022/11/AODA-Multi-Year-Accessibility-Plan.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/pickering-2",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/pickering-2",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/pickering-2",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/pembroke",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/pembroke",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/pembroke",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2024/03/MWS_Roll-off-truck-employee-beside-container-scaled.jpg",
+      "on": "service-locations/ontario/pembroke",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/pembroke",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/pembroke",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/owen-sound",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/owen-sound",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/owen-sound",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/ottawa",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/ottawa",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/waste-management-services-ontario-etobicoke",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/waste-management-services-ontario-etobicoke",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/waste-management-services-ontario-etobicoke",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2024/03/MWS_Roll-off-truck-employee-beside-container-scaled.jpg",
+      "on": "service-locations/ontario/waste-management-services-ontario-etobicoke",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/waste-management-services-ontario-etobicoke",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/scugog",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/scugog",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/scugog",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/uxbridge",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/uxbridge",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/uxbridge",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/uxbridge-2",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/uxbridge-2",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/uxbridge-2",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2024/03/MWS_Roll-off-truck-employee-beside-container-scaled.jpg",
+      "on": "service-locations/ontario/uxbridge-2",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/uxbridge-2",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/niagara-falls",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/niagara-falls",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/niagara-falls",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/west-lincoln",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/west-lincoln",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/bobcaygeon",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/bracebridge-2",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/barrie",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/blue-mountains",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/blue-mountains",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/blue-mountains",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/aurora-3",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/aurora-3",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/waste-management-services-ontario-west-nipissing",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/casselman-2",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/casselman-2",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/gatineau",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/gatineau",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/gatineau",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2024/03/MWS_Roll-off-truck-employee-beside-container-scaled.jpg",
+      "on": "service-locations/ontario/gatineau",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/gatineau",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/fenelon-falls",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/fenelon-falls",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/fenelon-falls",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/burlington",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/clarington",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/clarington",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/caledon",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/the-nation",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/the-nation",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/clarence-rockland",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/ontario/clarence-rockland",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/moncton",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/nackawic",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/port-elgin",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/port-elgin",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://wordpress-1281606-4640853.cloudwaysapps.com/wp-content/uploads/2024/03/jpeg-optimizer_AdobeStock_445433801.jpg",
+      "on": "service-locations/new-brunswick/port-elgin",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/port-elgin",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://wordpress-1281606-4640853.cloudwaysapps.com/wp-content/uploads/2024/03/MWS_Roll-off-truck-employee-beside-container-scaled.jpg",
+      "on": "service-locations/new-brunswick/port-elgin",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/port-elgin",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://wordpress-1281606-4640853.cloudwaysapps.com/wp-content/uploads/2024/03/PD_Lettuce-Crates.jpg",
+      "on": "service-locations/new-brunswick/port-elgin",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/sackville",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/sackville",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://wordpress-1281606-4640853.cloudwaysapps.com/wp-content/uploads/2024/03/jpeg-optimizer_AdobeStock_445433801.jpg",
+      "on": "service-locations/new-brunswick/sackville",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/sackville",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://wordpress-1281606-4640853.cloudwaysapps.com/wp-content/uploads/2024/03/MWS_Roll-off-truck-employee-beside-container-scaled.jpg",
+      "on": "service-locations/new-brunswick/sackville",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/sackville",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://wordpress-1281606-4640853.cloudwaysapps.com/wp-content/uploads/2024/03/PD_Lettuce-Crates.jpg",
+      "on": "service-locations/new-brunswick/sackville",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/salisbury",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/salisbury",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://wordpress-1281606-4640853.cloudwaysapps.com/wp-content/uploads/2024/03/jpeg-optimizer_AdobeStock_445433801.jpg",
+      "on": "service-locations/new-brunswick/salisbury",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/salisbury",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://wordpress-1281606-4640853.cloudwaysapps.com/wp-content/uploads/2024/03/MWS_Roll-off-truck-employee-beside-container-scaled.jpg",
+      "on": "service-locations/new-brunswick/salisbury",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/salisbury",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://wordpress-1281606-4640853.cloudwaysapps.com/wp-content/uploads/2024/03/PD_Lettuce-Crates.jpg",
+      "on": "service-locations/new-brunswick/salisbury",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/shediac",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/shediac",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://wordpress-1281606-4640853.cloudwaysapps.com/wp-content/uploads/2024/03/jpeg-optimizer_AdobeStock_445433801.jpg",
+      "on": "service-locations/new-brunswick/shediac",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/shediac",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://wordpress-1281606-4640853.cloudwaysapps.com/wp-content/uploads/2024/03/MWS_Roll-off-truck-employee-beside-container-scaled.jpg",
+      "on": "service-locations/new-brunswick/shediac",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/shediac",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://wordpress-1281606-4640853.cloudwaysapps.com/wp-content/uploads/2024/03/PD_Lettuce-Crates.jpg",
+      "on": "service-locations/new-brunswick/shediac",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/westmoreland-county",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/westmoreland-county",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://wordpress-1281606-4640853.cloudwaysapps.com/wp-content/uploads/2024/03/jpeg-optimizer_AdobeStock_445433801.jpg",
+      "on": "service-locations/new-brunswick/westmoreland-county",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/westmoreland-county",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://wordpress-1281606-4640853.cloudwaysapps.com/wp-content/uploads/2024/03/MWS_Roll-off-truck-employee-beside-container-scaled.jpg",
+      "on": "service-locations/new-brunswick/westmoreland-county",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/westmoreland-county",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://wordpress-1281606-4640853.cloudwaysapps.com/wp-content/uploads/2024/03/PD_Lettuce-Crates.jpg",
+      "on": "service-locations/new-brunswick/westmoreland-county",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/ville-de-saint-quentin",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/ville-de-saint-quentin",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://wordpress-1281606-4640853.cloudwaysapps.com/wp-content/uploads/2024/03/jpeg-optimizer_AdobeStock_445433801.jpg",
+      "on": "service-locations/new-brunswick/ville-de-saint-quentin",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/ville-de-saint-quentin",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://wordpress-1281606-4640853.cloudwaysapps.com/wp-content/uploads/2024/03/MWS_Roll-off-truck-employee-beside-container-scaled.jpg",
+      "on": "service-locations/new-brunswick/ville-de-saint-quentin",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/ville-de-saint-quentin",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://wordpress-1281606-4640853.cloudwaysapps.com/wp-content/uploads/2024/03/PD_Lettuce-Crates.jpg",
+      "on": "service-locations/new-brunswick/ville-de-saint-quentin",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/sussex",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/sussex",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://wordpress-1281606-4640853.cloudwaysapps.com/wp-content/uploads/2024/03/jpeg-optimizer_AdobeStock_445433801.jpg",
+      "on": "service-locations/new-brunswick/sussex",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/sussex",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://wordpress-1281606-4640853.cloudwaysapps.com/wp-content/uploads/2024/03/MWS_Roll-off-truck-employee-beside-container-scaled.jpg",
+      "on": "service-locations/new-brunswick/sussex",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/sussex",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://wordpress-1281606-4640853.cloudwaysapps.com/wp-content/uploads/2024/03/PD_Lettuce-Crates.jpg",
+      "on": "service-locations/new-brunswick/sussex",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/st-ignance",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/st-ignance",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://wordpress-1281606-4640853.cloudwaysapps.com/wp-content/uploads/2024/03/jpeg-optimizer_AdobeStock_445433801.jpg",
+      "on": "service-locations/new-brunswick/st-ignance",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/st-ignance",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://wordpress-1281606-4640853.cloudwaysapps.com/wp-content/uploads/2024/03/MWS_Roll-off-truck-employee-beside-container-scaled.jpg",
+      "on": "service-locations/new-brunswick/st-ignance",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/st-ignance",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://wordpress-1281606-4640853.cloudwaysapps.com/wp-content/uploads/2024/03/PD_Lettuce-Crates.jpg",
+      "on": "service-locations/new-brunswick/st-ignance",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/alma",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/alma",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/alma",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2024/03/MWS_Roll-off-truck-employee-beside-container-scaled.jpg",
+      "on": "service-locations/new-brunswick/alma",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/alma",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/saint-john",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/saint-john",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/saint-john",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2024/03/MWS_Roll-off-truck-employee-beside-container-scaled.jpg",
+      "on": "service-locations/new-brunswick/saint-john",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/new-brunswick/saint-john",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/antigonish",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/antigonish",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/antigonish",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2024/03/MWS_Roll-off-truck-employee-beside-container-scaled.jpg",
+      "on": "service-locations/nova-scotia/antigonish",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/antigonish",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/cape-breton",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/cape-breton",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/cape-breton",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2024/03/MWS_Roll-off-truck-employee-beside-container-scaled.jpg",
+      "on": "service-locations/nova-scotia/cape-breton",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/cape-breton",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/chester",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/chester",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/chester",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2024/03/MWS_Roll-off-truck-employee-beside-container-scaled.jpg",
+      "on": "service-locations/nova-scotia/chester",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/chester",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/woolwich",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/woolwich",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/woolwich",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2024/03/MWS_Roll-off-truck-employee-beside-container-scaled.jpg",
+      "on": "service-locations/nova-scotia/woolwich",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/woolwich",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/woolwich",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/cumberland",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/cumberland",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/cumberland",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2024/03/MWS_Roll-off-truck-employee-beside-container-scaled.jpg",
+      "on": "service-locations/nova-scotia/cumberland",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/cumberland",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/west-hants",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/west-hants",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/west-hants",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2024/03/MWS_Roll-off-truck-employee-beside-container-scaled.jpg",
+      "on": "service-locations/nova-scotia/west-hants",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/west-hants",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/guysborough",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/guysborough",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/guysborough",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2024/03/MWS_Roll-off-truck-employee-beside-container-scaled.jpg",
+      "on": "service-locations/nova-scotia/guysborough",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/guysborough",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/pictou",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/pictou",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/pictou",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2024/03/MWS_Roll-off-truck-employee-beside-container-scaled.jpg",
+      "on": "service-locations/nova-scotia/pictou",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/pictou",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/indian-brook",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/indian-brook",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/indian-brook",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2024/03/MWS_Roll-off-truck-employee-beside-container-scaled.jpg",
+      "on": "service-locations/nova-scotia/indian-brook",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/indian-brook",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/oxford",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/oxford",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/oxford",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2024/03/MWS_Roll-off-truck-employee-beside-container-scaled.jpg",
+      "on": "service-locations/nova-scotia/oxford",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/oxford",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/halifax",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/halifax",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/halifax",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2024/03/MWS_Roll-off-truck-employee-beside-container-scaled.jpg",
+      "on": "service-locations/nova-scotia/halifax",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/halifax",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/east-hants",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/east-hants",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/east-hants",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2024/03/MWS_Roll-off-truck-employee-beside-container-scaled.jpg",
+      "on": "service-locations/nova-scotia/east-hants",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/east-hants",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/lunenburg",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/lunenburg",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/lunenburg",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2024/03/MWS_Roll-off-truck-employee-beside-container-scaled.jpg",
+      "on": "service-locations/nova-scotia/lunenburg",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/lunenburg",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/amherst",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/amherst",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/amherst",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2024/03/MWS_Roll-off-truck-employee-beside-container-scaled.jpg",
+      "on": "service-locations/nova-scotia/amherst",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "service-locations/nova-scotia/amherst",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "business-waste-and-recycling-3",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "business-waste-and-recycling-3",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "business-waste-and-recycling-3",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "business-waste-and-recycling-3",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "business-waste-and-recycling-3",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "miller-compost-2",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "miller-compost-2",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "education-community",
+      "reason": "asset download failed"
+    },
+    {
+      "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
+      "on": "port-perry-waste-drop-off-depot",
+      "reason": "asset download failed"
+    }
+  ],
+  "finished": "2026-06-05T15:17:37.098Z",
+  "pagesCrawled": 295,
+  "skipped": [
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2025/07/MWS_Forced-Labour-Report_V1_061325.pdf",
+      "reason": "error: page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millerwaste.ca/wp-content/uploads/2025/07/MWS_Forced-Labour-Report_V1_061325.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2026/02/Miller-Waste-Black-Youth-Trades-Bursary-Application-Form.pdf",
+      "reason": "error: page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millerwaste.ca/wp-content/uploads/2026/02/Miller-Waste-Black-Youth-Trades-Bursary-Application-Form.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2021/12/2021-AODA-Policy.pdf",
+      "reason": "error: page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millerwaste.ca/wp-content/uploads/2021/12/2021-AODA-Policy.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2021/12/2021-Individual-Accommodation-Program-with-Forms.pdf",
+      "reason": "error: page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millerwaste.ca/wp-content/uploads/2021/12/2021-Individual-Accommodation-Program-with-Forms.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2022/11/AODA-Multi-Year-Accessibility-Plan.pdf",
+      "reason": "error: page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millerwaste.ca/wp-content/uploads/2022/11/AODA-Multi-Year-Accessibility-Plan.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://millerwaste.ca/service-locations-thornhill",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/service-locations-ontario-orillia",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/service-locations-ontario-omemee",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/service-locations-ontario-innisfil",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/service-locations-ontario-north-bay",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/service-locations-ontario-nobleton",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/service-locations-ontario-meaford",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/service-locations-ontario-mississauga",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/service-locations-ontario-meaford",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/service-locations-ontario-meaford",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/service-locations-ontario-whitchurch-stouffville",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2024/05/Guide-and-Schedule_Saint-John-BIL.pdf",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/service-locations-ontario-woolwich",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/service-locations-ontario-woolwich",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/service-locations-ontario-woolwich",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/service-locations-ontario-woolwich",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2024/01/Calendar-2024.pdf",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2024/01/Calendar-2024.pdf",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/shop?add-to-cart=5646",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/shop?add-to-cart=5649",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/shop?add-to-cart=5651",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/cart?remove_item=9219adc5c42107c4911e249155320648&_wpnonce=ee077b9a0b",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/my-account/lost-password",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "http://www.millerwaste.ca",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-announces-strategic-sale-of-organics-and-renewable-energy-assets",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-announces-strategic-sale-of-organics-and-renewable-energy-assets",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-services-to-launch-newwaste-collection-contract-in-windsorontario-on-april-1-2025",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-services-to-launch-newwaste-collection-contract-in-windsorontario-on-april-1-2025",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/packing-up-without-the-waste-your-guide-to-a-sustainable-move",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/packing-up-without-the-waste-your-guide-to-a-sustainable-move",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/the-true-cost-of-improper-waste-disposal",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/the-true-cost-of-improper-waste-disposal",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/how-to-make-2025-your-greenest-year-yet",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/how-to-make-2025-your-greenest-year-yet",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/a-greener-kind-of-cheer",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/a-greener-kind-of-cheer",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/grow-your-career-at-miller-waste",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/grow-your-career-at-miller-waste",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/repurposing-your-pumpkins",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/repurposing-your-pumpkins",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/essential-home-maintenance-tasks-to-tackle-this-fall",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/essential-home-maintenance-tasks-to-tackle-this-fall",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/join-the-cause-on-world-cleanup-day-2024",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/join-the-cause-on-world-cleanup-day-2024",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/your-guide-to-a-sustainable-back-to-school-season",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/author/liana-croccomillerwaste-ca",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/your-guide-to-a-sustainable-back-to-school-season",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/common-household-items-you-might-be-surprised-to-know-are-hazardous-waste",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/common-household-items-you-might-be-surprised-to-know-are-hazardous-waste",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/the-benefits-of-renting-temporary-dumpster-bins",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/the-benefits-of-renting-temporary-dumpster-bins",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/sustainable-gardening-through-composting",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/sustainable-gardening-through-composting",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-systems-named-one-of-deloittes-best-managed-companies-in-2024",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/author/liana-croccomillerwaste-ca",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-systems-named-one-of-deloittes-best-managed-companies-in-2024",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/what-does-miller-do-with-all-that-waste",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/what-does-miller-do-with-all-that-waste",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/tips-for-sustainable-living-in-2024",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/tips-for-sustainable-living-in-2024",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-systems-title-sponsor-for-2025-u-sports-womens-hockey-championship",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-systems-title-sponsor-for-2025-u-sports-womens-hockey-championship",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/download-and-print-your-2023-miller-waste-holiday-activity-book",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/download-and-print-your-2023-miller-waste-holiday-activity-book",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/sustainable-celebrations-a-guide-to-reducing-holiday-waste",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/sustainable-celebrations-a-guide-to-reducing-holiday-waste",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/how-to-reuse-common-household-items",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/how-to-reuse-common-household-items",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/what-happens-to-my-leaf-and-yard-waste",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/what-happens-to-my-leaf-and-yard-waste",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-supports-breast-and-prostate-cancer-awareness-with-pink-and-blue-truck",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-supports-breast-and-prostate-cancer-awareness-with-pink-and-blue-truck",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/how-to-reduce-food-waste",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/how-to-reduce-food-waste",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-celebrates-new-additions-to-25-year-club",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-celebrates-new-additions-to-25-year-club",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/biodegradable-vs-compostable-whats-the-difference",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/biodegradable-vs-compostable-whats-the-difference",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/why-you-should-compost",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/why-you-should-compost",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/your-top-3-faqs-answered",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/your-top-3-faqs-answered",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/how-to-reduce-clothing-waste",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/how-to-reduce-clothing-waste",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/region-of-waterloo-and-miller-waste-systems-celebrate-pride",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/how-to-develop-a-waste-reduction-plan-for-your-organization",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/how-to-develop-a-waste-reduction-plan-for-your-organization",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/how-to-camp-and-picnic-sustainably",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/how-to-camp-and-picnic-sustainably",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/spring-cleaning-with-miller-waste-systems",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/spring-cleaning-with-miller-waste-systems",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-systems-is-one-of-deloittes-2023-best-managed-companies",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-systems-is-one-of-deloittes-2023-best-managed-companies",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/earth-day-clean-up",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/5-ways-small-businesses-can-benefit-from-responsible-waste-management",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/5-ways-small-businesses-can-benefit-from-responsible-waste-management",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/7-ways-to-reduce-trash-at-home",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/7-ways-to-reduce-trash-at-home",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/what-happens-to-items-in-blue-recycling-bin",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/what-happens-to-items-in-blue-recycling-bin",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/benefits-of-roll-off-dumpster-bin-rentals",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/benefits-of-roll-off-dumpster-bin-rentals",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/why-recycling-is-important-for-businesses",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/why-recycling-is-important-for-businesses",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/gordon-food-service",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/gordon-food-service",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/what-are-the-major-parts-of-waste-management",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/what-are-the-major-parts-of-waste-management",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/how-is-organic-waste-recycled",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/how-is-organic-waste-recycled",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-compost-supports-local-communities",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-compost-supports-local-communities",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/the-airshow-london",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/the-airshow-london",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-systems-supports-greenmycity-initiative",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-systems-supports-greenmycity-initiative",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/escarpment-renewables-opens-in-grimsby",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/escarpment-renewables-opens-in-grimsby",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/category/blog/page/2",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-announces-strategic-sale-of-organics-and-renewable-energy-assets",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-announces-strategic-sale-of-organics-and-renewable-energy-assets",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-services-to-launch-newwaste-collection-contract-in-windsorontario-on-april-1-2025",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-services-to-launch-newwaste-collection-contract-in-windsorontario-on-april-1-2025",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-systems-named-one-of-deloittes-best-managed-companies-in-2024",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/author/liana-croccomillerwaste-ca",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-systems-named-one-of-deloittes-best-managed-companies-in-2024",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-systems-title-sponsor-for-2025-u-sports-womens-hockey-championship",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-systems-title-sponsor-for-2025-u-sports-womens-hockey-championship",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/download-and-print-your-2023-miller-waste-holiday-activity-book",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/download-and-print-your-2023-miller-waste-holiday-activity-book",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-supports-breast-and-prostate-cancer-awareness-with-pink-and-blue-truck",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-supports-breast-and-prostate-cancer-awareness-with-pink-and-blue-truck",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-celebrates-new-additions-to-25-year-club",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-celebrates-new-additions-to-25-year-club",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/region-of-waterloo-and-miller-waste-systems-celebrate-pride",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-systems-is-one-of-deloittes-2023-best-managed-companies",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-systems-is-one-of-deloittes-2023-best-managed-companies",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/earth-day-clean-up",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/category/news/page/2",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/gordon-food-service",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/gordon-food-service",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/why-recycling-is-important-for-businesses",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/how-to-reuse-common-household-items",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-compost-supports-local-communities",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/how-is-organic-waste-recycled",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/common-household-items-you-might-be-surprised-to-know-are-hazardous-waste",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/why-recycling-is-important-for-businesses",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/the-benefits-of-renting-temporary-dumpster-bins",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/spring-cleaning-with-miller-waste-systems",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/what-does-miller-do-with-all-that-waste",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/grow-your-career-at-miller-waste",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/the-true-cost-of-improper-waste-disposal",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-services-to-launch-newwaste-collection-contract-in-windsorontario-on-april-1-2025",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-services-to-launch-newwaste-collection-contract-in-windsorontario-on-april-1-2025",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/packing-up-without-the-waste-your-guide-to-a-sustainable-move",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/packing-up-without-the-waste-your-guide-to-a-sustainable-move",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/the-true-cost-of-improper-waste-disposal",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/the-true-cost-of-improper-waste-disposal",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/how-to-make-2025-your-greenest-year-yet",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/how-to-make-2025-your-greenest-year-yet",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/a-greener-kind-of-cheer",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/a-greener-kind-of-cheer",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/grow-your-career-at-miller-waste",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/grow-your-career-at-miller-waste",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/repurposing-your-pumpkins",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/repurposing-your-pumpkins",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/join-the-cause-on-world-cleanup-day-2024",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/join-the-cause-on-world-cleanup-day-2024",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/common-household-items-you-might-be-surprised-to-know-are-hazardous-waste",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/common-household-items-you-might-be-surprised-to-know-are-hazardous-waste",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/the-benefits-of-renting-temporary-dumpster-bins",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/the-benefits-of-renting-temporary-dumpster-bins",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/author/jonah/page/3",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-announces-strategic-sale-of-organics-and-renewable-energy-assets",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/miller-waste-announces-strategic-sale-of-organics-and-renewable-energy-assets",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/essential-home-maintenance-tasks-to-tackle-this-fall",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/essential-home-maintenance-tasks-to-tackle-this-fall",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/what-does-miller-do-with-all-that-waste",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/what-does-miller-do-with-all-that-waste",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/5-ways-small-businesses-can-benefit-from-responsible-waste-management",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/5-ways-small-businesses-can-benefit-from-responsible-waste-management",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/7-ways-to-reduce-trash-at-home",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/7-ways-to-reduce-trash-at-home",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/what-happens-to-items-in-blue-recycling-bin",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/what-happens-to-items-in-blue-recycling-bin",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/benefits-of-roll-off-dumpster-bin-rentals",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/benefits-of-roll-off-dumpster-bin-rentals",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/why-recycling-is-important-for-businesses",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/why-recycling-is-important-for-businesses",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/what-are-the-major-parts-of-waste-management",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/what-are-the-major-parts-of-waste-management",
+      "reason": "cap(300) reached"
+    },
+    {
+      "url": "https://millerwaste.ca/author/miller-waste-systems/page/2",
+      "reason": "cap(300) reached"
+    }
+  ],
+  "externalLinks": [
+    "http://1-905-404-0685/",
+    "http://905-475-3852/",
+    "http://SAFE Manitoba: https://www.safemanitoba.com/Pages/default.aspx",
+    "http://biogas.appliedproject-fleming.ca/",
+    "http://secure,%20confidential%20destruction%20services%20for%20off-spec,%20expired,%20and%20defective%20items./",
+    "http://usedoilrecycling.com/en/mb",
+    "http://wordpress-1281606-4640853.cloudwaysapps.com/pre-checkout/",
+    "http://www.compost.org/",
+    "http://www.eprassociation.ca/",
+    "http://www.healthsteward.ca/",
+    "http://www.mwscovid19.ca/?password-protected=login&redirect_to=http%3A%2F%2Fwww.mwscovid19.ca%2F",
+    "http://www.recyclemanitoba.ca/",
+    "http://www.regeneration.ca/",
+    "http://www.stewardshipontario.ca/",
+    "http://www.winnipeg.ca/waterandwaste/garbage/hhw.stm",
+    "https://accessibe.com/blog/knowledgebase/screen-reader-guide",
+    "https://ca.linkedin.com/company/miller-waste-systems",
+    "https://can231.dayforcehcm.com/CandidatePortal/en-US/millerwaste",
+    "https://can60.dayforcehcm.com/CandidatePortal/en-US/millerwaste",
+    "https://compost.css.cornell.edu/Factsheets/FS5.html",
+    "https://cookie-banner.ca/",
+    "https://cookie-banner.ca/?ref=banner",
+    "https://form.typeform.com/to/EwNUuEuY",
+    "https://form.typeform.com/to/PoEbWLXj",
+    "https://globalewaste.org/reports/global-e-waste-monitor-2024/",
+    "https://guelph.ca/living/environment/garbage-and-recycling/?utm_source=chatgpt.com",
+    "https://ised-isde.canada.ca/site/office-consumer-affairs/en/be-green-consumer/e-waste",
+    "https://jobs.dayforcehcm.com/en-US/millerwaste/CANDIDATEPORTAL?searchText=310t",
+    "https://jobs.dayforcehcm.com/en-US/millerwaste/CANDIDATEPORTAL?searchText=dz",
+    "https://landscapeontario.com/",
+    "https://littlefreelibrary.org/",
+    "https://millercompost.ca/",
+    "https://millercompost.ca/commercial-customer-application/",
+    "https://millercompost.ca/contact-us/",
+    "https://millercompost.ca/product-catalogue",
+    "https://millercompost.ca/product-catalogue/",
+    "https://millercompost.ca/product-type/aggregates/",
+    "https://millercompost.ca/product-type/compost/",
+    "https://millercompost.ca/product-type/mulch/",
+    "https://millercompost.ca/product-type/soil/",
+    "https://millercompost.ca/store-locator/",
+    "https://ottawa.ca/en/garbage-and-recycling/recycling/garbage-and-recycling-collection-calendar?utm_source=chatgpt.com",
+    "https://pmcfroadhockey.ca/",
+    "https://rpra.ca/news/",
+    "https://rpra.ca/programs/blue-box/",
+    "https://rpra.ca/programs/blue-box/regulation/",
+    "https://rpra.ca/programs/blue-box/regulation/producers/",
+    "https://share.google/GM0nl7m1Yf04qWGPP",
+    "https://share.google/wUkfi9bWgubbBDvr1",
+    "https://sturgeonfalls.ca/garbage-and-recycling/",
+    "https://thestarfish.ca/journal/2025/03/the-environmental-cost-of-concerts-and-festivals",
+    "https://waterloowarriors.universitytickets.com/w/packages/PackageDetail.aspx?PackageNewID=295",
+    "https://wordpress-1281606-4640853.cloudwaysapps.com/business-waste-and-recycling/",
+    "https://wordpress-1281606-4640853.cloudwaysapps.com/contact-us/",
+    "https://wordpress-1281606-4640853.cloudwaysapps.com/material-recovery-facilities/",
+    "https://wordpress-1281606-4640853.cloudwaysapps.com/product-destruction/",
+    "https://wordpress-1281606-4640853.cloudwaysapps.com/waste-drop-off-depots/",
+    "https://wordpress-1281606-4640853.cloudwaysapps.com/waste-management-ajax-2/#commercial-waste-collection",
+    "https://wordpress-1281606-4640853.cloudwaysapps.com/waste-management-ajax-2/#product-destruction",
+    "https://wordpress-1281606-4640853.cloudwaysapps.com/waste-management-ajax-2/dumster-bin-collection",
+    "https://wordpress.org/",
+    "https://www.ajax.ca/en/living-in-ajax/garbage-and-recycling.aspx",
+    "https://www.almanac.com/which-plastics-are-recyclable-number",
+    "https://www.barrie.ca/services-payments/garbage-recycling-organics",
+    "https://www.canada.ca/content/dam/eccc/migration/ese-ees/05df7a37-60ff-403f-bb37-0cc697dbd9a3/feqg_pbde_en.pdf",
+    "https://www.canada.ca/en/environment-climate-change/services/canadian-environmental-protection-act-registry/proposed-risk-management-instruments-mercury-products.html",
+    "https://www.canada.ca/en/environment-climate-change/services/environmental-indicators/solid-waste-diversion-disposal.html",
+    "https://www.canada.ca/en/environment-climate-change/services/environmental-indicators/solid-waste-diversion-disposal.html?utm_source=chatgpt.com",
+    "https://www.canada.ca/en/environment-climate-change/services/management-toxic-substances/list-canadian-environmental-protection-act/inorganic-cadmium-compounds.html",
+    "https://www.canada.ca/en/environment-climate-change/services/managing-reducing-waste/municipal-solid/reducing.html",
+    "https://www.canada.ca/en/environment-climate-change/services/managing-reducing-waste/reduce-plastic-waste/canada-action.html",
+    "https://www.canr.msu.edu/news/compost_increases_the_water_holding_capacity_of_droughty_soils",
+    "https://www.canva.com/invitations/",
+    "https://www.circularmaterials.ca/ontario",
+    "https://www.circularmaterials.ca/recycleontario/",
+    "https://www.circularmaterials.ca/recycling-container-request-form/",
+    "https://www.circularmaterials.ca/resident-communities/durham-region/",
+    "https://www.circularmaterials.ca/resident-provinces/ontario/",
+    "https://www.clarington.net/en/resident-services/Garbage-and-Recycling.aspx",
+    "https://www.compost.org/",
+    "https://www.drawnames.com/",
+    "https://www.durham.ca/en/living-here/garbage-recycling-green-bin-and-other-collection.aspx",
+    "https://www.elfster.com/",
+    "https://www.era.ca/book-a-pick-up/",
+    "https://www.escarpmentrenewables.ca/",
+    "https://www.evite.com/",
+    "https://www.facebook.com/millerwastesi",
+    "https://www.facebook.com/millerwastesystems/",
+    "https://www.facebook.com/share/1FP1ZgYwrC/",
+    "https://www.google.com/maps/place/49+Taylor+Blvd,+Port+Perry,+ON+L9L+1B2/@44.1062693,-78.9718902,15.25z/data=!4m15!1m8!3m7!1s0x89d5142d8d1ac465:0x6d228f788b1aa2fb!2s49+Taylor+Blvd,+Port+Perry,+ON+L9L+1B2!3b1!8m2!3d44.1003665!4d-78.9699566!16s%2Fg%2F11rq8j8jg4!3m5!1s0x89d5142d8d1ac465:0x6d228f788b1aa2fb!8m2!3d44.1003665!4d-78.9699566!16s%2Fg%2F11rq8j8jg4?entry=ttu&g_ep=EgoyMDI2MDEyOC4wIKXMDSoKLDEwMDc5MjA3M0gBUAM%3D",
+    "https://www.google.com/search?q=1220+Squires+Beach+Road+Pickering%2C+ON%2C+L1W+3S3&sca_esv=51f7e736cc3ae313&sxsrf=ANbL-n6IT2Ba-BNGEXtq-ApvwdBh5xMfpA%3A1770830296101&ei=2LmMaYrFBfmHw8cP4MHUiAM&biw=1912&bih=924&ved=0ahUKEwiKkYb2-NGSAxX5w_ACHeAgFTEQ4dUDCBM&uact=5&oq=1220+Squires+Beach+Road+Pickering%2C+ON%2C+L1W+3S3&gs_lp=Egxnd3Mtd2l6LXNlcnAiLjEyMjAgU3F1aXJlcyBCZWFjaCBSb2FkIFBpY2tlcmluZywgT04sIEwxVyAzUzMyAhAmMggQABiABBiiBDIFEAAY7wUyCBAAGIAEGKIEMggQABiABBiiBDIIEAAYgAQYogRI0hNQAFjrD3ABeACQAQCYAc4BoAHhAqoBBTAuMS4xuAEDyAEA-AEB-AECmAIDoAL4AqgCFMICBxAjGOoCGCfCAg0QLhjHARivARjqAhgnwgIXEAAYgAQYigUYkQIY5wYY6gIYtALYAQHCAg4QABjbBRjqAhi0AtgBAcICEBAAGAMYjwEY6gIYtALYAQGYAwrxBQCNnxSj9CoSugYGCAEQARgBkgcFMS4xLjGgB_AGsgcFMC4xLjG4B-0CwgcFMi0yLjHIBxGACAE&sclient=gws-wiz-serp",
+    "https://www.hamilton.ca/home-neighbourhood/garbage-recycling/blue-box-recycling?utm_source=chatgpt.com",
+    "https://www.houzz.ie/magazine/how-to-reduce-waste-reuse-and-recycle-during-your-renovation-stsetivw-vs~164106076",
+    "https://www.instagram.com/miller_waste",
+    "https://www.instagram.com/miller_waste/",
+    "https://www.kawarthalakes.ca/en/living-here/waste-and-recycling.aspx",
+    "https://www.linkedin.com/company/miller-waste-systems",
+    "https://www.millerenvironmental.ca/",
+    "https://www.ontario.ca/page/producer-responsibility-ontarios-waste-diversion-programs",
+    "https://www.oshawa.ca/en/living-here/waste-and-recycling.aspx",
+    "https://www.owma.org/cpages/home",
+    "https://www.paperlesspost.com/",
+    "https://www.pickering.ca/en/living/waste-and-recycling.aspx",
+    "https://www.regionofwaterloo.ca/en/living-here/my-waste-app.aspx?utm_source=chatgpt.com",
+    "https://www.regionofwaterloo.ca/en/living-here/resources/Waste-Management/134722-2025-Waste-Calendar_Accessible.pdf?utm_source=chatgpt.com",
+    "https://www.safemanitoba.com/Pages/default.aspx",
+    "https://www.scugog.ca/en/waste-and-recycling/waste-and-recycling.aspx",
+    "https://www.statcan.gc.ca/o1/en/plus/6850-less-diversion-and-more-non-residential-sources-push-canadas-waste-disposal-new-high-2022",
+    "https://www.statcan.gc.ca/o1/en/plus/6850-less-diversion-and-more-non-residential-sources-push-canadas-waste-disposal-new-high-2022?",
+    "https://www.toronto.ca/services-payments/recycling-organics-garbage/towaste-app/?utm_source=chatgpt.com",
+    "https://www.townshipofbrock.ca/en/waste-and-recycling/waste-and-recycling.aspx",
+    "https://www.uxbridge.ca/en/living-here/garbage-and-recycling.aspx",
+    "https://www.whitby.ca/en/residents/waste-and-recycling.aspx",
+    "https://www.york.ca/waste/garbage-and-recycling",
+    "https://www150.statcan.gc.ca/n1/daily-quotidien/240408/dq240408b-eng.htm",
+    "https://www150.statcan.gc.ca/n1/pub/16f0023x/2013001/part-partie1-eng.htm?",
+    "https://www150.statcan.gc.ca/t1/tbl1/en/cv.action?pid=2510006001",
+    "https://www2.deloitte.com/ca/en/pages/canadas-best-managed-companies/articles/platinum-club-members.html"
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "site": "millercompost",
+  "startUrl": "https://millercompost.ca/",
+  "started": "2026-06-05T14:26:33.585Z",
+  "errors": [
+    {
+      "url": "https://millercompost.ca/wp-content/uploads/2020/07/Waste-Credit-App.pdf",
+      "reason": "page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millercompost.ca/wp-content/uploads/2020/07/Waste-Credit-App.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://millercompost.ca/wp-content/uploads/2020/07/Customer-Profile-2020-COD.pdf",
+      "reason": "page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millercompost.ca/wp-content/uploads/2020/07/Customer-Profile-2020-COD.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://millercompost.ca/wp-content/uploads/2020/07/impact-black.pdf",
+      "reason": "page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millercompost.ca/wp-content/uploads/2020/07/impact-black.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://millercompost.ca/wp-content/uploads/2020/07/impact-dark-brown.pdf",
+      "reason": "page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millercompost.ca/wp-content/uploads/2020/07/impact-dark-brown.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://millercompost.ca/wp-content/uploads/2020/07/impact-ruby-red.pdf",
+      "reason": "page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millercompost.ca/wp-content/uploads/2020/07/impact-ruby-red.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    }
+  ],
+  "finished": "2026-06-05T14:34:06.627Z",
+  "pagesCrawled": 80,
+  "skipped": [
+    {
+      "url": "https://millercompost.ca/wp-content/uploads/2020/07/Waste-Credit-App.pdf",
+      "reason": "error: page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millercompost.ca/wp-content/uploads/2020/07/Waste-Credit-App.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://millercompost.ca/wp-content/uploads/2020/07/Customer-Profile-2020-COD.pdf",
+      "reason": "error: page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millercompost.ca/wp-content/uploads/2020/07/Customer-Profile-2020-COD.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://millercompost.ca/wp-content/uploads/2020/07/impact-black.pdf",
+      "reason": "error: page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millercompost.ca/wp-content/uploads/2020/07/impact-black.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://millercompost.ca/wp-content/uploads/2020/07/impact-dark-brown.pdf",
+      "reason": "error: page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millercompost.ca/wp-content/uploads/2020/07/impact-dark-brown.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://millercompost.ca/wp-content/uploads/2020/07/impact-ruby-red.pdf",
+      "reason": "error: page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millercompost.ca/wp-content/uploads/2020/07/impact-ruby-red.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    }
+  ],
+  "externalLinks": [
+    "http://www.ontario.ca/page/pollinator-health",
+    "https://landscapeontario.com/",
+    "https://maps.google.com/maps?ll=43.969809,-79.416413&z=3&t=m&hl=en-US&gl=US&mapclient=apiv3",
+    "https://millerwaste.ca/",
+    "https://twitter.com/CompostMiller",
+    "https://www.bing.com/images/search?q=Monarch+Butterfly+Milkweed&FORM=IRTRRL",
+    "https://www.bing.com/images/search?view=detailV2&ccid=dYfWZvq3&id=0EF7151B5F81B8C5A99AF5074A9BDDEED7D2128F&thid=OIP.dYfWZvq3YGXvwzVvKVUdEQHaEw&mediaurl=http://www.zephyrus.co.uk/insectflower.jpg&exph=435&expw=678&q=Bees+and+Flowers&simid=608056211107545519&ck=7FFEA3823E3295BA4C384CA0A30FD98D&selectedIndex=160&FORM=IRPRST",
+    "https://www.facebook.com/miller.compost",
+    "https://www.google.com/intl/en-US_US/help/terms_maps.html",
+    "https://www.google.com/maps/@43.969809,-79.416413,3z/data=!10m1!1e1!12b1?source=apiv3&rapsrc=apiv3",
+    "https://www.instagram.com/millercompost/",
+    "https://www.linkedin.com/company/miller-waste-systems/",
+    "https://www.linkedin.com/feed/hashtag/?keywords=culture",
+    "https://www.linkedin.com/feed/hashtag/?keywords=customerexperience",
+    "https://www.linkedin.com/feed/hashtag/?keywords=employeeexperience",
+    "https://www.linkedin.com/feed/hashtag/?keywords=leadership",
+    "https://www.linkedin.com/in/laweisman/",
+    "https://www.linkedin.com/in/miller-compost-8a35711a9/",
+    "https://www.toxicsinfo.org/Lawn/Lawn%20Pesticide%20Facts%20Figures.htm"
+  ]
+}

@@ -1,0 +1,158 @@
+<!-- https://millerwaste.ca/author/jonah -->
+# [TITLE] Miller Waste, Author at Miller Waste Systems
+
+[LINK] Accessibility Screen-Reader Guide, Feedback, and Issue Reporting | New window → https://accessibe.com/blog/knowledgebase/screen-reader-guide
+
+[SECTION: header .banner.sticky-top]
+
+[SECTION: nav .nav-top.nav-top-left]
+[LI] Bin Rentals
+[LI] Careers
+[LI] Contact
+
+[SECTION: nav .nav-top.nav-top-right]
+[LI] ONTARIO/MANITOBA: 1-800-465-5914
+[LI] ATLANTIC CANADA: 1-888-545-0557
+[IMG] photos/e8a8d8da3377__MWS_Main-Logo.svg  (alt: "Miller Waste Systems", natural 95×72)
+
+[SECTION: nav .nav-primary.navbar]
+[LINK] Waste → https://millerwaste.ca/author/jonah/#
+[LINK] Recycling → https://millerwaste.ca/recycling/
+[LINK] Organics → https://millerwaste.ca/author/jonah/#
+[LINK] About Us → https://millerwaste.ca/author/jonah/#
+[LINK] Shop → https://millerwaste.ca/author/jonah/#
+
+[SECTION: nav .nav-primary-two.navbar]
+[BUTTON] Request Service
+
+[SECTION: main .main]
+
+[SECTION: header]
+## [H2] Recycling Symbols Decoded: What Those Numbers on Plastics Actually Mean
+[P] By Miller Waste
+[P] Source: https://www.almanac.com/which-plastics-are-recyclable-number If you’ve ever flipped over a plastic container and spotted a number inside the “recycling” triangle, you are not alone in thinking that it belongs in the blue box.  Here’s the catch: those numbers don’t mean the item is recyclable. They are plastic identification codes (often called resin codes), and they simply tell you what type of plastic the item … Continued
+
+[SECTION: header]
+## [H2] How to Host a Zero-Waste Holiday Party
+[P] By Miller Waste
+[P] Holiday parties should be full of joy, not bags of garbage! Whether you’re celebrating at home or gathering at a restaurant, banquet hall, or other venue, there are plenty of ways to make your event more sustainable. Here are some easy, fun ways to celebrate while keeping things kind to the planet (with a bit of help from … Continued
+
+[SECTION: header]
+## [H2] Ontario’s EPR Is Reshaping Recycling—What It Means for Your Business
+[P] By Miller Waste
+[P] First, a quick clarification: “Producer” ≠ “every business”  Ontario’s Extended Producer Responsibility (EPR) shift makes product/packaging producers—brand owners, importers, and certain retailers/marketplaces—financially and operationally responsible for residential Blue Box recycling. See RPRA’s Blue Box producer guidance: RPRA – Producers  This does not replace the waste and recycling services your business locations (IC&I: industrial, commercial & … Continued
+
+[SECTION: header]
+## [H2] How Miller Waste Supports Canada’s Sustainability Goals
+[P] By Miller Waste
+[P] Canada has set ambitious targets to reduce greenhouse gas emissions, eliminate plastic waste, and improve landfill diversion rates. In 2022 alone, the country generated over 36.5 million tonnes of solid waste, but diverted only 9.9 million tonnes, or 27.1%, leaving nearly 73% to disposal (source).  At Miller Waste Systems, we’re proud to be part of … Continued
+
+[SECTION: header]
+## [H2] A Homeowner’s Guide to Yard Waste: Branches and Brush
+[P] By Miller Waste
+[P] Cleaning up yard waste after a weekend of pruning or a surprise windstorm shouldn’t be a headache. Yet many Canadians are unsure where those piles of branches belong or when the city will collect them. Yard waste is picked up only on designated dates that align with your municipality’s collection schedule. Always check your local … Continued
+
+[SECTION: header]
+## [H2] The Hidden Dangers of E-Waste: Why Responsible Recycling Matters
+[P] By Miller Waste
+[P] As students upgrade their devices for back-to-school season and businesses refresh IT equipment after summer, now is the perfect time to talk about what happens to the electronics we leave behind. Improper disposal of electronic waste (e-waste) poses one of the most serious environmental threats of our time. In fact, global e-waste generation reached a … Continued
+
+[SECTION: header]
+## [H2] 4 Easy Projects to Give Back This Summer
+[P] By Miller Waste
+[P] Ready to make your summer meaningful? Explore our eco-friendly projects that support your local community and help protect the environment.   Choosing a Sustainable Summer Project Choosing sustainable summer projects is a powerful way to reduce waste, support your neighbours, and build lasting habits that benefit everyone. When you take action for the environment, you also … Continued
+
+[SECTION: header]
+## [H2] Tackling Waste at Large Events and Festivals: Effective Waste Management Tips
+[P] By Miller Waste
+[P] With summer just around the corner, the festival and outdoor event season is quickly approaching. From community festivals to large concerts, these gatherings bring people together to celebrate, take in live music, and enjoy delicious food. However, they also bring a significant challenge—waste. The amount of trash generated during these events can be overwhelming, with … Continued
+
+[SECTION: header]
+## [H2] How to Manage Waste During Yard Work and Home Renovations
+[P] By Miller Waste
+[P] Whether you’re tackling a major home renovation project or sprucing up your yard, managing the waste generated can be a daunting task. With the volume of debris adding up quickly, it’s important to have a solid plan in place to dispose of your materials responsibly. Here’s how you can simplify waste management during yard work … Continued
+
+[SECTION: header]
+## [H2] The Journey of Your Yard Waste
+[P] By Miller Waste
+[P] At Miller Compost, we specialize in turning leaves and yard waste into valuable products that enhance soil health and promote sustainability. By receiving organic material, we create premium compost, mulch, topdressings, and soil amendments that help support plant growth and a healthier environment.  What makes our approach stand out? Let’s take a closer look at the … Continued
+
+[SECTION: nav .navigation.posts-navigation Posts]
+## [H2] Posts navigation
+[LINK] Older posts → https://millerwaste.ca/author/jonah/page/2/
+
+[SECTION: footer .content-info]
+[IMG] photos/e8a8d8da3377__MWS_Main-Logo.svg  (alt: "Miller Waste Systems Inc. Footer Logo", natural 268×24)
+
+[SECTION: section .widget.block-2]
+[LINK] @millerwastesi → https://www.facebook.com/millerwastesystems/
+[LINK] @miller-waste-systems → https://ca.linkedin.com/company/miller-waste-systems
+[LINK] @miller-waste → https://www.instagram.com/miller_waste/
+#### [H4] Quick Links
+
+[SECTION: nav .footer-quicklinks]
+[LI] Service Locations
+[LI] Waste Drop-Off Depots
+[LI] 14 Yard Bin
+[LI] 20 Yard Bin
+[LI] 40 Yard Bin
+[LI] Careers
+#### [H4] Residential
+
+[SECTION: nav .footer-one]
+[LI] Dumpster Bin Rentals
+[LI] Curbside Pickup
+[LI] Waste Drop-off Depots
+[LI] Landscape & Garden Materials
+#### [H4] Commercial
+
+[SECTION: nav .footer-two]
+[LI] Miller Waste Systems
+[LI] Miller Compost
+[LI] Miller Environmental
+#### [H4] Municipal Services
+
+[SECTION: nav .footer-three]
+[LI] Municipal Waste Services
+[LI] Extended Producer Responsibility
+[LI] Service Locations
+#### [H4] Organics
+
+[SECTION: nav .footer-four.mt-lg-0]
+[LI] Miller Compost
+[LI] Renewable Energy from Biomass
+[LI] Organic Facilities
+[LI] Organics Diversion Calculator
+#### [H4] Recycling
+
+[SECTION: nav .footer-five]
+[LI] Residential Recycling Services (Ontario)
+[LI] Commercial Recycling Services
+[LI] Drop-off Depots
+#### [H4] About Us
+
+[SECTION: nav .footer-six]
+[LI] We Are Miller
+[LI] Careers
+[LI] News
+[LI] Blog
+[LI] Contact Us
+#### [H4] Our Associations
+[IMG] photos/177e2c8f99f1__w2ro-assoc.png  (alt: "Ontario Waste Management Association", natural 134×60)
+[IMG] photos/5f11fb57a119__landscape-assoc.png  (alt: "Landscape Ontario", natural 134×40)
+[IMG] photos/bc2dc3c99142__compost-assoc.png  (alt: "Compost Council of Canada", natural 134×40)
+[IMG] photos/4958d4304dd3__managed-assoc.png  (alt: "Platinum Canada's best managed companies.", natural 134×60)
+[LI] Privacy Policy
+[LI] Terms of Service
+[LI] Refund Policy
+[LI] AODA Info
+[LI] Forced Labour Report
+[P] © 2026 Miller Waste | Powered by Sway
+[BUTTON] ×
+[IMG] photos/05178ac24544__cropped-MWS_Main-Logo-1-300x300.webp  (alt: "Logo", natural 52×24)
+### [H3] We use cookies
+[P] This website uses cookies to enhance your browsing experience and provide personalized content.
+[BUTTON] Accept All
+[BUTTON] Preferences
+[LINK] Powered by cookie-banner.ca → https://cookie-banner.ca/?ref=banner
+[LINK] Cookie consent by cookie-banner.ca → https://cookie-banner.ca/?ref=banner

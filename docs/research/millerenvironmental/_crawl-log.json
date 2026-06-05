@@ -1,0 +1,110 @@
+{
+  "site": "millerenvironmental",
+  "startUrl": "https://www.millerenvironmental.ca/",
+  "started": "2026-06-05T14:26:33.728Z",
+  "errors": [
+    {
+      "url": "https://www.millerenvironmental.ca/wp-content/uploads/2023/11/MEC-Operating-Licence-58-HW-S2-RRRR-1.pdf",
+      "reason": "page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://www.millerenvironmental.ca/wp-content/uploads/2023/11/MEC-Operating-Licence-58-HW-S2-RRRR-1.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://www.millerenvironmental.ca/wp-content/uploads/2022/04/Transport-Licence-MBC00202.pdf",
+      "reason": "page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://www.millerenvironmental.ca/wp-content/uploads/2022/04/Transport-Licence-MBC00202.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://www.millerenvironmental.ca/wp-content/uploads/2023/11/1803-Hekla-Ave.-Licence-211-HW-RR.pdf",
+      "reason": "page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://www.millerenvironmental.ca/wp-content/uploads/2023/11/1803-Hekla-Ave.-Licence-211-HW-RR.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://www.millerenvironmental.ca/wp-content/uploads/2023/08/MILLENVI01-2023-June-RR-Cert-ISO-9001_2015.pdf",
+      "reason": "page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://www.millerenvironmental.ca/wp-content/uploads/2023/08/MILLENVI01-2023-June-RR-Cert-ISO-9001_2015.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://www.millerenvironmental.ca/wp-content/uploads/2023/08/MILLENVI01-2023-June-RR-Cert-ISO-45001_2018.pdf",
+      "reason": "page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://www.millerenvironmental.ca/wp-content/uploads/2023/08/MILLENVI01-2023-June-RR-Cert-ISO-45001_2018.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://www.millerenvironmental.ca/wp-content/uploads/2023/11/COR%C2%AE-logo-black-background.pdf",
+      "reason": "page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://www.millerenvironmental.ca/wp-content/uploads/2023/11/COR%C2%AE-logo-black-background.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://www.millerenvironmental.ca/wp-content/uploads/2025/12/miller-case-study-master-feeds-v3.pdf",
+      "reason": "page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://www.millerenvironmental.ca/wp-content/uploads/2025/12/miller-case-study-master-feeds-v3.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://www.millerenvironmental.ca/wp-content/uploads/2025/11/miller-case-study-highway-16-v3.pdf",
+      "reason": "page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://www.millerenvironmental.ca/wp-content/uploads/2025/11/miller-case-study-highway-16-v3.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://www.millerenvironmental.ca/wp-content/uploads/2025/11/miller-case-study-steinbach-v3.pdf",
+      "reason": "page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://www.millerenvironmental.ca/wp-content/uploads/2025/11/miller-case-study-steinbach-v3.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://www.millerenvironmental.ca/wp-content/uploads/2025/12/miller-case-study-brandon-power-v3.pdf",
+      "reason": "page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://www.millerenvironmental.ca/wp-content/uploads/2025/12/miller-case-study-brandon-power-v3.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    }
+  ],
+  "finished": "2026-06-05T14:29:17.627Z",
+  "pagesCrawled": 37,
+  "skipped": [
+    {
+      "url": "https://www.millerenvironmental.ca/wp-content/uploads/2023/11/MEC-Operating-Licence-58-HW-S2-RRRR-1.pdf",
+      "reason": "error: page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://www.millerenvironmental.ca/wp-content/uploads/2023/11/MEC-Operating-Licence-58-HW-S2-RRRR-1.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://www.millerenvironmental.ca/wp-content/uploads/2022/04/Transport-Licence-MBC00202.pdf",
+      "reason": "error: page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://www.millerenvironmental.ca/wp-content/uploads/2022/04/Transport-Licence-MBC00202.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://www.millerenvironmental.ca/wp-content/uploads/2023/11/1803-Hekla-Ave.-Licence-211-HW-RR.pdf",
+      "reason": "error: page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://www.millerenvironmental.ca/wp-content/uploads/2023/11/1803-Hekla-Ave.-Licence-211-HW-RR.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://www.millerenvironmental.ca/wp-content/uploads/2023/08/MILLENVI01-2023-June-RR-Cert-ISO-9001_2015.pdf",
+      "reason": "error: page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://www.millerenvironmental.ca/wp-content/uploads/2023/08/MILLENVI01-2023-June-RR-Cert-ISO-9001_2015.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://www.millerenvironmental.ca/wp-content/uploads/2023/08/MILLENVI01-2023-June-RR-Cert-ISO-45001_2018.pdf",
+      "reason": "error: page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://www.millerenvironmental.ca/wp-content/uploads/2023/08/MILLENVI01-2023-June-RR-Cert-ISO-45001_2018.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://www.millerenvironmental.ca/wp-content/uploads/2023/11/COR%C2%AE-logo-black-background.pdf",
+      "reason": "error: page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://www.millerenvironmental.ca/wp-content/uploads/2023/11/COR%C2%AE-logo-black-background.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://www.millerenvironmental.ca/wp-content/uploads/2025/12/miller-case-study-master-feeds-v3.pdf",
+      "reason": "error: page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://www.millerenvironmental.ca/wp-content/uploads/2025/12/miller-case-study-master-feeds-v3.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://www.millerenvironmental.ca/wp-content/uploads/2025/11/miller-case-study-highway-16-v3.pdf",
+      "reason": "error: page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://www.millerenvironmental.ca/wp-content/uploads/2025/11/miller-case-study-highway-16-v3.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://www.millerenvironmental.ca/wp-content/uploads/2025/11/miller-case-study-steinbach-v3.pdf",
+      "reason": "error: page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://www.millerenvironmental.ca/wp-content/uploads/2025/11/miller-case-study-steinbach-v3.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "https://www.millerenvironmental.ca/wp-content/uploads/2025/12/miller-case-study-brandon-power-v3.pdf",
+      "reason": "error: page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://www.millerenvironmental.ca/wp-content/uploads/2025/12/miller-case-study-brandon-power-v3.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    }
+  ],
+  "externalLinks": [
+    "https://cme-mec.ca/",
+    "https://mbchamber.mb.ca/",
+    "https://meia.mb.ca/",
+    "https://millerwaste.ca/",
+    "https://transline49.com/",
+    "https://trucking.mb.ca/?gclid=EAIaIQobChMI9J2Q3dGq9wIVJilMCh0mqwK2EAAYASAAEgKlGvD_BwE",
+    "https://winnipeg-chamber.com/",
+    "https://winnipeg-chamber.com/code/",
+    "https://www.constructionsafety.ca/",
+    "https://www.facebook.com/millerenvironmentalcorporation",
+    "https://www.google.com/maps?sca_esv=f5ef27e69a38b3b6&rlz=1C1ONGR_enCA1077CA1077&biw=1920&bih=911&output=search&q=Miller+Environmental+Corporation+(Winnipeg)&source=lnms&fbs=AEQNm0BKxFXqFZETuC92mLOmXO9xJMdcEc6vsS8xotR_o6JIE2lxJVbfbQf0QBF0bvfl3GFNBPTQACMdFh6XPuV1Z0Eg9hjj1mCoiKv3FGCZSoL8LFWndMdM2XR4aGD0cSNlCtcWfG2Uxx1VHbESZZGtTLqJIpWorIEiBwoLHBotrxsca8c17DXljhODP05SZ-xKH05k1jwUlGV8PNmYih-FkegBBuFe9w&entry=mc&ved=1t:200715&ictx=111",
+    "https://www.instagram.com/millerenvironmentalcorporation/",
+    "https://www.linkedin.com/company/miller-environmental-corporation",
+    "https://www.owma.org/cpages/home",
+    "https://www.youtube.com/@MillerEnvironmental",
+    "https://x.com/MillerEnviron",
+    "https://youtu.be/AchmNsx3rzU"
+  ]
+}

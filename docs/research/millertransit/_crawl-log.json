@@ -1,0 +1,15 @@
+{
+  "site": "millertransit",
+  "startUrl": "https://millertransit.ca/",
+  "started": "2026-06-05T14:26:33.686Z",
+  "errors": [],
+  "finished": "2026-06-05T14:28:18.182Z",
+  "pagesCrawled": 32,
+  "skipped": [],
+  "externalLinks": [
+    "http://cutaactu.ca/",
+    "http://millerwaste.ca/",
+    "http://www.bloomingtondowns.ca/",
+    "http://www.omca.com/"
+  ]
+}
