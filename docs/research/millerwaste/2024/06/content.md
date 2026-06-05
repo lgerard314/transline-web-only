@@ -1,7 +1,6 @@
 <!-- https://millerwaste.ca/2024/06 -->
 # [TITLE] June 2024 - Miller Waste Systems
 
-[LINK] Accessibility Screen-Reader Guide, Feedback, and Issue Reporting | New window → https://accessibe.com/blog/knowledgebase/screen-reader-guide
 
 [SECTION: header .banner.sticky-top]
 

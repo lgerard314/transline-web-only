@@ -1,7 +1,6 @@
 <!-- https://millerwaste.ca/provincial-services-ontario -->
 # [TITLE] Provincial Services - Ontario - Miller Waste Systems - Waste Management Solutions
 
-[LINK] Accessibility Screen-Reader Guide, Feedback, and Issue Reporting | New window → https://accessibe.com/blog/knowledgebase/screen-reader-guide
 
 [SECTION: header .banner.sticky-top]
 

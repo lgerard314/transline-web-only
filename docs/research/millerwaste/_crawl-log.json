@@ -1,7 +1,7 @@
 {
   "site": "millerwaste",
   "startUrl": "https://millerwaste.ca/",
-  "started": "2026-06-05T14:26:33.512Z",
+  "started": "2026-06-05T15:26:13.479Z",
   "errors": [
     {
       "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
@@ -139,10 +139,6 @@
       "reason": "asset download failed"
     },
     {
-      "url": "https://millerwaste.ca/wp-content/uploads/2025/07/MWS_Forced-Labour-Report_V1_061325.pdf",
-      "reason": "page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millerwaste.ca/wp-content/uploads/2025/07/MWS_Forced-Labour-Report_V1_061325.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
-    },
-    {
       "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
       "on": "product-destruction",
       "reason": "asset download failed"
@@ -176,22 +172,6 @@
       "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
       "on": "service-locations/manitoba/winnipeg",
       "reason": "asset download failed"
-    },
-    {
-      "url": "https://millerwaste.ca/wp-content/uploads/2026/02/Miller-Waste-Black-Youth-Trades-Bursary-Application-Form.pdf",
-      "reason": "page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millerwaste.ca/wp-content/uploads/2026/02/Miller-Waste-Black-Youth-Trades-Bursary-Application-Form.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
-    },
-    {
-      "url": "https://millerwaste.ca/wp-content/uploads/2021/12/2021-AODA-Policy.pdf",
-      "reason": "page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millerwaste.ca/wp-content/uploads/2021/12/2021-AODA-Policy.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
-    },
-    {
-      "url": "https://millerwaste.ca/wp-content/uploads/2021/12/2021-Individual-Accommodation-Program-with-Forms.pdf",
-      "reason": "page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millerwaste.ca/wp-content/uploads/2021/12/2021-Individual-Accommodation-Program-with-Forms.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
-    },
-    {
-      "url": "https://millerwaste.ca/wp-content/uploads/2022/11/AODA-Multi-Year-Accessibility-Plan.pdf",
-      "reason": "page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millerwaste.ca/wp-content/uploads/2022/11/AODA-Multi-Year-Accessibility-Plan.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
     },
     {
       "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
@@ -1242,805 +1222,22 @@
       "url": "https://unsplash.com/photos/FPvZ2HfqgNsL",
       "on": "port-perry-waste-drop-off-depot",
       "reason": "asset download failed"
+    },
+    {
+      "url": "https://millerwaste.ca/wp-content/uploads/2024/06/shutterstock_1728605836-1024x683.jpg",
+      "on": "sustainable-gardening-through-composting",
+      "reason": "asset download failed"
     }
   ],
-  "finished": "2026-06-05T15:17:37.098Z",
-  "pagesCrawled": 295,
-  "skipped": [
-    {
-      "url": "https://millerwaste.ca/wp-content/uploads/2025/07/MWS_Forced-Labour-Report_V1_061325.pdf",
-      "reason": "error: page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millerwaste.ca/wp-content/uploads/2025/07/MWS_Forced-Labour-Report_V1_061325.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
-    },
-    {
-      "url": "https://millerwaste.ca/wp-content/uploads/2026/02/Miller-Waste-Black-Youth-Trades-Bursary-Application-Form.pdf",
-      "reason": "error: page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millerwaste.ca/wp-content/uploads/2026/02/Miller-Waste-Black-Youth-Trades-Bursary-Application-Form.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
-    },
-    {
-      "url": "https://millerwaste.ca/wp-content/uploads/2021/12/2021-AODA-Policy.pdf",
-      "reason": "error: page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millerwaste.ca/wp-content/uploads/2021/12/2021-AODA-Policy.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
-    },
-    {
-      "url": "https://millerwaste.ca/wp-content/uploads/2021/12/2021-Individual-Accommodation-Program-with-Forms.pdf",
-      "reason": "error: page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millerwaste.ca/wp-content/uploads/2021/12/2021-Individual-Accommodation-Program-with-Forms.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
-    },
-    {
-      "url": "https://millerwaste.ca/wp-content/uploads/2022/11/AODA-Multi-Year-Accessibility-Plan.pdf",
-      "reason": "error: page.goto: Download is starting\nCall log:\n\u001b[2m  - navigating to \"https://millerwaste.ca/wp-content/uploads/2022/11/AODA-Multi-Year-Accessibility-Plan.pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
-    },
-    {
-      "url": "https://millerwaste.ca/service-locations-thornhill",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/service-locations-ontario-orillia",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/service-locations-ontario-omemee",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/service-locations-ontario-innisfil",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/service-locations-ontario-north-bay",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/service-locations-ontario-nobleton",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/service-locations-ontario-meaford",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/service-locations-ontario-mississauga",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/service-locations-ontario-meaford",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/service-locations-ontario-meaford",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/service-locations-ontario-whitchurch-stouffville",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/wp-content/uploads/2024/05/Guide-and-Schedule_Saint-John-BIL.pdf",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/service-locations-ontario-woolwich",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/service-locations-ontario-woolwich",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/service-locations-ontario-woolwich",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/service-locations-ontario-woolwich",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/wp-content/uploads/2024/01/Calendar-2024.pdf",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/wp-content/uploads/2024/01/Calendar-2024.pdf",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/shop?add-to-cart=5646",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/shop?add-to-cart=5649",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/shop?add-to-cart=5651",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/cart?remove_item=9219adc5c42107c4911e249155320648&_wpnonce=ee077b9a0b",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/my-account/lost-password",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "http://www.millerwaste.ca",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-announces-strategic-sale-of-organics-and-renewable-energy-assets",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-announces-strategic-sale-of-organics-and-renewable-energy-assets",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-services-to-launch-newwaste-collection-contract-in-windsorontario-on-april-1-2025",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-services-to-launch-newwaste-collection-contract-in-windsorontario-on-april-1-2025",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/packing-up-without-the-waste-your-guide-to-a-sustainable-move",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/packing-up-without-the-waste-your-guide-to-a-sustainable-move",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/the-true-cost-of-improper-waste-disposal",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/the-true-cost-of-improper-waste-disposal",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/how-to-make-2025-your-greenest-year-yet",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/how-to-make-2025-your-greenest-year-yet",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/a-greener-kind-of-cheer",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/a-greener-kind-of-cheer",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/grow-your-career-at-miller-waste",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/grow-your-career-at-miller-waste",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/repurposing-your-pumpkins",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/repurposing-your-pumpkins",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/essential-home-maintenance-tasks-to-tackle-this-fall",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/essential-home-maintenance-tasks-to-tackle-this-fall",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/join-the-cause-on-world-cleanup-day-2024",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/join-the-cause-on-world-cleanup-day-2024",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/your-guide-to-a-sustainable-back-to-school-season",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/author/liana-croccomillerwaste-ca",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/your-guide-to-a-sustainable-back-to-school-season",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/common-household-items-you-might-be-surprised-to-know-are-hazardous-waste",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/common-household-items-you-might-be-surprised-to-know-are-hazardous-waste",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/the-benefits-of-renting-temporary-dumpster-bins",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/the-benefits-of-renting-temporary-dumpster-bins",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/sustainable-gardening-through-composting",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/sustainable-gardening-through-composting",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-systems-named-one-of-deloittes-best-managed-companies-in-2024",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/author/liana-croccomillerwaste-ca",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-systems-named-one-of-deloittes-best-managed-companies-in-2024",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/what-does-miller-do-with-all-that-waste",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/what-does-miller-do-with-all-that-waste",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/tips-for-sustainable-living-in-2024",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/tips-for-sustainable-living-in-2024",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-systems-title-sponsor-for-2025-u-sports-womens-hockey-championship",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-systems-title-sponsor-for-2025-u-sports-womens-hockey-championship",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/download-and-print-your-2023-miller-waste-holiday-activity-book",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/download-and-print-your-2023-miller-waste-holiday-activity-book",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/sustainable-celebrations-a-guide-to-reducing-holiday-waste",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/sustainable-celebrations-a-guide-to-reducing-holiday-waste",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/how-to-reuse-common-household-items",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/how-to-reuse-common-household-items",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/what-happens-to-my-leaf-and-yard-waste",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/what-happens-to-my-leaf-and-yard-waste",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-supports-breast-and-prostate-cancer-awareness-with-pink-and-blue-truck",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-supports-breast-and-prostate-cancer-awareness-with-pink-and-blue-truck",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/how-to-reduce-food-waste",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/how-to-reduce-food-waste",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-celebrates-new-additions-to-25-year-club",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-celebrates-new-additions-to-25-year-club",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/biodegradable-vs-compostable-whats-the-difference",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/biodegradable-vs-compostable-whats-the-difference",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/why-you-should-compost",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/why-you-should-compost",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/your-top-3-faqs-answered",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/your-top-3-faqs-answered",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/how-to-reduce-clothing-waste",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/how-to-reduce-clothing-waste",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/region-of-waterloo-and-miller-waste-systems-celebrate-pride",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/how-to-develop-a-waste-reduction-plan-for-your-organization",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/how-to-develop-a-waste-reduction-plan-for-your-organization",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/how-to-camp-and-picnic-sustainably",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/how-to-camp-and-picnic-sustainably",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/spring-cleaning-with-miller-waste-systems",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/spring-cleaning-with-miller-waste-systems",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-systems-is-one-of-deloittes-2023-best-managed-companies",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-systems-is-one-of-deloittes-2023-best-managed-companies",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/earth-day-clean-up",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/5-ways-small-businesses-can-benefit-from-responsible-waste-management",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/5-ways-small-businesses-can-benefit-from-responsible-waste-management",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/7-ways-to-reduce-trash-at-home",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/7-ways-to-reduce-trash-at-home",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/what-happens-to-items-in-blue-recycling-bin",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/what-happens-to-items-in-blue-recycling-bin",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/benefits-of-roll-off-dumpster-bin-rentals",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/benefits-of-roll-off-dumpster-bin-rentals",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/why-recycling-is-important-for-businesses",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/why-recycling-is-important-for-businesses",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/gordon-food-service",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/gordon-food-service",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/what-are-the-major-parts-of-waste-management",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/what-are-the-major-parts-of-waste-management",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/how-is-organic-waste-recycled",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/how-is-organic-waste-recycled",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-compost-supports-local-communities",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-compost-supports-local-communities",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/the-airshow-london",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/the-airshow-london",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-systems-supports-greenmycity-initiative",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-systems-supports-greenmycity-initiative",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/escarpment-renewables-opens-in-grimsby",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/escarpment-renewables-opens-in-grimsby",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/category/blog/page/2",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-announces-strategic-sale-of-organics-and-renewable-energy-assets",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-announces-strategic-sale-of-organics-and-renewable-energy-assets",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-services-to-launch-newwaste-collection-contract-in-windsorontario-on-april-1-2025",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-services-to-launch-newwaste-collection-contract-in-windsorontario-on-april-1-2025",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-systems-named-one-of-deloittes-best-managed-companies-in-2024",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/author/liana-croccomillerwaste-ca",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-systems-named-one-of-deloittes-best-managed-companies-in-2024",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-systems-title-sponsor-for-2025-u-sports-womens-hockey-championship",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-systems-title-sponsor-for-2025-u-sports-womens-hockey-championship",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/download-and-print-your-2023-miller-waste-holiday-activity-book",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/download-and-print-your-2023-miller-waste-holiday-activity-book",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-supports-breast-and-prostate-cancer-awareness-with-pink-and-blue-truck",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-supports-breast-and-prostate-cancer-awareness-with-pink-and-blue-truck",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-celebrates-new-additions-to-25-year-club",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-celebrates-new-additions-to-25-year-club",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/region-of-waterloo-and-miller-waste-systems-celebrate-pride",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-systems-is-one-of-deloittes-2023-best-managed-companies",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-systems-is-one-of-deloittes-2023-best-managed-companies",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/earth-day-clean-up",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/category/news/page/2",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/gordon-food-service",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/gordon-food-service",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/why-recycling-is-important-for-businesses",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/how-to-reuse-common-household-items",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-compost-supports-local-communities",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/how-is-organic-waste-recycled",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/common-household-items-you-might-be-surprised-to-know-are-hazardous-waste",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/why-recycling-is-important-for-businesses",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/the-benefits-of-renting-temporary-dumpster-bins",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/spring-cleaning-with-miller-waste-systems",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/what-does-miller-do-with-all-that-waste",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/grow-your-career-at-miller-waste",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/the-true-cost-of-improper-waste-disposal",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-services-to-launch-newwaste-collection-contract-in-windsorontario-on-april-1-2025",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-services-to-launch-newwaste-collection-contract-in-windsorontario-on-april-1-2025",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/packing-up-without-the-waste-your-guide-to-a-sustainable-move",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/packing-up-without-the-waste-your-guide-to-a-sustainable-move",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/the-true-cost-of-improper-waste-disposal",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/the-true-cost-of-improper-waste-disposal",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/how-to-make-2025-your-greenest-year-yet",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/how-to-make-2025-your-greenest-year-yet",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/a-greener-kind-of-cheer",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/a-greener-kind-of-cheer",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/grow-your-career-at-miller-waste",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/grow-your-career-at-miller-waste",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/repurposing-your-pumpkins",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/repurposing-your-pumpkins",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/join-the-cause-on-world-cleanup-day-2024",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/join-the-cause-on-world-cleanup-day-2024",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/common-household-items-you-might-be-surprised-to-know-are-hazardous-waste",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/common-household-items-you-might-be-surprised-to-know-are-hazardous-waste",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/the-benefits-of-renting-temporary-dumpster-bins",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/the-benefits-of-renting-temporary-dumpster-bins",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/author/jonah/page/3",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-announces-strategic-sale-of-organics-and-renewable-energy-assets",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/miller-waste-announces-strategic-sale-of-organics-and-renewable-energy-assets",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/essential-home-maintenance-tasks-to-tackle-this-fall",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/essential-home-maintenance-tasks-to-tackle-this-fall",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/what-does-miller-do-with-all-that-waste",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/what-does-miller-do-with-all-that-waste",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/5-ways-small-businesses-can-benefit-from-responsible-waste-management",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/5-ways-small-businesses-can-benefit-from-responsible-waste-management",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/7-ways-to-reduce-trash-at-home",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/7-ways-to-reduce-trash-at-home",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/what-happens-to-items-in-blue-recycling-bin",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/what-happens-to-items-in-blue-recycling-bin",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/benefits-of-roll-off-dumpster-bin-rentals",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/benefits-of-roll-off-dumpster-bin-rentals",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/why-recycling-is-important-for-businesses",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/why-recycling-is-important-for-businesses",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/what-are-the-major-parts-of-waste-management",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/what-are-the-major-parts-of-waste-management",
-      "reason": "cap(300) reached"
-    },
-    {
-      "url": "https://millerwaste.ca/author/miller-waste-systems/page/2",
-      "reason": "cap(300) reached"
-    }
-  ],
+  "finished": "2026-06-05T16:33:00.124Z",
+  "pagesCrawled": 373,
+  "skipped": [],
   "externalLinks": [
     "http://1-905-404-0685/",
     "http://905-475-3852/",
     "http://SAFE Manitoba: https://www.safemanitoba.com/Pages/default.aspx",
     "http://biogas.appliedproject-fleming.ca/",
+    "http://r20.rs6.net/tn.jsp?f=001SU2HBQvLnMNW4N0MXJLXPKM_wegcquhS-fjOZwm4PgdjL0LJcKfWAGl-Bd-rYi-nVS0gIX0ACvkz07k6qlb3tz2N580D47-_QYTrtF_2EGGdVy8EvKzdkn9rc0mZZCtYzLNOJ8DPjnLisAK03erqg3U1j3g0T5h0Z8rqjeeaOYhmXQ-2i-3lwkfKTCbmEtrksk-aeJn2YMwOktKmqA0Q1-j6B_g2fHCJF-AqnbqzOM7xLX3EDwZkWPHQv4kntdSbRUNcIAPLLszz11ITxzQ0kYLdlN_nLtqQDpwktX1rqkLOOYyeL_Pfa_Q6o4eBKDyWqRJqD_VwZinavH50SgLF8eHbAKimHtZtu15ON9mUe-eyt6VsZayHMzunGIn2LCfVMKuGrmChtB6eJb_YFrmTkQDaP5ZtjqOMByrhBvJ72TO5xhULsLq8jmO6Jyrhh44Q4eV1xwjAdnT3NLLccH7woq5mVV9xEWAdULeswqM-AoUThke95r80TWb3457bhARakaWtpYTEMPje0DYmz0-_nQ==&c=ORgvcEQL60_c8JEYge8JQEnf5L44ck6gBd-yMQDs19lvudOIuXStHA==&ch=I4hpVHetjtpqhwJXQ1GVPfa5wIdNTsABx379urQZv7K0jROCHsc9LQ==",
     "http://secure,%20confidential%20destruction%20services%20for%20off-spec,%20expired,%20and%20defective%20items./",
     "http://usedoilrecycling.com/en/mb",
     "http://wordpress-1281606-4640853.cloudwaysapps.com/pre-checkout/",
@@ -2053,21 +1250,28 @@
     "http://www.stewardshipontario.ca/",
     "http://www.winnipeg.ca/waterandwaste/garbage/hhw.stm",
     "https://accessibe.com/blog/knowledgebase/screen-reader-guide",
+    "https://athletics.uwaterloo.ca/",
+    "https://athletics.uwaterloo.ca/feature/seethembethem",
     "https://ca.linkedin.com/company/miller-waste-systems",
     "https://can231.dayforcehcm.com/CandidatePortal/en-US/millerwaste",
     "https://can60.dayforcehcm.com/CandidatePortal/en-US/millerwaste",
+    "https://cancer.ca/en/cancer-information/find-cancer-early/find-prostate-cancer",
     "https://compost.css.cornell.edu/Factsheets/FS5.html",
     "https://cookie-banner.ca/",
     "https://cookie-banner.ca/?ref=banner",
+    "https://earthday.ca/2021/10/19/fighting-waste-one-pumpkin-at-a-time/",
     "https://form.typeform.com/to/EwNUuEuY",
     "https://form.typeform.com/to/PoEbWLXj",
+    "https://fundyrecycles.com/index.php/solid-waste/education/school-programs/statistics/#:~:text=Compost,to%2012.5%25%20of%20one%20tonne.&text=Twenty%2Dtwo%20minutes%20a%20week,in%20composting%20activities%20on%20average.",
     "https://globalewaste.org/reports/global-e-waste-monitor-2024/",
     "https://guelph.ca/living/environment/garbage-and-recycling/?utm_source=chatgpt.com",
     "https://ised-isde.canada.ca/site/office-consumer-affairs/en/be-green-consumer/e-waste",
     "https://jobs.dayforcehcm.com/en-US/millerwaste/CANDIDATEPORTAL?searchText=310t",
     "https://jobs.dayforcehcm.com/en-US/millerwaste/CANDIDATEPORTAL?searchText=dz",
     "https://landscapeontario.com/",
+    "https://litterridder.org/",
     "https://littlefreelibrary.org/",
+    "https://medium.com/the-whole-family-happiness-project/changing-the-world-one-toothbrush-at-a-time-6aa3f7926b48#:~:text=That%20might%20not%20seem%20like,thrown%20into%20landfill%20each%20year.",
     "https://millercompost.ca/",
     "https://millercompost.ca/commercial-customer-application/",
     "https://millercompost.ca/contact-us/",
@@ -2080,26 +1284,38 @@
     "https://millercompost.ca/store-locator/",
     "https://ottawa.ca/en/garbage-and-recycling/recycling/garbage-and-recycling-collection-calendar?utm_source=chatgpt.com",
     "https://pmcfroadhockey.ca/",
+    "https://recycleyourbatteries.ca/",
     "https://rpra.ca/news/",
     "https://rpra.ca/programs/blue-box/",
     "https://rpra.ca/programs/blue-box/regulation/",
     "https://rpra.ca/programs/blue-box/regulation/producers/",
+    "https://rpra.ca/where-to-recycle/",
     "https://share.google/GM0nl7m1Yf04qWGPP",
     "https://share.google/wUkfi9bWgubbBDvr1",
+    "https://stories.td.com/ca/en/news/2009-08-20-young-adults-are-canada-27s-leading-litterbugs-2c-poll-shows",
     "https://sturgeonfalls.ca/garbage-and-recycling/",
     "https://thestarfish.ca/journal/2025/03/the-environmental-cost-of-concerts-and-festivals",
+    "https://usports.ca/en",
+    "https://uwaterloo.ca/",
     "https://waterloowarriors.universitytickets.com/w/packages/PackageDetail.aspx?PackageNewID=295",
+    "https://windsorite.ca/2025/03/new-waste-collection-contractor-starts-in-windsor-next-week-along-with-collection-day-changes/",
     "https://wordpress-1281606-4640853.cloudwaysapps.com/business-waste-and-recycling/",
     "https://wordpress-1281606-4640853.cloudwaysapps.com/contact-us/",
+    "https://wordpress-1281606-4640853.cloudwaysapps.com/how-to-camp-and-picnic-sustainably/",
+    "https://wordpress-1281606-4640853.cloudwaysapps.com/how-to-reduce-clothing-waste/",
+    "https://wordpress-1281606-4640853.cloudwaysapps.com/legal-info/#online-purchases-refund-policy",
     "https://wordpress-1281606-4640853.cloudwaysapps.com/material-recovery-facilities/",
+    "https://wordpress-1281606-4640853.cloudwaysapps.com/pre-checkout/",
     "https://wordpress-1281606-4640853.cloudwaysapps.com/product-destruction/",
     "https://wordpress-1281606-4640853.cloudwaysapps.com/waste-drop-off-depots/",
     "https://wordpress-1281606-4640853.cloudwaysapps.com/waste-management-ajax-2/#commercial-waste-collection",
     "https://wordpress-1281606-4640853.cloudwaysapps.com/waste-management-ajax-2/#product-destruction",
     "https://wordpress-1281606-4640853.cloudwaysapps.com/waste-management-ajax-2/dumster-bin-collection",
     "https://wordpress.org/",
+    "https://wrwcanada.com/en/get-involved/resources/textiles-themed-resources/textiles-waste-facts",
     "https://www.ajax.ca/en/living-in-ajax/garbage-and-recycling.aspx",
     "https://www.almanac.com/which-plastics-are-recyclable-number",
+    "https://www.am800cklw.com/news/new-waste-collection-contract-in-windsor-brings-40-new-jobs-starting-april-1.html",
     "https://www.barrie.ca/services-payments/garbage-recycling-organics",
     "https://www.canada.ca/content/dam/eccc/migration/ese-ees/05df7a37-60ff-403f-bb37-0cc697dbd9a3/feqg_pbde_en.pdf",
     "https://www.canada.ca/en/environment-climate-change/services/canadian-environmental-protection-act-registry/proposed-risk-management-instruments-mercury-products.html",
@@ -2108,13 +1324,17 @@
     "https://www.canada.ca/en/environment-climate-change/services/management-toxic-substances/list-canadian-environmental-protection-act/inorganic-cadmium-compounds.html",
     "https://www.canada.ca/en/environment-climate-change/services/managing-reducing-waste/municipal-solid/reducing.html",
     "https://www.canada.ca/en/environment-climate-change/services/managing-reducing-waste/reduce-plastic-waste/canada-action.html",
+    "https://www.canada.ca/en/health-canada/services/general-food-safety-tips/food-safety-tips-leftovers.html",
     "https://www.canr.msu.edu/news/compost_increases_the_water_holding_capacity_of_droughty_soils",
     "https://www.canva.com/invitations/",
+    "https://www.cbc.ca/radio/sunday/the-sunday-edition-for-april-21-2019-1.5099057/why-your-recycling-may-not-actually-get-recycled-1.5099103",
+    "https://www.cielap.org/pdf/hwfactsheet.pdf",
     "https://www.circularmaterials.ca/ontario",
     "https://www.circularmaterials.ca/recycleontario/",
     "https://www.circularmaterials.ca/recycling-container-request-form/",
     "https://www.circularmaterials.ca/resident-communities/durham-region/",
     "https://www.circularmaterials.ca/resident-provinces/ontario/",
+    "https://www.cityofsacramento.org/-/media/Corporate/Files/Public-Works/RSW/SacRecyclefactsheetv6pd.pdf?la=en#:~:text=On%20most%20plastic%20bottles%2C%20containers,not%20all%20plastics%20are%20recyclable.",
     "https://www.clarington.net/en/resident-services/Garbage-and-Recycling.aspx",
     "https://www.compost.org/",
     "https://www.drawnames.com/",
@@ -2126,6 +1346,7 @@
     "https://www.facebook.com/millerwastesi",
     "https://www.facebook.com/millerwastesystems/",
     "https://www.facebook.com/share/1FP1ZgYwrC/",
+    "https://www.farmersalmanac.com/pumpkin-bird-feeder",
     "https://www.google.com/maps/place/49+Taylor+Blvd,+Port+Perry,+ON+L9L+1B2/@44.1062693,-78.9718902,15.25z/data=!4m15!1m8!3m7!1s0x89d5142d8d1ac465:0x6d228f788b1aa2fb!2s49+Taylor+Blvd,+Port+Perry,+ON+L9L+1B2!3b1!8m2!3d44.1003665!4d-78.9699566!16s%2Fg%2F11rq8j8jg4!3m5!1s0x89d5142d8d1ac465:0x6d228f788b1aa2fb!8m2!3d44.1003665!4d-78.9699566!16s%2Fg%2F11rq8j8jg4?entry=ttu&g_ep=EgoyMDI2MDEyOC4wIKXMDSoKLDEwMDc5MjA3M0gBUAM%3D",
     "https://www.google.com/search?q=1220+Squires+Beach+Road+Pickering%2C+ON%2C+L1W+3S3&sca_esv=51f7e736cc3ae313&sxsrf=ANbL-n6IT2Ba-BNGEXtq-ApvwdBh5xMfpA%3A1770830296101&ei=2LmMaYrFBfmHw8cP4MHUiAM&biw=1912&bih=924&ved=0ahUKEwiKkYb2-NGSAxX5w_ACHeAgFTEQ4dUDCBM&uact=5&oq=1220+Squires+Beach+Road+Pickering%2C+ON%2C+L1W+3S3&gs_lp=Egxnd3Mtd2l6LXNlcnAiLjEyMjAgU3F1aXJlcyBCZWFjaCBSb2FkIFBpY2tlcmluZywgT04sIEwxVyAzUzMyAhAmMggQABiABBiiBDIFEAAY7wUyCBAAGIAEGKIEMggQABiABBiiBDIIEAAYgAQYogRI0hNQAFjrD3ABeACQAQCYAc4BoAHhAqoBBTAuMS4xuAEDyAEA-AEB-AECmAIDoAL4AqgCFMICBxAjGOoCGCfCAg0QLhjHARivARjqAhgnwgIXEAAYgAQYigUYkQIY5wYY6gIYtALYAQHCAg4QABjbBRjqAhi0AtgBAcICEBAAGAMYjwEY6gIYtALYAQGYAwrxBQCNnxSj9CoSugYGCAEQARgBkgcFMS4xLjGgB_AGsgcFMC4xLjG4B-0CwgcFMi0yLjHIBxGACAE&sclient=gws-wiz-serp",
     "https://www.hamilton.ca/home-neighbourhood/garbage-recycling/blue-box-recycling?utm_source=chatgpt.com",
@@ -2147,13 +1368,21 @@
     "https://www.statcan.gc.ca/o1/en/plus/6850-less-diversion-and-more-non-residential-sources-push-canadas-waste-disposal-new-high-2022",
     "https://www.statcan.gc.ca/o1/en/plus/6850-less-diversion-and-more-non-residential-sources-push-canadas-waste-disposal-new-high-2022?",
     "https://www.toronto.ca/services-payments/recycling-organics-garbage/towaste-app/?utm_source=chatgpt.com",
+    "https://www.toronto.ca/wp-content/uploads/2021/02/8b24-month-waste-posters.pdf",
     "https://www.townshipofbrock.ca/en/waste-and-recycling/waste-and-recycling.aspx",
+    "https://www.unlockfood.ca/en/Articles/Food-safety/Safe-Food-Storage.aspx#.VD_TGBx2D0g",
+    "https://www.uwaterloo.ca/",
     "https://www.uxbridge.ca/en/living-here/garbage-and-recycling.aspx",
+    "https://www.vwrm.com/holiday-waste-reduction-tips/#:~:text=Canadians%20produce%20tonnes%20of%20waste,part%20to%20reduce%20holiday%20waste%3F",
     "https://www.whitby.ca/en/residents/waste-and-recycling.aspx",
+    "https://www.worldcleanupday.org/country/canada",
     "https://www.york.ca/waste/garbage-and-recycling",
     "https://www150.statcan.gc.ca/n1/daily-quotidien/240408/dq240408b-eng.htm",
     "https://www150.statcan.gc.ca/n1/pub/16f0023x/2013001/part-partie1-eng.htm?",
     "https://www150.statcan.gc.ca/t1/tbl1/en/cv.action?pid=2510006001",
-    "https://www2.deloitte.com/ca/en/pages/canadas-best-managed-companies/articles/platinum-club-members.html"
+    "https://www2.deloitte.com/ca/en/pages/canadas-best-managed-companies/articles/meet-our-winners.html?icid=nav2_meet-our-winners",
+    "https://www2.deloitte.com/ca/en/pages/canadas-best-managed-companies/articles/platinum-club-members.html",
+    "https://www2.deloitte.com/ca/en/pages/canadas-best-managed-companies/topics/canada-best-managed-companies.html",
+    "https://www2.deloitte.com/ca/en/pages/press-releases/articles/best-managed-companies-celebrates-30years-of-privately-owned.html"
   ]
 }

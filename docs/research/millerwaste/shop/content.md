@@ -1,4 +1,4 @@
-<!-- https://millerwaste.ca/shop -->
+<!-- https://millerwaste.ca/shop?add-to-cart=5651 -->
 # [TITLE] Shop - Miller Waste Systems
 
 [LINK] Accessibility Screen-Reader Guide, Feedback, and Issue Reporting | New window → https://accessibe.com/blog/knowledgebase/screen-reader-guide
@@ -11,6 +11,8 @@
 
 [SECTION: header .woocommerce-products-header]
 # [H1] Shop
+[LI] Please double check all required fields again and retry the order.
+[LI] Please double check all required fields again and retry the order.
 [P] Showing all 3 results
 [LI] 14 Yard Bin
 $0.00

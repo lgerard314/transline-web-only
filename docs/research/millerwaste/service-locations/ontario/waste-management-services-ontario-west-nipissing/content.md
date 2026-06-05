@@ -1,7 +1,6 @@
 <!-- https://millerwaste.ca/service-locations/ontario/waste-management-services-ontario-west-nipissing -->
 # [TITLE] West Nipissing Waste Management & Recycling Services | Miller Waste
 
-[LINK] Accessibility Screen-Reader Guide, Feedback, and Issue Reporting | New window → https://accessibe.com/blog/knowledgebase/screen-reader-guide
 
 [SECTION: header .banner.sticky-top]
 

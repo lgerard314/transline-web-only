@@ -7,14 +7,16 @@ import { downloadAsset } from './lib/assets.mjs';
 import { extractBlocksFn, blocksToMarkdown } from './lib/annotate.mjs';
 import { writeSitemap, writeCrawlLog } from './lib/sitemap.mjs';
 
-const MAX_PAGES = 300;
+const DEFAULT_MAX_PAGES = 300;
 const PAGE_CONCURRENCY = 3;
 const DELAY_MS = 600;
+const DOC_RE = /\.(pdf|docx?|xlsx?|pptx?|csv|txt)(\?|$)/i;
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 export async function crawlSite(config) {
   const { name, startUrl, primaryHost, allowedHosts, outRoot } = config;
+  const MAX_PAGES = config.maxPages ?? DEFAULT_MAX_PAGES;
   const siteDir = path.join(outRoot, name);
   await mkdir(siteDir, { recursive: true });
 
@@ -61,6 +63,7 @@ export async function crawlSite(config) {
       const hrefs = await page.$$eval('a[href]', (as) => as.map((a) => a.href));
       for (const h of hrefs) {
         if (isInScope(h, allowedHosts)) {
+          if (DOC_RE.test(h)) continue; // documents are downloaded below, not crawled as pages
           const n = normalizeUrl(h);
           if (!seen.has(n)) {
             if (seen.size >= MAX_PAGES) { skipped.push({ url: n, reason: 'cap(300) reached' }); }
@@ -96,7 +99,7 @@ export async function crawlSite(config) {
       // documents linked via <a>
       for (const h of hrefs) {
         if (!isInScope(h, allowedHosts)) continue;
-        if (/\.(pdf|docx?|xlsx?|pptx?|csv|txt)(\?|$)/i.test(h)) {
+        if (DOC_RE.test(h)) {
           const asset = await downloadAsset(req, h, siteDir, assetCache);
           if (asset && asset.kind === 'document') {
             const set = docUsage.get(asset.localPath) || new Set();

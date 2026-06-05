@@ -44,7 +44,7 @@
 ### [H3] Community
 [P] We are invested in the communities in which we live and work. We take pride in the role we play in our communities as a corporation and as individuals.
 ## [H2] A Message From Our Owner & CEO
-[IMG] photos/542dbd4c0295__we-are-miller  (alt: "", natural 0×0)
+[IMG] photos/594bd17b6534__we-are-miller  (alt: "", natural 0×0)
 ## [H2] Our History
 [P] Miller Waste Systems’ roots in waste management date back to the early 1960s, when the company began providing waste management services to the Town of Markham. Since then, Miller Waste has grown from a two-truck operation to a diverse waste management company that, in addition to providing waste collection services to businesses and municipalities, specializes in the design, construction, and operation of material recovery and organic waste processing facilities. We are inspired by the work ethic of our founding family, who own and operate the business to this day.
 [IMG] photos/c41fcc609117__NJB_3985@2x.jpg  (alt: "", natural 16×16)
@@ -61,7 +61,7 @@
 [IMG] photos/eb18e4c74bea__NJB_2542.jpg  (alt: "", natural 1110×16)
 [IMG] photos/77026e8e3712__3.webp  (alt: "", natural 1110×16)
 [IMG] photos/7ce10269b45c__NJB_2549.jpg  (alt: "", natural 1110×16)
-[IMG] photos/542dbd4c0295__we-are-miller  (alt: "", natural 1110×0)
+[IMG] photos/594bd17b6534__we-are-miller  (alt: "", natural 1110×0)
 [IMG] photos/b08c22cb809b__NJB_7988.jpg  (alt: "", natural 1110×16)
 [IMG] photos/bb027aff7c45__NJB_9630.jpg  (alt: "", natural 1110×16)
 [IMG] photos/0ce7cc03e150__1.webp  (alt: "", natural 1110×16)
@@ -73,11 +73,11 @@
 [IMG] photos/eb18e4c74bea__NJB_2542.jpg  (alt: "", natural 1110×16)
 [IMG] photos/77026e8e3712__3.webp  (alt: "", natural 1110×16)
 [IMG] photos/7ce10269b45c__NJB_2549.jpg  (alt: "", natural 1110×16)
-[IMG] photos/542dbd4c0295__we-are-miller  (alt: "", natural 1110×0)
+[IMG] photos/594bd17b6534__we-are-miller  (alt: "", natural 1110×0)
 [IMG] photos/b08c22cb809b__NJB_7988.jpg  (alt: "", natural 1110×16)
 [IMG] photos/bb027aff7c45__NJB_9630.jpg  (alt: "", natural 1110×16)
 [IMG] photos/af282d31c15b__right-chev-3.png  (alt: "", natural 32×16)
-[IMG] photos/542dbd4c0295__we-are-miller  (alt: "", natural 0×0)
+[IMG] photos/594bd17b6534__we-are-miller  (alt: "", natural 0×0)
 ## [H2] Our People
 [P] At Miller Waste, there is no higher priority than our people. We are committed to maintaining a diverse, collaborative and respectful work environment while providing meaningful training and education opportunities to help our employees advance within the organization.
 ## [H2] Awards & Associations

@@ -39,11 +39,11 @@
 [P] A team of volunteers cleaning up the street.
 ### [H3] 2. Upcycling and DIY Crafts
 [P] Turn old or unused items into something useful. Upcycling projects—like making planter boxes from pallets or tote bags from old shirts—are creative ways to keep waste out of landfills. Host a crafting day with friends or family to swap materials and share skills, extending the life of everyday items while fostering a spirit of reuse.
-[IMG] photos/ec549dea13a8__image2-1.png  (alt: "A close-up of a craft table filled with open paint cans, brushes, and colorful cloths, with people painting and crafting in the blurred background during an outdoor art workshop.", natural 1110×48)
+[IMG] photos/ec549dea13a8__image2-1.png  (alt: "A close-up of a craft table filled with open paint cans, brushes, and colorful cloths, with people painting and crafting in the blurred background during an outdoor art workshop.", natural 1140×48)
 [P] Creative energy is in full swing at an outdoor painting workshop, where recycled materials and vibrant colours come together for hands-on fun.
 ### [H3] 3. Start a Sustainable Garden
 [P] Gardening helps the environment and brings healthy, fresh food closer to home. Use native plants that need less water, start composting kitchen scraps, and collect rainwater for irrigation. Gardening attracts pollinators and creates a rewarding seasonal project. Even a small balcony garden can make a positive impact.
-[IMG] photos/6095130f4959__image-1-1.png  (alt: "A person tending to a lush, well-organized vegetable garden with raised beds, a compost bin, and a variety of thriving plants and flowers in a green, tree-filled backyard.", natural 1110×48)
+[IMG] photos/6095130f4959__image-1-1.png  (alt: "A person tending to a lush, well-organized vegetable garden with raised beds, a compost bin, and a variety of thriving plants and flowers in a green, tree-filled backyard.", natural 1140×48)
 [P] A thriving backyard garden proves that growing your own food can be beautiful and sustainable.
 ### [H3] 4. Support Local Charities and Programs
 [P] Volunteer with local food banks, environmentally minded charities, or recycling initiatives. Donate gently used goods or your time to programs that help others and reduce waste. Many organizations post their needs online—find a cause that matters to you and get involved.
@@ -113,10 +113,10 @@
 [LI] Blog
 [LI] Contact Us
 #### [H4] Our Associations
-[IMG] photos/177e2c8f99f1__w2ro-assoc.png  (alt: "Ontario Waste Management Association", natural 134×60)
-[IMG] photos/5f11fb57a119__landscape-assoc.png  (alt: "Landscape Ontario", natural 134×40)
-[IMG] photos/bc2dc3c99142__compost-assoc.png  (alt: "Compost Council of Canada", natural 134×40)
-[IMG] photos/4958d4304dd3__managed-assoc.png  (alt: "Platinum Canada's best managed companies.", natural 134×60)
+[IMG] photos/177e2c8f99f1__w2ro-assoc.png  (alt: "Ontario Waste Management Association", natural 143×60)
+[IMG] photos/5f11fb57a119__landscape-assoc.png  (alt: "Landscape Ontario", natural 135×20)
+[IMG] photos/bc2dc3c99142__compost-assoc.png  (alt: "Compost Council of Canada", natural 143×40)
+[IMG] photos/4958d4304dd3__managed-assoc.png  (alt: "Platinum Canada's best managed companies.", natural 143×60)
 [LI] Privacy Policy
 [LI] Terms of Service
 [LI] Refund Policy

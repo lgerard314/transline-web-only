@@ -124,10 +124,10 @@
 [LI] Blog
 [LI] Contact Us
 #### [H4] Our Associations
-[IMG] photos/177e2c8f99f1__w2ro-assoc.png  (alt: "Ontario Waste Management Association", natural 134×60)
-[IMG] photos/5f11fb57a119__landscape-assoc.png  (alt: "Landscape Ontario", natural 134×40)
-[IMG] photos/bc2dc3c99142__compost-assoc.png  (alt: "Compost Council of Canada", natural 134×40)
-[IMG] photos/4958d4304dd3__managed-assoc.png  (alt: "Platinum Canada's best managed companies.", natural 134×60)
+[IMG] photos/177e2c8f99f1__w2ro-assoc.png  (alt: "Ontario Waste Management Association", natural 143×60)
+[IMG] photos/5f11fb57a119__landscape-assoc.png  (alt: "Landscape Ontario", natural 135×20)
+[IMG] photos/bc2dc3c99142__compost-assoc.png  (alt: "Compost Council of Canada", natural 143×40)
+[IMG] photos/4958d4304dd3__managed-assoc.png  (alt: "Platinum Canada's best managed companies.", natural 143×60)
 [LI] Privacy Policy
 [LI] Terms of Service
 [LI] Refund Policy

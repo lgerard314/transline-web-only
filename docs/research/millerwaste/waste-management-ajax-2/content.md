@@ -1,7 +1,6 @@
 <!-- https://millerwaste.ca/waste-management-ajax-2 -->
 # [TITLE] Page not found - Miller Waste Systems
 
-[LINK] Accessibility Screen-Reader Guide, Feedback, and Issue Reporting | New window → https://accessibe.com/blog/knowledgebase/screen-reader-guide
 
 [SECTION: header .banner.sticky-top]
 

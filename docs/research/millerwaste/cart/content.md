@@ -1,4 +1,4 @@
-<!-- https://millerwaste.ca/cart -->
+<!-- https://millerwaste.ca/cart?undo_item=9219adc5c42107c4911e249155320648&_wpnonce=a511c7da34 -->
 # [TITLE] Cart - Miller Waste Systems
 
 [LINK] Accessibility Screen-Reader Guide, Feedback, and Issue Reporting | New window → https://accessibe.com/blog/knowledgebase/screen-reader-guide
@@ -16,39 +16,17 @@
 [IMG] photos/e8a8d8da3377__MWS_Main-Logo.svg  (alt: "Miller Waste Systems", natural 95×72)
 
 [SECTION: nav .nav-primary.navbar]
-[LINK] Waste → https://millerwaste.ca/cart/#
+[LINK] Waste → https://millerwaste.ca/cart/?undo_item=9219adc5c42107c4911e249155320648&_wpnonce=a511c7da34#
 [LINK] Recycling → https://millerwaste.ca/recycling/
-[LINK] Organics → https://millerwaste.ca/cart/#
-[LINK] About Us → https://millerwaste.ca/cart/#
-[LINK] Shop → https://millerwaste.ca/cart/#
+[LINK] Organics → https://millerwaste.ca/cart/?undo_item=9219adc5c42107c4911e249155320648&_wpnonce=a511c7da34#
+[LINK] About Us → https://millerwaste.ca/cart/?undo_item=9219adc5c42107c4911e249155320648&_wpnonce=a511c7da34#
+[LINK] Shop → https://millerwaste.ca/cart/?undo_item=9219adc5c42107c4911e249155320648&_wpnonce=a511c7da34#
 
 [SECTION: nav .nav-primary-two.navbar]
 [BUTTON] Request Service
 
 [SECTION: main .main]
-[P] Remove item
-[P] Thumbnail image
-[P] Product
-[P] Price
-[P] Quantity
-[P] Subtotal
-[P] ×
-[IMG] photos/f83b8f585c2b__14yard-new-700x700.avif  (alt: "14 cubic yard dumpster rental bin dimensions", natural 382×24)
-[P] 14 Yard Bin
-[P] $0.00
-[P] $0.00
-[BUTTON] Apply coupon
-[BUTTON] Update cart
-## [H2] Cart totals
-[P] Subtotal
-[P] $0.00
-[P] Shipment
-[LI] Free shipping
-[P] Shipping to ON.
-[LINK] Change address → https://millerwaste.ca/cart/#
-[P] Total
-[P] $0.00
-[LINK] Proceed to checkout → https://millerwaste.ca/checkout/
+[P] Return to shop
 
 [SECTION: footer .content-info]
 [IMG] photos/e8a8d8da3377__MWS_Main-Logo.svg  (alt: "Miller Waste Systems Inc. Footer Logo", natural 268×24)

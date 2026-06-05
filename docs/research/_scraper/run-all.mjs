@@ -7,7 +7,7 @@ const OUT_ROOT = path.resolve(__dirname, '..'); // docs/research
 
 const SITES = [
   { name: 'millerwaste', startUrl: 'https://millerwaste.ca/', primaryHost: 'millerwaste.ca',
-    allowedHosts: ['millerwaste.ca', 'www.millerwaste.ca', 'residential-recycling-bins.millerwaste.ca'] },
+    allowedHosts: ['millerwaste.ca', 'www.millerwaste.ca', 'residential-recycling-bins.millerwaste.ca'], maxPages: 2000 },
   { name: 'millerenvironmental', startUrl: 'https://www.millerenvironmental.ca/', primaryHost: 'millerenvironmental.ca',
     allowedHosts: ['millerenvironmental.ca', 'www.millerenvironmental.ca'] },
   { name: 'millercompost', startUrl: 'https://millercompost.ca/', primaryHost: 'millercompost.ca',

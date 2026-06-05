@@ -1,6 +1,7 @@
 <!-- https://millerwaste.ca/email-subscription-confirmation -->
 # [TITLE] Email Subscription Confirmation - Miller Waste Systems
 
+[LINK] Accessibility Screen-Reader Guide, Feedback, and Issue Reporting | New window → https://accessibe.com/blog/knowledgebase/screen-reader-guide
 
 [SECTION: header .banner.sticky-top]
 

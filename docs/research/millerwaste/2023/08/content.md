@@ -1,7 +1,6 @@
 <!-- https://millerwaste.ca/2023/08 -->
 # [TITLE] August 2023 - Miller Waste Systems
 
-[LINK] Accessibility Screen-Reader Guide, Feedback, and Issue Reporting | New window → https://accessibe.com/blog/knowledgebase/screen-reader-guide
 
 [SECTION: header .banner.sticky-top]
 

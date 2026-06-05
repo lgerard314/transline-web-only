@@ -1,7 +1,6 @@
 <!-- https://millerwaste.ca/port-perry-transfer-station-discount-terms-and-conditions-2 -->
 # [TITLE] Port Perry Transfer Station Discount Terms and Conditions - Miller Waste Systems
 
-[LINK] Accessibility Screen-Reader Guide, Feedback, and Issue Reporting | New window → https://accessibe.com/blog/knowledgebase/screen-reader-guide
 
 [SECTION: header .banner.sticky-top]
 

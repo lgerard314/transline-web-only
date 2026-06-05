@@ -64,7 +64,7 @@ Grab some tape and label your bins clearly:
 [LI] Organics (food scraps)
 [LI] Garbage
 [P] This works great at parties and is helpful for everyday use too. You can find these signs online as downloadable images.
-[IMG] photos/e7d98df47b3e__image.webp  (alt: "A two-row grid of recycling signs. Top row shows large square signs: blue "PAPER" with a white recycling symbol, red "PLASTIC" with a white recycling symbol, yellow "CANS" with a white recycling symbol, and green "GENERAL" with a white waste-bin icon. Bottom row repeats smaller rectangular versions of the same four categories.", natural 1110×72)
+[IMG] photos/e7d98df47b3e__image.webp  (alt: "A two-row grid of recycling signs. Top row shows large square signs: blue "PAPER" with a white recycling symbol, red "PLASTIC" with a white recycling symbol, yellow "CANS" with a white recycling symbol, and green "GENERAL" with a white waste-bin icon. Bottom row repeats smaller rectangular versions of the same four categories.", natural 1140×72)
 ## [H2] 7. Donate and Reuse After the Party
 [P] Don’t toss good food. Pack leftovers for guests or donate to a local shelter or community fridge. Save your decorations to use again next year.
 [P] A Greener Celebration Starts with Simple Changes
@@ -137,10 +137,10 @@ Grab some tape and label your bins clearly:
 [LI] Blog
 [LI] Contact Us
 #### [H4] Our Associations
-[IMG] photos/177e2c8f99f1__w2ro-assoc.png  (alt: "Ontario Waste Management Association", natural 134×60)
-[IMG] photos/5f11fb57a119__landscape-assoc.png  (alt: "Landscape Ontario", natural 134×40)
-[IMG] photos/bc2dc3c99142__compost-assoc.png  (alt: "Compost Council of Canada", natural 134×40)
-[IMG] photos/4958d4304dd3__managed-assoc.png  (alt: "Platinum Canada's best managed companies.", natural 134×60)
+[IMG] photos/177e2c8f99f1__w2ro-assoc.png  (alt: "Ontario Waste Management Association", natural 143×60)
+[IMG] photos/5f11fb57a119__landscape-assoc.png  (alt: "Landscape Ontario", natural 135×20)
+[IMG] photos/bc2dc3c99142__compost-assoc.png  (alt: "Compost Council of Canada", natural 143×40)
+[IMG] photos/4958d4304dd3__managed-assoc.png  (alt: "Platinum Canada's best managed companies.", natural 143×60)
 [LI] Privacy Policy
 [LI] Terms of Service
 [LI] Refund Policy
