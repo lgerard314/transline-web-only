@@ -1,0 +1,11 @@
+{
+  "name": "miller-sites-scraper",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "description": "One-off Playwright crawler that archives Miller/White Owl marketing sites.",
+  "scripts": {
+    "selftest": "node selftest.mjs",
+    "crawl": "node run-all.mjs"
+  }
+}
