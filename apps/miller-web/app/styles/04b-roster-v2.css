@@ -1,0 +1,392 @@
+/* ════════════════════════════════════════════════════════════
+   ROSTER COLLAGE V2 (roster-collage-02) — isolated editable COPY of the home
+   "services" template. Namespaced .mw-roster2* / --r2-* so edits here never
+   touch the original .mw-roster* block in 04-home.css (the untouched backup).
+   Only the home page (/) renders this, via RosterCollage02.
+   ════════════════════════════════════════════════════════════ */
+.mw-roster2 {
+  position: relative;
+  background: var(--c-surface-warm);
+  padding-block: clamp(64px, 6.5vw, 112px);
+  /* NOTE: no `overflow: clip/hidden` here — it would establish a scroll container
+     that traps the sibling-sticky rail. Children stay within the section width, and
+     the grain wash (::before, inset:0) and parallax don't overflow horizontally. */
+  isolation: isolate;
+}
+.mw-roster2::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+  pointer-events: none;
+  z-index: 0;
+}
+.mw-roster2 > .mw-inner { position: relative; z-index: 1; }
+
+.mw-roster2__head { margin-bottom: clamp(40px, 4vw, 64px); }
+.mw-roster2__title {
+  margin-top: 28px;
+  max-width: none;
+  font-size: clamp(26px, 4.4vw, 72px);
+  line-height: 0.94;
+}
+.mw-roster2__title-line { display: block; }
+
+.mw-roster2__layout {
+  display: grid;
+  /* list column (left) · collage column (right) */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.55fr);
+  gap: clamp(28px, 4vw, 76px);
+  align-items: start;
+  padding-top: 0;
+}
+
+/* ── LEFT · collage ───────────────────────────────────────── */
+/* Clip frame — in the pinned section JS sizes it to exactly 2 rows and clips the
+   inner grid; everywhere else it's transparent (full grid shows). */
+.mw-roster2__collage { position: relative; }
+.mw-roster2__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* Identical row & column gaps. The column stagger (--ty) makes adjacent rows
+     overlap slightly — that woven offset is the intended look; the snap pitch
+     follows the row pitch so it still lands by whole rows. */
+  gap: clamp(10px, 1vw, 18px);
+  /* room for the column stagger (translateY) at the bottom */
+  padding-bottom: clamp(44px, 6vw, 104px);
+}
+.mw-roster2__card {
+  --ty: 0px;
+  --lift: 0px;
+  position: relative;
+  display: block;
+  /* width fixed by the grid columns; height = 1.1 × width (10% taller than square). */
+  aspect-ratio: 1 / 1.1;
+  overflow: hidden;
+  text-decoration: none;
+  isolation: isolate;
+  transform: translateY(calc(var(--ty) + var(--lift)));
+  transform-origin: center;
+  /* Hidden until scroll-revealed (pre-JS state): clipped to zero height. The wipe is
+     driven 100% by scroll position — JS writes inline clip-path each frame — so clip-path
+     is deliberately NOT in the transition (no time easing; it scrubs with the scroll). */
+  clip-path: inset(0 0 100% 0);
+  transition: transform 440ms cubic-bezier(.2, .7, .2, 1), box-shadow 440ms ease;
+}
+/* All three columns START level (no stagger — --ty stays 0 from the base rule).
+   The MIDDLE column then gets a scroll-driven parallax offset: JS writes --r2-mid
+   onto the grid and only the middle-column cards read it, so they drift up/down as
+   the section passes through the viewport while the outer columns track scroll 1:1.
+   The parallax transform tracks scroll continuously, so it is NOT transitioned
+   (a transition would lag the scrub); box-shadow still eases for the hover state. */
+.mw-roster2__card:nth-child(3n + 2) {
+  transform: translateY(calc(var(--ty) + var(--lift) + var(--r2-mid, 0px)));
+  /* Parallax scrub stays instant (transform not transitioned); clip-path is scroll-driven. */
+  transition: box-shadow 440ms ease;
+  will-change: transform;
+}
+/* Spotlit card stays put — no lift, no scale (the box size/position never changes).
+   It just brightens, gets the clay ring, and a SUBTLE shadow. The image zoom +
+   paragraph reveal are the two extracted motions (below). */
+.mw-roster2__card.is-active {
+  z-index: 3;
+  box-shadow: 0 8px 20px -10px rgba(42, 27, 18, 0.32);
+}
+.mw-roster2__card-photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+  /* Normal-state grade from bento-grid-02, then 10% darker (brightness 0.96 → 0.864).
+     The spotlit/hover grade below is unchanged. */
+  filter: saturate(0.95) brightness(0.864) contrast(1.02) sepia(0.04);
+  transform: scale(1);
+  transition: filter 320ms ease, transform 520ms ease;
+}
+/* Extracted motion #1 — image zoom (card-7 group-hover:scale-110), plus the
+   exact hover-state photo grade. */
+.mw-roster2__card.is-active .mw-roster2__card-photo {
+  filter: saturate(1.05) brightness(1.1) contrast(1) sepia(0.02);
+  transform: scale(1.1);
+}
+/* Light top wash over the photo (bento-grid-02 photo::after), lifts on hover. */
+.mw-roster2__card-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(42, 27, 18, 0.3) 0%, rgba(42, 27, 18, 0.08) 100%);
+  opacity: 1;
+  transition: opacity 320ms ease;
+}
+.mw-roster2__card.is-active .mw-roster2__card-photo::after { opacity: 0.2; }
+/* Accent ring on the spotlit card. */
+.mw-roster2__card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border: 1px solid transparent;
+  border-radius: inherit;
+  pointer-events: none;
+  transition: border-color 240ms ease;
+}
+.mw-roster2__card.is-active::after { border-color: var(--c-line); border-width: 1px; }
+.mw-roster2__card:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
+
+/* Action arrow pinned to each card's top-right corner. */
+.mw-roster2__card-arr {
+  position: absolute;
+  top: clamp(9px, 0.9vw, 15px);
+  right: clamp(11px, 1.1vw, 18px);
+  z-index: 2;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-size: clamp(20px, 1.9vw, 32px);
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 1px 5px rgba(20, 12, 6, 0.75);
+  transition: transform 240ms cubic-bezier(.2, .7, .2, 1), color 240ms ease;
+}
+.mw-roster2__card.is-active .mw-roster2__card-arr {
+  color: var(--c-accent);
+  transform: translate(3px, -3px);
+}
+
+/* Content overlay — title + summary + arrow over the exact bento-grid-02
+   content scrim (__body::before): bottom-anchored, gradient extended past the
+   edges so it reads identically. */
+.mw-roster2__card-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(7px, 0.7vw, 11px);
+  padding: clamp(13px, 1.2vw, 20px);
+}
+.mw-roster2__card-overlay::before {
+  content: "";
+  position: absolute;
+  left: -200px;
+  right: -200px;
+  bottom: -200px;
+  top: -80px;
+  z-index: -1;
+  background: linear-gradient(
+    to top,
+    rgba(6, 3, 1, 0.96) 0%,
+    rgba(6, 3, 1, 0.94) 35%,
+    rgba(6, 3, 1, 0.72) 60%,
+    rgba(6, 3, 1, 0.28) 85%,
+    rgba(6, 3, 1, 0) 100%
+  );
+  pointer-events: none;
+}
+.mw-roster2__card-title {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(22px, 2.3vw, 38px);
+  line-height: 0.98;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: #d9d9d9; /* unselected: ~15% darker than white */
+  transition: color 240ms ease;
+}
+/* The spotlit card's title goes full white; the rest sit ~15% darker. */
+.mw-roster2__card.is-active .mw-roster2__card-title { color: #fff; }
+/* Extracted motion #2 — reveal on hover (card-7's slide-up bottom section),
+   applied to the body paragraph: collapsed (0fr grid row) + faded at rest,
+   expands + fades in when the card is spotlit. The title stays put. */
+.mw-roster2__card-reveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: grid-template-rows 440ms cubic-bezier(.2, .7, .2, 1), opacity 360ms ease, transform 440ms ease;
+}
+.mw-roster2__card-reveal > * { overflow: hidden; min-height: 0; }
+.mw-roster2__card.is-active .mw-roster2__card-reveal {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transform: none;
+}
+.mw-roster2__card-text {
+  margin: 0;
+  font-family: var(--font-plex-sans), var(--font-body), ui-sans-serif, sans-serif;
+  font-size: clamp(11.5px, 0.86vw, 13.5px);
+  line-height: 1.42;
+  color: rgba(245, 230, 203, 0.85);
+}
+
+/* ── Final CTA card (catch-all / contact) ──────────────────────
+   A photo-less tile that completes the collage in place of the old rail Learn-more
+   button. No image — a deep-walnut (dark brown) border on the warm section surface,
+   with an eyebrow + short pitch + the contact CTA. Inherits the base card box
+   (square, same grid cell), but overrides the photo-card internals. */
+.mw-roster2__card--cta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: clamp(8px, 0.9vw, 14px);
+  padding: clamp(14px, 1.3vw, 22px);
+  background: transparent;
+  border: 1px solid var(--c-navy); /* deep walnut / dark brown */
+  overflow: hidden;
+  transition: background-color 240ms ease, box-shadow 240ms ease;
+}
+.mw-roster2__card--cta:hover { background: #fff; box-shadow: 0 8px 20px -10px rgba(42, 27, 18, 0.32); }
+.mw-roster2__cta-head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(6px, 0.7vw, 10px);
+}
+/* The eyebrow mark (Eyebrow01) inherits the section's diamond + mono label styling. */
+.mw-roster2__cta-eyebrow { display: block; }
+.mw-roster2__cta-title {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(18px, 1.55vw, 27px);
+  line-height: 0.96;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--c-navy);
+}
+.mw-roster2__cta-text {
+  margin: 0;
+  font-family: var(--font-plex-sans), var(--font-body), ui-sans-serif, sans-serif;
+  font-size: clamp(12px, 0.82vw, 14px);
+  line-height: 1.4;
+  color: var(--c-ink-2);
+}
+.mw-roster2__cta-foot { margin-top: 0; }
+
+/* ── RIGHT · roster menu ──────────────────────────────────── */
+/* SIBLING-STICKY list, centered. The rail is its natural (menu) height and sticks via
+   native position:sticky. Its `top` is set by JS to (viewportHeight − railHeight)/2, so
+   sticky engages exactly when the list reaches vertical CENTER of the screen — not
+   before. The list therefore scrolls normally as it comes into view, locks once centered,
+   and holds there while the sibling collage keeps scrolling, releasing when the collage
+   (the grid-row containing block) bottoms out. Keeping the rail at its natural height
+   (rather than a 100vh box) maximizes the sticky travel = collageHeight − railHeight.
+   The inline top is the only JS-set property; `top:50vh` is a pre-hydration fallback.
+   (Disabled at the stacked ≤1024 breakpoint below.) */
+.mw-roster2__rail {
+  position: sticky;
+  top: 50vh;
+  align-self: start;
+}
+.mw-roster2__menu { list-style: none; margin: 0; padding: 0; }
+.mw-roster2__row {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(12px, 1vw, 18px);
+  padding: clamp(10px, 0.98vw, 15px) 0;
+  text-decoration: none;
+  border-bottom: 1px solid var(--c-line);
+  /* Scroll reveal: each row is hidden until its matching collage card's BOTTOM edge is
+     on screen (JS toggles .is-revealed on scroll — reversible). `opacity` drives the
+     reveal; the active/inactive DIM uses filter:opacity() so the two never fight and can
+     animate on independent timings (reveal slow, dim snappy). */
+  opacity: 0;
+  /* Reveal: rows start shifted RIGHT (toward the grid) and slide LEFT into place, so they
+     read as shifting right→left out of the collage. */
+  transform: translateX(56px);
+  transition: opacity 520ms ease, transform 520ms cubic-bezier(.2, .7, .2, 1), filter 220ms ease;
+}
+.mw-roster2__menu > li:first-child .mw-roster2__row { border-top: 1px solid var(--c-line); }
+.mw-roster2__row.is-revealed { opacity: 1; transform: none; }
+.mw-roster2__row:not(.is-active) { filter: opacity(0.79); }
+.mw-roster2__row:not(.is-active):hover { filter: opacity(0.86); }
+/* Diamond marker — small + border-only at rest; spins into a larger filled
+   diamond when spotlit. Fixed-width grid cell keeps the name from shifting. */
+.mw-roster2__row-mark {
+  justify-self: center;
+  width: 8px;
+  height: 8px;
+  border: 1.5px solid var(--c-navy);
+  background: transparent;
+  transform: rotate(45deg);
+  transition: width 280ms cubic-bezier(.2, .7, .2, 1), height 280ms cubic-bezier(.2, .7, .2, 1),
+    background-color 240ms ease, border-color 240ms ease, transform 420ms cubic-bezier(.2, .7, .2, 1);
+}
+.mw-roster2__row.is-active .mw-roster2__row-mark {
+  width: 15px;
+  height: 15px;
+  background: var(--c-accent);
+  border-color: var(--c-accent);
+  transform: rotate(225deg);
+}
+.mw-roster2__row-name {
+  min-width: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(17px, 1.45vw, 25px);
+  line-height: 1.02;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+  transition: color 200ms ease;
+}
+.mw-roster2__row.is-active .mw-roster2__row-name { color: var(--c-navy); }
+.mw-roster2__row-arr {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-size: clamp(20px, 1.6vw, 26px);
+  font-weight: 700;
+  color: var(--c-accent);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+.mw-roster2__row.is-active .mw-roster2__row-arr { opacity: 1; transform: none; }
+
+/* Section lead — body-intro under the header, matching the other sections
+   (font-size + rhythm mirror .mw-secd__lead). */
+.mw-roster2__lead {
+  margin: clamp(18px, 1.6vw, 24px) 0 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(16px, 1.15vw, 19px);
+  line-height: 1.6;
+  color: var(--c-ink-2);
+  max-width: 64ch;
+}
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .mw-roster2__layout { grid-template-columns: 1fr; gap: clamp(28px, 5vw, 48px); }
+  .mw-roster2__grid { padding-bottom: clamp(34px, 8vw, 80px); }
+  /* Stacked single-column — the list sits above the collage, so no sticky. */
+  .mw-roster2__rail { position: static; top: auto; }
+}
+@media (max-width: 560px) {
+  /* Two columns, all level — parallax is gated off below the 3-column breakpoint (JS). */
+  .mw-roster2__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mw-roster2__card:nth-child(3n + 2) { transform: translateY(calc(var(--ty) + var(--lift))); }
+}
+/* Touch / no-hover devices can't trigger the reveal — show every paragraph. */
+@media (hover: none) {
+  .mw-roster2__card-reveal { grid-template-rows: 1fr; opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-roster2__card,
+  .mw-roster2__card-photo,
+  .mw-roster2__card-reveal,
+  .mw-roster2__row-mark,
+  .mw-roster2__row-arr,
+  .mw-roster2__row,
+  .mw-roster2__row-name,
+  .mw-roster2__row-tag { transition: none; }
+  .mw-roster2__card { --lift: 0px; }
+  .mw-roster2__card.is-active .mw-roster2__card-photo { transform: none; }
+  .mw-roster2__row.is-active .mw-roster2__row-mark { transform: none; }
+  /* No scroll-reveal animation — show every list row and card up front. */
+  .mw-roster2__row { opacity: 1; transform: none; }
+  .mw-roster2__card { clip-path: none; }
+}

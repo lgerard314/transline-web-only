@@ -70,6 +70,15 @@ const TIER_PERIM = 0.95; // the top/bottom diamonds (a, c) — outer tier, just 
 const STEM_GAP = 0.12; //  blank gap between a label and the start of its stem
 const STEM_FRAC = 1; //    stem spans the full label→edge distance (labels sit close, stems connect)
 const T_FRAC = 1 / 3; //   where along the angled face the stem attaches (0 = tip … 1 = side vertex)
+const LINE_SCALE = 0.75; // default leaders 25% shorter: label pulled 25% back toward its face attach point
+// Per-sector overrides (by slug) — these leaders run 50% shorter than full length; every
+// other leader uses the LINE_SCALE default. (agriculture/mining and crown-insurers/
+// construction-and-demolition leader lengths were swapped.)
+const LINE_SCALE_BY_SLUG = {
+  "mining": 0.5,
+  "education-and-healthcare": 0.5,
+  "crown-insurers": 0.5,
+};
 
 function labelSide(slot, k) {
   const even = k % 2 === 0;
@@ -109,12 +118,16 @@ export function SectorDiamonds01({ content, config = {} }) {
       const off = isMid ? TIER_MID : TIER_PERIM;
       const cx = c.col + 1; // diamond centre column (lattice)
       const cy = c.row + 1; // diamond centre row (lattice)
-      const labLatY = side === "top" ? -off : rows + off; // label anchor (lattice y)
       // Attach point on the angled face: from the near tip, T_FRAC of the way toward the side
       // vertex (h picks left/right face). Both coords shift by T_FRAC since the edge is at 45°.
       const h = faceDir(c.slot, c.ci);
       const ex = cx + h * T_FRAC;
       const ey = side === "top" ? cy - 1 + T_FRAC : cy + 1 - T_FRAC;
+      // Full label anchor, then pulled (scale) of the way back toward the face point (ey) so the
+      // whole leader (stem + its label) shortens while still meeting the face at ey.
+      const labLatYFull = side === "top" ? -off : rows + off;
+      const scale = LINE_SCALE_BY_SLUG[c.slug] ?? LINE_SCALE;
+      const labLatY = ey + scale * (labLatYFull - ey); // label anchor (lattice y)
       // vertical stem at the attach x, from near the label down/up to the face point
       const labelEndY = side === "top" ? labLatY + STEM_GAP : labLatY - STEM_GAP;
       const y1 = ey + STEM_FRAC * (labelEndY - ey);

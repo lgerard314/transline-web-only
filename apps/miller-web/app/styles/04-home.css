@@ -1139,6 +1139,9 @@
    container nested inside, reading over a scrim. */
 .mw-ten3__banner {
   position: relative;
+  /* Above the mission/stats column so the highlights can tuck up BEHIND the banner
+     and slide out of its bottom edge on scroll (see <TimelineStats>). */
+  z-index: 2;
   /* Bleed the image container to the section's TOP edge (up out of the section's
      top padding) and to the LEFT screen edge (out past the inner gutter); its
      right edge stays at the column boundary. --g is the inner side gutter: half
@@ -1154,7 +1157,17 @@
      record). --ang is how far the corners are inset from the right edge; the
      apex stays at the full right. The cut triangles reveal the page behind. */
   --ang: clamp(36px, 7%, 100px);
-  clip-path: polygon(0 0, calc(100% - var(--ang)) 0, 100% 50%, calc(100% - var(--ang)) 100%, 0 100%);
+  /* Scroll-wipe with a CHEVRON leading edge: the clip-path's right boundary is the
+     same ">" chevron as the resting shape (apex at the vertical middle, corners
+     inset by --ang), swept left → right by --wipe. The apex travels from -ang (fully
+     hidden, off the left edge) at wipe 0 to 100% (the resting right edge) at wipe 1,
+     so the reveal front always carries the chevron angle and lands exactly on the
+     resting chevron. var()'s fallback of 1 → full chevron for no-JS / reduced-motion;
+     written per scroll-frame onto the [data-history-wipe] banner by <TimelineWipe>. */
+  --w: var(--wipe, 1);
+  --wipe-apex: calc(var(--w) * (100% + var(--ang)) - var(--ang));
+  --wipe-corner: calc(var(--wipe-apex) - var(--ang));
+  clip-path: polygon(0 0, var(--wipe-corner) 0, var(--wipe-apex) 50%, var(--wipe-corner) 100%, 0 100%);
 }
 /* Warm cinematic overlay — same grade vocabulary as the hero (rgba(42,27,18)
    warm-walnut wash + a bottom darkening band) so this photo reads like the hero
@@ -1246,46 +1259,51 @@
    (the grid content top), so the shift is the difference. Reset to 0 when the
    grid stacks (≤1200). */
 .mw-ten3__line { list-style: none; margin: calc(var(--bh) / 2 - var(--ptop)) 0 0; padding: 0 0 0 30px; position: relative; }
-.mw-ten3__line::before { content: ""; position: absolute; left: 5px; top: 6px; bottom: 8px; width: 1px; background: var(--c-line); }
+/* The hairline spine fades out toward its bottom so it doesn't read as a bare line
+   running down past the last visible milestone (the lower items reveal late, so the
+   line would otherwise extend into still-hidden territory). Solid down the worked
+   length, then a soft fade to transparent over the tail. */
+.mw-ten3__line::before { content: ""; position: absolute; left: 5px; top: 6px; bottom: 8px; width: 1px; background: linear-gradient(to bottom, var(--c-line) 0%, var(--c-line) 70%, transparent 96%); }
 .mw-ten3__item { position: relative; padding: 0 0 clamp(20px, 2.2vw, 32px); }
 .mw-ten3__item:last-child { padding-bottom: 0; }
-.mw-ten3__tick { position: absolute; left: -25px; top: 0.58em; width: 14px; height: 1px; background: var(--c-accent); transition: width 0.3s cubic-bezier(0.22, 0.61, 0.36, 1), height 0.3s cubic-bezier(0.22, 0.61, 0.36, 1), left 0.3s cubic-bezier(0.22, 0.61, 0.36, 1), top 0.3s cubic-bezier(0.22, 0.61, 0.36, 1); }
+.mw-ten3__tick { position: absolute; left: -25px; top: 0.58em; width: 14px; height: 1px; background: var(--c-accent); }
 .mw-ten3__year { display: block; font-family: var(--font-plex-mono), ui-monospace, monospace; font-size: 13px; letter-spacing: 0.1em; color: var(--c-accent); margin-bottom: 4px; }
 .mw-ten3__ititle { display: block; font-family: var(--font-condensed), ui-sans-serif, sans-serif; font-weight: 600; text-transform: uppercase; font-size: clamp(18px, 1.6vw, 24px); line-height: 1.05; letter-spacing: 0.005em; color: var(--c-ink); }
 .mw-ten3__ibody { display: block; font-family: var(--font-plex-sans), ui-sans-serif, sans-serif; font-size: clamp(14px, 1vw, 15.5px); line-height: 1.5; color: var(--c-ink-2); margin-top: 6px; max-width: 58ch; }
 
 /* History items reveal with a small "wave": each entry grows in from the
-   record axis, overshoots a touch, then settles to size — so as the list
-   scrolls into view the milestones ripple down one after another (each fires
-   on its own crossing via MillerScrollReveal). Overrides the site's default
-   mw-rv fade for these items only; the extra [data-reveal] attr in the
-   selector wins specificity over the primitive's [data-in] rule. The global
-   prefers-reduced-motion rule (02-primitives) already kills this with
-   !important, so no reduced variant is needed for the entrance. */
+   record axis, overshoots a touch, then settles to size. Unlike the rest of the
+   site, these items do NOT fire on their own crossing — <TimelineReveal> holds
+   each one until the NEXT item's top reaches the viewport-bottom entry line (the
+   last item uses its own top), so a milestone only animates once it sits
+   comfortably in view. They opt out of the shared [data-reveal] observer and are
+   driven by [data-in] from that local driver instead.
+   Hidden state is gated on the list's data-rev-armed flag, which the driver adds
+   only once it is running, so pre-hydration / no-JS leaves every milestone
+   visible; under prefers-reduced-motion the driver never arms (items stay shown),
+   and the !important guard below is a belt-and-suspenders. */
 @keyframes mw-ten3-wave {
   0%   { opacity: 0; transform: translate3d(0, 14px, 0) scale(0.965); }
   58%  { opacity: 1; transform: translate3d(0, -2px, 0) scale(1.03); }
   100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
 }
-html[data-brand="miller"] .mw-ten3__item[data-reveal][data-in="1"] {
+html[data-brand="miller"] .mw-ten3__line[data-rev-armed] .mw-ten3__item { opacity: 0; }
+html[data-brand="miller"] .mw-ten3__item[data-in="1"] {
   animation: mw-ten3-wave 460ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
   transform-origin: left center;
 }
-
-/* Hover affordance — the connector tick swells into a smooth clay "hill" on the
-   record axis (an elliptical fill that fades out at the tips so the line ends
-   smoothly, peaking in the middle), and the entry's text zooms up. The hill IS
-   the tick growing — kept centred on the resting tick (centre ≈ -18px) so it
-   rises symmetrically. The text zoom lives on the wrapper (the <li> itself
-   can't scale — its reveal animation holds its transform). */
-.mw-ten3__item:hover .mw-ten3__tick,
-.mw-ten3__item:focus-within .mw-ten3__tick {
-  width: 28px;
-  height: 10px;
-  left: -32px;
-  top: calc(0.58em - 4.5px);
-  background: radial-gradient(closest-side, var(--c-accent) 38%, transparent 100%);
+@media (prefers-reduced-motion: reduce) {
+  html[data-brand="miller"] .mw-ten3__line[data-rev-armed] .mw-ten3__item {
+    opacity: 1 !important;
+    animation: none !important;
+    transform: none !important;
+  }
 }
+
+/* Hover affordance — the entry's text zooms up. (The connector tick stays static
+   on hover; its former swell-into-a-"hill" effect was removed.) The text zoom lives
+   on the wrapper (the <li> itself can't scale — its reveal animation holds its
+   transform). */
 .mw-ten3__item-body { transition: transform 0.28s cubic-bezier(0.22, 0.61, 0.36, 1); transform-origin: left center; }
 .mw-ten3__item:hover .mw-ten3__item-body,
 .mw-ten3__item:focus-within .mw-ten3__item-body { transform: scale(1.07); }
@@ -1293,27 +1311,98 @@ html[data-brand="miller"] .mw-ten3__item[data-reveal][data-in="1"] {
   .mw-ten3__item-body { transition: none; }
   .mw-ten3__item:hover .mw-ten3__item-body,
   .mw-ten3__item:focus-within .mw-ten3__item-body { transform: none; }
-  .mw-ten3__tick { transition: none; }
 }
 
 /* Mission — the SECOND container in the left column (stats highlights + mission
-   block). Capped to 80% of the column width. Sticky: once the image-banner has
-   scrolled up out of view, this block pins below the header and rides along for
-   the remainder of the timeline scroll (its travel is bounded by the stretched
-   column, which ends with the record). */
-.mw-ten3__aside { display: flex; flex-direction: column; max-width: 80%; position: sticky; top: clamp(120px, 8.5vw, 144px); align-self: flex-start; }
+   block). Capped to 80% of the column width. Sits one stacking level BELOW the
+   image-banner (z-index) so the highlights can tuck up behind it; the stats then
+   slide out of the banner's bottom on scroll (see <TimelineStats>) — this replaced
+   the block's former sticky behaviour. */
+.mw-ten3__aside { display: flex; flex-direction: column; max-width: 80%; position: relative; z-index: 1; align-self: flex-start; }
 /* The banner photo gets a stronger zoom + a near-top-right origin so its
    diagonal parallax drift (data-parallax-x="1" → 45° toward the bottom-right)
    reads as the trucks driving out of the frame. */
 .mw-ten3__plate2-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; --px-scale: 1.3; transform-origin: 80% 20%; z-index: 0; filter: saturate(0.8) brightness(0.66) contrast(1.14) sepia(0.14); }
+/* Stacked photo reveal — the hero's entrance ported onto the background image and
+   layered UNDER the container's chevron wipe (the banner clip-path above). Two
+   nested layers mirror the hero exactly so the parallax transform on the <img>
+   stays untouched:
+     · plate-window — the hero's clip-path window: a centred rectangle that opens
+       from a 25–75% inset (--wipe 0) out to full-bleed (--wipe 1).
+     · plate-zoom   — the hero's entrance zoom, 1.6→1, scaling the photo behind the
+       window (composes with the <img>'s own parallax scale, which rests at 1.3).
+   Both run off the same --wipe the container reads, so the window opens + zooms in
+   lockstep with the chevron sweeping across. var()'s fallback of 1 → full photo at
+   rest for no-JS / reduced-motion. */
+.mw-ten3__plate-window {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  --plate-inset: calc(25% * (1 - var(--wipe, 1)));
+  clip-path: polygon(
+    var(--plate-inset) var(--plate-inset),
+    calc(100% - var(--plate-inset)) var(--plate-inset),
+    calc(100% - var(--plate-inset)) calc(100% - var(--plate-inset)),
+    var(--plate-inset) calc(100% - var(--plate-inset))
+  );
+}
+.mw-ten3__plate-zoom {
+  position: absolute;
+  inset: 0;
+  /* Hero entrance zoom, gentled from 1.6→1 to ~1.3→1: stacked on the chevron
+     sweep, the window-open and the <img>'s own parallax, full hero intensity reads
+     busy — this keeps the settling-zoom character but lets the container wipe lead. */
+  transform: scale(calc(1 + (1 - var(--wipe, 1)) * 0.3));
+  transform-origin: center;
+}
+@media (prefers-reduced-motion: reduce) {
+  /* Off-switch — park the photo reveal at rest (the container clip-path already
+     falls back to the full chevron), so the panel is simply shown statically. */
+  .mw-ten3__plate-window { clip-path: none; }
+  .mw-ten3__plate-zoom { transform: none; }
+}
 /* Track-record stats — now an in-flow row at the top of the mission container
    (dark on cream), separated from the mission by a hairline. */
-.mw-ten3__plate2-stats { margin: 0 0 clamp(20px, 1.8vw, 30px); padding: 0 0 clamp(20px, 1.8vw, 30px); list-style: none; display: flex; gap: clamp(16px, 1.8vw, 34px); border-bottom: 1px solid var(--c-line); }
+.mw-ten3__plate2-stats { margin: 0 0 clamp(20px, 1.8vw, 30px); padding: 0 0 clamp(20px, 1.8vw, 30px); list-style: none; display: flex; gap: clamp(26px, 2.9vw, 54px); border-bottom: 1px solid var(--c-line); }
+/* Highlights emerge from the banner: rendered at their large size from the start
+   (real font-size — see the enlarged num/label below — NOT a transform scale, so the
+   text stays crisp), tucked up behind the banner (own height + the col gap, so they
+   clear its bottom edge and are occluded by it) until <TimelineStats> slides them down
+   out of the bottom. --stats-out 0 = tucked, 1 = home; var() fallback 1 → home at rest
+   for no-JS / reduced-motion. */
+.mw-ten3__plate2-stats {
+  transform: translateY(calc((1 - var(--stats-out, 1)) * (-100% - 72px)));
+  will-change: transform;
+}
 .mw-ten3__plate2-stat { display: flex; flex-direction: column; }
-.mw-ten3__plate2-num { font-family: var(--font-condensed), ui-sans-serif, sans-serif; font-weight: 600; font-size: clamp(26px, 2.6vw, 40px); color: var(--c-ink); line-height: 1; }
+.mw-ten3__plate2-num { font-family: var(--font-condensed), ui-sans-serif, sans-serif; font-weight: 600; font-size: clamp(42px, 4.2vw, 64px); color: var(--c-ink); line-height: 1; }
 .mw-ten3__plate2-unit { font-size: 0.5em; color: var(--c-accent); margin-left: 2px; }
-.mw-ten3__plate2-label { font-family: var(--font-plex-mono), ui-monospace, monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--c-ink-2); margin-top: 5px; }
+.mw-ten3__plate2-label { font-family: var(--font-plex-mono), ui-monospace, monospace; font-size: 16px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--c-ink-2); margin-top: 8px; }
 .mw-ten3__aside .mw-ten2__mission { margin-top: 0; }
+/* Mission's WHITE container — a simple card that rises straight UP from the bottom of
+   the screen (translateY). The motion only runs once <TimelineStats> is actually
+   driving it (it adds [data-armed]); until then the card sits at its natural position
+   (the no-JS / reduced-motion fallback). When armed, the transform's var() fallback is
+   0 = pushed a FULL SCREEN DOWN (off the bottom, HIDDEN) — so the card can NEVER flash
+   at its resting spot before the driver positions it, even if a lazy-load reflow hits
+   before the next scroll frame. --mission-rise goes 0 → 1 over the window from when the
+   banner is no longer visible (its bottom crosses the top) to when the highlights
+   disappear off the top, so the card reaches home exactly as they vanish. The inner
+   .mw-ten2__mission fade is neutralised so the content shows with the card. */
+.mw-ten3__mission-panel {
+  background: #fff;
+  padding: clamp(28px, 2.6vw, 44px);
+  box-shadow: 0 -10px 34px -16px rgba(42, 27, 18, 0.22);
+}
+.mw-ten3__mission-panel[data-armed] {
+  transform: translateY(calc((1 - var(--mission-rise, 0)) * 100vh));
+  will-change: transform;
+}
+html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+}
 @media (max-width: 1200px) {
   /* Single column: image-banner, then mission, then the record. The type spans
      the full banner width here (still indented to the content margin); the
@@ -1321,8 +1410,18 @@ html[data-brand="miller"] .mw-ten3__item[data-reveal][data-in="1"] {
   .mw-ten3__head { min-height: clamp(300px, 40vw, 440px); max-width: none; }
   .mw-ten3__banner { clip-path: none; }
   .mw-ten3__line { margin-top: 0; }
-  /* Stacked flow — nothing pins. */
+  /* Stacked flow — nothing pins, and the highlights don't emerge from the banner
+     (single column: no banner to tuck behind). */
   .mw-ten3__aside { position: static; max-width: none; }
+  .mw-ten3__plate2-stats { transform: none; }
+  /* Single column: the mission is a normal static block (no rise), even if armed. */
+  .mw-ten3__mission-panel[data-armed] { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  /* Off-switch — highlights stay in place, mission card sits at its natural position
+     (the driver doesn't attach, so it's never armed → no transform). */
+  .mw-ten3__plate2-stats { transform: none; }
+  .mw-ten3__mission-panel[data-armed] { transform: none; }
 }
 
 /* Truck plate — flipped truck side-view with three track-record
@@ -4733,3 +4832,300 @@ html[data-brand="miller"] {
   .mw-secd__grid.is-armed.is-in > * { opacity: 1; animation: none; }
 }
 
+/* ════════════════════════════════════════════════════════════════
+   Who-we-serve v1 (mw-secd2*) — ARC GALLERY. Ported from an external
+   arc-hero reference, rebuilt CSS-only in the clay system: SQUARED
+   photos (no radius), warm tokens only, no foreign palette. 16 sub-
+   industry photos fan along a rainbow arch; per-card angle/position/
+   rotation arrive as CSS custom props (--cosA/--sinA/--rot), and the
+   elliptical radii (--arc-rx % of content width, --arc-ry px) scale per
+   breakpoint. The 4 primary categories sit on a tighter concentric inner
+   arc (--cat-rx/--cat-ry), collapsing to a 2×2 grid on mobile. Staggered
+   fade-up reveal is driven by SectorGridMotion02 (.is-armed → .is-in).
+   ════════════════════════════════════════════════════════════════ */
+.mw-secd2 {
+  --arc-rx: 48%; /*  horizontal radius — fraction of body-content width, so the feet reach the column edges */
+  --arc-ry: 330px; /* vertical radius — flatter px rise (arch need not be a half-circle) */
+  --card: 116px; /*  square photo-tile size (category markers reuse the same arc geometry) */
+  --cat-drop: 180px; /* how far the category arc sits below the photo arch */
+  --cat-mark: 40px; /*  small clay diamond behind each category label */
+  --cat-bend: 1.12; /*  category arc curves a touch more than the photo arc */
+  --cat-hl-scale: 1.3; /* category-hover spotlight: matched photos grow … */
+  --cat-hl-slot: 162px; /* … gather into a row, this far apart (small gap between cards) … */
+  --cat-hl-gap: 226px; /*  … sitting this far above each category's own marker (equal gap for all four) */
+  position: relative;
+  background: var(--c-surface-warm);
+  padding-block: clamp(72px, 6.5vw, 128px) clamp(64px, 6.5vw, 112px); /* extra top room for spotlight captions */
+  color: var(--c-ink);
+  overflow: clip;
+  isolation: isolate;
+}
+/* 49° paper-grain wash — same faint diagonal hatch as the other warm sections. */
+.mw-secd2::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+
+/* ── the arch ── full-bleed band; pivot anchored bottom-centre so cards swing up into a rainbow ── */
+.mw-secd2__arc {
+  position: relative;
+  z-index: 1;
+  /* width comes from the shared .mw-inner primitive (the body-content column) */
+  height: calc(var(--arc-ry) + var(--card));
+}
+.mw-secd2__card {
+  position: absolute;
+  width: var(--card);
+  height: var(--card);
+  /* elliptical arc: x is a fraction of the content width, y is the flatter px rise */
+  left: calc(50% + (var(--cosA) * var(--arc-rx)));
+  bottom: calc(var(--sinA) * var(--arc-ry));
+  transform: translate(-50%, 50%);
+  z-index: var(--z);
+  /* left/bottom transition so the spotlight can glide the matched photos into a centred row */
+  transition: left 0.55s cubic-bezier(.2, .7, .2, 1), bottom 0.55s cubic-bezier(.2, .7, .2, 1);
+}
+/* squared photo tile — NO radius (brand), walnut backstop, soft clay shadow + cream hairline */
+.mw-secd2__card-inner {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--c-navy);
+  box-shadow: 0 8px 22px rgba(33, 20, 12, 0.26);
+  outline: 1px solid var(--c-line);
+  outline-offset: -1px;
+  transform: rotate(calc(var(--rot) * 1deg));
+  transition: transform 0.5s cubic-bezier(.2, .7, .2, 1), box-shadow 0.4s ease, filter 0.4s ease, opacity 0.4s ease;
+}
+.mw-secd2__card-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.92) brightness(0.96);
+  transition: filter 0.4s ease;
+}
+.mw-secd2__card:hover { z-index: 99; }
+.mw-secd2__card:hover .mw-secd2__card-inner {
+  transform: rotate(calc(var(--rot) * 1deg)) scale(1.07);
+  box-shadow: 0 14px 30px rgba(33, 20, 12, 0.34);
+}
+.mw-secd2__card:hover .mw-secd2__card-img { filter: saturate(1.05) brightness(1.05); }
+
+/* ── category-hover spotlight ── hovering a category card (second arc) reaches across to its
+   four photos in the top arc via :has(). The non-matched photos recede in place; the matched
+   four GATHER into a centred, evenly-spaced row (--cat-hl-slot apart, at --cat-hl-row height),
+   grow ~50% (--cat-hl-scale), and straighten — so every category presents its photos the same
+   readable way with no edge clipping, reusing the normal hover's saturation + shadow language. */
+.mw-secd2:has(.mw-secd2__cat:hover) .mw-secd2__card-inner {
+  filter: saturate(0.32) brightness(0.86);
+  opacity: 0.38;
+  transform: rotate(calc(var(--rot) * 1deg)) scale(0.96); /* the rest recede a hair for depth */
+}
+/* the other three category labels also fade so focus lands on the hovered one */
+.mw-secd2:has(.mw-secd2__cat:hover) .mw-secd2__cat:not(:hover) { opacity: 0.4; }
+/* matched photos slide to centred row slots — left/bottom resolve against the content column,
+   so the row is always centred and never clips, whichever category is hovered */
+.mw-secd2:has(.mw-secd2__cat[data-cat="0"]:hover) .mw-secd2__card[data-cat="0"],
+.mw-secd2:has(.mw-secd2__cat[data-cat="1"]:hover) .mw-secd2__card[data-cat="1"],
+.mw-secd2:has(.mw-secd2__cat[data-cat="2"]:hover) .mw-secd2__card[data-cat="2"],
+.mw-secd2:has(.mw-secd2__cat[data-cat="3"]:hover) .mw-secd2__card[data-cat="3"] {
+  z-index: 50;
+  left: calc(50% + (var(--cat-cx) * var(--arc-rx)) + (var(--gi) * var(--cat-hl-slot)));
+  /* row tracks this category's own marker height (+ a constant gap) so all four gaps match */
+  bottom: calc((var(--cat-cy) * var(--arc-ry) * var(--cat-bend)) - var(--cat-drop) - var(--cat-dy-cat) + var(--cat-hl-gap));
+}
+.mw-secd2:has(.mw-secd2__cat[data-cat="0"]:hover) .mw-secd2__card[data-cat="0"] .mw-secd2__card-inner,
+.mw-secd2:has(.mw-secd2__cat[data-cat="1"]:hover) .mw-secd2__card[data-cat="1"] .mw-secd2__card-inner,
+.mw-secd2:has(.mw-secd2__cat[data-cat="2"]:hover) .mw-secd2__card[data-cat="2"] .mw-secd2__card-inner,
+.mw-secd2:has(.mw-secd2__cat[data-cat="3"]:hover) .mw-secd2__card[data-cat="3"] .mw-secd2__card-inner {
+  opacity: 1;
+  filter: saturate(1.04) brightness(1.04);
+  transform: scale(var(--cat-hl-scale)); /* grow + fully upright (0°) */
+  box-shadow: 0 26px 50px rgba(33, 20, 12, 0.45);
+}
+/* sub-industry caption — sits above each photo; hidden until that photo's category is spotlighted */
+.mw-secd2__card-cap {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 32px); /* clears the scaled photo's top, with breathing room */
+  max-width: calc(var(--card) * var(--cat-hl-scale));
+  text-align: center;
+  line-height: 1.18;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+  opacity: 0;
+  transform: translate(-50%, 6px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.mw-secd2:has(.mw-secd2__cat[data-cat="0"]:hover) .mw-secd2__card[data-cat="0"] .mw-secd2__card-cap,
+.mw-secd2:has(.mw-secd2__cat[data-cat="1"]:hover) .mw-secd2__card[data-cat="1"] .mw-secd2__card-cap,
+.mw-secd2:has(.mw-secd2__cat[data-cat="2"]:hover) .mw-secd2__card[data-cat="2"] .mw-secd2__card-cap,
+.mw-secd2:has(.mw-secd2__cat[data-cat="3"]:hover) .mw-secd2__card[data-cat="3"] .mw-secd2__card-cap {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+/* matching category label/diamond also reads as active so the hovered group feels connected */
+.mw-secd2__cat:hover .mw-secd2__cat-mark { border-color: var(--c-accent); }
+@media (prefers-reduced-motion: reduce) {
+  /* no glide — the gather + spotlight still apply, just without the position/scale animation */
+  .mw-secd2__card { transition: none; }
+}
+
+/* ── second (category) arc ── SAME arc geometry as the photos (--arc-rx/--arc-ry), dropped
+   straight down by --cat-drop so the row reads below the arch. Each category is a small clay
+   DIAMOND marker with its full-size label centred on top of it. Zero-height .mw-inner layer so
+   its children share the photo arch's baseline + content-width coordinate system. */
+.mw-secd2__cats {
+  position: relative;
+  height: 0;
+  margin-inline: auto;
+  z-index: 4;
+}
+.mw-secd2__cat {
+  position: absolute;
+  width: var(--card);
+  height: var(--card);
+  left: calc(50% + (var(--cosA) * var(--arc-rx))); /*       same arc x as the photos … */
+  bottom: calc((var(--sinA) * var(--arc-ry) * var(--cat-bend)) - var(--cat-drop) - var(--cat-dy, 0px)); /* … arc y, bent + dropped (--cat-dy nudges the end cards down) */
+  transform: translate(-50%, 50%);
+  z-index: var(--z);
+  display: grid;
+  place-items: center; /* stack the small diamond + label in one cell … */
+  place-content: center; /* … and centre that cell on the arc point even when the label
+                            (wider than the card box) overflows, so the marker stays on-arc */
+  cursor: pointer; /* the category is interactive (spotlights its photos) */
+  transition: opacity 0.3s ease;
+}
+/* small border-only clay diamond sitting behind the label (no fill, no shadow) */
+.mw-secd2__cat-mark {
+  grid-area: 1 / 1;
+  width: var(--cat-mark);
+  height: var(--cat-mark);
+  border: 2px solid var(--c-line);
+  transform: rotate(45deg); /* diamond */
+  transition: border-color 0.3s ease;
+}
+/* label — horizontal, on top of the small diamond */
+.mw-secd2__cat-name {
+  grid-area: 1 / 1;
+  z-index: 1;
+  white-space: nowrap;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  /* 15% smaller at rest; grows back to full size on hover */
+  font-size: clamp(16px, 1.7vw, 27px);
+  line-height: 0.98;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--c-navy);
+  transition: font-size 0.28s cubic-bezier(.2, .7, .2, 1);
+}
+.mw-secd2__cat:hover .mw-secd2__cat-name,
+.mw-secd2__cat:focus-within .mw-secd2__cat-name {
+  font-size: clamp(19px, 2vw, 32px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-secd2__cat-name { transition: none; }
+}
+
+/* ── intro copy nested under the arch — real who-we-serve eyebrow/title/lead ── */
+.mw-secd2__intro {
+  position: relative;
+  z-index: 2;
+  max-width: 64ch;
+  margin-inline: auto;
+  margin-top: clamp(-64px, -5vw, -32px);
+  padding-inline: clamp(20px, 5vw, 40px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+}
+.mw-secd2__title {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(34px, 4vw, 64px);
+  line-height: 1.02;
+  letter-spacing: 0.005em;
+  color: var(--c-ink);
+  text-transform: uppercase;
+  max-width: 20ch;
+}
+.mw-secd2__lead {
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(16px, 1.15vw, 19px);
+  line-height: 1.6;
+  color: var(--c-ink-2);
+  max-width: 56ch;
+}
+
+/* responsive radius / card size */
+@media (max-width: 1023px) {
+  .mw-secd2 { --arc-ry: 230px; --card: 86px; --cat-drop: 128px; --cat-mark: 32px; --cat-hl-slot: 124px; --cat-hl-gap: 166px; }
+  .mw-secd2__intro { margin-top: clamp(-52px, -6vw, -28px); }
+}
+@media (max-width: 639px) {
+  .mw-secd2 { --arc-rx: 50%; --arc-ry: 140px; --card: 54px; }
+  /* the dropped arc is too tight on phones → lay the 4 diamond+label markers out as a 2×2 grid */
+  .mw-secd2__intro { margin-top: 8px; }
+  .mw-secd2__cats {
+    height: auto;
+    margin: 24px auto 4px;
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    justify-content: center;
+    align-items: center;
+    gap: 22px 30px;
+  }
+  .mw-secd2__cat {
+    position: relative;
+    left: auto; /*  drop the arc offsets — left/bottom would shift the static grid items */
+    bottom: auto;
+    width: auto;
+    height: auto;
+    padding: 12px 6px; /* room for the diamond points above/below the label */
+    transform: none;
+    z-index: auto;
+  }
+}
+
+/* ── staggered fade-up reveal ── SectorGridMotion02 arms the arch (.is-armed) then fires
+   .is-in when it scrolls into view; each card fades + rises, delayed by its index (--ai). */
+@keyframes mw-secd2-arc-in {
+  from { opacity: 0; transform: translate(-50%, 62%); }
+  to   { opacity: 1; transform: translate(-50%, 50%); }
+}
+.mw-secd2__arc.is-armed .mw-secd2__card,
+.mw-secd2__arc.is-armed ~ .mw-secd2__cats .mw-secd2__cat { opacity: 0; }
+.mw-secd2__arc.is-armed.is-in .mw-secd2__card,
+.mw-secd2__arc.is-armed.is-in ~ .mw-secd2__cats .mw-secd2__cat {
+  animation: mw-secd2-arc-in 0.8s cubic-bezier(.22, .61, .36, 1) both;
+  animation-delay: calc(var(--ai) * 70ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-secd2__card-inner,
+  .mw-secd2__card-img { transition: none; }
+  .mw-secd2__arc.is-armed .mw-secd2__card,
+  .mw-secd2__arc.is-armed.is-in .mw-secd2__card,
+  .mw-secd2__arc.is-armed ~ .mw-secd2__cats .mw-secd2__cat,
+  .mw-secd2__arc.is-armed.is-in ~ .mw-secd2__cats .mw-secd2__cat { opacity: 1; animation: none; }
+}
+/* On mobile the categories are a static 2×2 grid — the arc fade-up (which translates X) would
+   shove them sideways, so keep them at rest regardless of the arch's reveal state. */
+@media (max-width: 639px) {
+  .mw-secd2__arc.is-armed ~ .mw-secd2__cats .mw-secd2__cat,
+  .mw-secd2__arc.is-armed.is-in ~ .mw-secd2__cats .mw-secd2__cat { opacity: 1; animation: none; transform: none; }
+}

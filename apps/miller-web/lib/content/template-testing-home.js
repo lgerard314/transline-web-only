@@ -170,6 +170,14 @@ export const SECTORS = {
   cards: SECTOR_CARDS,
 };
 
+// Forkable v1 copy of SECTORS for the SectorDiamonds02 section. Same copy/cards as the live
+// SECTORS, with a distinct headingId so the duplicate <h2> doesn't collide on the page; edit
+// freely here to iterate the v1 "who we serve" without affecting the original below it.
+export const SECTORS_V1 = {
+  ...SECTORS,
+  headingId: "mw-sectors-heading-v1",
+};
+
 export const FACILITY = {
   headingId: "mw-facility-heading-copy",
   stage: "VBEC",

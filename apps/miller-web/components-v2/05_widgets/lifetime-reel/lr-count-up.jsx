@@ -2,21 +2,27 @@
 import { useEffect, useRef } from "react";
 
 // Count-up numeral for the lifetime reel. Ref-based (writes node.textContent — no
-// per-frame React re-render), rAF easeOutCubic. The final value is rendered once
-// as an invisible SIZER so the live numeral never reflows its frame. Animating
-// digits are aria-hidden; an sr-only span carries the final value so screen
-// readers announce it once. prefers-reduced-motion shows the final value
-// immediately.
+// per-frame React re-render), with two modes:
 //
-// The count starts only when the element is BOTH in view (IntersectionObserver)
-// AND `play` is true — so the reel can hold a mounted diamond dark until its turn
-// in the sequence, then start it exactly on cue. Until it starts, the live span
-// is empty (nothing shows). onStart fires the instant counting begins (used to
-// draw the seal in lockstep); onComplete fires once when it settles.
+//   • CONTROLLED (scroll-scrubbed): pass a numeric `progress` (0..1). The live
+//     numeral reflects it directly — empty until it starts, counting up linearly
+//     as the scroll wipe crosses this diamond, final at 1 — and it reverses when
+//     `progress` falls (scrolling back up). No internal timeline; the reel owns the
+//     pacing via scroll position.
+//   • AUTONOMOUS (self-timed): no `progress` prop → the original behavior — an
+//     easeOutCubic rAF that starts when the element is BOTH in view and `play` is
+//     true, firing onStart/onComplete. Kept for any non-scrubbed caller.
+//
+// The final value is rendered once as an invisible SIZER so the live numeral never
+// reflows its frame. Animating digits are aria-hidden; an sr-only span carries the
+// final value so screen readers announce it once. prefers-reduced-motion: in
+// autonomous mode the final value shows immediately; in controlled mode the reel
+// pins progress to 1, so the final value shows with no scrubbing.
 //
 // onStart/onComplete are held in refs so the effect does not depend on their
 // identity — a parent re-render must never restart the count.
-export function LrCountUp({ value, suffix = "", duration = 1600, play = true, onStart, onComplete, className }) {
+export function LrCountUp({ value, suffix = "", duration = 1600, play = true, progress, onStart, onComplete, className }) {
+  const controlled = typeof progress === "number";
   const liveRef = useRef(null);
   const doneRef = useRef(false);
   const startedRef = useRef(false);
@@ -30,7 +36,21 @@ export function LrCountUp({ value, suffix = "", duration = 1600, play = true, on
   const fmt = (n) => n.toLocaleString("en-US");
   const finalText = fmt(value) + suffix;
 
+  // CONTROLLED mode: reflect the externally supplied 0..1 progress.
   useEffect(() => {
+    if (!controlled) return;
+    const node = liveRef.current;
+    if (!node) return;
+    const p = Math.min(1, Math.max(0, progress));
+    const v = Math.round(p * value);
+    // Empty until the count rounds to a real digit, so the diamond can begin drawing
+    // (border/label) without flashing a "0" while the frontier first touches it.
+    node.textContent = p >= 1 ? finalText : v >= 1 ? fmt(v) + suffix : "";
+  }, [controlled, progress, value, suffix, finalText]);
+
+  // AUTONOMOUS mode: self-timed count, gated on in-view + play.
+  useEffect(() => {
+    if (controlled) return;
     const node = liveRef.current;
     if (!node) return;
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -61,12 +81,6 @@ export function LrCountUp({ value, suffix = "", duration = 1600, play = true, on
       }
     }, { threshold: 0.4 });
     io.observe(node);
-    // Fallback: the observer's async initial callback can be missed when the
-    // element is already on screen at mount — notably after a Fast-Refresh
-    // remount while the reel is in view, which otherwise leaves the count stuck
-    // at 0 forever (no scroll event to re-fire the observer). If a meaningful
-    // slice of the numeral is already visible, start synchronously. begin() is
-    // idempotent, so this never double-starts alongside the observer.
     const vh = window.innerHeight || document.documentElement.clientHeight || 0;
     const r = node.getBoundingClientRect();
     if (vh && r.height && r.top < vh - r.height * 0.4 && r.bottom > r.height * 0.4) {
@@ -76,17 +90,13 @@ export function LrCountUp({ value, suffix = "", duration = 1600, play = true, on
     return () => {
       io.disconnect();
       if (raf) cancelAnimationFrame(raf);
-      // If this effect is torn down before the count finished (StrictMode's
-      // double-invoke, a deps re-run, or a Fast-Refresh remount), allow the next
-      // run to restart — otherwise startedRef stays true, begin() bails, and the
-      // numeral freezes at whatever value it had reached.
       if (!doneRef.current) startedRef.current = false;
       beginRef.current = null;
     };
-  }, [value, suffix, duration, finalText]);
+  }, [controlled, value, suffix, duration, finalText]);
 
-  // When play flips on (the reel reaches this diamond's turn), start if in view.
-  useEffect(() => { playRef.current = play; if (play && beginRef.current) beginRef.current(); }, [play]);
+  // When play flips on (autonomous mode), start if in view.
+  useEffect(() => { if (controlled) return; playRef.current = play; if (play && beginRef.current) beginRef.current(); }, [controlled, play]);
 
   return (
     <span className={`mw-lr-cu ${className || ""}`}>

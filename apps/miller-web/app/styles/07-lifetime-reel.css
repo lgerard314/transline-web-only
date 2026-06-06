@@ -59,11 +59,13 @@
   /* Match the body content width (same formula as .mw-inner), centred — the map
      spans the content column, not the full bleed. Centring is via auto margins,
      NOT transform: the parallax engine owns `transform`. The layer is taller than
-     the band (±16% bleed ≈ ±116px) so the vertical parallax drift (±~95px,
-     data-parallax-max .1) has headroom without a transform-scale. The map is
-     taller-proportioned than the band so it crops top/bottom — intended. */
-  top: -16%;
-  bottom: -16%;
+     the band (±36% bleed) so the (deeper) vertical parallax drift — data-parallax-max
+     .2, i.e. up to ±20% of the layer height (~±0.34 of the band height) — always
+     has headroom: the bleed exceeds the max drift, so the layer's clipped edge is
+     never pulled into the band at any scroll extreme, without a transform-scale. The
+     map is taller-proportioned than the band so it crops top/bottom — intended. */
+  top: -36%;
+  bottom: -36%;
   left: 0;
   right: 0;
   margin-inline: auto;
