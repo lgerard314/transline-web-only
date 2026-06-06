@@ -26,12 +26,21 @@ export function MillerScrollReveal() {
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
-          if (!e.isIntersecting) continue;
-          // Defer one frame so the painter has committed the hidden
-          // state before the visible-state cascade kicks in.
           const target = e.target;
-          requestAnimationFrame(() => target.setAttribute("data-in", "1"));
-          io.unobserve(target);
+          // Opt-in repeat: elements marked [data-reveal-repeat] re-play their
+          // reveal every time they re-enter the viewport (e.g. the history
+          // timeline, so scrolling back up re-waves the items). They are never
+          // unobserved, and they reset to the hidden state when they leave.
+          const repeat = target.hasAttribute("data-reveal-repeat");
+          if (e.isIntersecting) {
+            // Defer one frame so the painter has committed the hidden
+            // state before the visible-state cascade kicks in.
+            requestAnimationFrame(() => target.setAttribute("data-in", "1"));
+            if (!repeat) io.unobserve(target);
+          } else if (repeat) {
+            // Fully out of view → clear so the next entry replays the animation.
+            target.removeAttribute("data-in");
+          }
         }
       },
       {

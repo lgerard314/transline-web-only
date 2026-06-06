@@ -74,32 +74,70 @@ export function RosterCollage01({ content, config = {} }) {
     const docTop = (el) => { let y = 0, n = el; while (n) { y += n.offsetTop; n = n.offsetParent; } return y; };
     const tyOf = (el) => new DOMMatrix(getComputedStyle(el).transform).m42; // card's --ty translate
 
-    let T0 = 0, range = 0, rowPitch = 1, maxStep = 1, dist = 1, v0 = 0, lastT = null, lastTk = "", lastBk = "", raf = 0, enabled = false;
+    let T0 = 0, range = 0, rowPitch = 1, maxStep = 1, dist = 1, v0 = 0, lastT = null, lastTk = "", lastBk = "", enabled = false;
+    let curTy = 0, tgtTy = 0, lerpK = 0.3, following = false, frameRaf = 0, snapTimer = 0;
 
     const apply = (ty) => {
       if (ty === lastT) return;
       lastT = ty;
       grid.style.transform = `translate3d(0, ${ty.toFixed(1)}px, 0)`;
     };
-    const update = () => {
-      raf = 0;
-      if (!enabled) return;
-      const top = wrap.getBoundingClientRect().top;
-      const p = Math.min(1, Math.max(0, (v0 - top) / dist));
-      // Chunked snap: advance the grid by whole card-rows (one chunk = rowPitch =
-      // card height + gap). The CSS transition animates each jump; the final chunk
-      // clamps to the exact end so the last row lands flush at the bottom pad.
-      const step = Math.min(maxStep, Math.round(p * maxStep));
-      apply(T0 - Math.min(range, step * rowPitch));
-      // Gate the edge fades by snap step: TOP fade off at step 0 (nothing clipped above),
-      // BOTTOM fade off at the last step (last row fully revealed). Transitioned in CSS.
-      const tk = step > 0 ? "1" : "0";
-      const bk = step < maxStep ? "1" : "0";
+    const setGates = (tk, bk) => {
       if (tk !== lastTk) { frame.style.setProperty("--mw-tk", tk); lastTk = tk; }
       if (bk !== lastBk) { frame.style.setProperty("--mw-bk", bk); lastBk = bk; }
-      if (section) section.classList.toggle("is-pinned", top <= v0 && top > v0 - dist);
     };
-    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    const readP = () => {
+      const top = wrap.getBoundingClientRect().top;
+      return { top, p: Math.min(1, Math.max(0, (v0 - top) / dist)) };
+    };
+
+    // One rAF loop eases the grid toward a target. While FOLLOWING (active scroll) the
+    // target tracks the live scroll position continuously → smooth, no dead zones. Once
+    // the scroll settles the target becomes the nearest whole-row position → it glides
+    // onto a chunk. So the motion FEELS smooth but VISUALLY lands on rows.
+    const tick = () => {
+      frameRaf = 0;
+      if (!enabled) return;
+      if (following) {
+        const { top, p } = readP();
+        tgtTy = T0 - p * range;
+        // Fades by live position: top engages once we leave the very start, bottom
+        // disengages only at the very end.
+        setGates(p > 0 ? "1" : "0", p < 1 ? "1" : "0");
+        if (section) section.classList.toggle("is-pinned", top <= v0 && top > v0 - dist);
+      }
+      const diff = tgtTy - curTy;
+      if (!following && Math.abs(diff) < 0.25) { // landed on a row and idle → stop the loop
+        curTy = tgtTy;
+        apply(curTy);
+        return;
+      }
+      curTy += diff * lerpK;
+      apply(curTy);
+      frameRaf = requestAnimationFrame(tick);
+    };
+    const ensureTick = () => { if (!frameRaf) frameRaf = requestAnimationFrame(tick); };
+
+    const endScroll = () => { // scrolling stopped → magnetically settle to the nearest row
+      snapTimer = 0;
+      if (!enabled) return;
+      following = false;
+      const { p } = readP();
+      const step = Math.min(maxStep, Math.round(p * maxStep));
+      tgtTy = T0 - Math.min(range, step * rowPitch);
+      lerpK = 0.14;                                  // gentle ease onto the chunk
+      // Fades settle to the snapped step (bottom fade off exactly when the last row lands).
+      setGates(step > 0 ? "1" : "0", step < maxStep ? "1" : "0");
+      ensureTick();
+    };
+    const onScroll = () => {
+      if (!enabled) return;
+      following = true;
+      lerpK = 0.32;                                  // tight, responsive follow
+      if (snapTimer) clearTimeout(snapTimer);
+      snapTimer = window.setTimeout(endScroll, 120); // snap shortly after scrolling stops
+      ensureTick();
+    };
 
     const clearFade = () => {
       ["--mw-top-mid", "--mw-top-out", "--mw-bot-mid", "--mw-bot-out", "--mw-tk", "--mw-bk"]
@@ -109,6 +147,9 @@ export function RosterCollage01({ content, config = {} }) {
 
     const disable = () => { // small screen / reduced motion: clear everything, flow normally
       enabled = false;
+      following = false;
+      if (frameRaf) { cancelAnimationFrame(frameRaf); frameRaf = 0; }
+      if (snapTimer) { clearTimeout(snapTimer); snapTimer = 0; }
       pinEl.style.height = "";
       frame.style.height = "";
       clearFade();
@@ -153,19 +194,16 @@ export function RosterCollage01({ content, config = {} }) {
       // very end). Kept small (≤40px) and capped so two whole staggered rows always fit.
       const twoRows = rowPitch + cardH + spread;
       const pad = Math.max(0, Math.min(40, Math.floor((clipH - twoRows) / 2)));
-      // PER-COLUMN edge-fade bands, derived from the stagger. The middle column sits
-      // `spread` higher than the outer columns, so at the TOP its full row lands at `pad`
-      // (short fade) while the outer rows land at `pad + spread` (longer fade). At the
-      // BOTTOM the middle column's partial row reaches higher, so it gets the longer fade
-      // and the outer columns the shorter one. Bottom bands span the whole partial row so
-      // it ramps fully out ("barely visible once pushed out").
+      // Edge-fade bands — UNIFORM across all three columns (no per-column variation), using
+      // the SHORTER band on each edge: top = `pad`, bottom = the outer-column value (where
+      // the lowest-staggered partial card reaches). All three mask layers get the same pair.
       const fullRows = Math.max(1, Math.floor((clipH - pad - spread - cardH) / rowPitch) + 1);
       const botMid = Math.max(pad, Math.min(rowPitch, clipH - pad - fullRows * rowPitch));
-      const botOut = Math.max(0, botMid - spread);
+      const botShort = Math.max(0, botMid - spread);
       frame.style.setProperty("--mw-top-mid", `${pad}px`);
-      frame.style.setProperty("--mw-top-out", `${pad + spread}px`);
-      frame.style.setProperty("--mw-bot-mid", `${botMid}px`);
-      frame.style.setProperty("--mw-bot-out", `${botOut}px`);
+      frame.style.setProperty("--mw-top-out", `${pad}px`);
+      frame.style.setProperty("--mw-bot-mid", `${botShort}px`);
+      frame.style.setProperty("--mw-bot-out", `${botShort}px`);
 
       // Step 0 → highest card sits `pad` below the clip top; end → lowest card sits `pad`
       // above the clip bottom. The grid SNAPS between these in whole-row chunks (below).
@@ -189,8 +227,16 @@ export function RosterCollage01({ content, config = {} }) {
       dist = maxStep * scrollPerChunk;                           // even page-scroll per chunk
       v0 = chrome - headerOffset;
       setPinHeight(`${Math.round(headerOffset + H + dist)}px`);
+      // Settle straight to the nearest row for the CURRENT scroll position (handles mount
+      // at the top and re-measures mid-scroll) — no animation, just place it.
+      following = false;
+      const { top, p } = readP();
+      const step = Math.min(maxStep, Math.round(p * maxStep));
+      curTy = tgtTy = T0 - Math.min(range, step * rowPitch);
       lastT = null;
-      update();
+      apply(curTy);
+      setGates(step > 0 ? "1" : "0", step < maxStep ? "1" : "0");
+      if (section) section.classList.toggle("is-pinned", top <= v0 && top > v0 - dist);
     };
 
     measure();
@@ -203,7 +249,8 @@ export function RosterCollage01({ content, config = {} }) {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", measure);
       ro.disconnect();
-      if (raf) cancelAnimationFrame(raf);
+      if (frameRaf) cancelAnimationFrame(frameRaf);
+      if (snapTimer) clearTimeout(snapTimer);
       grid.style.transform = "";
       frame.style.height = "";
       clearFade();

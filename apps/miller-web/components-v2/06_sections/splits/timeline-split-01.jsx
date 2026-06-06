@@ -34,7 +34,7 @@ export function TimelineSplit01({ content, config = {} }) {
 
             {/* Container 2: the track-record stats above the mission block. */}
             <aside className="mw-ten3__aside">
-              <ul className="mw-ten3__plate2-stats">
+              <ul className="mw-ten3__plate2-stats" data-reveal-stagger>
                 {plate.stats.map((s) => (
                   <li className="mw-ten3__plate2-stat" key={s.label}>
                     <span className="mw-ten3__plate2-num">{s.num}<span className="mw-ten3__plate2-unit">{s.unit}</span></span>
@@ -49,7 +49,7 @@ export function TimelineSplit01({ content, config = {} }) {
           {/* RIGHT column — the milestone record. */}
           <ol className="mw-ten3__line" aria-label="Company milestones">
             {milestones.map((m) => (
-              <li className="mw-ten3__item" key={m.year} data-reveal>
+              <li className="mw-ten3__item" key={m.year} data-reveal data-reveal-repeat>
                 {/* Connector tick + the hover hill live on the <li> (tick + its
                     ::after); the text is wrapped so its hover scale-up doesn't
                     fight the <li>'s own reveal animation, which holds the <li>'s

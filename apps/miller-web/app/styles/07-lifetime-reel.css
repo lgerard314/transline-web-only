@@ -256,7 +256,7 @@
   z-index: 0;
 }
 .mw-lr .mw-lr-reel .mw-lr-reel__card[data-mw-lr-seal="closed"] .mw-lr-seal::before { opacity: 1; }
-.mw-lr .mw-lr-reel .mw-lr-reel__item[data-active] .mw-lr-seal::before { background: #26130b; }
+.mw-lr .mw-lr-reel .mw-lr-reel__item[data-active] .mw-lr-seal::before { background: #1a0c06; }
 .mw-lr .mw-lr-reel .mw-lr-seal__inner {
   display: flex;
   flex-direction: column;
@@ -299,16 +299,28 @@
    brightens. The other diamonds are LEFT UNCHANGED (same size text colours); the
    body copy surfaces in the caption band below. No dimming of the others. ─────── */
 .mw-lr-reel__item[data-active] { z-index: 5; }
-/* Active emphasis scale is MOBILE-ONLY: on desktop the border lives in the unified
-   chain SVG (which doesn't scale per-diamond), so scaling just the card content
-   would detach it from its border. On mobile the seal edge scales with the card. */
-@media (max-width: 720px) {
-  .mw-lr-reel__item[data-active] .mw-lr-reel__card {
-    transform: scale(calc(var(--lr-card-scale) * 1.08));
-    transition: transform .32s var(--lr-ease);
-  }
+/* Hover/active emphasis: the diamond grows a touch (about its centre, so it stays
+   in place), its fill darkens, and its border turns the yellowish gold. The
+   per-diamond seal edge — hidden on desktop, where the chain SVG draws the borders
+   — is revealed for the active diamond and recoloured gold, and it scales WITH the
+   card so the gold ring tracks the enlarged diamond; the slightly-larger darker
+   fill covers the static terracotta chain border underneath. */
+/* Active emphasis: the diamond (border + numbers) scales up a touch, its border
+   turns yellowish gold at the SAME thin weight as the others, and its fill
+   darkens. The per-diamond fill + edge are revealed only for the active diamond
+   (they scale WITH it); the dark fill covers the static terracotta chain border
+   beneath, so only one thin gold ring shows. Scaled about centre → it stays put. */
+.mw-lr-reel__item[data-active] .mw-lr-reel__card {
+  transform: scale(calc(var(--lr-card-scale, 1) * 1.06));
+  transition: transform .32s var(--lr-ease);
 }
-.mw-lr .mw-lr-reel .mw-lr-reel__item[data-active] .mw-lr-seal__edge { stroke-opacity: 1; }
+.mw-lr .mw-lr-reel .mw-lr-reel__item[data-active] .mw-lr-seal::before { display: block; width: 62%; height: 62%; }
+.mw-lr .mw-lr-reel .mw-lr-reel__item[data-active] .mw-lr-seal__frame { display: block; }
+.mw-lr .mw-lr-reel .mw-lr-reel__item[data-active] .mw-lr-seal__edge {
+  stroke: var(--c-amber);
+  stroke-opacity: 1;
+  stroke-dashoffset: 0;
+}
 
 /* reveal captions: one absolutely-positioned <p> per diamond stacked in the band.
    The band's height is locked in JS to the TALLEST copy, so the section height is
