@@ -1,21 +1,26 @@
 "use client";
 // Section-local reveal driver for the history milestone list. Unlike the shared
-// MillerScrollReveal (which fires each element on ITS OWN top crossing the viewport
-// bottom), here each item is held until the NEXT item's top crosses that same entry
-// line — so an item only animates once the following card begins to enter from the
-// bottom (the last item uses the list's own bottom edge, since there is no card
-// after it). Items therefore reveal when they sit comfortably in view rather than
-// the instant they peek in at the bottom edge.
+// MillerScrollReveal (which fires each element the instant its own top peeks in at
+// the viewport bottom), here each item is held until there is room to fit the WHOLE
+// item + 40px above the fold — i.e. its rest-bottom has risen at least 40px above the
+// viewport bottom. At that point the CSS transition slides it up from the bottom of
+// the screen into its slot (the hidden state parks it one item-height + 40px below
+// rest, which is the bottom of the viewport at that moment). The exit mirrors this at
+// the top: once an item's rest-top rises within 40px of the viewport top we flip
+// [data-out] and the same transition slides it up out of the top edge and fades it —
+// symmetric with the entry, and reversible (scroll back down → drops [data-out]).
 //
 // These items opt out of the shared [data-reveal] observer (the JSX drops that attr)
-// and are driven here instead; the CSS still uses the section's mw-ten3-wave keyframe
-// keyed on [data-in="1"]. We "arm" the list (data-rev-armed) only once this effect is
-// running, so the hidden state never applies pre-hydration / with JS disabled — the
-// milestones stay visible in that case. Under prefers-reduced-motion we don't arm or
-// attach at all, leaving every item shown.
+// and are driven here instead; the CSS reveal is keyed on [data-in="1"]. We "arm" the
+// list (data-rev-armed) only once this effect is running, so the hidden state never
+// applies pre-hydration / with JS disabled — the milestones stay visible in that
+// case. Under prefers-reduced-motion we don't arm or attach at all, leaving every
+// item shown.
 //
-// Mirrors MillerParallax's rAF/passive-listener shape; reads all geometry before any
-// attribute write so a reveal can't invalidate the next item's measurement.
+// We read each item's REST position from the untransformed list rect plus the item's
+// offsetTop/offsetHeight (layout metrics, immune to the item's own reveal transform),
+// so the parked translate of a hidden item can't corrupt its own trigger. Mirrors
+// MillerParallax's rAF/passive-listener shape.
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
@@ -36,6 +41,7 @@ export function TimelineReveal() {
           el,
           // Seed from the DOM so the change-guard stays consistent across re-collects.
           on: el.hasAttribute("data-in"),
+          out: el.hasAttribute("data-out"),
         })),
       }));
     };
@@ -44,25 +50,31 @@ export function TimelineReveal() {
       raf = 0;
       const vh = window.innerHeight;
       const writes = [];
-      for (const { items } of lists) {
-        // READ phase — gather every measurement before any write below.
-        const tops = items.map((it) => it.el.getBoundingClientRect().top);
+      for (const { list, items } of lists) {
+        // READ phase. The <ol> is never transformed, so its rect top is a stable
+        // reference; combined with each item's layout offsetTop/offsetHeight (which a
+        // transform does not affect) it yields the item's REST bottom even while the
+        // item is parked below the fold by the hidden-state translate.
+        const listTop = list.getBoundingClientRect().top;
         for (let i = 0; i < items.length; i++) {
-          // The NEXT item's top is the trigger. The last item has no following card,
-          // and the list's bottom never reaches the viewport bottom in this layout,
-          // so it falls back to its OWN top — the only signal guaranteed to fire (its
-          // top still enters from the bottom). It thus reveals alongside the second-
-          // to-last (both keyed to the last item's top crossing the entry line).
-          const triggerTop = i + 1 < items.length ? tops[i + 1] : tops[i];
-          const on = triggerTop <= vh;
-          if (on !== items[i].on) writes.push([items[i], on]);
+          const el = items[i].el;
+          const restTop = listTop + el.offsetTop;
+          const restBottom = restTop + el.offsetHeight;
+          // Reveal once there is room to fit the WHOLE item + 40px above the fold...
+          const on = restBottom + 40 <= vh;
+          // ...and LEAVE (the mirror) once its rest-top rises within 40px of the top.
+          const out = restTop <= 40;
+          if (on !== items[i].on || out !== items[i].out) writes.push([items[i], on, out]);
         }
       }
       // WRITE phase.
-      for (const [it, on] of writes) {
+      for (const [it, on, out] of writes) {
         it.on = on;
+        it.out = out;
         if (on) it.el.setAttribute("data-in", "1");
         else it.el.removeAttribute("data-in"); // repeat: re-hide so it replays on re-entry
+        if (out) it.el.setAttribute("data-out", "");
+        else it.el.removeAttribute("data-out"); // repeat: restore as it scrolls back down
       }
     };
 
@@ -76,7 +88,9 @@ export function TimelineReveal() {
 
     const clear = () => lists.forEach(({ items }) => items.forEach((it) => {
       it.el.removeAttribute("data-in");
+      it.el.removeAttribute("data-out");
       it.on = false;
+      it.out = false;
     }));
 
     const enable = () => {

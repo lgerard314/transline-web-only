@@ -48,36 +48,56 @@
   overflow: clip;
   isolation: isolate;
 }
+
+/* ── Pinned scroll sequence (desktop, motion-OK) ────────────────────────────
+   The section is wrapped in a tall `.mw-lr-track` and made sticky, so it FREEZES
+   once it fully fills the viewport. Scroll then scrubs the timeline (background
+   map grows → chain draws → short hold) before the track releases to the next
+   section. The track must NOT clip overflow (that would break the sticky child).
+   Mobile and reduced-motion skip the pin entirely: the track collapses to auto
+   height and the section flows normally. JS (lifetime-reel-01.jsx) gates its
+   progress feed on the SAME condition as this query. */
+.mw-lr-track { position: relative; }
+@media (min-width: 721px) and (prefers-reduced-motion: no-preference) {
+  .mw-lr-track { height: var(--lr-track-h, 180vh); }
+  .mw-lr-track > .mw-lr {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    padding-block: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
 /* Background wash: a faint Canada outline map (cream-filled SVG over the dark
-   walnut band) standing in for the old diagonal paper-grain. Kept very low
-   opacity so it reads as subtle depth, not a legible graphic — most viewers
-   shouldn't clock that it's a map. It drifts with the shared viewport parallax:
-   [data-parallax-img] (in 04-home.css) composes translate + a 1.12 base scale,
-   and .mw-lr's `overflow: clip` hides the scaled/drifted edges. */
+   walnut band). Kept very low opacity so it reads as subtle depth, not a legible
+   graphic. The layer is CAPPED at the body-content column width (same formula as
+   .mw-inner), so the map never gets wider than the copy. JS (lifetime-reel-01.jsx)
+   grows it from a dot below the eyebrow (--lr-bg-scale 0 → 1, transform-origin set
+   to the eyebrow underside) once the eyebrow is on screen, then drifts it
+   vertically (--lr-bg-drift) like the old parallax. Unpinned (mobile / reduced
+   motion) it rests static at full width (scale 1, drift 0). .mw-lr's
+   `overflow: clip` hides the drifted top/bottom crop. */
 .mw-lr__bg {
   position: absolute;
-  /* Match the body content width (same formula as .mw-inner), centred — the map
-     spans the content column, not the full bleed. Centring is via auto margins,
-     NOT transform: the parallax engine owns `transform`. The layer is taller than
-     the band (±36% bleed) so the (deeper) vertical parallax drift — data-parallax-max
-     .2, i.e. up to ±20% of the layer height (~±0.34 of the band height) — always
-     has headroom: the bleed exceeds the max drift, so the layer's clipped edge is
-     never pulled into the band at any scroll extreme, without a transform-scale. The
-     map is taller-proportioned than the band so it crops top/bottom — intended. */
-  top: -36%;
-  bottom: -36%;
+  top: 0;
+  bottom: 0;
   left: 0;
   right: 0;
   margin-inline: auto;
-  width: min(100% - clamp(48px, 8vw, 144px), 1560px);
+  width: min(100% - clamp(48px, 8vw, 144px), 1560px); /* never wider than the body content */
   z-index: 0;
   pointer-events: none;
   background-image: url("/miller/custom/canada-bg-line-map.svg");
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 100% auto; /* fit the content-column width */
+  background-size: 100% auto; /* map fills the content-column width */
   opacity: 0.07;
-  --px-scale: 1;
+  transform: translateY(var(--lr-bg-drift, 0px)) scale(var(--lr-bg-scale, 1));
+  transform-origin: center center;
+  will-change: transform;
 }
 .mw-lr__inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
 .mw-lr .mw-section-tag { margin-bottom: clamp(20px, 2.4vw, 36px); }

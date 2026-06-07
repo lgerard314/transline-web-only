@@ -8,6 +8,15 @@
   position: relative;
   background: var(--c-surface-warm);
   padding-block: clamp(64px, 6.5vw, 112px);
+  /* Single source of truth for the collage spacing: the grid's row/column gap AND the
+     pinned-window strip at the top & bottom of the screen both use this, so the framing
+     gap is always exactly one card-gap. */
+  --r2-gap: clamp(10px, 1vw, 18px);
+  /* Height of the fixed site topbar in its collapsed (past-hero) state — 56px inner + 1px
+     border. The collage only ever pins well past the hero, so the topbar is always in this
+     state here; the window pins below it so the top gap strip shows beneath the header, not
+     behind it. If the topbar chrome height changes, update this. */
+  --r2-chrome: 57px;
   /* NOTE: no `overflow: clip/hidden` here — it would establish a scroll container
      that traps the sibling-sticky rail. Children stay within the section width, and
      the grain wash (::before, inset:0) and parallax don't overflow horizontally. */
@@ -32,6 +41,24 @@
 }
 .mw-roster2__title-line { display: block; }
 
+/* Signature beat: once the header has revealed (data-in set by
+   MillerScrollReveal), the clay stop-period stamps in last — held hidden
+   through the header's fade, then a quick scale-pop with a tiny overshoot,
+   like a rubber stamp pressing down. Scoped to this section's title so no
+   other .mw-stop is touched. fill-mode `both` keeps it hidden during the
+   delay so it never flashes ahead of the headline. */
+@keyframes mw-roster2-stamp {
+  0%   { opacity: 0; transform: scale(0.2); }
+  55%  { opacity: 1; transform: scale(1.18); }
+  78%  { transform: scale(0.92); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.mw-roster2__head[data-in="1"] .mw-roster2__title .mw-stop {
+  transform-origin: center;
+  animation: mw-roster2-stamp 420ms cubic-bezier(.22, .7, .3, 1.2) both;
+  animation-delay: 280ms;
+}
+
 .mw-roster2__layout {
   display: grid;
   /* list column (left) · collage column (right) */
@@ -42,18 +69,31 @@
 }
 
 /* ── LEFT · collage ───────────────────────────────────────── */
-/* Clip frame — in the pinned section JS sizes it to exactly 2 rows and clips the
-   inner grid; everywhere else it's transparent (full grid shows). */
+/* Pin "track": JS sets its height to the grid's full height so the window below pins for
+   exactly the grid's overflow, then releases. position:relative anchors nothing special —
+   the sticky child measures against the section's scroll. */
 .mw-roster2__collage { position: relative; }
+/* The viewport-tall, clipped window the grid scrolls inside. Pinned with a one-card-gap
+   strip of section showing at the top and bottom of the screen. JS translates the inner
+   grid up 1:1 with scroll while this is stuck. */
+.mw-roster2__window {
+  position: sticky;
+  /* Pin BELOW the fixed topbar with a one-card-gap strip beneath it; the bottom edge leaves
+     the same one-card-gap at the very bottom of the screen. */
+  top: calc(var(--r2-chrome) + var(--r2-gap));
+  height: calc(100vh - var(--r2-chrome) - 2 * var(--r2-gap));
+  overflow: clip;
+}
 .mw-roster2__grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  /* Identical row & column gaps. The column stagger (--ty) makes adjacent rows
-     overlap slightly — that woven offset is the intended look; the snap pitch
-     follows the row pitch so it still lands by whole rows. */
-  gap: clamp(10px, 1vw, 18px);
-  /* room for the column stagger (translateY) at the bottom */
-  padding-bottom: clamp(44px, 6vw, 104px);
+  /* Identical row & column gaps — this is the gap the window strips mirror. */
+  gap: var(--r2-gap);
+  /* No bottom padding: with the window clipping, the last row sits flush to the window's
+     bottom edge, leaving exactly the one-card-gap strip below it. */
+  padding-bottom: 0;
+  /* Scroll-jacked via inline transform (JS) — no transition so it scrubs with the scroll. */
+  will-change: transform;
 }
 .mw-roster2__card {
   --ty: 0px;
@@ -67,10 +107,6 @@
   isolation: isolate;
   transform: translateY(calc(var(--ty) + var(--lift)));
   transform-origin: center;
-  /* Hidden until scroll-revealed (pre-JS state): clipped to zero height. The wipe is
-     driven 100% by scroll position — JS writes inline clip-path each frame — so clip-path
-     is deliberately NOT in the transition (no time easing; it scrubs with the scroll). */
-  clip-path: inset(0 0 100% 0);
   transition: transform 440ms cubic-bezier(.2, .7, .2, 1), box-shadow 440ms ease;
 }
 /* All three columns START level (no stagger — --ty stays 0 from the base rule).
@@ -98,9 +134,10 @@
   z-index: 0;
   background-size: cover;
   background-position: center;
-  /* Normal-state grade from bento-grid-02, then 10% darker (brightness 0.96 → 0.864).
-     The spotlit/hover grade below is unchanged. */
-  filter: saturate(0.95) brightness(0.864) contrast(1.02) sepia(0.04);
+  /* Non-active state: black & white + darkened (brightness 0.778) so the spotlit card —
+     which restores full colour below — pops. The filter transition makes the colour fade
+     in on hover. */
+  filter: grayscale(1) brightness(0.778) contrast(1.02);
   transform: scale(1);
   transition: filter 320ms ease, transform 520ms ease;
 }
@@ -145,12 +182,12 @@
   font-weight: 700;
   line-height: 1;
   color: #fff;
-  text-shadow: 0 1px 5px rgba(20, 12, 6, 0.75);
   transition: transform 240ms cubic-bezier(.2, .7, .2, 1), color 240ms ease;
 }
 .mw-roster2__card.is-active .mw-roster2__card-arr {
-  color: var(--c-accent);
-  transform: translate(3px, -3px);
+  color: var(--c-amber);
+  /* Rotate the → up so it points 45° up-and-to-the-right (↗). */
+  transform: translate(3px, -3px) rotate(-45deg);
 }
 
 /* Content overlay — title + summary + arrow over the exact bento-grid-02
@@ -237,9 +274,15 @@
   background: transparent;
   border: 1px solid var(--c-navy); /* deep walnut / dark brown */
   overflow: hidden;
-  transition: background-color 240ms ease, box-shadow 240ms ease;
+  transition: background-color 240ms ease, box-shadow 240ms ease, filter 320ms ease;
 }
-.mw-roster2__card--cta:hover { background: #fff; box-shadow: 0 8px 20px -10px rgba(42, 27, 18, 0.32); }
+/* Match the photo cards' unselected scheme: desaturate the whole tile — border, eyebrow,
+   title, text AND the button — to B&W/gray. The background isn't a colour at rest
+   (transparent), so it's unaffected. Colour returns the moment the tile is selected, whether
+   hovered directly or via its "Other services" row (.is-active) — same trigger as the white bg. */
+.mw-roster2__card--cta:not(:hover):not(.is-active) { filter: grayscale(1); }
+.mw-roster2__card--cta:hover,
+.mw-roster2__card--cta.is-active { background: #fff; box-shadow: 0 8px 20px -10px rgba(42, 27, 18, 0.32); }
 .mw-roster2__cta-head {
   display: flex;
   flex-direction: column;
@@ -333,9 +376,10 @@
   letter-spacing: 0.01em;
   text-transform: uppercase;
   color: var(--c-ink-2);
-  transition: color 200ms ease;
+  transition: color 200ms ease, transform 220ms cubic-bezier(.2, .7, .2, 1);
 }
-.mw-roster2__row.is-active .mw-roster2__row-name { color: var(--c-navy); }
+/* Active row: just the TEXT nudges right slightly (the diamond mark stays put). */
+.mw-roster2__row.is-active .mw-roster2__row-name { color: var(--c-navy); transform: translateX(clamp(6px, 0.7vw, 11px)); }
 .mw-roster2__row-arr {
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
   font-size: clamp(20px, 1.6vw, 26px);
@@ -362,8 +406,10 @@
 @media (max-width: 1024px) {
   .mw-roster2__layout { grid-template-columns: 1fr; gap: clamp(28px, 5vw, 48px); }
   .mw-roster2__grid { padding-bottom: clamp(34px, 8vw, 80px); }
-  /* Stacked single-column — the list sits above the collage, so no sticky. */
+  /* Stacked single-column — the list sits above the collage, so no sticky and no window:
+     the grid just flows full-height (JS also stops sizing/translating below this width). */
   .mw-roster2__rail { position: static; top: auto; }
+  .mw-roster2__window { position: static; height: auto; overflow: visible; }
 }
 @media (max-width: 560px) {
   /* Two columns, all level — parallax is gated off below the 3-column breakpoint (JS). */
@@ -386,7 +432,14 @@
   .mw-roster2__card { --lift: 0px; }
   .mw-roster2__card.is-active .mw-roster2__card-photo { transform: none; }
   .mw-roster2__row.is-active .mw-roster2__row-mark { transform: none; }
-  /* No scroll-reveal animation — show every list row and card up front. */
+  /* No scroll-reveal animation — show every list row up front, and let the collage flow
+     full-height (no pinned window, no grid scroll-jack; JS also skips both here). */
   .mw-roster2__row { opacity: 1; transform: none; }
-  .mw-roster2__card { clip-path: none; }
+  .mw-roster2__window { position: static; height: auto; overflow: visible; }
+  /* Stop-period sits in its final state — no stamp pop. */
+  .mw-roster2__head[data-in="1"] .mw-roster2__title .mw-stop {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
 }

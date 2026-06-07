@@ -839,7 +839,7 @@
      shifted top both key off --bh/2. */
   --ptop: clamp(64px, 6.5vw, 112px);
   --bh: clamp(490px, 40vw, 620px);
-  background: var(--c-bg);
+  background: var(--c-surface-warm);
   padding-block: var(--ptop);
   color: var(--c-ink);
   overflow: clip;
@@ -861,7 +861,7 @@
 /* The left column — two stacked containers. Stretched to the full row height
    (overriding the grid's align-items:start) so the sticky mission/stats block
    has room to travel for the whole timeline scroll. */
-.mw-ten3__col { display: flex; flex-direction: column; gap: clamp(28px, 3vw, 48px); min-width: 0; align-self: stretch; }
+.mw-ten3__col { display: flex; flex-direction: column; gap: 0; min-width: 0; align-self: stretch; }
 /* Collapse to one column before the left column gets cramped by the record's
    fixed band. */
 @media (max-width: 1200px) {
@@ -1139,8 +1139,8 @@
    container nested inside, reading over a scrim. */
 .mw-ten3__banner {
   position: relative;
-  /* Above the mission/stats column so the highlights can tuck up BEHIND the banner
-     and slide out of its bottom edge on scroll (see <TimelineStats>). */
+  /* The first of three stacked banner-style bands; the highlights and mission bands
+     below it are clones with the same chevron wipe (see <TimelineWipe>). */
   z-index: 2;
   /* Bleed the image container to the section's TOP edge (up out of the section's
      top padding) and to the LEFT screen edge (out past the inner gutter); its
@@ -1282,21 +1282,35 @@
    only once it is running, so pre-hydration / no-JS leaves every milestone
    visible; under prefers-reduced-motion the driver never arms (items stay shown),
    and the !important guard below is a belt-and-suspenders. */
-@keyframes mw-ten3-wave {
-  0%   { opacity: 0; transform: translate3d(0, 14px, 0) scale(0.965); }
-  58%  { opacity: 1; transform: translate3d(0, -2px, 0) scale(1.03); }
-  100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+/* Reveal motion: each milestone slides UP from the bottom of the screen into its
+   slot (no more wave/scale). The armed-hidden state parks the <li> one item-height
+   + 40px below its resting position — i.e. at the bottom of the viewport at the
+   instant <TimelineReveal> reveals it (the driver flips [data-in] once there's room
+   for the whole item + 40px above the fold) — and the transition carries it up into
+   place. The transform is on the <li>; the hover zoom is on .mw-ten3__item-body, so
+   the two transforms never collide. */
+html[data-brand="miller"] .mw-ten3__line[data-rev-armed] .mw-ten3__item {
+  opacity: 0;
+  transform: translateY(calc(100% + 40px));
+  transition: transform 560ms cubic-bezier(0.22, 0.61, 0.36, 1), opacity 320ms ease;
 }
-html[data-brand="miller"] .mw-ten3__line[data-rev-armed] .mw-ten3__item { opacity: 0; }
-html[data-brand="miller"] .mw-ten3__item[data-in="1"] {
-  animation: mw-ten3-wave 460ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
-  transform-origin: left center;
+html[data-brand="miller"] .mw-ten3__line[data-rev-armed] .mw-ten3__item[data-in="1"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Leaving the top — the MIRROR of the entry: once an item's rest-top rises within 40px
+   of the viewport top, it slides UP out of the top edge and fades (one item-height +
+   40px above rest), exactly as it slid up into place from the bottom. data-out is set
+   by <TimelineReveal> and overrides the data-in rest state (later rule, equal specificity). */
+html[data-brand="miller"] .mw-ten3__line[data-rev-armed] .mw-ten3__item[data-out] {
+  opacity: 0;
+  transform: translateY(calc(-100% - 40px));
 }
 @media (prefers-reduced-motion: reduce) {
   html[data-brand="miller"] .mw-ten3__line[data-rev-armed] .mw-ten3__item {
     opacity: 1 !important;
-    animation: none !important;
     transform: none !important;
+    transition: none !important;
   }
 }
 
@@ -1313,12 +1327,41 @@ html[data-brand="miller"] .mw-ten3__item[data-in="1"] {
   .mw-ten3__item:focus-within .mw-ten3__item-body { transform: none; }
 }
 
-/* Mission — the SECOND container in the left column (stats highlights + mission
-   block). Capped to 80% of the column width. Sits one stacking level BELOW the
-   image-banner (z-index) so the highlights can tuck up behind it; the stats then
-   slide out of the banner's bottom on scroll (see <TimelineStats>) — this replaced
-   the block's former sticky behaviour. */
-.mw-ten3__aside { display: flex; flex-direction: column; max-width: 80%; position: relative; z-index: 1; align-self: flex-start; }
+/* Highlights + mission bands — each is its OWN clone of the image-banner: a
+   full-bleed, solid-fill container with the banner's chevron shape, revealed by the
+   SAME chevron wipe (--wipe, written per scroll-frame by <TimelineWipe>) as the photo
+   banner. They sit stacked in normal flow under the banner (no pinning), so each
+   begins its wipe as it scrolls into view — i.e. once the band above it is fully on
+   screen. A solid white fill stands in for the banner's photo; the content is padded
+   back to the gutter so the numbers/copy don't slide under the angled edge. */
+.mw-ten3__aside,
+.mw-ten3__maside {
+  position: relative;
+  align-self: stretch;
+  box-sizing: border-box;
+  /* Same height as the image-banner so the three bands read as one uniform stack;
+     content is centred vertically within the band. */
+  min-height: var(--bh);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  --g: max(clamp(24px, 4vw, 72px), calc((100vw - 1560px) / 2));
+  margin-left: calc(-1 * var(--g));
+  width: calc(100% + var(--g));
+  overflow: hidden;
+  background: #fff;
+  /* Same chevron + chevron-wipe as .mw-ten3__banner: apex at the vertical middle,
+     corners inset by --ang, swept left→right by --wipe (0 hidden → 1 full chevron). */
+  --ang: clamp(36px, 7%, 100px);
+  --w: var(--wipe, 1);
+  --wipe-apex: calc(var(--w) * (100% + var(--ang)) - var(--ang));
+  --wipe-corner: calc(var(--wipe-apex) - var(--ang));
+  clip-path: polygon(0 0, var(--wipe-corner) 0, var(--wipe-apex) 50%, var(--wipe-corner) 100%, 0 100%);
+}
+/* Middle band (the highlights) takes the section's former surface (--c-bg) so it sits
+   a half-shade off the new --c-surface-warm section field; the mission band stays the
+   white fill from the shared rule above. */
+.mw-ten3__aside { background: var(--c-bg); }
 /* The banner photo gets a stronger zoom + a near-top-right origin so its
    diagonal parallax drift (data-parallax-x="1" → 45° toward the bottom-right)
    reads as the trucks driving out of the frame. */
@@ -1361,42 +1404,29 @@ html[data-brand="miller"] .mw-ten3__item[data-in="1"] {
   .mw-ten3__plate-window { clip-path: none; }
   .mw-ten3__plate-zoom { transform: none; }
 }
-/* Track-record stats — now an in-flow row at the top of the mission container
-   (dark on cream), separated from the mission by a hairline. */
-.mw-ten3__plate2-stats { margin: 0 0 clamp(20px, 1.8vw, 30px); padding: 0 0 clamp(20px, 1.8vw, 30px); list-style: none; display: flex; gap: clamp(26px, 2.9vw, 54px); border-bottom: 1px solid var(--c-line); }
-/* Highlights emerge from the banner: rendered at their large size from the start
-   (real font-size — see the enlarged num/label below — NOT a transform scale, so the
-   text stays crisp), tucked up behind the banner (own height + the col gap, so they
-   clear its bottom edge and are occluded by it) until <TimelineStats> slides them down
-   out of the bottom. --stats-out 0 = tucked, 1 = home; var() fallback 1 → home at rest
-   for no-JS / reduced-motion. */
+/* Track-record stats — the content row inside the highlights band. The band wrapper
+   (.mw-ten3__aside) carries the white fill, full-bleed and chevron wipe; here we just
+   lay the three stats in a row and pad the content back to the gutter on the left, with
+   extra right padding so nothing falls under the angled chevron edge. */
 .mw-ten3__plate2-stats {
-  transform: translateY(calc((1 - var(--stats-out, 1)) * (-100% - 72px)));
-  will-change: transform;
+  list-style: none;
+  display: flex;
+  gap: clamp(26px, 2.9vw, 54px);
+  box-sizing: border-box;
+  margin: 0;
+  padding: clamp(22px, 2.2vw, 34px) clamp(80px, 14%, 220px) clamp(22px, 2.2vw, 34px) var(--g);
 }
 .mw-ten3__plate2-stat { display: flex; flex-direction: column; }
 .mw-ten3__plate2-num { font-family: var(--font-condensed), ui-sans-serif, sans-serif; font-weight: 600; font-size: clamp(42px, 4.2vw, 64px); color: var(--c-ink); line-height: 1; }
 .mw-ten3__plate2-unit { font-size: 0.5em; color: var(--c-accent); margin-left: 2px; }
 .mw-ten3__plate2-label { font-family: var(--font-plex-mono), ui-monospace, monospace; font-size: 16px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--c-ink-2); margin-top: 8px; }
 .mw-ten3__aside .mw-ten2__mission { margin-top: 0; }
-/* Mission's WHITE container — a simple card that rises straight UP from the bottom of
-   the screen (translateY). The motion only runs once <TimelineStats> is actually
-   driving it (it adds [data-armed]); until then the card sits at its natural position
-   (the no-JS / reduced-motion fallback). When armed, the transform's var() fallback is
-   0 = pushed a FULL SCREEN DOWN (off the bottom, HIDDEN) — so the card can NEVER flash
-   at its resting spot before the driver positions it, even if a lazy-load reflow hits
-   before the next scroll frame. --mission-rise goes 0 → 1 over the window from when the
-   banner is no longer visible (its bottom crosses the top) to when the highlights
-   disappear off the top, so the card reaches home exactly as they vanish. The inner
-   .mw-ten2__mission fade is neutralised so the content shows with the card. */
+/* Mission — the content holder inside the mission band; the band wrapper
+   (.mw-ten3__maside) carries the white fill, full-bleed and chevron wipe. Padded back
+   to the gutter (left) with extra right padding to clear the angled chevron edge. */
 .mw-ten3__mission-panel {
-  background: #fff;
-  padding: clamp(28px, 2.6vw, 44px);
-  box-shadow: 0 -10px 34px -16px rgba(42, 27, 18, 0.22);
-}
-.mw-ten3__mission-panel[data-armed] {
-  transform: translateY(calc((1 - var(--mission-rise, 0)) * 100vh));
-  will-change: transform;
+  box-sizing: border-box;
+  padding: clamp(28px, 2.6vw, 44px) clamp(80px, 14%, 220px) clamp(28px, 2.6vw, 44px) var(--g);
 }
 html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
   opacity: 1 !important;
@@ -1410,18 +1440,14 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
   .mw-ten3__head { min-height: clamp(300px, 40vw, 440px); max-width: none; }
   .mw-ten3__banner { clip-path: none; }
   .mw-ten3__line { margin-top: 0; }
-  /* Stacked flow — nothing pins, and the highlights don't emerge from the banner
-     (single column: no banner to tuck behind). */
-  .mw-ten3__aside { position: static; max-width: none; }
-  .mw-ten3__plate2-stats { transform: none; }
-  /* Single column: the mission is a normal static block (no rise), even if armed. */
-  .mw-ten3__mission-panel[data-armed] { transform: none; }
+  /* Single column: the bands drop the full-bleed + chevron and the equal-height
+     stretch, becoming plain content-sized white panels stacked under the banner. */
+  .mw-ten3__aside, .mw-ten3__maside { margin-left: 0; width: auto; max-width: none; clip-path: none; overflow: visible; min-height: 0; display: block; }
 }
 @media (prefers-reduced-motion: reduce) {
-  /* Off-switch — highlights stay in place, mission card sits at its natural position
-     (the driver doesn't attach, so it's never armed → no transform). */
-  .mw-ten3__plate2-stats { transform: none; }
-  .mw-ten3__mission-panel[data-armed] { transform: none; }
+  /* <TimelineWipe> doesn't attach and clears --wipe → the bands fall back to their full
+     chevron (var() fallback 1). Drop the clip so they're plain static panels instead. */
+  .mw-ten3__aside, .mw-ten3__maside { clip-path: none; }
 }
 
 /* Truck plate — flipped truck side-view with three track-record
@@ -4911,10 +4937,19 @@ html[data-brand="miller"] {
 }
 .mw-secd2__card:hover { z-index: 99; }
 .mw-secd2__card:hover .mw-secd2__card-inner {
-  transform: rotate(calc(var(--rot) * 1deg)) scale(1.07);
-  box-shadow: 0 14px 30px rgba(33, 20, 12, 0.34);
+  transform: translateY(-12px) scale(1.15); /* straighten to 0°, grow 15%, lift up so the label clears */
+  box-shadow: 0 16px 34px rgba(33, 20, 12, 0.36);
 }
 .mw-secd2__card:hover .mw-secd2__card-img { filter: saturate(1.05) brightness(1.05); }
+/* reveal this photo's own caption above it (offset clears the lifted, enlarged photo).
+   Side photos have the rising arc right beside them, so a centred caption lands over the
+   neighbouring photos. Shift it OUTWARD (toward the edge / clear cream) proportionally to how far
+   the photo sits from centre (--cosA): centre photos (cosA≈0) stay put, edge photos slide out. */
+.mw-secd2__card:hover .mw-secd2__card-cap {
+  opacity: 1;
+  transform: translate(calc(-50% + (var(--cosA) * 72px)), 0);
+  bottom: calc(100% + 38px);
+}
 
 /* ── category-hover spotlight ── hovering a category card (second arc) reaches across to its
    four photos in the top arc via :has(). The non-matched photos recede in place; the matched
@@ -5027,12 +5062,13 @@ html[data-brand="miller"] {
   line-height: 0.98;
   letter-spacing: 0.02em;
   text-transform: uppercase;
-  color: var(--c-navy);
-  transition: font-size 0.28s cubic-bezier(.2, .7, .2, 1);
+  color: var(--c-ink-2); /* inactive tone — matches the services list's unselected items */
+  transition: font-size 0.28s cubic-bezier(.2, .7, .2, 1), color 0.28s ease;
 }
 .mw-secd2__cat:hover .mw-secd2__cat-name,
 .mw-secd2__cat:focus-within .mw-secd2__cat-name {
   font-size: clamp(19px, 2vw, 32px);
+  color: var(--c-navy); /* darkens on hover, like the active services item */
 }
 @media (prefers-reduced-motion: reduce) {
   .mw-secd2__cat-name { transition: none; }
@@ -5115,17 +5151,277 @@ html[data-brand="miller"] {
   animation: mw-secd2-arc-in 0.8s cubic-bezier(.22, .61, .36, 1) both;
   animation-delay: calc(var(--ai) * 70ms);
 }
+/* Intro lines (eyebrow → title → lead) rise in as the finale: the photo sweep runs 0–1.05s and
+   the category diamonds settle 1.12–1.33s, so these land just after, resolving the message. They
+   share the .is-armed/.is-in state, so they reset and replay with the rest of the section. */
+@keyframes mw-secd2-rise {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.mw-secd2__arc.is-armed ~ .mw-secd2__intro > * { opacity: 0; }
+.mw-secd2__arc.is-armed.is-in ~ .mw-secd2__intro > * {
+  animation: mw-secd2-rise 0.7s cubic-bezier(.2, .7, .2, 1) both;
+}
+.mw-secd2__arc.is-armed.is-in ~ .mw-secd2__intro > *:nth-child(1) { animation-delay: 1s; }
+.mw-secd2__arc.is-armed.is-in ~ .mw-secd2__intro > *:nth-child(2) { animation-delay: 1.15s; }
+.mw-secd2__arc.is-armed.is-in ~ .mw-secd2__intro > *:nth-child(3) { animation-delay: 1.3s; }
 @media (prefers-reduced-motion: reduce) {
   .mw-secd2__card-inner,
   .mw-secd2__card-img { transition: none; }
   .mw-secd2__arc.is-armed .mw-secd2__card,
   .mw-secd2__arc.is-armed.is-in .mw-secd2__card,
   .mw-secd2__arc.is-armed ~ .mw-secd2__cats .mw-secd2__cat,
-  .mw-secd2__arc.is-armed.is-in ~ .mw-secd2__cats .mw-secd2__cat { opacity: 1; animation: none; }
+  .mw-secd2__arc.is-armed.is-in ~ .mw-secd2__cats .mw-secd2__cat,
+  .mw-secd2__arc.is-armed ~ .mw-secd2__intro > *,
+  .mw-secd2__arc.is-armed.is-in ~ .mw-secd2__intro > * { opacity: 1; animation: none; }
 }
 /* On mobile the categories are a static 2×2 grid — the arc fade-up (which translates X) would
    shove them sideways, so keep them at rest regardless of the arch's reveal state. */
 @media (max-width: 639px) {
   .mw-secd2__arc.is-armed ~ .mw-secd2__cats .mw-secd2__cat,
   .mw-secd2__arc.is-armed.is-in ~ .mw-secd2__cats .mw-secd2__cat { opacity: 1; animation: none; transform: none; }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Careers — zoom collage. A sticky stage "dives" through a mosaic of
+   crew photos (scroll-scrubbed scale written as --s by the
+   zoom-collage-01 widget) until the centre photo fills the frame, then
+   the invitation copy fades in over a walnut scrim (--reveal). Warm-clay
+   rebuild of a framer-motion zoom-parallax reference — CSS-only motion,
+   tokens only, squared frames. Namespaced mw-czoom (home-only).
+   ───────────────────────────────────────────────────────────────── */
+.mw-czoom {
+  position: relative;
+  background: var(--c-surface-warm);
+  isolation: isolate;
+}
+.mw-czoom__track {
+  position: relative;
+  /* --dive-vh: scroll distance the dive plays over (the widget reads this and keeps
+     the dive feel identical regardless of total track). --freeze-vh: a short pin at
+     the end where the full-width photo + copy hold before the next section. Track =
+     dive + freeze + one viewport (the sticky pane). */
+  --dive-vh: 200;
+  --freeze-vh: 30;
+  height: calc((var(--dive-vh) + var(--freeze-vh) + 100) * 1vh);
+}
+.mw-czoom__stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--c-surface-warm);
+}
+/* 49° paper-grain wash, terracotta-on-light — matches the warm cream surface. */
+.mw-czoom__stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+
+.mw-czoom__mosaic { position: absolute; inset: 0; z-index: 1; }
+/* Each cell is the full viewport; the scroll-driven scale (--s) sits HERE so every
+   photo scales about the same point — the viewport centre. The centre photo grows
+   in place to fill; the offset photos translate outward (offset × scale) and sweep
+   off-frame as they enlarge, leaving the centre photo (index 0) as the landing. */
+.mw-czoom__cell {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  transform: scale(var(--s, 1));
+  transform-origin: center;
+  will-change: transform;
+}
+/* The non-centre frames are nudged off-centre and resized so the mosaic reads as a
+   layered spread before the dive (positions ported from the reference). */
+.mw-czoom__frame {
+  position: relative;
+  width: 25vw;
+  height: 25vh;
+  overflow: hidden;
+}
+/* Centre (landing) photo only: laid out at its FINAL filled size so it rasterizes at
+   full resolution — the widget scales this cell DOWN (0.25→1) instead of a 25vw bitmap
+   UP, which is what made the landing look soft. Max layer = one viewport (no giant
+   compositor layer). The off-centre frames keep their small box. */
+.mw-czoom__cell:nth-child(1) .mw-czoom__frame { width: 100vw; height: 100vh; }
+.mw-czoom__frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.mw-czoom__cell:nth-child(2) .mw-czoom__frame { top: -30vh; left: 5vw; height: 30vh; width: 35vw; }
+.mw-czoom__cell:nth-child(3) .mw-czoom__frame { top: -10vh; left: -25vw; height: 45vh; width: 20vw; }
+.mw-czoom__cell:nth-child(4) .mw-czoom__frame { left: 27.5vw; height: 25vh; width: 25vw; }
+.mw-czoom__cell:nth-child(5) .mw-czoom__frame { top: 27.5vh; left: 5vw; height: 25vh; width: 20vw; }
+.mw-czoom__cell:nth-child(6) .mw-czoom__frame { top: 27.5vh; left: -22.5vw; height: 25vh; width: 30vw; }
+.mw-czoom__cell:nth-child(7) .mw-czoom__frame { top: 22.5vh; left: 25vw; height: 15vh; width: 15vw; }
+
+/* Invitation overlay — fades in over the filled centre photo as the dive lands. */
+.mw-czoom__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  padding: clamp(24px, 5vw, 80px);
+  opacity: var(--reveal, 0);
+  pointer-events: none;
+}
+.mw-czoom[data-shown] .mw-czoom__overlay,
+.mw-czoom__track[data-shown] .mw-czoom__overlay { pointer-events: auto; }
+/* Legibility scrim — applied ONLY to the centre (landing) photo, not the whole
+   stage, so the cream background stays clean during the dive. It lives inside the
+   centre frame (clipped to the photo, scales with it) and fades in with --reveal.
+   Hero-toned (--c-ink #2A1B12) and weighted to darken the CENTRE where the copy
+   sits — same approach that makes the home hero type read over its site photo. */
+.mw-czoom__cell:nth-child(1) .mw-czoom__frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: var(--reveal, 0);
+  /* Super-dark espresso-brown base (deeper/less warm than --c-ink), with a centre-
+     weighted darken so the copy reads. */
+  background:
+    linear-gradient(rgba(18, 11, 6, 0.62), rgba(18, 11, 6, 0.62)),
+    radial-gradient(ellipse at center, rgba(18, 11, 6, 0.5) 0%, rgba(18, 11, 6, 0.82) 100%);
+}
+.mw-czoom__copy {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(16px, 1.6vw, 24px);
+  text-align: center;
+  max-width: 760px;
+  transform: translateY(calc((1 - var(--reveal, 0)) * 24px));
+}
+.mw-czoom__field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(245, 230, 203, 0.92);
+  text-shadow: 0 1px 10px rgba(42, 27, 18, 0.7);
+}
+.mw-czoom__field::before {
+  content: "";
+  width: 8.1px;
+  height: 8.1px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex: none;
+}
+.mw-czoom__field-rule { width: clamp(40px, 6vw, 96px); height: 1px; background: currentColor; opacity: 0.4; }
+.mw-czoom__title {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  /* Matches the home hero title — pure white, heavier weight for legibility. */
+  font-weight: 700;
+  font-size: clamp(40px, 6vw, 88px);
+  line-height: 0.98;
+  letter-spacing: 0.005em;
+  color: #ffffff;
+  text-transform: uppercase;
+  text-shadow: 0 2px 28px rgba(42, 27, 18, 0.6);
+}
+.mw-czoom__title-em { color: var(--c-accent); display: block; }
+.mw-czoom__lead {
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(16px, 1.2vw, 20px);
+  line-height: 1.6;
+  /* Cream --c-on-navy, like the hero lead, with a soft shadow so it reads on the photo. */
+  color: rgba(245, 230, 203, 0.95);
+  text-shadow: 0 1px 12px rgba(42, 27, 18, 0.7);
+  max-width: 54ch;
+}
+/* Two squared invitation cards — clay-edged links, hover lifts to terracotta. */
+.mw-czoom__cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(12px, 1.4vw, 20px);
+  margin-top: clamp(8px, 1vw, 16px);
+}
+.mw-czoom__card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 220px;
+  padding: clamp(16px, 1.4vw, 22px) clamp(18px, 1.6vw, 26px);
+  text-align: left;
+  text-decoration: none;
+  background: rgba(46, 25, 16, 0.55);
+  border: 1px solid rgba(245, 230, 203, 0.28);
+  border-top: 2px solid var(--c-accent);
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+.mw-czoom__card:hover,
+.mw-czoom__card:focus-visible {
+  background: rgba(168, 90, 44, 0.22);
+  border-color: rgba(245, 230, 203, 0.5);
+  transform: translateY(-3px);
+}
+.mw-czoom__card-tag {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--c-amber);
+}
+.mw-czoom__card-title {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(20px, 1.6vw, 26px);
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+.mw-czoom__card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--c-on-navy);
+}
+.mw-czoom__card:hover .mw-czoom__card-link { color: var(--c-amber); }
+.mw-czoom__arrow { transition: transform 0.25s ease; }
+.mw-czoom__card:hover .mw-czoom__arrow { transform: translateX(5px); }
+
+/* Reduced motion: no scroll scrub — collapse the track to one viewport, pin the
+   landing photo filled (the widget writes the final --s/--reveal), copy shown. */
+@media (prefers-reduced-motion: reduce) {
+  .mw-czoom__track { height: 100vh; }
+  .mw-czoom__frame { will-change: auto; }
+  .mw-czoom__card,
+  .mw-czoom__arrow { transition: none; }
+  .mw-czoom__copy { transform: none; }
+}
+.mw-czoom__track[data-reduced] { height: 100vh; }
+
+/* Phone: shorten the dive and keep the centre photo the one that fills. */
+@media (max-width: 700px) {
+  .mw-czoom__track { --dive-vh: 160; }
+  .mw-czoom__card { min-width: 0; width: 100%; }
+  .mw-czoom__cards { width: 100%; max-width: 360px; }
 }

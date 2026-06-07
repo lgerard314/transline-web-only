@@ -5,9 +5,16 @@
 // paragraph reveals). Every card and row links to its service page.
 //
 // EDITABLE COPY of roster-collage-01 (the home "services" section). Namespaced
-// .mw-roster2* / --r2-* so edits here never touch the original. The scroll-pin /
-// sticky scroll-jacking behavior of -01 has been REMOVED — this section now flows
-// normally in the page: the full collage is visible and nothing pins or snaps.
+// .mw-roster2* / --r2-* so edits here never touch the original.
+//
+// COLLAGE SCROLL MODEL — "windowed scroll": the collage column is taller than the
+// viewport, so it scrolls INSIDE a viewport-tall window that's pinned to the screen
+// with a strip of section background (exactly one card-gap) always showing at the very
+// top and bottom of the screen. The window (.mw-roster2__window) is position:sticky and
+// clipped; the inner grid is translated up 1:1 with page scroll while the window is
+// pinned, so cards pass through the window at natural scroll speed but never reach the
+// screen edges. The per-card clip-path WIPE reveal of earlier revisions is gone — cards
+// are simply visible; the window does the framing. Middle-column parallax is retained.
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Eyebrow01 } from "@/components-v2/01_marks/eyebrows/eyebrow-01";
@@ -15,12 +22,6 @@ import { StopText01 } from "@/components-v2/01_marks/stops/stop-text-01";
 import { ActionArrow01 } from "@/components-v2/01_marks/arrows/action-arrow-01";
 import { SolidCta01 } from "@/components-v2/02_buttons/solid/solid-cta-01";
 import { sectionProps } from "@/components-v2/section-config";
-
-// Card scroll-reveal tuning — shared by the reveal effect AND the hover-scroll, so the
-// hover knows exactly how far to scroll for a card's wipe to FINISH (p=1).
-const CARD_REVEAL_WIDTH = 0.38;          // scroll-through span over which a card wipes fully open
-const CARD_COL_OFFSETS = [0, 0.1, 0.05]; // per-column scroll-phase offset (col0, col1, col2)
-const cardColOffset = (c) => CARD_COL_OFFSETS[c] ?? (0.1 + (c - 1) * 0.04);
 
 function buildItems({ services = [], externalTile }) {
   const items = services.map((s) => ({
@@ -63,53 +64,53 @@ export function RosterCollage02({ content, config = {} }) {
       "Not on the list? We probably still do it — get in touch and we'll sort it out.",
     label: ctaCard?.label ?? "Contact us",
     href: ctaCard?.href ?? "/contact-us/",
+    menuLabel: ctaCard?.menuLabel ?? "Other services",
   };
   const items = buildItems(content);
+  const ctaIndex = items.length; // the catch-all card sits after the service items
   const [active, setActive] = useState(0);
   const [revealed, setRevealed] = useState([]); // per-row scroll-reveal flags (React-owned)
   const sectionRef = useRef(null);
+  const collageRef = useRef(null); // the pin "track" — JS sizes it to the grid's height
+  const windowRef = useRef(null);  // the sticky, clipped viewport-tall window
   const gridRef = useRef(null);
   const railRef = useRef(null);
   const rowRefs = useRef([]);
   const cardRefs = useRef([]);
 
-  // Hovering a list row snaps the grid so that row — a "set" of N (= column count) cards —
-  // is framed in the viewport, using the SAME snap point for every card in the set. The
-  // effect is GATED: it does nothing until the list is fully rendered (all rows revealed)
-  // AND pinned (sticky-centered). Snapping centers the row, which frames the whole set incl.
-  // the parallax extremes (top of the highest card for the first set, bottom of the lowest
-  // for the last) and puts the wipe well past complete, so no card is cut off.
+  // Hovering a list row scrolls the page so that row's "set" of N (= column count) cards is
+  // framed within the pinned window. In the windowed model the grid translates 1:1 with page
+  // scroll, so framing a set = choosing the page-scroll that puts the set's row at the window
+  // center. Clamping that to the pinned travel makes the FIRST set sit at the window top and
+  // the LAST set at its bottom; middle sets center. GATED on the list being fully revealed.
   const bringCardIntoView = (i) => {
+    const collage = collageRef.current;
+    const win = windowRef.current;
     const grid = gridRef.current;
-    const rail = railRef.current;
-    if (!grid || !rail) return;
+    if (!collage || !win || !grid) return;
+    if (window.innerWidth <= 1024) return; // stacked: no window, normal flow
+    const fullyRendered = revealed.length > 0 && revealed.every(Boolean);
+    if (!fullyRendered) return;
 
-    // Gate — only once the list is fully rendered and pinned.
-    const fullyRendered = revealed.length === items.length && revealed.every(Boolean);
-    const stuckTop = parseFloat(rail.style.top);
-    const pinned = !Number.isNaN(stuckTop) && Math.abs(rail.getBoundingClientRect().top - stuckTop) < 2;
-    if (!fullyRendered || !pinned) return;
-
-    const layout = grid.closest(".mw-roster2__layout");
-    if (!layout) return;
-    const vh = window.innerHeight || document.documentElement.clientHeight;
     const cols = Math.max(1, getComputedStyle(grid).gridTemplateColumns.split(" ").filter(Boolean).length);
     const ref = cardRefs.current[Math.floor(i / cols) * cols]; // the set's column-0 card (never parallaxed)
     if (!ref) return;
-    const sy = window.scrollY;
-    const railH = rail.getBoundingClientRect().height;
-    const layoutRect = layout.getBoundingClientRect();
-    // The scroll range over which the list stays pinned. Clamping the snap into it means the
-    // list never unpins — and the clamp is what makes the FIRST set show the grid's top
-    // (clamped to pinStart) and the LAST set its bottom (clamped to pinEnd); middle sets center.
-    const pinStart = layoutRect.top + sy - stuckTop;
-    const pinEnd = layoutRect.bottom + sy - stuckTop - railH;
+
+    const stickyTop = parseFloat(getComputedStyle(win).top) || 0; // window's pinned offset (topbar + gap)
+    const gap = parseFloat(getComputedStyle(grid).rowGap) || 0;
+    const winH = Math.max(0, window.innerHeight - stickyTop - gap); // full (pinned) band height
+    const maxTy = Math.max(0, grid.scrollHeight - winH); // furthest the grid can translate up
+    // Card center as an offset within the grid's own content (transform-independent: both
+    // rects move together with the grid's translate, so their difference is the pure offset).
+    const gridTop = grid.getBoundingClientRect().top;
     const refRect = ref.getBoundingClientRect();
-    const rowCenterDoc = refRect.top + sy + refRect.height / 2;
-    let target = rowCenterDoc - vh / 2;                          // center this set's grid row…
-    target = Math.max(pinStart, Math.min(pinEnd, target));       // …clamped to the pinned range
-    target = Math.max(0, Math.round(target));
-    if (Math.abs(target - sy) < 2) return;
+    const cardCenterInGrid = refRect.top - gridTop + refRect.height / 2;
+    let ty = cardCenterInGrid - winH / 2;          // translate that centers the set in the window
+    ty = ty < 0 ? 0 : ty > maxTy ? maxTy : ty;     // clamp → first set tops out, last set bottoms out
+    // ty = scrollY − (trackDocTop − stickyTop) ⇒ scrollY = trackDocTop − stickyTop + ty
+    const trackDocTop = collage.getBoundingClientRect().top + window.scrollY;
+    const target = Math.max(0, Math.round(trackDocTop - stickyTop + ty));
+    if (Math.abs(target - window.scrollY) < 2) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     window.scrollTo({ top: target, behavior: reduce ? "auto" : "smooth" });
   };
@@ -209,53 +210,78 @@ export function RosterCollage02({ content, config = {} }) {
     };
   }, []);
 
-  // Cards "hard"-reveal (clip-path wipe), 100% SCROLL-LINKED — the wipe amount is a pure
-  // function of scroll position (no CSS transition / time easing), so scrolling scrubs it
-  // open/closed. Each row's progress is read from its COLUMN-0 card (never parallaxed, so
-  // the middle column can't desync); a per-column phase offset makes the three wipe
-  // left→right. The offset is compressed so column 3 starts just behind the middle (0.14)
-  // rather than far behind (was 0.20). Driven imperatively via inline clip-path (React
-  // doesn't own the cards' style → no re-renders, no hover wipe-out). reduced-motion: open.
+  // Windowed scroll: pin the collage to a viewport-tall, clipped window (CSS: position:sticky
+  // top = topbar + card-gap, height = the band below it) and translate the inner grid up 1:1
+  // with page scroll while it's pinned, so cards scroll through the window at natural speed but
+  // a card-gap strip of section always shows at the top and bottom of the screen. We size the
+  // collage "track" to the grid's full height so the window pins for exactly the grid's overflow.
+  //
+  // The window's bottom is also clamped to (viewport bottom − gap) EVERY frame, not just when
+  // pinned: while the section is still ENTERING (window not yet stuck, flowing up from the
+  // bottom of the screen) the fixed-height sticky box would otherwise extend past the screen
+  // bottom and cards would butt against the screen edge with no gap. Setting the height so the
+  // bottom always lands at vh − gap keeps the bottom strip present throughout. Plain transform,
+  // no time easing (scrubs with scroll). Disabled when stacked (≤1024) or reduced-motion.
   useEffect(() => {
+    const collage = collageRef.current;
+    const win = windowRef.current;
     const grid = gridRef.current;
-    if (!grid) return;
-    const cards = [...grid.querySelectorAll(".mw-roster2__card")];
-    if (!cards.length) return;
+    if (!collage || !win || !grid) return;
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      cards.forEach((c) => { c.style.clipPath = "none"; });
-      return;
-    }
+    let active = false;
+    let stickyTop = 0, gap = 0, fullBand = 0, maxTy = 0, vh = 0;
 
-    let cols = 3;
-    const readCols = () => {
-      cols = Math.max(1, getComputedStyle(grid).gridTemplateColumns.split(" ").filter(Boolean).length);
+    const clear = () => {
+      collage.style.height = "";
+      grid.style.transform = "";
+      win.style.height = "";
     };
+    const measure = () => {
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      active = !reduce && window.innerWidth > 1024;
+      if (!active) { clear(); return; }
+      vh = window.innerHeight;
+      stickyTop = parseFloat(getComputedStyle(win).top) || 0;   // topbar + gap (sticky offset)
+      gap = parseFloat(getComputedStyle(grid).rowGap) || 0;     // the card gap, resolved
+      fullBand = Math.max(0, vh - stickyTop - gap);             // window height once pinned
+      const gridH = grid.scrollHeight;
+      maxTy = Math.max(0, gridH - fullBand);                    // overflow the grid scrolls through
+      collage.style.height = `${gridH}px`;                      // track = grid height → pins for the overflow
+    };
+
     let raf = 0;
     const update = () => {
       raf = 0;
-      const vh = window.innerHeight || document.documentElement.clientHeight;
-      for (let i = 0; i < cards.length; i++) {
-        const col = i % cols;
-        const ref = cards[Math.floor(i / cols) * cols] || cards[i]; // row's column-0 card
-        const refTop = ref.getBoundingClientRect().top;
-        const s = (vh - refTop) / vh;                  // 0 at viewport bottom → 1 at top (pure scroll fn)
-        let p = (s - cardColOffset(col)) / CARD_REVEAL_WIDTH; // column-staggered window
-        p = p < 0 ? 0 : p > 1 ? 1 : p;                 // clamp 0..1
-        cards[i].style.clipPath = `inset(0 0 ${((1 - p) * 100).toFixed(2)}% 0)`;
-      }
+      if (!active) return;
+      // Translate the grid by how far we've scrolled past the sticky offset (0 while entering,
+      // maxTy while leaving) → cards scrub through the pinned window.
+      let ty = stickyTop - collage.getBoundingClientRect().top;
+      ty = ty < 0 ? 0 : ty > maxTy ? maxTy : ty;
+      grid.style.transform = `translateY(${(-ty).toFixed(1)}px)`;
+      // Keep the window's bottom at vh − gap (the bottom strip) even before it pins; clamp to
+      // the full band so the leaving phase just scrolls away normally.
+      const winTop = win.getBoundingClientRect().top;
+      let h = vh - gap - winTop;
+      h = h < 0 ? 0 : h > fullBand ? fullBand : h;
+      win.style.height = `${h.toFixed(1)}px`;
     };
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
-    const onResize = () => { readCols(); onScroll(); };
+    const onResize = () => { measure(); onScroll(); };
 
-    readCols();
+    measure();
     update();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize);
+    // Re-measure when the grid's content box changes (font swap, lazy images) so the track
+    // height + overflow stay correct. Transform writes don't change layout size → no loop.
+    const ro = new ResizeObserver(() => { measure(); onScroll(); });
+    ro.observe(grid);
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
+      ro.disconnect();
       if (raf) cancelAnimationFrame(raf);
+      clear();
     };
   }, []);
 
@@ -312,7 +338,11 @@ export function RosterCollage02({ content, config = {} }) {
   return (
     <section ref={sectionRef} className="mw-roster2" aria-labelledby={headingId} {...sectionProps(config)}>
       <div className="mw-inner">
-        <header className="mw-roster2__head">
+        {/* Header opts into the house scroll-reveal (MillerScrollReveal sets
+            data-in when it crosses the viewport → mw-rv fade-up), matching the
+            other home sections. The clay stop-period then stamps in a beat
+            later via mw-roster2-stamp (see 04b-roster-v2.css). */}
+        <header className="mw-roster2__head" data-reveal>
           <span className="mw-roster2__eyebrow"><Eyebrow01 label={eyebrow} /></span>
           <h2 id={headingId} className="mw-section-title mw-roster2__title">
             <span className="mw-roster2__title-line">{title.lead}</span>
@@ -326,26 +356,49 @@ export function RosterCollage02({ content, config = {} }) {
         <div className="mw-roster2__layout">
           {/* LEFT — roster menu (center-sticky; see the rail effect above). */}
           <div ref={railRef} className="mw-roster2__rail">
-            <ul className="mw-roster2__menu" aria-label="Services">{menuItems}</ul>
+            <ul className="mw-roster2__menu" aria-label="Services">
+              {menuItems}
+              {/* Row for the text-only catch-all card (last cell in the grid). */}
+              <li>
+                <Link
+                  href={cta.href}
+                  ref={(el) => { rowRefs.current[ctaIndex] = el; }}
+                  className={`mw-roster2__row${active === ctaIndex ? " is-active" : ""}${revealed[ctaIndex] ? " is-revealed" : ""}`}
+                  onMouseEnter={() => { setActive(ctaIndex); bringCardIntoView(ctaIndex); }}
+                  onFocus={() => { setActive(ctaIndex); bringCardIntoView(ctaIndex); }}
+                >
+                  <span className="mw-roster2__row-mark" aria-hidden="true" />
+                  <span className="mw-roster2__row-name">{cta.menuLabel}</span>
+                  <span className="mw-roster2__row-arr" aria-hidden="true">→</span>
+                </Link>
+              </li>
+            </ul>
           </div>
 
-          {/* RIGHT — photo-card collage (full grid, flows normally), closed out by the
-              photo-less catch-all / contact tile as the final cell. */}
-          <div className="mw-roster2__collage">
-            <div ref={gridRef} className="mw-roster2__grid">
-              {cards}
-              <article className="mw-roster2__card mw-roster2__card--cta">
-                <div className="mw-roster2__cta-head">
-                  <span className="mw-roster2__cta-eyebrow"><Eyebrow01 label={cta.eyebrow} /></span>
-                  <p className="mw-roster2__cta-title">{cta.title}</p>
-                  <p className="mw-roster2__cta-text">{cta.text}</p>
-                </div>
-                <div className="mw-roster2__cta-foot">
-                  <SolidCta01 href={cta.href}>
-                    {cta.label} <ActionArrow01 />
-                  </SolidCta01>
-                </div>
-              </article>
+          {/* RIGHT — photo-card collage, closed out by the photo-less catch-all / contact tile
+              as the final cell. The collage is the pin "track" (JS sizes it to the grid's
+              height); the window pins + clips to a viewport-tall frame and the grid scrolls
+              inside it (see the windowed-scroll effect above). */}
+          <div ref={collageRef} className="mw-roster2__collage">
+            <div ref={windowRef} className="mw-roster2__window">
+              <div ref={gridRef} className="mw-roster2__grid">
+                {cards}
+                <article
+                  ref={(el) => { cardRefs.current[ctaIndex] = el; }}
+                  className={`mw-roster2__card mw-roster2__card--cta${active === ctaIndex ? " is-active" : ""}`}
+                >
+                  <div className="mw-roster2__cta-head">
+                    <span className="mw-roster2__cta-eyebrow"><Eyebrow01 label={cta.eyebrow} /></span>
+                    <p className="mw-roster2__cta-title">{cta.title}</p>
+                    <p className="mw-roster2__cta-text">{cta.text}</p>
+                  </div>
+                  <div className="mw-roster2__cta-foot">
+                    <SolidCta01 href={cta.href}>
+                      {cta.label} <ActionArrow01 />
+                    </SolidCta01>
+                  </div>
+                </article>
+              </div>
             </div>
           </div>
         </div>

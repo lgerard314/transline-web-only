@@ -23,18 +23,19 @@ import { LrDiamondSeal } from "./lr-diamond-seal";
 // hidden on desktop (the chain draws them) and used only as the MOBILE one-at-a-time
 // fallback. prefers-reduced-motion pins progress to 1 (fully drawn, no scrubbing).
 
-// Scroll→progress mapping: progress 0 when the TOP 60% of the FIRST (left) diamond is
-// visible (the point START_VISIBLE_FRAC down from its top apex crosses the bottom of
-// the viewport); progress 1 when the BOTTOM of the body-description caption comes onto
-// the screen — i.e. the end of the paragraph text, which is also the top edge of the
-// section's bottom padding (the caption band is the last content before that padding).
+// Scroll→progress mapping (UNCONTROLLED / mobile only): progress 0 when the TOP 60%
+// of the FIRST (left) diamond is visible; progress 1 when the BOTTOM of the body
+// caption reaches the screen. On desktop the section is PINNED and the parent feeds
+// `progress` directly (see lifetime-reel-01.jsx), so this self-mapping is unused there.
 const START_VISIBLE_FRAC = 0.6; // fraction of the first diamond visible at progress 0
 
-export function LifetimeReel({ highlights = [] }) {
+export function LifetimeReel({ highlights = [], progress }) {
+  const controlled = typeof progress === "number"; // parent (pinned section) supplies progress
   const n = highlights.length;
   const baseId = useId();
   const captionId = `${baseId}-caption`;
-  const [prog, setProg] = useState(0);     // 0..1 scrub progress for the whole reel
+  const [internalProg, setInternalProg] = useState(0); // 0..1 self-driven scrub (uncontrolled mode)
+  const prog = controlled ? Math.min(1, Math.max(0, progress)) : internalProg;
   const [sticky, setSticky] = useState(null); // last diamond hovered/focused/clicked
   const [current, setCurrent] = useState(0); // mobile one-at-a-time index (scroll-synced, tap-overridable)
   const [reduced, setReduced] = useState(false); // prefers-reduced-motion
@@ -109,6 +110,17 @@ export function LifetimeReel({ highlights = [] }) {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    // CONTROLLED: the pinned section owns the scrub and feeds `progress`. We only
+    // mirror the reduced-motion flag (used by localOf's pre-geometry fallback) and
+    // attach no scroll listener of our own.
+    if (controlled) {
+      const sync = () => setReduced(mq.matches);
+      sync();
+      mq.addEventListener("change", sync);
+      return () => mq.removeEventListener("change", sync);
+    }
+    // UNCONTROLLED (mobile / no-pin): self-drive progress from the section's travel
+    // through the viewport. prefers-reduced-motion pins progress to 1.
     let raf = 0;
     const compute = () => {
       raf = 0;
@@ -123,7 +135,7 @@ export function LifetimeReel({ highlights = [] }) {
       // End: bottom of the body-paragraph caption = top of the section's bottom padding.
       const endB = band.getBoundingClientRect().bottom;
       const p = (vh - startA) / ((endB - startA) || 1);
-      setProg(Math.min(1, Math.max(0, p)));
+      setInternalProg(Math.min(1, Math.max(0, p)));
     };
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(compute); };
     const attach = () => {
@@ -137,13 +149,13 @@ export function LifetimeReel({ highlights = [] }) {
       if (raf) { cancelAnimationFrame(raf); raf = 0; }
     };
     const sync = () => {
-      if (mq.matches) { setReduced(true); detach(); setProg(1); }
+      if (mq.matches) { setReduced(true); detach(); setInternalProg(1); }
       else { setReduced(false); detach(); attach(); }
     };
     sync();
     mq.addEventListener("change", sync);
     return () => { detach(); mq.removeEventListener("change", sync); };
-  }, []);
+  }, [controlled]);
 
   // Write the wipe frontier directly from progress — no timed transition, so the
   // terracotta draw tracks the scroll position 1:1. (No moving gold gradient: the

@@ -239,6 +239,17 @@ export const CAREERS = {
   eyebrow: "Careers",
   title: { lead: "Join the", em: "Miller team" },
   lead: HOME.joinFamily.intro,
+  // Zoom-collage mosaic — the horse-and-flag shot is index 0 (the centre photo
+  // that fills the frame as the dive lands); the rest spread around it.
+  zoomPhotos: [
+    { src: "/miller/girl-on-horse-with-miller-flag.jpg" },
+    { src: "/miller/team-at-blue-bombers.jpg" },
+    { src: "/miller/team-at-conv-booth-big-5.jpg" },
+    { src: "/miller/team-in-casual-clothes.jpg" },
+    { src: "/miller/team-at-charity-event.jpg" },
+    { src: "/miller/team-accepting-awards.jpg" },
+    { src: "/miller/team-at-manitoba-env-event.jpg" },
+  ],
   cards: [
     { tag: "Culture", title: HOME.joinFamily.whyTitle, text: HOME.joinFamily.whyBody, cta: HOME.joinFamily.whyCta },
     { tag: "Hiring now", title: HOME.joinFamily.opportunitiesTitle, text: HOME.joinFamily.opportunitiesBody, cta: HOME.joinFamily.opportunitiesCta },

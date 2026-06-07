@@ -2,7 +2,6 @@ import { MissionBlock01 } from "@/components-v2/04_blocks/prose/mission-block-01
 import { sectionProps } from "@/components-v2/section-config";
 import { TimelineWipe } from "@/components-v2/06_sections/splits/timeline-wipe";
 import { TimelineReveal } from "@/components-v2/06_sections/splits/timeline-reveal";
-import { TimelineStats } from "@/components-v2/06_sections/splits/timeline-stats";
 
 // History — a two-column "record": the LEFT column stacks an image-banner (the
 // truck photo, with the eyebrow/title/lead read over it) above the mission
@@ -14,9 +13,11 @@ export function TimelineSplit01({ content, config = {} }) {
     <section className="mw-ten3" aria-labelledby={headingId} {...sectionProps(config)}>
       <div className="mw-inner">
         <div className="mw-ten3__grid">
-          {/* LEFT column — two stacked containers. The highlights emerge from the
-              banner's bottom on scroll (<TimelineStats>, keyed off this column). */}
-          <div className="mw-ten3__col" data-stats-reveal>
+          {/* LEFT column — three stacked banner-style containers. Each is a clone of
+              the image-banner (full-bleed, chevron edge, chevron-wipe reveal driven by
+              <TimelineWipe>); stacked in normal flow they reveal in sequence as you
+              scroll — each begins its wipe once the band above it is fully on screen. */}
+          <div className="mw-ten3__col">
             {/* Container 1: full-width, padding-free image-banner that just holds
                 the background photo, with the body-content container nested
                 inside it (read over a scrim). */}
@@ -41,8 +42,10 @@ export function TimelineSplit01({ content, config = {} }) {
               </header>
             </div>
 
-            {/* Container 2: the track-record stats above the mission block. */}
-            <aside className="mw-ten3__aside">
+            {/* Container 2: the track-record stats — its own banner-clone band (solid
+                fill instead of a photo). Wipes in once the image-banner above is fully on
+                screen. data-history-wipe → <TimelineWipe> drives its --wipe. */}
+            <aside className="mw-ten3__aside" data-history-wipe>
               <ul className="mw-ten3__plate2-stats">
                 {plate.stats.map((s) => (
                   <li className="mw-ten3__plate2-stat" key={s.label}>
@@ -52,18 +55,19 @@ export function TimelineSplit01({ content, config = {} }) {
                 ))}
               </ul>
             </aside>
-            {/* Mission lives as a COLUMN sibling (not inside the aside) so it can be
-                sticky within the tall stretched column — riding until the section ends
-                — and so its white panel can expand independently of the highlights. */}
-            <div className="mw-ten3__mission-panel">
-              <MissionBlock01 paragraphs={mission.paragraphs} cta={mission.cta} heading={mission.heading} />
-            </div>
-            <TimelineStats />
+            {/* Container 3: the mission — another banner-clone band, identical effect,
+                wipes in once the highlights band above is fully on screen. */}
+            <aside className="mw-ten3__maside" data-history-wipe>
+              <div className="mw-ten3__mission-panel">
+                <MissionBlock01 paragraphs={mission.paragraphs} cta={mission.cta} heading={mission.heading} />
+              </div>
+            </aside>
           </div>
 
-          {/* RIGHT column — the milestone record. Each item's reveal is deferred to
-              the NEXT item's entry by <TimelineReveal> (data-timeline-reveal), so the
-              items opt out of the shared [data-reveal] observer. */}
+          {/* RIGHT column — the milestone record. Each item slides up from the bottom
+              of the screen once there's room for the whole item + 40px above the fold
+              (<TimelineReveal>, data-timeline-reveal), so the items opt out of the
+              shared [data-reveal] observer. */}
           <ol className="mw-ten3__line" aria-label="Company milestones" data-timeline-reveal>
             {milestones.map((m) => (
               <li className="mw-ten3__item" key={m.year}>

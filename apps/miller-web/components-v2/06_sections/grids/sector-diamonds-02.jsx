@@ -97,9 +97,12 @@ export function SectorDiamonds02({ content, config = {} }) {
         })}
       </div>
 
-      {/* Intro copy nested under the arch — our real who-we-serve eyebrow/title/lead. */}
+      {/* Intro copy nested under the arch — eyebrow/title/lead. The three lines rise in on the
+          same .is-in reveal as the arch (so they reset with it); see CSS for the staggered timing
+          that lands them just after the photo sweep. Eyebrow's own data-reveal is dropped so it
+          doesn't double-animate. */}
       <div className="mw-secd2__intro">
-        <Eyebrow01 label={eyebrow} reveal />
+        <Eyebrow01 label={eyebrow} />
         <h2 id={headingId} className="mw-secd2__title"><StopText01>{title}</StopText01></h2>
         <p className="mw-secd2__lead">{lead}</p>
       </div>
