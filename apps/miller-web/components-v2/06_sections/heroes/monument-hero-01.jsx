@@ -24,11 +24,19 @@ export function MonumentHero01({ content, config = {} }) {
         )}
       </div>
       <div className="mw-hero__inner">
-        <h1 id={titleId} className="mw-hero__title">
-          <span className="mw-hero__line"><span className="mw-hero__line-in">{title.line1}</span></span>
-          <span className="mw-hero__line"><span className="mw-hero__line-in"><PhraseCycle01 phrases={title.cyclePhrases} /></span></span>
-          <span className="mw-hero__line"><span className="mw-hero__line-in"><StopText01 stopClassName="mw-hero__stop">{title.line3}</StopText01></span></span>
-        </h1>
+        <div className="mw-hero__head-row">
+          <h1 id={titleId} className="mw-hero__title">
+            <span className="mw-hero__line"><span className="mw-hero__line-in">{title.line1}</span></span>
+            <span className="mw-hero__line"><span className="mw-hero__line-in"><PhraseCycle01 phrases={title.cyclePhrases} /></span></span>
+            <span className="mw-hero__line"><span className="mw-hero__line-in"><StopText01 stopClassName="mw-hero__stop">{title.line3}</StopText01></span></span>
+          </h1>
+
+          <p className="mw-hero__mark" aria-hidden="true">
+            <span className="mw-hero__mark-brand">
+              <img className="mw-hero__mark-logo" src={mark.logoSrc} alt="" />
+            </span>
+          </p>
+        </div>
 
         <div className="mw-hero__body">
           <div className="mw-hero__intro">
@@ -39,14 +47,7 @@ export function MonumentHero01({ content, config = {} }) {
             </div>
           </div>
 
-          <p className="mw-hero__mark" aria-hidden="true">
-            <span className="mw-hero__mark-brand">
-              <img className="mw-hero__mark-logo" src={mark.logoSrc} alt="" />
-            </span>
-            <span className="mw-hero__mark-since">{mark.since}</span>
-          </p>
-
-          <p className="mw-hero__article"><strong>{article.strong}</strong>{article.rest}</p>
+          <p className="mw-hero__article"><strong>{article.strong}</strong><span className="mw-hero__article-since">{article.rest}</span></p>
         </div>
       </div>
     </section>

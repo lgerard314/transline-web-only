@@ -6,7 +6,7 @@
 // viewport bottom. At that point the CSS transition slides it up from the bottom of
 // the screen into its slot (the hidden state parks it one item-height + 40px below
 // rest, which is the bottom of the viewport at that moment). The exit mirrors this at
-// the top: once an item's rest-top rises within 40px of the viewport top we flip
+// the top: the moment an item's rest-top reaches the top of the screen we flip
 // [data-out] and the same transition slides it up out of the top edge and fades it —
 // symmetric with the entry, and reversible (scroll back down → drops [data-out]).
 //
@@ -35,22 +35,31 @@ export function TimelineReveal() {
     let attached = false;
 
     const collect = () => {
-      lists = Array.from(document.querySelectorAll("[data-timeline-reveal]")).map((list) => ({
-        list,
-        items: Array.from(list.querySelectorAll(".mw-ten3__item")).map((el) => ({
-          el,
-          // Seed from the DOM so the change-guard stays consistent across re-collects.
-          on: el.hasAttribute("data-in"),
-          out: el.hasAttribute("data-out"),
-        })),
-      }));
+      lists = Array.from(document.querySelectorAll("[data-timeline-reveal]")).map((list) => {
+        const grid = list.closest(".mw-ten3__grid");
+        return {
+          list,
+          // The image banner in the same record — the timeline holds until the banner's
+          // bottom edge has passed the bottom of the screen.
+          banner: grid ? grid.querySelector(".mw-ten3__banner") : null,
+          items: Array.from(list.querySelectorAll(".mw-ten3__item")).map((el) => ({
+            el,
+            // Seed from the DOM so the change-guard stays consistent across re-collects.
+            on: el.hasAttribute("data-in"),
+            out: el.hasAttribute("data-out"),
+          })),
+        };
+      });
     };
 
     const render = () => {
       raf = 0;
       const vh = window.innerHeight;
       const writes = [];
-      for (const { list, items } of lists) {
+      for (const { list, items, banner } of lists) {
+        // GATE: don't begin revealing any milestone until the banner's bottom edge has
+        // passed the bottom of the screen (banner fully on-screen). No banner → ready.
+        const ready = !banner || banner.getBoundingClientRect().bottom <= vh;
         // READ phase. The <ol> is never transformed, so its rect top is a stable
         // reference; combined with each item's layout offsetTop/offsetHeight (which a
         // transform does not affect) it yields the item's REST bottom even while the
@@ -60,10 +69,11 @@ export function TimelineReveal() {
           const el = items[i].el;
           const restTop = listTop + el.offsetTop;
           const restBottom = restTop + el.offsetHeight;
-          // Reveal once there is room to fit the WHOLE item + 40px above the fold...
-          const on = restBottom + 40 <= vh;
-          // ...and LEAVE (the mirror) once its rest-top rises within 40px of the top.
-          const out = restTop <= 40;
+          // Reveal once the highlights are fully out AND there's room for the WHOLE item +
+          // 40px above the fold...
+          const on = ready && restBottom + 40 <= vh;
+          // ...and LEAVE the moment its rest-top reaches the top of the screen.
+          const out = restTop <= 0;
           if (on !== items[i].on || out !== items[i].out) writes.push([items[i], on, out]);
         }
       }

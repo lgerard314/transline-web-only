@@ -70,6 +70,7 @@ export function RosterCollage02({ content, config = {} }) {
   const ctaIndex = items.length; // the catch-all card sits after the service items
   const [active, setActive] = useState(0);
   const [revealed, setRevealed] = useState([]); // per-row scroll-reveal flags (React-owned)
+  const [cardRevealed, setCardRevealed] = useState([]); // per-card scroll-reveal flags (React-owned)
   const sectionRef = useRef(null);
   const collageRef = useRef(null); // the pin "track" — JS sizes it to the grid's height
   const windowRef = useRef(null);  // the sticky, clipped viewport-tall window
@@ -185,19 +186,37 @@ export function RosterCollage02({ content, config = {} }) {
   // Reveal flags live in React STATE (not classList) so a hover-driven re-render — which
   // rewrites each row's className from JSX — can't wipe the reveal class. setRevealed is
   // change-gated, so it only re-renders when a row actually crosses the threshold.
+  //
+  // The CARDS reveal the same way (same hero rise effect, see .mw-roster2__card-in): each card
+  // rises out of its own mask when its slot enters the visible window band. We measure the CARD
+  // rect (the reveal transform rides on the inner .mw-roster2__card-in, not the card, so the
+  // card rect stays a stable slot) against the window's bottom edge — the band bottom when
+  // pinned, the viewport bottom when stacked. A card stays revealed while at/above the band and
+  // re-hides only when it drops back below it, so it never re-masks while scrolling up and out.
   useEffect(() => {
     let raf = 0;
+    const sameArr = (prev, next) =>
+      prev.length === next.length && prev.every((v, i) => v === next[i]) ? prev : next;
     const update = () => {
       raf = 0;
       const vh = window.innerHeight || document.documentElement.clientHeight;
-      const next = rowRefs.current.map((el) => {
+      const nextRows = rowRefs.current.map((el) => {
         if (!el) return false;
         const r = el.getBoundingClientRect();
         return r.top >= 0 && r.bottom <= vh; // enough room for the whole row
       });
-      setRevealed((prev) =>
-        prev.length === next.length && prev.every((v, i) => v === next[i]) ? prev : next
+      setRevealed((prev) => sameArr(prev, nextRows));
+
+      const win = windowRef.current;
+      const grid = gridRef.current;
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const windowed = !!win && !reduce && window.innerWidth > 1024;
+      const gap = grid ? parseFloat(getComputedStyle(grid).rowGap) || 0 : 0;
+      const bandBottom = windowed ? vh - gap : vh; // a card reveals once its slot tops this line
+      const nextCards = cardRefs.current.map((el) =>
+        el ? el.getBoundingClientRect().top < bandBottom : false
       );
+      setCardRevealed((prev) => sameArr(prev, nextCards));
     };
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
     update();
@@ -317,18 +336,21 @@ export function RosterCollage02({ content, config = {} }) {
         key={it.key}
         {...linkProps}
         ref={(el) => { cardRefs.current[i] = el; }}
-        className={`mw-roster2__card${i === active ? " is-active" : ""}`}
+        className={`mw-roster2__card${i === active ? " is-active" : ""}${cardRevealed[i] ? " is-revealed" : ""}`}
         onMouseEnter={() => setActive(i)}
         onFocus={() => setActive(i)}
         aria-label={it.title}
       >
-        <span className="mw-roster2__card-photo" style={{ backgroundImage: `url(${it.photo})` }} aria-hidden="true" />
-        <span className="mw-roster2__card-arr" aria-hidden="true">→</span>
-        <span className="mw-roster2__card-overlay">
-          <span className="mw-roster2__card-title">{it.title}</span>
-          {/* Body paragraph: hidden at rest, revealed (expand + fade) when spotlit. */}
-          <span className="mw-roster2__card-reveal">
-            <span className="mw-roster2__card-text">{it.summary}</span>
+        {/* card-in is the riser that rises out of the card's mask (hero-style reveal). */}
+        <span className="mw-roster2__card-in">
+          <span className="mw-roster2__card-photo" style={{ backgroundImage: `url(${it.photo})` }} aria-hidden="true" />
+          <span className="mw-roster2__card-arr" aria-hidden="true">→</span>
+          <span className="mw-roster2__card-overlay">
+            <span className="mw-roster2__card-title">{it.title}</span>
+            {/* Body paragraph: hidden at rest, revealed (expand + fade) when spotlit. */}
+            <span className="mw-roster2__card-reveal">
+              <span className="mw-roster2__card-text">{it.summary}</span>
+            </span>
           </span>
         </span>
       </Tag>
@@ -385,18 +407,21 @@ export function RosterCollage02({ content, config = {} }) {
                 {cards}
                 <article
                   ref={(el) => { cardRefs.current[ctaIndex] = el; }}
-                  className={`mw-roster2__card mw-roster2__card--cta${active === ctaIndex ? " is-active" : ""}`}
+                  className={`mw-roster2__card mw-roster2__card--cta${active === ctaIndex ? " is-active" : ""}${cardRevealed[ctaIndex] ? " is-revealed" : ""}`}
                 >
-                  <div className="mw-roster2__cta-head">
-                    <span className="mw-roster2__cta-eyebrow"><Eyebrow01 label={cta.eyebrow} /></span>
-                    <p className="mw-roster2__cta-title">{cta.title}</p>
-                    <p className="mw-roster2__cta-text">{cta.text}</p>
-                  </div>
-                  <div className="mw-roster2__cta-foot">
-                    <SolidCta01 href={cta.href}>
-                      {cta.label} <ActionArrow01 />
-                    </SolidCta01>
-                  </div>
+                  {/* card-in rises out of the card's mask, same as the photo cards. */}
+                  <span className="mw-roster2__card-in">
+                    <div className="mw-roster2__cta-head">
+                      <span className="mw-roster2__cta-eyebrow"><Eyebrow01 label={cta.eyebrow} /></span>
+                      <p className="mw-roster2__cta-title">{cta.title}</p>
+                      <p className="mw-roster2__cta-text">{cta.text}</p>
+                    </div>
+                    <div className="mw-roster2__cta-foot">
+                      <SolidCta01 href={cta.href}>
+                        {cta.label} <ActionArrow01 />
+                      </SolidCta01>
+                    </div>
+                  </span>
                 </article>
               </div>
             </div>

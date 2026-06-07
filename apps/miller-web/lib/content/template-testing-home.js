@@ -111,7 +111,7 @@ export const HERO = {
   lead: "Twenty-five years of licensed hazardous waste management in Manitoba. Three ISO certifications. One documented chain of custody from your loading dock to final disposition at VBEC.",
   primaryCta: { label: "Talk to Miller", href: "/contact-us/" },
   ghostPhone: { sup: "24/7 emergency", num: EMERGENCY_PHONE, href: EMERGENCY_HREF },
-  article: { strong: "VBEC", rest: " · 64 ha, Montcalm MB · ISO 9001 · 14001 · 45001" },
+  article: { strong: "Miller Environmental Corporation", rest: "since 1996" },
 };
 
 export const CERTS_BANNER = { ariaLabel: "Certifications", certs: CERTS };
@@ -182,11 +182,20 @@ export const SECTORS_V1 = {
   lead: "Industrial manufacturers, public agencies, small businesses, and residential drop-off programs — one operator, one accountable chain of custody.",
 };
 
+// V2 copy for the enhanced diamond grid (SectorDiamonds03) below the arc gallery. Matches the arc
+// section's text (title + lead + cards via SECTORS_V1), with a distinct headingId so the <h2> id
+// doesn't collide and its own eyebrow.
+export const SECTORS_V2 = {
+  ...SECTORS_V1,
+  headingId: "mw-sectors-heading-v2",
+  eyebrow: "Who we serve 2",
+};
+
 export const FACILITY = {
   headingId: "mw-facility-heading-copy",
   stage: "VBEC",
   eyebrow: "Vaughn Bullough Environmental Centre",
-  title: { top: "VBEC", em: "A facility built for the work" },
+  title: { top: "VBEC", em: "On-site &\nSelf-contained" },
   lead: HOME.vbec.body,
   figures: [
     { label: "Footprint", num: "64", unit: "hectares" },
@@ -239,8 +248,8 @@ export const CAREERS = {
     { src: "/miller/team-at-charity-event.jpg", caption: "Here for Winnipeg" },
     { src: "/miller/team-at-conv-booth-big-5.jpg", caption: "On the floor" },
   ],
-  stage: "The Crew",
-  eyebrow: "Careers",
+  stage: "Careers",
+  eyebrow: "Miller",
   title: { lead: "Join the", em: "Miller team" },
   lead: HOME.joinFamily.intro,
   // Zoom-collage mosaic — the horse-and-flag shot is index 0 (the centre photo

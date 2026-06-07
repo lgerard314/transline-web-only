@@ -42,6 +42,7 @@ import { sectionProps } from "@/components-v2/section-config";
 // Config: scheme / token overrides via sectionProps.
 const EYE_FULL_FRAC = 0.4; // eyebrow top at this fraction of viewport height = map fully grown
 const PARALLAX_MAX = 90;   // px of vertical parallax drift once the map is full width
+const BG_BLEED = 120;      // px the bg layer bleeds above/below the section (must exceed PARALLAX_MAX); keep in sync with .mw-lr__bg top/bottom in 07-lifetime-reel.css
 const DIAMOND_LEAD = 40;   // px past the diamond row's MIDLINE crossing the viewport bottom before the chain starts ("just after")
 const DRAW_VH = 1.0;       // viewport-heights of scroll over which the chain draws
 
@@ -91,7 +92,9 @@ export function LifetimeReel01({ content, config = {} }) {
         // Anchor the growth just below the eyebrow (in the bg layer's own coords —
         // its box top tracks the section top).
         const secTop = sec.getBoundingClientRect().top;
-        bg.style.transformOrigin = `center ${(eb.bottom - secTop + 6).toFixed(1)}px`;
+        // +BG_BLEED: the layer's own top sits BG_BLEED px above the section top (CSS bleed),
+        // so shift the origin down by it to land just below the eyebrow.
+        bg.style.transformOrigin = `center ${(eb.bottom - secTop + BG_BLEED + 6).toFixed(1)}px`;
         bg.style.setProperty("--lr-bg-scale", G.toFixed(4));
       }
       // Pinned scroll (track top 0 → -total) → 0..1; drives the parallax drift.
@@ -101,12 +104,12 @@ export function LifetimeReel01({ content, config = {} }) {
       // Vertical parallax once the map is full width — driven by the pinned scroll so
       // it keeps drifting while the section is frozen (negative = reveal more bottom).
       if (bg) bg.style.setProperty("--lr-bg-drift", (G >= 1 ? -(PARALLAX_MAX * P) : 0).toFixed(1) + "px");
-      // CHAIN: begin drawing once DIAMOND_LEAD px of space is visible below the diamond
-      // row. `triggerTopY` is the track-top value at which (diamonds bottom + lead)
+      // CHAIN: begin drawing just after the diamond row's MIDLINE crosses the viewport
+      // bottom. `triggerTopY` is the track-top value at which (diamond midline + lead)
       // reaches the viewport bottom; the diamonds' offset within the section is stable
       // (fixed-height section, content centred), so this is robust before AND during
       // the pin. Driving by topY (which keeps moving through the pin) lets the draw
-      // start late in the approach yet still scrub slowly after the section freezes.
+      // start during the approach yet still scrub slowly after the section freezes.
       let reel = 0;
       const stage = track.querySelector(".mw-lr-reel__stage");
       if (stage && sec) {

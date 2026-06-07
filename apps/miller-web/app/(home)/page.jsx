@@ -4,12 +4,13 @@ import { TallStaticBanner01 } from "@/components-v2/06_sections/banners/tall-sta
 import { RosterCollage02 } from "@/components-v2/06_sections/grids/roster-collage-02";
 import { LifetimeReel01 } from "@/components-v2/06_sections/statements/lifetime-reel-01";
 import { SectorDiamonds02 } from "@/components-v2/06_sections/grids/sector-diamonds-02";
+import { SectorDiamonds03 } from "@/components-v2/06_sections/grids/sector-diamonds-03";
 import { MediaSplit01 } from "@/components-v2/06_sections/splits/media-split-01";
 import { TimelineSplit01 } from "@/components-v2/06_sections/splits/timeline-split-01";
 import { ZoomCollage01 } from "@/components-v2/06_sections/callouts/zoom-collage-01";
 import { RotatingBanner01 } from "@/components-v2/06_sections/banners/rotating-banner-01";
 import { MultiColumnCta01 } from "@/components-v2/06_sections/callouts/multi-column-cta-01";
-import { HERO, CERTS_BANNER, SERVICES_GRID, LIFETIME_REEL, SECTORS_V1, FACILITY, HISTORY, CAREERS, AFFILIATES_BANNER, FINAL_CTA } from "@/lib/content/template-testing-home";
+import { HERO, CERTS_BANNER, SERVICES_GRID, LIFETIME_REEL, SECTORS_V1, SECTORS_V2, FACILITY, HISTORY, CAREERS, AFFILIATES_BANNER, FINAL_CTA } from "@/lib/content/template-testing-home";
 
 export const metadata = {
   title: "Miller Environmental — Hazardous Waste Management",
@@ -26,6 +27,7 @@ export default function HomePage() {
       <TallStaticBanner01 content={CERTS_BANNER} />
       <RosterCollage02 content={SERVICES_GRID} />
       <SectorDiamonds02 content={SECTORS_V1} />
+      <SectorDiamonds03 content={SECTORS_V2} />
       <LifetimeReel01 content={LIFETIME_REEL} />
       <MediaSplit01 content={FACILITY} />
       <TimelineSplit01 content={HISTORY} />

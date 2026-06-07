@@ -82,8 +82,11 @@
    `overflow: clip` hides the drifted top/bottom crop. */
 .mw-lr__bg {
   position: absolute;
-  top: 0;
-  bottom: 0;
+  /* Vertical bleed (±120px) so the upward parallax drift never lifts the layer's
+     bottom edge into view (the bleed must exceed PARALLAX_MAX). Keep 120 in sync with
+     BG_BLEED in lifetime-reel-01.jsx — the grow transform-origin compensates for it. */
+  top: -120px;
+  bottom: -120px;
   left: 0;
   right: 0;
   margin-inline: auto;
@@ -93,7 +96,7 @@
   background-image: url("/miller/custom/canada-bg-line-map.svg");
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 100% auto; /* map fills the content-column width */
+  background-size: cover; /* always fill the (bled) layer top→bottom so the drift can't expose a gap */
   opacity: 0.07;
   transform: translateY(var(--lr-bg-drift, 0px)) scale(var(--lr-bg-scale, 1));
   transform-origin: center center;

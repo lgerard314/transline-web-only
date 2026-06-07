@@ -180,31 +180,50 @@ export function LifetimeReel({ highlights = [], progress }) {
     applyFrontier(prog, geom);
   }, [prog, geom, applyFrontier]);
 
-  // Hover / focus / click all just SELECT a diamond; the selection is sticky.
-  const select = useCallback((idx) => () => setSticky(idx), []);
+  // Hover / focus / click select a diamond — but ONLY after the whole chain has drawn.
+  // During the draw the active diamond follows the draw progression (see drawnSlot
+  // below), so hovers are ignored until then. doneRef holds the latest `done` so the
+  // stable callback can read it without re-subscribing.
+  const doneRef = useRef(false);
+  const select = useCallback((idx) => () => { if (doneRef.current) setSticky(idx); }, []);
 
   const done = prog >= 0.999;
+  doneRef.current = done;
 
-  // Each diamond's local slice of the global wipe: 0 before the frontier reaches its
-  // left apex, ramping to 1 as the frontier crosses to its right apex. Before geometry
-  // is measured, fall back to fully-shown only under reduced motion (else hidden).
+  // Each diamond's count runs in lockstep with ITS OWN border draw: 0 before the wipe
+  // reaches its left apex (segStart), ramping to 1 exactly as the wipe crosses to its
+  // right apex (segEnd). So each number is fully reached the moment its diamond finishes
+  // drawing — right as that diamond becomes active and its body paragraph appears —
+  // before the next diamond starts counting. Before geometry is measured, fall back to
+  // fully-shown only under reduced motion (else hidden).
   const localOf = (idx) => {
     const g = geom;
     if (!g) return reduced ? 1 : 0;
     const s = slotOf(idx);
-    const m0 = g.milestones[0], m5 = g.milestones[5], span = (m5 - m0) || 1;
-    // Each diamond's count STARTS when the wipe reaches its left apex (staggered), but
-    // ALL finish together at prog = 1 — so the first (left) count runs longest, then the
-    // second, then the third (shortest). Normalize from this diamond's start to the
-    // global end (1), instead of to its own segment end.
-    const segStart = (g.milestones[2 * s] - m0) / span;
-    return Math.min(1, Math.max(0, (prog - segStart) / Math.max(1e-4, 1 - segStart)));
+    const m0 = g.milestones[0], span = (g.milestones[5] - m0) || 1;
+    const segStart = (g.milestones[2 * s] - m0) / span;     // this diamond's left apex
+    const segEnd = (g.milestones[2 * s + 1] - m0) / span;   // its right apex (draw complete)
+    return Math.min(1, Math.max(0, (prog - segStart) / Math.max(1e-4, segEnd - segStart)));
   };
 
-  // The reveal copy stays hidden until ALL diamonds have drawn; after that one is
-  // ALWAYS shown — the sticky selection, defaulting to the CENTRE-slot diamond.
-  const defaultActive = ORDER[Math.floor(n / 2)] ?? (n - 1);
-  const activeIdx = done ? (sticky != null ? sticky : defaultActive) : null;
+  // Active-diamond progression: as the wipe FINISHES each diamond (its frontier passes
+  // that diamond's right apex), THAT diamond becomes the active/highlighted one and its
+  // body paragraph shows — while the next diamond is still drawing. drawnSlot is the
+  // highest slot whose draw has completed (-1 before the first; left→centre→right).
+  // After the whole chain is drawn (done), hover/focus takes over via `sticky`; until a
+  // hover, the last-drawn (right) diamond stays active.
+  const drawnSlot = (() => {
+    const g = geom;
+    if (!g) return reduced ? n - 1 : -1;
+    const m0 = g.milestones[0], m5 = g.milestones[5], span = (m5 - m0) || 1;
+    let ds = -1;
+    for (let s = 0; s < n; s++) {
+      const segEnd = (g.milestones[2 * s + 1] - m0) / span; // prog at which slot s finishes drawing
+      if (prog >= segEnd - 1e-3) ds = s;
+    }
+    return ds;
+  })();
+  const activeIdx = (done && sticky != null) ? sticky : (drawnSlot >= 0 ? ORDER[drawnSlot] : null);
 
   // Mobile one-at-a-time current diamond (chain hidden on mobile): pick the slot whose
   // segment the global progress has entered. Scroll drives `current` (the effect only

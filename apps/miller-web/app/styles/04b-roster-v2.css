@@ -128,6 +128,20 @@
   z-index: 3;
   box-shadow: 0 8px 20px -10px rgba(42, 27, 18, 0.32);
 }
+/* Riser: holds all of a card's content and rises out of the card's overflow:hidden mask on
+   reveal — the hero header's line reveal applied to cards (translateY 116% → 0, no fade, no
+   shift; same easing as .mw-hero__line-in / mw-hero-rise and the list rows). The reveal
+   transform lives HERE, not on the card, so the card keeps its parallax transform and its rect
+   stays a stable reveal-trigger slot. */
+.mw-roster2__card-in {
+  position: absolute;
+  inset: 0;
+  transform: translateY(116%);
+  transition: transform 0.95s cubic-bezier(.16, .84, .3, 1);
+  will-change: transform;
+}
+.mw-roster2__card.is-revealed .mw-roster2__card-in { transform: none; }
+
 .mw-roster2__card-photo {
   position: absolute;
   inset: 0;
@@ -265,16 +279,19 @@
    with an eyebrow + short pitch + the contact CTA. Inherits the base card box
    (square, same grid cell), but overrides the photo-card internals. */
 .mw-roster2__card--cta {
+  background: transparent;
+  border: 1px solid var(--c-navy); /* deep walnut / dark brown */
+  overflow: hidden; /* also the reveal mask the card-in rises out of */
+  transition: background-color 240ms ease, box-shadow 240ms ease, filter 320ms ease;
+}
+/* The flex layout lives on the riser (card-in fills the card via inset:0). */
+.mw-roster2__card--cta .mw-roster2__card-in {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
   gap: clamp(8px, 0.9vw, 14px);
   padding: clamp(14px, 1.3vw, 22px);
-  background: transparent;
-  border: 1px solid var(--c-navy); /* deep walnut / dark brown */
-  overflow: hidden;
-  transition: background-color 240ms ease, box-shadow 240ms ease, filter 320ms ease;
 }
 /* Match the photo cards' unselected scheme: desaturate the whole tile — border, eyebrow,
    title, text AND the button — to B&W/gray. The background isn't a colour at rest
@@ -334,18 +351,20 @@
   padding: clamp(10px, 0.98vw, 15px) 0;
   text-decoration: none;
   border-bottom: 1px solid var(--c-line);
-  /* Scroll reveal: each row is hidden until its matching collage card's BOTTOM edge is
-     on screen (JS toggles .is-revealed on scroll — reversible). `opacity` drives the
-     reveal; the active/inactive DIM uses filter:opacity() so the two never fight and can
-     animate on independent timings (reveal slow, dim snappy). */
-  opacity: 0;
-  /* Reveal: rows start shifted RIGHT (toward the grid) and slide LEFT into place, so they
-     read as shifting right→left out of the collage. */
-  transform: translateX(56px);
-  transition: opacity 520ms ease, transform 520ms cubic-bezier(.2, .7, .2, 1), filter 220ms ease;
+  /* Scroll reveal: each row is hidden until it's fully on screen (JS toggles .is-revealed on
+     scroll — reversible). SAME effect as the hero header's page-load reveal — the row rises up
+     out of a clipped mask (its <li>); no fade, no horizontal shift. translateY(116%) + this
+     easing mirror .mw-hero__line-in / mw-hero-rise. The active/inactive DIM uses
+     filter:opacity() so it never fights the reveal transform. */
+  transform: translateY(116%);
+  transition: transform 0.95s cubic-bezier(.16, .84, .3, 1), filter 220ms ease;
 }
+/* The <li> is the mask the row rises out of (mirrors .mw-hero__line wrapping .mw-hero__line-in). */
+.mw-roster2__menu > li { overflow: hidden; }
 .mw-roster2__menu > li:first-child .mw-roster2__row { border-top: 1px solid var(--c-line); }
-.mw-roster2__row.is-revealed { opacity: 1; transform: none; }
+.mw-roster2__row.is-revealed { transform: none; }
+/* Inset focus ring so the mask (overflow:hidden li) can't clip it. */
+.mw-roster2__row:focus-visible { outline: 2px solid var(--c-accent); outline-offset: -2px; }
 .mw-roster2__row:not(.is-active) { filter: opacity(0.79); }
 .mw-roster2__row:not(.is-active):hover { filter: opacity(0.86); }
 /* Diamond marker — small + border-only at rest; spins into a larger filled
@@ -432,9 +451,10 @@
   .mw-roster2__card { --lift: 0px; }
   .mw-roster2__card.is-active .mw-roster2__card-photo { transform: none; }
   .mw-roster2__row.is-active .mw-roster2__row-mark { transform: none; }
-  /* No scroll-reveal animation — show every list row up front, and let the collage flow
-     full-height (no pinned window, no grid scroll-jack; JS also skips both here). */
+  /* No scroll-reveal animation — show every list row and card up front, and let the collage
+     flow full-height (no pinned window, no grid scroll-jack; JS also skips both here). */
   .mw-roster2__row { opacity: 1; transform: none; }
+  .mw-roster2__card-in { transform: none; }
   .mw-roster2__window { position: static; height: auto; overflow: visible; }
   /* Stop-period sits in its final state — no stamp pop. */
   .mw-roster2__head[data-in="1"] .mw-roster2__title .mw-stop {

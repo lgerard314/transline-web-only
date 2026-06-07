@@ -51,7 +51,9 @@ export function SectorDiamonds02({ content, config = {} }) {
             "--gi": (1.5 - (i % 4)).toFixed(1), // signed group position (rightmost +1.5 … leftmost −1.5) — fans OUTWARD on category hover
             "--cat-cx": catCos.toFixed(4), //                          x-centre of this photo's category → row centres above it
             "--cat-cy": Math.sqrt(1 - catCos * catCos).toFixed(4), //  its height on the arc → row sits a constant gap above the label
-            "--cat-dy-cat": isEndCat ? "7px" : "0px", //               mirror the marker's end-nudge so the gap stays equal everywhere
+            "--cat-dy-cat": isEndCat ? "7px" : "-40px", //             ends nudge down 7px; middle two ride up 40px (negative = up) so their gather row tracks the raised label
+            "--cat-dx-cat": isEndCat ? "0px" : (catCos >= 0 ? "30px" : "-30px"), // middle two shift their gather row 30px OUTWARD (toward the nearer edge) to track the nudged label
+            "--cat-hl-dy": isEndCat ? "0px" : "-67px", //              middle two (Institutional/Infrastructure) drop their gather row ~67px so the sub-industry labels' tops line up with the arch's highest photo
           };
           return (
             // data-cat ties each photo to its category so a category hover can spotlight its 4 photos (see CSS :has()).
@@ -86,7 +88,8 @@ export function SectorDiamonds02({ content, config = {} }) {
             "--sinA": sinA.toFixed(4),
             "--ai": count + k, // settle in just after the 16 photos land
             "--z": cards.length - k,
-            "--cat-dy": isEnd ? "7px" : "0px",
+            "--cat-dy": isEnd ? "7px" : "-40px", // ends nudge down 7px; middle two (Institutional/Infrastructure) ride up 40px
+            "--cat-dx": isEnd ? "0px" : (cosA >= 0 ? "30px" : "-30px"), // middle two shift 30px OUTWARD horizontally (left one left, right one right)
           };
           return (
             <div className="mw-secd2__cat" data-cat={k} style={style} key={cat.title}>
