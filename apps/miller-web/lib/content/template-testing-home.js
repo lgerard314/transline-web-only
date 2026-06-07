@@ -176,6 +176,10 @@ export const SECTORS = {
 export const SECTORS_V1 = {
   ...SECTORS,
   headingId: "mw-sectors-heading-v1",
+  // \n is a hard 2-line break for the display title (rendered via white-space: pre-line on
+  // .mw-secd2__title); the stop period stays glued to "home" since StopText01 splits on the last space.
+  title: "Every sector —\nfrom your business to your home",
+  lead: "Industrial manufacturers, public agencies, small businesses, and residential drop-off programs — one operator, one accountable chain of custody.",
 };
 
 export const FACILITY = {

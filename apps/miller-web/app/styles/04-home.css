@@ -5078,7 +5078,7 @@ html[data-brand="miller"] {
 .mw-secd2__intro {
   position: relative;
   z-index: 2;
-  max-width: 64ch;
+  max-width: min(94vw, 880px); /* room for the 2-line display title; lead keeps its own 56ch cap */
   margin-inline: auto;
   margin-top: clamp(-64px, -5vw, -32px);
   padding-inline: clamp(20px, 5vw, 40px);
@@ -5092,12 +5092,13 @@ html[data-brand="miller"] {
   margin: 0;
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
   font-weight: 600;
-  font-size: clamp(34px, 4vw, 64px);
+  font-size: clamp(24px, 4vw, 64px);
   line-height: 1.02;
   letter-spacing: 0.005em;
   color: var(--c-ink);
   text-transform: uppercase;
-  max-width: 20ch;
+  max-width: 46ch; /* wide enough to keep the longer 2nd line ("from your business to your home") on one line */
+  white-space: pre-line; /* honor the \n in the content as a hard 2-line break */
 }
 .mw-secd2__lead {
   margin: 0;
