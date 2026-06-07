@@ -30,12 +30,6 @@ export function TimelineSplit01({ content, config = {} }) {
               </div>
               <TimelineWipe />
               <header className="mw-ten3__head" data-reveal>
-                {/* Field-head: the /v2 manifest grammar — a mono `record —— field` document line above the title. */}
-                <p className="mw-ten3__field">
-                  {stage ? <span>{stage}</span> : null}
-                  <span className="mw-ten3__field-rule" />
-                  <span>{eyebrow}</span>
-                </p>
                 <h2 id={headingId} className="mw-ten3__title">
                   {title.lead} <span className="mw-ten3__title-em">{title.em}</span>
                 </h2>
@@ -77,9 +71,17 @@ export function TimelineSplit01({ content, config = {} }) {
               and slides up OUT the top once its rest-top reaches the top (<TimelineReveal>,
               data-timeline-reveal), so the items opt out of the shared [data-reveal]
               observer. The two sticky edge fades keep the spine off the screen edges. */}
-          <ol className="mw-ten3__line" aria-label="Company milestones" data-timeline-reveal>
-            <span className="mw-ten3__edge mw-ten3__edge--top" aria-hidden="true" />
-            {milestones.map((m) => (
+          <div className="mw-ten3__record">
+            {/* Record eyebrow — moved here from the banner; <TimelineReveal> reveals it the
+                moment the bg-chip banner is fully rendered (its wipe completes). */}
+            <p className="mw-ten3__field mw-ten3__record-eyebrow" data-record-eyebrow>
+              {stage ? <span>{stage}</span> : null}
+              <span className="mw-ten3__field-rule" />
+              <span>{eyebrow}</span>
+            </p>
+            <ol className="mw-ten3__line" aria-label="Company milestones" data-timeline-reveal>
+              <span className="mw-ten3__edge mw-ten3__edge--top" aria-hidden="true" />
+              {milestones.map((m) => (
               <li className="mw-ten3__item" key={m.year}>
                 {/* Connector tick + the hover hill live on the <li> (tick + its
                     ::after); the text is wrapped so its hover scale-up doesn't
@@ -94,7 +96,8 @@ export function TimelineSplit01({ content, config = {} }) {
               </li>
             ))}
             <span className="mw-ten3__edge mw-ten3__edge--bottom" aria-hidden="true" />
-          </ol>
+            </ol>
+          </div>
           <TimelineReveal />
         </div>
       </div>

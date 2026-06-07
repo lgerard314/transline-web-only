@@ -40,8 +40,10 @@ export function TimelineReveal() {
         return {
           list,
           // The image banner in the same record — the timeline holds until the banner's
-          // bottom edge has passed the bottom of the screen.
+          // bottom edge has passed the bottom of the screen; the eyebrow above the list is
+          // revealed the moment the banner is fully rendered (its --wipe completes).
           banner: grid ? grid.querySelector(".mw-ten3__banner") : null,
+          eyebrow: grid ? grid.querySelector("[data-record-eyebrow]") : null,
           items: Array.from(list.querySelectorAll(".mw-ten3__item")).map((el) => ({
             el,
             // Seed from the DOM so the change-guard stays consistent across re-collects.
@@ -56,10 +58,18 @@ export function TimelineReveal() {
       raf = 0;
       const vh = window.innerHeight;
       const writes = [];
-      for (const { list, items, banner } of lists) {
+      for (const { list, items, banner, eyebrow } of lists) {
         // GATE: don't begin revealing any milestone until the banner's bottom edge has
         // passed the bottom of the screen (banner fully on-screen). No banner → ready.
         const ready = !banner || banner.getBoundingClientRect().bottom <= vh;
+        // EYEBROW: reveal it the instant the banner is fully rendered (its wipe completes).
+        if (eyebrow) {
+          const wipe = banner ? parseFloat(getComputedStyle(banner).getPropertyValue("--wipe")) : NaN;
+          const rendered = isNaN(wipe) || wipe >= 0.999;
+          const has = eyebrow.hasAttribute("data-in");
+          if (rendered && !has) eyebrow.setAttribute("data-in", "1");
+          else if (!rendered && has) eyebrow.removeAttribute("data-in");
+        }
         // READ phase. The <ol> is never transformed, so its rect top is a stable
         // reference; combined with each item's layout offsetTop/offsetHeight (which a
         // transform does not affect) it yields the item's REST bottom even while the
@@ -91,17 +101,25 @@ export function TimelineReveal() {
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(render); };
     const onResize = () => { collect(); onScroll(); };
 
-    const arm = (on) => lists.forEach(({ list }) => {
-      if (on) list.setAttribute("data-rev-armed", "");
-      else list.removeAttribute("data-rev-armed");
+    const arm = (on) => lists.forEach(({ list, eyebrow }) => {
+      if (on) {
+        list.setAttribute("data-rev-armed", "");
+        if (eyebrow) eyebrow.setAttribute("data-armed", "");
+      } else {
+        list.removeAttribute("data-rev-armed");
+        if (eyebrow) eyebrow.removeAttribute("data-armed");
+      }
     });
 
-    const clear = () => lists.forEach(({ items }) => items.forEach((it) => {
-      it.el.removeAttribute("data-in");
-      it.el.removeAttribute("data-out");
-      it.on = false;
-      it.out = false;
-    }));
+    const clear = () => lists.forEach(({ items, eyebrow }) => {
+      items.forEach((it) => {
+        it.el.removeAttribute("data-in");
+        it.el.removeAttribute("data-out");
+        it.on = false;
+        it.out = false;
+      });
+      if (eyebrow) eyebrow.removeAttribute("data-in");
+    });
 
     const enable = () => {
       if (attached) return;

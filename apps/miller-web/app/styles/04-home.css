@@ -1515,12 +1515,26 @@ html[data-brand="miller"] .mw-iacc__panel[data-in="1"] .mw-iacc__zoom {
    shows year + title + body (the /v2 evidentiary list). The interactive
    zigzag timeline styles below are retained for the standalone
    VerticalTimeline01 widget in the template gallery. */
-/* The record fills the RIGHT column, shifted DOWN so its top lands on the
-   vertical middle of the image-banner (= the angled edge's apex). The banner
-   middle is --bh/2 from the section top; the record's natural top is at --ptop
-   (the grid content top), so the shift is the difference. Reset to 0 when the
-   grid stacks (≤1200). */
-.mw-ten3__line { list-style: none; margin: calc(var(--bh) / 2 - var(--ptop)) 0 0; padding: 0 0 0 30px; position: relative; }
+/* The record column (eyebrow + milestone list) fills the RIGHT column, shifted DOWN so its
+   top lands on the vertical middle of the image-banner (= the angled edge's apex). The banner
+   middle is --bh/2 from the section top; the record's natural top is at --ptop (the grid
+   content top), so the shift is the difference. Reset to 0 when the grid stacks (≤1200). */
+.mw-ten3__record { margin-top: calc(var(--bh) / 2 - var(--ptop)); }
+/* Record eyebrow — the `record —— field` document line moved up here from the banner. On the
+   light section field it takes the default dark field colour (no banner override). It's hidden
+   while the driver is armed and revealed (fade + small rise) the instant the bg-chip banner is
+   fully rendered — data-in set by <TimelineReveal>; data-armed gates it so no-JS leaves it shown. */
+.mw-ten3__record-eyebrow { margin: 0 0 clamp(20px, 2vw, 30px); padding-left: 30px; }
+.mw-ten3__record-eyebrow[data-armed] {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 420ms ease, transform 560ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.mw-ten3__record-eyebrow[data-armed][data-in] { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .mw-ten3__record-eyebrow[data-armed] { opacity: 1; transform: none; transition: none; }
+}
+.mw-ten3__line { list-style: none; margin: 0; padding: 0 0 0 30px; position: relative; }
 /* The hairline spine fades out toward its bottom so it doesn't read as a bare line
    running down past the last visible milestone (the lower items reveal late, so the
    line would otherwise extend into still-hidden territory). Solid down the worked
@@ -1737,20 +1751,20 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
   inset: 0;
   z-index: 3;
   overflow: hidden;
-  /* Grow the arrow-chip (right-side chevron) shape out from a single point on the right
-     edge at the vertical MIDDLE (72% / 50%): every chevron vertex is interpolated from that
-     point (--mission-rev 0 → collapsed at the point) to its resting position (1 → full
-     chevron — left edge full, corners inset by --ang, apex at the right middle). --r is the
-     progress, --ir its inverse. So a full right-chip shape opens out from the centre-right. */
+  /* Grow the arrow-chip (right-side chevron) shape out from the BOTTOM-RIGHT corner (100% /
+     100%): every chevron vertex is interpolated from that corner (--mission-rev 0 → collapsed
+     at the corner) to its resting position (1 → full chevron — left edge full, corners inset
+     by --ang, apex at the right middle). --r is the progress, --ir its inverse. So the whole
+     right-chip shape unfolds up-and-left out of the bottom-right corner. */
   --ang: clamp(36px, 7%, 100px);
   --r: var(--mission-rev, 0);
   --ir: calc(1 - var(--mission-rev, 0));
   clip-path: polygon(
-    calc(72% * var(--ir)) calc(50% * var(--ir)),
-    calc(72% * var(--ir) + (100% - var(--ang)) * var(--r)) calc(50% * var(--ir)),
-    calc(72% * var(--ir) + 100% * var(--r)) 50%,
-    calc(72% * var(--ir) + (100% - var(--ang)) * var(--r)) calc(50% * var(--ir) + 100% * var(--r)),
-    calc(72% * var(--ir)) calc(50% * var(--ir) + 100% * var(--r))
+    calc(100% * var(--ir)) calc(100% * var(--ir)),
+    calc(100% * var(--ir) + (100% - var(--ang)) * var(--r)) calc(100% * var(--ir)),
+    100% calc(100% * var(--ir) + 50% * var(--r)),
+    calc(100% * var(--ir) + (100% - var(--ang)) * var(--r)) 100%,
+    calc(100% * var(--ir)) 100%
   );
 }
 .mw-ten3__bmission-window {
@@ -1766,22 +1780,16 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
   flex-direction: column;
   justify-content: center;
   padding: clamp(40px, 7vh, 120px) clamp(80px, 14%, 220px) clamp(40px, 7vh, 120px) var(--g);
-  /* Grow the content from the SAME point + rate as the chip clip, so the MISSION heading
-     scales up in lockstep with the container (the clip interpolates each vertex linearly
-     from the point P, and scale(rev) about P is that exact interpolation — so the content
-     always tracks inside the clip). At rev 0 it collapses to P; at 1 it's at rest, full size. */
+  /* Header + body both EXPAND with the container (scale tracks the chip clip exactly — scale
+     about P equals the clip's linear vertex interpolation, so the content never out-runs the
+     clip) and FADE IN together. The fade finishes at --mission-rev 0.85 — i.e. once the body is
+     fully rendered/readable — and the box then keeps expanding to the screen edge while the
+     content stays opaque. var() fallback 1 → shown for no-JS / reduced-motion. */
   transform: scale(var(--mission-rev, 1));
-  transform-origin: 72% 50%;
+  transform-origin: 100% 100%;
+  opacity: calc(var(--mission-rev, 1) / 0.85);
 }
 .mw-ten3__bmission .mw-ten3__mission-panel { padding: 0; max-width: 90%; }
-/* During the grow, only the MISSION heading shows (revealed by the chip clip). The body copy
-   + link stay hidden and fade in only at the very end — once --mission-rev has cleared the
-   clip past them — so the wide body block never appears mid-cut. var() fallback 1 → shown for
-   no-JS / reduced-motion. */
-.mw-ten3__bmission .mw-ten2__mission-copy,
-.mw-ten3__bmission .mw-ten2__mission-link {
-  opacity: calc((var(--mission-rev, 1) - 0.95) / 0.05);
-}
 /* A little life — the instant the reveal locks in, the MISSION heading does a small overshoot
    and settles. data-settled is set by <TimelineStats> at rev ≈ 1, where the container is full
    so there's room and no clipping; it re-arms on scroll-out so the pop replays on re-entry. */
@@ -1803,13 +1811,12 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
      height stretch, becoming plain content-sized blocks stacked under the banner. */
   .mw-ten3__head { min-height: clamp(300px, 40vw, 440px); max-width: none; }
   .mw-ten3__banner { clip-path: none; position: static; overflow: visible; }
-  .mw-ten3__line { margin-top: 0; }
+  .mw-ten3__record { margin-top: 0; }
   .mw-ten3__aside, .mw-ten3__maside { margin-left: 0; width: auto; max-width: none; clip-path: none; overflow: visible; min-height: 0; display: block; transform: none; }
   .mw-ten3__aside { position: static; top: auto; height: auto; }
   /* Mission layer flows as a plain white block below the banner image (no pin/clip/zoom). */
   .mw-ten3__bmission, .mw-ten3__bmission-window, .mw-ten3__bmission-zoom { position: static; inset: auto; clip-path: none; transform: none; }
-  .mw-ten3__bmission-zoom { display: block; padding: clamp(28px, 6vw, 44px) clamp(24px, 5vw, 40px); }
-  .mw-ten3__bmission .mw-ten2__mission-copy, .mw-ten3__bmission .mw-ten2__mission-link { opacity: 1; }
+  .mw-ten3__bmission-zoom { display: block; padding: clamp(28px, 6vw, 44px) clamp(24px, 5vw, 40px); opacity: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
   /* The drivers don't attach → --wipe / --stats-out fall back (full chevron, band at rest).
