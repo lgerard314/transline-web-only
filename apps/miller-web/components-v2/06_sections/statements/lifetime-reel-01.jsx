@@ -14,8 +14,8 @@ import { sectionProps } from "@/components-v2/section-config";
 //   EXPANDING PANEL (approach → pin):
 //     The dark walnut box that holds the background map is a RECTANGLE, TOP-ALIGNED just
 //     BELOW the sticky header, square corners, map fully OPAQUE. It begins growing — and
-//     the map begins fading to the faint wash — once the box is vertically CENTERED in the
-//     viewport (its centre at vh/2), and grows (width faster than height)
+//     the map begins fading to the faint wash — once the BOTTOM of the initial square
+//     reaches the viewport bottom, and grows (width faster than height)
 //     to its FINAL band — spanning from below the header to the bottom of the screen,
 //     full-bleed — exactly when the section pins. The GRAPHIC stays fitted (whole map)
 //     while it can and grows SLOWER than the box; its FINAL width is the body-content
@@ -50,6 +50,7 @@ import { sectionProps } from "@/components-v2/section-config";
 const MAP_ASPECT = 720 / 612; // bg graphic (canada-bg-line-map.svg) intrinsic aspect ≈ 1.176 — the graphic always fits this
 const PANEL_H_START = 0.34;   // starting box height as a fraction of the final band height
 const CHAIN_SPEED = 4;          // keep in sync with lifetime-reel.jsx applyFrontier
+const CHAIN_SCROLL_MULT = 1.5;  // diamond + connector draw: 1.5× legacy scroll span (50% progress per px → slower scrub to full render)
 const PIN_HOLD_VH = 10;         // tiny post-content scroll before the section releases
 const PIN_RUNWAY_DESKTOP = 280; // vh — legacy full pin reference (pre-trim)
 const PIN_RUNWAY_TABLET = 175;  // vh — tablet legacy pin reference
@@ -57,7 +58,7 @@ const PIN_RUNWAY_SCALE = 0.7;   // legacy trim factor used to preserve content s
 const pinLayout = (tablet) => {
   const base = tablet ? PIN_RUNWAY_TABLET : PIN_RUNWAY_DESKTOP;
   const legacyPinVh = (base - 100) * PIN_RUNWAY_SCALE;
-  const contentScrollVh = legacyPinVh / CHAIN_SPEED; // px scroll where chain highlights finish
+  const contentScrollVh = (legacyPinVh / CHAIN_SPEED) * CHAIN_SCROLL_MULT; // scroll span where chain + highlights finish
   const pinTotalVh = contentScrollVh + PIN_HOLD_VH;
   return {
     trackVh: 100 + pinTotalVh,
@@ -78,6 +79,7 @@ const smoothstep = (t) => { const x = Math.min(1, Math.max(0, t)); return x * x 
 
 export function LifetimeReel01({ content, config = {} }) {
   const { headingId, srHeading, eyebrow, highlights } = content;
+  const autoScroll = config.autoScroll !== false;
   const trackRef = useRef(null);
   const panelRef = useRef(null);
   const innerRef = useRef(null);
@@ -135,8 +137,8 @@ export function LifetimeReel01({ content, config = {} }) {
       setPin(true);
 
       // PANEL: a RECTANGLE that grows (top-aligned below the header) from a small box to the
-      // full band — width faster than height. Growth begins once the box is vertically
-      // CENTERED in the viewport (centre at vh/2 → topY == vh/2 - headerH - hSmall/2) and
+      // full band — width faster than height. Growth begins once the BOTTOM of the initial
+      // square reaches the viewport bottom (track top == vh - headerH - hSmall) and
       // completes as the section pins. The GRAPHIC fits ENTIRELY inside (contain) with
       // padding, capped at the body-content width, so it grows slower than the box; its
       // opacity fades 1 → faint wash across the growth.
@@ -145,7 +147,7 @@ export function LifetimeReel01({ content, config = {} }) {
       const vw = window.innerWidth || vh;
       const hFull = Math.max(1, vh - headerH);
       const hSmall = PANEL_H_START * hFull;
-      const triggerTop = Math.max(1, vh / 2 - headerH - hSmall / 2); // section-top y where the box centre sits at vh/2
+      const triggerTop = Math.max(1, vh - headerH - hSmall); // track top where the small box's bottom hits the screen bottom
       const panelT = Math.min(1, Math.max(0, (triggerTop - topY) / triggerTop));
       const reel = contentP;
       setReel(reel);
@@ -202,31 +204,33 @@ export function LifetimeReel01({ content, config = {} }) {
       const dt = lastTs ? Math.min(50, ts - lastTs) : 16.7; // clamp big gaps (tab switches)
       lastTs = ts;
 
-      const { topY, panelT, reel, triggerTop, pinTotal, contentScrollVh } = measure();
+      const { topY, panelT, reel, triggerTop, contentScrollVh } = measure();
 
-      // AUTO-SCROLL: active from the moment the box starts expanding (panelT > 0) until the
-      // last diamond is rendered (reel == 1). Pace the expand + content draw span over AUTO_MS.
-      const vh = window.innerHeight || document.documentElement.clientHeight || 1;
-      const span = triggerTop + (contentScrollVh / 100) * vh;
-      const active = panelT > 0 && reel < 1;
-      const userActive = ts - lastUserTs < USER_IDLE_MS;
-      const y = window.scrollY;
-      if (topY >= triggerTop) cancelled = false;               // re-arm once scrolled back above the start
-      if (!cancelled && active && y < lastY - 1) cancelled = true; // scroll UP → hand control back
-      if (active && !cancelled && !userActive) {
-        window.scrollBy({ top: (span / AUTO_MS) * dt, behavior: "instant" });
-      } else {
-        // REVERSE AMPLIFY (scroll-up only): while there is still reveal to undo (the box is
-        // expanded and/or the chain is drawn), every pixel the user scrolls UP this frame gets
-        // an extra (REVERSE_SPEED-1) px upward, so the reverse plays REVERSE_SPEED× faster.
-        // Down scroll is never amplified (movedUp ≤ 0). Skipped during the down auto-nudge.
-        const movedUp = lastY - y; // > 0 when the user scrolled up since last frame
-        const reverseZone = reel > 0 || panelT > 0;
-        if (movedUp > 0 && reverseZone) {
-          window.scrollBy({ top: -movedUp * (REVERSE_SPEED - 1), behavior: "instant" });
+      if (autoScroll) {
+        // AUTO-SCROLL: active from the moment the box starts expanding (panelT > 0) until the
+        // last diamond is rendered (reel == 1). Pace the expand + content draw span over AUTO_MS.
+        const vh = window.innerHeight || document.documentElement.clientHeight || 1;
+        const span = triggerTop + (contentScrollVh / 100) * vh;
+        const active = panelT > 0 && reel < 1;
+        const userActive = ts - lastUserTs < USER_IDLE_MS;
+        const y = window.scrollY;
+        if (topY >= triggerTop) cancelled = false;               // re-arm once scrolled back above the start
+        if (!cancelled && active && y < lastY - 1) cancelled = true; // scroll UP → hand control back
+        if (active && !cancelled && !userActive) {
+          window.scrollBy({ top: (span / AUTO_MS) * dt, behavior: "instant" });
+        } else {
+          // REVERSE AMPLIFY (scroll-up only): while there is still reveal to undo (the box is
+          // expanded and/or the chain is drawn), every pixel the user scrolls UP this frame gets
+          // an extra (REVERSE_SPEED-1) px upward, so the reverse plays REVERSE_SPEED× faster.
+          // Down scroll is never amplified (movedUp ≤ 0). Skipped during the down auto-nudge.
+          const movedUp = lastY - y; // > 0 when the user scrolled up since last frame
+          const reverseZone = reel > 0 || panelT > 0;
+          if (movedUp > 0 && reverseZone) {
+            window.scrollBy({ top: -movedUp * (REVERSE_SPEED - 1), behavior: "instant" });
+          }
         }
+        lastY = window.scrollY;
       }
-      lastY = window.scrollY;
     };
 
     const startLoop = () => { if (running) return; running = true; lastTs = 0; lastY = window.scrollY; raf = requestAnimationFrame(loop); };
@@ -240,20 +244,24 @@ export function LifetimeReel01({ content, config = {} }) {
 
     const io = new IntersectionObserver(([e]) => { inView = e.isIntersecting; evaluate(); }, { threshold: 0 });
     io.observe(track);
-    window.addEventListener("wheel", onUserScroll, { passive: true });
-    window.addEventListener("touchmove", onUserScroll, { passive: true });
+    if (autoScroll) {
+      window.addEventListener("wheel", onUserScroll, { passive: true });
+      window.addEventListener("touchmove", onUserScroll, { passive: true });
+    }
     mqWide.addEventListener("change", evaluate);
     mqRM.addEventListener("change", evaluate);
     evaluate();
     return () => {
       io.disconnect();
       stopLoop();
-      window.removeEventListener("wheel", onUserScroll);
-      window.removeEventListener("touchmove", onUserScroll);
+      if (autoScroll) {
+        window.removeEventListener("wheel", onUserScroll);
+        window.removeEventListener("touchmove", onUserScroll);
+      }
       mqWide.removeEventListener("change", evaluate);
       mqRM.removeEventListener("change", evaluate);
     };
-  }, []);
+  }, [autoScroll]);
 
   return (
     <div className="mw-lr-track" ref={trackRef}>

@@ -7,13 +7,12 @@ import { FigureStat01 } from "@/components-v2/04_blocks/stats/figure-stat-01";
 import { ImageAccordion01 } from "@/components-v2/05_widgets/galleries/image-accordion-01";
 import { sectionProps } from "@/components-v2/section-config";
 
-// MediaSplit01 — the home VBEC (facility) section. A 40/60 split on a section whose DEFAULT
-// background is dark walnut (--c-navy), continuous with the LifetimeReel above. Two phases:
+// MediaSplit01 — the home VBEC (facility) section. A 40/60 split on a cream section. Two phases:
 //
-// ENTRANCE (brown → beige fill, as the section scrolls in to fill the viewport):
-//   LEFT  — a CREAM intro panel that slides DOWN into place (delayed by top padding).
-//   RIGHT — at that same gate moment it rises UP from below on the same easeInOut curve so both
-//           columns finish together.
+// ENTRANCE (as the section scrolls in to fill the viewport):
+//   LEFT  — intro column slides DOWN into place; eyebrow / title / lead / CTA / text-link each
+//           mask-rise in only once that item's bottom has fully entered the viewport.
+//   RIGHT — rises UP from below on the same easeInOut curve so both columns finish together.
 //
 // PINNED SEQUENCE (once the section fills the viewport):
 //   1. HIGHLIGHTS — once entrance completes, the 3-figure band auto-slides out over FIG_MS.
@@ -53,8 +52,11 @@ const CAP_TONES = ["#B5642F", "#B5642F", "#A85A2C", "#A85A2C", "#8C4A24", "#8C4A
 const capDiaStyle = (col, row, extra) => ({ left: `${col * CAP_SX}%`, top: `${row * CAP_SY}%`, width: `${2 * CAP_SX}%`, ...extra });
 const capSoftWrap = (s) => s.replace(/([/-])/g, "$1" + String.fromCharCode(0x200b));
 
+const INTRO_RISE_SEL = [".mw-fac2__field", ".mw-fac2__title", ".mw-fac2__lead", ".mw-fac2__cta-rise", ".mw-fac2__about-rise"];
+
 export function MediaSplit01({ content, config = {} }) {
   const { eyebrow, stage, title, lead, figures, capsTitle, capabilities, primaryCta, aboutLink, headingId, photos } = content;
+  const autoScroll = config.autoScroll !== false;
   const trackRef = useRef(null);
   const sectionRef = useRef(null);
   const leftRef = useRef(null);
@@ -100,6 +102,25 @@ export function MediaSplit01({ content, config = {} }) {
       pinned: false,
     });
 
+    const showAllIntroRises = (leftEl) => {
+      if (!leftEl) return;
+      for (const sel of INTRO_RISE_SEL) {
+        const el = leftEl.querySelector(sel);
+        if (el) el.setAttribute("data-in", "1");
+      }
+    };
+
+    const gateIntroRises = (leftEl, vh) => {
+      if (!leftEl) return;
+      for (const sel of INTRO_RISE_SEL) {
+        const el = leftEl.querySelector(sel);
+        if (!el) continue;
+        const bottom = el.getBoundingClientRect().bottom;
+        if (bottom > 0 && bottom <= vh) el.setAttribute("data-in", "1");
+        else if (bottom > vh) el.removeAttribute("data-in");
+      }
+    };
+
     const render = () => {
       const track = trackRef.current, section = sectionRef.current;
       const left = leftRef.current, right = rightRef.current;
@@ -124,6 +145,7 @@ export function MediaSplit01({ content, config = {} }) {
           setHighlightsDone(false);
         }
         resetPinClocks();
+        showAllIntroRises(left);
         return idleState();
       }
       // Pin immediately BELOW the fixed header (read it live — it collapses on scroll).
@@ -143,20 +165,16 @@ export function MediaSplit01({ content, config = {} }) {
       const total = Math.max(1, track.offsetHeight - vh + headOff);
       const P = clamp01((headOff - trackTop) / total);
 
-      // ENTRANCE GATE — both columns wait until the section has revealed its top padding (brown
-      // strip above). At that exact scroll moment the left begins sliding DOWN and the right
-      // rises UP on the same remapped timeline.
-      const padTop = Math.max(64, Math.min(112, 0.065 * vw));
-      const eStart = padTop / span;
-      const t = E <= eStart ? 0 : clamp01((E - eStart) / Math.max(0.001, 1 - eStart));
-      const u = easeInOut(t);
+      // ENTRANCE — left slides DOWN, right rises UP, both keyed to E on the same easeInOut curve.
+      const u = easeInOut(E);
 
       const coverL = left.offsetHeight || span;
       left.style.setProperty("--fac2-left-y", (-(1 - u) * coverL).toFixed(1) + "px");
 
       const coverR = right.offsetHeight || span;
-      const rightY = E <= eStart ? coverR : (1 - u) * coverR;
-      right.style.setProperty("--fac2-right-y", rightY.toFixed(1) + "px");
+      right.style.setProperty("--fac2-right-y", ((1 - u) * coverR).toFixed(1) + "px");
+
+      gateIntroRises(left, vh);
 
       // PIN 1 — HIGHLIGHTS: auto-slide the figclip out once the section is fully formed (E = 1).
       const entranceDone = E >= 0.999;
@@ -207,8 +225,9 @@ export function MediaSplit01({ content, config = {} }) {
 
       // 8 diamonds × 1 rule: each diamond starts one width above-left, already tucked
       // under the moving media edge, then falls down-right on a straight 45° path into
-      // its final lattice slot. Every diamond is settled once the media container has
-      // fully cleared the body-content width, even though it may still be visible onscreen.
+      // its final lattice slot. The first diamond to launch settles first; each later
+      // launch follows, with the final diamond settled once the media clears the body
+      // content width.
       const grid = caps.querySelector(".mw-cap-dia");
       if (grid) {
         const gridLeft = grid.getBoundingClientRect().left;
@@ -224,13 +243,14 @@ export function MediaSplit01({ content, config = {} }) {
           return { cell, boxW, startX, launchEdge };
         });
         const edge = containerLeft;
+        const lastLaunchEdge = Math.max(...metrics.map((m) => m.launchEdge));
+        const settleSpan = Math.max(1, bodyContentRight - lastLaunchEdge);
         const spinTotal = -(CAP_ROT + CAP_SPIN);
         for (const { cell, boxW, startX, launchEdge } of metrics) {
-          const fallSpan = Math.max(1, bodyContentRight - launchEdge);
           const travelPx = edge - launchEdge;
           const raw = travelPx <= 0
               ? 0
-              : clamp01(travelPx / fallSpan);
+              : clamp01(travelPx / settleSpan);
           const spin = ease(raw);
           const scale = CAP_START_SCALE + (1 - CAP_START_SCALE) * ease(raw);
           const startY = -boxW * 0.5;
@@ -274,26 +294,28 @@ export function MediaSplit01({ content, config = {} }) {
       if (pinActive && figElapsed < FIG_MS) figElapsed = Math.min(FIG_MS, figElapsed + dt);
 
       const state = render();
-      const y = window.scrollY;
-      const userActive = ts - lastUserTs < USER_IDLE_MS;
 
-      if (state.figDone && state.swipeStartP != null && state.P > state.swipeStartP) exitArmed = true;
-      if (state.swipeStartP != null && state.P <= state.swipeStartP) {
-        cancelled = false;
-        exitArmed = false;
-      }
-      if (!cancelled && state.pinned && exitArmed && state.sweep < 1 && y < lastY - 1) cancelled = true;
+      if (autoScroll) {
+        const y = window.scrollY;
+        const userActive = ts - lastUserTs < USER_IDLE_MS;
+        if (state.figDone && state.swipeStartP != null && state.P > state.swipeStartP) exitArmed = true;
+        if (state.swipeStartP != null && state.P <= state.swipeStartP) {
+          cancelled = false;
+          exitArmed = false;
+        }
+        if (!cancelled && state.pinned && exitArmed && state.sweep < 1 && y < lastY - 1) cancelled = true;
 
-      // Careers auto-advance: real scroll, animation feel — accelerating pace, instant steps.
-      // Only honour USER_IDLE_MS once the exit is visibly underway so the arming nudge does
-      // not stall the self-run (careers never has a separate arm step).
-      const userBlocks = userActive && state.sweep > 0.05;
-      if (exitArmed && state.pinned && state.sweep < 1 && !cancelled && !userBlocks) {
-        const exitDist = Math.max(1, (SWIPE_END - (state.swipeStartP ?? 0)) * state.total);
-        const v = (exitDist / EXIT_MS) * 0.924 * (1 + 3 * state.sweep);
-        window.scrollBy({ top: v * dt, behavior: "instant" });
+        // Careers auto-advance: real scroll, animation feel — accelerating pace, instant steps.
+        // Only honour USER_IDLE_MS once the exit is visibly underway so the arming nudge does
+        // not stall the self-run (careers never has a separate arm step).
+        const userBlocks = userActive && state.sweep > 0.05;
+        if (exitArmed && state.pinned && state.sweep < 1 && !cancelled && !userBlocks) {
+          const exitDist = Math.max(1, (SWIPE_END - (state.swipeStartP ?? 0)) * state.total);
+          const v = (exitDist / EXIT_MS) * 0.924 * (1 + 3 * state.sweep);
+          window.scrollBy({ top: v * dt, behavior: "instant" });
+        }
+        lastY = window.scrollY;
       }
-      lastY = window.scrollY;
     };
 
     const start = () => {
@@ -301,15 +323,19 @@ export function MediaSplit01({ content, config = {} }) {
       running = true;
       lastTs = 0;
       lastY = window.scrollY;
-      window.addEventListener("wheel", onUserInput, { passive: true });
-      window.addEventListener("touchmove", onUserInput, { passive: true });
+      if (autoScroll) {
+        window.addEventListener("wheel", onUserInput, { passive: true });
+        window.addEventListener("touchmove", onUserInput, { passive: true });
+      }
       raf = requestAnimationFrame(loop);
     };
     const stop = () => {
       if (!running) return;
       running = false;
-      window.removeEventListener("wheel", onUserInput);
-      window.removeEventListener("touchmove", onUserInput);
+      if (autoScroll) {
+        window.removeEventListener("wheel", onUserInput);
+        window.removeEventListener("touchmove", onUserInput);
+      }
       if (raf) cancelAnimationFrame(raf);
       raf = 0;
       render();
@@ -330,7 +356,7 @@ export function MediaSplit01({ content, config = {} }) {
       mqWide.removeEventListener("change", evaluate);
       mqRM.removeEventListener("change", evaluate);
     };
-  }, []);
+  }, [autoScroll]);
 
   return (
     <div className="mw-fac2-track" ref={trackRef}>
@@ -341,32 +367,46 @@ export function MediaSplit01({ content, config = {} }) {
             <div className="mw-fac2__left" ref={leftRef}>
               <div className="mw-fac2__intro">
                 <header className="mw-fac2__head">
-                  <p className="mw-fac2__field">
-                    {stage ? <span>{stage}</span> : null}
-                    <span className="mw-fac2__field-rule" />
-                    <span>{eyebrow}</span>
+                  <p className="mw-fac2__field" data-fac2-rise>
+                    <span className="mw-fac2__rise">
+                      {stage ? <span>{stage}</span> : null}
+                      <span className="mw-fac2__field-rule" />
+                      <span>{eyebrow}</span>
+                    </span>
                   </p>
-                  <h2 id={headingId} className="mw-fac2__title">{title.em}</h2>
+                  <h2 id={headingId} className="mw-fac2__title" data-fac2-rise>
+                    <span className="mw-fac2__rise">{title.em}</span>
+                  </h2>
                 </header>
 
-                <p className="mw-fac2__lead">{lead}</p>
+                <p className="mw-fac2__lead" data-fac2-rise>
+                  <span className="mw-fac2__rise">{lead}</span>
+                </p>
 
                 <div className="mw-fac2__actions">
-                  <SolidCta01 href={primaryCta.href}>
-                    <span className="mw-fac2__lbl-long">{primaryCta.longLabel}</span>
-                    <span className="mw-fac2__lbl-short">{primaryCta.shortLabel}</span>
-                    {" "}<ActionArrow01 />
-                  </SolidCta01>
-                  <Link href={aboutLink.href} className="mw-fac2__about">
-                    <span className="mw-fac2__lbl-long">{aboutLink.longLabel}</span>
-                    <span className="mw-fac2__lbl-short">{aboutLink.shortLabel}</span>
-                    {" "}<span aria-hidden="true">→</span>
-                  </Link>
+                  <div className="mw-fac2__cta-rise" data-fac2-rise>
+                    <span className="mw-fac2__rise">
+                      <SolidCta01 href={primaryCta.href}>
+                        <span className="mw-fac2__lbl-long">{primaryCta.longLabel}</span>
+                        <span className="mw-fac2__lbl-short">{primaryCta.shortLabel}</span>
+                        {" "}<ActionArrow01 />
+                      </SolidCta01>
+                    </span>
+                  </div>
+                  <div className="mw-fac2__about-rise" data-fac2-rise>
+                    <span className="mw-fac2__rise">
+                      <Link href={aboutLink.href} className="mw-fac2__about">
+                        <span className="mw-fac2__lbl-long">{aboutLink.longLabel}</span>
+                        <span className="mw-fac2__lbl-short">{aboutLink.shortLabel}</span>
+                        {" "}<span aria-hidden="true">→</span>
+                      </Link>
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* RIGHT — the cream column. Two stacked layers: MEDIA (photos + highlights band) which
+            {/* RIGHT — two stacked layers: MEDIA (photos + highlights band) which
                 rises in then swipes RIGHT, and CAPS (the diamond cluster) parked centred behind it,
                 rolling in as the media uncovers it. */}
             <div className="mw-fac2__right" ref={rightRef}>

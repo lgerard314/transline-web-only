@@ -36,7 +36,7 @@ const REVEAL_START = 0.70;
 const REVEAL_END = 1.0;
 const DIVE_MS = 2600; // base auto-advance pace (start speed); it accelerates to 2× by the end
 
-export function ZoomCollage01({ photos = [], children }) {
+export function ZoomCollage01({ photos = [], children, autoScroll = true }) {
   const rootRef = useRef(null);
   const cellRefs = useRef([]);
   const [reduced, setReduced] = useState(false);
@@ -95,40 +95,46 @@ export function ZoomCollage01({ photos = [], children }) {
       // Progress is tied to scroll position (scrubbed) — scrolling up reverses it.
       const pd = diveDist > 0 ? Math.min(1, Math.max(0, -rect.top / diveDist)) : 0;
       apply(pd);
-      const y = window.scrollY;
-      const pinned = rect.top <= 0 && rect.bottom > vh;
-      const userActive = ts - lastUserTs < USER_IDLE_MS;
-      // Re-arm once the section UNPINS on the way back up (its top drops below the
-      // viewport top) — i.e. the user scrolled up past the pin point.
-      if (rect.top > 0) cancelled = false;
-      // If the user scrolls UP while pinned, kill the auto-scroll entirely. It stays
-      // cancelled (the section is now plain scroll-scrubbed) until it unpins.
-      if (!cancelled && pinned && pd < 1 && y < lastY - 1) cancelled = true;
-      // Auto-advance only while pinned, unfinished, not cancelled, AND the user isn't
-      // mid-scroll (so their scroll-to-speed-up isn't cancelled by our nudge).
-      // The pace ACCELERATES across the dive: it begins slow (≈0.66× base) and ends at
-      // ≈1.33× — i.e. the finish is twice the starting speed. behavior:"instant" bypasses
-      // the page's scroll-behavior:smooth.
-      if (pinned && pd < 1 && !cancelled && !userActive) {
-        const v = (diveDist / DIVE_MS) * 0.924 * (1 + 3 * pd); // 40% faster overall (start 0.92× → end 3.7×)
-        window.scrollBy({ top: v * dt, behavior: "instant" });
+      if (autoScroll) {
+        const y = window.scrollY;
+        const pinned = rect.top <= 0 && rect.bottom > vh;
+        const userActive = ts - lastUserTs < USER_IDLE_MS;
+        // Re-arm once the section UNPINS on the way back up (its top drops below the
+        // viewport top) — i.e. the user scrolled up past the pin point.
+        if (rect.top > 0) cancelled = false;
+        // If the user scrolls UP while pinned, kill the auto-scroll entirely. It stays
+        // cancelled (the section is now plain scroll-scrubbed) until it unpins.
+        if (!cancelled && pinned && pd < 1 && y < lastY - 1) cancelled = true;
+        // Auto-advance only while pinned, unfinished, not cancelled, AND the user isn't
+        // mid-scroll (so their scroll-to-speed-up isn't cancelled by our nudge).
+        // The pace ACCELERATES across the dive: it begins slow (≈0.66× base) and ends at
+        // ≈1.33× — i.e. the finish is twice the starting speed. behavior:"instant" bypasses
+        // the page's scroll-behavior:smooth.
+        if (pinned && pd < 1 && !cancelled && !userActive) {
+          const v = (diveDist / DIVE_MS) * 0.924 * (1 + 3 * pd); // 40% faster overall (start 0.92× → end 3.7×)
+          window.scrollBy({ top: v * dt, behavior: "instant" });
+        }
+        lastY = window.scrollY;
       }
-      lastY = window.scrollY;
     };
 
     const start = () => {
       if (running) return;
       running = true; lastTs = 0; lastY = window.scrollY;
       readVars();
-      window.addEventListener("wheel", onUserScroll, { passive: true });
-      window.addEventListener("touchmove", onUserScroll, { passive: true });
+      if (autoScroll) {
+        window.addEventListener("wheel", onUserScroll, { passive: true });
+        window.addEventListener("touchmove", onUserScroll, { passive: true });
+      }
       raf = requestAnimationFrame(loop);
     };
     const stop = () => {
       if (!running) return;
       running = false;
-      window.removeEventListener("wheel", onUserScroll);
-      window.removeEventListener("touchmove", onUserScroll);
+      if (autoScroll) {
+        window.removeEventListener("wheel", onUserScroll);
+        window.removeEventListener("touchmove", onUserScroll);
+      }
       cancelAnimationFrame(raf); raf = 0;
     };
 
@@ -148,7 +154,7 @@ export function ZoomCollage01({ photos = [], children }) {
     window.addEventListener("resize", readVars, { passive: true });
     apply(0);
     return () => { io.disconnect(); stop(); window.removeEventListener("resize", readVars); };
-  }, []);
+  }, [autoScroll]);
 
   if (!photos || photos.length === 0) return null;
 

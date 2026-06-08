@@ -21,7 +21,7 @@ export function ZoomCollage01({ content, config = {} }) {
           <span>{eyebrow}</span>
         </p>
       </header>
-      <ZoomCollageWidget photos={zoomPhotos}>
+      <ZoomCollageWidget photos={zoomPhotos} autoScroll={config.autoScroll !== false}>
         <div className="mw-czoom__copy">
           <p className="mw-czoom__field">
             {stage ? <span>{stage}</span> : null}

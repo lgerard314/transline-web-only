@@ -11,8 +11,7 @@
    ───────────────────────────────────────────────────────────────── */
 .mw-fac2 {
   position: relative;
-  /* Resting / mobile background is the light beige. On desktop (pinned block far below) the
-     DEFAULT flips to dark walnut and the two beige/photo columns slide over it to erase it. */
+  /* Cream surface on all breakpoints — desktop entrance is column content sliding into place. */
   background: var(--c-bg);
   padding-block: clamp(64px, 6.5vw, 112px);
   color: var(--c-ink);
@@ -5426,9 +5425,9 @@ html[data-brand="miller"] {
    Reuses the base .mw-secd__* styling; everything below ports the arc gallery's
    interaction model onto the grid. Photo cells position from --lx/--ly/--w vars
    so the hover states can move them without fighting inline left/top. The reveal
-   animates .mw-secd__photo (holding its transform), so the category spotlight (#4)
-   moves photos via left/top and the single-photo hover (#5) scales the child
-   .mw-secd__photo-clip — neither collides with the held animation transform.
+   scrubs each cell's translate/rotate/scale, so the category spotlight (#4) still
+   moves photos via left/top and the single-photo hover (#5) still scales the child
+   .mw-secd__photo-clip — neither collides with the held reveal transform.
    --sp-* knobs tune the spotlight placement.
    ════════════════════════════════════════════════════════════════ */
 .mw-secd--int {
@@ -5450,18 +5449,17 @@ html[data-brand="miller"] {
   left: var(--lx);
   top: var(--ly);
   width: var(--w);
-  transition: left 0.5s cubic-bezier(.2, .7, .2, 1), top 0.5s cubic-bezier(.2, .7, .2, 1), width 0.5s cubic-bezier(.2, .7, .2, 1), transform 0.5s cubic-bezier(.2, .7, .2, 1);
+  transition: left 0.5s cubic-bezier(.2, .7, .2, 1), top 0.5s cubic-bezier(.2, .7, .2, 1), width 0.5s cubic-bezier(.2, .7, .2, 1);
 }
 
-/* (#3) staggered reveal — fade + scale-in; replays each time the driver toggles .is-in */
-@keyframes mw-secd3-in {
-  from { opacity: 0; transform: scale(0.55); }
-  to   { opacity: 1; transform: scale(1); }
-}
-.mw-secd--int .mw-secd__grid.is-armed > * { opacity: 0; }
-.mw-secd--int .mw-secd__grid.is-armed.is-in > * {
-  animation: mw-secd3-in 0.62s cubic-bezier(.22, .61, .36, 1) both;
-  animation-delay: calc(var(--fx, 0) * 0.5s);
+/* (#3) scroll-scrubbed reveal — VBEC-style fall-in; SectorGridMotion03 writes
+   --secd3-op / --secd3-sc / --secd3-tx / --secd3-ty / --secd3-rot per cell once
+   every diamond has cleared the viewport bottom (+ buffer). */
+.mw-secd--int .mw-secd__grid.is-armed > * {
+  opacity: var(--secd3-op, 0);
+  transform: translate3d(var(--secd3-tx, 0px), var(--secd3-ty, 0px), 0) rotate(var(--secd3-rot, 0deg)) scale(var(--secd3-sc, 0.25));
+  transform-origin: center;
+  will-change: transform, opacity;
 }
 
 /* hover caption — hidden at rest, sits above the photo's top (used by #4 + #5). Styled IDENTICALLY
@@ -5556,8 +5554,7 @@ html[data-brand="miller"] {
 @media (prefers-reduced-motion: reduce) {
   .mw-secd--int .mw-secd__photo,
   .mw-secd--int .mw-secd__photo-clip { transition: none; }
-  .mw-secd--int .mw-secd__grid.is-armed > *,
-  .mw-secd--int .mw-secd__grid.is-armed.is-in > * { opacity: 1; animation: none; }
+  .mw-secd--int .mw-secd__grid.is-armed > * { opacity: 1; transform: none; }
 }
 
 /* ── CHECKMARK variant (SectorDiamonds04) ──────────────────────────────────
@@ -5574,6 +5571,8 @@ html[data-brand="miller"] {
    spotlight (≈150px) are absolute sizes, unaffected. */
 .mw-secd--check {
   overflow-x: clip; /* safety net — the grid must never add a page scrollbar */
+  /* Extra bottom room before Lifetime Impact — 3× the base .mw-secd bottom padding. */
+  padding-block: clamp(64px, 6.5vw, 112px) clamp(192px, 19.5vw, 336px);
   /* Spotlight gathered-row vertical position (relative to the grid top). Positioned so the TOP of the
      straightened spotlight PHOTOS sits ~16px above the top of the highest grid photo (si3, row 0).
      Both boxes share the same clip inset (--secd-gap), so those cancel → −16px exactly. Scoped to --check. */
@@ -5712,13 +5711,13 @@ html[data-brand="miller"] {
    view as the pin releases. Shorter viewports skip the pin and flow normally. */
 @media (min-width: 721px) and (min-height: 840px) and (prefers-reduced-motion: no-preference) {
   /* sticky runway: a brief pin hold, then it releases and the button + bottom gap scroll into view */
-  .mw-secd-track { height: calc(100vh + 520px); }
+  .mw-secd-track { height: calc(100vh + 720px); }
   .mw-secd-track > .mw-secd--check {
     position: sticky;
     top: 0;
     min-height: 100vh;     /* grows taller than the viewport → the button sits BELOW the framed pinned view */
     /* top: clear the fixed nav AND the spotlight captions (~57px above the grid); bottom: gap before next section */
-    padding-block: clamp(88px, 10vh, 116px) clamp(56px, 7vh, 112px);
+    padding-block: clamp(88px, 10vh, 116px) clamp(168px, 21vh, 336px);
     display: flex;
     flex-direction: column;
     /* CENTRE the composition when there's room (tall / portrait → everything fits, middle-aligned); fall
@@ -6357,8 +6356,7 @@ html[data-brand="miller"] {
 }
 
 /* ─────────────────────────────────────────────────────────────────
-   VBEC brown → beige FILL + pinned reveal (media-split-01.jsx). DEFAULT
-   background is dark walnut (--c-navy), continuous with the LifetimeReel above.
+   VBEC pinned reveal (media-split-01.jsx). Cream section throughout.
    ENTRANCE: left intro slides DOWN and right column rises UP (shared easeInOut) so both
    finish together. PINNED: highlights auto-grow (FIG_MS), then scroll scrubs the media exit
    (SWIPE_START → SWIPE_END on pin P) and diamonds roll in. Remaining track height is release
@@ -6367,19 +6365,15 @@ html[data-brand="miller"] {
 
 @media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
   .mw-fac2-track { position: relative; height: var(--fac2-track-h, 250vh); }
-  /* DEFAULT background is dark walnut (matches the section above); the cream columns erase it.
-     The section pins immediately below the header, sized to the remaining viewport. */
+  /* Section pins immediately below the header, sized to the remaining viewport. */
   .mw-fac2-track > .mw-fac2 {
     position: sticky;
     top: var(--fac2-head-off, 115px);
     height: calc(100vh - var(--fac2-head-off, 115px));
     padding-block: 0;
-    background: var(--c-navy);
+    background: var(--c-bg);
   }
-  /* The 49° paper-grain wash is tuned for the light surface — hide it over the walnut default. */
-  .mw-fac2-track > .mw-fac2::before { display: none; }
-  /* The inner tiles the FULL pinned viewport (no max-width gutter, no padding) so the two cream
-     columns can cover every pixel of brown. The content's gutter is restored inside the columns. */
+  /* Inner fills the pinned viewport (no max-width gutter, no padding); column gutters restored inside. */
   .mw-fac2-track > .mw-fac2 > .mw-inner {
     height: 100%;
     max-width: none;
@@ -6395,28 +6389,46 @@ html[data-brand="miller"] {
     margin: 0;
     align-items: stretch;
   }
-  /* LEFT — the CREAM intro panel (bg full height, no brown gutter). Bleeds to the screen's left
-     edge; text held in the content gutter via padding-left; vertically centred. Slides DOWN into
-     place (delayed by the top padding) then PINS (reader writes --fac2-left-y, no reverse). */
+  /* LEFT — intro column. Bleeds to the screen's left edge; text held in the content gutter via
+     padding-left; vertically centred. Slides DOWN into place (JS: --fac2-left-y). */
   .mw-fac2-track .mw-fac2__left {
     position: relative;
     justify-content: center;
-    background: var(--c-bg);
     padding: clamp(64px, 6.5vw, 112px) clamp(28px, 3.2vw, 56px);
     padding-left: max(clamp(24px, 4vw, 72px), calc((100vw - 1560px) / 2));
     transform: translateY(var(--fac2-left-y, 0px));
     will-change: transform;
   }
-  /* RIGHT — the CREAM column, the positioning context for the two stacked layers. Before the
-     entrance gate it sits below the viewport; at the gate it rises UP (reader writes
-     --fac2-right-y from coverR → 0 on the same easeInOut progress as the left); stays put on the pin.
-     Flex-centres the media stack so it aligns with the left intro. */
+  /* Intro copy mask-rise — each item reveals only once its bottom has fully entered the viewport
+     (data-in set per-frame in media-split-01.jsx). */
+  .mw-fac2-track .mw-fac2__field[data-fac2-rise],
+  .mw-fac2-track .mw-fac2__title[data-fac2-rise],
+  .mw-fac2-track .mw-fac2__lead[data-fac2-rise],
+  .mw-fac2-track .mw-fac2__cta-rise[data-fac2-rise],
+  .mw-fac2-track .mw-fac2__about-rise[data-fac2-rise] { overflow: hidden; }
+  .mw-fac2-track [data-fac2-rise] > .mw-fac2__rise {
+    display: block;
+    transform: translateY(116%);
+    transition: transform 0.95s cubic-bezier(.16, .84, .3, 1);
+  }
+  .mw-fac2-track .mw-fac2__field[data-fac2-rise] > .mw-fac2__rise {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+  }
+  .mw-fac2-track [data-fac2-rise][data-in="1"] > .mw-fac2__rise { transform: none; }
+  .mw-fac2-track .mw-fac2__cta-rise[data-fac2-rise] > .mw-fac2__rise,
+  .mw-fac2-track .mw-fac2__about-rise[data-fac2-rise] > .mw-fac2__rise {
+    transition-duration: 0.475s;
+  }
+  /* RIGHT — positioning context for media + caps layers. Rises UP on entrance (JS: --fac2-right-y);
+     flex-centres the media stack so it aligns with the left intro. */
   .mw-fac2-track .mw-fac2__right {
     position: relative;
     align-self: stretch;
     min-width: 0;
     min-height: 0;
-    background: var(--c-bg);
     transform: translateY(var(--fac2-right-y, 0px));
     will-change: transform;
     display: flex;

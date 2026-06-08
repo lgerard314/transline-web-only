@@ -26,10 +26,10 @@ export default function HomePage() {
       <TallStaticBanner01 content={CERTS_BANNER} />
       <RosterCollage02 content={SERVICES_GRID} />
       <SectorDiamonds04 content={SECTORS_V2} />
-      <LifetimeReel01 content={LIFETIME_REEL} />
-      <MediaSplit01 content={FACILITY} />
+      <LifetimeReel01 content={LIFETIME_REEL} config={{ autoScroll: false }} />
+      <MediaSplit01 content={FACILITY} config={{ autoScroll: false }} />
       <TimelineSplit01 content={HISTORY} />
-      <ZoomCollage01 content={CAREERS} />
+      <ZoomCollage01 content={CAREERS} config={{ autoScroll: false }} />
       <RotatingBanner01 content={AFFILIATES_BANNER} />
       <MultiColumnCta01 content={FINAL_CTA} />
     </>
