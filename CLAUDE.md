@@ -40,10 +40,19 @@ Rules for miller-web:
 - **`page.jsx` orchestrates only** — no section markup inline. Find a `06_sections` template that fits (check `/template-gallery`) before inventing anything.
 - **Copy** lives in `lib/content/<page>.js` (service pages) or the home content modules — never duplicated inside `page.jsx`.
 - **Do not reintroduce per-route `sections/NN-*.jsx` / `banners/` files or monolithic `*Template.jsx`** for miller pages — the template cutover removed them. Build by composition.
-- **Changing a template is a shared, multi-page change.** Prefer adding a **config knob that defaults to current behavior** (existing callers must render byte-identically) over editing default output; add a new `*-02.jsx` template when the DOM structurally diverges; a "hard change" to default output touches every consumer. **Before changing a template, run `npm run template-map`** (in `apps/miller-web`) to see which pages it affects, and Playwright-verify each affected page after. Full protocol in the components-v2 README.
+- **Changing a template is a shared, multi-page change.** Prefer adding a **config knob that defaults to current behavior** (existing callers must render byte-identically) over editing default output; add a new `*-02.jsx` template when the DOM structurally diverges; a "hard change" to default output touches every consumer. **Before changing a template, run `npm run template-map`** (in `apps/miller-web`) to see which pages it affects. Playwright-verify affected pages only when the change is visual (see **Verifying UI** below). Full protocol in the components-v2 README.
 
 **transline49-web is still bespoke** — it has not adopted the templates yet, and we are **not** refactoring the library into a shared package right now. Build/convert TL49 pages by mirroring the Miller reference pages per `docs/DESIGN-SYSTEM.md` §14 (its own `tl49-*` layer or promoting truly-shared pieces to `tl-*`); do not import `@/components-v2` (miller-namespaced) into TL49. When TL49 adopts the templates we will revisit sharing.
 
 ## Verifying UI
 
-Per repo norms: when checking visual work with Playwright, actually run it and **look at the screenshots** (open them) — structural assertions don't prove design quality. Don't claim a UI is correct without seeing it rendered.
+**Playwright is not required for every edit.** Skip it for small, low-risk changes where the outcome is obvious from the diff alone — copy/content updates in `lib/content/`, typo fixes, aria/semantic tweaks, non-visual logic, or scoped CSS nudges (one token, one spacing value) inside a section you were already assigned. Trust the code change; don't spin up a browser pass just to rubber-stamp it.
+
+**Run Playwright (and actually open the screenshots — structural assertions don't prove design quality) when the change is visually significant**, including:
+
+- New sections, major layout/responsive rework, or animation/scroll/pin behavior
+- Template **hard changes** or any edit whose `template-map` blast radius spans multiple pages
+- Palette, typography, or cross-section visual refactors
+- Finishing a new page or calling work "done" on a substantial redesign
+
+When you do verify: load the affected route(s), capture desktop + mobile, **look at the screenshots**, and don't claim a UI is correct without seeing it rendered. Use the shared dev server rules in **Scoped work** above.

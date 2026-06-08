@@ -74,14 +74,15 @@
 /* ── Pinned scroll sequence (desktop, motion-OK) ────────────────────────────
    The section is wrapped in a tall `.mw-lr-track` and made sticky, so it FREEZES
    once it fully fills the viewport. Scroll then scrubs the timeline (background
-   map grows → chain draws → short hold) before the track releases to the next
-   section. The track must NOT clip overflow (that would break the sticky child).
+   map grows → chain draws → bg zoom/parallax freeze when highlights land, then the hold
+   scroll drifts the map so its bottom edge comes into view before the section releases.
    Mobile and reduced-motion skip the pin entirely: the track collapses to auto
    height and the section flows normally. JS (lifetime-reel-01.jsx) gates its
-   progress feed on the SAME condition as this query. */
+   progress feed on the SAME condition as this query. The track must NOT clip
+   overflow (that would break the sticky child). */
 .mw-lr-track { position: relative; }
 @media (min-width: 721px) and (prefers-reduced-motion: no-preference) {
-  .mw-lr-track { height: var(--lr-track-h, 280vh); }
+  .mw-lr-track { height: var(--lr-track-h, 141.5vh); }
   .mw-lr-track > .mw-lr {
     position: sticky;
     top: 0;
@@ -92,12 +93,9 @@
     justify-content: center;
   }
 }
-/* Tablet (721–1024): run the pinned reel over a SHORTER track so the money-shot
-   doesn't stretch across ~3 screens of empty scroll on a tablet — the JS reader maps
-   progress off track.offsetHeight, so the same timeline simply compresses into less
-   travel. Desktop (≥1025) keeps the full 280vh runway, byte-for-byte unchanged. */
+/* Tablet (721–1024): shorter track; JS sets --lr-track-h (152.5vh fallback). */
 @media (min-width: 721px) and (max-width: 1024px) and (prefers-reduced-motion: no-preference) {
-  .mw-lr-track { height: 175vh; }
+  .mw-lr-track { height: var(--lr-track-h, 123.13vh); }
 }
 
 /* Background wash: a faint Canada outline map, filling the expanding panel. When the
@@ -108,9 +106,8 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  /* JS sizes the WHOLE map inside the box (--lr-map-w / --lr-map-h, map aspect). Once the
-     section is full, --lr-zoom scales the map up past its fit (cropping at the box edge —
-     "zoom in") and --lr-bg-drift drifts it vertically (parallax). */
+  /* JS sizes the map (--lr-map-w / --lr-map-h). Content-phase zoom + drift; hold-phase drift
+     continues upward (--lr-bg-drift) so the bottom of the graphic is revealed on exit. */
   transform: translate(-50%, calc(-50% + var(--lr-bg-drift, 0px))) scale(var(--lr-zoom, 1));
   width: var(--lr-map-w, min(92%, 1560px));
   height: var(--lr-map-h, 100%);
@@ -381,18 +378,27 @@
 }
 .mw-lr-reel__caption {
   position: absolute; top: 0; left: 50%;
-  width: clamp(200px, 27vw, 400px); /* narrower so all three captions fit side by side under their diamonds */
+  /* Narrow lanes with generous gutters — each caption stays in its column so a
+     hovered neighbour growing in size/brightness never crowds the other two. */
+  width: clamp(148px, 17.5vw, 252px);
   margin: 0;
   font-family: var(--font-sans), sans-serif;
-  font-size: clamp(16px, 1.15vw, 19px); line-height: 1.6;
+  font-size: clamp(14px, 1vw, 16px); line-height: 1.6;
   color: rgba(250, 243, 229, .92); text-align: center;
   opacity: 0;
   transform: translateX(calc(-50% + var(--lr-cap-dx, 0px))) translateY(8px);
-  transition: opacity .35s var(--lr-ease), transform .35s var(--lr-ease);
+  transition: opacity .35s var(--lr-ease), transform .35s var(--lr-ease), font-size .35s var(--lr-ease), color .35s var(--lr-ease), width .35s var(--lr-ease);
 }
 .mw-lr-reel__caption[data-on] {
   opacity: 1;
   transform: translateX(calc(-50% + var(--lr-cap-dx, 0px))) translateY(0);
+}
+/* Related diamond hover/focus: full body-copy size + a touch more lane width so the
+   larger type doesn't reflow; brighten toward white without going fully #fff. */
+.mw-lr-reel__caption[data-on][data-active] {
+  width: clamp(168px, 19.5vw, 288px);
+  font-size: clamp(16px, 1.15vw, 19px);
+  color: rgba(255, 252, 247, .97);
 }
 
 /* mobile-only revisit dots */

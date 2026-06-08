@@ -34,16 +34,7 @@ import { LrDiamondSeal } from "./lr-diamond-seal";
 const START_VISIBLE_FRAC = 0.6; // fraction of the first diamond visible at progress 0
 const BAND = 90; // px width of the gold "charge" band riding the frontier (keep in sync with mask-size in 07-lifetime-reel.css)
 const CHAIN_SPEED = 4; // the diamond/line gradient build runs this many × the count-up pace (chain finishes in the first 1/CHAIN_SPEED of progress; the numbers are unaffected). Each count still STARTS as its diamond forms (segStart = apexStart/CHAIN_SPEED, so it tracks the sped draw).
-const COUNT_SPEED = 1.4; // the numbers count this many × faster: they all still land TOGETHER but at drawProg = 1/COUNT_SPEED instead of 1, so the whole count completes 40% sooner (desktop/controlled only).
-// Time-based grace AFTER the third diamond finishes rendering, before hover can override the
-// auto-selected third. This is a wall-clock perception window, not a scroll distance: it is
-// sized to outlast the highlight's appear transitions (caption fade .35s, active scale .32s)
-// plus a beat to register them, so (a) the user clearly SEES the third highlighted, and (b)
-// those transitions have SETTLED before hover engages — otherwise the layout shifting under a
-// stationary mouse fires a stray mouseenter that instantly steals the selection. A scroll
-// distance can't express this (a fast scroll crosses it before the transition even finishes).
-const HOVER_GRACE_MS = 600;
-
+const COUNT_SPEED = 2.8; // the numbers count this many × faster: they all still land TOGETHER but at drawProg = 1/COUNT_SPEED instead of 1, so the whole count completes sooner (desktop/controlled only).
 export function LifetimeReel({ highlights = [], progress }) {
   const controlled = typeof progress === "number"; // parent (pinned section) supplies progress
   const n = highlights.length;
@@ -213,23 +204,7 @@ export function LifetimeReel({ highlights = [], progress }) {
     applyFrontier(Math.min(1, prog * CHAIN_SPEED), geom);
   }, [prog, geom, applyFrontier]);
 
-  // Hover / focus / click emphasise a diamond — but ONLY after the whole chain has drawn AND the
-  // grace has elapsed (hoverReady). During the draw + grace, hovers are ignored (no diamond is
-  // emphasised; the captions simply accumulate). hoverReadyRef lets the stable callback read the
-  // latest value.
   const done = prog >= 0.999;                 // chain fully drawn (drives data-done)
-  const [hoverReady, setHoverReady] = useState(false);
-  const hoverReadyRef = useRef(false);
-  hoverReadyRef.current = hoverReady;
-  const select = useCallback((idx) => () => { if (hoverReadyRef.current) setSticky(idx); }, []);
-
-  // Start the grace clock the moment the chain is fully drawn; hover engages HOVER_GRACE_MS
-  // later. If the user scrolls back before then (done → false), reset so it must elapse again.
-  useEffect(() => {
-    if (!done) { setHoverReady(false); return; }
-    const t = setTimeout(() => setHoverReady(true), HOVER_GRACE_MS);
-    return () => clearTimeout(t);
-  }, [done]);
 
   // DESKTOP each count STARTS exactly as its own diamond's border begins drawing, but all
   // three FINISH together at the very end (when the third diamond's count completes) — a
@@ -247,6 +222,14 @@ export function LifetimeReel({ highlights = [], progress }) {
   // finishes together at drawProg = 1/COUNT_SPEED, so that is the cue (no longer the full-scroll
   // `done`). Mobile reveals the current diamond's caption one at a time and ignores this.
   const countsDone = controlled ? drawProg >= (1 / COUNT_SPEED) - 1e-4 : false;
+  const countsDoneRef = useRef(false);
+  countsDoneRef.current = countsDone;
+  // Desktop: hover engages as soon as the body paragraphs render (countsDone). Mobile:
+  // the current one-at-a-time diamond is always hoverable (pointer-events gated in CSS).
+  const select = useCallback((idx) => () => {
+    if (controlled) { if (countsDoneRef.current) setSticky(idx); }
+    else setSticky(idx);
+  }, [controlled]);
   const localOf = (idx) => {
     const g = geom;
     if (!g) return reduced ? 1 : 0;
@@ -257,21 +240,21 @@ export function LifetimeReel({ highlights = [], progress }) {
       // The CHAIN_SPEED-accelerated wipe reaches this diamond's left apex at
       // drawProg = apexStart / CHAIN_SPEED — so the count fires exactly as the border
       // starts drawing. They all land TOGETHER at the shared end drawProg = 1/COUNT_SPEED
-      // (< 1), so the whole count completes COUNT_SPEED× sooner — 40% faster — regardless
+      // (< 1), so the whole count completes COUNT_SPEED× sooner regardless
       // of when each one started.
       const segStart = apexStart / CHAIN_SPEED;
       const segEnd = 1 / COUNT_SPEED;
       return Math.min(1, Math.max(0, (drawProg - segStart) / Math.max(1e-4, segEnd - segStart)));
     }
     const segEnd = (g.milestones[2 * s + 1] - m0) / span;     // its right apex (draw complete) — mobile lockstep
-    return Math.min(1, Math.max(0, (drawProg - apexStart) / Math.max(1e-4, segEnd - apexStart)));
+    const effectiveEnd = apexStart + (segEnd - apexStart) / COUNT_SPEED;
+    return Math.min(1, Math.max(0, (drawProg - apexStart) / Math.max(1e-4, effectiveEnd - apexStart)));
   };
 
-  // The diamond emphasis (amber border + scale) is HOVER-ONLY: it lights the hovered diamond
-  // after the chain has drawn. The body paragraphs are gated on the WHOLE chain finishing —
-  // all three reveal together once the last diamond is fully rendered (done), not per-diamond
-  // (see the caption `data-on`) — so hover (which only styles the diamonds) never drives them.
-  const activeIdx = (hoverReady && sticky != null) ? sticky : null;
+  // Diamond emphasis (amber border + scale) is hover-only once the body paragraphs render
+  // (countsDone). Captions reveal together at that same moment; hovering a diamond also
+  // bumps that caption to the full body-copy size (data-active on the matching caption).
+  const activeIdx = (countsDone && sticky != null) ? sticky : null;
 
   // Mobile one-at-a-time current diamond (chain hidden on mobile): pick the slot whose
   // segment the global progress has entered. Scroll drives `current` (the effect only
@@ -413,6 +396,7 @@ export function LifetimeReel({ highlights = [], progress }) {
               data-idx={idx}
               ref={(el) => { captionEls.current[idx] = el; }}
               data-on={shown ? "1" : undefined}
+              data-active={activeIdx === idx ? "1" : undefined}
               aria-hidden={shown ? undefined : "true"}
             >
               {h.reveal}

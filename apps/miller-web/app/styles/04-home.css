@@ -1589,7 +1589,7 @@
      padding-bottom extends the column so it stays pinned for the whole list. The matching field
      background + vertical padding mask any item passing behind it; z-index keeps it on top. */
   position: sticky;
-  top: calc(var(--hdr, 56px) + 12px);
+  top: var(--hdr, 56px);
   z-index: 2;
   background: var(--c-surface-warm);
   padding: 8px 0 8px 1.5px;
@@ -5566,22 +5566,22 @@ html[data-brand="miller"] {
    (never wrap), the longest being INFRASTRUCTURE ≈ 115.6px wide at the 18px font cap.
    For a text box (width W, line-height h) centred in a rhombus of visible size S to
    clear the slanted edges with padding p per side: S ≥ W + h + 2p. With W=115.6,
-   h=17.6, p≈8 → S ≈ 150px. So pin the grid to a FIXED width (NOT %-of-body) that makes
-   the visible clip = 150px: clip = 2·gridWidth/cols − 2·gap, so gridWidth = (75px+gap)·cols.
-   Fixed-size (does not scale with width); the font only shrinks below 18px on narrower
-   screens, so 150px keeps the word fitting everywhere. The single-photo hover (133px)
-   and category spotlight (≈150px) are absolute sizes, unaffected. */
+   h=17.6, p≈8 → S ≈ 150px. So cap the grid at an IDEAL width that makes the visible
+   clip = 150px: clip = 2·gridWidth/cols − 2·gap, so gridWidth = (75px+gap)·cols.
+   At that cap the font sits at its 18px max and INFRASTRUCTURE fits with padding; when
+   body-content is narrower the grid shrinks to 100% of the column (aspect-ratio holds)
+   and the font falls back via clamp(). The single-photo hover (133px) and category
+   spotlight (≈150px) are absolute sizes, unaffected. */
 .mw-secd--check {
-  overflow-x: clip; /* the centred fixed-width grid must never add a page scrollbar */
+  overflow-x: clip; /* safety net — the grid must never add a page scrollbar */
   /* Spotlight gathered-row vertical position (relative to the grid top). Positioned so the TOP of the
      straightened spotlight PHOTOS sits ~16px above the top of the highest grid photo (si3, row 0).
      Both boxes share the same clip inset (--secd-gap), so those cancel → −16px exactly. Scoped to --check. */
   --sp-top: -16px;
 }
 .mw-secd--check .mw-secd__grid {
-  width: calc((75px + var(--secd-gap)) * var(--secd-cols, 18)); /* → box = 150px + 2·gap → visible clip = 150px → fits INFRASTRUCTURE + ~8px padding */
-  margin-left: 50%;            /* centre the fixed-width grid on the (centred) content column */
-  transform: translateX(-50%);
+  width: min(100%, calc((75px + var(--secd-gap)) * var(--secd-cols, 18))); /* ideal cap → 150px clip; shrinks with body-content when narrower */
+  margin-inline: auto;
 }
 /* Eyebrow moved to the TOP of the section, above the diamonds — centred (the tag is inline-flex). The
    grid's own margin-top (the spotlight band) provides the gap down to the diamonds. */
@@ -6358,13 +6358,11 @@ html[data-brand="miller"] {
 
 /* ─────────────────────────────────────────────────────────────────
    VBEC brown → beige FILL + pinned reveal (media-split-01.jsx). DEFAULT
-   background is dark walnut (--c-navy), continuous with the LifetimeReel
-   above. ENTRANCE: a CREAM left intro slides DOWN (delayed by the top
-   padding) and the CREAM right column (locked-ratio photos) rises UP from
-   below — erasing the brown by pin-in. PINNED (progress P): the 3 highlights
-   GROW out from under the photos, then the MEDIA (photos + highlights) swipes
-   RIGHT off the screen and the diamond cluster ROLLS in behind it.
-   Mobile / reduced-motion: no pin, beige section, columns at rest.
+   background is dark walnut (--c-navy), continuous with the LifetimeReel above.
+   ENTRANCE: left intro slides DOWN and right column rises UP (shared easeInOut) so both
+   finish together. PINNED: highlights auto-grow (FIG_MS), then scroll scrubs the media exit
+   (SWIPE_START → SWIPE_END on pin P) and diamonds roll in. Remaining track height is release
+   scroll after the sequence. Mobile / reduced-motion: no pin, columns at rest.
    ───────────────────────────────────────────────────────────────── */
 
 @media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
@@ -6409,8 +6407,10 @@ html[data-brand="miller"] {
     transform: translateY(var(--fac2-left-y, 0px));
     will-change: transform;
   }
-  /* RIGHT — the CREAM column, the positioning context for the two stacked layers. Rises UP from
-     below the screen on entrance (reader writes --fac2-right-y); stays put on the pin. */
+  /* RIGHT — the CREAM column, the positioning context for the two stacked layers. Before the
+     entrance gate it sits below the viewport; at the gate it rises UP (reader writes
+     --fac2-right-y from coverR → 0 on the same easeInOut progress as the left); stays put on the pin.
+     Flex-centres the media stack so it aligns with the left intro. */
   .mw-fac2-track .mw-fac2__right {
     position: relative;
     align-self: stretch;
@@ -6419,13 +6419,15 @@ html[data-brand="miller"] {
     background: var(--c-bg);
     transform: translateY(var(--fac2-right-y, 0px));
     will-change: transform;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
-  /* MEDIA layer (z-index 2) — the photos (LOCKED ratio) + the highlights clip band, anchored
-     below the top padding, bleeding to the screen's right edge. NO card/container. On the pin it
-     SWIPES right (--fac2-media-x). */
+  /* MEDIA layer (z-index 2) — the photos (LOCKED ratio) + the highlights clip band, bleeding to
+     the screen's right edge. NO card/container. On the pin it SWIPES right (--fac2-media-x) and
+     fades out (--fac2-media-op). */
   .mw-fac2-track .mw-fac2__media {
-    position: absolute;
-    top: clamp(64px, 6.5vw, 112px);
+    position: relative;
     left: 0;
     right: 0;
     z-index: 2;
@@ -6433,7 +6435,8 @@ html[data-brand="miller"] {
     flex-direction: column;
     gap: 0;
     transform: translateX(var(--fac2-media-x, 0px));
-    will-change: transform;
+    opacity: var(--fac2-media-op, 1);
+    will-change: transform, opacity;
   }
   /* Locked-ratio gallery, filling the column width and bleeding right (no left inset). */
   .mw-fac2-track .mw-fac2__media .mw-iacc { --reel-inset: 0px; margin: 0; }

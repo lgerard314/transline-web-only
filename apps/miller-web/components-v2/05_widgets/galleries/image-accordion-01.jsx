@@ -16,9 +16,49 @@ import { useEffect, useRef, useState } from "react";
 // .mw-fac2__intro). All scrubbed by one scroll timeline; reduced-motion rests everything.
 //
 // Props: photos — [{ src, alt, caption }]
-export function ImageAccordion01({ photos, label = "Facility photo gallery", reveal = true }) {
+//        highlightsDone — when true (VBEC pin: after the 3-figure band finishes), scroll
+//          parallax is off and a light mouse parallax runs on the open panel only.
+export function ImageAccordion01({ photos, label = "Facility photo gallery", reveal = true, highlightsDone = false }) {
   const [open, setOpen] = useState(0);
   const rootRef = useRef(null);
+
+  // Light mouse parallax on the open (big) photo once scroll parallax is disabled.
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root || !highlightsDone) return;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (mq.matches) return;
+    const HOVER_X = 11;
+    const HOVER_Y = 8;
+
+    const resetHover = () => {
+      root.querySelectorAll(".mw-iacc__img").forEach((img) => {
+        img.style.setProperty("--hx", "0px");
+        img.style.setProperty("--hy", "0px");
+      });
+    };
+
+    const onMove = (e) => {
+      const panel = root.querySelector(".mw-iacc__panel.is-open");
+      if (!panel) return;
+      const img = panel.querySelector(".mw-iacc__img");
+      if (!img) return;
+      const r = panel.getBoundingClientRect();
+      const nx = Math.max(-1, Math.min(1, (e.clientX - (r.left + r.width / 2)) / (r.width / 2)));
+      const ny = Math.max(-1, Math.min(1, (e.clientY - (r.top + r.height / 2)) / (r.height / 2)));
+      resetHover();
+      img.style.setProperty("--hx", `${(nx * HOVER_X).toFixed(2)}px`);
+      img.style.setProperty("--hy", `${(ny * HOVER_Y).toFixed(2)}px`);
+    };
+
+    root.addEventListener("mousemove", onMove);
+    root.addEventListener("mouseleave", resetHover);
+    return () => {
+      root.removeEventListener("mousemove", onMove);
+      root.removeEventListener("mouseleave", resetHover);
+      resetHover();
+    };
+  }, [highlightsDone, open]);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -150,9 +190,11 @@ export function ImageAccordion01({ photos, label = "Facility photo gallery", rev
                     alt={isOpen ? (photo.alt || "") : ""}
                     loading="lazy"
                     draggable="false"
-                    data-parallax-img
-                    data-parallax-x="1"
-                    data-parallax-max="0.14"
+                    {...(!highlightsDone ? {
+                      "data-parallax-img": "",
+                      "data-parallax-x": "1",
+                      "data-parallax-max": "0.14",
+                    } : {})}
                   />
                 </span>
               </span>

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { SolidCta01 } from "@/components-v2/02_buttons/solid/solid-cta-01";
 import { ActionArrow01 } from "@/components-v2/01_marks/arrows/action-arrow-01";
@@ -11,28 +11,30 @@ import { sectionProps } from "@/components-v2/section-config";
 // background is dark walnut (--c-navy), continuous with the LifetimeReel above. Two phases:
 //
 // ENTRANCE (brown → beige fill, as the section scrolls in to fill the viewport):
-//   LEFT  — a CREAM intro panel that slides DOWN into place. Its start is DELAYED until the
-//           section has revealed an amount equal to its top padding (then it slides to rest and
-//           stays PINNED — it does not reverse).
-//   RIGHT — the photo gallery (LOCKED ratio) rising UP from below the screen, on a cream column.
-//   By pin-in the brown is fully erased.
+//   LEFT  — a CREAM intro panel that slides DOWN into place (delayed by top padding).
+//   RIGHT — at that same gate moment it rises UP from below on the same easeInOut curve so both
+//           columns finish together.
 //
-// PINNED SEQUENCE (once the section fills the viewport; driven by pin progress P):
-//   1. HIGHLIGHTS — the 3-figure band GROWS out from under the photos (no container).
-//   2. SWIPE — a beat later the MEDIA (photos + highlights) slides RIGHT off the screen and the
-//      capabilities "diamond of diamonds" ROLLS in (left→right) in its wake.
+// PINNED SEQUENCE (once the section fills the viewport):
+//   1. HIGHLIGHTS — once entrance completes, the 3-figure band auto-slides out over FIG_MS.
+//   2. SWIPE — after highlights finish, the user must scroll again; that nudge arms a
+//      careers-style auto-advance (zoom-collage-01: one rAF loop, window.scrollBy while
+//      pinned, accelerating pace) that scroll-drives the photo exit → SWIPE_END.
+//      Remaining track height below SWIPE_END is release scroll after the sequence.
 //
 // Mobile / reduced-motion: no pin, beige section, columns at rest. Styling: app/styles/04-home.css.
 const clamp01 = (x) => (x < 0 ? 0 : x > 1 ? 1 : x);
-const ease = (x) => 1 - Math.pow(1 - x, 3);            // easeOutCubic
+const ease = (x) => 1 - Math.pow(1 - x, 3);            // easeOutCubic (highlights)
+const easeInOut = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
 
-// Pin-sequence breakpoints (fractions of the pin progress P).
-const FIG_END = 0.3;        // highlights fully out by P = FIG_END
-const SWIPE_START = 0.4;    // the swipe begins a beat after the highlights settle
-const SWIPE_END = 0.9;      // …and completes (photos fully off-screen, diamonds in) by here
-const CAP_RAMP = 0.42;      // per-diamond roll-in duration (fraction of the photo sweep)
-const CAP_LEAD = 0.06;      // each diamond starts rolling a touch BEFORE the photo edge clears it
-const CAP_ROT = 150;        // deg each diamond spins through as it rolls in (settles to 0)
+const FIG_MS = 850;         // ms for the highlights band once entrance completes
+const EXIT_MS = 1200;       // base auto-advance pace for the photo exit (careers DIVE_MS pattern)
+const USER_IDLE_MS = 160;   // pause auto-nudge while the user is actively scrolling
+const SWIPE_END = 0.9;      // pin P where media is fully off-screen and diamonds are in
+const EXIT_PAD = 32;        // px past the viewport right edge once exit completes
+const CAP_TIP = 0.5 - Math.SQRT1_2 / 2; // left vertex of a 45° diamond in its inner box
+const CAP_ROT = 210;        // deg base spin as each diamond rolls in (settles to 0)
+const CAP_SPIN = 120;       // extra rotation added on top of CAP_ROT at enter
 
 // Capabilities "diamond of diamonds" — 8 diamonds on the who-we-serve argyle lattice (6×6 cells,
 // each diamond a 2×2 box; (col+row) even keeps them on the lattice). A TITLE diamond crowns the
@@ -46,8 +48,6 @@ const CAP_SLOTS = [
   { col: 2, row: 4 },
 ];
 const CAP_TONES = ["#B5642F", "#B5642F", "#A85A2C", "#A85A2C", "#8C4A24", "#8C4A24", "#75401F"];
-// Each diamond's horizontal CENTRE as a fraction of the grid width (DOM order: title, then 7).
-const CAP_FX = [0.5, ...CAP_SLOTS.map((s) => (s.col + 1) / CAP_COLS)];
 const capDiaStyle = (col, row, extra) => ({ left: `${col * CAP_SX}%`, top: `${row * CAP_SY}%`, width: `${2 * CAP_SX}%`, ...extra });
 const capSoftWrap = (s) => s.replace(/([/-])/g, "$1" + String.fromCharCode(0x200b));
 
@@ -60,32 +60,69 @@ export function MediaSplit01({ content, config = {} }) {
   const mediaRef = useRef(null);
   const figsRef = useRef(null);
   const capsRef = useRef(null);
+  const [highlightsDone, setHighlightsDone] = useState(false);
+  const highlightsDoneRef = useRef(false);
 
-  // One rAF-coalesced reader. ENTRANCE (E) fills the brown; the PIN sequence (P) grows the
-  // highlights then swipes the media right to reveal the diamonds. Active only when the pin is
-  // live (wide viewport + motion OK); otherwise everything rests static (beige).
+  // Careers-style driver (zoom-collage-01): one continuous rAF loop while the track is in
+  // view reads scroll → writes the scene, auto-advances the exit once the user nudges past
+  // the highlights hold. Wide viewport + motion OK only; otherwise columns rest static.
   useEffect(() => {
     if (typeof window === "undefined") return;
+    const track = trackRef.current;
+    if (!track) return;
     const mqWide = window.matchMedia("(min-width: 901px)");
     const mqRM = window.matchMedia("(prefers-reduced-motion: reduce)");
     const canPin = () => mqWide.matches && !mqRM.matches;
-    let raf = 0;
+    let raf = 0, running = false, lastTs = 0, lastY = window.scrollY;
+    let figElapsed = 0, pinActive = false, swipeStartP = null, exitArmed = false, cancelled = false;
+    let lastUserTs = -1e9;
+
+    const onUserInput = (e) => { lastUserTs = e.timeStamp; };
+
+    const resetPinClocks = () => {
+      figElapsed = 0;
+      pinActive = false;
+      swipeStartP = null;
+      exitArmed = false;
+      cancelled = false;
+    };
+
+    const idleState = () => ({
+      entranceDone: false,
+      P: 0,
+      sweep: 0,
+      figDone: false,
+      swipeStartP: null,
+      total: 1,
+      pinActive: false,
+      pinned: false,
+    });
 
     const render = () => {
       const track = trackRef.current, section = sectionRef.current;
       const left = leftRef.current, right = rightRef.current;
       const media = mediaRef.current, figs = figsRef.current, caps = capsRef.current;
-      if (!track || !section || !left || !right || !media || !figs || !caps) return;
+      if (!track || !section || !left || !right || !media || !figs || !caps) {
+        return idleState();
+      }
       if (!canPin()) {
         left.style.removeProperty("--fac2-left-y");
         right.style.removeProperty("--fac2-right-y");
         media.style.removeProperty("--fac2-media-x");
+        media.style.removeProperty("--fac2-media-op");
+        media.style.removeProperty("visibility");
+        delete media.dataset.figDone;
         caps.style.removeProperty("--fac2-cap-y");
         if (figs.parentElement) figs.parentElement.style.removeProperty("--fac2-fig-h");
         track.style.removeProperty("--fac2-head-off");
         const g = caps.querySelector(".mw-cap-dia");
         if (g) g.querySelectorAll(".mw-cap-dia__cell").forEach((c) => { c.style.removeProperty("--cap-sc"); c.style.removeProperty("--cap-op"); c.style.removeProperty("--cap-tx"); c.style.removeProperty("--cap-rot"); });
-        return;
+        if (highlightsDoneRef.current) {
+          highlightsDoneRef.current = false;
+          setHighlightsDone(false);
+        }
+        resetPinClocks();
+        return idleState();
       }
       // Pin immediately BELOW the fixed header (read it live — it collapses on scroll).
       const header = document.querySelector(".tl-topbar");
@@ -104,74 +141,177 @@ export function MediaSplit01({ content, config = {} }) {
       const total = Math.max(1, track.offsetHeight - vh + headOff);
       const P = clamp01((headOff - trackTop) / total);
 
-      // LEFT — begins sliding DOWN at the SAME moment as the right (both start at E=0), but it
-      // FILLS SLOWER so a brown strip (≈ the top padding at its widest) trails below it as it
-      // expands; the lag closes by pin-in. Then it pins (no reverse).
+      // ENTRANCE GATE — both columns wait until the section has revealed its top padding (brown
+      // strip above). At that exact scroll moment the left begins sliding DOWN and the right
+      // rises UP on the same remapped timeline.
       const padTop = Math.max(64, Math.min(112, 0.065 * vw));
       const eStart = padTop / span;
-      const eLeft = clamp01(E - eStart * Math.sin(Math.PI * E));
+      const t = E <= eStart ? 0 : clamp01((E - eStart) / Math.max(0.001, 1 - eStart));
+      const u = easeInOut(t);
+
       const coverL = left.offsetHeight || span;
-      left.style.setProperty("--fac2-left-y", (-(1 - eLeft) * coverL).toFixed(1) + "px");
+      left.style.setProperty("--fac2-left-y", (-(1 - u) * coverL).toFixed(1) + "px");
 
-      // RIGHT — the cream column RISES UP from below the screen, so the DEFAULT brown section bg
-      // stays visible ABOVE it as it comes up (a complementary fill to the left: top-left cream
-      // while the left drops in, top-right brown while the right rises). Both transforms begin at
-      // E=0. Stays put on the pin.
       const coverR = right.offsetHeight || span;
-      right.style.setProperty("--fac2-right-y", ((1 - E) * coverR).toFixed(1) + "px");
+      const rightY = E <= eStart ? coverR : (1 - u) * coverR;
+      right.style.setProperty("--fac2-right-y", rightY.toFixed(1) + "px");
 
-      // PIN 1 — HIGHLIGHTS grow out from under the photos: the figclip GROWS from 0 → the figs'
-      // natural height (no reserved space), so they push out from the photos' bottom.
-      const figIn = ease(clamp01(P / FIG_END));
+      // PIN 1 — HIGHLIGHTS: auto-slide the figclip out once the section is fully formed (E = 1).
+      const entranceDone = E >= 0.999;
+      if (entranceDone) pinActive = true;
+      else if (secTop > vh * 0.85) { pinActive = false; resetPinClocks(); }
+
+      const figIn = pinActive ? ease(clamp01(figElapsed / FIG_MS)) : 0;
+      const figDone = figElapsed >= FIG_MS;
       const figclip = figs.parentElement;
       if (figclip) figclip.style.setProperty("--fac2-fig-h", (figs.offsetHeight * figIn).toFixed(1) + "px");
 
-      // PIN 2 — SWIPE the media (photos + highlights) RIGHT off the screen; the diamond grid
-      // (parked centred BEHIND, z-index 1) rolls in left→right in its wake.
-      const sweep = clamp01((P - SWIPE_START) / Math.max(0.001, SWIPE_END - SWIPE_START));
+      if (!figDone) swipeStartP = null;
+      else if (swipeStartP === null) swipeStartP = P;
+
+      media.dataset.figDone = figDone ? "1" : "";
+      if (figDone !== highlightsDoneRef.current) {
+        highlightsDoneRef.current = figDone;
+        setHighlightsDone(figDone);
+      }
+
+      // PIN 2 — SWIPE (scroll-scrubbed): only after highlights AND further scroll past the P
+      // captured when the band finished — so continuous scrolling through the pin cannot
+      // auto-trigger the exit the moment the highlights land.
+      const sweep = figDone && swipeStartP != null && P > swipeStartP
+        ? clamp01((P - swipeStartP) / Math.max(0.001, SWIPE_END - swipeStartP))
+        : 0;
+      const exitT = sweep;
+      const exitDone = figDone && sweep >= 1;
+
       const rightRect = right.getBoundingClientRect();
-      const rightTop = rightRect.top, mediaLeft = rightRect.left;
-      const exitDist = vw - mediaLeft + 28;             // travel to clear the screen's right edge
-      media.style.setProperty("--fac2-media-x", (sweep * exitDist).toFixed(1) + "px");
+      const rightTop = rightRect.top;
+      const mediaRect = media.getBoundingClientRect();
+      const exitDist = (vw - mediaRect.left) + mediaRect.width + EXIT_PAD;
+      media.style.setProperty("--fac2-media-x", (exitT * exitDist).toFixed(1) + "px");
+      media.style.setProperty("--fac2-media-op", (1 - exitT).toFixed(3));
+      if (exitDone) media.style.visibility = "hidden";
+      else media.style.removeProperty("visibility");
+      const containerLeft = media.getBoundingClientRect().left;
+      // Where the photo/highlight container's left edge lands once fully off-screen (exitT = 1).
+      const exitEndLeft = containerLeft + (1 - exitT) * exitDist;
 
-      // Park the diamond grid at its vertically-CENTRED home (aligned to the left intro's middle).
-      const intro = section.querySelector(".mw-fac2__intro");
+      // Park the diamond grid at the right column's vertical centre (matches flex-centred media).
       const capsH = caps.offsetHeight;
-      const introRect = intro ? intro.getBoundingClientRect() : null;
-      const leftCenter = introRect ? (introRect.top + introRect.height / 2) : (vh / 2);
-      caps.style.setProperty("--fac2-cap-y", ((leftCenter - rightTop) - capsH / 2).toFixed(1) + "px");
+      const rightCenter = rightRect.top + rightRect.height / 2;
+      caps.style.setProperty("--fac2-cap-y", ((rightCenter - rightTop) - capsH / 2).toFixed(1) + "px");
 
-      // Roll each diamond in as the media's left edge clears it (left→right cascade).
+      // 8 diamonds × 1 rule: the photo/highlight container's left edge must pass each
+      // diamond's left vertex before that diamond's enter runs; each enter finishes exactly
+      // when the container leaves the page (exitT → 1), so later diamonds get a shorter
+      // window but nobody settles early.
       const grid = caps.querySelector(".mw-cap-dia");
       if (grid) {
-        const gridRect = grid.getBoundingClientRect();   // not X-transformed → stable
+        const gridLeft = grid.getBoundingClientRect().left;
         const cells = grid.querySelectorAll(".mw-cap-dia__cell");
+        const spinTotal = CAP_ROT + CAP_SPIN;
         for (let i = 0; i < cells.length; i++) {
-          const fx = CAP_FX[i] != null ? CAP_FX[i] : 0.5;
-          const dcx = gridRect.left + fx * gridRect.width;
-          const uncover = clamp01((dcx - mediaLeft) / exitDist);
-          const dl = clamp01((sweep - uncover + CAP_LEAD) / CAP_RAMP);
-          const e = ease(dl);
-          cells[i].style.setProperty("--cap-sc", (0.12 + 0.88 * e).toFixed(3));
-          cells[i].style.setProperty("--cap-rot", ((1 - e) * CAP_ROT).toFixed(1) + "deg");
-          cells[i].style.setProperty("--cap-tx", ((1 - e) * 48).toFixed(1) + "px");
-          cells[i].style.setProperty("--cap-op", clamp01(dl * 2.2).toFixed(3));
+          const cell = cells[i];
+          const inner = cell.querySelector(".mw-cap-dia__d");
+          const boxLeft = gridLeft + cell.offsetLeft + (inner?.offsetLeft || 0);
+          const boxW = inner?.offsetWidth || cell.offsetWidth;
+          const diamondLeft = boxLeft + boxW * CAP_TIP;
+          const dl = exitDone || exitT >= 1
+            ? 1
+            : containerLeft <= diamondLeft
+              ? 0
+              : ease(clamp01((containerLeft - diamondLeft) / Math.max(1, exitEndLeft - diamondLeft)));
+          if (dl <= 0) {
+            cell.style.setProperty("--cap-sc", "0.12");
+            cell.style.setProperty("--cap-rot", spinTotal + "deg");
+            cell.style.setProperty("--cap-tx", "48px");
+            cell.style.setProperty("--cap-op", "0");
+            continue;
+          }
+          cell.style.setProperty("--cap-sc", (0.12 + 0.88 * dl).toFixed(3));
+          cell.style.setProperty("--cap-rot", ((1 - dl) * spinTotal).toFixed(1) + "deg");
+          cell.style.setProperty("--cap-tx", ((1 - dl) * 48).toFixed(1) + "px");
+          cell.style.setProperty("--cap-op", dl.toFixed(3));
         }
       }
+
+      const pinned = entranceDone && P < 1 && secTop <= headOff + 4 && track.getBoundingClientRect().bottom > vh;
+      return {
+        entranceDone,
+        P,
+        sweep,
+        figDone,
+        swipeStartP,
+        total,
+        pinActive,
+        pinned,
+      };
     };
 
-    const onScroll = () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; render(); }); };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
-    mqWide.addEventListener("change", onScroll);
-    mqRM.addEventListener("change", onScroll);
-    render();
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      mqWide.removeEventListener("change", onScroll);
-      mqRM.removeEventListener("change", onScroll);
+    const loop = (ts) => {
+      if (!canPin()) { stop(); render(); return; }
+      raf = requestAnimationFrame(loop);
+      const dt = lastTs ? Math.min(50, ts - lastTs) : 16.7;
+      lastTs = ts;
+
+      if (pinActive && figElapsed < FIG_MS) figElapsed = Math.min(FIG_MS, figElapsed + dt);
+
+      const state = render();
+      const y = window.scrollY;
+      const userActive = ts - lastUserTs < USER_IDLE_MS;
+
+      if (state.figDone && state.swipeStartP != null && state.P > state.swipeStartP) exitArmed = true;
+      if (state.swipeStartP != null && state.P <= state.swipeStartP) {
+        cancelled = false;
+        exitArmed = false;
+      }
+      if (!cancelled && state.pinned && exitArmed && state.sweep < 1 && y < lastY - 1) cancelled = true;
+
+      // Careers auto-advance: real scroll, animation feel — accelerating pace, instant steps.
+      // Only honour USER_IDLE_MS once the exit is visibly underway so the arming nudge does
+      // not stall the self-run (careers never has a separate arm step).
+      const userBlocks = userActive && state.sweep > 0.05;
+      if (exitArmed && state.pinned && state.sweep < 1 && !cancelled && !userBlocks) {
+        const exitDist = Math.max(1, (SWIPE_END - (state.swipeStartP ?? 0)) * state.total);
+        const v = (exitDist / EXIT_MS) * 0.924 * (1 + 3 * state.sweep);
+        window.scrollBy({ top: v * dt, behavior: "instant" });
+      }
+      lastY = window.scrollY;
+    };
+
+    const start = () => {
+      if (running || !canPin()) return;
+      running = true;
+      lastTs = 0;
+      lastY = window.scrollY;
+      window.addEventListener("wheel", onUserInput, { passive: true });
+      window.addEventListener("touchmove", onUserInput, { passive: true });
+      raf = requestAnimationFrame(loop);
+    };
+    const stop = () => {
+      if (!running) return;
+      running = false;
+      window.removeEventListener("wheel", onUserInput);
+      window.removeEventListener("touchmove", onUserInput);
       if (raf) cancelAnimationFrame(raf);
+      raf = 0;
+      render();
+    };
+    const evaluate = () => { if (canPin()) start(); else { stop(); render(); } };
+
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) start();
+      else stop();
+    }, { threshold: 0 });
+    io.observe(track);
+    mqWide.addEventListener("change", evaluate);
+    mqRM.addEventListener("change", evaluate);
+    evaluate();
+    return () => {
+      io.disconnect();
+      stop();
+      mqWide.removeEventListener("change", evaluate);
+      mqRM.removeEventListener("change", evaluate);
     };
   }, []);
 
@@ -214,7 +354,7 @@ export function MediaSplit01({ content, config = {} }) {
                 rolling in as the media uncovers it. */}
             <div className="mw-fac2__right" ref={rightRef}>
               <div className="mw-fac2__media" ref={mediaRef}>
-                <ImageAccordion01 photos={photos} reveal={false} label="Vaughn Bullough Environmental Centre photo gallery" />
+                <ImageAccordion01 photos={photos} reveal={false} highlightsDone={highlightsDone} label="Vaughn Bullough Environmental Centre photo gallery" />
                 {/* Clip band — the 3 highlights grow out from under the photos (no container). */}
                 <div className="mw-fac2__figclip">
                   <dl className="mw-fac2__figs" aria-label="Facility figures" ref={figsRef}>

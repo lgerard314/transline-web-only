@@ -19,12 +19,11 @@ import { sectionProps } from "@/components-v2/section-config";
 //     to its FINAL band — spanning from below the header to the bottom of the screen,
 //     full-bleed — exactly when the section pins. The GRAPHIC stays fitted (whole map)
 //     while it can and grows SLOWER than the box; its FINAL width is the body-content
-//     width (cover-cropping vertically once too tall). Once the graphic is at content
-//     width, a vertical PARALLAX drifts it on further scroll. The content (eyebrow +
-//     diamonds) fades in as the box nears full.
-//   DIAMONDS (SCROLL-SCRUBBED): once pinned, the pinned scroll [0, DRAW_END] draws the
-//     diamond/line chain + gradient build + count-ups (fed to the reel as `progress`);
-//     each numeral counts in lockstep with its own diamond, then a HOLD [DRAW_END, 1].
+//     width (cover-cropping vertically once too tall). Once pinned, map zoom + parallax
+//     scrub in lockstep with the diamond chain (same progress curve) and freeze once the
+//     highlights finish; hold scroll drifts the map upward so its bottom edge comes into view.
+//   DIAMONDS (SCROLL-SCRUBBED): content progress 0 → 1 draws the chain, counts, and bg
+//     together; bg zoom/parallax stop the moment the last highlight lands.
 //
 // AUTO-SCROLL (careers-style, see zoom-collage-01): the WHOLE effect above — box
 // expansion AND the chain gradient build — is one continuous scroll effect, but a rAF
@@ -35,9 +34,8 @@ import { sectionProps } from "@/components-v2/section-config";
 // wins); scrolling UP hands control fully back (cancels until they leave the start) AND
 // the reverse is AMPLIFIED REVERSE_SPEED× — each up-pixel becomes REVERSE_SPEED px while
 // there is still reveal to undo — so the effect rewinds twice as fast on the way up only
-// (down scroll is never amplified). After the last diamond renders the auto-scroll stops —
-// the HOLD + exit are manual (the bg keeps zooming / parallaxing on scroll; hover then
-// takes over a diamond).
+// (down scroll is never amplified). After the last diamond renders the auto-scroll stops
+// and the track releases on the next scroll (hover then takes over a diamond).
 //
 // Mobile and prefers-reduced-motion skip the pin + auto-scroll entirely: the track
 // collapses, the panel rests full (symmetric padding), the section flows normally, and
@@ -51,13 +49,32 @@ import { sectionProps } from "@/components-v2/section-config";
 // Config: scheme / token overrides via sectionProps.
 const MAP_ASPECT = 720 / 612; // bg graphic (canada-bg-line-map.svg) intrinsic aspect ≈ 1.176 — the graphic always fits this
 const PANEL_H_START = 0.34;   // starting box height as a fraction of the final band height
-const DRAW_END = 0.7;         // fraction of the pinned scroll over which the chain draws (then a HOLD to 1)
+const CHAIN_SPEED = 4;          // keep in sync with lifetime-reel.jsx applyFrontier
+const PIN_HOLD_VH = 10;         // tiny post-content scroll before the section releases
+const PIN_RUNWAY_DESKTOP = 280; // vh — legacy full pin reference (pre-trim)
+const PIN_RUNWAY_TABLET = 175;  // vh — tablet legacy pin reference
+const PIN_RUNWAY_SCALE = 0.7;   // legacy trim factor used to preserve content scroll distance
+const pinLayout = (tablet) => {
+  const base = tablet ? PIN_RUNWAY_TABLET : PIN_RUNWAY_DESKTOP;
+  const legacyPinVh = (base - 100) * PIN_RUNWAY_SCALE;
+  const contentScrollVh = legacyPinVh / CHAIN_SPEED; // px scroll where chain highlights finish
+  const pinTotalVh = contentScrollVh + PIN_HOLD_VH;
+  return {
+    trackVh: 100 + pinTotalVh,
+    contentScrollVh,
+    pinTotalVh,
+    contentDoneP: contentScrollVh / pinTotalVh,
+  };
+};
 const AUTO_MS = 3600;         // auto-scroll pace: traverse the whole expand+draw span in roughly this long
 const USER_IDLE_MS = 160;     // pause the auto-nudge for this long after a wheel/touch so the user's scroll wins
 const REVERSE_SPEED = 2;      // scroll-UP only: amplify the user's upward scroll by this factor (each up-pixel becomes REVERSE_SPEED px) so the reverse plays this many × faster. Down scroll is untouched.
 const BG_OPACITY_FULL = 0.07; // map opacity once fully grown (the faint wash); it starts fully opaque (1)
-const PARALLAX_MAX = 90;      // px of vertical parallax drift on the graphic once the section is full
+const PARALLAX_MAX = 90;      // px of vertical parallax drift during the content phase
+const HOLD_PARALLAX = 0.42;   // fraction of zoom crop revealed by exit-phase drift (map bottom)
+const HOLD_EXIT_BAND = 0.12;  // reveal completes when only this fraction of section height remains visible
 const ZOOM_MAX = 1.4;        // how far the graphic zooms in (scales past its fit) once the section is full
+const smoothstep = (t) => { const x = Math.min(1, Math.max(0, t)); return x * x * (3 - 2 * x); };
 
 export function LifetimeReel01({ content, config = {} }) {
   const { headingId, srHeading, eyebrow, highlights } = content;
@@ -92,8 +109,15 @@ export function LifetimeReel01({ content, config = {} }) {
 
     const clearReduced = () => {
       setPin(false);
+      track.style.removeProperty("--lr-track-h");
       if (panel) ["--lr-panel-top", "--lr-panel-w", "--lr-panel-h", "--lr-map-w", "--lr-map-h", "--lr-zoom", "--lr-bg-drift", "--lr-bg-opacity"].forEach((p) => panel.style.removeProperty(p));
       if (inner) inner.style.removeProperty("--lr-content-in");
+    };
+
+    const setTrackHeight = () => {
+      if (!canPin()) { track.style.removeProperty("--lr-track-h"); return; }
+      const tablet = window.matchMedia("(min-width: 721px) and (max-width: 1024px)").matches;
+      track.style.setProperty("--lr-track-h", pinLayout(tablet).trackVh.toFixed(2) + "vh");
     };
 
     // Read scroll position → set the panel geometry + reel progress for this frame.
@@ -103,7 +127,11 @@ export function LifetimeReel01({ content, config = {} }) {
       const vh = window.innerHeight || document.documentElement.clientHeight || 1;
       const topY = track.getBoundingClientRect().top;
       const pinTotal = Math.max(1, track.offsetHeight - vh);
-      const P = Math.min(1, Math.max(0, -topY / pinTotal)); // 0 across the approach; 0 → 1 across the pin
+      const rawP = Math.min(1, Math.max(0, -topY / pinTotal)); // 0 → 1 across the pin
+      const tablet = window.matchMedia("(min-width: 721px) and (max-width: 1024px)").matches;
+      const { contentDoneP, contentScrollVh } = pinLayout(tablet);
+      // Content progress: chain + bg zoom/parallax share one curve; freeze at 1 after highlights.
+      const contentP = Math.min(1, rawP / contentDoneP);
       setPin(true);
 
       // PANEL: a RECTANGLE that grows (top-aligned below the header) from a small box to the
@@ -119,6 +147,13 @@ export function LifetimeReel01({ content, config = {} }) {
       const hSmall = PANEL_H_START * hFull;
       const triggerTop = Math.max(1, vh / 2 - headerH - hSmall / 2); // section-top y where the box centre sits at vh/2
       const panelT = Math.min(1, Math.max(0, (triggerTop - topY) / triggerTop));
+      const reel = contentP;
+      setReel(reel);
+      // Bg zoom/parallax: one even scroll-distance curve from panel start → highlight complete
+      // (panel expansion is slow, pin zoom was compressed — unify so growth rate stays smooth).
+      const scrollIntoAnim = topY >= triggerTop ? 0 : triggerTop - topY;
+      const scrollToHighlight = triggerTop + (contentDoneP / CHAIN_SPEED) * pinTotal;
+      const bgP = smoothstep(Math.min(1, scrollIntoAnim / Math.max(1, scrollToHighlight)));
       if (panel) {
         panel.style.setProperty("--lr-panel-top", headerH + "px");
         const pad0 = Math.min(34, Math.max(18, 0.022 * vw));
@@ -135,17 +170,28 @@ export function LifetimeReel01({ content, config = {} }) {
         mapW = Math.min(mapW, contentMax);
         panel.style.setProperty("--lr-map-w", mapW.toFixed(1) + "px");
         panel.style.setProperty("--lr-map-h", (mapW / MAP_ASPECT).toFixed(1) + "px");
-        panel.style.setProperty("--lr-zoom", (1 + (ZOOM_MAX - 1) * P).toFixed(3));
-        panel.style.setProperty("--lr-bg-drift", (-(PARALLAX_MAX * P)).toFixed(1) + "px");
-        panel.style.setProperty("--lr-bg-opacity", (1 - (1 - BG_OPACITY_FULL) * panelT).toFixed(3));
+        panel.style.setProperty("--lr-zoom", (1 + (ZOOM_MAX - 1) * bgP).toFixed(3));
+        const holdParallax = (mapW / MAP_ASPECT) * (ZOOM_MAX - 1) * HOLD_PARALLAX;
+        // Exit drift: only after content motion is done, and only as the section scrolls off —
+        // bottom of the map appears when just the bottom band of the section remains on screen.
+        let holdDriftT = 0;
+        if (bgP >= 1) {
+          const secEl = track.querySelector(".mw-lr");
+          const secRect = secEl?.getBoundingClientRect();
+          if (secRect && secRect.top < 0) {
+            const secH = Math.max(1, secRect.height);
+            const exitBand = secH * HOLD_EXIT_BAND;
+            const exitRaw = Math.min(1, (-secRect.top) / Math.max(1, secH - exitBand));
+            holdDriftT = exitRaw * exitRaw * (3 - 2 * exitRaw);
+          }
+        }
+        const bgDrift = -(PARALLAX_MAX * bgP) - holdDriftT * holdParallax;
+        panel.style.setProperty("--lr-bg-drift", bgDrift.toFixed(1) + "px");
+        panel.style.setProperty("--lr-bg-opacity", (1 - (1 - BG_OPACITY_FULL) * bgP).toFixed(3));
         if (inner) inner.style.setProperty("--lr-content-in", Math.min(1, Math.max(0, (panelT - 0.6) / 0.4)).toFixed(3));
       }
 
-      // CHAIN: scroll-scrubbed — draws over the pinned scroll [0, DRAW_END], then HOLDs to 1.
-      const reel = Math.min(1, Math.max(0, P / DRAW_END));
-      setReel(reel);
-
-      return { topY, panelT, reel, triggerTop, pinTotal };
+      return { topY, panelT, reel, triggerTop, pinTotal, contentScrollVh };
     };
 
     const onUserScroll = (e) => { lastUserTs = e.timeStamp; };
@@ -156,11 +202,12 @@ export function LifetimeReel01({ content, config = {} }) {
       const dt = lastTs ? Math.min(50, ts - lastTs) : 16.7; // clamp big gaps (tab switches)
       lastTs = ts;
 
-      const { topY, panelT, reel, triggerTop, pinTotal } = measure();
+      const { topY, panelT, reel, triggerTop, pinTotal, contentScrollVh } = measure();
 
       // AUTO-SCROLL: active from the moment the box starts expanding (panelT > 0) until the
-      // last diamond is rendered (reel == 1). Pace the whole expand+draw span over AUTO_MS.
-      const span = triggerTop + DRAW_END * pinTotal; // approach px + draw px
+      // last diamond is rendered (reel == 1). Pace the expand + content draw span over AUTO_MS.
+      const vh = window.innerHeight || document.documentElement.clientHeight || 1;
+      const span = triggerTop + (contentScrollVh / 100) * vh;
       const active = panelT > 0 && reel < 1;
       const userActive = ts - lastUserTs < USER_IDLE_MS;
       const y = window.scrollY;
@@ -186,6 +233,7 @@ export function LifetimeReel01({ content, config = {} }) {
     const stopLoop = () => { running = false; if (raf) cancelAnimationFrame(raf); raf = 0; };
     const evaluate = () => {
       if (!canPin()) { stopLoop(); clearReduced(); return; }
+      setTrackHeight();
       if (inView) startLoop();
       else { stopLoop(); measure(); } // off-screen: set the at-rest frame once, no loop / no auto-scroll
     };

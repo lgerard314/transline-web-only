@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output
+.next/
+out/
+dist/
+build/
+
+# Agent / Playwright scratch and reports
+.scratch/
+.scratch-*/
+**/.scratch/
+**/.scratch-*/
+test-results/
+playwright-report/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Env and deploy
+.env*.local
+.vercel
+
+# Editor / tooling caches
+.DS_Store
+Thumbs.db
+.aws/
