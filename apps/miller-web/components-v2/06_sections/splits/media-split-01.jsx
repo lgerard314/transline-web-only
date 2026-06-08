@@ -70,9 +70,6 @@ export function MediaSplit01({ content, config = {} }) {
   const mediaRef = useRef(null);
   const figsRef = useRef(null);
   const capsRef = useRef(null);
-  const [highlightsDone, setHighlightsDone] = useState(false);
-  const highlightsDoneRef = useRef(false);
-
   // Careers-style driver (zoom-collage-01): one continuous rAF loop while the track is in
   // view reads scroll → writes the scene, auto-advances the exit once the user nudges past
   // the highlights hold. Wide viewport + motion OK only; otherwise columns rest static.
@@ -145,10 +142,7 @@ export function MediaSplit01({ content, config = {} }) {
         track.style.removeProperty("--fac2-head-off");
         const g = caps.querySelector(".mw-cap-dia");
         if (g) g.querySelectorAll(".mw-cap-dia__cell").forEach((c) => { c.style.removeProperty("--cap-sc"); c.style.removeProperty("--cap-op"); c.style.removeProperty("--cap-tx"); c.style.removeProperty("--cap-ty"); c.style.removeProperty("--cap-rot"); });
-        if (highlightsDoneRef.current) {
-          highlightsDoneRef.current = false;
-          setHighlightsDone(false);
-        }
+        delete media.dataset.iaccHover;
         resetPinClocks();
         showAllIntroRises(left);
         return idleState();
@@ -202,16 +196,17 @@ export function MediaSplit01({ content, config = {} }) {
       else delete media.dataset.figReveal;
 
       media.dataset.figDone = figDone ? "1" : "";
-      if (figDone !== highlightsDoneRef.current) {
-        highlightsDoneRef.current = figDone;
-        setHighlightsDone(figDone);
-      }
 
       // PIN 2 — SWIPE (scroll-scrubbed): only after highlights AND SWIPE_HOLD_P extra scroll
       // past FIG_END_P — so the band can rest before the media exit begins.
       const sweep = figDone && P > swipeGate
         ? clamp01((P - swipeGate) / Math.max(0.001, SWIPE_END - swipeGate))
         : 0;
+
+      // Mouse parallax on the big photo once entrance finishes and before the exit swipe.
+      const photoReady = entranceDone && sweep < 0.001;
+      if (photoReady) media.dataset.iaccHover = "1";
+      else delete media.dataset.iaccHover;
       const exitT = sweep;
       const exitDone = figDone && sweep >= 1;
 
@@ -419,7 +414,7 @@ export function MediaSplit01({ content, config = {} }) {
                 rolling in as the media uncovers it. */}
             <div className="mw-fac2__right" ref={rightRef}>
               <div className="mw-fac2__media" ref={mediaRef}>
-                <ImageAccordion01 photos={photos} reveal={false} highlightsDone={highlightsDone} label="Vaughn Bullough Environmental Centre photo gallery" />
+                <ImageAccordion01 photos={photos} reveal={false} label="Vaughn Bullough Environmental Centre photo gallery" />
                 {/* Clip band — the 3 highlights grow out from under the photos (no container). */}
                 <div className="mw-fac2__figclip">
                   <dl className="mw-fac2__figs" aria-label="Facility figures" ref={figsRef}>

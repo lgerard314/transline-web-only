@@ -705,6 +705,13 @@
   -webkit-user-drag: none;
 }
 .mw-iacc__panel.is-open .mw-iacc__img { filter: brightness(1) saturate(1.02); }
+/* VBEC — mouse parallax on the open panel's zoom layer (--hover-x/y from the widget).
+   Stacks with scroll parallax on the nested <img> so the two never fight. */
+.mw-iacc--hover-px .mw-iacc__panel.is-open .mw-iacc__zoom {
+  transform: translate3d(var(--hover-x, 0px), var(--hover-y, 0px), 0)
+    scale(calc(1 + (1 - var(--p, 1)) * 0.45));
+  transition: transform 0.12s ease-out;
+}
 
 .mw-iacc__veil {
   position: absolute;
@@ -1558,6 +1565,24 @@
   line-height: 1.6;
   color: var(--c-ink-2);
 }
+/* Banner head — hero entrance choreography (mask-rise title lines + lead fade-up).
+   Armed by <TimelineWipe>; plays once --wipe-box completes (data-head-settled).
+   Scoped so the global .mw-hero__line-in load animation does not run here. */
+.mw-ten3__banner .mw-ten3__head .mw-hero__line-in { animation: none; transform: none; }
+.mw-ten3__banner .mw-ten3__head .mw-ten3__lead { animation: none; }
+.mw-ten3__banner[data-head-armed]:not([data-head-settled]) .mw-ten3__head .mw-hero__line-in { transform: translateY(116%); }
+.mw-ten3__banner[data-head-armed]:not([data-head-settled]) .mw-ten3__head .mw-ten3__lead { opacity: 0; transform: translateY(18px); }
+.mw-ten3__banner[data-head-settled] .mw-ten3__title .mw-hero__line:nth-child(1) .mw-hero__line-in {
+  animation: mw-hero-rise 0.95s cubic-bezier(.16, .84, .3, 1) both;
+  animation-delay: 0.45s;
+}
+.mw-ten3__banner[data-head-settled] .mw-ten3__title .mw-hero__line:nth-child(2) .mw-hero__line-in {
+  animation: mw-hero-rise 0.95s cubic-bezier(.16, .84, .3, 1) both;
+  animation-delay: 0.57s;
+}
+.mw-ten3__banner[data-head-settled] .mw-ten3__head .mw-ten3__lead {
+  animation: mw-hero-fade 0.8s ease 0.95s both;
+}
 
 /* Static milestone record — plain ticks down a hairline spine; every entry
    shows year + title + body (the /v2 evidentiary list). The interactive
@@ -1957,6 +1982,8 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
 @media (prefers-reduced-motion: reduce) {
   /* The drivers don't attach → --wipe / --stats-out fall back (full chevron, band at rest).
      Drop the clip and the emerge translate so the bands are plain static panels. */
+  .mw-ten3__banner[data-head-armed] .mw-ten3__head .mw-hero__line-in,
+  .mw-ten3__banner[data-head-armed] .mw-ten3__head .mw-ten3__lead { transform: none; opacity: 1; animation: none; }
   .mw-ten3__aside, .mw-ten3__maside { clip-path: none; }
   .mw-ten3__aside { transform: none; }
   /* No driver → no data-hl cycle; lay all three stats back out as a static row, all shown. */

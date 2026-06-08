@@ -63,6 +63,8 @@ export function TimelineWipe() {
           it.lastImg = pImg;
           it.el.style.setProperty("--wipe", pImg.toFixed(3));
         }
+        // Hero-style head/body entrance once the brown chevron container is fully on.
+        it.el.toggleAttribute("data-head-settled", pBox >= 0.999);
       }
     };
 
@@ -73,6 +75,8 @@ export function TimelineWipe() {
       for (const it of els) {
         it.el.style.removeProperty("--wipe");
         it.el.style.removeProperty("--wipe-box");
+        it.el.removeAttribute("data-head-armed");
+        it.el.removeAttribute("data-head-settled");
         it.lastImg = -1;
         it.lastBox = -1;
       }
@@ -82,6 +86,7 @@ export function TimelineWipe() {
       if (attached) return;
       collect();
       if (!els.length) return;
+      for (const it of els) it.el.setAttribute("data-head-armed", "");
       attached = true;
       window.addEventListener("scroll", onScroll, { passive: true });
       window.addEventListener("resize", onResize, { passive: true });

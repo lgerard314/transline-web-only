@@ -29,9 +29,10 @@ export function TimelineSplit01({ content, config = {} }) {
                 </div>
               </div>
               <TimelineWipe />
-              <header className="mw-ten3__head" data-reveal>
+              <header className="mw-ten3__head">
                 <h2 id={headingId} className="mw-ten3__title">
-                  {title.lead} <span className="mw-ten3__title-em">{title.em}</span>
+                  <span className="mw-hero__line"><span className="mw-hero__line-in">{title.lead}</span></span>
+                  <span className="mw-hero__line"><span className="mw-hero__line-in"><span className="mw-ten3__title-em">{title.em}</span></span></span>
                 </h2>
                 <p className="mw-ten3__lead">{lead}</p>
               </header>
