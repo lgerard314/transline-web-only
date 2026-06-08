@@ -634,7 +634,7 @@
   position: relative;
   /* Scroll-driven entrance (the page's plate gesture): the panel RISES + fades in as
      --p scrubs 0 -> 1, while the photo's clip window opens + zoom-settles below. */
-  transform: translateY(calc((1 - var(--p, 1)) * 30px));
+  transform: translateY(calc((1 - var(--p, 1)) * 72px));
   opacity: var(--p, 1);
   flex: 1 1 0; /* slivers fill the remainder to the right edge */
   min-width: 0;
@@ -667,7 +667,7 @@
   overflow: hidden;
   /* Container reveal: the clay frame shows first, then the clip window opens
      (inset 16% -> 0) as --p scrubs, so the photo expands into the frame. */
-  clip-path: inset(calc((1 - var(--p, 1)) * 16%));
+  clip-path: inset(calc((1 - var(--p, 1)) * 28%));
 }
 .mw-iacc__zoom {
   position: absolute;
@@ -675,7 +675,7 @@
   transform-origin: center;
   will-change: transform;
   /* Entrance zoom-settle: the photo eases from scale 1.22 -> 1 as --p scrubs. */
-  transform: scale(calc(1 + (1 - var(--p, 1)) * 0.22));
+  transform: scale(calc(1 + (1 - var(--p, 1)) * 0.45));
 }
 /* (the per-photo brown matte was removed — the whole container is dark brown now) */
 .mw-iacc__img {

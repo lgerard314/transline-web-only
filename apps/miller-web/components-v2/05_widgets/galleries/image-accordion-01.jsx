@@ -26,67 +26,60 @@ export function ImageAccordion01({ photos, label = "Facility photo gallery" }) {
     const panels = Array.from(root.querySelectorAll(".mw-iacc__panel"));
     if (!panels.length) return;
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    // The intro text lives in the sibling left column; we drive its mask-rise reveal
-    // (--p) from the SAME scroll timeline so it sequences strictly AFTER the photos.
+    // The intro text lives in the sibling left column; its four masked parts rise after.
     const grid = root.closest(".mw-fac2__grid");
     const intro = grid ? grid.querySelector(".mw-fac2__intro") : null;
-    // The intro's four masked parts (eyebrow → header → body → buttons) rise top-down.
     const risers = intro ? Array.from(intro.querySelectorAll(".mw-fac2__rise")) : [];
-    const RSTAG = 0.13;
-    const rden = 1 - (risers.length > 1 ? (risers.length - 1) * RSTAG : 0);
-    const cell = root.closest(".mw-fac2__right") || root;
-    const n = panels.length;
-    const STAG = 0.09;                 // left-to-right stagger in progress space
-    const denom = 1 - (n - 1) * STAG;  // normalize so the last panel still finishes at 1
-    const PHOTO_END = 0.62;            // photos done by here; the text rises after
-    let raf = 0;
 
-    const compute = () => {
-      raf = 0;
-      if (mq.matches) {
-        for (const p of panels) p.style.setProperty("--p", "1");
-        for (const el of risers) el.style.setProperty("--p", "1");
-        return;
+    const setAll = (v) => {
+      for (const p of panels) p.style.setProperty("--p", v);
+      for (const el of risers) el.style.setProperty("--p", v);
+    };
+    if (mq.matches) { setAll("1"); return; }
+    setAll("0");
+
+    // TIMED plate-window cascade, TRIGGERED when the gallery scrolls into view (like the
+    // page's data-reveal / hero) so it ALWAYS plays out fully — even if you stop scrolling
+    // (a position-scrubbed reveal would finish off-screen, since the photos are tall and
+    // top-aligned). Photos cascade left-to-right (window opens + zoom-settles + rises +
+    // fades); then the intro text mask-rises top-down. Replays each time it re-enters view.
+    const ease = (x) => 1 - Math.pow(1 - x, 3);          // easeOutCubic
+    const PHOTO_DUR = 640, PHOTO_STAG = 130;             // per-photo duration / stagger (ms)
+    const TEXT_GAP = 120, TEXT_DUR = 600, TEXT_STAG = 110;
+    const photoTotal = (panels.length - 1) * PHOTO_STAG + PHOTO_DUR;
+    let raf = 0, t0 = 0, playing = false;
+
+    const frame = (now) => {
+      if (!t0) t0 = now;
+      const elapsed = now - t0;
+      let done = true;
+      for (let i = 0; i < panels.length; i++) {
+        const l = (elapsed - i * PHOTO_STAG) / PHOTO_DUR;
+        const v = l <= 0 ? 0 : l >= 1 ? 1 : ease(l);
+        if (v < 1) done = false;
+        panels[i].style.setProperty("--p", v.toFixed(4));
       }
-      const vh = window.innerHeight;
-      // The cell isn't transformed, so its live rect is accurate (survives lazy-load
-      // reflow above). One section-travel value t (0 → 1) drives everything.
-      const top = cell.getBoundingClientRect().top;
-      const start = vh * 0.88; // gallery entering — the reveal begins
-      const end = vh * 0.2;    //   photos settled AND the text has risen
-      let t = (start - top) / (start - end);
-      t = t < 0 ? 0 : t > 1 ? 1 : t;
-
-      // Photos — each panel's clip window opens + zoom-settles + rises, staggered L→R.
-      const raw = t / PHOTO_END;
-      for (let i = 0; i < n; i++) {
-        let pp = (raw - i * STAG) / denom;
-        pp = pp < 0 ? 0 : pp > 1 ? 1 : pp;
-        panels[i].style.setProperty("--p", pp.toFixed(4));
-      }
-
-      // Text — each part (eyebrow → header → body → buttons) mask-rises once the photos
-      // are in, staggered top-down (mirrors the hero's headline-line stagger).
-      let p = (t - PHOTO_END) / (1 - PHOTO_END);
-      p = p < 0 ? 0 : p > 1 ? 1 : p;
       for (let i = 0; i < risers.length; i++) {
-        let rp = (p - i * RSTAG) / rden;
-        rp = rp < 0 ? 0 : rp > 1 ? 1 : rp;
-        risers[i].style.setProperty("--p", rp.toFixed(4));
+        const l = (elapsed - photoTotal - TEXT_GAP - i * TEXT_STAG) / TEXT_DUR;
+        const v = l <= 0 ? 0 : l >= 1 ? 1 : ease(l);
+        if (v < 1) done = false;
+        risers[i].style.setProperty("--p", v.toFixed(4));
       }
+      raf = done ? 0 : requestAnimationFrame(frame);
+      if (done) playing = false;
     };
-    const onScroll = () => { if (!raf) raf = requestAnimationFrame(compute); };
+    const play = () => { if (playing) return; playing = true; t0 = 0; raf = requestAnimationFrame(frame); };
+    const stop = () => { if (raf) cancelAnimationFrame(raf); raf = 0; playing = false; setAll("0"); };
 
-    compute();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    mq.addEventListener("change", compute);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      mq.removeEventListener("change", compute);
-      if (raf) cancelAnimationFrame(raf);
-    };
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) play();
+        else stop();   // reset so it replays the next time it scrolls back into view
+      }
+    }, { threshold: 0.25 });
+    io.observe(root);
+
+    return () => { io.disconnect(); if (raf) cancelAnimationFrame(raf); };
   }, [photos]);
 
   if (!photos || photos.length === 0) return null;
