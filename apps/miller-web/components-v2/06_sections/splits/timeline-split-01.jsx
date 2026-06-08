@@ -1,6 +1,7 @@
 import { MissionBlock01 } from "@/components-v2/04_blocks/prose/mission-block-01";
 import { sectionProps } from "@/components-v2/section-config";
 import { TimelineWipe } from "@/components-v2/06_sections/splits/timeline-wipe";
+import { TimelineHeadReveal } from "@/components-v2/06_sections/splits/timeline-head-reveal";
 import { TimelineReveal } from "@/components-v2/06_sections/splits/timeline-reveal";
 import { TimelineStats } from "@/components-v2/06_sections/splits/timeline-stats";
 
@@ -29,12 +30,19 @@ export function TimelineSplit01({ content, config = {} }) {
                 </div>
               </div>
               <TimelineWipe />
+              <TimelineHeadReveal />
               <header className="mw-ten3__head">
                 <h2 id={headingId} className="mw-ten3__title">
-                  <span className="mw-hero__line"><span className="mw-hero__line-in">{title.lead}</span></span>
-                  <span className="mw-hero__line"><span className="mw-hero__line-in"><span className="mw-ten3__title-em">{title.em}</span></span></span>
+                  <span className="mw-ten3__head-line" data-head-part="rise">
+                    <span className="mw-ten3__head-rise-in">{title.lead}</span>
+                  </span>
+                  <span className="mw-ten3__head-line" data-head-part="rise">
+                    <span className="mw-ten3__head-rise-in"><span className="mw-ten3__title-em">{title.em}</span></span>
+                  </span>
                 </h2>
-                <p className="mw-ten3__lead">{lead}</p>
+                <p className="mw-ten3__lead" data-head-part="fade">
+                  <span className="mw-ten3__lead-in">{lead}</span>
+                </p>
               </header>
               {/* Mission layer — comes into view INSIDE this arrow-chip (chevron) container
                   using the SAME reveal as the bg image: a chevron wipe + the photo's window-

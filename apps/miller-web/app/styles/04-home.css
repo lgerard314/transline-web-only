@@ -1565,23 +1565,30 @@
   line-height: 1.6;
   color: var(--c-ink-2);
 }
-/* Banner head — hero entrance choreography (mask-rise title lines + lead fade-up).
-   Armed by <TimelineWipe>; plays once --wipe-box completes (data-head-settled).
-   Scoped so the global .mw-hero__line-in load animation does not run here. */
-.mw-ten3__banner .mw-ten3__head .mw-hero__line-in { animation: none; transform: none; }
-.mw-ten3__banner .mw-ten3__head .mw-ten3__lead { animation: none; }
-.mw-ten3__banner[data-head-armed]:not([data-head-settled]) .mw-ten3__head .mw-hero__line-in { transform: translateY(116%); }
-.mw-ten3__banner[data-head-armed]:not([data-head-settled]) .mw-ten3__head .mw-ten3__lead { opacity: 0; transform: translateY(18px); }
-.mw-ten3__banner[data-head-settled] .mw-ten3__title .mw-hero__line:nth-child(1) .mw-hero__line-in {
-  animation: mw-hero-rise 0.95s cubic-bezier(.16, .84, .3, 1) both;
-  animation-delay: 0.45s;
+/* Banner head — per-part scroll reveals (<TimelineHeadReveal>). Each title line mask-rises
+   (hero-style); the lead fades up (hero-style). Each part fires independently once it has
+   room to render fully on screen (+ 40px above the viewport bottom). */
+.mw-ten3__head-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
 }
-.mw-ten3__banner[data-head-settled] .mw-ten3__title .mw-hero__line:nth-child(2) .mw-hero__line-in {
-  animation: mw-hero-rise 0.95s cubic-bezier(.16, .84, .3, 1) both;
-  animation-delay: 0.57s;
+.mw-ten3__head-rise-in { display: block; }
+.mw-ten3__lead-in { display: block; }
+.mw-ten3__banner[data-head-armed] .mw-ten3__head-line .mw-ten3__head-rise-in {
+  transform: translateY(116%);
+  transition: transform 0.95s cubic-bezier(.16, .84, .3, 1);
 }
-.mw-ten3__banner[data-head-settled] .mw-ten3__head .mw-ten3__lead {
-  animation: mw-hero-fade 0.8s ease 0.95s both;
+.mw-ten3__banner[data-head-armed] .mw-ten3__head-line[data-in="1"] .mw-ten3__head-rise-in { transform: none; }
+.mw-ten3__banner[data-head-armed] .mw-ten3__lead-in {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.mw-ten3__banner[data-head-armed] [data-head-part="fade"][data-in="1"] .mw-ten3__lead-in {
+  opacity: 1;
+  transform: none;
 }
 
 /* Static milestone record — plain ticks down a hairline spine; every entry
@@ -1982,8 +1989,8 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
 @media (prefers-reduced-motion: reduce) {
   /* The drivers don't attach → --wipe / --stats-out fall back (full chevron, band at rest).
      Drop the clip and the emerge translate so the bands are plain static panels. */
-  .mw-ten3__banner[data-head-armed] .mw-ten3__head .mw-hero__line-in,
-  .mw-ten3__banner[data-head-armed] .mw-ten3__head .mw-ten3__lead { transform: none; opacity: 1; animation: none; }
+  .mw-ten3__banner[data-head-armed] .mw-ten3__head-rise-in,
+  .mw-ten3__banner[data-head-armed] .mw-ten3__lead-in { transform: none; opacity: 1; transition: none; }
   .mw-ten3__aside, .mw-ten3__maside { clip-path: none; }
   .mw-ten3__aside { transform: none; }
   /* No driver → no data-hl cycle; lay all three stats back out as a static row, all shown. */
