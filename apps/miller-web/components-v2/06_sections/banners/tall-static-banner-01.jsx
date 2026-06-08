@@ -1,7 +1,7 @@
 // L3 · tall-static-banner-01 — trust band; download-card row under the hero.
 "use client";
 
-import { useCallback, useLayoutEffect, useRef } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef } from "react";
 import { sectionProps } from "@/components-v2/section-config";
 
 function CertDownloadLink({ cert }) {
@@ -74,6 +74,40 @@ export function TallStaticBanner01({ content, config = {} }) {
       window.removeEventListener("resize", syncInnerWidths);
     };
   }, [syncInnerWidths, content.certs]);
+
+  // Replay the staggered entrance reveal whenever the user returns to the very
+  // top of the page. The house MillerScrollReveal reveals these cards once and
+  // then unobserves them, so we keep our own observer to re-reveal them, and we
+  // clear their revealed state when scrollY hits the top (off-screen, since the
+  // banner sits below the hero fold) so it plays fresh on the next scroll-in.
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
+    const root = gridRef.current;
+    if (!root) return undefined;
+    const items = () => Array.from(root.children);
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) e.target.setAttribute("data-in", "1");
+        }
+      },
+      { threshold: 0, rootMargin: "0px" },
+    );
+    items().forEach((el) => io.observe(el));
+
+    const onScroll = () => {
+      if (window.scrollY <= 1) {
+        items().forEach((el) => el.removeAttribute("data-in"));
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      io.disconnect();
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, [content.certs]);
 
   return (
     <section

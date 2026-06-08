@@ -57,6 +57,10 @@ export function TimelineReveal() {
     const render = () => {
       raf = 0;
       const vh = window.innerHeight;
+      // The fixed header (.tl-topbar past-hero state) overlays the top HDR px of the viewport, so
+      // that band is the real TOP fold for the timeline — an item must leave before it slides under
+      // the header, or it reads as cut off. Mirror the entry's 40px clearance on this fold.
+      const HDR = 56;
       const writes = [];
       for (const { list, items, banner, eyebrow } of lists) {
         // GATE: don't begin revealing any milestone until the banner's bottom edge has
@@ -80,10 +84,12 @@ export function TimelineReveal() {
           const restTop = listTop + el.offsetTop;
           const restBottom = restTop + el.offsetHeight;
           // Reveal once the highlights are fully out AND there's room for the WHOLE item +
-          // 40px above the fold...
+          // 40px above the BOTTOM fold (the viewport bottom)...
           const on = ready && restBottom + 40 <= vh;
-          // ...and LEAVE the moment its rest-top reaches the top of the screen.
-          const out = restTop <= 0;
+          // ...and LEAVE symmetrically at the TOP fold: the moment its rest-top rises within 40px
+          // of the header's bottom edge, so it slides up + fades OUT before the header can clip it
+          // (mirror of the entry — same 40px clearance, measured from the header instead of vh=0).
+          const out = restTop <= HDR + 40;
           if (on !== items[i].on || out !== items[i].out) writes.push([items[i], on, out]);
         }
       }

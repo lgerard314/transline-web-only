@@ -47,7 +47,7 @@ export function MonumentHero01({ content, config = {} }) {
             </div>
           </div>
 
-          <p className="mw-hero__article"><strong>{article.strong}</strong><span className="mw-hero__article-since">{article.rest}</span></p>
+          <p className="mw-hero__article"><strong>{article.strong}</strong>{article.rest}</p>
         </div>
       </div>
     </section>

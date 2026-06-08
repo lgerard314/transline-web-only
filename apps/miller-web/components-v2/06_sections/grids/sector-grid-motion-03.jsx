@@ -1,15 +1,20 @@
 "use client";
 import { useEffect } from "react";
 
-// Reveal driver for the enhanced diamond grid (SectorDiamonds03 / .mw-secd--int). Mirrors the arc
-// gallery's driver: arm the grid hidden, then TOGGLE `.is-in` whenever the section is on screen, so
-// the staggered reveal replays each time it scrolls back into view and only resets once the section
-// is completely out of view (no rootMargin). A separate observer eager-loads + decodes the photos
-// ~800px ahead so they're painted before the reveal plays. prefers-reduced-motion shows it at rest.
+// Reveal driver for the enhanced diamond grid (SectorDiamonds03 / .mw-secd--int). Arms the grid
+// hidden, then PLAYS the staggered reveal once the diamonds scroll into view — and DOES NOT replay
+// when you scroll the section back into view. It only re-arms (so the next entry replays fresh) once
+// the section has COMPLETELY left the viewport. Two observers:
+//   • play  — adds `.is-in` when the grid reaches its trigger zone (never removes it), so scrolling
+//             up/down while the section stays on screen doesn't restart the animation.
+//   • reset — removes `.is-in` when the whole SECTION is fully out of view (threshold 0, no margin).
+// A third observer eager-loads + decodes the photos ~800px ahead. prefers-reduced-motion shows it
+// at rest.
 export function SectorGridMotion03() {
   useEffect(() => {
     const grid = document.querySelector(".mw-secd--int .mw-secd__grid");
     if (!grid) return;
+    const section = grid.closest(".mw-secd") || grid;
 
     const imgs = Array.from(grid.querySelectorAll("img"));
     const pre = new IntersectionObserver(
@@ -24,20 +29,33 @@ export function SectorGridMotion03() {
     );
     pre.observe(grid);
 
-    let io;
+    let playIO, resetIO;
     if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       grid.classList.add("is-armed");
-      const section = grid.closest(".mw-secd") || grid;
-      io = new IntersectionObserver(
+      // PLAY: once the diamonds reach the trigger zone (18% up from the bottom), reveal — and leave it
+      // revealed. Adding `.is-in` when it's already there is a no-op, so re-entering never replays.
+      playIO = new IntersectionObserver(
         (entries) => {
-          for (const e of entries) grid.classList.toggle("is-in", e.isIntersecting);
+          for (const e of entries) if (e.isIntersecting) grid.classList.add("is-in");
+        },
+        { threshold: 0, rootMargin: "0px 0px -18% 0px" },
+      );
+      playIO.observe(grid);
+      // RESET: re-arm ONLY when the section has fully left via the BOTTOM — i.e. you scrolled UP above
+      // it and it now sits entirely below the viewport (boundingClientRect.top > 0). Leaving via the TOP
+      // (scrolling DOWN past it) must NOT reset, so scrolling back up to it does not replay.
+      resetIO = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (!e.isIntersecting && e.boundingClientRect.top > 0) grid.classList.remove("is-in");
+          }
         },
         { threshold: 0 },
       );
-      io.observe(section);
+      resetIO.observe(section);
     }
 
-    return () => { pre.disconnect(); if (io) io.disconnect(); };
+    return () => { pre.disconnect(); if (playIO) playIO.disconnect(); if (resetIO) resetIO.disconnect(); };
   }, []);
 
   return null;

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
 
-// Scroll-reveal driver for the SectorDiamonds02 arc gallery. When the arch scrolls into view
+// Scroll-reveal driver for the ArcPhotoDisplay01 arc gallery. When the arch scrolls into view
 // we add `.is-in`; the cards then run a staggered CSS fade-up (delay = each card's --ai index).
 // When the arch is scrolled FULLY out of view (past the top or the bottom) we remove `.is-in`,
 // so it re-arms and the reveal replays the next time it scrolls back in — in either direction.

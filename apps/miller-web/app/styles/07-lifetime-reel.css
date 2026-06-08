@@ -42,11 +42,33 @@
    ════════════════════════════════════════════════════════════════════════ */
 .mw-lr {
   position: relative;
-  background: var(--c-navy-3);
+  /* Warm surface shows AROUND the expanding dark box (the dark lives on .mw-lr__panel). */
+  background: var(--c-surface-warm);
   color: var(--c-on-navy);
-  padding-block: clamp(50px, 5.6vw, 101px); /* 30% less than the standard band padding */
+  --lr-pad: clamp(50px, 5.6vw, 101px); /* top/bottom padding — reused as the panel's symmetric margins */
+  padding-block: var(--lr-pad);
   overflow: clip;
   isolation: isolate;
+}
+
+/* ── Expanding panel ─────────────────────────────────────────────────────────
+   The dark walnut box (+ the bg map). It starts as a small box at the GRAPHIC's exact
+   aspect, TOP-ALIGNED (top edge at the section's top padding), and grows — width +
+   height — to a band with symmetric top/bottom padding (height = section − 2×--lr-pad).
+   JS sets --lr-panel-w (centred) / --lr-panel-h; unpinned it rests at that symmetric
+   band. Square corners. It clips its own contents (the map's cover crop). */
+.mw-lr__panel {
+  position: absolute;
+  top: var(--lr-panel-top, var(--lr-pad)); /* JS sets this to the header height (band starts below the header) */
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--lr-panel-w, 100%);
+  height: var(--lr-panel-h, calc(100% - 2 * var(--lr-pad)));
+  z-index: 0;
+  background: var(--c-navy-3);
+  overflow: clip;
+  border-radius: 0; /* square corners */
+  will-change: width, height;
 }
 
 /* ── Pinned scroll sequence (desktop, motion-OK) ────────────────────────────
@@ -59,7 +81,7 @@
    progress feed on the SAME condition as this query. */
 .mw-lr-track { position: relative; }
 @media (min-width: 721px) and (prefers-reduced-motion: no-preference) {
-  .mw-lr-track { height: var(--lr-track-h, 180vh); }
+  .mw-lr-track { height: var(--lr-track-h, 280vh); }
   .mw-lr-track > .mw-lr {
     position: sticky;
     top: 0;
@@ -71,38 +93,32 @@
   }
 }
 
-/* Background wash: a faint Canada outline map (cream-filled SVG over the dark
-   walnut band). Kept very low opacity so it reads as subtle depth, not a legible
-   graphic. The layer is CAPPED at the body-content column width (same formula as
-   .mw-inner), so the map never gets wider than the copy. JS (lifetime-reel-01.jsx)
-   grows it from a dot below the eyebrow (--lr-bg-scale 0 → 1, transform-origin set
-   to the eyebrow underside) once the eyebrow is on screen, then drifts it
-   vertically (--lr-bg-drift) like the old parallax. Unpinned (mobile / reduced
-   motion) it rests static at full width (scale 1, drift 0). .mw-lr's
-   `overflow: clip` hides the drifted top/bottom crop. */
+/* Background wash: a faint Canada outline map, filling the expanding panel. When the
+   panel is at the map's aspect (its starting shape) `cover` is an EXACT fit (no crop,
+   no letterbox); as the panel widens into the band, cover fills it (cropping top/bottom
+   of the map). */
 .mw-lr__bg {
   position: absolute;
-  /* Vertical bleed (±120px) so the upward parallax drift never lifts the layer's
-     bottom edge into view (the bleed must exceed PARALLAX_MAX). Keep 120 in sync with
-     BG_BLEED in lifetime-reel-01.jsx — the grow transform-origin compensates for it. */
-  top: -120px;
-  bottom: -120px;
-  left: 0;
-  right: 0;
-  margin-inline: auto;
-  width: min(100% - clamp(48px, 8vw, 144px), 1560px); /* never wider than the body content */
+  top: 50%;
+  left: 50%;
+  /* JS sizes the WHOLE map inside the box (--lr-map-w / --lr-map-h, map aspect). Once the
+     section is full, --lr-zoom scales the map up past its fit (cropping at the box edge —
+     "zoom in") and --lr-bg-drift drifts it vertically (parallax). */
+  transform: translate(-50%, calc(-50% + var(--lr-bg-drift, 0px))) scale(var(--lr-zoom, 1));
+  width: var(--lr-map-w, min(92%, 1560px));
+  height: var(--lr-map-h, 100%);
   z-index: 0;
   pointer-events: none;
   background-image: url("/miller/custom/canada-bg-line-map.svg");
   background-repeat: no-repeat;
   background-position: center;
-  background-size: cover; /* always fill the (bled) layer top→bottom so the drift can't expose a gap */
-  opacity: 0.07;
-  transform: translateY(var(--lr-bg-drift, 0px)) scale(var(--lr-bg-scale, 1));
-  transform-origin: center center;
-  will-change: transform;
+  background-size: cover; /* the element is the map's aspect, so this is an exact, whole-map fit */
+  /* fully opaque in the small box, fading to the faint wash as it grows
+     (--lr-bg-opacity inherits from the panel, set in JS). */
+  opacity: var(--lr-bg-opacity, 0.07);
 }
-.mw-lr__inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
+/* Content fades in as the panel nears full size (--lr-content-in set in JS). */
+.mw-lr__inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; text-align: center; opacity: var(--lr-content-in, 1); }
 .mw-lr .mw-section-tag { margin-bottom: clamp(20px, 2.4vw, 36px); }
 
 /* ── Lifetime reel: three static highlight diamonds, drawn LEFT → RIGHT ───────
@@ -358,7 +374,7 @@
 }
 .mw-lr-reel__caption {
   position: absolute; top: 0; left: 50%;
-  width: clamp(280px, 32vw, 460px);
+  width: clamp(200px, 27vw, 400px); /* narrower so all three captions fit side by side under their diamonds */
   margin: 0;
   font-family: var(--font-sans), sans-serif;
   font-size: clamp(16px, 1.15vw, 19px); line-height: 1.6;
@@ -399,6 +415,7 @@
   .mw-lr-reel__item[data-settled="1"] .mw-lr-reel__label { opacity: 1; }
   .mw-lr-reel__dots { display: flex; }
   .mw-lr-reel__link { display: none; }       /* no horizontal layout to bridge on mobile */
+  .mw-lr-reel__caption { width: min(88vw, 440px); } /* one centred caption at a time on mobile — wider */
 }
 
 @media (prefers-reduced-motion: reduce) {

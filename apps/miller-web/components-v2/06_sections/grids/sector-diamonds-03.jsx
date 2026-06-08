@@ -30,7 +30,7 @@ function buildGrid(cards) {
     content.push({ t: "photo", slot: "b", ci: k, col: 3 + ox, row: 2, slug: it[1].slug, name: it[1].name });
     content.push({ t: "photo", slot: "c", ci: k, col: 2 + ox, row: 3, slug: it[2].slug, name: it[2].name });
     content.push({ t: "photo", slot: "d", ci: k, col: 1 + ox, row: 2, slug: it[3].slug, name: it[3].name });
-    content.push({ t: "cat", ci: k, col: 0 + ox, row: k % 2 === 0 ? 3 : 1, title: cat.title });
+    content.push({ t: "cat", ci: k, col: 0 + ox, row: 3, title: cat.title }); // all category diamonds on the LOWER row (Infrastructure + Community dropped from the upper zig-zag slot)
   });
   // Normalise so the first content column is 0 (= body-content left) and the top row 0.
   const minCol = Math.min(...content.map((c) => c.col));
@@ -52,14 +52,6 @@ export function SectorDiamonds03({ content, config = {} }) {
   return (
     <section className="mw-secd mw-secd--int" aria-labelledby={headingId} {...sectionProps(config)}>
       <div className="mw-inner">
-        <header className="mw-secd__head">
-          <Eyebrow01 label={eyebrow} reveal />
-          <div className="mw-secd__head-solo" data-reveal-stagger>
-            <h2 id={headingId} className="mw-secd__title"><StopText01>{title}</StopText01></h2>
-            <p className="mw-secd__lead">{lead}</p>
-          </div>
-        </header>
-
         <div className="mw-secd__grid" style={{ aspectRatio: `${cols} / ${rows}` }}>
           {cells.map((c, i) => {
             if (c.t === "cat") {
@@ -88,6 +80,15 @@ export function SectorDiamonds03({ content, config = {} }) {
             );
           })}
         </div>
+
+        {/* Header BELOW the grid — mirrors the arc section (visual first, intro underneath). */}
+        <header className="mw-secd__head">
+          <Eyebrow01 label={eyebrow} reveal />
+          <div className="mw-secd__head-solo" data-reveal-stagger>
+            <h2 id={headingId} className="mw-secd__title"><StopText01>{title}</StopText01></h2>
+            <p className="mw-secd__lead">{lead}</p>
+          </div>
+        </header>
       </div>
       <SectorGridMotion03 />
     </section>

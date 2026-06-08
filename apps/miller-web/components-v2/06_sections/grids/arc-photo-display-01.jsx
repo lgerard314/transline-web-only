@@ -3,19 +3,20 @@ import { StopText01 } from "@/components-v2/01_marks/stops/stop-text-01";
 import { SectorGridMotion02 } from "@/components-v2/06_sections/grids/sector-grid-motion-02";
 import { sectionProps } from "@/components-v2/section-config";
 
-// Who-we-serve v1 — ARC GALLERY. Ported from an external arc-hero reference (Tailwind +
-// rounded cards + JS resize) and rebuilt natively: CSS-only, clay tokens, SQUARED photos
-// (no radius), our own copy. The 16 sub-industry photos fan along a rainbow arch. Below it,
-// on the SAME arc geometry (dropped down by --cat-drop), the 4 primary categories sit as small
-// clay DIAMOND markers with their full-size labels centred on top — evenly spaced, with the
-// end margins equal to the gaps between them. Angle/arc position are precomputed here and handed
-// to CSS as custom props, so this stays a server component — radii/sizes scale per breakpoint in
-// CSS, and the staggered fade-up reveal is driven by SectorGridMotion02 (no per-frame JS).
+// ARCED PHOTO DISPLAY — a reusable section that fans a set of photos along a rainbow arch. Ported
+// from an external arc-hero reference (Tailwind + rounded cards + JS resize) and rebuilt natively:
+// CSS-only, clay tokens, SQUARED photos (no radius). The 16 sub-industry photos fan along the arch.
+// Below it, on the SAME arc geometry (dropped down by --cat-drop), the 4 primary categories sit as
+// small clay DIAMOND markers with their full-size labels centred on top — evenly spaced, with the
+// end margins equal to the gaps between them. Angle/arc position are precomputed here and handed to
+// CSS as custom props, so this stays a server component — radii/sizes scale per breakpoint in CSS,
+// and the staggered fade-up reveal is driven by SectorGridMotion02 (no per-frame JS).
+// (Formerly SectorDiamonds02 — the home "who we serve" arc; kept as a general arced-photo template.)
 const PHOTO_BASE = "/miller/custom";
 const START_ANGLE = 20; // degrees — right-hand foot of the arch
 const END_ANGLE = 160; //  degrees — left-hand foot of the arch
 
-export function SectorDiamonds02({ content, config = {} }) {
+export function ArcPhotoDisplay01({ content, config = {} }) {
   const { headingId, eyebrow, title, lead, cards } = content;
   // Swap the first and last categories (Industrial ↔ Community) — and, through the flatMap below,
   // their photos too — so Community takes the right end of the arc and Industrial the left.

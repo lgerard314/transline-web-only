@@ -28,6 +28,14 @@ import { LrDiamondSeal } from "./lr-diamond-seal";
 // caption reaches the screen. On desktop the section is PINNED and the parent feeds
 // `progress` directly (see lifetime-reel-01.jsx), so this self-mapping is unused there.
 const START_VISIBLE_FRAC = 0.6; // fraction of the first diamond visible at progress 0
+// Time-based grace AFTER the third diamond finishes rendering, before hover can override the
+// auto-selected third. This is a wall-clock perception window, not a scroll distance: it is
+// sized to outlast the highlight's appear transitions (caption fade .35s, active scale .32s)
+// plus a beat to register them, so (a) the user clearly SEES the third highlighted, and (b)
+// those transitions have SETTLED before hover engages — otherwise the layout shifting under a
+// stationary mouse fires a stray mouseenter that instantly steals the selection. A scroll
+// distance can't express this (a fast scroll crosses it before the transition even finishes).
+const HOVER_GRACE_MS = 600;
 
 export function LifetimeReel({ highlights = [], progress }) {
   const controlled = typeof progress === "number"; // parent (pinned section) supplies progress
@@ -180,15 +188,23 @@ export function LifetimeReel({ highlights = [], progress }) {
     applyFrontier(prog, geom);
   }, [prog, geom, applyFrontier]);
 
-  // Hover / focus / click select a diamond — but ONLY after the whole chain has drawn.
-  // During the draw the active diamond follows the draw progression (see drawnSlot
-  // below), so hovers are ignored until then. doneRef holds the latest `done` so the
-  // stable callback can read it without re-subscribing.
-  const doneRef = useRef(false);
-  const select = useCallback((idx) => () => { if (doneRef.current) setSticky(idx); }, []);
+  // Hover / focus / click emphasise a diamond — but ONLY after the whole chain has drawn AND the
+  // grace has elapsed (hoverReady). During the draw + grace, hovers are ignored (no diamond is
+  // emphasised; the captions simply accumulate). hoverReadyRef lets the stable callback read the
+  // latest value.
+  const done = prog >= 0.999;                 // chain fully drawn (drives data-done)
+  const [hoverReady, setHoverReady] = useState(false);
+  const hoverReadyRef = useRef(false);
+  hoverReadyRef.current = hoverReady;
+  const select = useCallback((idx) => () => { if (hoverReadyRef.current) setSticky(idx); }, []);
 
-  const done = prog >= 0.999;
-  doneRef.current = done;
+  // Start the grace clock the moment the chain is fully drawn; hover engages HOVER_GRACE_MS
+  // later. If the user scrolls back before then (done → false), reset so it must elapse again.
+  useEffect(() => {
+    if (!done) { setHoverReady(false); return; }
+    const t = setTimeout(() => setHoverReady(true), HOVER_GRACE_MS);
+    return () => clearTimeout(t);
+  }, [done]);
 
   // Each diamond's count runs in lockstep with ITS OWN border draw: 0 before the wipe
   // reaches its left apex (segStart), ramping to 1 exactly as the wipe crosses to its
@@ -206,24 +222,11 @@ export function LifetimeReel({ highlights = [], progress }) {
     return Math.min(1, Math.max(0, (prog - segStart) / Math.max(1e-4, segEnd - segStart)));
   };
 
-  // Active-diamond progression: as the wipe FINISHES each diamond (its frontier passes
-  // that diamond's right apex), THAT diamond becomes the active/highlighted one and its
-  // body paragraph shows — while the next diamond is still drawing. drawnSlot is the
-  // highest slot whose draw has completed (-1 before the first; left→centre→right).
-  // After the whole chain is drawn (done), hover/focus takes over via `sticky`; until a
-  // hover, the last-drawn (right) diamond stays active.
-  const drawnSlot = (() => {
-    const g = geom;
-    if (!g) return reduced ? n - 1 : -1;
-    const m0 = g.milestones[0], m5 = g.milestones[5], span = (m5 - m0) || 1;
-    let ds = -1;
-    for (let s = 0; s < n; s++) {
-      const segEnd = (g.milestones[2 * s + 1] - m0) / span; // prog at which slot s finishes drawing
-      if (prog >= segEnd - 1e-3) ds = s;
-    }
-    return ds;
-  })();
-  const activeIdx = (done && sticky != null) ? sticky : (drawnSlot >= 0 ? ORDER[drawnSlot] : null);
+  // The diamond emphasis (amber border + scale) is HOVER-ONLY: it lights the hovered diamond
+  // after the chain has drawn. The body paragraphs are shown INDEPENDENTLY — each diamond's
+  // caption appears the moment that diamond finishes loading and STAYS (all three end up
+  // visible; see the caption `data-on`), so hover no longer drives the captions.
+  const activeIdx = (hoverReady && sticky != null) ? sticky : null;
 
   // Mobile one-at-a-time current diamond (chain hidden on mobile): pick the slot whose
   // segment the global progress has entered. Scroll drives `current` (the effect only
@@ -301,6 +304,7 @@ export function LifetimeReel({ highlights = [], progress }) {
           const name = `${h.value}${h.suffix}${h.unit ? " " + h.unit : ""} — ${h.label}`;
           const local = localOf(idx);
           const started = local > 0;
+          const loaded = local >= 0.999; // this diamond has finished loading → its caption stays
           return (
             <div
               className="mw-lr-reel__item"
@@ -315,7 +319,7 @@ export function LifetimeReel({ highlights = [], progress }) {
                   type="button"
                   className="mw-lr-reel__card"
                   aria-label={`${name}. Show details`}
-                  aria-expanded={activeIdx === idx}
+                  aria-expanded={loaded}
                   aria-controls={`${captionId}-${idx}`}
                   data-mw-lr-seal={started ? "closed" : "open"}
                   onClick={select(idx)}
@@ -338,20 +342,26 @@ export function LifetimeReel({ highlights = [], progress }) {
         })}
       </div>
 
-      {/* Reveal captions: one per diamond, stacked in a band BELOW the row. */}
+      {/* Reveal captions: one per diamond, each sitting under its diamond. On desktop every
+          caption stays once its diamond has loaded (all three end up visible); on mobile
+          (one diamond at a time) only the current diamond's caption shows. */}
       <div className="mw-lr-reel__captions" ref={captionsRef}>
-        {highlights.map((h, idx) => (
-          <p
-            key={idx}
-            className="mw-lr-reel__caption"
-            id={`${captionId}-${idx}`}
-            ref={(el) => { captionEls.current[idx] = el; }}
-            data-on={activeIdx === idx ? "1" : undefined}
-            aria-hidden={activeIdx === idx ? undefined : "true"}
-          >
-            {h.reveal}
-          </p>
-        ))}
+        {highlights.map((h, idx) => {
+          const shown = controlled ? localOf(idx) >= 0.999 : current === idx;
+          return (
+            <p
+              key={idx}
+              className="mw-lr-reel__caption"
+              id={`${captionId}-${idx}`}
+              data-idx={idx}
+              ref={(el) => { captionEls.current[idx] = el; }}
+              data-on={shown ? "1" : undefined}
+              aria-hidden={shown ? undefined : "true"}
+            >
+              {h.reveal}
+            </p>
+          );
+        })}
       </div>
 
       {/* Mobile-only: revisit dots (desktop hides this). */}

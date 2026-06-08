@@ -31,11 +31,17 @@ export function TimelineStats() {
           return {
             banner: col.querySelector(".mw-ten3__banner"),
             stats: col.querySelector(".mw-ten3__aside"),
+            lastItem: grid ? ([...grid.querySelectorAll(".mw-ten3__item")].pop() || null) : null,
             bmission: col.querySelector(".mw-ten3__bmission"),
             timeline: grid ? grid.querySelector(".mw-ten3__line") : null,
+            grid,
             last: -1,
             lastRev: -1,
+            lastHl: -1,
+            lastUnpin: false,
             lastSettled: false,
+            hlIdx: -1,
+            hlBase: -1,
           };
         })
         .filter((c) => c.banner && c.stats);
@@ -75,6 +81,47 @@ export function TimelineStats() {
           c.last = p;
           c.stats.style.setProperty("--stats-out", p.toFixed(3));
         }
+        // Highlights → cream wipe. The band stays LOCKED in place (pinned, never scrolls up); only its
+        // white background colour and its content shift up inside it. The white's bottom (the gradient
+        // colour line) sits exactly at the BOTTOM of the last timeline item: --hl-rev = 1 − (lastItem
+        // bottom − band pinned-top) / band height. 0 when the last item's bottom is at the band's
+        // bottom edge (all white); 1 once it has risen to the band's top (all cream). The container's
+        // pinned top is fixed (HDR + banner height), so this is independent of any band movement. The
+        // cream lives in the band's ONE fixed chevron clip (cream below the line, white above), so it
+        // is always inside the white's silhouette — never a pixel of cream to the right of the white.
+        if (c.lastItem) {
+          const ah = c.stats.offsetHeight || 1;
+          const pinnedTop = HDR + (c.banner ? c.banner.offsetHeight : 0);
+          const liBot = c.lastItem.getBoundingClientRect().bottom;
+          const hl = Math.min(Math.max(1 - (liBot - pinnedTop) / ah, 0), 1);
+          if (Math.abs(hl - c.lastHl) >= 0.001) {
+            c.lastHl = hl;
+            c.stats.style.setProperty("--hl-rev", hl.toFixed(3));
+          }
+          // Once the highlights are 100% gone (wipe complete), RELEASE the whole pinned stack — the
+          // mission banner AND the highlights band — by freezing them as absolutely-positioned
+          // elements at the EXACT spots they currently occupy, so further scrolling carries them
+          // smoothly UP and out of view together. Freezing only the banner would leave the still-
+          // pinned highlights behind and open a gap between them. Reverts (re-pins) on scroll back up.
+          const unpin = hl >= 0.999;
+          if (unpin !== c.lastUnpin) {
+            c.lastUnpin = unpin;
+            if (unpin) {
+              // Freeze the stack at its DETERMINISTIC pinned positions — banner top at the header line
+              // (HDR), highlights one banner-height below (HDR + bh) — computed relative to the column.
+              // Reading the LIVE rects instead would, on a FAST scroll, capture the band where it has
+              // already released/scrolled off, freezing it misaligned or off-screen (the bug). The
+              // column is in normal flow, so its top is stable to read at any scroll speed.
+              const col = (c.banner || c.stats).parentElement;
+              const colTop = col ? col.getBoundingClientRect().top : 0;
+              const bh = c.banner ? c.banner.offsetHeight : 0;
+              if (c.banner) { c.banner.style.marginTop = "0px"; c.banner.style.top = (HDR - colTop).toFixed(1) + "px"; c.banner.style.position = "absolute"; }
+              if (c.stats) { c.stats.style.marginTop = "0px"; c.stats.style.top = (HDR + bh - colTop).toFixed(1) + "px"; c.stats.style.position = "absolute"; }
+            } else {
+              for (const el of [c.banner, c.stats]) if (el) { el.style.position = ""; el.style.top = ""; el.style.marginTop = ""; }
+            }
+          }
+        }
         // Mission reveal — STARTS a touch after the timeline's midpoint passes the bottom of
         // the screen (REV_DELAY past the crossing), then ramps 0→1 over the next ~40% of
         // viewport scroll. Written onto the banner so the in-banner mission layer reads it.
@@ -82,7 +129,7 @@ export function TimelineStats() {
           const lr = c.timeline.getBoundingClientRect();
           const mid = lr.top + lr.height / 2;
           const REV_DELAY = vh * 0.15; // hold a beat past the midpoint before it begins
-          const REV_RANGE = vh * 0.4 || 1;
+          const REV_RANGE = vh * 0.15 || 1; // quick — ramps 0→1 over a short scroll span
           const rev = Math.min(Math.max((vh - mid - REV_DELAY) / REV_RANGE, 0), 1);
           if (Math.abs(rev - c.lastRev) >= 0.001) {
             c.lastRev = rev;
@@ -94,6 +141,24 @@ export function TimelineStats() {
           if (settled !== c.lastSettled) {
             c.lastSettled = settled;
             if (c.bmission) c.bmission.toggleAttribute("data-settled", settled);
+          }
+          // Single-highlight cycle: only ONE of the three track-record stats shows at a time,
+          // cross-fading in place. Highlight 1 on reveal; swap to 2 the moment the mission
+          // container appears (--mission-rev past its midpoint); swap to 3 once two MORE
+          // milestone items have rendered past that point (baseline = the revealed count when
+          // the mission appeared). Scrolling back out (mission gone) resets to highlight 1.
+          const missionShown = rev >= 0.5;
+          let idx = 0;
+          if (missionShown) {
+            const revealed = c.grid ? c.grid.querySelectorAll(".mw-ten3__item[data-in]").length : 0;
+            if (c.hlBase < 0) c.hlBase = revealed;
+            idx = revealed >= c.hlBase + 2 ? 2 : 1;
+          } else {
+            c.hlBase = -1;
+          }
+          if (idx !== c.hlIdx) {
+            c.hlIdx = idx;
+            c.stats.setAttribute("data-hl", String(idx));
           }
         }
       }
@@ -110,11 +175,18 @@ export function TimelineStats() {
       c.stats.style.removeProperty("--stats-out");
       c.stats.style.removeProperty("--stats-tinset");
       c.stats.style.removeProperty("--stats-redge");
+      c.stats.style.removeProperty("--hl-rev");
+      c.stats.removeAttribute("data-hl");
       c.banner.style.removeProperty("--mission-rev");
-      if (c.bmission) c.bmission.removeAttribute("data-settled");
+      if (c.bmission) { c.bmission.removeAttribute("data-settled"); c.bmission.removeAttribute("data-rev-armed"); }
+      for (const el of [c.banner, c.stats]) if (el) { el.style.position = ""; el.style.top = ""; el.style.marginTop = ""; }
       c.last = -1;
       c.lastRev = -1;
+      c.lastHl = -1;
+      c.lastUnpin = false;
       c.lastSettled = false;
+      c.hlIdx = -1;
+      c.hlBase = -1;
     });
 
     const enable = () => {
@@ -122,6 +194,9 @@ export function TimelineStats() {
       collect();
       if (!cols.length) return;
       attached = true;
+      // Arm the mission heading's mask-rise: the heading is parked below its clip only while this
+      // flag is present, so with JS off / before this runs the heading stays visible.
+      cols.forEach((c) => { if (c.bmission) c.bmission.setAttribute("data-rev-armed", ""); });
       window.addEventListener("scroll", onScroll, { passive: true });
       window.addEventListener("resize", onResize, { passive: true });
       ro.observe(document.body);

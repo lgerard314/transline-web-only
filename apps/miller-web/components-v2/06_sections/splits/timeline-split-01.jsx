@@ -43,16 +43,23 @@ export function TimelineSplit01({ content, config = {} }) {
                 <div className="mw-ten3__bmission-window">
                   <div className="mw-ten3__bmission-zoom">
                     <div className="mw-ten3__mission-panel">
-                      <MissionBlock01 paragraphs={mission.paragraphs} cta={mission.cta} heading={mission.heading} />
+                      {/* heading wrapped in a line-mask span (scoped to this template) so the
+                          heading can do the hero header's mask-rise — translateY(116%)→0 inside
+                          the h3's overflow:hidden — triggered by scroll when the mission reveal
+                          completes. Other MissionBlock01 callers still pass a plain string. */}
+                      <MissionBlock01 paragraphs={mission.paragraphs} cta={mission.cta} heading={<span className="mw-ten3__mh-in">{mission.heading}</span>} />
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Container 2: the track-record stats — grows OUT of the banner's bottom:
-                tucked behind it, then slid down into place as the banner scrolls up
-                (<TimelineStats> drives --stats-out). Keeps its static chevron edge. */}
+            {/* Container 2: the track-record highlights — ONE fixed-shape chevron band. As the
+                section reaches its end (<TimelineStats> drives --hl-rev 0→1) two things happen at
+                once inside this single container: the stats CONTENT shifts up, and the band's
+                BACKGROUND recolours from the bottom up (white → cream) via a gradient with a moving
+                hard stop. The chevron clip is fixed, so the right-side angle never moves — no gap.
+                It also grows OUT of the banner's bottom on entry (--stats-out). */}
             <aside className="mw-ten3__aside">
               <ul className="mw-ten3__plate2-stats">
                 {plate.stats.map((s) => (

@@ -111,7 +111,7 @@ export const HERO = {
   lead: "Twenty-five years of licensed hazardous waste management in Manitoba. Three ISO certifications. One documented chain of custody from your loading dock to final disposition at VBEC.",
   primaryCta: { label: "Talk to Miller", href: "/contact-us/" },
   ghostPhone: { sup: "24/7 emergency", num: EMERGENCY_PHONE, href: EMERGENCY_HREF },
-  article: { strong: "Miller Environmental Corporation", rest: "since 1996" },
+  article: { strong: "Miller Environmental Corporation", rest: " · since 1996" },
 };
 
 export const CERTS_BANNER = { ariaLabel: "Certifications", certs: CERTS };
@@ -170,9 +170,9 @@ export const SECTORS = {
   cards: SECTOR_CARDS,
 };
 
-// Forkable v1 copy of SECTORS for the SectorDiamonds02 section. Same copy/cards as the live
-// SECTORS, with a distinct headingId so the duplicate <h2> doesn't collide on the page; edit
-// freely here to iterate the v1 "who we serve" without affecting the original below it.
+// Base "who we serve" copy (title/lead/cards) — now consumed by SECTORS_V2 (the checkmark grid,
+// SectorDiamonds04) via the spread below. Distinct headingId so its <h2> id never collides. (Was
+// also the source for the arc section before it was removed from the home page.)
 export const SECTORS_V1 = {
   ...SECTORS,
   headingId: "mw-sectors-heading-v1",
@@ -189,6 +189,7 @@ export const SECTORS_V2 = {
   ...SECTORS_V1,
   headingId: "mw-sectors-heading-v2",
   eyebrow: "Who we serve 2",
+  cta: { label: "Learn more", href: "/industrial-services/" },
 };
 
 export const FACILITY = {
