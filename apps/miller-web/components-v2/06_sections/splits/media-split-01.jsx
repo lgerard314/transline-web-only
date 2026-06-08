@@ -16,8 +16,8 @@ import { sectionProps } from "@/components-v2/section-config";
 //   RIGHT — rises UP from below on easeInOut(E) so the media column finishes with pin-in.
 //
 // PINNED SEQUENCE (once the section fills the viewport):
-//   1. HIGHLIGHTS — scroll-scrubbed (FIG_START_P → FIG_END_P on pin P) after a short hold;
-//      the 3-figure band grows out from under the photos (reverses on scroll-up).
+//   1. HIGHLIGHTS — scroll-scrubbed (FIG_START_P → FIG_END_P on pin P) begins as soon as the
+//      section pins; the 3-figure band grows out from under the photos (reverses on scroll-up).
 //   2. SWIPE — after highlights finish, SWIPE_HOLD_P of extra scroll before the media exit
 //      scrubs; that nudge arms a
 //      careers-style auto-advance (zoom-collage-01: one rAF loop, window.scrollBy while
@@ -29,9 +29,9 @@ const clamp01 = (x) => (x < 0 ? 0 : x > 1 ? 1 : x);
 const ease = (x) => 1 - Math.pow(1 - x, 3);            // easeOutCubic (highlights)
 const easeInOut = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
 
-const FIG_START_P = 0.24;   // pin P past settle before highlights begin scrubbing (breathing room after entrance)
-const FIG_END_P = 0.33;     // pin P where the highlights band is fully grown (same 0.09 scrub span as before)
-const SWIPE_HOLD_P = 0.10;  // pin P hold after highlights land before the media exit scrubs
+const FIG_START_P = 0;        // highlights scrub begins as soon as the section pins (no pre-hold)
+const FIG_END_P = 0.09;       // pin P where the highlights band is fully grown (0.09 scrub span)
+const SWIPE_HOLD_P = 0.10;    // pin P hold after highlights land before the media exit scrubs
 const EXIT_MS = 1200;       // base auto-advance pace for the photo exit (careers DIVE_MS pattern)
 const USER_IDLE_MS = 160;   // pause auto-nudge while the user is actively scrolling
 const SWIPE_END = 0.9;      // pin P where media is fully off-screen and diamonds are in

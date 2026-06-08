@@ -6357,7 +6357,7 @@ html[data-brand="miller"] {
   .mw-czoom__cards { width: 100%; max-width: 360px; }
 }
 
-/* VBEC media — photos bleed flush to the viewport's right edge. */
+/* VBEC media — rightmost photo flush to the screen; card framing unchanged elsewhere. */
 .mw-fac2-track .mw-fac2__media {
   padding-right: 0;
   border-right: none;
@@ -6366,7 +6366,7 @@ html[data-brand="miller"] {
 /* ─────────────────────────────────────────────────────────────────
    VBEC pinned reveal (media-split-01.jsx). Cream section throughout.
    ENTRANCE: left intro clip-reveals top→bottom at final alignment; right column rises UP
-   (easeInOut) to finish with pin-in. PINNED: highlights scroll-scrub (FIG_START_P → FIG_END_P), then scroll scrubs the media exit
+   (easeInOut) to finish with pin-in. PINNED: highlights scroll-scrub immediately on pin (FIG_START_P → FIG_END_P), hold, then scroll scrubs the media exit
    (SWIPE_START → SWIPE_END on pin P) and diamonds roll in. Remaining track height is release
    scroll after the sequence. Mobile / reduced-motion: no pin, columns at rest.
    ───────────────────────────────────────────────────────────────── */
@@ -6391,6 +6391,7 @@ html[data-brand="miller"] {
   }
   /* Grid spans edge-to-edge (no gutter, no gap) so left + right tile the whole section. */
   .mw-fac2-track .mw-fac2__grid {
+    --fac2-col-pad: clamp(28px, 3.2vw, 56px); /* matches left column inner horizontal pad */
     height: 100%;
     grid-template-columns: minmax(0, 40fr) minmax(0, 60fr);
     gap: 0;
@@ -6405,7 +6406,8 @@ html[data-brand="miller"] {
     position: relative;
     justify-content: center;
     overflow: hidden;
-    padding: clamp(64px, 6.5vw, 112px) clamp(28px, 3.2vw, 56px);
+    padding-block: clamp(64px, 6.5vw, 112px);
+    padding-right: 0;
     padding-left: max(clamp(24px, 4vw, 72px), calc((100vw - 1560px) / 2));
   }
   .mw-fac2-track .mw-fac2__intro { will-change: clip-path; }
@@ -6432,21 +6434,22 @@ html[data-brand="miller"] {
     transition-duration: 0.475s;
   }
   /* RIGHT — positioning context for media + caps layers. Rises UP on entrance (JS: --fac2-right-y);
-     flex-centres the media stack so it aligns with the left intro. */
+     flex-centres the media stack so it aligns with the left intro. Left pad matches the left
+     column's right padding so the photo/highlight card sits the same inset from the split. */
   .mw-fac2-track .mw-fac2__right {
     position: relative;
     align-self: stretch;
     min-width: 0;
     min-height: 0;
+    padding-left: var(--fac2-col-pad);
     transform: translateY(var(--fac2-right-y, 0px));
     will-change: transform;
     display: flex;
     flex-direction: column;
     justify-content: center;
   }
-  /* MEDIA layer (z-index 2) — the photos (LOCKED ratio) + the highlights clip band, bleeding to
-     the screen's right edge. NO card/container. On the pin it SWIPES right (--fac2-media-x) and
-     fades out (--fac2-media-op). */
+  /* MEDIA layer (z-index 2) — the photos (LOCKED ratio) + the highlights clip band. On the pin
+     it SWIPES right (--fac2-media-x) and fades out (--fac2-media-op). */
   .mw-fac2-track .mw-fac2__media {
     position: relative;
     left: 0;
@@ -6458,11 +6461,6 @@ html[data-brand="miller"] {
     transform: translateX(var(--fac2-media-x, 0px));
     opacity: var(--fac2-media-op, 1);
     will-change: transform, opacity;
-    /* NO card framing on the pin — photos run to the screen edge. */
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    padding: 0;
   }
   /* Locked-ratio gallery, filling the column width and bleeding right (no left inset). */
   .mw-fac2-track .mw-fac2__media .mw-iacc { --reel-inset: 0px; margin: 0; }
