@@ -1773,30 +1773,24 @@ html[data-brand="miller"] .mw-ten3__line[data-rev-armed] .mw-ten3__item[data-out
   transform: translateY(calc((1 - var(--stats-out, 1)) * -100%));
   will-change: transform;
   clip-path: polygon(0 0, calc(100% - var(--stats-tinset, 0px)) 0, calc(100% - var(--stats-tinset, 0px) - var(--stats-redge, 0px)) 100%, 0 100%);
-  /* Two masks intersected (NOT added): (1) entire bottom edge → transparent before the
-     container ends, (2) ~12° tilt within that bottom band only. Top 66.67% stays solid. */
-  -webkit-mask-image:
-    linear-gradient(to top, transparent 0%, #000 33.333%),
-    linear-gradient(
-      calc(180deg - var(--stats-fade-tilt, 12deg)),
-      #000 0%,
-      transparent 100%
-    );
-  -webkit-mask-size: 100% 100%, 100% 100%;
-  -webkit-mask-position: center, center;
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-composite: source-in;
-  mask-image:
-    linear-gradient(to top, transparent 0%, #000 33.333%),
-    linear-gradient(
-      calc(180deg - var(--stats-fade-tilt, 12deg)),
-      #000 0%,
-      transparent 100%
-    );
-  mask-size: 100% 100%, 100% 100%;
-  mask-position: center, center;
-  mask-repeat: no-repeat;
-  mask-composite: intersect;
+  /* Fade line rises ~12° from bottom-left. Below-right of it → transparent first;
+     full bottom still reaches transparent. Shape = clip-path only. */
+  -webkit-mask-image: linear-gradient(
+    calc(180deg - var(--stats-fade-tilt, 12deg)),
+    #000 0%,
+    #000 70%,
+    rgb(0 0 0 / 0.62) 78%,
+    rgb(0 0 0 / 0.26) 88%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    calc(180deg - var(--stats-fade-tilt, 12deg)),
+    #000 0%,
+    #000 70%,
+    rgb(0 0 0 / 0.62) 78%,
+    rgb(0 0 0 / 0.26) 88%,
+    transparent 100%
+  );
 }
 /* The banner photo gets a stronger zoom + a near-top-right origin so its
    diagonal parallax drift (data-parallax-x="1" → 45° toward the bottom-right)
