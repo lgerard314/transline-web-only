@@ -227,7 +227,7 @@ export const HISTORY = {
     ],
   },
   mission: {
-    heading: "Mission",
+    heading: "Our mission",
     paragraphs: [
       "At Miller Environmental, our mission is to lead the hazardous waste disposal industry by exemplifying unwavering commitment to environmentally responsible practices, rigorous regulatory compliance, and continuous innovation.",
       "We prioritize safety in all operations, ensuring the well-being of our team, clients, and the communities we serve.",

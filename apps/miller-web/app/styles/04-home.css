@@ -1144,6 +1144,10 @@
      lives on .mw-ten3__record (it extends the grid row, the band's sticky containing block); this is
      just a little breathing space under everything. */
   --mission-tail: clamp(16px, 2.5vh, 40px);
+  /* Scroll runway for the highlights band (aside min-height keys off this × 1.5). */
+  --highlights-runway: calc(100dvh - var(--hdr, 56px) - var(--bh));
+  /* Shallow tilt for the highlights fade — bottom-right goes transparent before the rest. */
+  --stats-fade-tilt: 12deg;
   background: var(--c-surface-warm);
   padding-block: var(--ptop) var(--mission-tail);
   color: var(--c-ink);
@@ -1442,10 +1446,7 @@
    parallax can move the photo without moving the type) with the body-content
    container nested inside, reading over a scrim. */
 .mw-ten3__banner {
-  /* Pins to the bottom of the fixed header (--hdr) once its top reaches that line, and
-     stays stuck for the rest of the section scroll (the stretched column gives the travel). */
-  position: sticky;
-  top: var(--hdr, 56px);
+  position: relative;
   /* Above the highlights so they can tuck up BEHIND it and grow out of its bottom edge. */
   z-index: 2;
   /* Bleed the image container to the section's TOP edge (up out of the section's
@@ -1453,7 +1454,6 @@
      right edge stays at the column boundary. --g is the inner side gutter: half
      the .mw-inner reduction, or the centered-cap overflow, whichever wins. */
   --g: max(clamp(24px, 4vw, 72px), calc((100vw - 1560px) / 2));
-  margin-top: calc(-1 * var(--ptop));
   margin-left: calc(-1 * var(--g));
   width: calc(100% + var(--g));
   overflow: hidden;
@@ -1482,8 +1482,18 @@
   --img-delay: 0.12;
   --wipe-img: clamp(0, calc((var(--wipe, 1) - var(--img-delay)) / (1 - var(--img-delay))), 1);
 }
-/* Once the highlights wipe is complete (--hl-rev hit 1), <TimelineStats> releases the banner by
-   freezing it (inline position:absolute at its current spot) so it scrolls up and out with the page. */
+/* Pinned stack — mission banner + highlights band stick as ONE unit (prevents the highlights
+   from independently scrolling up into the mission area). Frozen absolute at timeline end. */
+.mw-ten3__stack {
+  position: sticky;
+  top: var(--hdr, 56px);
+  z-index: 2;
+  align-self: flex-start;
+  width: 100%;
+  /* Section-bleed lived on the banner when it was the sticky pin; on the stack wrapper so
+     the chip-arrow top still lands on --hdr when pinned (not pulled above the header). */
+  margin-top: calc(-1 * var(--ptop));
+}
 /* Warm cinematic overlay — same grade vocabulary as the hero (rgba(42,27,18)
    warm-walnut wash + a bottom darkening band) so this photo reads like the hero
    frame, not a flat stock photo. Darkest top-left where the type sits and at the
@@ -1599,12 +1609,11 @@
    top lands on the vertical middle of the image-banner (= the angled edge's apex). The banner
    middle is --bh/2 from the section top; the record's natural top is at --ptop (the grid
    content top), so the shift is the difference. Reset to 0 when the grid stacks (≤1200).
-   padding-bottom extends the RIGHT column (the taller one, which sets the grid-row height) so the
-   left column's sticky highlights band stays PINNED through the whole wipe — i.e. while the last
-   item's bottom rises a full band-height through it — instead of releasing partway. */
+   padding-bottom extends the record column so the left sticky stack stays pinned through the
+   full timeline before releasing together at the end. */
 .mw-ten3__record {
   margin-top: calc(var(--bh) / 2 - var(--ptop));
-  padding-bottom: calc(100dvh - var(--hdr, 56px) - var(--bh));
+  padding-bottom: calc(var(--highlights-runway) * 1.5);
 }
 /* Record eyebrow — the `record —— field` document line moved up here from the banner. On the
    light section field it takes the default dark field colour (no banner override). It's hidden
@@ -1751,34 +1760,43 @@ html[data-brand="miller"] .mw-ten3__line[data-rev-armed] .mw-ten3__item[data-out
    the banner at --stats-out 0, then slid down into its slot at --stats-out 1 (written by
    <TimelineStats>). Its chevron stays static (no --wipe), so only the slide reveals it;
    var() fallback 1 → at rest for no-JS / reduced-motion. */
-/* Registered so the wipe (--hl-rev) can be TRANSITIONED: the driver flips it 0→1 at the wipe's
-   start point and CSS animates the bg recolour + the content shift-up over time, rather than
-   scrubbing it by scroll. Inherited so the value set here also drives the nested stats' shift. */
-@property --hl-rev { syntax: "<number>"; inherits: true; initial-value: 0; }
 .mw-ten3__aside {
-  transition: --hl-rev 0.34s cubic-bezier(0.22, 0.61, 0.36, 1);
-  /* The band recolours from the BOTTOM UP as --hl-rev goes 0→1: white above the wipe line, and BELOW
-     it an even gradient from the timeline's background (--c-surface-warm, at the very bottom) up to
-     the mission cream (--c-bg, at the line). So the part that replaces the highlights doesn't read as
-     a flat cream block — it grades smoothly down into the section background. At 0 it's all white
-     (the highlights); at 1 the whole band is the even cream→surface-warm gradient. The chevron clip
-     (below) is the FIXED right-side angle, so only the colour line moves, never the edge. */
-  background: linear-gradient(to top, var(--c-surface-warm) 0%, var(--c-bg) calc(var(--hl-rev, 0) * 100%), #fff calc(var(--hl-rev, 0) * 100%));
+  /* Stats row sits flush under the banner — override the shared band's vertical centering. */
+  justify-content: flex-start;
+  align-items: stretch;
+  background: #fff;
   z-index: 1;
-  /* Pins directly below the pinned banner and spans from the banner's bottom down to the
-     bottom of the screen (overriding the equal-height band sizing). */
-  position: sticky;
-  top: calc(var(--hdr, 56px) + var(--bh));
-  min-height: 0;
-  height: calc(100dvh - var(--hdr, 56px) - var(--bh));
+  /* Tall highlights panel below the banner (stats at top); 1.5× runway, sticky on .mw-ten3__stack. */
+  position: relative;
+  min-height: calc(var(--highlights-runway) * 1.5);
+  height: auto;
   transform: translateY(calc((1 - var(--stats-out, 1)) * -100%));
   will-change: transform;
-  /* Previous shape: NOT its own chevron — a single diagonal that CONTINUES the banner's
-     bottom-half chevron line downward. Its top-right starts at the banner's bottom-right
-     corner (inset --stats-tinset = the banner's ang) and its bottom-right continues that
-     same slope a further --stats-redge (= slope·height). Both px insets are computed from
-     the banner's geometry by <TimelineStats>; fallback 0 → plain rectangle for no-JS. */
   clip-path: polygon(0 0, calc(100% - var(--stats-tinset, 0px)) 0, calc(100% - var(--stats-tinset, 0px) - var(--stats-redge, 0px)) 100%, 0 100%);
+  /* Two masks intersected (NOT added): (1) entire bottom edge → transparent before the
+     container ends, (2) ~12° tilt within that bottom band only. Top 66.67% stays solid. */
+  -webkit-mask-image:
+    linear-gradient(to top, transparent 0%, #000 33.333%),
+    linear-gradient(
+      calc(180deg - var(--stats-fade-tilt, 12deg)),
+      #000 0%,
+      transparent 100%
+    );
+  -webkit-mask-size: 100% 100%, 100% 100%;
+  -webkit-mask-position: center, center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to top, transparent 0%, #000 33.333%),
+    linear-gradient(
+      calc(180deg - var(--stats-fade-tilt, 12deg)),
+      #000 0%,
+      transparent 100%
+    );
+  mask-size: 100% 100%, 100% 100%;
+  mask-position: center, center;
+  mask-repeat: no-repeat;
+  mask-composite: intersect;
 }
 /* The banner photo gets a stronger zoom + a near-top-right origin so its
    diagonal parallax drift (data-parallax-x="1" → 45° toward the bottom-right)
@@ -1828,9 +1846,8 @@ html[data-brand="miller"] .mw-ten3__line[data-rev-armed] .mw-ten3__item[data-out
    right padding so nothing falls under the angled chevron edge. */
 .mw-ten3__plate2-stats {
   list-style: none;
-  /* The three stats lay out as a row in fixed slots; they fade IN cumulatively (1 → 1+2 →
-     1+2+3) as <TimelineStats> writes data-hl on the band — none ever leaves, the row only
-     fills up. Hidden slots still hold their space, so nothing reflows as each appears. */
+  /* The three stats lay out as a row in fixed slots; they emerge from under the banner in step
+     with --stats-out as the band grows (see .mw-ten3__plate2-stat). */
   display: flex;
   align-items: flex-start;
   /* The three stats split the row into three equal columns (even spread). --stat-pad is the
@@ -1844,19 +1861,20 @@ html[data-brand="miller"] .mw-ten3__line[data-rev-armed] .mw-ten3__item[data-out
   padding: clamp(22px, 2.2vw, 34px) clamp(40px, 7%, 110px) clamp(22px, 2.2vw, 34px) var(--g);
   position: relative;
   z-index: 1;
-  /* Shift the stats CONTENT straight up as the band recolours (driven by the same --hl-rev): they
-     ride up a FULL band-height, so they're entirely off the top (clipped) well before the wipe
-     finishes — no labels left peeking at the band's top edge. var() fallback 0 → at rest for no-JS. */
-  transform: translateY(calc(var(--hl-rev, 0) * -1 * (100dvh - var(--hdr, 56px) - var(--bh))));
-  will-change: transform;
 }
-@media (prefers-reduced-motion: reduce) {
-  .mw-ten3__plate2-stats { transform: none; }
+/* All three stats start tucked UP behind the banner and slide DOWN into the row as --stats-out
+   grows the highlights band (0 tucked → 1 resting). Opacity follows --num-rev (counter progress);
+   full fade only when numbers finish. Numbers scrub in <TimelineStats>. */
+.mw-ten3__plate2-stat {
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  position: relative;
+  padding-inline: var(--stat-pad);
+  display: flex;
+  flex-direction: column;
+  opacity: var(--num-rev, 1);
+  transform: translateY(calc((1 - var(--stats-out, 1)) * -140%));
 }
-/* All three stats start tucked UP above the band (clipped by its top edge) and slide DOWN into
-   the row. They all reveal TOGETHER off the SAME trigger (data-band-in, set when the band is
-   fully rendered). */
-.mw-ten3__plate2-stat { flex: 0 0 auto; box-sizing: border-box; position: relative; padding-inline: var(--stat-pad); display: flex; flex-direction: column; opacity: 0; transition: opacity 0.45s ease, transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1); }
 /* First stat sits flush to the gutter; last has no trailing pad (the row's right padding is the
    trailing space). Every divider then has --stat-pad of space on BOTH sides. */
 .mw-ten3__plate2-stat:first-child { padding-left: 0; }
@@ -1871,10 +1889,6 @@ html[data-brand="miller"] .mw-ten3__line[data-rev-armed] .mw-ten3__item[data-out
   width: 0.5px;
   background: color-mix(in srgb, var(--c-navy) 22%, transparent);
 }
-.mw-ten3__plate2-stat:nth-child(1), .mw-ten3__plate2-stat:nth-child(2), .mw-ten3__plate2-stat:nth-child(3) { transform: translateY(-140%); }
-/* Reveal all three once the band is fully rendered. No-JS fallback (neither attr) shows #1. */
-.mw-ten3__aside:not([data-hl]):not([data-band-in]) .mw-ten3__plate2-stat:first-child,
-.mw-ten3__aside[data-band-in] .mw-ten3__plate2-stat { opacity: 1; transform: translateY(0); }
 .mw-ten3__plate2-num { font-family: var(--font-condensed), ui-sans-serif, sans-serif; font-weight: 600; font-size: clamp(64px, 7.2vw, 108px); color: var(--c-ink); line-height: 1; }
 .mw-ten3__plate2-unit { font-size: 0.32em; color: var(--c-accent); margin-left: 2px; }
 .mw-ten3__plate2-label { font-family: var(--font-plex-mono), ui-monospace, monospace; font-size: 16px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--c-ink-2); margin-top: 8px; }
@@ -1894,14 +1908,12 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
 
 /* Mission layer INSIDE the banner (the arrow-chip / chevron container). It comes into view
    with an even RADIAL grow from ≈ the bottom-right of the banner (the red-dot point) —
-   driven by --mission-rev (0 hidden → 1 fully covering), which <TimelineStats> ramps once
-   the timeline's midpoint passes the bottom of the screen. Sits above the image + head; a
+   driven by --mission-rev (0 hidden → 1 fully covering), scrubbed by scroll after the three
+   highlight stats begin entering. Sits above the image + head; a
    solid --c-bg fill covers the photo, with its border matched to that fill (no edge). */
-/* Registered so --mission-rev can be TRANSITIONED: the driver now flips it 0→1 at a single
-   breakpoint and CSS animates the reveal over time (clip-path / scale / opacity all read it).
-   Inherited so the value set on .mw-ten3__banner reaches the nested mission layers. */
+/* Registered so --mission-rev can be scrubbed by scroll (<TimelineStats> writes 0→1 over a short
+   px span after highlight content begins). Inherited to nested mission layers. */
 @property --mission-rev { syntax: "<number>"; inherits: true; initial-value: 0; }
-.mw-ten3__banner { transition: --mission-rev 0.57s cubic-bezier(0.22, 0.61, 0.36, 1); }
 .mw-ten3__bmission {
   position: absolute;
   inset: 0;
@@ -1936,33 +1948,14 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
   padding: clamp(40px, 7vh, 120px) clamp(80px, 14%, 220px) clamp(40px, 7vh, 120px) var(--g);
   /* Content stays at full size and rides the rising clip from the bottom — no scale growth.
      translateY keeps the block moving up in step with the band as --mission-rev opens. */
-  transform: translateY(calc(100% * (1 - var(--mission-rev, 1))));
+  transform: translateY(calc(100% * (1 - var(--mission-rev, 0))));
   opacity: 1;
 }
 .mw-ten3__bmission .mw-ten3__mission-panel { padding: 0; max-width: 90%; }
-/* The MISSION heading gets the HERO header's text animation, scroll-triggered: a line mask-rise —
-   the heading line sits clipped below its own overflow box (translateY 116%) and rises into view
-   exactly like .mw-hero__line / .mw-hero__line-in (same keyframe + easing). data-settled is set by
-   <TimelineStats> at rev ≈ 1 (the reveal locked in) and re-arms on scroll-out, so the rise replays
-   each time you scroll the mission back into view. The h3 is the clip; .mw-ten3__mh-in (injected
-   only in this template's heading) is the rising line. */
-.mw-ten3__bmission .mw-ten2__mission-heading {
-  overflow: hidden;
-  padding-bottom: 0.12em;
-  margin-bottom: -0.12em;
-}
-.mw-ten3__bmission .mw-ten3__mh-in { display: block; }
-/* Parked below the clip ONLY while the driver is armed (data-rev-armed set by <TimelineStats>),
-   so with JS off / pre-hydration the heading stays shown rather than stuck clipped. */
-.mw-ten3__bmission[data-rev-armed] .mw-ten3__mh-in { transform: translateY(116%); }
-.mw-ten3__bmission[data-settled] .mw-ten3__mh-in {
-  animation: mw-hero-rise 0.95s cubic-bezier(.16, .84, .3, 1) both;
-}
 @media (prefers-reduced-motion: reduce) {
-  .mw-ten3__bmission .mw-ten3__mh-in { transform: none; animation: none; }
   /* Driver doesn't attach, so --mission-rev would sit at its @property initial 0 (hidden);
      force it shown and drop the reveal clip/transition. */
-  .mw-ten3__banner { --mission-rev: 1; transition: none; }
+  .mw-ten3__banner { --mission-rev: 1; }
   .mw-ten3__bmission { clip-path: none; }
 }
 @media (max-width: 1200px) {
@@ -1970,16 +1963,15 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
      type spans the full banner width; the bands drop the full-bleed + chevron + equal-
      height stretch, becoming plain content-sized blocks stacked under the banner. */
   .mw-ten3__head { min-height: clamp(300px, 40vw, 440px); max-width: none; }
+  .mw-ten3__stack { position: static; }
   .mw-ten3__banner { clip-path: none; position: static; overflow: visible; }
   .mw-ten3__record { margin-top: 0; }
   .mw-ten3__aside, .mw-ten3__maside { margin-left: 0; width: auto; max-width: none; clip-path: none; overflow: visible; min-height: 0; display: block; transform: none; }
-  .mw-ten3__aside { position: static; top: auto; height: auto; }
+  .mw-ten3__aside { position: static; height: auto; }
+  .mw-ten3__aside { -webkit-mask-image: none; mask-image: none; }
   /* Mission layer flows as a plain white block below the banner image (no pin/clip/zoom). */
   .mw-ten3__bmission, .mw-ten3__bmission-window, .mw-ten3__bmission-zoom { position: static; inset: auto; clip-path: none; transform: none; }
   .mw-ten3__bmission-zoom { display: block; padding: clamp(28px, 6vw, 44px) clamp(24px, 5vw, 40px); opacity: 1; }
-  /* Single-column: no sticky end-wipe, so keep the stats put (the band reads as a normal white
-     stats panel). The gradient bg falls back to all-white via --hl-rev's 0 fallback. */
-  .mw-ten3__plate2-stats { transform: none; }
   .mw-ten3__plate2-stat { transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1988,8 +1980,8 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
   .mw-ten3__banner[data-head-armed] .mw-ten3__head-rise-in,
   .mw-ten3__banner[data-head-armed] .mw-ten3__lead-in { transform: none; opacity: 1; transition: none; }
   .mw-ten3__aside, .mw-ten3__maside { clip-path: none; }
-  .mw-ten3__aside { transform: none; }
-  /* No driver → no data-hl cycle; lay all three stats back out as a static row, all shown. */
+  .mw-ten3__aside { transform: none; -webkit-mask-image: none; mask-image: none; }
+  /* No driver → --stats-out falls back to 1; lay all three stats out as a static row. */
   .mw-ten3__plate2-stats { display: flex; }
   .mw-ten3__plate2-stat { opacity: 1; transform: none; }
 }
@@ -6106,23 +6098,39 @@ html[data-brand="miller"] {
   background: var(--c-surface-warm);
   isolation: isolate;
 }
-/* Temporary intro eyebrow at the top of the section (above the photos). Normal-flow
-   block above the sticky track, so it scrolls out of view once the dive pins. The
-   matching field-head reappears in the overlay after the photo lands; this copy is
-   dark-on-cream (the overlay one is cream-on-photo). */
-.mw-czoom__intro {
+/* Three equal columns; eyebrow lives in column 1, centred, zero padding on the wrap. */
+.mw-czoom__intro-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 0;
+  margin: 0;
+  pointer-events: none;
+}
+.mw-czoom__intro-col {
+  grid-column: 1;
   position: relative;
-  display: flex;
-  /* Eyebrow sits in the empty area on the LEFT, low in the cream band (just above the
-     photos), not centred at the top. */
-  justify-content: flex-start;
-  align-items: flex-end;
-  min-height: clamp(200px, 34vh, 380px);
-  padding-inline: clamp(24px, 5vw, 80px);
-  padding-bottom: clamp(16px, 2.5vh, 36px);
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.mw-czoom__intro {
+  position: absolute;
+  left: var(--czoom-intro-x, 50%);
+  transform: translateX(-50%);
+  top: 0;
+  padding: 0;
+  margin: clamp(40px, 4.5vh, 60px) 0 0 0;
+  width: max-content;
+  max-width: calc(100vw / 3);
+  pointer-events: auto;
 }
 .mw-czoom__intro-field {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 12px;
   margin: 0;
@@ -6395,8 +6403,8 @@ html[data-brand="miller"] {
 
 /* ─────────────────────────────────────────────────────────────────
    VBEC pinned reveal (media-split-01.jsx). Cream section throughout.
-   ENTRANCE: left intro clip-reveals top→bottom at final alignment; right column rises UP
-   (easeInOut) to finish with pin-in. PINNED: highlights scroll-scrub immediately on pin (FIG_START_P → FIG_END_P), hold, then scroll scrubs the media exit
+   ENTRANCE: left intro rests visible; right column rises UP (easeInOut) to finish with pin-in.
+   PINNED: highlights scroll-scrub immediately on pin (FIG_START_P → FIG_END_P), hold, then scroll scrubs the media exit
    (SWIPE_START → SWIPE_END on pin P) and diamonds roll in. Remaining track height is release
    scroll after the sequence. Mobile / reduced-motion: no pin, columns at rest.
    ───────────────────────────────────────────────────────────────── */
@@ -6429,39 +6437,14 @@ html[data-brand="miller"] {
     align-items: stretch;
   }
   /* LEFT — intro column. Bleeds to the screen's left edge; text held in the content gutter via
-     padding-left; vertically centred. Intro stays in final alignment — JS opens a bottom
-     clip-path top→bottom so copy pushes out of the section above without ever sitting below
-     its settled bottom padding. */
+     padding-left; vertically centred. Copy rests visible — no clip or mask-rise on entrance. */
   .mw-fac2-track .mw-fac2__left {
     position: relative;
     justify-content: center;
-    overflow: hidden;
+    overflow: visible;
     padding-block: clamp(64px, 6.5vw, 112px);
     padding-right: 0;
     padding-left: max(clamp(24px, 4vw, 72px), calc((100vw - 1560px) / 2));
-  }
-  .mw-fac2-track .mw-fac2__intro { will-change: clip-path; }
-  /* Intro copy mask-rise — each item gates on entrance u, top → bottom (media-split-01.jsx). */
-  .mw-fac2-track .mw-fac2__field[data-fac2-rise],
-  .mw-fac2-track .mw-fac2__title[data-fac2-rise],
-  .mw-fac2-track .mw-fac2__lead[data-fac2-rise],
-  .mw-fac2-track .mw-fac2__cta-rise[data-fac2-rise],
-  .mw-fac2-track .mw-fac2__about-rise[data-fac2-rise] { overflow: hidden; }
-  .mw-fac2-track [data-fac2-rise] > .mw-fac2__rise {
-    display: block;
-    transform: translateY(116%);
-    transition: transform 0.95s cubic-bezier(.16, .84, .3, 1);
-  }
-  .mw-fac2-track .mw-fac2__field[data-fac2-rise] > .mw-fac2__rise {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-  }
-  .mw-fac2-track [data-fac2-rise][data-in="1"] > .mw-fac2__rise { transform: none; }
-  .mw-fac2-track .mw-fac2__cta-rise[data-fac2-rise] > .mw-fac2__rise,
-  .mw-fac2-track .mw-fac2__about-rise[data-fac2-rise] > .mw-fac2__rise {
-    transition-duration: 0.475s;
   }
   /* RIGHT — positioning context for media + caps layers. Rises UP on entrance (JS: --fac2-right-y);
      flex-centres the media stack so it aligns with the left intro. Left pad matches the left
@@ -6471,7 +6454,7 @@ html[data-brand="miller"] {
     align-self: stretch;
     min-width: 0;
     min-height: 0;
-    padding-left: var(--fac2-col-pad);
+    padding-left: calc(2 * var(--fac2-col-pad));
     transform: translateY(var(--fac2-right-y, 0px));
     will-change: transform;
     display: flex;

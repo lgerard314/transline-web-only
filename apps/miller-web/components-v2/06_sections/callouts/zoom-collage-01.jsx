@@ -10,18 +10,21 @@ export function ZoomCollage01({ content, config = {} }) {
   const { headingId, stage, eyebrow, title, lead, zoomPhotos = [], cards = [] } = content;
   return (
     <section className="mw-czoom" aria-labelledby={headingId} {...sectionProps(config)}>
-      {/* Temporary section-intro eyebrow shown at the top, above the photos — a
-          normal-flow block that scrolls out of view as the dive pins. The real
-          field-head reappears in the overlay once the photo lands, so this one is
-          aria-hidden to avoid announcing it twice. */}
-      <header className="mw-czoom__intro" data-reveal aria-hidden="true">
-        <p className="mw-czoom__intro-field">
-          {stage ? <span>{stage}</span> : null}
-          <span className="mw-czoom__intro-rule" />
-          <span>{eyebrow}</span>
-        </p>
-      </header>
-      <ZoomCollageWidget photos={zoomPhotos} autoScroll={config.autoScroll !== false}>
+      <ZoomCollageWidget
+        photos={zoomPhotos}
+        autoScroll={config.autoScroll !== false}
+        intro={(
+          /* Temporary intro eyebrow in the cream band above the mosaic — scrolls out once
+             the dive pins. The field-head reappears in the overlay after the photo lands. */
+          <header className="mw-czoom__intro" aria-hidden="true">
+            <p className="mw-czoom__intro-field">
+              {stage ? <span>{stage}</span> : null}
+              <span className="mw-czoom__intro-rule" />
+              <span>{eyebrow}</span>
+            </p>
+          </header>
+        )}
+      >
         <div className="mw-czoom__copy">
           <p className="mw-czoom__field">
             {stage ? <span>{stage}</span> : null}

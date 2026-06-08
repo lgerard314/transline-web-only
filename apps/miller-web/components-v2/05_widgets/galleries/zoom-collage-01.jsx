@@ -35,8 +35,9 @@ const CAP = [4, 3, 3, 3, 3, 3, 3];
 const REVEAL_START = 0.70;
 const REVEAL_END = 1.0;
 const DIVE_MS = 2600; // base auto-advance pace (start speed); it accelerates to 2× by the end
+const INTRO_PHOTO = 2; // booth tile (left mosaic at dive start) — intro centres above it
 
-export function ZoomCollage01({ photos = [], children, autoScroll = true }) {
+export function ZoomCollage01({ photos = [], children, intro, autoScroll = true }) {
   const rootRef = useRef(null);
   const cellRefs = useRef([]);
   const [reduced, setReduced] = useState(false);
@@ -71,6 +72,20 @@ export function ZoomCollage01({ photos = [], children, autoScroll = true }) {
       root.style.setProperty("--reveal", reveal.toFixed(3));
       if (reveal > 0.5) root.setAttribute("data-shown", "1");
       else root.removeAttribute("data-shown");
+      if (pd <= 0.001) placeIntro();
+    };
+
+    const placeIntro = () => {
+      const col = root.querySelector(".mw-czoom__intro-col");
+      const cell = cellRefs.current[INTRO_PHOTO];
+      if (!col || !cell) return;
+      const frame = cell.querySelector(".mw-czoom__frame");
+      if (!frame) return;
+      const cr = col.getBoundingClientRect();
+      const fr = frame.getBoundingClientRect();
+      if (!cr.width || !fr.width) return;
+      const cx = fr.left + fr.width / 2 - cr.left;
+      col.style.setProperty("--czoom-intro-x", `${cx.toFixed(1)}px`);
     };
 
     let running = false;
@@ -150,17 +165,27 @@ export function ZoomCollage01({ photos = [], children, autoScroll = true }) {
       ([e]) => { if (e.isIntersecting) start(); else stop(); },
       { threshold: 0 },
     );
+    const onResize = () => { readVars(); placeIntro(); };
     io.observe(root);
-    window.addEventListener("resize", readVars, { passive: true });
+    window.addEventListener("resize", onResize, { passive: true });
+    readVars();
     apply(0);
-    return () => { io.disconnect(); stop(); window.removeEventListener("resize", readVars); };
-  }, [autoScroll]);
+    let n = 0;
+    const boot = () => { placeIntro(); if (n++ < 8) requestAnimationFrame(boot); };
+    requestAnimationFrame(boot);
+    return () => { io.disconnect(); stop(); window.removeEventListener("resize", onResize); };
+  }, [autoScroll, intro]);
 
   if (!photos || photos.length === 0) return null;
 
   return (
     <div className="mw-czoom__track" ref={rootRef} data-reduced={reduced ? "1" : undefined}>
       <div className="mw-czoom__stage">
+        {intro ? (
+          <div className="mw-czoom__intro-wrap">
+            <div className="mw-czoom__intro-col">{intro}</div>
+          </div>
+        ) : null}
         <div className="mw-czoom__mosaic" aria-hidden="true">
           {photos.slice(0, 7).map((photo, i) => (
             <div className="mw-czoom__cell" key={photo.src} style={{ "--i": i }} ref={(el) => { cellRefs.current[i] = el; }}>

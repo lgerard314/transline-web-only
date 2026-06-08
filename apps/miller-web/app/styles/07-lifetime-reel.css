@@ -378,27 +378,61 @@
 }
 .mw-lr-reel__caption {
   position: absolute; top: 0; left: 50%;
-  /* Narrow lanes with generous gutters — each caption stays in its column so a
-     hovered neighbour growing in size/brightness never crowds the other two. */
-  width: clamp(148px, 17.5vw, 252px);
+  /* Wider lanes — three columns under the diamonds with room to breathe. */
+  width: clamp(172px, 20.5vw, 296px);
   margin: 0;
   font-family: var(--font-sans), sans-serif;
   font-size: clamp(14px, 1vw, 16px); line-height: 1.6;
   color: rgba(250, 243, 229, .92); text-align: center;
   opacity: 0;
+  pointer-events: none;
   transform: translateX(calc(-50% + var(--lr-cap-dx, 0px))) translateY(8px);
-  transition: opacity .35s var(--lr-ease), transform .35s var(--lr-ease), font-size .35s var(--lr-ease), color .35s var(--lr-ease), width .35s var(--lr-ease);
+  transition:
+    opacity .35s var(--lr-ease),
+    transform .35s var(--lr-ease),
+    color .35s var(--lr-ease),
+    font-size .35s var(--lr-ease),
+    width .35s var(--lr-ease),
+    text-shadow .35s var(--lr-ease);
 }
 .mw-lr-reel__caption[data-on] {
   opacity: 1;
   transform: translateX(calc(-50% + var(--lr-cap-dx, 0px))) translateY(0);
 }
-/* Related diamond hover/focus: full body-copy size + a touch more lane width so the
-   larger type doesn't reflow; brighten toward white without going fully #fff. */
+/* Once all three diamonds have landed, body paragraphs join diamonds as hover
+   targets (mirrors the diamond button behaviour). */
+.mw-lr-reel[data-hoverable] .mw-lr-reel__caption[data-on] {
+  pointer-events: auto;
+  cursor: pointer;
+}
+.mw-lr-reel[data-hoverable] .mw-lr-reel__caption[data-on]:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 4px;
+}
+/* When one highlight is selected, the other two captions ease back — the
+   diamond row stays undimmed; only the copy lane shifts hierarchy. */
+.mw-lr-reel[data-active] .mw-lr-reel__caption[data-on]:not([data-active]) {
+  opacity: .52;
+  color: rgba(245, 230, 203, .62);
+}
+/* Active caption: +1px size with width scaled to match so line breaks hold. */
 .mw-lr-reel__caption[data-on][data-active] {
-  width: clamp(168px, 19.5vw, 288px);
-  font-size: clamp(16px, 1.15vw, 19px);
-  color: rgba(255, 252, 247, .97);
+  z-index: 2;
+  width: clamp(184px, calc(20.5vw * 15 / 14), 315px);
+  font-size: clamp(15px, calc(1vw + 1px), 17px);
+  color: rgba(255, 252, 247, .98);
+  text-shadow: 0 0 28px rgba(216, 154, 63, .18);
+}
+.mw-lr-reel__caption[data-on][data-active]::before {
+  content: "";
+  position: absolute;
+  top: clamp(-14px, -1.1vw, -10px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18px;
+  height: 1px;
+  background: var(--c-amber);
+  opacity: .75;
 }
 
 /* mobile-only revisit dots */

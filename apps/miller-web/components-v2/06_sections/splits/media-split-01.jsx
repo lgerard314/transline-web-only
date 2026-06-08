@@ -10,9 +10,7 @@ import { sectionProps } from "@/components-v2/section-config";
 // MediaSplit01 — the home VBEC (facility) section. A 40/60 split on a cream section. Two phases:
 //
 // ENTRANCE (as the section scrolls in to fill the viewport):
-//   LEFT  — intro rests in final alignment; a bottom clip-path opens top→bottom so copy pushes
-//           out of the section above without ever sitting below its settled bottom padding.
-//           Eyebrow / title / lead / CTA / text-link mask-rise in stagger with the same curve.
+//   LEFT  — intro rests visible at final alignment (no clip or mask-rise).
 //   RIGHT — rises UP from below on easeInOut(E) so the media column finishes with pin-in.
 //
 // PINNED SEQUENCE (once the section fills the viewport):
@@ -57,9 +55,6 @@ const CAP_TONES = ["#B5642F", "#B5642F", "#A85A2C", "#A85A2C", "#8C4A24", "#8C4A
 const capDiaStyle = (col, row, extra) => ({ left: `${col * CAP_SX}%`, top: `${row * CAP_SY}%`, width: `${2 * CAP_SX}%`, ...extra });
 const capSoftWrap = (s) => s.replace(/([/-])/g, "$1" + String.fromCharCode(0x200b));
 
-const INTRO_RISE_SEL = [".mw-fac2__field", ".mw-fac2__title", ".mw-fac2__lead", ".mw-fac2__cta-rise", ".mw-fac2__about-rise"];
-const INTRO_RISE_U = [0.22, 0.4, 0.56, 0.74, 0.88]; // mask-rise gates keyed to entrance u (top → bottom)
-
 export function MediaSplit01({ content, config = {} }) {
   const { eyebrow, stage, title, lead, figures, capsTitle, capabilities, primaryCta, aboutLink, headingId, photos } = content;
   const autoScroll = config.autoScroll !== false;
@@ -101,24 +96,6 @@ export function MediaSplit01({ content, config = {} }) {
       pinned: false,
     });
 
-    const showAllIntroRises = (leftEl) => {
-      if (!leftEl) return;
-      for (const sel of INTRO_RISE_SEL) {
-        const el = leftEl.querySelector(sel);
-        if (el) el.setAttribute("data-in", "1");
-      }
-    };
-
-    const gateIntroRises = (leftEl, progress) => {
-      if (!leftEl) return;
-      for (let i = 0; i < INTRO_RISE_SEL.length; i++) {
-        const el = leftEl.querySelector(INTRO_RISE_SEL[i]);
-        if (!el) continue;
-        if (progress >= INTRO_RISE_U[i]) el.setAttribute("data-in", "1");
-        else el.removeAttribute("data-in");
-      }
-    };
-
     const render = () => {
       const track = trackRef.current, section = sectionRef.current;
       const left = leftRef.current, right = rightRef.current;
@@ -144,7 +121,6 @@ export function MediaSplit01({ content, config = {} }) {
         if (g) g.querySelectorAll(".mw-cap-dia__cell").forEach((c) => { c.style.removeProperty("--cap-sc"); c.style.removeProperty("--cap-op"); c.style.removeProperty("--cap-tx"); c.style.removeProperty("--cap-ty"); c.style.removeProperty("--cap-rot"); });
         delete media.dataset.iaccHover;
         resetPinClocks();
-        showAllIntroRises(left);
         return idleState();
       }
       // Pin immediately BELOW the fixed header (read it live — it collapses on scroll).
@@ -164,20 +140,16 @@ export function MediaSplit01({ content, config = {} }) {
       const total = Math.max(1, track.offsetHeight - vh + headOff);
       const P = clamp01((headOff - trackTop) / total);
 
-      // ENTRANCE — intro stays in final alignment; bottom clip opens top→bottom (never dips below
-      // settled padding). Right column rises UP on the same curve.
+      // ENTRANCE — left intro rests visible; right column rises UP on the same curve.
       const u = easeInOut(E);
       const intro = left.querySelector(".mw-fac2__intro");
       if (intro) {
         intro.style.removeProperty("--fac2-intro-y");
-        const hidden = (1 - u) * 100;
-        intro.style.clipPath = hidden > 0.05 ? `inset(0 0 ${hidden.toFixed(3)}% 0)` : "none";
+        intro.style.removeProperty("clip-path");
       }
 
       const coverR = right.offsetHeight || span;
       right.style.setProperty("--fac2-right-y", ((1 - u) * coverR).toFixed(1) + "px");
-
-      gateIntroRises(left, u);
 
       // PIN 1 — HIGHLIGHTS: scroll-scrubbed figclip growth (FIG_START_P → FIG_END_P on pin P).
       const entranceDone = E >= 0.999;
@@ -366,45 +338,33 @@ export function MediaSplit01({ content, config = {} }) {
       <section className="mw-fac2" aria-labelledby={headingId} ref={sectionRef} {...sectionProps(config)}>
         <div className="mw-inner">
           <div className="mw-fac2__grid">
-            {/* LEFT — intro rests in final alignment; clip-path reveals top→bottom on entrance. */}
+            {/* LEFT — intro copy at rest (no entrance choreography). */}
             <div className="mw-fac2__left" ref={leftRef}>
               <div className="mw-fac2__intro">
                 <header className="mw-fac2__head">
-                  <p className="mw-fac2__field" data-fac2-rise>
-                    <span className="mw-fac2__rise">
-                      {stage ? <span>{stage}</span> : null}
-                      <span className="mw-fac2__field-rule" />
-                      <span>{eyebrow}</span>
-                    </span>
+                  <p className="mw-fac2__field">
+                    {stage ? <span>{stage}</span> : null}
+                    <span className="mw-fac2__field-rule" />
+                    <span>{eyebrow}</span>
                   </p>
-                  <h2 id={headingId} className="mw-fac2__title" data-fac2-rise>
-                    <span className="mw-fac2__rise">{title.em}</span>
+                  <h2 id={headingId} className="mw-fac2__title">
+                    {title.em}
                   </h2>
                 </header>
 
-                <p className="mw-fac2__lead" data-fac2-rise>
-                  <span className="mw-fac2__rise">{lead}</span>
-                </p>
+                <p className="mw-fac2__lead">{lead}</p>
 
                 <div className="mw-fac2__actions">
-                  <div className="mw-fac2__cta-rise" data-fac2-rise>
-                    <span className="mw-fac2__rise">
-                      <SolidCta01 href={primaryCta.href}>
-                        <span className="mw-fac2__lbl-long">{primaryCta.longLabel}</span>
-                        <span className="mw-fac2__lbl-short">{primaryCta.shortLabel}</span>
-                        {" "}<ActionArrow01 />
-                      </SolidCta01>
-                    </span>
-                  </div>
-                  <div className="mw-fac2__about-rise" data-fac2-rise>
-                    <span className="mw-fac2__rise">
-                      <Link href={aboutLink.href} className="mw-fac2__about">
-                        <span className="mw-fac2__lbl-long">{aboutLink.longLabel}</span>
-                        <span className="mw-fac2__lbl-short">{aboutLink.shortLabel}</span>
-                        {" "}<span aria-hidden="true">→</span>
-                      </Link>
-                    </span>
-                  </div>
+                  <SolidCta01 href={primaryCta.href}>
+                    <span className="mw-fac2__lbl-long">{primaryCta.longLabel}</span>
+                    <span className="mw-fac2__lbl-short">{primaryCta.shortLabel}</span>
+                    {" "}<ActionArrow01 />
+                  </SolidCta01>
+                  <Link href={aboutLink.href} className="mw-fac2__about">
+                    <span className="mw-fac2__lbl-long">{aboutLink.longLabel}</span>
+                    <span className="mw-fac2__lbl-short">{aboutLink.shortLabel}</span>
+                    {" "}<span aria-hidden="true">→</span>
+                  </Link>
                 </div>
               </div>
             </div>

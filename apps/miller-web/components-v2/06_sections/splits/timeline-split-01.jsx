@@ -20,9 +20,9 @@ export function TimelineSplit01({ content, config = {} }) {
               <TimelineWipe>); stacked flush and equal-height, they reveal in sequence as
               you scroll — each begins its wipe once the band above it is fully on screen. */}
           <div className="mw-ten3__col">
-            {/* Container 1: full-width, padding-free image-banner that just holds
-                the background photo, with the body-content container nested
-                inside it (read over a scrim). */}
+            {/* Pinned stack — banner (mission) + highlights move as one unit; frozen at
+                timeline end so both scroll off the top together. */}
+            <div className="mw-ten3__stack">
             <div className="mw-ten3__banner" data-history-wipe>
               <div className="mw-ten3__plate-window">
                 <div className="mw-ten3__plate-zoom">
@@ -44,31 +44,23 @@ export function TimelineSplit01({ content, config = {} }) {
                   <span className="mw-ten3__lead-in">{lead}</span>
                 </p>
               </header>
-              {/* Mission layer — comes into view INSIDE this arrow-chip (chevron) container
-                  using the SAME reveal as the bg image: a chevron wipe + the photo's window-
-                  open + zoom, all off --mission-rev. <TimelineStats> starts it once the
-                  timeline's midpoint passes the bottom of the screen. Sits over the image/head. */}
+              {/* Mission layer — rises from the banner bottom (clip + translate), scrubbed by
+                  --mission-rev. <TimelineStats> starts it once the timeline top hits the header,
+                  holds briefly, then ramps over ~two wheel-clicks of scroll. */}
               <div className="mw-ten3__bmission">
                 <div className="mw-ten3__bmission-window">
                   <div className="mw-ten3__bmission-zoom">
                     <div className="mw-ten3__mission-panel">
-                      {/* heading wrapped in a line-mask span (scoped to this template) so the
-                          heading can do the hero header's mask-rise — translateY(116%)→0 inside
-                          the h3's overflow:hidden — triggered by scroll when the mission reveal
-                          completes. Other MissionBlock01 callers still pass a plain string. */}
-                      <MissionBlock01 paragraphs={mission.paragraphs} cta={mission.cta} heading={<span className="mw-ten3__mh-in">{mission.heading}</span>} />
+                      <MissionBlock01 paragraphs={mission.paragraphs} cta={mission.cta} heading={mission.heading} />
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Container 2: the track-record highlights — ONE fixed-shape chevron band. As the
-                section reaches its end (<TimelineStats> drives --hl-rev 0→1) two things happen at
-                once inside this single container: the stats CONTENT shifts up, and the band's
-                BACKGROUND recolours from the bottom up (white → cream) via a gradient with a moving
-                hard stop. The chevron clip is fixed, so the right-side angle never moves — no gap.
-                It also grows OUT of the banner's bottom on entry (--stats-out). */}
+            {/* Container 2: track-record highlights — one tall chevron band (stats at the top).
+                Grows OUT of the banner's bottom on entry (--stats-out). <TimelineStats> releases
+                the stack once the last milestone bottom passes the stat-caption line. */}
             <aside className="mw-ten3__aside">
               <ul className="mw-ten3__plate2-stats">
                 {plate.stats.map((s) => (
@@ -79,6 +71,7 @@ export function TimelineSplit01({ content, config = {} }) {
                 ))}
               </ul>
             </aside>
+            </div>
             <TimelineStats />
           </div>
 

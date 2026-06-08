@@ -306,6 +306,7 @@ export function LifetimeReel({ highlights = [], progress }) {
       data-current={current}
       data-done={done ? "1" : undefined}
       data-active={activeIdx != null ? "1" : undefined}
+      data-hoverable={countsDone ? "1" : undefined}
     >
       <div className="mw-lr-reel__stage" ref={stageRef}>
         {/* Unified chain (desktop), revealed left→right by the wipe. Split into z layers
@@ -388,6 +389,7 @@ export function LifetimeReel({ highlights = [], progress }) {
           // (countsDone), then reveal them together. Mobile: one at a time, the current
           // diamond's caption.
           const shown = controlled ? countsDone : current === idx;
+          const hoverable = controlled ? countsDone : shown;
           return (
             <p
               key={idx}
@@ -398,6 +400,9 @@ export function LifetimeReel({ highlights = [], progress }) {
               data-on={shown ? "1" : undefined}
               data-active={activeIdx === idx ? "1" : undefined}
               aria-hidden={shown ? undefined : "true"}
+              tabIndex={hoverable ? 0 : -1}
+              onMouseEnter={hoverable ? select(idx) : undefined}
+              onFocus={hoverable ? select(idx) : undefined}
             >
               {h.reveal}
             </p>
