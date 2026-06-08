@@ -16,16 +16,17 @@ import { sectionProps } from "@/components-v2/section-config";
 const PHOTO_BASE = "/miller/custom";
 const STEP = 4; // columns between consecutive checkmarks: at 4 each mark's top tip (col4) lands on the next mark's category column, touching it tip-to-tip — the interlocked "every diamond touches the next" grid (6 would split them into a wider, smaller-diamond row).
 
-// Per category: a checkmark of 5 diamonds. cat is the short-arm tip (col0,row0); it descends one
-// step to the vertex (col1,row1 — the lowest point), then the four photos ride up the long arm.
-// All cells keep (col+row) even so they sit on the argyle lattice.
+// Per category: a checkmark of 5 diamonds. The category LABEL diamond sits at the BOTTOM VERTEX
+// (col1,row1 — the lowest point); the four photos ride up from there — one to the short-arm tip
+// (col0,row0, up-left of the label) and three up the long arm to the right. All cells keep
+// (col+row) even so they sit on the argyle lattice.
 function buildGrid(cards) {
   const content = [];
   cards.forEach((cat, k) => {
     const ox = k * STEP;
     const it = cat.items;
-    content.push({ t: "cat", ci: k, col: ox + 0, row: 0, title: cat.title });
-    content.push({ t: "photo", ci: k, si: 0, col: ox + 1, row: 1, slug: it[0].slug, name: it[0].name });  // vertex (bottom)
+    content.push({ t: "cat", ci: k, col: ox + 1, row: 1, title: cat.title });  // label at the BOTTOM vertex (lowest point)
+    content.push({ t: "photo", ci: k, si: 0, col: ox + 0, row: 0, slug: it[0].slug, name: it[0].name });  // photo at the short-arm tip (up-left of the label)
     content.push({ t: "photo", ci: k, si: 1, col: ox + 2, row: 0, slug: it[1].slug, name: it[1].name });  // up the long arm …
     content.push({ t: "photo", ci: k, si: 2, col: ox + 3, row: -1, slug: it[2].slug, name: it[2].name });
     content.push({ t: "photo", ci: k, si: 3, col: ox + 4, row: -2, slug: it[3].slug, name: it[3].name });  // top-right tip
@@ -70,17 +71,25 @@ export function SectorDiamonds04({ content, config = {} }) {
       raf = 0;
       const track = trackRef.current, section = sectionRef.current;
       if (!track || !section) return;
-      if (!canPin()) { section.style.removeProperty("--secd-rev"); section.classList.remove("is-secd-pinned"); return; }
       const vh = window.innerHeight || 1;
+      // Each item — eyebrow, title, body-intro, button — INDEPENDENTLY renders in only when IT can fully
+      // fit on screen: reveal once its OWN bottom is within the viewport, keep it parked (mask-rise) while
+      // it's still cut off by the bottom of the screen. No shared gating — every item gets its own effect
+      // keyed to its own bottom, so e.g. the title shows as soon as the title fits, not when the body does.
+      const setRise = (el) => {
+        if (!el) return;
+        const bottom = el.getBoundingClientRect().bottom;
+        if (bottom > 0 && bottom <= vh) el.setAttribute("data-in", "1");
+        else if (bottom > vh) el.removeAttribute("data-in");
+      };
+      setRise(section.querySelector(".mw-secd__eyebrow-top"));
+      setRise(section.querySelector(".mw-secd__title"));
+      setRise(section.querySelector(".mw-secd__lead"));
+      setRise(section.querySelector(".mw-secd__cta"));
+      if (!canPin()) { section.classList.remove("is-secd-pinned"); return; }
       const top = track.getBoundingClientRect().top;
-      const total = Math.max(1, track.offsetHeight - vh);
-      const scrolled = Math.min(Math.max(-top, 0), total);
-      const P = scrolled / total;                       // 0 across approach; 0→1 across the pin
-      // HOLD the title fully visible for the first ~30% of the pinned scroll, THEN crossfade to the
-      // paragraph over the next ~25% (half the previous span → the swap is twice as quick), then hold.
-      const rev = Math.min(1, Math.max(0, (P - 0.3) / 0.25));
-      section.style.setProperty("--secd-rev", rev.toFixed(3));
-      // Hide the eyebrow once the section is pinned (the track spans the viewport → section stuck at top).
+      // The pin is purely a framing PAUSE — no scroll-driven reveals; the whole composition just shows.
+      // Toggle is-secd-pinned (track spans the viewport → section stuck at top) only to hide the eyebrow.
       section.classList.toggle("is-secd-pinned", top <= 0 && (top + track.offsetHeight) >= vh);
     };
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(compute); };
@@ -104,9 +113,10 @@ export function SectorDiamonds04({ content, config = {} }) {
     <div className="mw-secd-track" ref={trackRef}>
     <section ref={sectionRef} className="mw-secd mw-secd--int mw-secd--check" aria-labelledby={headingId} {...sectionProps(config)}>
       <div className="mw-inner">
-        {/* Eyebrow ABOVE the diamonds, at the top of the section (title + lead stay below the grid). */}
+        {/* Eyebrow ABOVE the diamonds, at the top of the section (title + lead stay below the grid).
+            Mask-rises in independently when it can fit (gated per-frame below), like the header items. */}
         <div className="mw-secd__eyebrow-top">
-          <Eyebrow01 label={eyebrow} reveal />
+          <span className="mw-secd__rise"><Eyebrow01 label={eyebrow} /></span>
         </div>
         <div className="mw-secd__grid" style={{ aspectRatio: `${cols} / ${rows}`, "--secd-cols": cols }}>
           {cells.map((c, i) => {
@@ -136,17 +146,17 @@ export function SectorDiamonds04({ content, config = {} }) {
           })}
         </div>
 
-        {/* Header BELOW the grid. Title + lead overlap in one cell (.mw-secd__swap); while pinned the
-            paragraph REPLACES the title via a scroll-scrubbed crossfade (--secd-rev). No data-reveal here
-            so --secd-rev fully owns both opacities; off the pin they just stack and show. */}
+        {/* Header BELOW the grid — STACKED: title (always shown) → body-intro (reveals on pin, part 1)
+            → button (reveals on pin, part 2). No data-reveal here so the pin vars own the opacities;
+            off the pin everything just shows. */}
         <header className="mw-secd__head">
-          <div className="mw-secd__swap">
-            <h2 id={headingId} className="mw-secd__title"><StopText01>{title}</StopText01></h2>
-            <div className="mw-secd__lead-group">
-              <p className="mw-secd__lead">{lead}</p>
-              {cta && <SolidCta01 href={cta.href}>{cta.label} <ActionArrow01 /></SolidCta01>}
-            </div>
-          </div>
+          {/* Title, body-intro, and button all render in (mask-rise, like the services list-items) only
+              once they can fully fit on screen — gated per-frame in the effect below via data-in (NOT the
+              global threshold-0 observer, which would reveal them while cut off at the bottom). .mw-secd__rise
+              is the riser. The title + body rise together as one unit; the button is part 2. */}
+          <h2 id={headingId} className="mw-secd__title"><span className="mw-secd__rise"><StopText01>{title}</StopText01></span></h2>
+          <p className="mw-secd__lead"><span className="mw-secd__rise">{lead}</span></p>
+          {cta && <div className="mw-secd__cta"><span className="mw-secd__rise"><SolidCta01 href={cta.href}>{cta.label} <ActionArrow01 /></SolidCta01></span></div>}
         </header>
       </div>
       <SectorGridMotion03 />

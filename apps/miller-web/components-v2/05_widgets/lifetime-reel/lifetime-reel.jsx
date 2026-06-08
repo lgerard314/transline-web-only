@@ -7,27 +7,34 @@ import { LrDiamondSeal } from "./lr-diamond-seal";
 // LEFT → RIGHT. On DESKTOP the entire chain — all three diamond outlines AND the two
 // connecting lines — is a SINGLE unified SVG (one set of paths, one stroke-width), so
 // the line and the borders are identical in thickness and the diamond→line seam is
-// seamless (it is one shape). The reveal is a single left→right wipe of a TERRACOTTA
-// layer, clipped to [0, frontierX] (revealed left→right). There is NO moving gold
-// gradient on the draw — the chain reveals in its settled terracotta the whole way;
-// the only gold is the active/hover per-diamond seal edge (handled in CSS, untouched).
+// seamless (it is one shape). The reveal pairs TWO copies of the chain: a TERRACOTTA
+// base layer clipped to [0, frontierX] (the settled draw), and a GOLD copy masked to
+// a soft band (BAND px) riding the frontier — so the growing edge reads as drawn in
+// gold trailing back into the settled terracotta, identically on the diamonds and the
+// lines. The gold band fades out once the reel settles (data-done). The only other
+// gold is the active/hover per-diamond seal edge (handled in CSS, untouched).
 //
-// SCROLL-SCRUBBED: the wipe is NOT a self-running timeline. The frontier position —
-// and each diamond's count-up — is tied to a 0..1 progress derived from the
-// section's travel THROUGH the viewport (see PROG_START/PROG_END). Scrolling down
-// draws the chain left→right at scroll speed; scrolling back up reverses it; so the
-// whole effect replays every time the section is scrolled through, in either
-// direction. The per-diamond count-up runs in LrCountUp's CONTROLLED mode, fed each
+// PROGRESS-DRIVEN: the frontier position — and each diamond's count-up — is tied to a
+// 0..1 `progress`. The SOURCE of that progress is the parent's choice: on desktop the
+// pinned section now feeds an AUTO-PLAY timeline (the chain draws itself once the
+// section fills — see lifetime-reel-01.jsx); in the uncontrolled / mobile fallback the
+// widget self-derives progress from the section's travel through the viewport (see
+// START_VISIBLE_FRAC) so scrolling draws/reverses the chain. Either way the wipe is a
+// pure function of progress (left→right at frontierX), so it replays whenever progress
+// runs 0→1. The per-diamond count-up runs in LrCountUp's CONTROLLED mode, fed each
 // diamond's local slice of the global progress. The geometry (paths + milestone x's)
 // is measured once from the live diamond boxes. The per-diamond seal edges are
 // hidden on desktop (the chain draws them) and used only as the MOBILE one-at-a-time
-// fallback. prefers-reduced-motion pins progress to 1 (fully drawn, no scrubbing).
+// fallback. prefers-reduced-motion pins progress to 1 (fully drawn, no animation).
 
 // Scroll→progress mapping (UNCONTROLLED / mobile only): progress 0 when the TOP 60%
 // of the FIRST (left) diamond is visible; progress 1 when the BOTTOM of the body
 // caption reaches the screen. On desktop the section is PINNED and the parent feeds
 // `progress` directly (see lifetime-reel-01.jsx), so this self-mapping is unused there.
 const START_VISIBLE_FRAC = 0.6; // fraction of the first diamond visible at progress 0
+const BAND = 90; // px width of the gold "charge" band riding the frontier (keep in sync with mask-size in 07-lifetime-reel.css)
+const CHAIN_SPEED = 4; // the diamond/line gradient build runs this many × the count-up pace (chain finishes in the first 1/CHAIN_SPEED of progress; the numbers are unaffected). Each count still STARTS as its diamond forms (segStart = apexStart/CHAIN_SPEED, so it tracks the sped draw).
+const COUNT_SPEED = 1.4; // the numbers count this many × faster: they all still land TOGETHER but at drawProg = 1/COUNT_SPEED instead of 1, so the whole count completes 40% sooner (desktop/controlled only).
 // Time-based grace AFTER the third diamond finishes rendering, before hover can override the
 // auto-selected third. This is a wall-clock perception window, not a scroll distance: it is
 // sized to outlast the highlight's appear transitions (caption fade .35s, active scale .32s)
@@ -165,27 +172,45 @@ export function LifetimeReel({ highlights = [], progress }) {
     return () => { detach(); mq.removeEventListener("change", sync); };
   }, [controlled]);
 
-  // Write the wipe frontier directly from progress — no timed transition, so the
-  // terracotta draw tracks the scroll position 1:1. (No moving gold gradient: the
-  // chain reveals in its settled terracotta the whole way; the only gold is the
-  // active/hover per-diamond seal edge, which is untouched.)
+  // Write the wipe frontier directly from progress — no timed transition, so the draw
+  // tracks progress 1:1 (the auto-play timeline / scroll already paces it). Every CLIP
+  // layer (terracotta base + fills) is clipped to [0, frontierX]; every MASK layer (the
+  // gold copies) rides its soft band so its leading edge sits at the frontier — gold at
+  // the growing edge, fading back into the settled terracotta. Both update in lockstep.
   const applyFrontier = useCallback((p, g) => {
     const stage = stageRef.current;
     if (!stage || !g) return;
     const m0 = g.milestones[0], m5 = g.milestones[5];
-    const clipX = m0 + p * (m5 - m0);
+    // The GOLD band's leading edge runs all the way to m5 + BAND by p=1, so it sweeps
+    // fully OFF the right apex of the third diamond — the gradient runs the whole length
+    // and the third diamond settles SOLID (not cut off by the fade). The terracotta clip
+    // frontier tracks the band but caps at m5: the chain reaches full draw a touch before
+    // p=1, then holds while the gold finishes exiting over the tail.
+    const goldX = m0 + p * (m5 - m0 + BAND);
+    const clipX = Math.min(m5, goldX);
     const rightInset = Math.max(0, g.stageW - clipX);
     const clipVal = `inset(0 ${rightInset.toFixed(1)}px 0 0)`;
+    const maskX = (goldX - BAND).toFixed(1); // band's leading (opaque) edge sits at goldX
     stage.querySelectorAll('.mw-lr-reel__chain[data-reveal="clip"]').forEach((el) => {
       el.style.transition = "clip-path 0ms linear";
       el.style.clipPath = clipVal;
     });
+    stage.querySelectorAll('.mw-lr-reel__chain[data-reveal="mask"]').forEach((el) => {
+      el.style.transition = "-webkit-mask-position 0ms linear, mask-position 0ms linear, opacity .5s linear";
+      el.style.webkitMaskPosition = `${maskX}px 0`;
+      el.style.maskPosition = `${maskX}px 0`;
+    });
   }, []);
 
   // Re-apply the frontier whenever progress or geometry changes (scroll tick, resize).
+  // The chain (diamond outlines + lines + gold band) draws at CHAIN_SPEED× the count-up
+  // pace: we feed applyFrontier a sped-up progress so the whole chain finishes (and the
+  // gold sweeps off) within the first 1/CHAIN_SPEED of the scroll, while the numbers keep
+  // running off the un-scaled progress (drawProg/localOf) — so the lines race ahead and
+  // the figures count up at their original, unchanged speed.
   useEffect(() => {
     if (!geom) return;
-    applyFrontier(prog, geom);
+    applyFrontier(Math.min(1, prog * CHAIN_SPEED), geom);
   }, [prog, geom, applyFrontier]);
 
   // Hover / focus / click emphasise a diamond — but ONLY after the whole chain has drawn AND the
@@ -206,26 +231,46 @@ export function LifetimeReel({ highlights = [], progress }) {
     return () => clearTimeout(t);
   }, [done]);
 
-  // Each diamond's count runs in lockstep with ITS OWN border draw: 0 before the wipe
-  // reaches its left apex (segStart), ramping to 1 exactly as the wipe crosses to its
-  // right apex (segEnd). So each number is fully reached the moment its diamond finishes
-  // drawing — right as that diamond becomes active and its body paragraph appears —
-  // before the next diamond starts counting. Before geometry is measured, fall back to
+  // DESKTOP each count STARTS exactly as its own diamond's border begins drawing, but all
+  // three FINISH together at the very end (when the third diamond's count completes) — a
+  // staggered cascade of starts that lands as one. MOBILE keeps the original lockstep: each
+  // count runs with its own diamond's draw (start at its left apex, complete at its right
+  // apex), since there is no shared chain there. Before geometry is measured, fall back to
   // fully-shown only under reduced motion (else hidden).
+  // Visible-DRAW fraction: because the gold band overshoots the chain end by BAND to
+  // sweep off the third diamond, the terracotta draw (clipX, capped at m5) completes a
+  // touch before the raw timeline ends — the tail is just the gold exiting. The
+  // count-ups and captions key off THIS fraction (not raw prog).
+  const span0 = geom ? (geom.milestones[5] - geom.milestones[0]) : 0;
+  const drawProg = span0 ? Math.min(1, prog * (span0 + BAND) / span0) : prog;
+  // The body paragraphs reveal the instant the LAST counter lands. On desktop every count
+  // finishes together at drawProg = 1/COUNT_SPEED, so that is the cue (no longer the full-scroll
+  // `done`). Mobile reveals the current diamond's caption one at a time and ignores this.
+  const countsDone = controlled ? drawProg >= (1 / COUNT_SPEED) - 1e-4 : false;
   const localOf = (idx) => {
     const g = geom;
     if (!g) return reduced ? 1 : 0;
     const s = slotOf(idx);
     const m0 = g.milestones[0], span = (g.milestones[5] - m0) || 1;
-    const segStart = (g.milestones[2 * s] - m0) / span;     // this diamond's left apex
-    const segEnd = (g.milestones[2 * s + 1] - m0) / span;   // its right apex (draw complete)
-    return Math.min(1, Math.max(0, (prog - segStart) / Math.max(1e-4, segEnd - segStart)));
+    const apexStart = (g.milestones[2 * s] - m0) / span;       // this diamond's left apex (un-sped frontier fraction)
+    if (controlled) {
+      // The CHAIN_SPEED-accelerated wipe reaches this diamond's left apex at
+      // drawProg = apexStart / CHAIN_SPEED — so the count fires exactly as the border
+      // starts drawing. They all land TOGETHER at the shared end drawProg = 1/COUNT_SPEED
+      // (< 1), so the whole count completes COUNT_SPEED× sooner — 40% faster — regardless
+      // of when each one started.
+      const segStart = apexStart / CHAIN_SPEED;
+      const segEnd = 1 / COUNT_SPEED;
+      return Math.min(1, Math.max(0, (drawProg - segStart) / Math.max(1e-4, segEnd - segStart)));
+    }
+    const segEnd = (g.milestones[2 * s + 1] - m0) / span;     // its right apex (draw complete) — mobile lockstep
+    return Math.min(1, Math.max(0, (drawProg - apexStart) / Math.max(1e-4, segEnd - apexStart)));
   };
 
   // The diamond emphasis (amber border + scale) is HOVER-ONLY: it lights the hovered diamond
-  // after the chain has drawn. The body paragraphs are shown INDEPENDENTLY — each diamond's
-  // caption appears the moment that diamond finishes loading and STAYS (all three end up
-  // visible; see the caption `data-on`), so hover no longer drives the captions.
+  // after the chain has drawn. The body paragraphs are gated on the WHOLE chain finishing —
+  // all three reveal together once the last diamond is fully rendered (done), not per-diamond
+  // (see the caption `data-on`) — so hover (which only styles the diamonds) never drives them.
   const activeIdx = (hoverReady && sticky != null) ? sticky : null;
 
   // Mobile one-at-a-time current diamond (chain hidden on mobile): pick the slot whose
@@ -238,7 +283,7 @@ export function LifetimeReel({ highlights = [], progress }) {
     const m0 = g.milestones[0], m5 = g.milestones[5], span = (m5 - m0) || 1;
     const c1 = (g.milestones[2] - m0) / span; // centre slot segStart
     const c2 = (g.milestones[4] - m0) / span; // right slot segStart
-    return prog >= c2 ? 2 : prog >= c1 ? 1 : 0;
+    return drawProg >= c2 ? 2 : drawProg >= c1 ? 1 : 0;
   })();
   useEffect(() => { setCurrent(orderRef.current[slotCurrent] ?? slotCurrent); }, [slotCurrent]);
 
@@ -269,7 +314,7 @@ export function LifetimeReel({ highlights = [], progress }) {
     place();
     window.addEventListener("resize", place);
     return () => window.removeEventListener("resize", place);
-  }, [done, highlights.length]);
+  }, [countsDone, highlights.length]);
 
   return (
     <div
@@ -280,21 +325,29 @@ export function LifetimeReel({ highlights = [], progress }) {
       data-active={activeIdx != null ? "1" : undefined}
     >
       <div className="mw-lr-reel__stage" ref={stageRef}>
-        {/* Unified chain (desktop), revealed left→right by the scroll-scrubbed wipe.
-            Split into z layers so the diamond fill overlay sits BETWEEN the connector
-            lines and the diamond borders (back → front: lines → fill → borders →
-            content). All clip off the same frontier (set in applyFrontier). Stroke
-            width matches the diamond size. Terracotta-only — no moving gold gradient;
-            the active/hover seal edge provides the only gold. */}
+        {/* Unified chain (desktop), revealed left→right by the wipe. Split into z layers
+            so the diamond fill overlay sits BETWEEN the connector lines and the diamond
+            borders (back → front: lines → fill → borders → content). Each stroked layer
+            is a PAIR: a terracotta --base (clipped to [0, frontier]) plus a --gold copy
+            (masked to a soft band riding the frontier, on top of its base), so the
+            growing edge reads as gold trailing into settled terracotta. All clip/mask
+            off the same frontier (set in applyFrontier); gold fades out on settle
+            (data-done). Stroke width matches the diamond size. */}
         {geom && (
           <>
             <svg className="mw-lr-reel__chain mw-lr-reel__chain--lines mw-lr-reel__chain--base" data-reveal="clip" viewBox={`0 0 ${geom.stageW} ${geom.stageH}`} preserveAspectRatio="none" aria-hidden="true">
+              <path d={geom.linesD} strokeWidth={geom.sw} />
+            </svg>
+            <svg className="mw-lr-reel__chain mw-lr-reel__chain--lines mw-lr-reel__chain--gold" data-reveal="mask" viewBox={`0 0 ${geom.stageW} ${geom.stageH}`} preserveAspectRatio="none" aria-hidden="true">
               <path d={geom.linesD} strokeWidth={geom.sw} />
             </svg>
             <svg className="mw-lr-reel__chain mw-lr-reel__chain--fills" data-reveal="clip" viewBox={`0 0 ${geom.stageW} ${geom.stageH}`} preserveAspectRatio="none" aria-hidden="true">
               <path d={geom.fillsD} />
             </svg>
             <svg className="mw-lr-reel__chain mw-lr-reel__chain--diamonds mw-lr-reel__chain--base" data-reveal="clip" viewBox={`0 0 ${geom.stageW} ${geom.stageH}`} preserveAspectRatio="none" aria-hidden="true">
+              <path d={geom.diamondsD} strokeWidth={geom.sw} />
+            </svg>
+            <svg className="mw-lr-reel__chain mw-lr-reel__chain--diamonds mw-lr-reel__chain--gold" data-reveal="mask" viewBox={`0 0 ${geom.stageW} ${geom.stageH}`} preserveAspectRatio="none" aria-hidden="true">
               <path d={geom.diamondsD} strokeWidth={geom.sw} />
             </svg>
           </>
@@ -304,7 +357,7 @@ export function LifetimeReel({ highlights = [], progress }) {
           const name = `${h.value}${h.suffix}${h.unit ? " " + h.unit : ""} — ${h.label}`;
           const local = localOf(idx);
           const started = local > 0;
-          const loaded = local >= 0.999; // this diamond has finished loading → its caption stays
+          const capShown = controlled ? countsDone : current === idx; // its caption reveals the moment the last counter lands
           return (
             <div
               className="mw-lr-reel__item"
@@ -319,7 +372,7 @@ export function LifetimeReel({ highlights = [], progress }) {
                   type="button"
                   className="mw-lr-reel__card"
                   aria-label={`${name}. Show details`}
-                  aria-expanded={loaded}
+                  aria-expanded={capShown}
                   aria-controls={`${captionId}-${idx}`}
                   data-mw-lr-seal={started ? "closed" : "open"}
                   onClick={select(idx)}
@@ -342,12 +395,16 @@ export function LifetimeReel({ highlights = [], progress }) {
         })}
       </div>
 
-      {/* Reveal captions: one per diamond, each sitting under its diamond. On desktop every
-          caption stays once its diamond has loaded (all three end up visible); on mobile
-          (one diamond at a time) only the current diamond's caption shows. */}
+      {/* Reveal captions: one per diamond, each sitting under its diamond. On desktop all
+          three stay HIDDEN until the last counter finishes (every count lands together at
+          drawProg = 1/COUNT_SPEED → countsDone), then reveal together; on mobile (one diamond
+          at a time) only the current diamond's caption shows. */}
       <div className="mw-lr-reel__captions" ref={captionsRef}>
         {highlights.map((h, idx) => {
-          const shown = controlled ? localOf(idx) >= 0.999 : current === idx;
+          // Desktop: hold ALL three captions hidden until the last counter lands
+          // (countsDone), then reveal them together. Mobile: one at a time, the current
+          // diamond's caption.
+          const shown = controlled ? countsDone : current === idx;
           return (
             <p
               key={idx}

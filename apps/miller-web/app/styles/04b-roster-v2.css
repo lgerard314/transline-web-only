@@ -41,19 +41,37 @@
 }
 .mw-roster2__title-line { display: block; }
 
-/* Signature beat: once the header has revealed (data-in set by
-   MillerScrollReveal), the clay stop-period stamps in last — held hidden
-   through the header's fade, then a quick scale-pop with a tiny overshoot,
-   like a rubber stamp pressing down. Scoped to this section's title so no
-   other .mw-stop is touched. fill-mode `both` keeps it hidden during the
-   delay so it never flashes ahead of the headline. */
+/* Per-element header reveal: the eyebrow, title and intro each fade up on their own (driven by
+   headRevealed state → .is-head-in) the moment they fully fit on screen, and reset when they
+   don't — so scrolling back up past one re-runs it. Transition (not a one-shot animation) so it
+   reverses smoothly. */
+.mw-roster2__eyebrow,
+.mw-roster2__title,
+.mw-roster2__lead {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 520ms ease, transform 520ms cubic-bezier(.16, .84, .3, 1);
+}
+.mw-roster2__eyebrow { display: inline-block; } /* a bare <span> ignores transform otherwise */
+.mw-roster2__eyebrow.is-head-in,
+.mw-roster2__title.is-head-in,
+.mw-roster2__lead.is-head-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Signature beat: when the TITLE reveals, the clay stop-period stamps in last — held hidden
+   through the title's fade, then a quick scale-pop with a tiny overshoot, like a rubber stamp
+   pressing down. Re-runs each time the title re-reveals (the animation is tied to .is-head-in).
+   Scoped to this title so no other .mw-stop is touched; fill-mode `both` keeps it hidden during
+   the delay so it never flashes ahead of the headline. */
 @keyframes mw-roster2-stamp {
   0%   { opacity: 0; transform: scale(0.2); }
   55%  { opacity: 1; transform: scale(1.18); }
   78%  { transform: scale(0.92); }
   100% { opacity: 1; transform: scale(1); }
 }
-.mw-roster2__head[data-in="1"] .mw-roster2__title .mw-stop {
+.mw-roster2__title.is-head-in .mw-stop {
   transform-origin: center;
   animation: mw-roster2-stamp 420ms cubic-bezier(.22, .7, .3, 1.2) both;
   animation-delay: 280ms;
@@ -182,7 +200,9 @@
   pointer-events: none;
   transition: border-color 240ms ease;
 }
-.mw-roster2__card.is-active::after { border-color: var(--c-line); border-width: 1px; }
+/* The active ring only appears once the card has finished rising in (is-rise-done, set when
+   the card-in's transform transition ends) — so it never frames a card mid-motion. */
+.mw-roster2__card.is-active.is-rise-done::after { border-color: var(--c-line); border-width: 1px; }
 .mw-roster2__card:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
 
 /* Action arrow pinned to each card's top-right corner. */
@@ -455,9 +475,15 @@
      flow full-height (no pinned window, no grid scroll-jack; JS also skips both here). */
   .mw-roster2__row { opacity: 1; transform: none; }
   .mw-roster2__card-in { transform: none; }
+  /* No rise transition fires here, so is-rise-done is never set — show the active ring on
+     is-active alone. */
+  .mw-roster2__card.is-active::after { border-color: var(--c-line); border-width: 1px; }
   .mw-roster2__window { position: static; height: auto; overflow: visible; }
-  /* Stop-period sits in its final state — no stamp pop. */
-  .mw-roster2__head[data-in="1"] .mw-roster2__title .mw-stop {
+  /* Header bits sit in their final state — no fade-up, no stamp pop. */
+  .mw-roster2__eyebrow,
+  .mw-roster2__title,
+  .mw-roster2__lead { opacity: 1; transform: none; }
+  .mw-roster2__title.is-head-in .mw-stop {
     animation: none;
     opacity: 1;
     transform: none;

@@ -35,11 +35,19 @@ export function TimelineStats() {
             bmission: col.querySelector(".mw-ten3__bmission"),
             timeline: grid ? grid.querySelector(".mw-ten3__line") : null,
             grid,
+            items: grid ? [...grid.querySelectorAll(".mw-ten3__item")] : [],
+            vals: [...col.querySelectorAll(".mw-ten3__plate2-val")].map((el) => {
+              const raw = el.getAttribute("data-val") || el.textContent || "0";
+              return { el, target: parseFloat(raw) || 0, dec: (raw.split(".")[1] || "").length };
+            }),
+            countRaf: 0,
+            y1: -1,
             last: -1,
             lastRev: -1,
             lastHl: -1,
             lastUnpin: false,
             lastSettled: false,
+            lastBandIn: false,
             hlIdx: -1,
             hlBase: -1,
           };
@@ -65,6 +73,28 @@ export function TimelineStats() {
       c.stats.style.setProperty("--stats-redge", (slope * hH).toFixed(1) + "px");
     };
 
+    // Count-up for the three highlight numbers — runs when the band reveals (data-band-in),
+    // ticking each 0→target with easeOutCubic. Decimals are preserved (4.5 keeps one place).
+    const startCount = (c) => {
+      if (!c.vals.length) return;
+      cancelAnimationFrame(c.countRaf);
+      for (const v of c.vals) v.el.textContent = (0).toFixed(v.dec); // zero immediately — no flash of the final number
+      const dur = 1400;
+      const ease = (t) => 1 - Math.pow(1 - t, 3);
+      let start = 0;
+      const step = (ts) => {
+        if (!start) start = ts;
+        const e = ease(Math.min(1, (ts - start) / dur));
+        for (const v of c.vals) v.el.textContent = (e * v.target).toFixed(v.dec);
+        if (e < 1) c.countRaf = requestAnimationFrame(step);
+      };
+      c.countRaf = requestAnimationFrame(step);
+    };
+    const resetCount = (c) => {
+      cancelAnimationFrame(c.countRaf);
+      for (const v of c.vals) v.el.textContent = (0).toFixed(v.dec); // park at 0 so it replays on re-entry
+    };
+
     const render = () => {
       raf = 0;
       const vh = window.innerHeight;
@@ -81,6 +111,15 @@ export function TimelineStats() {
           c.last = p;
           c.stats.style.setProperty("--stats-out", p.toFixed(3));
         }
+        // Highlight #1 (the 25+yrs stat) reveals — as an automated, timed slide/fade — the moment
+        // the white container is FULLY rendered (the band has finished growing out, --stats-out≈1),
+        // rather than being shown from the start. Toggled via data-band-in; CSS does the rest.
+        const bandIn = p >= 0.99;
+        if (bandIn !== c.lastBandIn) {
+          c.lastBandIn = bandIn;
+          c.stats.toggleAttribute("data-band-in", bandIn);
+          if (bandIn) startCount(c); else resetCount(c);
+        }
         // Highlights → cream wipe. The band stays LOCKED in place (pinned, never scrolls up); only its
         // white background colour and its content shift up inside it. The white's bottom (the gradient
         // colour line) sits exactly at the BOTTOM of the last timeline item: --hl-rev = 1 − (lastItem
@@ -93,11 +132,22 @@ export function TimelineStats() {
           const ah = c.stats.offsetHeight || 1;
           const pinnedTop = HDR + (c.banner ? c.banner.offsetHeight : 0);
           const liBot = c.lastItem.getBoundingClientRect().bottom;
-          const hl = Math.min(Math.max(1 - (liBot - pinnedTop) / ah, 0), 1);
-          if (Math.abs(hl - c.lastHl) >= 0.001) {
-            c.lastHl = hl;
-            c.stats.style.setProperty("--hl-rev", hl.toFixed(3));
+          // The wipe (content shifts up + bg recolours to cream) is now an AUTOMATED, timed reveal
+          // instead of being scrubbed: --hl-rev flips 0→1 at the SAME starting point it used to
+          // begin (the last timeline item's bottom rising to the band's bottom edge) and CSS
+          // transitions it over its own duration (--hl-rev is a registered @property). Reverses on
+          // scroll back up.
+          const wipeOn = liBot - pinnedTop <= ah;
+          const target = wipeOn ? 1 : 0;
+          if (target !== c.lastHl) {
+            c.lastHl = target;
+            c.stats.style.setProperty("--hl-rev", String(target));
           }
+          // The un-pin/freeze stays tied to SCROLL — the band's sticky range is one band-height of
+          // scroll past the wipe start, so we release exactly as the sticky range ends (the original
+          // scroll-based progress hitting 1). Decoupling this from the now-timed visual wipe would
+          // let the band un-stick and scroll up before the freeze, then snap back — a visible jump.
+          const hl = Math.min(Math.max(1 - (liBot - pinnedTop) / ah, 0), 1);
           // Once the highlights are 100% gone (wipe complete), RELEASE the whole pinned stack — the
           // mission banner AND the highlights band — by freezing them as absolutely-positioned
           // elements at the EXACT spots they currently occupy, so further scrolling carries them
@@ -122,40 +172,48 @@ export function TimelineStats() {
             }
           }
         }
-        // Mission reveal — STARTS a touch after the timeline's midpoint passes the bottom of
-        // the screen (REV_DELAY past the crossing), then ramps 0→1 over the next ~40% of
-        // viewport scroll. Written onto the banner so the in-banner mission layer reads it.
+        // Mission reveal — now an AUTOMATED, timed reveal fired at a single breakpoint rather than
+        // scrubbed by scroll: --mission-rev flips 0→1 the moment the scroll crosses the START of the
+        // old effect (the timeline midpoint reaching REV_DELAY above the fold), and CSS transitions
+        // it over its own duration (--mission-rev is a registered @property). The heading mask-rise
+        // (data-settled) fires at the same breakpoint. Both reverse if you scroll back past it.
         if (c.timeline) {
           const lr = c.timeline.getBoundingClientRect();
           const mid = lr.top + lr.height / 2;
           const REV_DELAY = vh * 0.15; // hold a beat past the midpoint before it begins
-          const REV_RANGE = vh * 0.15 || 1; // quick — ramps 0→1 over a short scroll span
-          const rev = Math.min(Math.max((vh - mid - REV_DELAY) / REV_RANGE, 0), 1);
-          if (Math.abs(rev - c.lastRev) >= 0.001) {
-            c.lastRev = rev;
-            c.banner.style.setProperty("--mission-rev", rev.toFixed(3));
+          const REV_RANGE = vh * 0.15 || 1; // (still used to anchor the highlight-3 scroll target)
+          const missionOn = (vh - mid - REV_DELAY) >= 0; // crossed the reveal breakpoint
+          const mrev = missionOn ? 1 : 0;
+          if (mrev !== c.lastRev) {
+            c.lastRev = mrev;
+            c.banner.style.setProperty("--mission-rev", String(mrev));
           }
-          // Fire the "settle" pop on the heading the moment the reveal locks in (and re-arm
-          // if you scroll back out, so it replays on re-entry).
-          const settled = rev >= 0.999;
-          if (settled !== c.lastSettled) {
-            c.lastSettled = settled;
-            if (c.bmission) c.bmission.toggleAttribute("data-settled", settled);
+          if (missionOn !== c.lastSettled) {
+            c.lastSettled = missionOn;
+            if (c.bmission) c.bmission.toggleAttribute("data-settled", missionOn);
           }
-          // Single-highlight cycle: only ONE of the three track-record stats shows at a time,
-          // cross-fading in place. Highlight 1 on reveal; swap to 2 the moment the mission
-          // container appears (--mission-rev past its midpoint); swap to 3 once two MORE
-          // milestone items have rendered past that point (baseline = the revealed count when
-          // the mission appeared). Scrolling back out (mission gone) resets to highlight 1.
-          const missionShown = rev >= 0.5;
+          // Highlight reveals, expressed as actual SCROLL positions so #2 lands exactly midway
+          // between #1 and #3 (event triggers on different scales can't define a midpoint).
+          //   y1 = scroll where the band pins (banner top reaches the header line).
+          //   y3 = UNCHANGED — scroll where #3 fires: one milestone item past the mission
+          //        appearing. Item k reveals when its rest-bottom rises 40px above the fold;
+          //        the mission appears (--mission-rev==0.5) when the timeline midpoint hits its
+          //        target — both solved to a scroll value from the current frame's geometry.
+          //   y2 = (y1 + y3) / 2 — the exact midpoint.
+          const HDRc = HDR;
+          const bt = c.banner ? c.banner.getBoundingClientRect().top : HDRc;
+          if (bt > HDRc + 0.5 || c.y1 < 0) c.y1 = window.scrollY + (bt - HDRc); // capture before it pins
+          const revealY = (el) => window.scrollY + (lr.top + el.offsetTop + el.offsetHeight + 40 - vh);
+          const midTarget = vh - REV_DELAY - 0.5 * REV_RANGE; // timeline-mid value when rev==0.5
+          const yMission = window.scrollY + (mid - midTarget);
+          let hlBase = 0;
+          for (const el of c.items) if (revealY(el) <= yMission) hlBase++;
+          const y3 = c.items[hlBase] ? Math.max(yMission, revealY(c.items[hlBase])) : yMission;
+          const y2 = (c.y1 + y3) / 2;
+          const sy = window.scrollY;
           let idx = 0;
-          if (missionShown) {
-            const revealed = c.grid ? c.grid.querySelectorAll(".mw-ten3__item[data-in]").length : 0;
-            if (c.hlBase < 0) c.hlBase = revealed;
-            idx = revealed >= c.hlBase + 2 ? 2 : 1;
-          } else {
-            c.hlBase = -1;
-          }
+          if (c.y1 >= 0 && sy >= y2) idx = 1;
+          if (c.y1 >= 0 && sy >= y3) idx = 2;
           if (idx !== c.hlIdx) {
             c.hlIdx = idx;
             c.stats.setAttribute("data-hl", String(idx));
@@ -177,6 +235,7 @@ export function TimelineStats() {
       c.stats.style.removeProperty("--stats-redge");
       c.stats.style.removeProperty("--hl-rev");
       c.stats.removeAttribute("data-hl");
+      c.stats.removeAttribute("data-band-in");
       c.banner.style.removeProperty("--mission-rev");
       if (c.bmission) { c.bmission.removeAttribute("data-settled"); c.bmission.removeAttribute("data-rev-armed"); }
       for (const el of [c.banner, c.stats]) if (el) { el.style.position = ""; el.style.top = ""; el.style.marginTop = ""; }
@@ -185,8 +244,12 @@ export function TimelineStats() {
       c.lastHl = -1;
       c.lastUnpin = false;
       c.lastSettled = false;
+      c.lastBandIn = false;
+      cancelAnimationFrame(c.countRaf);
+      for (const v of c.vals) v.el.textContent = v.dec ? v.target.toFixed(v.dec) : String(v.target); // restore final value
       c.hlIdx = -1;
       c.hlBase = -1;
+      c.y1 = -1;
     });
 
     const enable = () => {

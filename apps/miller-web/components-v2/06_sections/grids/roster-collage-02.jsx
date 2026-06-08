@@ -71,6 +71,8 @@ export function RosterCollage02({ content, config = {} }) {
   const [active, setActive] = useState(0);
   const [revealed, setRevealed] = useState([]); // per-row scroll-reveal flags (React-owned)
   const [cardRevealed, setCardRevealed] = useState([]); // per-card scroll-reveal flags (React-owned)
+  const [riseDone, setRiseDone] = useState([]); // per-card: rise (card-in) transition has settled
+  const [headRevealed, setHeadRevealed] = useState([]); // [eyebrow, title, intro] reveal flags
   const sectionRef = useRef(null);
   const collageRef = useRef(null); // the pin "track" — JS sizes it to the grid's height
   const windowRef = useRef(null);  // the sticky, clipped viewport-tall window
@@ -78,6 +80,9 @@ export function RosterCollage02({ content, config = {} }) {
   const railRef = useRef(null);
   const rowRefs = useRef([]);
   const cardRefs = useRef([]);
+  const headRefs = useRef([]); // [eyebrow, title, intro] — each reveals individually
+  const hoverAnchor = useRef(null); // pointer pos of the last hover-accepted selection
+  const lastScrollAt = useRef(-Infinity); // timestamp of the most recent scroll (ms)
 
   // Hovering a list row scrolls the page so that row's "set" of N (= column count) cards is
   // framed within the pinned window. In the windowed model the grid translates 1:1 with page
@@ -115,6 +120,59 @@ export function RosterCollage02({ content, config = {} }) {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     window.scrollTo({ top: target, behavior: reduce ? "auto" : "smooth" });
   };
+
+  // Hover-select a row. The catch: wheel-scrolling with the cursor resting on the list slides a
+  // new row under it (firing mouseenter) WITHOUT changing the pointer's clientX/clientY, which
+  // makes the selection jump around as you scroll. So ONLY in the brief window right after a
+  // scroll do we require ≥40px of real pointer travel before re-selecting (tiny jitter and pure
+  // scroll move ≈0px → ignored). Once the user stops scrolling for a second, the rule lifts and
+  // hovering selects immediately as normal. Keyboard focus is unaffected (it calls setActive).
+  const HOVER_MOVE_MIN = 40;
+  const SCROLL_GUARD_MS = 1000;
+  const selectFromHover = (i, e) => {
+    const justScrolled = performance.now() - lastScrollAt.current < SCROLL_GUARD_MS;
+    const a = hoverAnchor.current;
+    if (justScrolled && a && Math.hypot(e.clientX - a.x, e.clientY - a.y) < HOVER_MOVE_MIN) return;
+    hoverAnchor.current = { x: e.clientX, y: e.clientY };
+    setActive(i);
+    bringCardIntoView(i);
+  };
+
+  // Stamp the time of USER scrolling so selectFromHover knows whether we're inside the
+  // post-scroll guard window. We listen for `wheel` (mouse wheel / trackpad), NOT `scroll`:
+  // every hover-select runs bringCardIntoView, which smooth-scrolls and fires `scroll` events —
+  // using `scroll` here would re-arm the guard on every selection, so it would never release.
+  // `wheel` fires only on real user scroll input, so the guard correctly lapses ~1s after the
+  // user stops scrolling.
+  useEffect(() => {
+    const onWheel = () => { lastScrollAt.current = performance.now(); };
+    window.addEventListener("wheel", onWheel, { passive: true });
+    return () => window.removeEventListener("wheel", onWheel);
+  }, []);
+
+  // The active border (the card's ::after ring) must stay hidden while a card is still rising
+  // into view, and only appear once that motion finishes. We flag a card "rise-done" when its
+  // card-in finishes its transform transition while revealed; the ring CSS requires that flag.
+  const handleCardRiseEnd = (i, e) => {
+    if (e.propertyName !== "transform") return;
+    const el = e.target;
+    if (!el.classList || !el.classList.contains("mw-roster2__card-in")) return;
+    const risen = !!el.parentElement && el.parentElement.classList.contains("is-revealed");
+    setRiseDone((prev) => (!!prev[i] === risen ? prev : Object.assign([...prev], { [i]: risen })));
+  };
+  // Drop the flag the instant a card un-reveals, so the ring hides immediately (never lingers
+  // around a card that's dropping back into its mask) and never shows during a re-rise.
+  useEffect(() => {
+    setRiseDone((prev) => {
+      let changed = false;
+      const next = cardRevealed.map((rev, i) => {
+        const v = rev ? !!prev[i] : false;
+        if (v !== !!prev[i]) changed = true;
+        return v;
+      });
+      return changed ? next : prev;
+    });
+  }, [cardRevealed]);
 
   // Center-sticky offset for the list. The rail uses native position:sticky; we set its
   // `top` to (viewportHeight − railHeight)/2 so it engages exactly when the list reaches
@@ -197,15 +255,34 @@ export function RosterCollage02({ content, config = {} }) {
     let raf = 0;
     const sameArr = (prev, next) =>
       prev.length === next.length && prev.every((v, i) => v === next[i]) ? prev : next;
+    // Reveal when `enter` becomes true; reset ONLY once the element is fully below the viewport
+    // (`below`), where the reset is invisible. In between, hold the current state. Net effect:
+    // the motion plays as you scroll DOWN onto something and re-arms (off-screen) below it, but
+    // scrolling back UP never visibly resets it — it stays revealed until it's gone past the
+    // bottom edge. So effects only reset/replay on the way down, never on the way up.
+    const resolve = (prev, i, enter, below) => (enter ? true : below ? false : !!prev[i]);
     const update = () => {
       raf = 0;
       const vh = window.innerHeight || document.documentElement.clientHeight;
-      const nextRows = rowRefs.current.map((el) => {
-        if (!el) return false;
-        const r = el.getBoundingClientRect();
-        return r.top >= 0 && r.bottom <= vh; // enough room for the whole row
+
+      setRevealed((prev) => {
+        const next = rowRefs.current.map((el, i) => {
+          if (!el) return false;
+          const r = el.getBoundingClientRect();
+          return resolve(prev, i, r.top >= 0 && r.bottom <= vh, r.top >= vh);
+        });
+        return sameArr(prev, next);
       });
-      setRevealed((prev) => sameArr(prev, nextRows));
+
+      // Header bits (eyebrow, title, intro) each reveal individually once the WHOLE element fits.
+      setHeadRevealed((prev) => {
+        const next = headRefs.current.map((el, i) => {
+          if (!el) return false;
+          const r = el.getBoundingClientRect();
+          return resolve(prev, i, r.top >= 0 && r.bottom <= vh, r.top >= vh);
+        });
+        return sameArr(prev, next);
+      });
 
       const win = windowRef.current;
       const grid = gridRef.current;
@@ -213,10 +290,14 @@ export function RosterCollage02({ content, config = {} }) {
       const windowed = !!win && !reduce && window.innerWidth > 1024;
       const gap = grid ? parseFloat(getComputedStyle(grid).rowGap) || 0 : 0;
       const bandBottom = windowed ? vh - gap : vh; // a card reveals once its slot tops this line
-      const nextCards = cardRefs.current.map((el) =>
-        el ? el.getBoundingClientRect().top < bandBottom : false
-      );
-      setCardRevealed((prev) => sameArr(prev, nextCards));
+      setCardRevealed((prev) => {
+        const next = cardRefs.current.map((el, i) => {
+          if (!el) return false;
+          const top = el.getBoundingClientRect().top;
+          return resolve(prev, i, top < bandBottom, top >= vh);
+        });
+        return sameArr(prev, next);
+      });
     };
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
     update();
@@ -315,7 +396,7 @@ export function RosterCollage02({ content, config = {} }) {
           {...linkProps}
           ref={(el) => { rowRefs.current[i] = el; }}
           className={`mw-roster2__row${i === active ? " is-active" : ""}${revealed[i] ? " is-revealed" : ""}`}
-          onMouseEnter={() => { setActive(i); bringCardIntoView(i); }}
+          onMouseEnter={(e) => selectFromHover(i, e)}
           onFocus={() => { setActive(i); bringCardIntoView(i); }}
         >
           <span className="mw-roster2__row-mark" aria-hidden="true" />
@@ -336,9 +417,10 @@ export function RosterCollage02({ content, config = {} }) {
         key={it.key}
         {...linkProps}
         ref={(el) => { cardRefs.current[i] = el; }}
-        className={`mw-roster2__card${i === active ? " is-active" : ""}${cardRevealed[i] ? " is-revealed" : ""}`}
+        className={`mw-roster2__card${i === active ? " is-active" : ""}${cardRevealed[i] ? " is-revealed" : ""}${riseDone[i] ? " is-rise-done" : ""}`}
         onMouseEnter={() => setActive(i)}
         onFocus={() => setActive(i)}
+        onTransitionEnd={(e) => handleCardRiseEnd(i, e)}
         aria-label={it.title}
       >
         {/* card-in is the riser that rises out of the card's mask (hero-style reveal). */}
@@ -360,25 +442,46 @@ export function RosterCollage02({ content, config = {} }) {
   return (
     <section ref={sectionRef} className="mw-roster2" aria-labelledby={headingId} {...sectionProps(config)}>
       <div className="mw-inner">
-        {/* Header opts into the house scroll-reveal (MillerScrollReveal sets
-            data-in when it crosses the viewport → mw-rv fade-up), matching the
-            other home sections. The clay stop-period then stamps in a beat
-            later via mw-roster2-stamp (see 04b-roster-v2.css). */}
-        <header className="mw-roster2__head" data-reveal>
-          <span className="mw-roster2__eyebrow"><Eyebrow01 label={eyebrow} /></span>
-          <h2 id={headingId} className="mw-section-title mw-roster2__title">
+        {/* Eyebrow, title and intro each reveal individually (own fade-up; the title's clay
+            stop-period also stamps in) the moment that element fully fits on screen. They re-arm
+            only once scrolled fully past (below the viewport), so the effect replays on the way
+            DOWN but never visibly resets on the way up. Driven by headRevealed state from the
+            reveal effect above (NOT the house data-reveal, which is one-shot and whole-block). */}
+        <header className="mw-roster2__head">
+          <span
+            ref={(el) => { headRefs.current[0] = el; }}
+            className={`mw-roster2__eyebrow${headRevealed[0] ? " is-head-in" : ""}`}
+          >
+            <Eyebrow01 label={eyebrow} />
+          </span>
+          <h2
+            id={headingId}
+            ref={(el) => { headRefs.current[1] = el; }}
+            className={`mw-section-title mw-roster2__title${headRevealed[1] ? " is-head-in" : ""}`}
+          >
             <span className="mw-roster2__title-line">{title.lead}</span>
             <span className="mw-roster2__title-line mw-roster2__title-em">
               <StopText01>{title.em}</StopText01>
             </span>
           </h2>
-          {intro ? <p className="mw-roster2__lead">{intro}</p> : null}
+          {intro ? (
+            <p
+              ref={(el) => { headRefs.current[2] = el; }}
+              className={`mw-roster2__lead${headRevealed[2] ? " is-head-in" : ""}`}
+            >
+              {intro}
+            </p>
+          ) : null}
         </header>
 
         <div className="mw-roster2__layout">
           {/* LEFT — roster menu (center-sticky; see the rail effect above). */}
           <div ref={railRef} className="mw-roster2__rail">
-            <ul className="mw-roster2__menu" aria-label="Services">
+            <ul
+              className="mw-roster2__menu"
+              aria-label="Services"
+              onMouseLeave={() => { hoverAnchor.current = null; }}
+            >
               {menuItems}
               {/* Row for the text-only catch-all card (last cell in the grid). */}
               <li>
@@ -386,7 +489,7 @@ export function RosterCollage02({ content, config = {} }) {
                   href={cta.href}
                   ref={(el) => { rowRefs.current[ctaIndex] = el; }}
                   className={`mw-roster2__row${active === ctaIndex ? " is-active" : ""}${revealed[ctaIndex] ? " is-revealed" : ""}`}
-                  onMouseEnter={() => { setActive(ctaIndex); bringCardIntoView(ctaIndex); }}
+                  onMouseEnter={(e) => selectFromHover(ctaIndex, e)}
                   onFocus={() => { setActive(ctaIndex); bringCardIntoView(ctaIndex); }}
                 >
                   <span className="mw-roster2__row-mark" aria-hidden="true" />
@@ -407,7 +510,8 @@ export function RosterCollage02({ content, config = {} }) {
                 {cards}
                 <article
                   ref={(el) => { cardRefs.current[ctaIndex] = el; }}
-                  className={`mw-roster2__card mw-roster2__card--cta${active === ctaIndex ? " is-active" : ""}${cardRevealed[ctaIndex] ? " is-revealed" : ""}`}
+                  className={`mw-roster2__card mw-roster2__card--cta${active === ctaIndex ? " is-active" : ""}${cardRevealed[ctaIndex] ? " is-revealed" : ""}${riseDone[ctaIndex] ? " is-rise-done" : ""}`}
+                  onTransitionEnd={(e) => handleCardRiseEnd(ctaIndex, e)}
                 >
                   {/* card-in rises out of the card's mask, same as the photo cards. */}
                   <span className="mw-roster2__card-in">

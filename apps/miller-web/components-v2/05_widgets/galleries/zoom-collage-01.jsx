@@ -1,18 +1,18 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 
-/* Scroll-scrubbed zoom collage — a sticky stage where a mosaic of crew photos
-   scales up as the section travels through the viewport, "diving" into the lead
-   photo until it fills the frame, then the careers invitation fades in over it.
+/* Auto-scroll zoom collage — a mosaic of crew photos that scales up, "diving" into
+   the lead photo until it fills the frame, then the careers invitation fades in over
+   it. The section PINS (sticky over a tall track) and the dive is driven by scroll
+   progress; while it's pinned and unfinished it AUTO-ADVANCES (the page eases itself
+   forward), so the effect plays on its own — but the user can scroll to push it along
+   faster. Once the dive completes the auto-advance stops and the page scrolls normally.
 
-   Ported from a framer-motion reference (scroll-linked scale) and rebuilt the
-   repo way: NO framer-motion / lenis / tailwind. One rAF-coalesced scroll reader
-   maps the section's progress (0 when its top hits the top of the viewport, 1
-   when its bottom hits the bottom — the reference's ['start start','end end'])
-   to a per-photo scale written as a CSS var (--s); CSS composes the transform so
-   the positions stay declarative. The last slice of progress drives --reveal,
-   which fades the overlay in. prefers-reduced-motion pins progress to 1 (the
-   landing photo filled, copy shown) and collapses the scroll track.
+   Rebuilt the repo way: NO framer-motion / lenis / tailwind. One rAF loop reads the
+   section's scroll progress over a FIXED dive distance (--dive-vh viewport-heights),
+   writes the per-photo scale (--s) and overlay reveal (--reveal), and nudges the
+   scroll forward each frame while pinned. prefers-reduced-motion skips it (finished
+   frame, no auto-scroll).
 
    IMAGE QUALITY: the CENTRE photo (index 0, the one that fills the frame at the
    landing) is laid out at its FINAL size (100vw×100vh) and scaled DOWN (0.25→1)
@@ -22,14 +22,19 @@ import { useEffect, useRef, useState } from "react";
    dive, so they keep the lightweight scale-up. */
 
 // Per-photo zoom factor. Index 0 (centre) hits 4 → fills; the rest run larger so
-// they sweep past. The centre is handled with the laid-out-large / scale-down trick;
-// the others scale up from their small box.
+// they sweep past. CAP is how large each frame is LAID OUT relative to its mosaic box
+// (then scaled down) — laying out large keeps it crisp instead of upscaling a small
+// bitmap. Centre = its full zoom (4) so it's crisp at full size; the others are capped
+// at 3× to stay crisp the whole time they're on screen while keeping layers bounded
+// (they only mildly upscale near the very end, by which point they've swept off-frame).
 const ZOOM = [4, 5, 6, 5, 6, 8, 9];
-// The overlay (scrim) + copy fade/slide in across this window — they begin a little
-// early and are FULLY rendered by REVEAL_END (where the dive settles), rather than
-// only starting their entrance there.
+const CAP = [4, 3, 3, 3, 3, 3, 3];
+// The overlay (scrim) + copy fade/slide in across this window of the progress — they
+// begin partway through and reach full opacity only when the dive completes (pd 1),
+// i.e. when the centre photo reaches full size.
 const REVEAL_START = 0.70;
-const REVEAL_END = 0.82;
+const REVEAL_END = 1.0;
+const DIVE_MS = 2600; // base auto-advance pace (start speed); it accelerates to 2× by the end
 
 export function ZoomCollage01({ photos = [], children }) {
   const rootRef = useRef(null);
@@ -42,10 +47,8 @@ export function ZoomCollage01({ photos = [], children }) {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     let raf = 0;
 
-    // The dive plays over a FIXED scroll distance (--dive-vh viewport-heights) so it
-    // feels identical regardless of how much extra track is added. The extra track
-    // beyond the dive is the freeze: progress clamps at 1, holding the finished
-    // photo+copy pinned for that short scroll before the section releases.
+    // The dive plays over a FIXED scroll distance (--dive-vh viewport-heights); extra
+    // track beyond it is a short freeze where the finished frame holds.
     let diveVh = 200;
     const readVars = () => {
       const v = parseFloat(getComputedStyle(root).getPropertyValue("--dive-vh"));
@@ -57,9 +60,11 @@ export function ZoomCollage01({ photos = [], children }) {
         const el = cellRefs.current[i];
         if (!el) continue;
         const z = ZOOM[i % ZOOM.length];
-        // Centre photo: laid out at final size, scale DOWN 1/z → 1 (crisp landing).
-        // Off-centre photos: scale UP 1 → z from their small box.
-        const s = i === 0 ? 1 / z + pd * (1 - 1 / z) : 1 + pd * (z - 1);
+        const cap = CAP[i % CAP.length];
+        // Frame is laid out at cap× its mosaic box; scaling the cell by (1/cap)(1+pd(z-1))
+        // gives the same on-screen size/position as before (mosaic box at pd 0 → box×z at
+        // pd 1), but rasterized from the larger layout → crisp instead of upscaled.
+        const s = (1 / cap) * (1 + pd * (z - 1));
         el.style.setProperty("--s", s.toFixed(4));
       }
       const reveal = Math.min(1, Math.max(0, (pd - REVEAL_START) / (REVEAL_END - REVEAL_START)));
@@ -68,42 +73,81 @@ export function ZoomCollage01({ photos = [], children }) {
       else root.removeAttribute("data-shown");
     };
 
-    const render = () => {
-      raf = 0;
+    let running = false;
+    let lastTs = 0;
+    let lastY = 0;
+    let cancelled = false; // user scrolled up mid-run → auto-scroll killed until it unpins
+    let lastUserTs = -1e9; // last time the user actively scrolled (wheel/touch)
+    const USER_IDLE_MS = 160; // pause auto-advance for this long after user scroll input
+    // The user drives the scroll; our auto-nudge must not fight it. While the user is
+    // actively scrolling we PAUSE the nudge so their (smooth) scroll registers fully —
+    // an instant programmatic scroll would otherwise cancel their in-flight scroll and
+    // "eat" the input. The nudge resumes once they're idle.
+    const onUserScroll = (e) => { lastUserTs = e.timeStamp; };
+
+    const loop = (ts) => {
+      raf = requestAnimationFrame(loop);
+      const dt = lastTs ? Math.min(50, ts - lastTs) : 16.7; // clamp big gaps (tab switches)
+      lastTs = ts;
       const rect = root.getBoundingClientRect();
       const vh = window.innerHeight || document.documentElement.clientHeight || 1;
       const diveDist = (diveVh / 100) * vh;
+      // Progress is tied to scroll position (scrubbed) — scrolling up reverses it.
       const pd = diveDist > 0 ? Math.min(1, Math.max(0, -rect.top / diveDist)) : 0;
       apply(pd);
+      const y = window.scrollY;
+      const pinned = rect.top <= 0 && rect.bottom > vh;
+      const userActive = ts - lastUserTs < USER_IDLE_MS;
+      // Re-arm once the section UNPINS on the way back up (its top drops below the
+      // viewport top) — i.e. the user scrolled up past the pin point.
+      if (rect.top > 0) cancelled = false;
+      // If the user scrolls UP while pinned, kill the auto-scroll entirely. It stays
+      // cancelled (the section is now plain scroll-scrubbed) until it unpins.
+      if (!cancelled && pinned && pd < 1 && y < lastY - 1) cancelled = true;
+      // Auto-advance only while pinned, unfinished, not cancelled, AND the user isn't
+      // mid-scroll (so their scroll-to-speed-up isn't cancelled by our nudge).
+      // The pace ACCELERATES across the dive: it begins slow (≈0.66× base) and ends at
+      // ≈1.33× — i.e. the finish is twice the starting speed. behavior:"instant" bypasses
+      // the page's scroll-behavior:smooth.
+      if (pinned && pd < 1 && !cancelled && !userActive) {
+        const v = (diveDist / DIVE_MS) * 0.924 * (1 + 3 * pd); // 40% faster overall (start 0.92× → end 3.7×)
+        window.scrollBy({ top: v * dt, behavior: "instant" });
+      }
+      lastY = window.scrollY;
     };
 
-    const onScroll = () => { if (!raf) raf = requestAnimationFrame(render); };
-    const onResize = () => { readVars(); onScroll(); };
-
-    let attached = false;
-    const attach = () => {
-      if (attached) return;
-      attached = true;
+    const start = () => {
+      if (running) return;
+      running = true; lastTs = 0; lastY = window.scrollY;
       readVars();
-      window.addEventListener("scroll", onScroll, { passive: true });
-      window.addEventListener("resize", onResize, { passive: true });
-      render();
+      window.addEventListener("wheel", onUserScroll, { passive: true });
+      window.addEventListener("touchmove", onUserScroll, { passive: true });
+      raf = requestAnimationFrame(loop);
     };
-    const detach = () => {
-      if (!attached) return;
-      attached = false;
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onResize);
-      if (raf) { cancelAnimationFrame(raf); raf = 0; }
+    const stop = () => {
+      if (!running) return;
+      running = false;
+      window.removeEventListener("wheel", onUserScroll);
+      window.removeEventListener("touchmove", onUserScroll);
+      cancelAnimationFrame(raf); raf = 0;
     };
 
-    const sync = () => {
-      if (mq.matches) { setReduced(true); detach(); apply(1); }
-      else { setReduced(false); detach(); attach(); }
-    };
-    sync();
-    mq.addEventListener("change", sync);
-    return () => { detach(); mq.removeEventListener("change", sync); };
+    if (mq.matches) {
+      setReduced(true);
+      apply(1); // reduced motion: finished frame, no auto-scroll
+      return;
+    }
+
+    // Run the loop only while the section is in view (re-arming is handled in the loop
+    // when the section unpins on the way back up).
+    const io = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) start(); else stop(); },
+      { threshold: 0 },
+    );
+    io.observe(root);
+    window.addEventListener("resize", readVars, { passive: true });
+    apply(0);
+    return () => { io.disconnect(); stop(); window.removeEventListener("resize", readVars); };
   }, []);
 
   if (!photos || photos.length === 0) return null;

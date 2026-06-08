@@ -11,7 +11,9 @@
    ───────────────────────────────────────────────────────────────── */
 .mw-fac2 {
   position: relative;
-  background: var(--c-surface-warm);
+  /* Resting / mobile background is the light beige. On desktop (pinned block far below) the
+     DEFAULT flips to dark walnut and the two beige/photo columns slide over it to erase it. */
+  background: var(--c-bg);
   padding-block: clamp(64px, 6.5vw, 112px);
   color: var(--c-ink);
   overflow: clip;
@@ -151,11 +153,12 @@
   margin: 0;
   padding-block: clamp(16px, 1.8vw, 26px);
   border-top: 0.5px solid var(--c-line);
-  border-bottom: 0.5px solid var(--c-line);
+  text-align: center;       /* centre each stat */
 }
 .mw-fac2__fig {
   display: flex;
   flex-direction: column;
+  align-items: center;      /* centre the label + value within the column */
   gap: 8px;
 }
 /* Vertical hairline rules between figures — a refined "spec row". */
@@ -175,6 +178,7 @@
   margin: 0;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 4px;
 }
 .mw-fac2__fig-num {
@@ -307,6 +311,13 @@
   display: flex;
   flex-direction: column;
   gap: 0;
+  /* White container — a cream card framing the photos AND the highlights band. The photos
+     sit at the top; the highlights slide down out of the photos' bottom INTO the card below
+     them (flush, no gap between photos and the highlights band). */
+  background: var(--c-bg);
+  border: 1px solid var(--c-line);
+  box-shadow: 0 28px 64px -34px rgba(42, 27, 18, 0.34);
+  padding: clamp(10px, 0.9vw, 16px);
 }
 .mw-fac2__photo-frame {
   position: relative;
@@ -1571,7 +1582,18 @@
    padding-left 1.5px (not 30) centres the leading clay diamond mark on the timeline spine (the
    line's ::before sits at left:5px; the 8.1px diamond's centre lands on it), so the eyebrow's
    mark caps the vertical line rather than aligning to the item-text indent. */
-.mw-ten3__record-eyebrow { margin: 0 0 clamp(20px, 2vw, 30px); padding-left: 1.5px; }
+.mw-ten3__record-eyebrow {
+  margin: 0 0 clamp(20px, 2vw, 30px);
+  /* Pin above the timeline: once the eyebrow reaches the header line it sticks there while the
+     milestone list scrolls up beneath it. Its sticky containing block is .mw-ten3__record, whose
+     padding-bottom extends the column so it stays pinned for the whole list. The matching field
+     background + vertical padding mask any item passing behind it; z-index keeps it on top. */
+  position: sticky;
+  top: calc(var(--hdr, 56px) + 12px);
+  z-index: 2;
+  background: var(--c-surface-warm);
+  padding: 8px 0 8px 1.5px;
+}
 .mw-ten3__record-eyebrow[data-armed] {
   opacity: 0;
   transform: translateY(10px);
@@ -1698,7 +1720,12 @@ html[data-brand="miller"] .mw-ten3__line[data-rev-armed] .mw-ten3__item[data-out
    the banner at --stats-out 0, then slid down into its slot at --stats-out 1 (written by
    <TimelineStats>). Its chevron stays static (no --wipe), so only the slide reveals it;
    var() fallback 1 → at rest for no-JS / reduced-motion. */
+/* Registered so the wipe (--hl-rev) can be TRANSITIONED: the driver flips it 0→1 at the wipe's
+   start point and CSS animates the bg recolour + the content shift-up over time, rather than
+   scrubbing it by scroll. Inherited so the value set here also drives the nested stats' shift. */
+@property --hl-rev { syntax: "<number>"; inherits: true; initial-value: 0; }
 .mw-ten3__aside {
+  transition: --hl-rev 0.34s cubic-bezier(0.22, 0.61, 0.36, 1);
   /* The band recolours from the BOTTOM UP as --hl-rev goes 0→1: white above the wipe line, and BELOW
      it an even gradient from the timeline's background (--c-surface-warm, at the very bottom) up to
      the mission cream (--c-bg, at the line). So the part that replaces the highlights doesn't read as
@@ -1775,10 +1802,15 @@ html[data-brand="miller"] .mw-ten3__line[data-rev-armed] .mw-ten3__item[data-out
      fills up. Hidden slots still hold their space, so nothing reflows as each appears. */
   display: flex;
   align-items: flex-start;
-  gap: clamp(26px, 2.9vw, 54px);
+  /* The three stats split the row into three equal columns (even spread). --stat-pad is the
+     space on EACH side of a divider line, so the gap around every divider is identical. */
+  --stat-pad: clamp(24px, 3.4vw, 56px);
+  gap: 0;
   box-sizing: border-box;
   margin: 0;
-  padding: clamp(22px, 2.2vw, 34px) clamp(80px, 14%, 220px) clamp(22px, 2.2vw, 34px) var(--g);
+  /* Right padding (space after the 3rd highlight, before the chevron) cut ~50% vs the prior
+     clamp(80px, 14%, 220px). */
+  padding: clamp(22px, 2.2vw, 34px) clamp(40px, 7%, 110px) clamp(22px, 2.2vw, 34px) var(--g);
   position: relative;
   z-index: 1;
   /* Shift the stats CONTENT straight up as the band recolours (driven by the same --hl-rev): they
@@ -1790,13 +1822,28 @@ html[data-brand="miller"] .mw-ten3__line[data-rev-armed] .mw-ten3__item[data-out
 @media (prefers-reduced-motion: reduce) {
   .mw-ten3__plate2-stats { transform: none; }
 }
-/* Each stat is hidden by default and faded IN cumulatively by data-hl (1, then 1+2, then
-   1+2+3). Default (driver not yet run / no-JS) shows the first. */
-.mw-ten3__plate2-stat { display: flex; flex-direction: column; opacity: 0; transition: opacity 0.4s ease; }
-.mw-ten3__aside:not([data-hl]) .mw-ten3__plate2-stat:first-child,
-.mw-ten3__aside[data-hl="0"] .mw-ten3__plate2-stat:nth-child(1),
-.mw-ten3__aside[data-hl="1"] .mw-ten3__plate2-stat:nth-child(-n+2),
-.mw-ten3__aside[data-hl="2"] .mw-ten3__plate2-stat:nth-child(-n+3) { opacity: 1; }
+/* All three stats start tucked UP above the band (clipped by its top edge) and slide DOWN into
+   the row. They all reveal TOGETHER off the SAME trigger (data-band-in, set when the band is
+   fully rendered). */
+.mw-ten3__plate2-stat { flex: 0 0 auto; box-sizing: border-box; position: relative; padding-inline: var(--stat-pad); display: flex; flex-direction: column; opacity: 0; transition: opacity 0.45s ease, transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1); }
+/* First stat sits flush to the gutter; last has no trailing pad (the row's right padding is the
+   trailing space). Every divider then has --stat-pad of space on BOTH sides. */
+.mw-ten3__plate2-stat:first-child { padding-left: 0; }
+.mw-ten3__plate2-stat:last-child { padding-right: 0; }
+/* Faint 0.5px divider centred in the gap between adjacent stats. */
+.mw-ten3__plate2-stat + .mw-ten3__plate2-stat::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0.5px;
+  background: color-mix(in srgb, var(--c-navy) 22%, transparent);
+}
+.mw-ten3__plate2-stat:nth-child(1), .mw-ten3__plate2-stat:nth-child(2), .mw-ten3__plate2-stat:nth-child(3) { transform: translateY(-140%); }
+/* Reveal all three once the band is fully rendered. No-JS fallback (neither attr) shows #1. */
+.mw-ten3__aside:not([data-hl]):not([data-band-in]) .mw-ten3__plate2-stat:first-child,
+.mw-ten3__aside[data-band-in] .mw-ten3__plate2-stat { opacity: 1; transform: translateY(0); }
 .mw-ten3__plate2-num { font-family: var(--font-condensed), ui-sans-serif, sans-serif; font-weight: 600; font-size: clamp(64px, 7.2vw, 108px); color: var(--c-ink); line-height: 1; }
 .mw-ten3__plate2-unit { font-size: 0.32em; color: var(--c-accent); margin-left: 2px; }
 .mw-ten3__plate2-label { font-family: var(--font-plex-mono), ui-monospace, monospace; font-size: 16px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--c-ink-2); margin-top: 8px; }
@@ -1819,6 +1866,11 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
    driven by --mission-rev (0 hidden → 1 fully covering), which <TimelineStats> ramps once
    the timeline's midpoint passes the bottom of the screen. Sits above the image + head; a
    solid --c-bg fill covers the photo, with its border matched to that fill (no edge). */
+/* Registered so --mission-rev can be TRANSITIONED: the driver now flips it 0→1 at a single
+   breakpoint and CSS animates the reveal over time (clip-path / scale / opacity all read it).
+   Inherited so the value set on .mw-ten3__banner reaches the nested mission layers. */
+@property --mission-rev { syntax: "<number>"; inherits: true; initial-value: 0; }
+.mw-ten3__banner { transition: --mission-rev 0.57s cubic-bezier(0.22, 0.61, 0.36, 1); }
 .mw-ten3__bmission {
   position: absolute;
   inset: 0;
@@ -1881,6 +1933,10 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
 }
 @media (prefers-reduced-motion: reduce) {
   .mw-ten3__bmission .mw-ten3__mh-in { transform: none; animation: none; }
+  /* Driver doesn't attach, so --mission-rev would sit at its @property initial 0 (hidden);
+     force it shown and drop the reveal clip/transition. */
+  .mw-ten3__banner { --mission-rev: 1; transition: none; }
+  .mw-ten3__bmission { clip-path: none; }
 }
 @media (max-width: 1200px) {
   /* Single column: image-banner, then highlights, then mission, then the record. The
@@ -1897,6 +1953,7 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
   /* Single-column: no sticky end-wipe, so keep the stats put (the band reads as a normal white
      stats panel). The gradient bg falls back to all-white via --hl-rev's 0 fallback. */
   .mw-ten3__plate2-stats { transform: none; }
+  .mw-ten3__plate2-stat { transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   /* The drivers don't attach → --wipe / --stats-out fall back (full chevron, band at rest).
@@ -1905,7 +1962,7 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
   .mw-ten3__aside { transform: none; }
   /* No driver → no data-hl cycle; lay all three stats back out as a static row, all shown. */
   .mw-ten3__plate2-stats { display: flex; }
-  .mw-ten3__plate2-stat { opacity: 1; }
+  .mw-ten3__plate2-stat { opacity: 1; transform: none; }
 }
 
 /* Truck plate — flipped truck side-view with three track-record
@@ -3553,6 +3610,27 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
     flex-direction: column;
     gap: 6px;
   }
+}
+
+/* Reveal: come up + fade in, like the home services roster rows. Applied to the
+   CARD (not its inner content) so the cards' resting/centered layout is never
+   touched — at rest opacity:0 + a downward offset, settling to opacity:1 +
+   transform:none (identity → no layout shift). The banner drives its OWN reveal
+   (its grid is not a data-reveal-stagger container — see tall-static-banner-01.jsx):
+   the cards rest hidden and fire TOGETHER, no stagger, once each is 50% past the
+   bottom of the viewport (data-in set by the banner's observer at threshold 0.5).
+   We own the hidden resting state and the reduced-motion off-switch here since the
+   house [data-reveal-stagger] rules no longer apply. */
+@keyframes mw-cert-rv {
+  0%   { opacity: 0; transform: translateY(34px); }
+  100% { opacity: 1; transform: none; }
+}
+.mw-trust--tsb01 .mw-cert { opacity: 0; }
+.mw-trust--tsb01 .mw-cert[data-in="1"] {
+  animation: mw-cert-rv 0.8s cubic-bezier(.16, .84, .3, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-trust--tsb01 .mw-cert { opacity: 1 !important; animation: none !important; }
 }
 
 /* ─────────────────────────────────────────────────────────────────
@@ -5495,10 +5573,10 @@ html[data-brand="miller"] {
    and category spotlight (≈150px) are absolute sizes, unaffected. */
 .mw-secd--check {
   overflow-x: clip; /* the centred fixed-width grid must never add a page scrollbar */
-  /* Spotlight row sits closer to the category diamonds: the category tops are ~163px below the grid
-     top and the spotlight clip bottom was ~75px below it (gap ≈ 88px). Drop the row ~44px (−79→−36)
-     to halve that gap. Scoped to --check so template #2's spotlight placement is unchanged. */
-  --sp-top: -36px;
+  /* Spotlight gathered-row vertical position (relative to the grid top). Positioned so the TOP of the
+     straightened spotlight PHOTOS sits ~16px above the top of the highest grid photo (si3, row 0).
+     Both boxes share the same clip inset (--secd-gap), so those cancel → −16px exactly. Scoped to --check. */
+  --sp-top: -16px;
 }
 .mw-secd--check .mw-secd__grid {
   width: calc((75px + var(--secd-gap)) * var(--secd-cols, 18)); /* → box = 150px + 2·gap → visible clip = 150px → fits INFRASTRUCTURE + ~8px padding */
@@ -5556,7 +5634,7 @@ html[data-brand="miller"] {
    si0 vertex → BELOW; si1/si2 rising arm → UP-LEFT (their up-right is the next photo); si3 tip → ABOVE.
    Relative to each photo's own box, so the same values work for all four categories. */
 .mw-secd--check .mw-secd__photo[data-si="0"] .mw-secd__photo-clip:hover ~ .mw-secd__cap {
-  bottom: auto; top: calc(50% + 82px); transform: translate(-50%, 0); /* below the vertex */
+  bottom: auto; top: calc(50% + 92px); transform: translate(-50%, 0); /* BELOW — into the cream notch between the two label diamonds; ABOVE collided with the neighbour photo at si0's short-arm tip */
 }
 .mw-secd--check .mw-secd__photo[data-si="1"] .mw-secd__photo-clip:hover ~ .mw-secd__cap,
 .mw-secd--check .mw-secd__photo[data-si="2"] .mw-secd__photo-clip:hover ~ .mw-secd__cap {
@@ -5591,53 +5669,69 @@ html[data-brand="miller"] {
   left: calc(clamp(23%, var(--cat-cx), 77%) - (var(--sp-size) / 2) + ((var(--si) - 1.5) * var(--sp-slot)));
 }
 
-/* 2-line display title: widen the header wrapper so the title breaks to TWO balanced lines (was 3 at
-   22ch). */
-.mw-secd--check .mw-secd__swap { max-width: none; }
+/* 2-line display title (was 3 at 22ch). The header STACKS: title → body-intro → button, each centred
+   (base .mw-secd__head is already a centred grid with a gap). */
 .mw-secd--check .mw-secd__title { max-width: 30ch; text-wrap: balance; }
-/* Default (non-pinned: mobile / short / reduced-motion): title + paragraph simply stacked & shown. */
-.mw-secd--check .mw-secd__swap { display: flex; flex-direction: column; align-items: center; gap: 22px; }
-/* Paragraph + "Learn more" button stack together (they reveal as one group on the pinned scroll). */
-.mw-secd--check .mw-secd__lead-group { display: flex; flex-direction: column; align-items: center; gap: clamp(20px, 2vw, 28px); }
+.mw-secd--check .mw-secd__cta { margin-top: clamp(4px, 0.6vw, 10px); }
 
-/* ── Pinned full-screen reveal (mirrors the lifetime-reel pin) ──────────────────────────────────
+/* Title + body-intro + button all "render in" only once they cross the viewport — using the SERVICES
+   section's list-item mask-rise: each sits in a clipped mask (overflow:hidden) with its content parked
+   at translateY(116%), then rises to 0 when its data-in="1" is set (i.e. when it can fully fit on
+   screen — gated per-frame in JS). No opacity fade — the mask itself hides it. The title + body rise
+   together (one unit); the button is part 2, gated on its own bottom. */
+.mw-secd--check .mw-secd__eyebrow-top,
+.mw-secd--check .mw-secd__title,
+.mw-secd--check .mw-secd__lead,
+.mw-secd--check .mw-secd__cta { overflow: hidden; }
+.mw-secd--check .mw-secd__rise {
+  display: block;
+  transform: translateY(116%);
+  transition: transform 0.95s cubic-bezier(.16, .84, .3, 1);
+}
+.mw-secd--check .mw-secd__eyebrow-top[data-in="1"] .mw-secd__rise,
+.mw-secd--check .mw-secd__title[data-in="1"] .mw-secd__rise,
+.mw-secd--check .mw-secd__lead[data-in="1"] .mw-secd__rise,
+.mw-secd--check .mw-secd__cta[data-in="1"] .mw-secd__rise { transform: none; }
+/* Button rises in TWICE as fast as the other items (0.95s → 0.475s), same easing. */
+.mw-secd--check .mw-secd__cta .mw-secd__rise { transition-duration: 0.475s; }
+@media (prefers-reduced-motion: reduce) {
+  .mw-secd--check .mw-secd__rise { transform: none; transition: none; }
+}
+
+/* ── Pinned framing PAUSE (mirrors the lifetime-reel sticky) ─────────────────────────────────────
    The section is wrapped in a tall .mw-secd-track and made sticky, so it FREEZES once it fills the
-   viewport (grid near the top under the fixed nav, header below). While pinned the body paragraph
-   REPLACES the title in the SAME spot: the two are stacked in one grid cell and crossfade as the pin
-   scrolls — title fades + rises OUT, paragraph fades + rises IN (driven by --secd-rev, 0→1, set in
-   JS). Mobile / short viewport / reduced-motion skip the pin — the track collapses, the section flows,
-   and both title + paragraph just show (stacked). */
+   viewport — a brief stop that frames the whole composition (grid + title + body-intro + button) at
+   the right spot so the user can hover the diamonds without anything being cut off, then releases.
+   No scroll-driven reveals; everything just shows. Mobile / short viewport / reduced-motion skip the
+   pin — the track collapses and the section flows normally. */
 .mw-secd-track { position: relative; }
-@media (min-width: 721px) and (min-height: 820px) and (prefers-reduced-motion: no-preference) {
-  .mw-secd-track { height: 200vh; } /* longer pinned scroll → the title dwells before the crossfade, which is also slower */
+/* min-height 840 — the floor where the FRAMED view (grid + ~120px spotlight headroom + title +
+   body-intro) fits one screen with the hover spotlight clearing the nav. The BUTTON is intentionally
+   NOT forced into this view: the section grows TALLER than the viewport (min-height:100vh), so the
+   button — with proper spacing below the body — sits below the framed pinned view and scrolls into
+   view as the pin releases. Shorter viewports skip the pin and flow normally. */
+@media (min-width: 721px) and (min-height: 840px) and (prefers-reduced-motion: no-preference) {
+  /* sticky runway: a brief pin hold, then it releases and the button + bottom gap scroll into view */
+  .mw-secd-track { height: calc(100vh + 520px); }
   .mw-secd-track > .mw-secd--check {
     position: sticky;
     top: 0;
-    height: 100vh;
-    padding-block: 0;
-    padding-top: clamp(60px, 7vh, 92px); /* eyebrow visible just below the fixed nav, at the top of the grid container */
+    min-height: 100vh;     /* grows taller than the viewport → the button sits BELOW the framed pinned view */
+    /* top: clear the fixed nav AND the spotlight captions (~57px above the grid); bottom: gap before next section */
+    padding-block: clamp(88px, 10vh, 116px) clamp(56px, 7vh, 112px);
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    /* CENTRE the composition when there's room (tall / portrait → everything fits, middle-aligned); fall
+       back to top-aligned when it overflows (landscape → grid stays below the nav, button below the fold) */
+    justify-content: safe center;
   }
-  /* GENEROUS band above the grid — this is the room the hover spotlight cards + their labels fly up
-     into. The eyebrow sits at the top of this band and yields it (fades out) on category hover. */
-  .mw-secd-track > .mw-secd--check .mw-secd__grid { margin-top: clamp(110px, 11.5vh, 156px); }
-  /* overlap title + paragraph in one cell so the paragraph can REPLACE the title in place */
-  .mw-secd-track > .mw-secd--check .mw-secd__swap { display: grid; justify-items: center; align-items: center; gap: 0; }
-  .mw-secd-track > .mw-secd--check .mw-secd__swap > * { grid-area: 1 / 1; }
-  /* title: visible at rest, fades + rises OUT as the pin scrolls */
-  .mw-secd-track > .mw-secd--check .mw-secd__title {
-    opacity: calc(1 - var(--secd-rev, 0));
-    transform: translateY(calc(var(--secd-rev, 0) * -16px));
-    will-change: opacity, transform;
-  }
-  /* paragraph + button: hidden at rest, fade + rise IN together to take the title's place */
-  .mw-secd-track > .mw-secd--check .mw-secd__lead-group {
-    opacity: var(--secd-rev, 0);
-    transform: translateY(calc((1 - var(--secd-rev, 0)) * 16px));
-    will-change: opacity, transform;
-  }
+  /* spotlight headroom + a little more breathing room above the grid (and eyebrow→grid gap on approach) */
+  .mw-secd-track > .mw-secd--check .mw-secd__grid { margin-top: clamp(52px, 5.5vh, 80px); }
+  /* GENEROUS spacing: bottom-of-grid → header, then title → body; the body → button gap is modest */
+  .mw-secd-track > .mw-secd--check .mw-secd__head { margin-top: clamp(76px, 9vh, 124px); gap: clamp(24px, 2.8vh, 36px); }
+  .mw-secd-track > .mw-secd--check .mw-secd__cta { margin-top: clamp(20px, 2.4vh, 34px); }
+  /* the eyebrow is already opacity:0 when pinned — collapse its box too so it doesn't eat vertical room */
+  .mw-secd-track > .mw-secd--check.is-secd-pinned .mw-secd__eyebrow-top { height: 0; margin: 0; overflow: hidden; }
 }
 
 /* ════════════════════════════════════════════════════════════════
@@ -5988,10 +6082,13 @@ html[data-brand="miller"] {
 .mw-czoom__intro {
   position: relative;
   display: flex;
-  justify-content: center;
-  /* Top padding halved; bottom (gap to the first photo) unchanged. */
-  padding-block: clamp(28px, 3.5vw, 55px) clamp(28px, 3.5vw, 55px);
+  /* Eyebrow sits in the empty area on the LEFT, low in the cream band (just above the
+     photos), not centred at the top. */
+  justify-content: flex-start;
+  align-items: flex-end;
+  min-height: clamp(200px, 34vh, 380px);
   padding-inline: clamp(24px, 5vw, 80px);
+  padding-bottom: clamp(16px, 2.5vh, 36px);
 }
 .mw-czoom__intro-field {
   display: flex;
@@ -6016,12 +6113,11 @@ html[data-brand="miller"] {
 .mw-czoom__intro-rule { width: clamp(40px, 6vw, 96px); height: 1px; background: currentColor; opacity: 0.4; }
 .mw-czoom__track {
   position: relative;
-  /* --dive-vh: scroll distance the dive plays over (the widget reads this and keeps
-     the dive feel identical regardless of total track). --freeze-vh: a short pin at
-     the end where the full-width photo + copy hold before the next section. Track =
-     dive + freeze + one viewport (the sticky pane). */
+  /* The section pins (sticky stage) over this track; the widget drives the dive from
+     scroll progress over --dive-vh and auto-advances the scroll while pinned. --freeze-vh
+     is a short hold on the finished frame before release. Track = dive + freeze + one viewport. */
   --dive-vh: 200;
-  --freeze-vh: 30;
+  --freeze-vh: 25;
   height: calc((var(--dive-vh) + var(--freeze-vh) + 100) * 1vh);
 }
 .mw-czoom__stage {
@@ -6063,10 +6159,10 @@ html[data-brand="miller"] {
   height: 25vh;
   overflow: hidden;
 }
-/* Centre (landing) photo only: laid out at its FINAL filled size so it rasterizes at
-   full resolution — the widget scales this cell DOWN (0.25→1) instead of a 25vw bitmap
-   UP, which is what made the landing look soft. Max layer = one viewport (no giant
-   compositor layer). The off-centre frames keep their small box. */
+/* Each frame is laid out LARGER than its on-screen mosaic box (centre at its full
+   100vw/100vh; the rest at 3× their box — see CAP in the widget) and scaled DOWN, so
+   every photo rasterizes from a large source and stays crisp instead of upscaling a
+   small bitmap. Sizes/offsets below are mosaic-box × cap. */
 .mw-czoom__cell:nth-child(1) .mw-czoom__frame { width: 100vw; height: 100vh; }
 .mw-czoom__frame img {
   display: block;
@@ -6074,12 +6170,20 @@ html[data-brand="miller"] {
   height: 100%;
   object-fit: cover;
 }
-.mw-czoom__cell:nth-child(2) .mw-czoom__frame { top: -30vh; left: 5vw; height: 30vh; width: 35vw; }
-.mw-czoom__cell:nth-child(3) .mw-czoom__frame { top: -10vh; left: -25vw; height: 45vh; width: 20vw; }
-.mw-czoom__cell:nth-child(4) .mw-czoom__frame { left: 27.5vw; height: 25vh; width: 25vw; }
-.mw-czoom__cell:nth-child(5) .mw-czoom__frame { top: 27.5vh; left: 5vw; height: 25vh; width: 20vw; }
-.mw-czoom__cell:nth-child(6) .mw-czoom__frame { top: 27.5vh; left: -22.5vw; height: 25vh; width: 30vw; }
-.mw-czoom__cell:nth-child(7) .mw-czoom__frame { top: 22.5vh; left: 25vw; height: 15vh; width: 15vw; }
+.mw-czoom__cell:nth-child(2) .mw-czoom__frame { top: -90vh; left: 15vw; height: 90vh; width: 105vw; }
+.mw-czoom__cell:nth-child(3) .mw-czoom__frame { top: -30vh; left: -75vw; height: 135vh; width: 60vw; }
+.mw-czoom__cell:nth-child(4) .mw-czoom__frame { left: 82.5vw; height: 75vh; width: 75vw; }
+.mw-czoom__cell:nth-child(5) .mw-czoom__frame { top: 82.5vh; left: 15vw; height: 75vh; width: 60vw; }
+.mw-czoom__cell:nth-child(6) .mw-czoom__frame { top: 82.5vh; left: -67.5vw; height: 75vh; width: 90vw; }
+.mw-czoom__cell:nth-child(7) .mw-czoom__frame { top: 67.5vh; left: 75vw; height: 45vh; width: 45vw; }
+/* Convention photo (6th tile, bottom-left) — plain image (no zoom), positioned so the
+   people's heads sit just below the top of the frame. */
+.mw-czoom__cell:nth-child(6) .mw-czoom__frame img { object-position: 50% 73%; }
+/* Booth photo (3rd tile) anchored to the top of its frame. */
+.mw-czoom__cell:nth-child(3) .mw-czoom__frame img { object-position: top; }
+/* Blue Bombers photo (4th tile) is wider than its frame, so it fills the height with
+   no vertical slack — a small scale anchored at the top creates room to nudge it down. */
+.mw-czoom__cell:nth-child(4) .mw-czoom__frame img { transform: scale(1.1); transform-origin: center top; }
 
 /* Invitation overlay — fades in over the filled centre photo as the dive lands. */
 .mw-czoom__overlay {
@@ -6118,7 +6222,7 @@ html[data-brand="miller"] {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(16px, 1.6vw, 24px);
+  gap: clamp(22px, 2.2vw, 34px);
   text-align: center;
   max-width: 760px;
   transform: translateY(calc((1 - var(--reveal, 0)) * 24px));
@@ -6174,24 +6278,29 @@ html[data-brand="miller"] {
   flex-wrap: wrap;
   justify-content: center;
   gap: clamp(12px, 1.4vw, 20px);
-  margin-top: clamp(8px, 1vw, 16px);
+  margin-top: clamp(10px, 1.4vw, 22px);
 }
 .mw-czoom__card {
   display: flex;
   flex-direction: column;
   gap: 8px;
   min-width: 220px;
-  padding: clamp(16px, 1.4vw, 22px) clamp(18px, 1.6vw, 26px);
+  /* Slightly taller cards; the link is pinned to the bottom so a modest, deliberate
+     gap opens between the title and the link. */
+  min-height: clamp(96px, 7.6vw, 116px);
+  padding: clamp(16px, 1.5vw, 24px) clamp(18px, 1.6vw, 26px);
   text-align: left;
   text-decoration: none;
-  background: rgba(46, 25, 16, 0.55);
+  /* Extremely dark espresso-brown panel (not the warm/orange tint it had before). */
+  background: rgba(18, 11, 6, 0.78);
   border: 1px solid rgba(245, 230, 203, 0.28);
   border-top: 2px solid var(--c-accent);
   transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
 }
 .mw-czoom__card:hover,
 .mw-czoom__card:focus-visible {
-  background: rgba(168, 90, 44, 0.22);
+  /* Hover goes DARKER, not brighter. */
+  background: rgba(18, 11, 6, 0.92);
   border-color: rgba(245, 230, 203, 0.5);
   transform: translateY(-3px);
 }
@@ -6216,7 +6325,9 @@ html[data-brand="miller"] {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-top: 2px;
+  /* Pin to the bottom of the card; opens a clean gap below the title. */
+  margin-top: auto;
+  padding-top: clamp(10px, 1.1vw, 16px);
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
   font-size: 14px;
   font-weight: 600;
@@ -6238,9 +6349,228 @@ html[data-brand="miller"] {
 }
 .mw-czoom__track[data-reduced] { height: 100vh; }
 
-/* Phone: shorten the dive and keep the centre photo the one that fills. */
+/* Phone: shorter dive distance; stack the invitation cards full-width. */
 @media (max-width: 700px) {
   .mw-czoom__track { --dive-vh: 160; }
   .mw-czoom__card { min-width: 0; width: 100%; }
   .mw-czoom__cards { width: 100%; max-width: 360px; }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   VBEC brown → beige FILL + pinned reveal (media-split-01.jsx). DEFAULT
+   background is dark walnut (--c-navy), continuous with the LifetimeReel
+   above. ENTRANCE: a CREAM left intro slides DOWN (delayed by the top
+   padding) and the CREAM right column (locked-ratio photos) rises UP from
+   below — erasing the brown by pin-in. PINNED (progress P): the 3 highlights
+   GROW out from under the photos, then the MEDIA (photos + highlights) swipes
+   RIGHT off the screen and the diamond cluster ROLLS in behind it.
+   Mobile / reduced-motion: no pin, beige section, columns at rest.
+   ───────────────────────────────────────────────────────────────── */
+
+@media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
+  .mw-fac2-track { position: relative; height: var(--fac2-track-h, 250vh); }
+  /* DEFAULT background is dark walnut (matches the section above); the cream columns erase it.
+     The section pins immediately below the header, sized to the remaining viewport. */
+  .mw-fac2-track > .mw-fac2 {
+    position: sticky;
+    top: var(--fac2-head-off, 115px);
+    height: calc(100vh - var(--fac2-head-off, 115px));
+    padding-block: 0;
+    background: var(--c-navy);
+  }
+  /* The 49° paper-grain wash is tuned for the light surface — hide it over the walnut default. */
+  .mw-fac2-track > .mw-fac2::before { display: none; }
+  /* The inner tiles the FULL pinned viewport (no max-width gutter, no padding) so the two cream
+     columns can cover every pixel of brown. The content's gutter is restored inside the columns. */
+  .mw-fac2-track > .mw-fac2 > .mw-inner {
+    height: 100%;
+    max-width: none;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  /* Grid spans edge-to-edge (no gutter, no gap) so left + right tile the whole section. */
+  .mw-fac2-track .mw-fac2__grid {
+    height: 100%;
+    grid-template-columns: minmax(0, 40fr) minmax(0, 60fr);
+    gap: 0;
+    margin: 0;
+    align-items: stretch;
+  }
+  /* LEFT — the CREAM intro panel (bg full height, no brown gutter). Bleeds to the screen's left
+     edge; text held in the content gutter via padding-left; vertically centred. Slides DOWN into
+     place (delayed by the top padding) then PINS (reader writes --fac2-left-y, no reverse). */
+  .mw-fac2-track .mw-fac2__left {
+    position: relative;
+    justify-content: center;
+    background: var(--c-bg);
+    padding: clamp(64px, 6.5vw, 112px) clamp(28px, 3.2vw, 56px);
+    padding-left: max(clamp(24px, 4vw, 72px), calc((100vw - 1560px) / 2));
+    transform: translateY(var(--fac2-left-y, 0px));
+    will-change: transform;
+  }
+  /* RIGHT — the CREAM column, the positioning context for the two stacked layers. Rises UP from
+     below the screen on entrance (reader writes --fac2-right-y); stays put on the pin. */
+  .mw-fac2-track .mw-fac2__right {
+    position: relative;
+    align-self: stretch;
+    min-width: 0;
+    min-height: 0;
+    background: var(--c-bg);
+    transform: translateY(var(--fac2-right-y, 0px));
+    will-change: transform;
+  }
+  /* MEDIA layer (z-index 2) — the photos (LOCKED ratio) + the highlights clip band, anchored
+     below the top padding, bleeding to the screen's right edge. NO card/container. On the pin it
+     SWIPES right (--fac2-media-x). */
+  .mw-fac2-track .mw-fac2__media {
+    position: absolute;
+    top: clamp(64px, 6.5vw, 112px);
+    left: 0;
+    right: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    transform: translateX(var(--fac2-media-x, 0px));
+    will-change: transform;
+  }
+  /* Locked-ratio gallery, filling the column width and bleeding right (no left inset). */
+  .mw-fac2-track .mw-fac2__media .mw-iacc { --reel-inset: 0px; margin: 0; }
+  /* Clip band — GROWS from 0 → the highlights' height (--fac2-fig-h) so they push out from under
+     the photos; pulled inside the right edge so the text isn't jammed against the screen. */
+  .mw-fac2-track .mw-fac2__figclip {
+    overflow: hidden;
+    height: var(--fac2-fig-h, 0px);
+    margin-right: var(--bleed-right, 0px);
+  }
+  .mw-fac2-track .mw-fac2__figs {
+    margin: 0;
+    border-top: 0;
+    padding-block: clamp(18px, 2vw, 30px);
+    align-items: start;
+  }
+  .mw-fac2-track .mw-fac2__fig { gap: clamp(6px, 0.7vw, 10px); }
+  /* CAPS layer (z-index 1) — the diamond cluster parked centred BEHIND the media; each diamond
+     rolls in (per-cell vars) as the media swipes past. */
+  .mw-fac2-track .mw-fac2__caps {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    margin: 0;
+    margin-right: var(--bleed-right, 0px);
+    padding: 0;
+    display: block;
+    transform: translateY(var(--fac2-cap-y, 2000px));
+    will-change: transform;
+  }
+  .mw-fac2-track .mw-cap-dia__cell {
+    transform: translateX(var(--cap-tx, 0px)) rotate(var(--cap-rot, 0deg)) scale(var(--cap-sc, 0.12));
+    transform-origin: center;
+    opacity: var(--cap-op, 0);
+    will-change: transform, opacity;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Capabilities diamond-of-diamonds (replaces the 7-cap grid). 8 rounded
+   clay diamonds on the who-we-serve argyle lattice (SAME --secd-gap),
+   hollow centre; a title diamond crowns the top; the hovered diamond
+   grows above its neighbours. JSX: media-split-01.jsx (.mw-cap-dia*). */
+.mw-cap-dia {
+  --secd-gap: clamp(2.12px, 0.247vw, 4.24px); /* SAME visible gap as the who-we-serve grid */
+  position: relative;
+  width: min(100%, 520px);
+  margin-inline: auto;
+  /* aspect-ratio is set inline (cols / rows) so the lattice stays square-celled */
+}
+.mw-cap-dia__cell {
+  position: absolute;
+  aspect-ratio: 1;          /* square box → diamond after the rounded-rect fill; width set inline */
+  pointer-events: none;     /* boxes overlap at the corners — only the diamond fill is hoverable */
+}
+.mw-cap-dia__d {
+  position: absolute;
+  inset: var(--secd-gap);   /* the gap inset, exactly like .mw-secd__photo-clip */
+  display: block;
+  transform-origin: center;
+  transition: transform 0.42s cubic-bezier(0.2, 0.7, 0.2, 1), filter 0.32s ease;
+  will-change: transform;
+}
+.mw-cap-dia__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 8px 18px rgba(33, 20, 12, 0.30));
+  transition: filter 0.32s ease;
+}
+.mw-cap-dia__fill {
+  fill: var(--cap-bg, var(--c-accent));
+  pointer-events: auto;     /* the diamond shape is the hover target */
+  transition: fill 0.3s ease;
+}
+/* faceted sheen — soft top-left highlight → bottom-right shade, clipped just inside the
+   rounded diamond so it never spills past the tips; sits over the fill, under the text. */
+.mw-cap-dia__d::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(50% 4%, 96% 50%, 50% 96%, 4% 50%);
+  background: linear-gradient(145deg, rgba(255, 241, 222, 0.16), rgba(255, 241, 222, 0) 46%, rgba(36, 21, 11, 0.24));
+  pointer-events: none;
+  z-index: 0;
+}
+.mw-cap-dia__face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 0 17%;
+  pointer-events: none;     /* hover passes through the text to the diamond fill below */
+  z-index: 1;
+}
+.mw-cap-dia__name {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(9px, 0.95vw, 14px);
+  line-height: 1.05;
+  letter-spacing: 0.015em;
+  text-transform: uppercase;
+  color: var(--c-bg);
+  text-wrap: balance;
+  text-shadow: 0 1px 2px rgba(20, 11, 5, 0.30);
+}
+/* Title diamond — deep walnut crown, bolder lettering + a clay stamp tick. */
+.mw-cap-dia__cell--title .mw-cap-dia__fill { fill: var(--c-navy); }
+.mw-cap-dia__title {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(11px, 1.15vw, 18px);
+  line-height: 1.0;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--c-bg);
+}
+.mw-cap-dia__title::after {
+  content: "";
+  display: block;
+  width: 8px;
+  height: 8px;
+  margin: 8px auto 0;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  transition: transform 0.42s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+/* Hover — the diamond grows above its neighbours and brightens (target = the diamond fill). */
+.mw-cap-dia__cell:has(.mw-cap-dia__fill:hover) { z-index: 6; }
+.mw-cap-dia__cell:has(.mw-cap-dia__fill:hover) .mw-cap-dia__d { transform: scale(1.14); filter: brightness(1.08); }
+.mw-cap-dia__cell:has(.mw-cap-dia__fill:hover) .mw-cap-dia__svg { filter: drop-shadow(0 16px 34px rgba(33, 20, 12, 0.46)); }
+.mw-cap-dia__cell--title:has(.mw-cap-dia__fill:hover) .mw-cap-dia__title::after { transform: rotate(135deg); }
+@media (prefers-reduced-motion: reduce) {
+  .mw-cap-dia__d, .mw-cap-dia__svg, .mw-cap-dia__fill, .mw-cap-dia__title::after { transition: none; }
 }

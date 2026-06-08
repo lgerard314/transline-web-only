@@ -92,6 +92,13 @@
     justify-content: center;
   }
 }
+/* Tablet (721–1024): run the pinned reel over a SHORTER track so the money-shot
+   doesn't stretch across ~3 screens of empty scroll on a tablet — the JS reader maps
+   progress off track.offsetHeight, so the same timeline simply compresses into less
+   travel. Desktop (≥1025) keeps the full 280vh runway, byte-for-byte unchanged. */
+@media (min-width: 721px) and (max-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .mw-lr-track { height: 175vh; }
+}
 
 /* Background wash: a faint Canada outline map, filling the expanding panel. When the
    panel is at the map's aspect (its starting shape) `cover` is an EXACT fit (no crop,

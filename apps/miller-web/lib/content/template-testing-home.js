@@ -203,7 +203,7 @@ export const FACILITY = {
     { label: "Location", num: "70", unit: "km S of Winnipeg" },
     { label: "Operating", num: "1996", unit: "to today" },
   ],
-  capsTitle: "7 powerful capabilities",
+  capsTitle: "Powerful Capabilities",
   capabilities: HOME.vbec.capabilities,
   primaryCta: { longLabel: HOME.vbec.cta.label, shortLabel: "Visit Facility", href: HOME.vbec.cta.href },
   aboutLink: { longLabel: HOME.vbec.aboutLinkLabel, shortLabel: "Read the story", href: HOME.vbec.aboutHref },
@@ -257,12 +257,12 @@ export const CAREERS = {
   // that fills the frame as the dive lands); the rest spread around it.
   zoomPhotos: [
     { src: "/miller/girl-on-horse-with-miller-flag.jpg" },
+    { src: "/miller/highlight-2-1.webp" },
+    { src: "/miller/team-at-conv-booth-4.jpg" },
     { src: "/miller/team-at-blue-bombers.jpg" },
-    { src: "/miller/team-at-conv-booth-big-5.jpg" },
-    { src: "/miller/team-in-casual-clothes.jpg" },
-    { src: "/miller/team-at-charity-event.jpg" },
-    { src: "/miller/team-accepting-awards.jpg" },
-    { src: "/miller/team-at-manitoba-env-event.jpg" },
+    { src: "/miller/miller-env-2020-international-lt625-high-roof-sleeper-tractor/miller-env-2020-international-lt625-high-roof-sleeper-tractor.jpg" },
+    { src: "/miller/team-photo-at-convention.jpg" },
+    { src: "/miller/closeup-miller-vest-badge-hq.jpg" },
   ],
   cards: [
     { tag: "Culture", title: HOME.joinFamily.whyTitle, text: HOME.joinFamily.whyBody, cta: HOME.joinFamily.whyCta },

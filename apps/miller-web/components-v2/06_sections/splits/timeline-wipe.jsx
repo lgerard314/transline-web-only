@@ -33,8 +33,12 @@ export function TimelineWipe() {
     const collect = () => {
       els = Array.from(document.querySelectorAll("[data-history-wipe]")).map((el) => ({
         el,
+        // Geometry is read from the INNER header (the title/lead block), so the reveal
+        // doesn't begin until the top of that header crosses the viewport bottom — a
+        // deliberate delay past the container's own top edge. Falls back to the container.
+        ref: el.querySelector(".mw-ten3__head") || el,
         // How many viewport-heights of scrolling the wipe spans (smaller =
-        // snappier). Reveal starts as the container's top edge enters from the
+        // snappier). Reveal starts as the header's top edge enters from the
         // bottom and completes once it has risen ~55% of the viewport.
         span: parseFloat(el.getAttribute("data-history-wipe-span")) || 0.55,
         last: -1,
@@ -45,8 +49,8 @@ export function TimelineWipe() {
       raf = 0;
       const vh = window.innerHeight;
       for (const it of els) {
-        const rect = it.el.getBoundingClientRect();
-        // 0 when the container's top sits at the viewport bottom; 1 after it has
+        const rect = it.ref.getBoundingClientRect();
+        // 0 when the inner header's top sits at the viewport bottom; 1 after it has
         // travelled up by span*vh. Clamped both ends so it parks at full reveal
         // once scrolled past and stays hidden while still below the fold.
         const p = Math.min(Math.max((vh - rect.top) / (vh * it.span), 0), 1);

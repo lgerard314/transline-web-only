@@ -64,7 +64,7 @@ export function TimelineSplit01({ content, config = {} }) {
               <ul className="mw-ten3__plate2-stats">
                 {plate.stats.map((s) => (
                   <li className="mw-ten3__plate2-stat" key={s.label}>
-                    <span className="mw-ten3__plate2-num">{s.num}<span className="mw-ten3__plate2-unit">{s.unit}</span></span>
+                    <span className="mw-ten3__plate2-num"><span className="mw-ten3__plate2-val" data-val={s.num}>{s.num}</span><span className="mw-ten3__plate2-unit">{s.unit}</span></span>
                     <span className="mw-ten3__plate2-label">{s.label}</span>
                   </li>
                 ))}

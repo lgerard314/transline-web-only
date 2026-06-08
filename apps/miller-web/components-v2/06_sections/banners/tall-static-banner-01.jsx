@@ -75,11 +75,14 @@ export function TallStaticBanner01({ content, config = {} }) {
     };
   }, [syncInnerWidths, content.certs]);
 
-  // Replay the staggered entrance reveal whenever the user returns to the very
-  // top of the page. The house MillerScrollReveal reveals these cards once and
-  // then unobserves them, so we keep our own observer to re-reveal them, and we
-  // clear their revealed state when scrollY hits the top (off-screen, since the
-  // banner sits below the hero fold) so it plays fresh on the next scroll-in.
+  // Reveal: each card comes up + fades in once it is at least HALF past the
+  // bottom of the viewport (50% of the card visible). No stagger — the cards
+  // share a row, so they cross the 50% line together and fire as one. This
+  // banner drives its OWN reveal: the grid is deliberately NOT a
+  // data-reveal-stagger container, so the house MillerScrollReveal (which fires
+  // at first-pixel and would cascade them) never touches these cards. We clear
+  // the revealed state when scrollY returns to the top (the banner sits below
+  // the hero fold) so the motion plays fresh on the next scroll-in.
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
     const root = gridRef.current;
@@ -89,10 +92,10 @@ export function TallStaticBanner01({ content, config = {} }) {
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
-          if (e.isIntersecting) e.target.setAttribute("data-in", "1");
+          if (e.intersectionRatio >= 0.5) e.target.setAttribute("data-in", "1");
         }
       },
-      { threshold: 0, rootMargin: "0px" },
+      { threshold: [0, 0.5, 1], rootMargin: "0px" },
     );
     items().forEach((el) => io.observe(el));
 
@@ -120,7 +123,6 @@ export function TallStaticBanner01({ content, config = {} }) {
         className="mw-certs"
         role="list"
         aria-label={content.ariaLabel}
-        data-reveal-stagger
       >
         {content.certs.map((cert) => (
           <CertDownloadLink key={cert.slug} cert={cert} />

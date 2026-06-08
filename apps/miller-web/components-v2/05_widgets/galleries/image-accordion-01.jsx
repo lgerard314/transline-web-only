@@ -16,7 +16,7 @@ import { useEffect, useRef, useState } from "react";
 // .mw-fac2__intro). All scrubbed by one scroll timeline; reduced-motion rests everything.
 //
 // Props: photos — [{ src, alt, caption }]
-export function ImageAccordion01({ photos, label = "Facility photo gallery" }) {
+export function ImageAccordion01({ photos, label = "Facility photo gallery", reveal = true }) {
   const [open, setOpen] = useState(0);
   const rootRef = useRef(null);
 
@@ -35,52 +35,89 @@ export function ImageAccordion01({ photos, label = "Facility photo gallery" }) {
       for (const p of panels) p.style.setProperty("--p", v);
       for (const el of risers) el.style.setProperty("--p", v);
     };
-    if (mq.matches) { setAll("1"); return; }
-    setAll("0");
 
-    // TIMED plate-window cascade, TRIGGERED when the gallery scrolls into view (like the
-    // page's data-reveal / hero) so it ALWAYS plays out fully — even if you stop scrolling
-    // (a position-scrubbed reveal would finish off-screen, since the photos are tall and
-    // top-aligned). Photos cascade left-to-right (window opens + zoom-settles + rises +
-    // fades); then the intro text mask-rises top-down. Replays each time it re-enters view.
+    // When the entrance is owned by a parent (e.g. MediaSplit01's column-slide fill), skip the
+    // scroll-scrubbed cascade entirely and rest every photo fully shown (--p = 1).
+    if (!reveal) { setAll("1"); return; }
+
+    // SCROLL-SCRUBBED plate-window cascade — each photo opens (window opens + zoom-settles
+    // + rises + fades), staggered LEFT-TO-RIGHT so the big/open photo lands FIRST; then the
+    // intro text mask-rises top-down — but tied to the SCROLLBAR instead of a timer. The gallery's
+    // approach up through the lower viewport maps to a virtual timeline T ∈ [0, TOTAL];
+    // each panel/riser reads its OWN slice of T exactly as the timed version did, so the
+    // sequence + start point are identical — it just tracks scroll position and reverses
+    // on scroll-up. The section pins shortly after, freezing T at TOTAL (fully revealed).
+    // We measure the (non-transformed) root rect for the trigger — reading a panel's own
+    // transformed rect would feed its --p translate back and deadlock. Reduced-motion rests
+    // everything at --p = 1.
     const ease = (x) => 1 - Math.pow(1 - x, 3);          // easeOutCubic
-    const PHOTO_DUR = 640, PHOTO_STAG = 130;             // per-photo duration / stagger (ms)
+    const PHOTO_DUR = 640, PHOTO_STAG = 130;             // per-photo span / stagger (timeline units)
     const TEXT_GAP = 120, TEXT_DUR = 600, TEXT_STAG = 110;
     const photoTotal = (panels.length - 1) * PHOTO_STAG + PHOTO_DUR;
-    let raf = 0, t0 = 0, playing = false;
+    const textTotal = risers.length ? (risers.length - 1) * TEXT_STAG + TEXT_DUR : 0;
+    const TOTAL = photoTotal + TEXT_GAP + textTotal;
+    const START = 0.9, END = 0.36;   // mobile fallback scrub: T=0 at root.top 90% vh → TOTAL at 36% vh
+    // (Desktop anchors the cascade END to the big photo's bottom instead — see compute().)
 
-    const frame = (now) => {
-      if (!t0) t0 = now;
-      const elapsed = now - t0;
-      let done = true;
+    let raf = 0;
+    const apply = (T) => {
       for (let i = 0; i < panels.length; i++) {
-        const l = (elapsed - i * PHOTO_STAG) / PHOTO_DUR;
+        // Stagger: the big/open photo (panel 0) opens FIRST and the small sliver photos
+        // follow LEFT-TO-RIGHT, so the headline picture leads the cascade.
+        const stagIdx = i;
+        const l = (T - stagIdx * PHOTO_STAG) / PHOTO_DUR;
         const v = l <= 0 ? 0 : l >= 1 ? 1 : ease(l);
-        if (v < 1) done = false;
         panels[i].style.setProperty("--p", v.toFixed(4));
       }
       for (let i = 0; i < risers.length; i++) {
-        const l = (elapsed - photoTotal - TEXT_GAP - i * TEXT_STAG) / TEXT_DUR;
+        const l = (T - photoTotal - TEXT_GAP - i * TEXT_STAG) / TEXT_DUR;
         const v = l <= 0 ? 0 : l >= 1 ? 1 : ease(l);
-        if (v < 1) done = false;
         risers[i].style.setProperty("--p", v.toFixed(4));
       }
-      raf = done ? 0 : requestAnimationFrame(frame);
-      if (done) playing = false;
     };
-    const play = () => { if (playing) return; playing = true; t0 = 0; raf = requestAnimationFrame(frame); };
-    const stop = () => { if (raf) cancelAnimationFrame(raf); raf = 0; playing = false; setAll("0"); };
-
-    const io = new IntersectionObserver((entries) => {
-      for (const e of entries) {
-        if (e.isIntersecting) play();
-        else stop();   // reset so it replays the next time it scrolls back into view
+    const compute = () => {
+      raf = 0;
+      if (mq.matches) { setAll("1"); return; }
+      const vh = window.innerHeight || document.documentElement.clientHeight || 1;
+      const top = root.getBoundingClientRect().top;   // root is NOT transformed → safe
+      // DESKTOP: end the PHOTO cascade exactly when the big photo's bottom is JUST ABOVE the
+      // screen bottom. The root is not transformed and its height equals the big/open photo's
+      // height, so root.bottom == the big photo's bottom. Photos finish (T = photoTotal) at
+      // root.bottom = vh - END_MARGIN (i.e. root.top = vh - END_MARGIN - rootH); the cascade
+      // starts at root.top = START*vh, and the text rise continues at the same scroll rate and
+      // still completes before the section pins. (Mobile keeps the fixed START → END fraction.)
+      let T;
+      if (window.matchMedia("(min-width: 901px)").matches) {
+        const END_MARGIN = Math.round(vh * 0.03);      // "just above" the screen bottom
+        const rootH = root.offsetHeight;
+        const topStart = START * vh;
+        const topPhotoEnd = vh - END_MARGIN - rootH;
+        const slope = Math.max(0.001, (topStart - topPhotoEnd) / photoTotal); // px of scroll per timeline unit
+        T = Math.min(TOTAL, Math.max(0, (topStart - top) / slope));
+      } else {
+        const p = Math.min(1, Math.max(0, (START * vh - top) / ((START - END) * vh)));
+        T = p * TOTAL;
       }
-    }, { threshold: 0.25 });
-    io.observe(root);
+      apply(T);
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(compute); };
 
-    return () => { io.disconnect(); if (raf) cancelAnimationFrame(raf); };
-  }, [photos]);
+    if (mq.matches) { setAll("1"); }
+    else {
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", onScroll, { passive: true });
+      compute();
+    }
+    const onMq = () => { if (raf) { cancelAnimationFrame(raf); raf = 0; } compute(); };
+    mq.addEventListener("change", onMq);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      mq.removeEventListener("change", onMq);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [photos, reveal]);
 
   if (!photos || photos.length === 0) return null;
 
