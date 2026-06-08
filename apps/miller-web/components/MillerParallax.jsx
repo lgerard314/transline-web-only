@@ -77,11 +77,9 @@ export function MillerParallax() {
         it.el.style.transform = `translate3d(0, ${offset.toFixed(2)}px, 0)`;
       }
       for (const it of imgEls) {
-        if (it.el.closest("[data-fig-done]")) {
-          it.el.style.removeProperty("--px-y");
-          it.el.style.removeProperty("--px-x");
-          continue;
-        }
+        // VBEC pin: leave last --px-* in place while highlights scrub / hold so the
+        // photos don't drift or appear to zoom as the figclip band grows.
+        if (it.el.closest("[data-fig-reveal], [data-fig-done]")) continue;
         const elCenter = it.base + it.h / 2 - y; // centre, relative to viewport top
         const delta = vh / 2 - elCenter;         // + when the photo is above centre
         const max = it.h * it.maxFrac;

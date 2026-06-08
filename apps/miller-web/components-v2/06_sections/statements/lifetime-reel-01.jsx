@@ -129,12 +129,8 @@ export function LifetimeReel01({ content, config = {} }) {
       const vh = window.innerHeight || document.documentElement.clientHeight || 1;
       const topY = track.getBoundingClientRect().top;
       const pinTotal = Math.max(1, track.offsetHeight - vh);
-      const rawP = Math.min(1, Math.max(0, -topY / pinTotal)); // 0 → 1 across the pin
       const tablet = window.matchMedia("(min-width: 721px) and (max-width: 1024px)").matches;
       const { contentDoneP, contentScrollVh } = pinLayout(tablet);
-      // Content progress: chain + bg zoom/parallax share one curve; freeze at 1 after highlights.
-      const contentP = Math.min(1, rawP / contentDoneP);
-      setPin(true);
 
       // PANEL: a RECTANGLE that grows (top-aligned below the header) from a small box to the
       // full band — width faster than height. Growth begins once the BOTTOM of the initial
@@ -149,6 +145,18 @@ export function LifetimeReel01({ content, config = {} }) {
       const hSmall = PANEL_H_START * hFull;
       const triggerTop = Math.max(1, vh - headerH - hSmall); // track top where the small box's bottom hits the screen bottom
       const panelT = Math.min(1, Math.max(0, (triggerTop - topY) / triggerTop));
+
+      // Chain progress: start once the panel width reaches body-content max (earlier in the
+      // scroll); end stays at the same scroll position (contentDoneP) — longer scrub, same finish.
+      const contentMax = Math.min(vw - Math.min(144, Math.max(48, 0.08 * vw)), 1560);
+      const wFull = vw;
+      const boxWStart = hSmall * MAP_ASPECT;
+      const panelTContent = Math.min(1, Math.max(0, (contentMax - boxWStart) / Math.max(1, wFull - boxWStart)));
+      const topYChainStart = triggerTop * (1 - panelTContent);
+      const topYChainEnd = -contentDoneP * pinTotal;
+      const chainSpan = Math.max(1, topYChainStart - topYChainEnd);
+      const contentP = Math.min(1, Math.max(0, (topYChainStart - topY) / chainSpan));
+      setPin(true);
       const reel = contentP;
       setReel(reel);
       // Bg zoom/parallax: one even scroll-distance curve from panel start → highlight complete
@@ -159,9 +167,7 @@ export function LifetimeReel01({ content, config = {} }) {
       if (panel) {
         panel.style.setProperty("--lr-panel-top", headerH + "px");
         const pad0 = Math.min(34, Math.max(18, 0.022 * vw));
-        const contentMax = Math.min(vw - Math.min(144, Math.max(48, 0.08 * vw)), 1560);
-        const wFull = vw;
-        const boxW = (hSmall * MAP_ASPECT) + (wFull - hSmall * MAP_ASPECT) * panelT;
+        const boxW = boxWStart + (wFull - boxWStart) * panelT;
         const boxH = hSmall + (hFull - hSmall) * panelT;
         panel.style.setProperty("--lr-panel-w", ((boxW / wFull) * 100).toFixed(2) + "%");
         panel.style.setProperty("--lr-panel-h", boxH.toFixed(1) + "px");

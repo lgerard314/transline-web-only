@@ -11,8 +11,8 @@
    ───────────────────────────────────────────────────────────────── */
 .mw-fac2 {
   position: relative;
-  /* Cream surface on all breakpoints — desktop entrance is column content sliding into place. */
-  background: var(--c-bg);
+  /* Warm surface on all breakpoints — desktop entrance is column content sliding into place. */
+  background: var(--c-surface-warm);
   padding-block: clamp(64px, 6.5vw, 112px);
   color: var(--c-ink);
   overflow: clip;
@@ -310,10 +310,10 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  /* White container — a cream card framing the photos AND the highlights band. The photos
-     sit at the top; the highlights slide down out of the photos' bottom INTO the card below
-     them (flush, no gap between photos and the highlights band). */
-  background: var(--c-bg);
+  /* Warm card framing the photos AND the highlights band. The photos sit at the top; the
+     highlights slide down out of the photos' bottom INTO the card below them (flush, no gap
+     between photos and the highlights band). */
+  background: var(--c-surface-warm);
   border: 1px solid var(--c-line);
   box-shadow: 0 28px 64px -34px rgba(42, 27, 18, 0.34);
   padding: clamp(10px, 0.9vw, 16px);
@@ -5630,10 +5630,12 @@ html[data-brand="miller"] {
 
 /* Single-photo hover (#5) labels — positioned PER POSITION in the ✓ so each lands in clear cream
    instead of over a neighbouring diamond. The mark rises lower-left→upper-right, so the open zones are:
-   si0 vertex → BELOW; si1/si2 rising arm → UP-LEFT (their up-right is the next photo); si3 tip → ABOVE.
+   si0 short-arm tip → UP-RIGHT (toward the category diamond); si1/si2 rising arm → UP-LEFT; si3 tip → ABOVE.
    Relative to each photo's own box, so the same values work for all four categories. */
 .mw-secd--check .mw-secd__photo[data-si="0"] .mw-secd__photo-clip:hover ~ .mw-secd__cap {
-  bottom: auto; top: calc(50% + 92px); transform: translate(-50%, 0); /* BELOW — into the cream notch between the two label diamonds; ABOVE collided with the neighbour photo at si0's short-arm tip */
+  top: auto;
+  bottom: calc(50% + 80px);
+  transform: translate(calc(-50% + 64px), 0); /* up + right into the cream notch toward the category diamond */
 }
 .mw-secd--check .mw-secd__photo[data-si="1"] .mw-secd__photo-clip:hover ~ .mw-secd__cap,
 .mw-secd--check .mw-secd__photo[data-si="2"] .mw-secd__photo-clip:hover ~ .mw-secd__cap {
@@ -6355,10 +6357,16 @@ html[data-brand="miller"] {
   .mw-czoom__cards { width: 100%; max-width: 360px; }
 }
 
+/* VBEC media — photos bleed flush to the viewport's right edge. */
+.mw-fac2-track .mw-fac2__media {
+  padding-right: 0;
+  border-right: none;
+}
+
 /* ─────────────────────────────────────────────────────────────────
    VBEC pinned reveal (media-split-01.jsx). Cream section throughout.
-   ENTRANCE: left intro slides DOWN and right column rises UP (shared easeInOut) so both
-   finish together. PINNED: highlights auto-grow (FIG_MS), then scroll scrubs the media exit
+   ENTRANCE: left intro clip-reveals top→bottom at final alignment; right column rises UP
+   (easeInOut) to finish with pin-in. PINNED: highlights scroll-scrub (FIG_START_P → FIG_END_P), then scroll scrubs the media exit
    (SWIPE_START → SWIPE_END on pin P) and diamonds roll in. Remaining track height is release
    scroll after the sequence. Mobile / reduced-motion: no pin, columns at rest.
    ───────────────────────────────────────────────────────────────── */
@@ -6371,7 +6379,7 @@ html[data-brand="miller"] {
     top: var(--fac2-head-off, 115px);
     height: calc(100vh - var(--fac2-head-off, 115px));
     padding-block: 0;
-    background: var(--c-bg);
+    background: var(--c-surface-warm);
   }
   /* Inner fills the pinned viewport (no max-width gutter, no padding); column gutters restored inside. */
   .mw-fac2-track > .mw-fac2 > .mw-inner {
@@ -6390,17 +6398,18 @@ html[data-brand="miller"] {
     align-items: stretch;
   }
   /* LEFT — intro column. Bleeds to the screen's left edge; text held in the content gutter via
-     padding-left; vertically centred. Slides DOWN into place (JS: --fac2-left-y). */
+     padding-left; vertically centred. Intro stays in final alignment — JS opens a bottom
+     clip-path top→bottom so copy pushes out of the section above without ever sitting below
+     its settled bottom padding. */
   .mw-fac2-track .mw-fac2__left {
     position: relative;
     justify-content: center;
+    overflow: hidden;
     padding: clamp(64px, 6.5vw, 112px) clamp(28px, 3.2vw, 56px);
     padding-left: max(clamp(24px, 4vw, 72px), calc((100vw - 1560px) / 2));
-    transform: translateY(var(--fac2-left-y, 0px));
-    will-change: transform;
   }
-  /* Intro copy mask-rise — each item reveals only once its bottom has fully entered the viewport
-     (data-in set per-frame in media-split-01.jsx). */
+  .mw-fac2-track .mw-fac2__intro { will-change: clip-path; }
+  /* Intro copy mask-rise — each item gates on entrance u, top → bottom (media-split-01.jsx). */
   .mw-fac2-track .mw-fac2__field[data-fac2-rise],
   .mw-fac2-track .mw-fac2__title[data-fac2-rise],
   .mw-fac2-track .mw-fac2__lead[data-fac2-rise],
@@ -6449,6 +6458,11 @@ html[data-brand="miller"] {
     transform: translateX(var(--fac2-media-x, 0px));
     opacity: var(--fac2-media-op, 1);
     will-change: transform, opacity;
+    /* NO card framing on the pin — photos run to the screen edge. */
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    padding: 0;
   }
   /* Locked-ratio gallery, filling the column width and bleeding right (no left inset). */
   .mw-fac2-track .mw-fac2__media .mw-iacc { --reel-inset: 0px; margin: 0; }

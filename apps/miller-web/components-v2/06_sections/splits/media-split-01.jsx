@@ -10,13 +10,16 @@ import { sectionProps } from "@/components-v2/section-config";
 // MediaSplit01 — the home VBEC (facility) section. A 40/60 split on a cream section. Two phases:
 //
 // ENTRANCE (as the section scrolls in to fill the viewport):
-//   LEFT  — intro column slides DOWN into place; eyebrow / title / lead / CTA / text-link each
-//           mask-rise in only once that item's bottom has fully entered the viewport.
-//   RIGHT — rises UP from below on the same easeInOut curve so both columns finish together.
+//   LEFT  — intro rests in final alignment; a bottom clip-path opens top→bottom so copy pushes
+//           out of the section above without ever sitting below its settled bottom padding.
+//           Eyebrow / title / lead / CTA / text-link mask-rise in stagger with the same curve.
+//   RIGHT — rises UP from below on easeInOut(E) so the media column finishes with pin-in.
 //
 // PINNED SEQUENCE (once the section fills the viewport):
-//   1. HIGHLIGHTS — once entrance completes, the 3-figure band auto-slides out over FIG_MS.
-//   2. SWIPE — after highlights finish, the user must scroll again; that nudge arms a
+//   1. HIGHLIGHTS — scroll-scrubbed (FIG_START_P → FIG_END_P on pin P) after a short hold;
+//      the 3-figure band grows out from under the photos (reverses on scroll-up).
+//   2. SWIPE — after highlights finish, SWIPE_HOLD_P of extra scroll before the media exit
+//      scrubs; that nudge arms a
 //      careers-style auto-advance (zoom-collage-01: one rAF loop, window.scrollBy while
 //      pinned, accelerating pace) that scroll-drives the photo exit → SWIPE_END.
 //      Remaining track height below SWIPE_END is release scroll after the sequence.
@@ -26,7 +29,9 @@ const clamp01 = (x) => (x < 0 ? 0 : x > 1 ? 1 : x);
 const ease = (x) => 1 - Math.pow(1 - x, 3);            // easeOutCubic (highlights)
 const easeInOut = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
 
-const FIG_MS = 850;         // ms for the highlights band once entrance completes
+const FIG_START_P = 0.24;   // pin P past settle before highlights begin scrubbing (breathing room after entrance)
+const FIG_END_P = 0.33;     // pin P where the highlights band is fully grown (same 0.09 scrub span as before)
+const SWIPE_HOLD_P = 0.10;  // pin P hold after highlights land before the media exit scrubs
 const EXIT_MS = 1200;       // base auto-advance pace for the photo exit (careers DIVE_MS pattern)
 const USER_IDLE_MS = 160;   // pause auto-nudge while the user is actively scrolling
 const SWIPE_END = 0.9;      // pin P where media is fully off-screen and diamonds are in
@@ -53,6 +58,7 @@ const capDiaStyle = (col, row, extra) => ({ left: `${col * CAP_SX}%`, top: `${ro
 const capSoftWrap = (s) => s.replace(/([/-])/g, "$1" + String.fromCharCode(0x200b));
 
 const INTRO_RISE_SEL = [".mw-fac2__field", ".mw-fac2__title", ".mw-fac2__lead", ".mw-fac2__cta-rise", ".mw-fac2__about-rise"];
+const INTRO_RISE_U = [0.22, 0.4, 0.56, 0.74, 0.88]; // mask-rise gates keyed to entrance u (top → bottom)
 
 export function MediaSplit01({ content, config = {} }) {
   const { eyebrow, stage, title, lead, figures, capsTitle, capabilities, primaryCta, aboutLink, headingId, photos } = content;
@@ -78,15 +84,12 @@ export function MediaSplit01({ content, config = {} }) {
     const mqRM = window.matchMedia("(prefers-reduced-motion: reduce)");
     const canPin = () => mqWide.matches && !mqRM.matches;
     let raf = 0, running = false, lastTs = 0, lastY = window.scrollY;
-    let figElapsed = 0, pinActive = false, swipeStartP = null, exitArmed = false, cancelled = false;
+    let exitArmed = false, cancelled = false;
     let lastUserTs = -1e9;
 
     const onUserInput = (e) => { lastUserTs = e.timeStamp; };
 
     const resetPinClocks = () => {
-      figElapsed = 0;
-      pinActive = false;
-      swipeStartP = null;
       exitArmed = false;
       cancelled = false;
     };
@@ -96,9 +99,8 @@ export function MediaSplit01({ content, config = {} }) {
       P: 0,
       sweep: 0,
       figDone: false,
-      swipeStartP: null,
+      swipeGate: FIG_END_P + SWIPE_HOLD_P,
       total: 1,
-      pinActive: false,
       pinned: false,
     });
 
@@ -110,14 +112,13 @@ export function MediaSplit01({ content, config = {} }) {
       }
     };
 
-    const gateIntroRises = (leftEl, vh) => {
+    const gateIntroRises = (leftEl, progress) => {
       if (!leftEl) return;
-      for (const sel of INTRO_RISE_SEL) {
-        const el = leftEl.querySelector(sel);
+      for (let i = 0; i < INTRO_RISE_SEL.length; i++) {
+        const el = leftEl.querySelector(INTRO_RISE_SEL[i]);
         if (!el) continue;
-        const bottom = el.getBoundingClientRect().bottom;
-        if (bottom > 0 && bottom <= vh) el.setAttribute("data-in", "1");
-        else if (bottom > vh) el.removeAttribute("data-in");
+        if (progress >= INTRO_RISE_U[i]) el.setAttribute("data-in", "1");
+        else el.removeAttribute("data-in");
       }
     };
 
@@ -129,7 +130,11 @@ export function MediaSplit01({ content, config = {} }) {
         return idleState();
       }
       if (!canPin()) {
-        left.style.removeProperty("--fac2-left-y");
+        const introOff = left.querySelector(".mw-fac2__intro");
+        if (introOff) {
+          introOff.style.removeProperty("--fac2-intro-y");
+          introOff.style.removeProperty("clip-path");
+        }
         right.style.removeProperty("--fac2-right-y");
         media.style.removeProperty("--fac2-media-x");
         media.style.removeProperty("--fac2-media-op");
@@ -165,29 +170,36 @@ export function MediaSplit01({ content, config = {} }) {
       const total = Math.max(1, track.offsetHeight - vh + headOff);
       const P = clamp01((headOff - trackTop) / total);
 
-      // ENTRANCE — left slides DOWN, right rises UP, both keyed to E on the same easeInOut curve.
+      // ENTRANCE — intro stays in final alignment; bottom clip opens top→bottom (never dips below
+      // settled padding). Right column rises UP on the same curve.
       const u = easeInOut(E);
-
-      const coverL = left.offsetHeight || span;
-      left.style.setProperty("--fac2-left-y", (-(1 - u) * coverL).toFixed(1) + "px");
+      const intro = left.querySelector(".mw-fac2__intro");
+      if (intro) {
+        intro.style.removeProperty("--fac2-intro-y");
+        const hidden = (1 - u) * 100;
+        intro.style.clipPath = hidden > 0.05 ? `inset(0 0 ${hidden.toFixed(3)}% 0)` : "none";
+      }
 
       const coverR = right.offsetHeight || span;
       right.style.setProperty("--fac2-right-y", ((1 - u) * coverR).toFixed(1) + "px");
 
-      gateIntroRises(left, vh);
+      gateIntroRises(left, u);
 
-      // PIN 1 — HIGHLIGHTS: auto-slide the figclip out once the section is fully formed (E = 1).
+      // PIN 1 — HIGHLIGHTS: scroll-scrubbed figclip growth (FIG_START_P → FIG_END_P on pin P).
       const entranceDone = E >= 0.999;
-      if (entranceDone) pinActive = true;
-      else if (secTop > vh * 0.85) { pinActive = false; resetPinClocks(); }
-
-      const figIn = pinActive ? ease(clamp01(figElapsed / FIG_MS)) : 0;
-      const figDone = figElapsed >= FIG_MS;
+      const figSpan = Math.max(0.001, FIG_END_P - FIG_START_P);
+      const figIn = entranceDone && P >= FIG_START_P
+        ? ease(clamp01((P - FIG_START_P) / figSpan))
+        : 0;
+      const figDone = entranceDone && P >= FIG_END_P;
+      const swipeGate = FIG_END_P + SWIPE_HOLD_P;
       const figclip = figs.parentElement;
       if (figclip) figclip.style.setProperty("--fac2-fig-h", (figs.offsetHeight * figIn).toFixed(1) + "px");
 
-      if (!figDone) swipeStartP = null;
-      else if (swipeStartP === null) swipeStartP = P;
+      // Freeze scroll parallax on the photos while highlights scrub (same scroll also
+      // grows the figclip — MillerParallax must not rewrite --px-* on the images).
+      if (figIn > 0) media.dataset.figReveal = "1";
+      else delete media.dataset.figReveal;
 
       media.dataset.figDone = figDone ? "1" : "";
       if (figDone !== highlightsDoneRef.current) {
@@ -195,11 +207,10 @@ export function MediaSplit01({ content, config = {} }) {
         setHighlightsDone(figDone);
       }
 
-      // PIN 2 — SWIPE (scroll-scrubbed): only after highlights AND further scroll past the P
-      // captured when the band finished — so continuous scrolling through the pin cannot
-      // auto-trigger the exit the moment the highlights land.
-      const sweep = figDone && swipeStartP != null && P > swipeStartP
-        ? clamp01((P - swipeStartP) / Math.max(0.001, SWIPE_END - swipeStartP))
+      // PIN 2 — SWIPE (scroll-scrubbed): only after highlights AND SWIPE_HOLD_P extra scroll
+      // past FIG_END_P — so the band can rest before the media exit begins.
+      const sweep = figDone && P > swipeGate
+        ? clamp01((P - swipeGate) / Math.max(0.001, SWIPE_END - swipeGate))
         : 0;
       const exitT = sweep;
       const exitDone = figDone && sweep >= 1;
@@ -278,9 +289,8 @@ export function MediaSplit01({ content, config = {} }) {
         P,
         sweep,
         figDone,
-        swipeStartP,
+        swipeGate,
         total,
-        pinActive,
         pinned,
       };
     };
@@ -291,15 +301,13 @@ export function MediaSplit01({ content, config = {} }) {
       const dt = lastTs ? Math.min(50, ts - lastTs) : 16.7;
       lastTs = ts;
 
-      if (pinActive && figElapsed < FIG_MS) figElapsed = Math.min(FIG_MS, figElapsed + dt);
-
       const state = render();
 
       if (autoScroll) {
         const y = window.scrollY;
         const userActive = ts - lastUserTs < USER_IDLE_MS;
-        if (state.figDone && state.swipeStartP != null && state.P > state.swipeStartP) exitArmed = true;
-        if (state.swipeStartP != null && state.P <= state.swipeStartP) {
+        if (state.figDone && state.P > state.swipeGate) exitArmed = true;
+        if (state.P <= state.swipeGate) {
           cancelled = false;
           exitArmed = false;
         }
@@ -310,7 +318,7 @@ export function MediaSplit01({ content, config = {} }) {
         // not stall the self-run (careers never has a separate arm step).
         const userBlocks = userActive && state.sweep > 0.05;
         if (exitArmed && state.pinned && state.sweep < 1 && !cancelled && !userBlocks) {
-          const exitDist = Math.max(1, (SWIPE_END - (state.swipeStartP ?? 0)) * state.total);
+          const exitDist = Math.max(1, (SWIPE_END - state.swipeGate) * state.total);
           const v = (exitDist / EXIT_MS) * 0.924 * (1 + 3 * state.sweep);
           window.scrollBy({ top: v * dt, behavior: "instant" });
         }
@@ -363,7 +371,7 @@ export function MediaSplit01({ content, config = {} }) {
       <section className="mw-fac2" aria-labelledby={headingId} ref={sectionRef} {...sectionProps(config)}>
         <div className="mw-inner">
           <div className="mw-fac2__grid">
-            {/* LEFT — the cream intro panel. Slides DOWN into place (delayed) then pins. */}
+            {/* LEFT — intro rests in final alignment; clip-path reveals top→bottom on entrance. */}
             <div className="mw-fac2__left" ref={leftRef}>
               <div className="mw-fac2__intro">
                 <header className="mw-fac2__head">

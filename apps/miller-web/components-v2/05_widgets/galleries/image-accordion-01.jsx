@@ -16,8 +16,8 @@ import { useEffect, useRef, useState } from "react";
 // .mw-fac2__intro). All scrubbed by one scroll timeline; reduced-motion rests everything.
 //
 // Props: photos — [{ src, alt, caption }]
-//        highlightsDone — when true (VBEC pin: after the 3-figure band finishes), scroll
-//          parallax is off and a light mouse parallax runs on the open panel only.
+//        highlightsDone — when true (VBEC pin: after the 3-figure band finishes), a light
+//          mouse parallax runs on the open panel only (scroll parallax + photo scale unchanged).
 export function ImageAccordion01({ photos, label = "Facility photo gallery", reveal = true, highlightsDone = false }) {
   const [open, setOpen] = useState(0);
   const rootRef = useRef(null);
@@ -173,7 +173,7 @@ export function ImageAccordion01({ photos, label = "Facility photo gallery", rev
               key={i}
               type="button"
               className={"mw-iacc__panel" + (isOpen ? " is-open" : "")}
-              style={{ "--p": 0 }}
+              style={{ "--p": reveal ? 0 : 1 }}
               aria-pressed={isOpen}
               aria-label={cap}
               onMouseEnter={() => setOpen(i)}
@@ -190,11 +190,9 @@ export function ImageAccordion01({ photos, label = "Facility photo gallery", rev
                     alt={isOpen ? (photo.alt || "") : ""}
                     loading="lazy"
                     draggable="false"
-                    {...(!highlightsDone ? {
-                      "data-parallax-img": "",
-                      "data-parallax-x": "1",
-                      "data-parallax-max": "0.14",
-                    } : {})}
+                    data-parallax-img=""
+                    data-parallax-x="1"
+                    data-parallax-max="0.14"
                   />
                 </span>
               </span>
