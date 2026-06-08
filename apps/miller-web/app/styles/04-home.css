@@ -6470,7 +6470,7 @@ html[data-brand="miller"] {
     will-change: transform;
   }
   .mw-fac2-track .mw-cap-dia__cell {
-    transform: translateX(var(--cap-tx, 0px)) rotate(var(--cap-rot, 0deg)) scale(var(--cap-sc, 0.12));
+    transform: translate3d(var(--cap-tx, 0px), var(--cap-ty, 0px), 0) rotate(var(--cap-rot, 0deg)) scale(var(--cap-sc, 0.12));
     transform-origin: center;
     opacity: var(--cap-op, 0);
     will-change: transform, opacity;

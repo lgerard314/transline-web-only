@@ -33,8 +33,10 @@ const USER_IDLE_MS = 160;   // pause auto-nudge while the user is actively scrol
 const SWIPE_END = 0.9;      // pin P where media is fully off-screen and diamonds are in
 const EXIT_PAD = 32;        // px past the viewport right edge once exit completes
 const CAP_TIP = 0.5 - Math.SQRT1_2 / 2; // left vertex of a 45° diamond in its inner box
-const CAP_ROT = 210;        // deg base spin as each diamond rolls in (settles to 0)
+const CAP_ROT = 210;        // deg base spin as each diamond rotates in (settles to 0)
 const CAP_SPIN = 120;       // extra rotation added on top of CAP_ROT at enter
+const CAP_LAUNCH_OVERLAP = 0.32; // fraction of a diamond covered by the media edge at launch
+const CAP_START_SCALE = 0.25;
 
 // Capabilities "diamond of diamonds" — 8 diamonds on the who-we-serve argyle lattice (6×6 cells,
 // each diamond a 2×2 box; (col+row) even keeps them on the lattice). A TITLE diamond crowns the
@@ -116,7 +118,7 @@ export function MediaSplit01({ content, config = {} }) {
         if (figs.parentElement) figs.parentElement.style.removeProperty("--fac2-fig-h");
         track.style.removeProperty("--fac2-head-off");
         const g = caps.querySelector(".mw-cap-dia");
-        if (g) g.querySelectorAll(".mw-cap-dia__cell").forEach((c) => { c.style.removeProperty("--cap-sc"); c.style.removeProperty("--cap-op"); c.style.removeProperty("--cap-tx"); c.style.removeProperty("--cap-rot"); });
+        if (g) g.querySelectorAll(".mw-cap-dia__cell").forEach((c) => { c.style.removeProperty("--cap-sc"); c.style.removeProperty("--cap-op"); c.style.removeProperty("--cap-tx"); c.style.removeProperty("--cap-ty"); c.style.removeProperty("--cap-rot"); });
         if (highlightsDoneRef.current) {
           highlightsDoneRef.current = false;
           setHighlightsDone(false);
@@ -189,49 +191,64 @@ export function MediaSplit01({ content, config = {} }) {
       const mediaRect = media.getBoundingClientRect();
       const exitDist = (vw - mediaRect.left) + mediaRect.width + EXIT_PAD;
       media.style.setProperty("--fac2-media-x", (exitT * exitDist).toFixed(1) + "px");
-      media.style.setProperty("--fac2-media-op", (1 - exitT).toFixed(3));
+      const mediaFade = ease(clamp01((exitT - 0.72) / 0.28));
+      media.style.setProperty("--fac2-media-op", (1 - mediaFade).toFixed(3));
       if (exitDone) media.style.visibility = "hidden";
       else media.style.removeProperty("visibility");
       const containerLeft = media.getBoundingClientRect().left;
-      // Where the photo/highlight container's left edge lands once fully off-screen (exitT = 1).
-      const exitEndLeft = containerLeft + (1 - exitT) * exitDist;
+      // Shared body-content right edge (.mw-inner): width min(100% - clamp(48px, 8vw, 144px), 1560px), centred.
+      const bodyGutter = Math.max(Math.min(72, Math.max(24, 0.04 * vw)), (vw - 1560) / 2);
+      const bodyContentRight = vw - bodyGutter;
 
       // Park the diamond grid at the right column's vertical centre (matches flex-centred media).
       const capsH = caps.offsetHeight;
       const rightCenter = rightRect.top + rightRect.height / 2;
       caps.style.setProperty("--fac2-cap-y", ((rightCenter - rightTop) - capsH / 2).toFixed(1) + "px");
 
-      // 8 diamonds × 1 rule: the photo/highlight container's left edge must pass each
-      // diamond's left vertex before that diamond's enter runs; each enter finishes exactly
-      // when the container leaves the page (exitT → 1), so later diamonds get a shorter
-      // window but nobody settles early.
+      // 8 diamonds × 1 rule: each diamond starts one width above-left, already tucked
+      // under the moving media edge, then falls down-right on a straight 45° path into
+      // its final lattice slot. Every diamond is settled once the media container has
+      // fully cleared the body-content width, even though it may still be visible onscreen.
       const grid = caps.querySelector(".mw-cap-dia");
       if (grid) {
         const gridLeft = grid.getBoundingClientRect().left;
         const cells = grid.querySelectorAll(".mw-cap-dia__cell");
-        const spinTotal = CAP_ROT + CAP_SPIN;
-        for (let i = 0; i < cells.length; i++) {
-          const cell = cells[i];
+        const metrics = Array.from(cells, (cell) => {
           const inner = cell.querySelector(".mw-cap-dia__d");
           const boxLeft = gridLeft + cell.offsetLeft + (inner?.offsetLeft || 0);
           const boxW = inner?.offsetWidth || cell.offsetWidth;
           const diamondLeft = boxLeft + boxW * CAP_TIP;
-          const dl = exitDone || exitT >= 1
-            ? 1
-            : containerLeft <= diamondLeft
+          const startX = -boxW;
+          const startRight = boxLeft + boxW * (1 - CAP_TIP) + startX;
+          const launchEdge = startRight - boxW * CAP_LAUNCH_OVERLAP;
+          return { cell, boxW, startX, launchEdge };
+        });
+        const edge = containerLeft;
+        const spinTotal = -(CAP_ROT + CAP_SPIN);
+        for (const { cell, boxW, startX, launchEdge } of metrics) {
+          const fallSpan = Math.max(1, bodyContentRight - launchEdge);
+          const travelPx = edge - launchEdge;
+          const raw = travelPx <= 0
               ? 0
-              : ease(clamp01((containerLeft - diamondLeft) / Math.max(1, exitEndLeft - diamondLeft)));
-          if (dl <= 0) {
-            cell.style.setProperty("--cap-sc", "0.12");
+              : clamp01(travelPx / fallSpan);
+          const spin = ease(raw);
+          const scale = CAP_START_SCALE + (1 - CAP_START_SCALE) * ease(raw);
+          const startY = -boxW * 0.5;
+          const pathX = (1 - raw) * startX;
+          const pathY = (1 - raw) * startY;
+          if (raw <= 0) {
+            cell.style.setProperty("--cap-sc", CAP_START_SCALE.toFixed(3));
             cell.style.setProperty("--cap-rot", spinTotal + "deg");
-            cell.style.setProperty("--cap-tx", "48px");
+            cell.style.setProperty("--cap-tx", startX.toFixed(1) + "px");
+            cell.style.setProperty("--cap-ty", startY.toFixed(1) + "px");
             cell.style.setProperty("--cap-op", "0");
             continue;
           }
-          cell.style.setProperty("--cap-sc", (0.12 + 0.88 * dl).toFixed(3));
-          cell.style.setProperty("--cap-rot", ((1 - dl) * spinTotal).toFixed(1) + "deg");
-          cell.style.setProperty("--cap-tx", ((1 - dl) * 48).toFixed(1) + "px");
-          cell.style.setProperty("--cap-op", dl.toFixed(3));
+          cell.style.setProperty("--cap-sc", scale.toFixed(3));
+          cell.style.setProperty("--cap-rot", ((1 - spin) * spinTotal).toFixed(1) + "deg");
+          cell.style.setProperty("--cap-tx", pathX.toFixed(1) + "px");
+          cell.style.setProperty("--cap-ty", pathY.toFixed(1) + "px");
+          cell.style.setProperty("--cap-op", ease(clamp01(raw / 0.08)).toFixed(3));
         }
       }
 
