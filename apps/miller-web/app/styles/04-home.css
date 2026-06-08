@@ -1934,14 +1934,10 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
   flex-direction: column;
   justify-content: center;
   padding: clamp(40px, 7vh, 120px) clamp(80px, 14%, 220px) clamp(40px, 7vh, 120px) var(--g);
-  /* Header + body both EXPAND with the container from the BOTTOM (matching the rise-from-bottom
-     band, so the content stays inside the clip the whole way) and FADE IN together. The fade
-     finishes at --mission-rev 0.85 — once the body is fully rendered/readable — and the box
-     then keeps opening to the edges while the content stays opaque. var() fallback 1 → shown
-     for no-JS / reduced-motion. */
-  transform: scale(var(--mission-rev, 1));
-  transform-origin: 50% 100%;
-  opacity: calc(var(--mission-rev, 1) / 0.85);
+  /* Content stays at full size and rides the rising clip from the bottom — no scale growth.
+     translateY keeps the block moving up in step with the band as --mission-rev opens. */
+  transform: translateY(calc(100% * (1 - var(--mission-rev, 1))));
+  opacity: 1;
 }
 .mw-ten3__bmission .mw-ten3__mission-panel { padding: 0; max-width: 90%; }
 /* The MISSION heading gets the HERO header's text animation, scroll-triggered: a line mask-rise —
