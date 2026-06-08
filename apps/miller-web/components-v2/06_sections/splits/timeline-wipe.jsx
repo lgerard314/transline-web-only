@@ -1,9 +1,10 @@
 "use client";
-// Scroll-linked diagonal wipe for the history banner photo. Writes a single
-// 0→1 progress var (--wipe) onto each [data-history-wipe] container as it
-// scrolls through the viewport; the CSS mask on .mw-ten3__plate2-img reveals
-// the photo top-left → bottom-right in step with scroll position (reversible —
-// scroll back up through the entry band and it un-wipes). Mirrors MillerParallax's
+// Scroll-linked diagonal wipe for the history banner. Writes two 0→1 progress vars
+// onto each [data-history-wipe] container:
+//   --wipe-box — the brown chevron container; fully revealed once the banner's
+//     vertical midpoint (top half of the chip) reaches the viewport bottom.
+//   --wipe     — the photo window-open + zoom (unchanged timing; lags the box in CSS).
+// Reversible on scroll-up. Mirrors MillerParallax's
 // rAF/CSS-var idiom: the JS only writes a var, the visual is composed in CSS, and
 // geometry is read via getBoundingClientRect (layout-based) so the mask never
 // feeds back into the next read.
@@ -13,7 +14,7 @@
 // the template — no edit to a shared driver other agents may be mid-change on, and
 // it self-mounts wherever TimelineSplit01 renders.
 //
-// A11y: prefers-reduced-motion → no listener is attached and --wipe is cleared,
+// A11y: prefers-reduced-motion → no listener is attached and --wipe / --wipe-box are cleared,
 // so the CSS var() fallback (1 = full photo) stands; a CSS reduced-motion rule
 // also drops the mask entirely as a belt-and-suspenders. Pre-hydration / no-JS
 // fall back to the full photo for the same reason.
@@ -33,15 +34,12 @@ export function TimelineWipe() {
     const collect = () => {
       els = Array.from(document.querySelectorAll("[data-history-wipe]")).map((el) => ({
         el,
-        // Geometry is read from the INNER header (the title/lead block), so the reveal
-        // doesn't begin until the top of that header crosses the viewport bottom — a
-        // deliberate delay past the container's own top edge. Falls back to the container.
-        ref: el.querySelector(".mw-ten3__head") || el,
-        // How many viewport-heights of scrolling the wipe spans (smaller =
-        // snappier). Reveal starts as the header's top edge enters from the
-        // bottom and completes once it has risen ~55% of the viewport.
-        span: parseFloat(el.getAttribute("data-history-wipe-span")) || 0.55,
-        last: -1,
+        // Photo timing — read from the inner header so the image reveal doesn't begin
+        // until the title/lead block crosses the viewport bottom (unchanged).
+        head: el.querySelector(".mw-ten3__head") || el,
+        imgSpan: parseFloat(el.getAttribute("data-history-wipe-span")) || 0.55,
+        lastImg: -1,
+        lastBox: -1,
       }));
     };
 
@@ -49,16 +47,22 @@ export function TimelineWipe() {
       raf = 0;
       const vh = window.innerHeight;
       for (const it of els) {
-        const rect = it.ref.getBoundingClientRect();
-        // 0 when the inner header's top sits at the viewport bottom; 1 after it has
-        // travelled up by span*vh. Clamped both ends so it parks at full reveal
-        // once scrolled past and stays hidden while still below the fold.
-        const p = Math.min(Math.max((vh - rect.top) / (vh * it.span), 0), 1);
-        // Skip the write when nothing meaningfully changed (parked at 0 or 1, or
-        // sub-pixel motion) — keeps the per-frame paint off the idle extremes.
-        if (Math.abs(p - it.last) < 0.001) continue;
-        it.last = p;
-        it.el.style.setProperty("--wipe", p.toFixed(3));
+        const bannerRect = it.el.getBoundingClientRect();
+        const headRect = it.head.getBoundingClientRect();
+        // Container — 0 when the banner top is at the viewport bottom; 1 once the
+        // banner midpoint (top half of the chip) reaches the viewport bottom.
+        const halfH = Math.max(1, bannerRect.height * 0.5);
+        const pBox = Math.min(Math.max((vh - bannerRect.top) / halfH, 0), 1);
+        // Photo — unchanged: header top at vh → 0; rises span*vh → 1.
+        const pImg = Math.min(Math.max((vh - headRect.top) / (vh * it.imgSpan), 0), 1);
+        if (Math.abs(pBox - it.lastBox) >= 0.001) {
+          it.lastBox = pBox;
+          it.el.style.setProperty("--wipe-box", pBox.toFixed(3));
+        }
+        if (Math.abs(pImg - it.lastImg) >= 0.001) {
+          it.lastImg = pImg;
+          it.el.style.setProperty("--wipe", pImg.toFixed(3));
+        }
       }
     };
 
@@ -66,7 +70,12 @@ export function TimelineWipe() {
     const onResize = () => { onScroll(); };
 
     const clear = () => {
-      for (const it of els) { it.el.style.removeProperty("--wipe"); it.last = -1; }
+      for (const it of els) {
+        it.el.style.removeProperty("--wipe");
+        it.el.style.removeProperty("--wipe-box");
+        it.lastImg = -1;
+        it.lastBox = -1;
+      }
     };
 
     const enable = () => {

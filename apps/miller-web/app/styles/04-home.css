@@ -1462,8 +1462,8 @@
      hidden, off the left edge) at wipe 0 to 100% (the resting right edge) at wipe 1,
      so the reveal front always carries the chevron angle and lands exactly on the
      resting chevron. var()'s fallback of 1 → full chevron for no-JS / reduced-motion;
-     written per scroll-frame onto the [data-history-wipe] banner by <TimelineWipe>. */
-  --w: var(--wipe, 1);
+     written per scroll-frame as --wipe-box by <TimelineWipe> (photo uses --wipe). */
+  --w: var(--wipe-box, var(--wipe, 1));
   --wipe-apex: calc(var(--w) * (100% + var(--ang)) - var(--ang));
   --wipe-corner: calc(var(--wipe-apex) - var(--ang));
   clip-path: polygon(0 0, var(--wipe-corner) 0, var(--wipe-apex) 50%, var(--wipe-corner) 100%, 0 100%);
@@ -1760,8 +1760,8 @@ html[data-brand="miller"] .mw-ten3__line[data-rev-armed] .mw-ten3__item[data-out
        from a 25–75% inset (--wipe 0) out to full-bleed (--wipe 1).
      · plate-zoom   — the hero's entrance zoom, 1.6→1, scaling the photo behind the
        window (composes with the <img>'s own parallax scale, which rests at 1.3).
-   Both run off the same --wipe the container reads, so the window opens + zooms in
-   lockstep with the chevron sweeping across. var()'s fallback of 1 → full photo at
+   Both run off --wipe (photo only — the container chevron reads --wipe-box). var()'s
+   fallback of 1 → full photo at
    rest for no-JS / reduced-motion. */
 .mw-ten3__plate-window {
   position: absolute;

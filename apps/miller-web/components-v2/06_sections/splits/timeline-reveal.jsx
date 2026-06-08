@@ -68,8 +68,8 @@ export function TimelineReveal() {
         const ready = !banner || banner.getBoundingClientRect().bottom <= vh;
         // EYEBROW: reveal it the instant the banner is fully rendered (its wipe completes).
         if (eyebrow) {
-          const wipe = banner ? parseFloat(getComputedStyle(banner).getPropertyValue("--wipe")) : NaN;
-          const rendered = isNaN(wipe) || wipe >= 0.999;
+          const wipeBox = banner ? parseFloat(getComputedStyle(banner).getPropertyValue("--wipe-box")) : NaN;
+          const rendered = isNaN(wipeBox) || wipeBox >= 0.999;
           const has = eyebrow.hasAttribute("data-in");
           if (rendered && !has) eyebrow.setAttribute("data-in", "1");
           else if (!rendered && has) eyebrow.removeAttribute("data-in");
