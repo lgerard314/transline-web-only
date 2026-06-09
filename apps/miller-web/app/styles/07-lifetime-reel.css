@@ -469,3 +469,116 @@
   .mw-lr-reel__card { animation: none !important; }
   .mw-lr-reel__item, .mw-lr-reel__caption, .mw-lr-reel__link i { transition: none !important; }
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   MOBILE PORTRAIT (≤600px) — STACK ALL THREE STATS (accessibility + impact)
+   --------------------------------------------------------------------------
+   The ≤720 block above presents ONE diamond at a time (scroll-synced carousel,
+   dots to revisit). That hides 2 of the 3 stats from anyone who doesn't slow-
+   scroll the section — and crucially from prefers-reduced-motion users, whose
+   progress is pinned to 1 so they only ever see the LAST slot ("40M+ recycled").
+   The 49M+ disposal and 100% chain-of-custody stats are unreachable for them.
+
+   On phones we instead STACK the three diamond seals VERTICALLY so every stat is
+   visible at once — a stronger "lifetime impact" proof stack and fully accessible
+   (no reliance on a cycle a reduced-motion user can't perceive). This block is
+   appended LAST so its rules win the equal-specificity collisions with the ≤720
+   carousel rules above; it OVERRIDES the one-at-a-time display only — desktop
+   (≥721) and the pin/animation blocks are untouched.
+   All additions are static (no new animation), so they need no reduced-motion
+   off-switch beyond the existing block above. ════════════════════════════════ */
+@media (max-width: 600px) {
+  /* Slightly tighter section padding — the stack is taller than a single diamond. */
+  .mw-lr { --lr-pad: clamp(42px, 9vw, 64px); }
+
+  /* Smaller seal so three stack comfortably within a phone's height while each
+     number still reads big. (≤720 set it to min(81.4vw,352px) for the lone diamond.) */
+  .mw-lr-reel { --lr-S: min(58vw, 244px); }
+
+  /* Stage becomes a flowing vertical column instead of a fixed-height absolute row. */
+  .mw-lr-reel__stage {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(30px, 8.5vw, 46px); /* room for the vertical connector between seals */
+  }
+
+  /* Every diamond flows in the column, full-size, always visible (override the ≤720
+     absolute centring + one-at-a-time opacity gating, which used !important). */
+  .mw-lr-reel__item {
+    position: relative;
+    left: auto !important;
+    transform: none !important;
+    opacity: 1 !important;
+    pointer-events: auto;
+    --lr-card-scale: 1;
+  }
+
+  /* Vertical "chain" connector — a short clay segment bridging each pair of seals,
+     echoing the desktop horizontal connector + the rotated-diamond motif. Sits in
+     the gap above every diamond after the first. Static (no motion). */
+  .mw-lr-reel__item + .mw-lr-reel__item::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 100%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: clamp(30px, 8.5vw, 46px); /* spans the column gap */
+    background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--c-accent) 60%, transparent) 38%, var(--c-accent));
+    pointer-events: none;
+  }
+
+  /* Keep the per-diamond diamond frame + numerals; drop the legacy ≤600 seal-bar
+     fallback bits (the ≤720 block already does this — re-assert here for clarity). */
+  .mw-lr-reel .mw-lr-seal { padding: 0; }
+  .mw-lr-reel .mw-lr-seal__frame { display: block; }
+  .mw-lr-reel .mw-lr-seal__inner::after { content: none; }
+  .mw-lr-reel .mw-lr-seal__legend { display: none; }
+
+  /* ── Render every diamond FULLY SETTLED, at all scroll positions ──────────────
+     The ≤720 carousel draws diamonds one-at-a-time off scroll-scrubbed progress
+     (each diamond fills only as the scroll wipe crosses it). That makes no sense for
+     a VERTICAL stack — you'd see the top diamond drawn and the lower two empty
+     depending on scroll. So on phones we pin every diamond to its settled look,
+     independent of progress — the same end-state reduced-motion already shows, now
+     for everyone. This is the stacked layout's correct resting state.
+
+     1) Final numerals without JS: LrCountUp renders a hidden SIZER holding the final
+        value ("49M+", "100%", …) plus an absolutely-positioned LIVE span that is
+        empty until scroll progress drives it. Reveal the sizer and drop the live
+        overlay → the final number always shows, with zero scroll coupling. (SR users
+        are unaffected: the value is also in the .tl-sr-only span + the button aria-label.) */
+  .mw-lr-reel .mw-lr-cu__sizer { visibility: visible; }
+  .mw-lr-reel .mw-lr-cu__live { display: none; }
+  /*  2) Figures + label always shown. !important defeats the higher-specificity
+        state gates `.mw-lr-reel__card[data-mw-lr-seal="open"] .mw-lr-reel__figstack`
+        and `.mw-lr-reel__card[data-mw-lr-seal="open"] ... __figstack { opacity:0 }`,
+        which otherwise keep an un-drawn diamond's figures hidden. */
+  .mw-lr-reel__card .mw-lr-reel__figstack { opacity: 1 !important; }
+  .mw-lr-reel__item .mw-lr-reel__label { opacity: 1 !important; }
+  /*  3) Diamond border rests fully drawn (override the dash-offset draw-in) AND
+        reads at full strength. The base edge is stroke-opacity:.5 → terracotta
+        composites to ≈#6B3A1E ≈1.8:1 on the walnut, so the outline that DEFINES
+        the proof-chain diamond visually vanishes on the lower seals (worst on the
+        bottom "100%" one, where the faint map darkens the ground) and the clay
+        connector looks orphaned. In the stacked layout there is no chain-SVG to
+        carry the borders, so the per-seal edge IS the diamond. Make it solid
+        (opacity 1) and a touch thicker → #A85A2C ≈3.3:1 vs #2E1910 (≈3.8:1 where
+        the map darkens it), clearing WCAG 1.4.11's 3:1 for the diamond graphic and
+        letting each connector meet a crisp, fully-closed diamond. Crisp, not heavy;
+        ≤600-scoped only — desktop edge (1.4px, .5 opacity) is untouched. */
+  .mw-lr-reel__item .mw-lr-seal__edge {
+    stroke-dashoffset: 0 !important;
+    stroke-opacity: 1;
+    stroke-width: 2;
+  }
+
+  /* The long body captions and the revisit dots are now redundant — all three stats
+     show together, so there is nothing to cycle or reveal one-at-a-time. Hiding the
+     captions keeps the stack tight; the diamond's number + unit + label already
+     carry each stat (and the button's aria-label announces it). */
+  .mw-lr-reel__captions { display: none; }
+  .mw-lr-reel__dots { display: none; }
+}
