@@ -5,6 +5,7 @@ import { SolidCta01 } from "@/components-v2/02_buttons/solid/solid-cta-01";
 import { ActionArrow01 } from "@/components-v2/01_marks/arrows/action-arrow-01";
 import { FigureStat01 } from "@/components-v2/04_blocks/stats/figure-stat-01";
 import { ImageAccordion01 } from "@/components-v2/05_widgets/galleries/image-accordion-01";
+import { Fac2Dumptruck01 } from "@/components-v2/05_widgets/graphics/fac2-dumptruck-01";
 import { sectionProps } from "@/components-v2/section-config";
 
 // MediaSplit01 — the home VBEC (facility) section. A 40/60 split on a cream section. Two phases:
@@ -25,6 +26,7 @@ import { sectionProps } from "@/components-v2/section-config";
 // Mobile / reduced-motion: no pin, beige section, columns at rest. Styling: app/styles/04-home.css.
 const clamp01 = (x) => (x < 0 ? 0 : x > 1 ? 1 : x);
 const ease = (x) => 1 - Math.pow(1 - x, 3);            // easeOutCubic (highlights)
+const easeIn = (x) => x * x * x;                       // easeInCubic — slow start, speeds up (truck fade)
 const easeInOut = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
 
 const FIG_START_P = 0;        // highlights scrub begins as soon as the section pins (no pre-hold)
@@ -51,12 +53,14 @@ const CAP_SLOTS = [
   { col: 1, row: 3 }, { col: 3, row: 3 },
   { col: 2, row: 4 },
 ];
-const CAP_TONES = ["#B5642F", "#B5642F", "#A85A2C", "#A85A2C", "#8C4A24", "#8C4A24", "#75401F"];
+const CAP_TONES = ["#3D594A", "#465E67", "#735A38", "#7A462D", "#51483A", "#38564F", "#3E4E5C"];
 const capDiaStyle = (col, row, extra) => ({ left: `${col * CAP_SX}%`, top: `${row * CAP_SY}%`, width: `${2 * CAP_SX}%`, ...extra });
 const capSoftWrap = (s) => s.replace(/([/-])/g, "$1" + String.fromCharCode(0x200b));
+const capText = (cap) => (typeof cap === "string" ? cap : cap?.name || "");
+const capDetail = (cap, lines, i) => (typeof cap === "string" ? lines?.[i] || "" : cap?.line || cap?.detail || lines?.[i] || "");
 
 export function MediaSplit01({ content, config = {} }) {
-  const { eyebrow, stage, title, lead, figures, capsTitle, capabilities, primaryCta, aboutLink, headingId, photos } = content;
+  const { eyebrow, stage, title, lead, figures, capsTitle, capabilities, capabilityLines, primaryCta, aboutLink, headingId, photos } = content;
   const autoScroll = config.autoScroll !== false;
   const trackRef = useRef(null);
   const sectionRef = useRef(null);
@@ -119,6 +123,11 @@ export function MediaSplit01({ content, config = {} }) {
         track.style.removeProperty("--fac2-head-off");
         const g = caps.querySelector(".mw-cap-dia");
         if (g) g.querySelectorAll(".mw-cap-dia__cell").forEach((c) => { c.style.removeProperty("--cap-sc"); c.style.removeProperty("--cap-op"); c.style.removeProperty("--cap-tx"); c.style.removeProperty("--cap-ty"); c.style.removeProperty("--cap-rot"); });
+        const truckOff = caps.querySelector(".mw-fac2__truck");
+        if (truckOff) {
+          truckOff.style.removeProperty("--fac2-truck-op");
+          truckOff.style.removeProperty("--fac2-truck-x");
+        }
         delete media.dataset.iaccHover;
         resetPinClocks();
         return idleState();
@@ -248,6 +257,23 @@ export function MediaSplit01({ content, config = {} }) {
           cell.style.setProperty("--cap-ty", pathY.toFixed(1) + "px");
           cell.style.setProperty("--cap-op", ease(clamp01(raw / 0.08)).toFixed(3));
         }
+      }
+
+      // Dumptruck exit — parked in the stage behind the diamonds (final rest = translateX 0).
+      // Starts tucked right under the media container, slides LEFT into centre as the media
+      // block exits right. Window: first movement → media fully past body-content. Ease-in.
+      const truck = caps.querySelector(".mw-fac2__truck");
+      const stage = caps.querySelector(".mw-fac2__stage");
+      if (truck && stage) {
+        const stageRect = stage.getBoundingClientRect();
+        const truckFadeSpan = Math.max(1, bodyContentRight - stageRect.left);
+        const truckFadeTravel = containerLeft - stageRect.left;
+        const truckRaw = truckFadeTravel <= 0 ? 0 : clamp01(truckFadeTravel / truckFadeSpan);
+        const truckEase = easeIn(truckRaw);
+        const tuckRight = Math.max(0, mediaRect.right - stageRect.right, mediaRect.width * 0.22);
+        const truckX = tuckRight * (1 - truckEase);
+        truck.style.setProperty("--fac2-truck-op", truckEase.toFixed(3));
+        truck.style.setProperty("--fac2-truck-x", truckX.toFixed(1) + "px");
       }
 
       const pinned = entranceDone && P < 1 && secTop <= headOff + 4 && track.getBoundingClientRect().bottom > vh;
@@ -383,10 +409,14 @@ export function MediaSplit01({ content, config = {} }) {
                 </div>
               </div>
 
-              {/* Onsite capabilities — the "diamond of diamonds": a title diamond crowning 7 clay
-                  capability diamonds on the who-we-serve argyle lattice. Revealed by the swipe. */}
+              {/* Onsite capabilities — dumptruck slides left out of the media container while the
+                  "diamond of diamonds" cluster rolls in behind it on a shared centred stage. */}
               <div className="mw-fac2__caps" ref={capsRef}>
-                <div className="mw-cap-dia" style={{ aspectRatio: `${CAP_COLS} / ${CAP_ROWS}` }} role="group" aria-label={capsTitle}>
+                <div className="mw-fac2__stage">
+                  <div className="mw-fac2__truck" aria-hidden="true">
+                    <Fac2Dumptruck01 />
+                  </div>
+                  <div className="mw-cap-dia" style={{ aspectRatio: `${CAP_COLS} / ${CAP_ROWS}` }} role="group" aria-label={capsTitle}>
                   <div className="mw-cap-dia__cell mw-cap-dia__cell--title" style={capDiaStyle(2, 0)}>
                     <span className="mw-cap-dia__d">
                       <svg className="mw-cap-dia__svg" viewBox="0 0 200 200" aria-hidden="true">
@@ -397,17 +427,30 @@ export function MediaSplit01({ content, config = {} }) {
                   </div>
                   {capabilities.map((cap, i) => {
                     const s = CAP_SLOTS[i];
+                    const name = capText(cap);
+                    const detail = capDetail(cap, capabilityLines, i);
                     return (
-                      <div className="mw-cap-dia__cell" style={capDiaStyle(s.col, s.row, { "--cap-bg": CAP_TONES[i] })} key={i}>
+                      <div
+                        className={`mw-cap-dia__cell mw-cap-dia__cell--cap mw-cap-dia__cell--cap-${i}`}
+                        style={capDiaStyle(s.col, s.row, {
+                          "--cap-bg": CAP_TONES[i],
+                        })}
+                        key={name || i}
+                        aria-label={detail ? `${name}: ${detail}` : name}
+                      >
+                        <span className="mw-cap-dia__hit" aria-hidden="true" />
                         <span className="mw-cap-dia__d">
                           <svg className="mw-cap-dia__svg" viewBox="0 0 200 200" aria-hidden="true">
-                            <rect className="mw-cap-dia__fill" x="29.3" y="29.3" width="141.4" height="141.4" rx="15" transform="rotate(45 100 100)" />
+                            <rect className="mw-cap-dia__fill" x="29.3" y="29.3" width="141.4" height="141.4" rx="0" transform="rotate(45 100 100)" />
                           </svg>
-                          <span className="mw-cap-dia__face"><span className="mw-cap-dia__name">{capSoftWrap(cap)}</span></span>
+                          <span className="mw-cap-dia__face">
+                            <span className="mw-cap-dia__name">{capSoftWrap(name)}</span>
+                          </span>
                         </span>
                       </div>
                     );
                   })}
+                  </div>
                 </div>
               </div>
             </div>

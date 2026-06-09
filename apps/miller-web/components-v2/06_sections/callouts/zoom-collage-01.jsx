@@ -1,6 +1,8 @@
 import { ZoomCollage01 as ZoomCollageWidget } from "@/components-v2/05_widgets/galleries/zoom-collage-01";
 import { sectionProps } from "@/components-v2/section-config";
 
+const CAREERS_DIVE_INITIAL_SLOPE = 0.625; // 125vh / legacy 200vh: same start rate, faster finish
+
 /* Careers — an immersive zoom collage. A sticky stage dives through a mosaic of
    crew photos until the lead shot fills the frame, where the careers invitation
    (field-head eyebrow, headline, lead, two CTAs) fades in over a walnut scrim.
@@ -13,6 +15,7 @@ export function ZoomCollage01({ content, config = {} }) {
       <ZoomCollageWidget
         photos={zoomPhotos}
         autoScroll={config.autoScroll !== false}
+        diveInitialSlope={CAREERS_DIVE_INITIAL_SLOPE}
         intro={(
           /* Temporary intro eyebrow in the cream band above the mosaic — scrolls out once
              the dive pins. The field-head reappears in the overlay after the photo lands. */

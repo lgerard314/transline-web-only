@@ -22,6 +22,15 @@ export const HOME = {
       "Batch water treatment",
       "Hydro-vac slurry receiving",
     ],
+    capabilityLines: [
+      "Secure final-disposal cells.",
+      "Clay-lined staging and treatment.",
+      "Chemistry-specific waste routing.",
+      "Clean equipment and containers.",
+      "Shred, sort, and recover plastics.",
+      "Measured batches, documented results.",
+      "Separate slurry into managed streams.",
+    ],
     cta: { label: "Visit Treatment Facility", href: "/treatment-facility/" },
   },
 

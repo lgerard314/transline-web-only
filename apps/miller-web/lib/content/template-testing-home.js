@@ -108,7 +108,7 @@ export const HERO = {
     cyclePhrases: [{ text: "hazardous" }, { text: "safe", tone: "accent" }, { text: "reliable", tone: "accent" }],
     line3: "waste disposal",
   },
-  lead: "Twenty-five years of licensed hazardous waste management in Manitoba. Three ISO certifications. One documented chain of custody from your loading dock to final disposition at VBEC.",
+  lead: "Twenty-five years of licensed hazardous waste management in Manitoba. One documented chain of custody from your loading dock to final disposition at VBEC.",
   primaryCta: { label: "Talk to Miller", href: "/contact-us/" },
   ghostPhone: { sup: "24/7 emergency", num: EMERGENCY_PHONE, href: EMERGENCY_HREF },
   article: { strong: "Miller Environmental Corporation", rest: " · since 1996" },
@@ -188,7 +188,7 @@ export const SECTORS_V1 = {
 export const SECTORS_V2 = {
   ...SECTORS_V1,
   headingId: "mw-sectors-heading-v2",
-  eyebrow: "Who we serve 2",
+  eyebrow: "Who we serve",
   cta: { label: "Learn more", href: "/industrial-services/" },
 };
 
@@ -205,6 +205,7 @@ export const FACILITY = {
   ],
   capsTitle: "Powerful Capabilities",
   capabilities: HOME.vbec.capabilities,
+  capabilityLines: HOME.vbec.capabilityLines,
   primaryCta: { longLabel: HOME.vbec.cta.label, shortLabel: "Visit Facility", href: HOME.vbec.cta.href },
   aboutLink: { longLabel: HOME.vbec.aboutLinkLabel, shortLabel: "Read the story", href: HOME.vbec.aboutHref },
   photos: FACILITY_PHOTOS,

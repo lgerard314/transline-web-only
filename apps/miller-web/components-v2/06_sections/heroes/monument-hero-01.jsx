@@ -24,23 +24,26 @@ export function MonumentHero01({ content, config = {} }) {
         )}
       </div>
       <div className="mw-hero__inner">
-        <div className="mw-hero__head-row">
-          <h1 id={titleId} className="mw-hero__title">
-            <span className="mw-hero__line"><span className="mw-hero__line-in">{title.line1}</span></span>
-            <span className="mw-hero__line"><span className="mw-hero__line-in"><PhraseCycle01 phrases={title.cyclePhrases} /></span></span>
-            <span className="mw-hero__line"><span className="mw-hero__line-in"><StopText01 stopClassName="mw-hero__stop">{title.line3}</StopText01></span></span>
-          </h1>
+        <div className="mw-hero__stack">
+          <div className="mw-hero__head-row">
+            <h1 id={titleId} className="mw-hero__title">
+              <span className="mw-hero__line"><span className="mw-hero__line-in">{title.line1}</span></span>
+              <span className="mw-hero__line"><span className="mw-hero__line-in"><PhraseCycle01 phrases={title.cyclePhrases} /></span></span>
+              <span className="mw-hero__line"><span className="mw-hero__line-in"><StopText01 stopClassName="mw-hero__stop">{title.line3}</StopText01></span></span>
+            </h1>
 
-          <p className="mw-hero__mark" aria-hidden="true">
-            <span className="mw-hero__mark-brand">
-              <img className="mw-hero__mark-logo" src={mark.logoSrc} alt="" />
-            </span>
-          </p>
+            <p className="mw-hero__mark" aria-hidden="true">
+              <span className="mw-hero__mark-brand">
+                <img className="mw-hero__mark-logo" src={mark.logoSrc} alt="" />
+              </span>
+            </p>
+          </div>
+
+          <p className="mw-hero__lead">{lead}</p>
         </div>
 
         <div className="mw-hero__body">
           <div className="mw-hero__intro">
-            <p className="mw-hero__lead">{lead}</p>
             <div className="mw-hero__ctas">
               <SolidCta01 href={primaryCta.href}>{primaryCta.label} <ActionArrow01 /></SolidCta01>
               <GhostPhoneCta01 sup={ghostPhone.sup} num={ghostPhone.num} href={ghostPhone.href} ariaLabel={`Call 24/7 emergency: ${ghostPhone.num}`} />

@@ -115,8 +115,9 @@
   pointer-events: none;
   background-image: url("/miller/custom/canada-bg-line-map.svg");
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: calc(50% + var(--lr-bg-mouse-x, 0px)) center;
   background-size: cover; /* the element is the map's aspect, so this is an exact, whole-map fit */
+  transition: background-position 0.45s cubic-bezier(.22, .61, .36, 1);
   /* fully opaque in the small box, fading to the faint wash as it grows
      (--lr-bg-opacity inherits from the panel, set in JS). */
   opacity: var(--lr-bg-opacity, 0.07);
@@ -209,6 +210,7 @@
 @media (prefers-reduced-motion: reduce) {
   .mw-lr-reel__chain--gold { opacity: 0 !important; }
   .mw-lr-reel__chain[data-reveal="clip"] { clip-path: none !important; }
+  .mw-lr__bg { transition: none; }
 }
 
 /* Equal visual gutters: the four gaps (container-left→D1, D1→centre, centre→D2,
@@ -356,7 +358,8 @@
    (they scale WITH it); the dark fill covers the static terracotta chain border
    beneath, so only one thin gold ring shows. Scaled about centre → it stays put. */
 .mw-lr-reel__item[data-active] .mw-lr-reel__card {
-  transform: scale(calc(var(--lr-card-scale, 1) * 1.06));
+  /* Absolute hover scale — side diamonds rest at .92 but must match centre at 1.06. */
+  transform: scale(1.06);
   transition: transform .32s var(--lr-ease);
 }
 .mw-lr .mw-lr-reel .mw-lr-reel__item[data-active] .mw-lr-seal::before { display: block; width: 62%; height: 62%; }
@@ -375,6 +378,7 @@
   position: relative;
   width: 100%;
   margin: clamp(12px, 1.6vw, 24px) auto 0; /* tighter gap between the diamonds and the reveal */
+  overflow: visible; /* active caption scales visually without clipping */
 }
 .mw-lr-reel__caption {
   position: absolute; top: 0; left: 50%;
@@ -391,9 +395,8 @@
     opacity .35s var(--lr-ease),
     transform .35s var(--lr-ease),
     color .35s var(--lr-ease),
-    font-size .35s var(--lr-ease),
-    width .35s var(--lr-ease),
     text-shadow .35s var(--lr-ease);
+  transform-origin: center top;
 }
 .mw-lr-reel__caption[data-on] {
   opacity: 1;
@@ -415,13 +418,12 @@
   opacity: .52;
   color: rgba(245, 230, 203, .62);
 }
-/* Active caption: +1px size with width scaled to match so line breaks hold. */
+/* Active caption: scale for emphasis (same line breaks as rest state — no reflow). */
 .mw-lr-reel__caption[data-on][data-active] {
   z-index: 2;
-  width: clamp(184px, calc(20.5vw * 15 / 14), 315px);
-  font-size: clamp(15px, calc(1vw + 1px), 17px);
   color: rgba(255, 252, 247, .98);
   text-shadow: 0 0 28px rgba(216, 154, 63, .18);
+  transform: translateX(calc(-50% + var(--lr-cap-dx, 0px))) translateY(0) scale(calc(15 / 14));
 }
 .mw-lr-reel__caption[data-on][data-active]::before {
   content: "";

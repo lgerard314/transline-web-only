@@ -48,6 +48,8 @@ export function TimelineStats() {
             lastMission: -1,
             missionGateY: -1,
             lastUnpin: false,
+            tailFadeStartTop: -1,
+            lastTailFade: -1,
           };
         })
         .filter((c) => c.banner && c.stats);
@@ -70,6 +72,10 @@ export function TimelineStats() {
       const redgePx = slope * hH;
       c.stats.style.setProperty("--stats-tinset", ang.toFixed(1) + "px");
       c.stats.style.setProperty("--stats-redge", redgePx.toFixed(1) + "px");
+      const row = c.stats.querySelector(".mw-ten3__plate2-stats");
+      if (row) {
+        c.stats.style.setProperty("--stats-row-end", (row.offsetTop + row.offsetHeight) + "px");
+      }
     };
 
     const render = () => {
@@ -139,11 +145,13 @@ export function TimelineStats() {
             if (unpin) {
               const stackTop = c.stack.getBoundingClientRect().top - colTop;
               c.stack.style.marginTop = "0px";
-              c.stack.style.top = stackTop.toFixed(1) + "px";
+              c.stack.style.top = Math.round(stackTop) + "px";
               c.stack.style.left = "0";
               c.stack.style.width = "100%";
               c.stack.style.position = "absolute";
               c.stack.style.zIndex = "2";
+              c.stack.dataset.unpinned = "1";
+              c.tailFadeStartTop = c.stats.getBoundingClientRect().top;
             } else {
               c.stack.style.position = "";
               c.stack.style.top = "";
@@ -151,6 +159,22 @@ export function TimelineStats() {
               c.stack.style.width = "";
               c.stack.style.marginTop = "";
               c.stack.style.zIndex = "";
+              delete c.stack.dataset.unpinned;
+              c.tailFadeStartTop = -1;
+              c.lastTailFade = -1;
+              c.stats.style.removeProperty("--stats-tail-fade");
+            }
+          }
+          // Tail runway fades bottom-up in step with the highlights climbing to the header line.
+          if (c.lastUnpin) {
+            const asideTop = c.stats.getBoundingClientRect().top;
+            const span = c.tailFadeStartTop - HDR;
+            const tailFade = span > 1
+              ? Math.min(Math.max((c.tailFadeStartTop - asideTop) / span, 0), 1)
+              : (asideTop <= HDR ? 1 : 0);
+            if (Math.abs(tailFade - c.lastTailFade) >= 0.001) {
+              c.lastTailFade = tailFade;
+              c.stats.style.setProperty("--stats-tail-fade", tailFade.toFixed(3));
             }
           }
         }
@@ -169,6 +193,8 @@ export function TimelineStats() {
       c.stats.style.removeProperty("--num-rev");
       c.stats.style.removeProperty("--stats-tinset");
       c.stats.style.removeProperty("--stats-redge");
+      c.stats.style.removeProperty("--stats-row-end");
+      c.stats.style.removeProperty("--stats-tail-fade");
       c.banner.style.removeProperty("--mission-rev");
       if (c.stack) {
         c.stack.style.position = "";
@@ -177,6 +203,7 @@ export function TimelineStats() {
         c.stack.style.width = "";
         c.stack.style.marginTop = "";
         c.stack.style.zIndex = "";
+        delete c.stack.dataset.unpinned;
       }
       c.last = -1;
       c.lastNum = -1;
@@ -184,6 +211,8 @@ export function TimelineStats() {
       c.lastMission = -1;
       c.missionGateY = -1;
       c.lastUnpin = false;
+      c.tailFadeStartTop = -1;
+      c.lastTailFade = -1;
       for (const v of c.vals) v.el.textContent = v.dec ? v.target.toFixed(v.dec) : String(v.target);
     });
 

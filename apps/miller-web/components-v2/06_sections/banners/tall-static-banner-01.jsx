@@ -75,8 +75,9 @@ export function TallStaticBanner01({ content, config = {} }) {
     };
   }, [syncInnerWidths, content.certs]);
 
-  // Reveal: each card comes up + fades in once it is at least HALF past the
-  // bottom of the viewport (50% of the card visible). No stagger — the cards
+  // Reveal: each card slides down out of the header + fades in once it is at
+  // least HALF past the bottom of the viewport (50% of the card visible). No
+  // stagger — the cards
   // share a row, so they cross the 50% line together and fire as one. This
   // banner drives its OWN reveal: the grid is deliberately NOT a
   // data-reveal-stagger container, so the house MillerScrollReveal (which fires
@@ -113,21 +114,34 @@ export function TallStaticBanner01({ content, config = {} }) {
   }, [content.certs]);
 
   return (
-    <section
-      className="mw-trust mw-trust--tsb01"
-      aria-label={content.ariaLabel}
-      {...sectionProps(config)}
-    >
-      <div
-        ref={gridRef}
-        className="mw-certs"
-        role="list"
+    <>
+      {/* Reveal motion owned here (not 04-home.css) so cert cards slide DOWN out
+          of the hero/header fold instead of up from below. */}
+      <style>{`
+        @keyframes mw-cert-rv-tsb01 {
+          0%   { opacity: 0; transform: translateY(-34px); }
+          100% { opacity: 1; transform: none; }
+        }
+        .mw-trust--tsb01 .mw-cert[data-in="1"] {
+          animation: mw-cert-rv-tsb01 0.8s cubic-bezier(.16, .84, .3, 1) both;
+        }
+      `}</style>
+      <section
+        className="mw-trust mw-trust--tsb01"
         aria-label={content.ariaLabel}
+        {...sectionProps(config)}
       >
-        {content.certs.map((cert) => (
-          <CertDownloadLink key={cert.slug} cert={cert} />
-        ))}
-      </div>
-    </section>
+        <div
+          ref={gridRef}
+          className="mw-certs"
+          role="list"
+          aria-label={content.ariaLabel}
+        >
+          {content.certs.map((cert) => (
+            <CertDownloadLink key={cert.slug} cert={cert} />
+          ))}
+        </div>
+      </section>
+    </>
   );
 }

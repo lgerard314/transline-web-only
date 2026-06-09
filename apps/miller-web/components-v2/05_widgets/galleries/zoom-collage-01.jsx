@@ -37,7 +37,7 @@ const REVEAL_END = 1.0;
 const DIVE_MS = 2600; // base auto-advance pace (start speed); it accelerates to 2× by the end
 const INTRO_PHOTO = 2; // booth tile (left mosaic at dive start) — intro centres above it
 
-export function ZoomCollage01({ photos = [], children, intro, autoScroll = true }) {
+export function ZoomCollage01({ photos = [], children, intro, autoScroll = true, diveInitialSlope = 1 }) {
   const rootRef = useRef(null);
   const cellRefs = useRef([]);
   const [reduced, setReduced] = useState(false);
@@ -56,7 +56,7 @@ export function ZoomCollage01({ photos = [], children, intro, autoScroll = true 
       if (v) diveVh = v;
     };
 
-    const apply = (pd) => {
+    const apply = (pd, raw = pd) => {
       for (let i = 0; i < cellRefs.current.length; i++) {
         const el = cellRefs.current[i];
         if (!el) continue;
@@ -68,6 +68,10 @@ export function ZoomCollage01({ photos = [], children, intro, autoScroll = true 
         const s = (1 / cap) * (1 + pd * (z - 1));
         el.style.setProperty("--s", s.toFixed(4));
       }
+      const centerZoom = 1.12 - 0.12 * pd;
+      root.style.setProperty("--center-img-zoom", centerZoom.toFixed(4));
+      const introOut = Math.min(1, Math.max(0, raw / 0.08));
+      root.style.setProperty("--intro-out", introOut.toFixed(3));
       const reveal = Math.min(1, Math.max(0, (pd - REVEAL_START) / (REVEAL_END - REVEAL_START)));
       root.style.setProperty("--reveal", reveal.toFixed(3));
       if (reveal > 0.5) root.setAttribute("data-shown", "1");
@@ -108,8 +112,12 @@ export function ZoomCollage01({ photos = [], children, intro, autoScroll = true 
       const vh = window.innerHeight || document.documentElement.clientHeight || 1;
       const diveDist = (diveVh / 100) * vh;
       // Progress is tied to scroll position (scrubbed) — scrolling up reverses it.
-      const pd = diveDist > 0 ? Math.min(1, Math.max(0, -rect.top / diveDist)) : 0;
-      apply(pd);
+      // The curve preserves the old start speed against the shorter track, then
+      // gradually accelerates so the landing arrives in ~37.5% less scroll.
+      const raw = diveDist > 0 ? Math.min(1, Math.max(0, -rect.top / diveDist)) : 0;
+      const startSlope = Math.min(1, Math.max(0, diveInitialSlope));
+      const pd = raw * (startSlope + (1 - startSlope) * raw);
+      apply(pd, raw);
       if (autoScroll) {
         const y = window.scrollY;
         const pinned = rect.top <= 0 && rect.bottom > vh;
@@ -174,7 +182,7 @@ export function ZoomCollage01({ photos = [], children, intro, autoScroll = true 
     const boot = () => { placeIntro(); if (n++ < 8) requestAnimationFrame(boot); };
     requestAnimationFrame(boot);
     return () => { io.disconnect(); stop(); window.removeEventListener("resize", onResize); };
-  }, [autoScroll, intro]);
+  }, [autoScroll, intro, diveInitialSlope]);
 
   if (!photos || photos.length === 0) return null;
 

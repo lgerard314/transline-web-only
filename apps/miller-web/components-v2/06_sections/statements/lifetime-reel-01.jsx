@@ -75,6 +75,7 @@ const PARALLAX_MAX = 90;      // px of vertical parallax drift during the conten
 const HOLD_PARALLAX = 0.42;   // fraction of zoom crop revealed by exit-phase drift (map bottom)
 const HOLD_EXIT_BAND = 0.12;  // reveal completes when only this fraction of section height remains visible
 const ZOOM_MAX = 1.4;        // how far the graphic zooms in (scales past its fit) once the section is full
+const MOUSE_PARALLAX_MAX = 14; // px — subtle horizontal bg shift tied to cursor (background-position only)
 const smoothstep = (t) => { const x = Math.min(1, Math.max(0, t)); return x * x * (3 - 2 * x); };
 
 export function LifetimeReel01({ content, config = {} }) {
@@ -268,6 +269,34 @@ export function LifetimeReel01({ content, config = {} }) {
       mqRM.removeEventListener("change", evaluate);
     };
   }, [autoScroll]);
+
+  // Subtle horizontal mouse parallax on the bg map — background-position only so scroll
+  // zoom/drift (transform) stays untouched. Skipped for reduced motion.
+  useEffect(() => {
+    if (typeof window === "undefined") return undefined;
+    const panel = panelRef.current;
+    const section = panel?.closest(".mw-lr");
+    if (!panel || !section) return undefined;
+    const mqRM = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (mqRM.matches) return undefined;
+
+    const onMove = (e) => {
+      const rect = section.getBoundingClientRect();
+      const nx = ((e.clientX - rect.left) / Math.max(1, rect.width) - 0.5) * 2;
+      panel.style.setProperty("--lr-bg-mouse-x", (nx * MOUSE_PARALLAX_MAX).toFixed(2) + "px");
+    };
+    const onLeave = () => {
+      panel.style.setProperty("--lr-bg-mouse-x", "0px");
+    };
+
+    section.addEventListener("mousemove", onMove);
+    section.addEventListener("mouseleave", onLeave);
+    return () => {
+      section.removeEventListener("mousemove", onMove);
+      section.removeEventListener("mouseleave", onLeave);
+      panel.style.removeProperty("--lr-bg-mouse-x");
+    };
+  }, []);
 
   return (
     <div className="mw-lr-track" ref={trackRef}>

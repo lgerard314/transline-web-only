@@ -1144,10 +1144,6 @@
      lives on .mw-ten3__record (it extends the grid row, the band's sticky containing block); this is
      just a little breathing space under everything. */
   --mission-tail: clamp(16px, 2.5vh, 40px);
-  /* Scroll runway for the highlights band (aside min-height keys off this × 1.5). */
-  --highlights-runway: calc(100dvh - var(--hdr, 56px) - var(--bh));
-  /* Shallow tilt for the highlights fade — bottom-right goes transparent before the rest. */
-  --stats-fade-tilt: 12deg;
   background: var(--c-surface-warm);
   padding-block: var(--ptop) var(--mission-tail);
   color: var(--c-ink);
@@ -1457,7 +1453,10 @@
   margin-left: calc(-1 * var(--g));
   width: calc(100% + var(--g));
   overflow: hidden;
-  background: var(--c-navy);
+  /* Solid navy for the photo chip (wipe + pin). Once --mission-rev reaches 1 the
+     field warms to --c-surface-warm so chevron clip-path AA during stack exit
+     does not read as a dark fringe on the mission panel. */
+  background: color-mix(in srgb, var(--c-surface-warm) calc(var(--mission-rev, 0) * 100%), var(--c-navy));
   /* The right edge angles in from the top-right and bottom-right corners to a
      point at the vertical middle (a shallow chevron that points toward the
      record). --ang is how far the corners are inset from the right edge; the
@@ -1493,6 +1492,12 @@
   /* Section-bleed lived on the banner when it was the sticky pin; on the stack wrapper so
      the chip-arrow top still lands on --hdr when pinned (not pulled above the header). */
   margin-top: calc(-1 * var(--ptop));
+}
+/* While frozen absolute at timeline end, keep the banner + highlights on one clean
+   compositor layer so chevron clip-path edges don't pick up the dark scrim. */
+.mw-ten3__stack[data-unpinned] {
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 /* Warm cinematic overlay — same grade vocabulary as the hero (rgba(42,27,18)
    warm-walnut wash + a bottom darkening band) so this photo reads like the hero
@@ -1613,7 +1618,7 @@
    full timeline before releasing together at the end. */
 .mw-ten3__record {
   margin-top: calc(var(--bh) / 2 - var(--ptop));
-  padding-bottom: calc(var(--highlights-runway) * 1.5);
+  padding-bottom: calc(100dvh - var(--hdr, 56px) - var(--bh));
 }
 /* Record eyebrow — the `record —— field` document line moved up here from the banner. On the
    light section field it takes the default dark field colour (no banner override). It's hidden
@@ -1766,31 +1771,38 @@ html[data-brand="miller"] .mw-ten3__line[data-rev-armed] .mw-ten3__item[data-out
   align-items: stretch;
   background: #fff;
   z-index: 1;
-  /* Tall highlights panel below the banner (stats at top); 1.5× runway, sticky on .mw-ten3__stack. */
+  /* 1px tuck under the banner bottom so a scroll-time hairline gap cannot flash the
+     dark photo/scrim between the two bands while the stack exits together. */
+  margin-top: -1px;
+  /* Tall highlights panel below the banner (stats at top); scroll runway, sticky on .mw-ten3__stack. */
   position: relative;
-  min-height: calc(var(--highlights-runway) * 1.5);
+  min-height: calc(100dvh - var(--hdr, 56px) - var(--bh));
   height: auto;
   transform: translateY(calc((1 - var(--stats-out, 1)) * -100%));
   will-change: transform;
   clip-path: polygon(0 0, calc(100% - var(--stats-tinset, 0px)) 0, calc(100% - var(--stats-tinset, 0px) - var(--stats-redge, 0px)) 100%, 0 100%);
-  /* Fade line rises ~12° from bottom-left. Below-right of it → transparent first;
-     full bottom still reaches transparent. Shape = clip-path only. */
-  -webkit-mask-image: linear-gradient(
-    calc(180deg - var(--stats-fade-tilt, 12deg)),
-    #000 0%,
-    #000 70%,
-    rgb(0 0 0 / 0.62) 78%,
-    rgb(0 0 0 / 0.26) 88%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    calc(180deg - var(--stats-fade-tilt, 12deg)),
-    #000 0%,
-    #000 70%,
-    rgb(0 0 0 / 0.62) 78%,
-    rgb(0 0 0 / 0.26) 88%,
-    transparent 100%
-  );
+}
+/* Pin runway below the stats row — fades to transparent from the bottom up once the stack
+   unpins and scrolls off together; the stats row itself stays solid (see .mw-ten3__plate2-stats). */
+.mw-ten3__stack[data-unpinned] .mw-ten3__aside {
+  background: transparent;
+}
+.mw-ten3__aside::after {
+  content: "";
+  display: none;
+}
+.mw-ten3__stack[data-unpinned] .mw-ten3__aside::after {
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--stats-row-end, 0);
+  bottom: 0;
+  background: #fff;
+  pointer-events: none;
+  z-index: 0;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 calc((1 - var(--stats-tail-fade, 0)) * 100%), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 calc((1 - var(--stats-tail-fade, 0)) * 100%), transparent 100%);
 }
 /* The banner photo gets a stronger zoom + a near-top-right origin so its
    diagonal parallax drift (data-parallax-x="1" → 45° toward the bottom-right)
@@ -1855,6 +1867,7 @@ html[data-brand="miller"] .mw-ten3__line[data-rev-armed] .mw-ten3__item[data-out
   padding: clamp(22px, 2.2vw, 34px) clamp(40px, 7%, 110px) clamp(22px, 2.2vw, 34px) var(--g);
   position: relative;
   z-index: 1;
+  background: #fff;
 }
 /* All three stats start tucked UP behind the banner and slide DOWN into the row as --stats-out
    grows the highlights band (0 tucked → 1 resting). Opacity follows --num-rev (counter progress);
@@ -1904,15 +1917,22 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
    with an even RADIAL grow from ≈ the bottom-right of the banner (the red-dot point) —
    driven by --mission-rev (0 hidden → 1 fully covering), scrubbed by scroll after the three
    highlight stats begin entering. Sits above the image + head; a
-   solid --c-bg fill covers the photo, with its border matched to that fill (no edge). */
+   solid --c-bg fill covers the photo. */
 /* Registered so --mission-rev can be scrubbed by scroll (<TimelineStats> writes 0→1 over a short
    px span after highlight content begins). Inherited to nested mission layers. */
 @property --mission-rev { syntax: "<number>"; inherits: true; initial-value: 0; }
 .mw-ten3__bmission {
   position: absolute;
-  inset: 0;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  /* Bleed past the nominal right edge so the cream fill reaches the chevron
+     clip boundary — stops the dark photo/scrim from winning clip-path AA while
+     the stack scrolls up at timeline end. */
+  right: calc(-1 * var(--ang));
   z-index: 3;
   overflow: hidden;
+  isolation: isolate;
   /* Rise STRAIGHT UP from the container's BOTTOM with a FLAT top edge — the banner container this
      sits inside already carries the right-side chevron, so the reveal is a plain rectangle whose
      bottom is pinned at 100% and whose top edge rides from 100% (bottom) up to 0% (full). --r is
@@ -1931,7 +1951,27 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
   position: absolute;
   inset: 0;
   background: var(--c-bg);
-  border: 1px solid var(--c-bg);
+  /* No outer border — a 1px border straddling the edge was picking up the banner
+     field through clip-path AA while the stack scrolls up at timeline end. */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+/* Chevron-edge seal — a narrow band hugging the banner's right chip, painted in the
+   section surface colour so clip-path AA during the joint stack exit never reads dark. */
+.mw-ten3__bmission-window::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: var(--c-bg);
+  clip-path: polygon(
+    calc(100% - var(--ang)) 0,
+    100% 50%,
+    calc(100% - var(--ang)) 100%,
+    calc(100% - var(--ang) - 3px) 100%,
+    calc(100% - 3px) 50%,
+    calc(100% - var(--ang) - 3px) 0
+  );
 }
 .mw-ten3__bmission-zoom {
   position: absolute;
@@ -1962,7 +2002,6 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
   .mw-ten3__record { margin-top: 0; }
   .mw-ten3__aside, .mw-ten3__maside { margin-left: 0; width: auto; max-width: none; clip-path: none; overflow: visible; min-height: 0; display: block; transform: none; }
   .mw-ten3__aside { position: static; height: auto; }
-  .mw-ten3__aside { -webkit-mask-image: none; mask-image: none; }
   /* Mission layer flows as a plain white block below the banner image (no pin/clip/zoom). */
   .mw-ten3__bmission, .mw-ten3__bmission-window, .mw-ten3__bmission-zoom { position: static; inset: auto; clip-path: none; transform: none; }
   .mw-ten3__bmission-zoom { display: block; padding: clamp(28px, 6vw, 44px) clamp(24px, 5vw, 40px); opacity: 1; }
@@ -1974,7 +2013,7 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
   .mw-ten3__banner[data-head-armed] .mw-ten3__head-rise-in,
   .mw-ten3__banner[data-head-armed] .mw-ten3__lead-in { transform: none; opacity: 1; transition: none; }
   .mw-ten3__aside, .mw-ten3__maside { clip-path: none; }
-  .mw-ten3__aside { transform: none; -webkit-mask-image: none; mask-image: none; }
+  .mw-ten3__aside { transform: none; }
   /* No driver → --stats-out falls back to 1; lay all three stats out as a static row. */
   .mw-ten3__plate2-stats { display: flex; }
   .mw-ten3__plate2-stat { opacity: 1; transform: none; }
@@ -2155,7 +2194,7 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
   }
 
   /* BOTTOM-GAP TRIM (#user-tester). On desktop the record column reserves a tall pin runway
-     (padding-bottom: --highlights-runway × 1.5 ≈ 100dvh − header − banner, ×1.5) so the left
+     (padding-bottom: 100dvh − header − banner) so the left
      sticky stack stays pinned through the whole milestone list. In this STACKED layout there is
      no pin (the ≤1200 block already statics the stack), so that runway becomes ~650–1175px of
      blank cream after the last milestone — the page looks stalled. Replace it with a normal,
@@ -3234,6 +3273,7 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
      so the hero only needs to fill the remaining viewport. */
   min-height: calc(100svh - var(--mw-eb-h, 39px) - 76px);
   display: flex;
+  flex-direction: column;
   align-items: stretch;
 }
 /* Operating-site photograph. Warm-toned via saturation/brightness so it sits inside the clay palette rather than competing with it. */
@@ -3338,24 +3378,29 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
 .mw-hero__inner {
   position: relative;
   z-index: 2;
+  flex: 1 1 auto;
+  min-height: 0;
   /* 1560 content width at wide viewports, with 24px gutters at viewports < 1608. */
   width: min(100% - clamp(48px, 8vw, 144px), 1560px);
   margin-inline: auto;
   padding-block: clamp(40px, 4vw, 72px);
-  display: grid;
-  grid-template-columns: 1fr;
-  /* A flexible spacer on top pushes the whole left unit (title + lead + CTAs)
-     to the bottom; the two content rows then sit with their natural spacing and
-     the gap here is the header→body spacing. */
-  grid-template-rows: 1fr auto auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 2.2vw, 28px);
+}
+/* Headline + lead share the flexible zone above the pinned CTA row and sit
+   vertically centred in that space on every viewport. */
+.mw-hero__stack {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   gap: clamp(28px, 3vw, 48px);
-  align-content: stretch;
+  min-height: 0;
 }
 /* Headline fills the row and stays three lines at its set size; the logo rides
    the right edge, vertically centred against the headline. */
 .mw-hero__head-row {
-  grid-column: 1 / -1;
-  grid-row: 2;
   /* Columns mirror .mw-hero__body so the logo's column lines up exactly above
      the article tag's column beneath it. */
   display: grid;
@@ -3363,12 +3408,10 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
   column-gap: clamp(28px, 3.5vw, 56px);
   align-items: center;
 }
-/* Intro (lead + CTAs) holds the left column; the article tag rides the right
-   column, bottom-aligned with the CTA row. This row sits at the very bottom, so
-   the CTAs and tag pin to the bottom edge of the hero. */
+/* CTAs hold the left column; the article tag rides the right column,
+   bottom-aligned with the CTA row — pinned to the foot of the hero. */
 .mw-hero__body {
-  grid-column: 1 / -1;
-  grid-row: 3;
+  flex: 0 0 auto;
   display: grid;
   grid-template-columns: minmax(0, 1fr) clamp(280px, 22vw, 360px);
   column-gap: clamp(28px, 3.5vw, 56px);
@@ -3381,7 +3424,6 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: clamp(20px, 2.2vw, 28px);
 }
 .mw-hero__mark {
   grid-column: 2;
@@ -3657,22 +3699,31 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
      untouched — every rule here is additive within this query. Tighten the
      vertical rhythm so the content is less bottom-loaded and the logo rides
      a touch higher with less dead photo above it. */
-  .mw-hero__inner { padding-block: 60px 52px; gap: clamp(22px, 6vw, 30px); }
-  .mw-hero__head-row { row-gap: clamp(14px, 3.5vw, 20px); }
+  .mw-hero {
+    min-height: calc(100svh - var(--mw-eb-h, 39px) - 76px);
+  }
+  .mw-hero__inner {
+    padding-block: 60px 52px;
+    gap: clamp(16px, 4.5vw, 22px);
+  }
+  .mw-hero__stack {
+    gap: clamp(22px, 6vw, 30px);
+  }
+  .mw-hero__head-row { row-gap: clamp(20px, 5vw, 32px); }
   .mw-hero__mark { justify-self: start; }
-  /* Slightly larger mark for presence at 390 without nearing the headline. */
-  .mw-hero__mark-brand { height: clamp(66px, 17vw, 88px); }
-  /* Monument headline: denser line-height + a small negative tracking let the
-     three DOM lines settle as a tight "LEADERS IN / HAZARDOUS / WASTE DISPOSAL."
-     stack, and the reduced top size pulls "DISPOSAL." in from the right edge at
-     430. A faint shadow keeps the white crisp where it overlaps the brighter
-     upper third of the photo. */
+  /* 2× the prior phone mark — commanding stamp above the headline. */
+  .mw-hero__mark-brand { height: clamp(132px, 34vw, 176px); }
+  /* Monument headline: larger now that "waste / disposal" may wrap; disposal +
+     the terracotta stop stay glued via .mw-nobr. */
   .mw-hero__title {
-    font-size: clamp(45px, 13vw, 58px);
-    line-height: 0.82;
-    letter-spacing: -0.006em;
+    font-size: clamp(58px, 17vw, 84px);
+    line-height: 0.86;
+    letter-spacing: -0.004em;
     text-shadow: 0 1px 18px rgba(28, 18, 11, 0.42);
   }
+  /* "waste disposal" may wrap on phone; keep disposal + stop glued. */
+  .mw-hero__title .mw-hero__line:nth-child(3) { overflow: visible; }
+  .mw-hero__title .mw-hero__line:nth-child(3) .mw-hero__line-in { white-space: normal; }
   /* Lead: warmer/brighter cream + tighter measure so the line length is
      comfortable on the narrow column, with a subtle shadow for legibility over
      the photo. */
@@ -3684,19 +3735,46 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
     text-shadow: 0 1px 10px rgba(28, 18, 11, 0.5);
   }
   .mw-hero::after { left: 12px; }
-  .mw-hero__intro { width: 100%; gap: clamp(16px, 4.5vw, 22px); }
-  /* Stacked CTAs: a hair more separation so the framed solid's outline-offset
-     no longer crowds the ghost button below it; both rows clear 48px tall. */
-  .mw-hero__ctas { width: 100%; flex-direction: column; align-items: stretch; gap: 16px; }
-  .mw-hero__ctas .mw-cta { width: 100%; justify-content: center; }
+  .mw-hero__intro {
+    align-items: stretch;
+    width: 100%;
+  }
+  /* Side-by-side CTAs: equal-width pair fills the column on one row; compact
+     sizing keeps both labels legible down to 320px without wrapping. */
+  .mw-hero__ctas {
+    width: 100%;
+    max-width: 100%;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: clamp(8px, 2.5vw, 12px);
+  }
+  .mw-hero__ctas .mw-cta {
+    flex: 1 1 0;
+    min-width: 0;
+    justify-content: center;
+  }
   .mw-hero__ctas .mw-cta--ghost {
     align-items: center;
     text-align: center;
-    padding-block: 15px;
+  }
+  .mw-hero__ctas .mw-cta--solid {
+    padding: 12px clamp(8px, 2.5vw, 14px);
+    font-size: clamp(11.5px, 3vw, 13.5px);
+    outline-offset: 2px;
+    white-space: nowrap;
+  }
+  .mw-hero__ctas .mw-cta--ghost {
+    padding: 10px clamp(8px, 2.5vw, 12px);
     border-color: rgba(245, 230, 203, 0.34);
   }
   /* Brighten the emergency label one notch so the 24/7 line earns its weight. */
-  .mw-hero__ctas .mw-cta--ghost .mw-cta__sup { color: rgba(245, 230, 203, 0.78); }
+  .mw-hero__ctas .mw-cta--ghost .mw-cta__sup {
+    font-size: clamp(8.5px, 2.4vw, 9.5px);
+    letter-spacing: 0.14em;
+    color: rgba(245, 230, 203, 0.78);
+  }
+  .mw-hero__ctas .mw-cta__num { font-size: clamp(12px, 3.4vw, 14.5px); }
   /* Article tag: smaller, tighter tracking so it fits one line at 390/430, and
      text-wrap:balance so the unavoidable wrap at the narrowest widths splits
      evenly instead of orphaning "1996" on its own line. */
@@ -3715,40 +3793,27 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
    desktop 2-column layout — every stacking rule the ≤960 baseline supplies
    is therefore restated here so the intended portrait layout holds across
    the entire 601–1024 portrait range (768, 820, AND 1024-portrait).
-   The tall canvas gets a BOTTOM-anchored monument composition: stamp logo →
-   commanding 3-line headline → measured lead → side-by-side CTAs → article,
-   pushed down onto the dark bottom gradient (a LEADING 1fr spacer soaks up
-   the surplus height ABOVE the content) — the same content-at-bottom logic
-   as the desktop hero, landing the type on the darkest/most-legible third
-   of the photo with no empty/dead field across the bottom. No new animation
+   The tall canvas uses the shared centred stack (headline + lead) above the
+   pinned CTA row. No new animation
    is introduced, so no new
    reduced-motion fallback is required — the existing entrance + its
    prefers-reduced-motion off-switch above still apply unchanged. ── */
 @media (min-width: 601px) and (max-width: 1024px) and (orientation: portrait) {
   /* Fill the visible viewport below the fixed chrome (the ≤960 baseline
      zeroes this; restore it so 1024-portrait isn't a short hero stranded
-     under a tall photo). A leading 1fr spacer then bottom-anchors the
-     content onto the dark gradient, using the height gracefully. */
+     under a tall photo). */
   .mw-hero { min-height: calc(100svh - var(--mw-eb-h, 39px) - 76px); }
   .mw-hero__inner {
     padding-block: clamp(40px, 7vw, 84px) clamp(44px, 6vw, 76px);
-    /* Bottom-anchor the monument unit onto the dark bottom gradient — the
-       same content-at-bottom logic as the desktop hero, which lands the
-       type on the darkest/most-legible third of the photo. The LEADING 1fr
-       row is the flexible spacer: it absorbs the tall canvas's surplus
-       height ABOVE the content, so there is no empty/dead field across the
-       bottom (the old trailing-spacer version stranded that gap). Head-row
-       and body then sit with their natural spacing at the foot of the hero. */
-    grid-template-rows: 1fr auto auto;
+    gap: clamp(24px, 3.2vw, 34px);
+  }
+  .mw-hero__stack {
     gap: clamp(30px, 4.5vw, 56px);
-    align-content: stretch;
   }
   .mw-hero__head-row {
     /* Restated stacking (1024 doesn't inherit the ≤960 baseline): logo
-       stamp above the headline, single column, left-aligned. Sits on the
-       inner grid's row 2 (row 1 is the flexible top spacer). */
+       stamp above the headline, single column, left-aligned. */
     grid-template-columns: 1fr;
-    grid-row: 2;
     align-items: start;
     row-gap: clamp(18px, 2.8vw, 30px);
   }
@@ -3773,10 +3838,8 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
     align-items: flex-start;
   }
   .mw-hero__mark-brand { height: clamp(96px, 13vw, 140px); }
-  /* Body → single column (restated for 1024); intro then article stack.
-     Inner grid row 3 — directly under the head-row at the foot of the hero. */
+  /* Body → single column (restated for 1024); CTAs then article stack. */
   .mw-hero__body {
-    grid-row: 3;
     grid-template-columns: 1fr;
     row-gap: clamp(20px, 3vw, 30px);
     align-items: start;
@@ -3784,7 +3847,6 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
   .mw-hero__intro {
     grid-column: 1;
     grid-row: 1;
-    gap: clamp(24px, 3.2vw, 34px);
   }
   /* Lead: measured line length + a notch more size/contrast for the larger
      canvas; faint shadow keeps the cream crisp over the brighter photo. */
@@ -3795,9 +3857,9 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
     color: rgba(247, 234, 210, 0.9);
     text-shadow: 0 1px 12px rgba(28, 18, 11, 0.45);
   }
-  /* CTAs stay side-by-side on this wide canvas (only ≤600 stacks them);
-     a touch more separation, comfortable finger targets (solid ≈54px,
-     ghost ≈56px tall — both clear 44px). */
+  /* CTAs stay side-by-side on this wide canvas; a touch more separation,
+     comfortable finger targets (solid ≈54px, ghost ≈56px tall — both
+     clear 44px). */
   .mw-hero__ctas { gap: clamp(16px, 2vw, 24px); }
   /* Article tag: left-aligned under the CTAs (restated for 1024), one line,
      sized up slightly for the canvas; nowrap is safe at this measure. */
@@ -3825,32 +3887,23 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
    dead photo band up top with the logo floating mid-right.
 
    This block keeps the desktop LANGUAGE (2-column, logo + article on the right
-   rail) but re-tunes it for the short height: the flexible spacer moves to the
-   MIDDLE of the inner grid so the head-row (headline + top-aligned stamp logo)
-   commands the TOP third (the brightest photo) while the body (lead → CTAs →
-   article) anchors the BOTTOM onto the dark gradient — filling the canvas top
-   to bottom with intentional structure instead of a letterboxed desktop. No
+   rail) but re-tunes it for the short height while preserving the centred stack
+   above the pinned CTA row. No
    new animation is introduced, so no new reduced-motion fallback is required —
    the existing entrance + its prefers-reduced-motion off-switch above apply
    unchanged. ── */
 @media (min-width: 1000px) and (max-width: 1366px) and (orientation: landscape) and (pointer: coarse) {
-  /* Keep the full short-viewport height, but split it: head-row pinned to the
-     top, a flexible spacer in the MIDDLE, body anchored to the bottom. This
-     erases the dead band the base's leading 1fr spacer leaves on a short
-     canvas and lands the lead/CTAs on the darkest, most-legible lower third. */
   .mw-hero__inner {
     padding-block: clamp(38px, 5vh, 64px) clamp(34px, 5vh, 60px);
-    grid-template-rows: auto 1fr auto;
-    gap: clamp(24px, 3.2vh, 40px);
-    align-content: stretch;
+    gap: clamp(18px, 2.4vh, 26px);
   }
-  /* Head-row holds the TOP: headline (left) + stamp logo (right rail), the
-     logo TOP-aligned to the headline's first line so it reads as a corner mark
-     anchored beside the title block — not the base's mid-height float. Sits on
-     the inner grid's row 1. The right rail is a touch narrower than desktop so
-     the headline keeps its commanding width on the shorter canvas. */
+  .mw-hero__stack {
+    gap: clamp(24px, 3.2vh, 40px);
+  }
+  /* Headline (left) + stamp logo (right rail), top-aligned on the short canvas.
+     The right rail is a touch narrower than desktop so the headline keeps its
+     commanding width. */
   .mw-hero__head-row {
-    grid-row: 1;
     grid-template-columns: minmax(0, 1fr) clamp(220px, 20vw, 300px);
     column-gap: clamp(28px, 3.2vw, 52px);
     align-items: start;
@@ -3871,16 +3924,12 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
     align-self: start;
   }
   .mw-hero__mark-brand { height: clamp(112px, 11vw, 140px); }
-  /* Body anchors the BOTTOM (inner grid row 3): intro on the left rail, article
-     on the right rail under the logo, bottom-aligned — the desktop arrangement,
-     now landing on the dark gradient. */
+  /* Intro on the left rail, article on the right rail under the logo. */
   .mw-hero__body {
-    grid-row: 3;
     grid-template-columns: minmax(0, 1fr) clamp(220px, 20vw, 300px);
     column-gap: clamp(28px, 3.2vw, 52px);
     align-items: end;
   }
-  .mw-hero__intro { gap: clamp(18px, 2.4vh, 26px); }
   /* Lead: a notch more contrast + a measured width for the wide column, with a
      faint shadow for legibility where it crosses the photo. */
   .mw-hero__lead {
@@ -4075,103 +4124,6 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
 .mw-trust--tsb01 .mw-cert__desc {
   max-width: none;
 }
-@media (max-width: 600px) {
-  .mw-trust--tsb01 .mw-certs__inner {
-    flex-direction: column;
-    gap: 6px;
-  }
-}
-
-/* ── Certs banner · MOBILE PORTRAIT refinement (≤600 only, tsb01-scoped) ──
-   On phones the inherited 2×2 grid forced every long description ("Environmental
-   Management System", "Certificate of Recognition (Safety)") to wrap inside a
-   narrow ~150px column, so the four cards baked out at uneven heights with the
-   "PDF · KB" line floating at different y-positions — the band read unfinished.
-   Re-cast the home trust strip as a single-column "ledger": one full-width row
-   per certificate, logo-left + body-right (the SAME anatomy as the desktop
-   card), hairline-divided. Full width lets each description breathe and lets the
-   rows auto-size independently (no side-by-side height imbalance), and turns
-   every card into a large, obvious full-width download target. Everything is
-   scoped to `.mw-trust--tsb01` and confined to ≤600, so desktop, the ≤1100/≤900
-   tablet passes, the template-gallery `.mw-certs` preview, and the standalone
-   `download-card-01` are all untouched. No new animation → the existing
-   prefers-reduced-motion off-switch below still covers the reveal. ── */
-@media (max-width: 600px) {
-  /* 2×2 → single column. Drop the grid's own left/top hairlines; the section's
-     top/bottom borders plus the per-row dividers below frame the band. */
-  .mw-trust--tsb01 .mw-certs {
-    grid-template-columns: 1fr;
-    border-left: 0;
-    border-top: 0;
-  }
-  /* Each card is a horizontal ledger row. Undo the generic ≤600 column-stack
-     and the tsb01 center-justify; left-align and top-align so the logo anchors
-     to the big number. Replace the vertical card borders with a single top
-     hairline per row (the first row's divider is the section's top border). */
-  .mw-trust--tsb01 .mw-cert {
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: flex-start;
-    gap: clamp(14px, 4vw, 20px);
-    padding: clamp(15px, 4.4vw, 22px) clamp(15px, 4.2vw, 20px);
-    border-right: 0;
-    border-left: 0;
-    border-top: 0.5px solid var(--c-line);
-  }
-  .mw-trust--tsb01 .mw-cert:first-child {
-    border-top: 0;
-  }
-  /* The JS equalizes every .mw-certs__inner to the widest card's px width; at
-     1-col that's the full row, so force row layout + 100% width here and the
-     equalized inline width can never exceed the column → no horizontal overflow. */
-  .mw-trust--tsb01 .mw-certs__inner {
-    flex-direction: row;
-    align-items: flex-start;
-    gap: clamp(14px, 4vw, 20px);
-    width: 100%;
-  }
-  /* Logo: a touch larger than the 38px stacked mark to balance the big number,
-     and dropped down so its top edge meets the number's top — skipping the
-     "ISO · YEAR" prefix row (prefix 10.5px × ~1.2 + 3px margin ≈ 16px), exactly
-     like the desktop card's margin-top trick. */
-  .mw-trust--tsb01 .mw-cert__mark {
-    width: clamp(46px, 13vw, 56px);
-    margin-top: 16px;
-  }
-  .mw-trust--tsb01 .mw-cert__body {
-    flex: 1;
-    min-width: 0;
-  }
-  .mw-trust--tsb01 .mw-cert__prefix {
-    margin-bottom: 3px;
-  }
-  /* Commanding monolith number, but sized so it no longer crowds a narrow
-     column now that it owns the full row width. */
-  .mw-trust--tsb01 .mw-cert__num {
-    font-size: clamp(34px, 9.4vw, 44px);
-    line-height: 0.86;
-  }
-  .mw-trust--tsb01 .mw-cert__desc {
-    font-size: 12.5px;
-    line-height: 1.4;
-    margin-top: 5px;
-    max-width: none;
-  }
-  /* Download cue: on touch there is no :hover (the desktop accent-bar reveal +
-     arrow nudge never fire), so the static state must carry the affordance.
-     Keep the desktop "PDF · KB ↓" mono-clay pattern but give it more presence
-     and a larger, heavier arrow so the row reads unmistakably as a download. */
-  .mw-trust--tsb01 .mw-cert__pdf {
-    margin-top: 11px;
-    font-size: 10.5px;
-    gap: 9px;
-  }
-  .mw-trust--tsb01 .mw-cert__arr {
-    font-size: 16px;
-    font-weight: 700;
-  }
-}
-
 /* Reveal: come up + fade in, like the home services roster rows. Applied to the
    CARD (not its inner content) so the cards' resting/centered layout is never
    touched — at rest opacity:0 + a downward offset, settling to opacity:1 +
@@ -4193,110 +4145,91 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
   .mw-trust--tsb01 .mw-cert { opacity: 1 !important; animation: none !important; }
 }
 
-/* ── Certs banner · TABLET-PORTRAIT pass (601–1024, portrait only, tsb01-scoped) ──
-   SELF-SUFFICIENT block — appended after every preceding certs rule so it wins
-   the cascade where it overlaps. It must stand alone across the whole range:
-   the ≤1100 rule reaches up to 1100 (so 768/820/1024-portrait all inherit its
-   2×2 grid) but there is NO ≤900 certs rule, and the ≤600 ledger never matches
-   here — so this block restates the full intended layout without leaning on any
-   width-only block. Desktop (≥1025 in landscape, and any fine-pointer width) and
-   the committed ≤600 mobile ledger are both outside this query → untouched.
-
-   THE DEFECT THIS FIXES: at these wide tablet half-columns the base
-   `.mw-trust--tsb01 .mw-cert { justify-content:center }` centers each card's
-   JS-equalized (narrow) inner block inside its much-wider cell, leaving a large
-   dead gutter on BOTH sides — the four cards floated as centered islands with no
-   relationship to their cell edges and a big void under the "PDF·KB" line. We
-   re-anchor each card's content to the cell's left padding (the desktop/ledger
-   anatomy: seal-left + body-right, reading from the left edge), firm up the seal
-   and monolith-number scale for the larger canvas, and tighten the internal
-   rhythm so each cell is balanced top-to-bottom. No new animation is introduced,
-   so the existing prefers-reduced-motion off-switch above still covers the
-   reveal; the JS still equalizes the inners (now left-aligned), and every inner
-   is capped at `max-width:100%` of its own equal-width column → no overflow. ── */
-@media (min-width: 601px) and (max-width: 1024px) and (orientation: portrait) {
-  /* Restate the 2×2 grid so the block is self-sufficient (does not rely on the
-     ≤1100 rule). Keep the grid's framing hairlines: outer left + a top hairline
-     so both rows read as a clean two-up ledger. */
+/* ── Certs banner · HORIZONTAL SCROLL (≤1100, tsb01-scoped) ──
+   When four cards no longer fit in one row, keep a single scrollable strip
+   instead of a 2×2 grid or vertical ledger. Placed before the tablet-LANDSCAPE
+   coarse block so touch tablets that still fit 4-across in landscape keep that
+   layout. Scoped to `.mw-trust--tsb01` only — generic `.mw-certs` previews and
+   other consumers of the base grid are untouched. ── */
+@media (max-width: 1100px) {
   .mw-trust--tsb01 .mw-certs {
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+    scrollbar-color: var(--c-accent-2) transparent;
+    grid-template-columns: none;
     border-left: 0.5px solid var(--c-line);
-    border-top: 0.5px solid var(--c-line);
+    border-top: 0;
   }
-  /* 2×2 dividers: no left border on the left column, a top border on the
-     bottom-row cells. (Restated locally so it holds at 1024 too, where only the
-     ≤1100 rule would otherwise supply it.) */
-  .mw-trust--tsb01 .mw-cert:nth-child(odd) { border-left: 0; }
-  .mw-trust--tsb01 .mw-cert:nth-child(3),
-  .mw-trust--tsb01 .mw-cert:nth-child(4) { border-top: 0.5px solid var(--c-line); }
-
-  /* Anchor each card LEFT (kills the centered-island gutter), keep seal-top
-     aligned to the big number, and give the cell comfortable breathing padding.
-     The whole <a> is the tap target — at this padding every cell is well over
-     140px tall, far past the 44px minimum. */
   .mw-trust--tsb01 .mw-cert {
-    justify-content: flex-start;
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: row;
     align-items: flex-start;
-    padding: clamp(22px, 3.4vw, 32px) clamp(22px, 3.2vw, 34px);
-    gap: clamp(16px, 2.2vw, 24px);
+    justify-content: flex-start;
+    min-width: clamp(260px, 68vw, 340px);
+    gap: clamp(14px, 2vw, 22px);
+    padding: clamp(14px, 2.2vw, 22px) clamp(16px, 2.4vw, 24px);
+    border-top: 0;
+    border-left: 0;
+    border-right: 0.5px solid var(--c-line);
+    scroll-snap-align: start;
   }
-  /* The JS equalizes every inner to the widest card's px width; left-align it
-     against the cell padding and let it grow only to the column (max-width:100%
-     already caps it) so the equalized width can never overflow the half-column. */
+  .mw-trust--tsb01 .mw-cert:nth-child(odd),
+  .mw-trust--tsb01 .mw-cert:nth-child(3),
+  .mw-trust--tsb01 .mw-cert:nth-child(4) {
+    border-left: 0;
+    border-top: 0;
+  }
   .mw-trust--tsb01 .mw-certs__inner {
     flex-direction: row;
     align-items: flex-start;
-    gap: clamp(16px, 2.2vw, 24px);
+    gap: clamp(14px, 2vw, 22px);
+    width: max-content;
+    max-width: 100%;
   }
-  /* Seal: firmer than the base clamp at these widths so it balances the larger
-     monolith number (mirrors the mobile ledger's confident seal). Dropped down
-     so its top meets the number's top, skipping the "ISO · YEAR" prefix row
-     (prefix 11px × ~1.2 + 4px margin ≈ 17px), exactly like the desktop card. */
   .mw-trust--tsb01 .mw-cert__mark {
-    width: clamp(56px, 7.2vw, 68px);
-    margin-top: 18px;
+    width: clamp(44px, 6vw, 60px);
+    margin-top: 16px;
   }
   .mw-trust--tsb01 .mw-cert__body {
     flex: 1;
     min-width: 0;
   }
-  .mw-trust--tsb01 .mw-cert__prefix {
-    font-size: 11px;
-    margin-bottom: 4px;
-  }
-  /* Commanding monolith, sized to own the half-column without crowding the seal.
-     Capped so the widest numbers ("14001"/"45001", 5 glyphs) never collide with
-     the seal at 768; the desc wraps to ≤24ch so the inner's natural width stays
-     within the column (no JS-equalized overflow). */
-  .mw-trust--tsb01 .mw-cert__num {
-    font-size: clamp(42px, 6vw, 54px);
-    line-height: 0.84;
-  }
   .mw-trust--tsb01 .mw-cert__desc {
-    font-size: 13.5px;
-    line-height: 1.4;
-    margin-top: 7px;
     max-width: 24ch;
-    /* Reserve two lines of description height in EVERY cell. Within a row the
-       descriptions are uneven ("Environmental Management System" /
-       "Certificate of Recognition (Safety)" wrap to two lines while their
-       row-mates stay on one), which would otherwise drop the "PDF·KB ↓" line to
-       different y-positions across the row. A fixed 2-line min-height lands the
-       download cue on a consistent baseline in both cells of each row. */
     min-height: 2.8em;
   }
-  /* Download cue: on touch there is no :hover (the accent-bar reveal + arrow
-     nudge never fire), so the static state must read unmistakably as a download.
-     Keep the mono-clay "PDF · KB ↓" pattern but give it presence and a larger,
-     heavier arrow — the same move as the committed mobile ledger. */
   .mw-trust--tsb01 .mw-cert__pdf {
-    margin-top: 14px;
-    font-size: 11px;
-    gap: 10px;
+    margin-top: 11px;
+    font-size: 10.5px;
+    gap: 9px;
   }
   .mw-trust--tsb01 .mw-cert__arr {
     font-size: 16px;
     font-weight: 700;
+  }
+}
+@media (max-width: 600px) {
+  .mw-trust--tsb01 .mw-cert {
+    min-width: clamp(240px, 78vw, 300px);
+    padding: clamp(15px, 4vw, 20px) clamp(14px, 3.8vw, 18px);
+  }
+  .mw-trust--tsb01 .mw-cert__mark {
+    width: clamp(46px, 12vw, 56px);
+  }
+  .mw-trust--tsb01 .mw-cert__num {
+    font-size: clamp(34px, 9vw, 42px);
+  }
+  .mw-trust--tsb01 .mw-cert__desc {
+    font-size: 12.5px;
+    max-width: none;
   }
 }
 
@@ -4345,9 +4278,17 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
      canvas. Keep the grid's leading left hairline; no top border (a single row
      is framed by the section's top/bottom borders + per-cell right dividers). */
   .mw-trust--tsb01 .mw-certs {
+    display: grid;
+    overflow-x: visible;
+    scroll-snap-type: none;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     border-left: 0.5px solid var(--c-line);
     border-top: 0;
+  }
+  .mw-trust--tsb01 .mw-cert {
+    flex: initial;
+    min-width: 0;
+    scroll-snap-align: none;
   }
   /* Reset the ≤1100 2×2 divider scheme back to the desktop single-row scheme:
      only the FIRST cell drops its left border (the grid supplies the leading
@@ -4399,10 +4340,6 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
     font-size: clamp(34px, 3.7vw, 50px);
     line-height: 0.86;
   }
-  /* Desc wraps to ≤22ch so the inner's natural width stays inside the cell (no
-     JS-equalized overflow); a fixed 2-line min-height reserves equal description
-     height in EVERY card so the "PDF·KB ↓" cue lands on ONE baseline across the
-     row even where a description wraps to two lines and its row-mates do not. */
   .mw-trust--tsb01 .mw-cert__desc {
     font-size: 12.5px;
     line-height: 1.4;
@@ -6486,8 +6423,8 @@ html[data-brand="miller"] {
 .mw-secd--check .mw-secd__title[data-in="1"] .mw-secd__rise,
 .mw-secd--check .mw-secd__lead[data-in="1"] .mw-secd__rise,
 .mw-secd--check .mw-secd__cta[data-in="1"] .mw-secd__rise { transform: none; }
-/* Button rises in TWICE as fast as the other items (0.95s → 0.475s), same easing. */
-.mw-secd--check .mw-secd__cta .mw-secd__rise { transition-duration: 0.475s; }
+/* Button rises in 4× as fast as the other items (0.95s → 0.2375s), same easing. */
+.mw-secd--check .mw-secd__cta .mw-secd__rise { transition-duration: 0.2375s; }
 @media (prefers-reduced-motion: reduce) {
   .mw-secd--check .mw-secd__rise { transform: none; transition: none; }
 }
@@ -7117,12 +7054,13 @@ html[data-brand="miller"] {
 .mw-czoom__intro {
   position: absolute;
   left: var(--czoom-intro-x, 50%);
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateY(calc(var(--intro-out, 0) * -8px));
   top: 0;
   padding: 0;
   margin: clamp(40px, 4.5vh, 60px) 0 0 0;
   width: max-content;
   max-width: calc(100vw / 3);
+  opacity: calc(1 - var(--intro-out, 0));
   pointer-events: auto;
 }
 .mw-czoom__intro-field {
@@ -7151,8 +7089,9 @@ html[data-brand="miller"] {
   /* The section pins (sticky stage) over this track; the widget drives the dive from
      scroll progress over --dive-vh and auto-advances the scroll while pinned. --freeze-vh
      is a short hold on the finished frame before release. Track = dive + freeze + one viewport. */
-  --dive-vh: 200;
+  --dive-vh: 125;
   --freeze-vh: 25;
+  --center-img-anchor-y: 58%;
   height: calc((var(--dive-vh) + var(--freeze-vh) + 100) * 1vh);
 }
 .mw-czoom__stage {
@@ -7199,6 +7138,11 @@ html[data-brand="miller"] {
    every photo rasterizes from a large source and stays crisp instead of upscaling a
    small bitmap. Sizes/offsets below are mosaic-box × cap. */
 .mw-czoom__cell:nth-child(1) .mw-czoom__frame { width: 100vw; height: 100vh; }
+.mw-czoom__cell:nth-child(1) .mw-czoom__frame img {
+  object-position: center var(--center-img-anchor-y);
+  transform: scale(var(--center-img-zoom, 1.12));
+  transform-origin: center var(--center-img-anchor-y);
+}
 .mw-czoom__frame img {
   display: block;
   width: 100%;
@@ -7386,7 +7330,7 @@ html[data-brand="miller"] {
 
 /* Phone: shorter dive distance; stack the invitation cards full-width. */
 @media (max-width: 700px) {
-  .mw-czoom__track { --dive-vh: 160; }
+  .mw-czoom__track { --dive-vh: 100; }
   .mw-czoom__card { min-width: 0; width: 100%; }
   .mw-czoom__cards { width: 100%; max-width: 360px; }
 }
@@ -7508,31 +7452,88 @@ html[data-brand="miller"] {
     opacity: var(--cap-op, 0);
     will-change: transform, opacity;
   }
+  /* Shared stage — dumptruck + diamond cluster share one centred hub once the swipe completes. */
+  .mw-fac2-track .mw-fac2__stage {
+    position: relative;
+    width: min(100%, clamp(520px, 54vw, 760px));
+    margin-inline: auto;
+    aspect-ratio: 1672 / 941;
+    overflow: visible;
+  }
+  .mw-fac2-track .mw-fac2__truck {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    opacity: var(--fac2-truck-op, 0);
+    transform: translateX(var(--fac2-truck-x, 0px));
+    will-change: transform, opacity;
+    --fac2-truck-base: var(--c-bg);
+    --fac2-truck-mid: color-mix(in srgb, var(--c-bg) 80%, var(--c-line));
+    --fac2-truck-shade: color-mix(in srgb, var(--c-bg) 62%, var(--c-line));
+    --fac2-truck-stroke: color-mix(in srgb, var(--c-ink) 26%, var(--c-line));
+  }
+  .mw-fac2-track .mw-fac2__truck-svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+.mw-fac2-track .mw-fac2__stage > .mw-cap-dia {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(var(--cap-hover-scale, 1));
+    transform-origin: center;
+    transition: transform 0.42s cubic-bezier(0.2, 0.7, 0.2, 1);
+    width: min(68%, 480px);
+    margin: 0;
+    z-index: 1;
+  }
 }
 
+/* VBEC swipe-reveal stage wrapper — static/mobile flow only; truck hidden until pin. */
+.mw-fac2__stage { position: relative; }
+.mw-fac2__truck { display: none; }
+
 /* ─────────────────────────────────────────────────────────────────
-   Capabilities diamond-of-diamonds (replaces the 7-cap grid). 8 rounded
-   clay diamonds on the who-we-serve argyle lattice (SAME --secd-gap),
+   Capabilities diamond-of-diamonds (replaces the 7-cap grid). 8 flat
+   mineral diamonds on the who-we-serve argyle lattice (SAME --secd-gap),
    hollow centre; a title diamond crowns the top; the hovered diamond
-   grows above its neighbours. JSX: media-split-01.jsx (.mw-cap-dia*). */
+   brings its one-line detail forward. JSX: media-split-01.jsx (.mw-cap-dia*). */
 .mw-cap-dia {
   --secd-gap: clamp(2.12px, 0.247vw, 4.24px); /* SAME visible gap as the who-we-serve grid */
+  --cap-hover-scale: 1;
   position: relative;
   width: min(100%, 520px);
   margin-inline: auto;
+  transform: scale(var(--cap-hover-scale));
+  transform-origin: center;
+  transition: transform 0.42s cubic-bezier(0.2, 0.7, 0.2, 1);
   /* aspect-ratio is set inline (cols / rows) so the lattice stays square-celled */
 }
 .mw-cap-dia__cell {
   position: absolute;
   aspect-ratio: 1;          /* square box → diamond after the rounded-rect fill; width set inline */
   pointer-events: none;     /* boxes overlap at the corners — only the diamond fill is hoverable */
+  transition: opacity 0.28s ease;
+}
+.mw-cap-dia__hit {
+  position: absolute;
+  inset: var(--secd-gap);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  display: block;
+  pointer-events: auto;
+  z-index: 4;
 }
 .mw-cap-dia__d {
   position: absolute;
   inset: var(--secd-gap);   /* the gap inset, exactly like .mw-secd__photo-clip */
   display: block;
   transform-origin: center;
-  transition: transform 0.42s cubic-bezier(0.2, 0.7, 0.2, 1), filter 0.32s ease;
+  transition: transform 0.42s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.28s ease;
   will-change: transform;
 }
 .mw-cap-dia__svg {
@@ -7541,32 +7542,28 @@ html[data-brand="miller"] {
   width: 100%;
   height: 100%;
   overflow: visible;
-  filter: drop-shadow(0 8px 18px rgba(33, 20, 12, 0.30));
-  transition: filter 0.32s ease;
+  filter: none;
+  transform-origin: center;
+  transition: transform 0.48s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 .mw-cap-dia__fill {
   fill: var(--cap-bg, var(--c-accent));
-  pointer-events: auto;     /* the diamond shape is the hover target */
-  transition: fill 0.3s ease;
-}
-/* faceted sheen — soft top-left highlight → bottom-right shade, clipped just inside the
-   rounded diamond so it never spills past the tips; sits over the fill, under the text. */
-.mw-cap-dia__d::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  clip-path: polygon(50% 4%, 96% 50%, 50% 96%, 4% 50%);
-  background: linear-gradient(145deg, rgba(255, 241, 222, 0.16), rgba(255, 241, 222, 0) 46%, rgba(36, 21, 11, 0.24));
+  stroke: none;
+  stroke-width: 0;
+  vector-effect: non-scaling-stroke;
   pointer-events: none;
-  z-index: 0;
+  transition: fill 0.32s ease;
 }
+.mw-cap-dia__d::after { content: none; }
 .mw-cap-dia__face {
   position: absolute;
   inset: 0;
   display: grid;
   place-items: center;
+  align-content: center;
+  gap: 0;
   text-align: center;
-  padding: 0 17%;
+  padding: 0 14%;
   pointer-events: none;     /* hover passes through the text to the diamond fill below */
   z-index: 1;
 }
@@ -7579,10 +7576,15 @@ html[data-brand="miller"] {
   text-transform: uppercase;
   color: var(--c-bg);
   text-wrap: balance;
-  text-shadow: 0 1px 2px rgba(20, 11, 5, 0.30);
+  text-shadow: none;
+  transition: opacity 0.22s ease, transform 0.34s ease;
 }
 /* Title diamond — deep walnut crown, bolder lettering + a clay stamp tick. */
-.mw-cap-dia__cell--title .mw-cap-dia__fill { fill: var(--c-navy); }
+.mw-cap-dia__cell--title .mw-cap-dia__fill {
+  fill: var(--c-navy);
+  stroke: none;
+  stroke-width: 0;
+}
 .mw-cap-dia__title {
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
   font-weight: 700;
@@ -7593,22 +7595,25 @@ html[data-brand="miller"] {
   color: var(--c-bg);
 }
 .mw-cap-dia__title::after {
-  content: "";
-  display: block;
-  width: 8px;
-  height: 8px;
-  margin: 8px auto 0;
-  background: var(--c-accent);
-  transform: rotate(45deg);
-  transition: transform 0.42s cubic-bezier(0.2, 0.7, 0.2, 1);
+  content: none;
 }
-/* Hover — the diamond grows above its neighbours and brightens (target = the diamond fill). */
-.mw-cap-dia__cell:has(.mw-cap-dia__fill:hover) { z-index: 6; }
-.mw-cap-dia__cell:has(.mw-cap-dia__fill:hover) .mw-cap-dia__d { transform: scale(1.14); filter: brightness(1.08); }
-.mw-cap-dia__cell:has(.mw-cap-dia__fill:hover) .mw-cap-dia__svg { filter: drop-shadow(0 16px 34px rgba(33, 20, 12, 0.46)); }
-.mw-cap-dia__cell--title:has(.mw-cap-dia__fill:hover) .mw-cap-dia__title::after { transform: rotate(135deg); }
+/* Hover — scale the full lattice as one unit so every gap keeps the same pattern. */
+.mw-cap-dia:has(.mw-cap-dia__hit:hover) { --cap-hover-scale: 1.16; }
+.mw-cap-dia__cell--cap:has(.mw-cap-dia__hit:hover) { z-index: 7; }
+.mw-cap-dia__cell--cap:has(.mw-cap-dia__hit:hover) .mw-cap-dia__d {
+  transform: scale(1);
+}
+.mw-cap-dia__cell--cap:has(.mw-cap-dia__hit:hover) .mw-cap-dia__svg {
+  filter: none;
+  transform: rotate(90deg);
+}
+.mw-cap-dia__cell--cap:has(.mw-cap-dia__hit:hover) .mw-cap-dia__fill {
+  fill: var(--c-navy);
+  stroke: none;
+  stroke-width: 0;
+}
 @media (prefers-reduced-motion: reduce) {
-  .mw-cap-dia__d, .mw-cap-dia__svg, .mw-cap-dia__fill, .mw-cap-dia__title::after { transition: none; }
+  .mw-cap-dia, .mw-cap-dia__cell, .mw-cap-dia__d, .mw-cap-dia__svg, .mw-cap-dia__fill, .mw-cap-dia__name { transition: none; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -7712,7 +7717,7 @@ html[data-brand="miller"] {
      names crowded the diamond. FIX: a viewport-scaled name size with a higher
      floor, slightly looser inner padding so long names have room, and a touch
      more top separation so the cluster breathes under the figures. The lattice
-     geometry, tones, sheen, and crown diamond are untouched. */
+     geometry, flat fill treatment, and crown diamond are untouched. */
   .mw-fac2__caps { margin-top: clamp(8px, 3vw, 18px); }
   .mw-cap-dia { width: 100%; }
   .mw-cap-dia__face { padding: 0 12%; }
