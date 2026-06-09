@@ -3600,6 +3600,101 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
     letter-spacing: 0.12em;
   }
 }
+/* ── Tablet-LANDSCAPE pass (1000–1366, landscape, COARSE pointer only).
+   Additive: appended after every preceding hero rule so it wins the cascade
+   where it overlaps. The `pointer: coarse` guard is load-bearing — these
+   landscape widths (1024–1366) overlap real desktop window widths, so coarse
+   is what restricts this block to touch tablets and guarantees a mouse desktop
+   (fine pointer) never matches, even at an identical width. The shared ≤960
+   baseline does not match above 960px, and the tablet-PORTRAIT block can never
+   match landscape, so on the WIDE-but-SHORT canvas (1024×768 · 1194×834 ·
+   1366×1024) the hero would otherwise fall into the desktop 2-column layout
+   whose LEADING 1fr spacer dumps all content to the bottom and strands a big
+   dead photo band up top with the logo floating mid-right.
+
+   This block keeps the desktop LANGUAGE (2-column, logo + article on the right
+   rail) but re-tunes it for the short height: the flexible spacer moves to the
+   MIDDLE of the inner grid so the head-row (headline + top-aligned stamp logo)
+   commands the TOP third (the brightest photo) while the body (lead → CTAs →
+   article) anchors the BOTTOM onto the dark gradient — filling the canvas top
+   to bottom with intentional structure instead of a letterboxed desktop. No
+   new animation is introduced, so no new reduced-motion fallback is required —
+   the existing entrance + its prefers-reduced-motion off-switch above apply
+   unchanged. ── */
+@media (min-width: 1000px) and (max-width: 1366px) and (orientation: landscape) and (pointer: coarse) {
+  /* Keep the full short-viewport height, but split it: head-row pinned to the
+     top, a flexible spacer in the MIDDLE, body anchored to the bottom. This
+     erases the dead band the base's leading 1fr spacer leaves on a short
+     canvas and lands the lead/CTAs on the darkest, most-legible lower third. */
+  .mw-hero__inner {
+    padding-block: clamp(38px, 5vh, 64px) clamp(34px, 5vh, 60px);
+    grid-template-rows: auto 1fr auto;
+    gap: clamp(24px, 3.2vh, 40px);
+    align-content: stretch;
+  }
+  /* Head-row holds the TOP: headline (left) + stamp logo (right rail), the
+     logo TOP-aligned to the headline's first line so it reads as a corner mark
+     anchored beside the title block — not the base's mid-height float. Sits on
+     the inner grid's row 1. The right rail is a touch narrower than desktop so
+     the headline keeps its commanding width on the shorter canvas. */
+  .mw-hero__head-row {
+    grid-row: 1;
+    grid-template-columns: minmax(0, 1fr) clamp(220px, 20vw, 300px);
+    column-gap: clamp(28px, 3.2vw, 52px);
+    align-items: start;
+  }
+  /* Headline: big enough to command the width, capped so the three lines + the
+     lead + CTAs all fit the short height as one clean block (≈92px @1024 ·
+     ≈100px @1194 · ≈104px @1366). Slight negative tracking + a faint shadow
+     keep "WASTE DISPOSAL." crisp over the brighter upper third of the photo. */
+  .mw-hero__title {
+    font-size: clamp(72px, 8vw, 108px);
+    line-height: 0.82;
+    letter-spacing: -0.004em;
+    text-shadow: 0 1px 16px rgba(28, 18, 11, 0.34);
+  }
+  /* Stamp logo: top-aligned in the right rail, sized to sit beside the headline
+     without nearing its height (≈118px @1024 · ≈128px @1194 · ≈132px @1366). */
+  .mw-hero__mark {
+    align-self: start;
+  }
+  .mw-hero__mark-brand { height: clamp(112px, 11vw, 140px); }
+  /* Body anchors the BOTTOM (inner grid row 3): intro on the left rail, article
+     on the right rail under the logo, bottom-aligned — the desktop arrangement,
+     now landing on the dark gradient. */
+  .mw-hero__body {
+    grid-row: 3;
+    grid-template-columns: minmax(0, 1fr) clamp(220px, 20vw, 300px);
+    column-gap: clamp(28px, 3.2vw, 52px);
+    align-items: end;
+  }
+  .mw-hero__intro { gap: clamp(18px, 2.4vh, 26px); }
+  /* Lead: a notch more contrast + a measured width for the wide column, with a
+     faint shadow for legibility where it crosses the photo. */
+  .mw-hero__lead {
+    font-size: clamp(17px, 1.5vw, 20px);
+    line-height: 1.5;
+    max-width: 50ch;
+    color: rgba(247, 234, 210, 0.9);
+    text-shadow: 0 1px 12px rgba(28, 18, 11, 0.45);
+  }
+  /* CTAs stay side-by-side on this wide canvas (comfortable finger targets:
+     solid ≈54px, ghost ≈50px tall — both clear the 44px minimum). */
+  .mw-hero__ctas { gap: clamp(16px, 1.6vw, 22px); }
+  /* Article tag: one line on the right rail, bottom-aligned with the CTAs —
+     vertically echoing the desktop's logo→article rail. RIGHT-aligned (not
+     centered like desktop) so its right edge tucks under the logo's right edge
+     and the line overflows LEFT into the gutter, away from the hero's right
+     edge — the narrower landscape rail would otherwise clip a centered, nowrap
+     line ("…SINCE 1996" cut to "…SINCE") at the screen edge. */
+  .mw-hero__article {
+    justify-self: end;
+    align-self: end;
+    text-align: right;
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+  }
+}
 
 
 /* ─────────────────────────────────────────────────────────────────
