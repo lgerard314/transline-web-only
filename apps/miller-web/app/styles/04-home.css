@@ -3870,6 +3870,96 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
   }
 }
 
+/* ── Certs banner · MOBILE PORTRAIT refinement (≤600 only, tsb01-scoped) ──
+   On phones the inherited 2×2 grid forced every long description ("Environmental
+   Management System", "Certificate of Recognition (Safety)") to wrap inside a
+   narrow ~150px column, so the four cards baked out at uneven heights with the
+   "PDF · KB" line floating at different y-positions — the band read unfinished.
+   Re-cast the home trust strip as a single-column "ledger": one full-width row
+   per certificate, logo-left + body-right (the SAME anatomy as the desktop
+   card), hairline-divided. Full width lets each description breathe and lets the
+   rows auto-size independently (no side-by-side height imbalance), and turns
+   every card into a large, obvious full-width download target. Everything is
+   scoped to `.mw-trust--tsb01` and confined to ≤600, so desktop, the ≤1100/≤900
+   tablet passes, the template-gallery `.mw-certs` preview, and the standalone
+   `download-card-01` are all untouched. No new animation → the existing
+   prefers-reduced-motion off-switch below still covers the reveal. ── */
+@media (max-width: 600px) {
+  /* 2×2 → single column. Drop the grid's own left/top hairlines; the section's
+     top/bottom borders plus the per-row dividers below frame the band. */
+  .mw-trust--tsb01 .mw-certs {
+    grid-template-columns: 1fr;
+    border-left: 0;
+    border-top: 0;
+  }
+  /* Each card is a horizontal ledger row. Undo the generic ≤600 column-stack
+     and the tsb01 center-justify; left-align and top-align so the logo anchors
+     to the big number. Replace the vertical card borders with a single top
+     hairline per row (the first row's divider is the section's top border). */
+  .mw-trust--tsb01 .mw-cert {
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: clamp(14px, 4vw, 20px);
+    padding: clamp(15px, 4.4vw, 22px) clamp(15px, 4.2vw, 20px);
+    border-right: 0;
+    border-left: 0;
+    border-top: 0.5px solid var(--c-line);
+  }
+  .mw-trust--tsb01 .mw-cert:first-child {
+    border-top: 0;
+  }
+  /* The JS equalizes every .mw-certs__inner to the widest card's px width; at
+     1-col that's the full row, so force row layout + 100% width here and the
+     equalized inline width can never exceed the column → no horizontal overflow. */
+  .mw-trust--tsb01 .mw-certs__inner {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: clamp(14px, 4vw, 20px);
+    width: 100%;
+  }
+  /* Logo: a touch larger than the 38px stacked mark to balance the big number,
+     and dropped down so its top edge meets the number's top — skipping the
+     "ISO · YEAR" prefix row (prefix 10.5px × ~1.2 + 3px margin ≈ 16px), exactly
+     like the desktop card's margin-top trick. */
+  .mw-trust--tsb01 .mw-cert__mark {
+    width: clamp(46px, 13vw, 56px);
+    margin-top: 16px;
+  }
+  .mw-trust--tsb01 .mw-cert__body {
+    flex: 1;
+    min-width: 0;
+  }
+  .mw-trust--tsb01 .mw-cert__prefix {
+    margin-bottom: 3px;
+  }
+  /* Commanding monolith number, but sized so it no longer crowds a narrow
+     column now that it owns the full row width. */
+  .mw-trust--tsb01 .mw-cert__num {
+    font-size: clamp(34px, 9.4vw, 44px);
+    line-height: 0.86;
+  }
+  .mw-trust--tsb01 .mw-cert__desc {
+    font-size: 12.5px;
+    line-height: 1.4;
+    margin-top: 5px;
+    max-width: none;
+  }
+  /* Download cue: on touch there is no :hover (the desktop accent-bar reveal +
+     arrow nudge never fire), so the static state must carry the affordance.
+     Keep the desktop "PDF · KB ↓" mono-clay pattern but give it more presence
+     and a larger, heavier arrow so the row reads unmistakably as a download. */
+  .mw-trust--tsb01 .mw-cert__pdf {
+    margin-top: 11px;
+    font-size: 10.5px;
+    gap: 9px;
+  }
+  .mw-trust--tsb01 .mw-cert__arr {
+    font-size: 16px;
+    font-weight: 700;
+  }
+}
+
 /* Reveal: come up + fade in, like the home services roster rows. Applied to the
    CARD (not its inner content) so the cards' resting/centered layout is never
    touched — at rest opacity:0 + a downward offset, settling to opacity:1 +
