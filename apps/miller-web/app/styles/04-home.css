@@ -7636,3 +7636,54 @@ html[data-brand="miller"] {
     .mw-fac2 .mw-iacc__panel.is-open { flex: 1 1 100%; width: 100%; }
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   VBEC / facility (MediaSplit01) — TABLET LANDSCAPE refinement.
+   Range 1000–1366px AND landscape AND coarse pointer (a real tablet held
+   sideways: iPad 1024×768, iPad Pro 11" 1194×834, large 1366×1024). The
+   `pointer:coarse` gate is ESSENTIAL — these landscape widths overlap the
+   fine-pointer DESKTOP range (≥1025px), and desktop must stay byte-identical;
+   coarse-pointer narrows this block to touch devices ONLY.
+
+   In this range the PIN IS ACTIVE (the pinned reveal gate is min-width:901px
+   + motion-OK, which 1024/1194/1366 all satisfy), so tablet landscape already
+   runs the full desktop-style 40/60 PINNED sequence: intro left, media right;
+   the 3 highlights grow → media swipes RIGHT → the capability diamonds roll
+   into the argyle cluster and settle. Verified across a scrollY sequence at all
+   three widths (incl. the shortest 1024×768): the intro/CTAs read well, the 3
+   figures land cleanly under the photo, the diamond cluster spreads into the
+   full lattice with every label legible, and there is no vertical crowding or
+   horizontal overflow. The reveal geometry is correct as-is — desktop-derived.
+
+   The ONLY blemish is the SAME one the tablet-PORTRAIT 901–1024 pass fixed:
+   the ImageAccordion01's 5 collapsed panels squeeze to a thin vertical
+   "barcode" sliver strip at the hero photo's right edge during the entrance /
+   pin-in / highlights phase (before the swipe), most pronounced in the narrower
+   1024 column. FIX → reuse the portrait approach verbatim: drop the collapsed
+   slivers and let the OPEN photo fill the media column as one clean hero plate
+   that then swipes off. The diamond launch reads `.mw-fac2__media`'s left edge
+   (not the individual panels), and the swipe reads the same container box, so a
+   full-width single photo leaves the pin JS untouched and only improves the
+   tuck-under. (The pin JS cannot be disabled or broken from CSS regardless.)
+
+   SCOPE: only this section's own selectors (.mw-fac2*) and the shared
+   ImageAccordion01 SCOPED under .mw-fac2 (.mw-fac2 .mw-iacc*) so no other
+   consumer of that widget is affected. Nothing here touches a fine-pointer
+   desktop rule (the coarse-pointer gate excludes ≥1025 desktop), the
+   ≤600 / ≤700 / ≤900 mobile blocks, the tablet-PORTRAIT block, the static
+   (max-width:700/900px) blocks, or any reduced-motion block. Reduced-motion is
+   unaffected: when prefers-reduced-motion is set the pin is OFF (the pin query
+   is no-preference) and the section is the static stacked flow — these rules
+   still tidy the gallery there too, which is the correct static treatment.
+   ═══════════════════════════════════════════════════════════════════ */
+@media (min-width: 1000px) and (max-width: 1366px) and (orientation: landscape) and (pointer: coarse) {
+  /* Single hero photo — remove the collapsed "barcode" slivers and let the open
+     panel fill the media column. Mirrors the tablet-portrait 901–1024 fix. */
+  .mw-fac2 .mw-iacc__track { justify-content: stretch; }
+  .mw-fac2 .mw-iacc__panel:not(.is-open) { display: none; }
+  .mw-fac2 .mw-iacc__panel.is-open { flex: 1 1 100%; width: 100%; }
+
+  /* Belt-and-braces: the single-photo re-flow must never push a horizontal
+     scrollbar (the media still bleeds to the right screen edge by design). */
+  .mw-fac2 { overflow-x: clip; }
+}
