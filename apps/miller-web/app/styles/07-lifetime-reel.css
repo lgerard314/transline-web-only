@@ -582,3 +582,48 @@
   .mw-lr-reel__captions { display: none; }
   .mw-lr-reel__dots { display: none; }
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   TABLET PORTRAIT (601–1024, portrait) — REFINE the horizontal 3-diamond chain
+   --------------------------------------------------------------------------
+   This block layers VISUAL refinements on top of the existing tablet pin runway
+   (the `(min-width:721px) and (max-width:1024px)` block, which sets --lr-track-h
+   only). It keeps the desktop horizontal chain (NOT the ≤600 vertical stack) and
+   never touches base/desktop rules, the pin/animation block, or the mobile stack.
+   Appended last so it wins equal-specificity collisions within the portrait range.
+
+   THE PROBLEM it fixes (verified at 768 & 820): base --lr-S is
+   clamp(255px, 29.7vw, 383px). At 768/820 portrait the content column
+   (.mw-inner ≈ 707px / 754px) is narrower than 3×255px (765px), so 29.7vw clamps
+   UP to the 255px FLOOR and the four equal gutters
+   (--lr-gap-even = max(0, (100% − 3·S)/4)) collapse to ~0 — the three diamonds
+   nearly touch and the connecting "growing line" (the money-shot chain motif)
+   shrinks to ~15px stubs. 1024 portrait (S resolves to 304px in a 942px column)
+   already fit, but its connectors were also short (~51px).
+   ════════════════════════════════════════════════════════════════════════ */
+@media (min-width: 601px) and (max-width: 1024px) and (orientation: portrait) {
+  /* Diamond edge length, re-tuned for the narrower PORTRAIT content column so the
+     four equal gutters reopen to real, visible connectors at every portrait width.
+     Coefficient 26.6vw is derived to reproduce DESKTOP's connector-to-diamond
+     proportion (connector ≈ 0.26·S): it yields S ≈ 204px @768, 218px @820,
+     272px @1024 → connectors ≈ 53px / 57px / 71px (was ~15px / ~15px / ~51px).
+     The diamonds shrink slightly (most at 1024: 304→272px, −10%) but the chain now
+     reads as one continuous left→right pen-sweep — the intended motif — instead of
+     three jammed-together seals. Floor 188px sits just under the 768 value so it
+     never clamps the chain back closed; the 300px cap only engages above the
+     portrait range (≈1128px) as a harmless guard and stays well under desktop's
+     383px. No horizontal overflow (3·S + 4·gutters == content width by construction). */
+  .mw-lr-reel { --lr-S: clamp(188px, 26.6vw, 300px); }
+
+  /* Diamond/connector outline contrast over the dark walnut panel + faint map.
+     The settled chain is the terracotta --base layer (the gold band fades out on
+     data-done). At the base stroke-opacity:.5, --c-accent (#A85A2C) composites to
+     ≈rgb(107,58,30) over the panel (#2E1910) ≈ 1.78:1 — below WCAG 1.4.11's 3:1
+     for the graphic that DEFINES each diamond, so the outline reads faint/soft over
+     the map (matches the finding the ≤600 stack already corrected for its per-seal
+     edge). Render the settled chain at full --c-accent → ≈3.30:1, a crisp clay edge.
+     Opacity-only (no width change): JS feeds one stroke-width to every chain path,
+     so the diamond↔connector seam stays perfectly uniform. The separate --gold band
+     (the draw-in comet) is untouched, so the build animation is unchanged. */
+  .mw-lr-reel__chain--base path { stroke-opacity: 1; }
+}
