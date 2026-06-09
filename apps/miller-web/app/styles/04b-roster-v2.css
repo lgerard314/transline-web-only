@@ -578,3 +578,106 @@
     transform: none;
   }
 }
+/* ── TABLET PORTRAIT (601–1024, portrait) — scoped touch-tablet refinements ──────────
+   Tablet-portrait-only surface, appended LAST so it wins on overlap with the shared
+   ≤1024 STACKED baseline it inherits (single-column layout, no pinned window — JS also
+   disables the windowed-PIN / center-sticky rail at ≤1024). Desktop and the committed
+   ≤600 mobile pass are out of this query's range, so both are provably untouched.
+
+   Same touch strategy as the ≤600 mobile pass, tuned for the wider canvas: the desktop
+   hover-spotlight that justified the left MENU never fires on touch, so the rail is a
+   second, non-interactive copy of the service list above an identical grid of photo-card
+   LINKS — pure redundancy in an already very tall section. We HIDE the menu and let the
+   photo cards be the navigation. `@media (hover: none)` force-opens every card body on
+   touch, so each cell carries its title PLUS a multi-line summary; we give cells more
+   height than the base 1/1.1 square and retune the overlay type for the larger cards.
+   Two columns (not the desktop 3) keeps cards generous and titles uncramped at 768–1024. */
+@media (min-width: 601px) and (max-width: 1024px) and (orientation: portrait) {
+  /* Trim the head's trailing space so the cards come up a touch sooner. */
+  .mw-roster2__head { margin-bottom: clamp(32px, 5vw, 52px); }
+
+  /* Hide the redundant, now-functionless menu rail; the cards are the nav on touch. The
+     rows stay in the DOM (untouched for desktop) — just not rendered here. The layout
+     already collapsed to one column at ≤1024, so the collage now stands alone, full-width. */
+  .mw-roster2__rail { display: none; }
+  /* Reclaim the inter-column gap the (now-hidden) rail left in the stacked layout. */
+  .mw-roster2__layout { gap: 0; }
+
+  /* Two columns for the wider tablet canvas (the desktop 3-col makes ~228px cards at 768
+     whose titles + open bodies crowd). A roomier gap than the phone keeps the pair airy. */
+  .mw-roster2__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(12px, 1.8vw, 20px);
+    padding-bottom: clamp(28px, 5vw, 56px);
+  }
+  /* Kill the middle-column parallax here: its JS is gated `>560` so it still writes
+     --r2-mid at this width, but :nth-child(3n+2) selects a scattered set of cells in a
+     2-col grid — they would drift out of alignment. Pin them level (mirrors the ≤560
+     reset). Reduced-motion already neutralizes this separately. */
+  .mw-roster2__card:nth-child(3n + 2) {
+    transform: translateY(calc(var(--ty) + var(--lift)));
+  }
+
+  /* Taller cells so a packed card (multi-line title + force-open body) never crowds. The
+     wider tablet card needs less extra height than the phone (1/1.28): 1/1.16 gives the
+     overlay room while the photo still reads as a strong, near-square image. Height is
+     intrinsic to the card (the reveal transform rides on card-in), so the overflow:hidden
+     rise-mask + reduced-motion settle are unaffected. */
+  .mw-roster2__card { aspect-ratio: 1 / 1.16; }
+  /* Last-row pairing: the catch-all CTA card (last child, idx 11 → 2nd cell of the final
+     2-col row) auto-heights to its content, taller than the fixed-ratio photo cells. Its
+     row-mate — CROSS-BORDER SERVICES (:nth-last-child(2)) — would keep the 1/1.16 box and
+     top-align, leaving an empty cream gap below. Drop that one card's fixed ratio so it
+     stretches to the row height (set by the CTA) and the pair bottom-aligns as one clean
+     block. The photo is position:absolute; inset:0; cover, so a taller cell just reveals
+     more image — no distortion, no clipping; height stays intrinsic (rise-mask unaffected). */
+  .mw-roster2__card:nth-last-child(2) { aspect-ratio: auto; }
+
+  /* Overlay: a touch more bottom padding + a clearer title→body gap so headline and
+     summary read as two distinct blocks at the larger card size. */
+  .mw-roster2__card-overlay {
+    gap: 7px;
+    padding: clamp(15px, 1.8vw, 20px) clamp(15px, 1.7vw, 19px) clamp(16px, 1.8vw, 19px);
+  }
+  /* Title scaled up for the wider cards (vs the phone's fixed 21px); leading/tracking kept
+     tight for a deliberate multi-line set on the longer names. */
+  .mw-roster2__card-title {
+    font-size: clamp(24px, 3vw, 31px);
+    line-height: 0.96;
+    letter-spacing: 0;
+  }
+  /* Body: comfortably legible on a tablet, a step up from the phone floor. */
+  .mw-roster2__card-text {
+    font-size: clamp(13px, 1.5vw, 15px);
+    line-height: 1.42;
+  }
+  /* → affordance: a fixed, touch-legible size, clear of the title. */
+  .mw-roster2__card-arr {
+    top: clamp(11px, 1.4vw, 15px);
+    right: clamp(13px, 1.5vw, 17px);
+    font-size: clamp(26px, 3vw, 32px);
+  }
+
+  /* CTA card — at base it inherits the fixed 1/1.16 photo-card box with overflow:hidden,
+     which CLIPS the "Contact us" button (the card matches the photo cell height and the
+     button overflows past the bottom — same bug the phone pass fixed). Let it size to its
+     own content so the primary action shows. The riser (card-in) is position:absolute at
+     base — absolute children give the box no height — so flow it in normal layout here;
+     overflow:hidden stays, so the card-in still rises out of the mask (and reduced-motion's
+     `card-in{transform:none}` still settles it). A min-height keeps it visually balanced. */
+  .mw-roster2__card--cta {
+    aspect-ratio: auto;
+    min-height: 0;
+  }
+  .mw-roster2__card--cta .mw-roster2__card-in {
+    position: static;
+    inset: auto;
+    gap: clamp(12px, 1.6vw, 18px);
+    padding: clamp(16px, 1.9vw, 22px);
+  }
+  /* Restore comfortable CTA typography for the larger card (base clamps floor near the
+     desktop minimums). */
+  .mw-roster2__cta-title { font-size: clamp(24px, 2.9vw, 30px); line-height: 0.96; }
+  .mw-roster2__cta-text { font-size: clamp(14px, 1.5vw, 16px); line-height: 1.45; }
+  .mw-roster2__cta-foot { margin-top: clamp(4px, 1vw, 10px); }
+}
