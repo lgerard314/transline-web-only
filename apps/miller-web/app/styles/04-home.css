@@ -3494,6 +3494,112 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
     text-wrap: balance;
   }
 }
+/* ── Tablet-PORTRAIT pass (601–1024, portrait only). Additive: appended
+   after every preceding hero rule so it wins the cascade where it overlaps.
+   Desktop (≥1280 / landscape / fine-pointer) and the ≤600 phone block can
+   NEVER match this query, so both are provably untouched. This block is
+   SELF-SUFFICIENT: the shared ≤960 baseline does not match above 960px, so
+   at 1024×1366 portrait the hero would otherwise fall into the cramped
+   desktop 2-column layout — every stacking rule the ≤960 baseline supplies
+   is therefore restated here so the intended portrait layout holds across
+   the entire 601–1024 portrait range (768, 820, AND 1024-portrait).
+   The tall canvas gets a BOTTOM-anchored monument composition: stamp logo →
+   commanding 3-line headline → measured lead → side-by-side CTAs → article,
+   pushed down onto the dark bottom gradient (a LEADING 1fr spacer soaks up
+   the surplus height ABOVE the content) — the same content-at-bottom logic
+   as the desktop hero, landing the type on the darkest/most-legible third
+   of the photo with no empty/dead field across the bottom. No new animation
+   is introduced, so no new
+   reduced-motion fallback is required — the existing entrance + its
+   prefers-reduced-motion off-switch above still apply unchanged. ── */
+@media (min-width: 601px) and (max-width: 1024px) and (orientation: portrait) {
+  /* Fill the visible viewport below the fixed chrome (the ≤960 baseline
+     zeroes this; restore it so 1024-portrait isn't a short hero stranded
+     under a tall photo). A leading 1fr spacer then bottom-anchors the
+     content onto the dark gradient, using the height gracefully. */
+  .mw-hero { min-height: calc(100svh - var(--mw-eb-h, 39px) - 76px); }
+  .mw-hero__inner {
+    padding-block: clamp(40px, 7vw, 84px) clamp(44px, 6vw, 76px);
+    /* Bottom-anchor the monument unit onto the dark bottom gradient — the
+       same content-at-bottom logic as the desktop hero, which lands the
+       type on the darkest/most-legible third of the photo. The LEADING 1fr
+       row is the flexible spacer: it absorbs the tall canvas's surplus
+       height ABOVE the content, so there is no empty/dead field across the
+       bottom (the old trailing-spacer version stranded that gap). Head-row
+       and body then sit with their natural spacing at the foot of the hero. */
+    grid-template-rows: 1fr auto auto;
+    gap: clamp(30px, 4.5vw, 56px);
+    align-content: stretch;
+  }
+  .mw-hero__head-row {
+    /* Restated stacking (1024 doesn't inherit the ≤960 baseline): logo
+       stamp above the headline, single column, left-aligned. Sits on the
+       inner grid's row 2 (row 1 is the flexible top spacer). */
+    grid-template-columns: 1fr;
+    grid-row: 2;
+    align-items: start;
+    row-gap: clamp(18px, 2.8vw, 30px);
+  }
+  .mw-hero__title {
+    grid-column: 1;
+    grid-row: 2;
+    /* More commanding than the ≤960 baseline's 96px cap — scales up across
+       the portrait range (≈70px @768 · ≈75px @820 · ≈94px @1024) while
+       staying three lines; "WASTE DISPOSAL." + stamp clear the right edge. */
+    font-size: clamp(60px, 9.2vw, 132px);
+    line-height: 0.8;
+    letter-spacing: -0.004em;
+    text-shadow: 0 1px 16px rgba(28, 18, 11, 0.34);
+  }
+  /* Stamp logo, top-left: bigger presence on the generous canvas than the
+     ≤960 baseline (≈100px @768 · ≈107px @820 · ≈133px @1024) yet always
+     shorter than the headline, so it reads as a mark above the title. */
+  .mw-hero__mark {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+    align-items: flex-start;
+  }
+  .mw-hero__mark-brand { height: clamp(96px, 13vw, 140px); }
+  /* Body → single column (restated for 1024); intro then article stack.
+     Inner grid row 3 — directly under the head-row at the foot of the hero. */
+  .mw-hero__body {
+    grid-row: 3;
+    grid-template-columns: 1fr;
+    row-gap: clamp(20px, 3vw, 30px);
+    align-items: start;
+  }
+  .mw-hero__intro {
+    grid-column: 1;
+    grid-row: 1;
+    gap: clamp(24px, 3.2vw, 34px);
+  }
+  /* Lead: measured line length + a notch more size/contrast for the larger
+     canvas; faint shadow keeps the cream crisp over the brighter photo. */
+  .mw-hero__lead {
+    font-size: clamp(18px, 2.1vw, 22px);
+    line-height: 1.55;
+    max-width: 52ch;
+    color: rgba(247, 234, 210, 0.9);
+    text-shadow: 0 1px 12px rgba(28, 18, 11, 0.45);
+  }
+  /* CTAs stay side-by-side on this wide canvas (only ≤600 stacks them);
+     a touch more separation, comfortable finger targets (solid ≈54px,
+     ghost ≈56px tall — both clear 44px). */
+  .mw-hero__ctas { gap: clamp(16px, 2vw, 24px); }
+  /* Article tag: left-aligned under the CTAs (restated for 1024), one line,
+     sized up slightly for the canvas; nowrap is safe at this measure. */
+  .mw-hero__article {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: start;
+    align-self: start;
+    text-align: left;
+    white-space: nowrap;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+  }
+}
 
 
 /* ─────────────────────────────────────────────────────────────────
