@@ -2069,6 +2069,14 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
   }
   /* Shrink the numerals so even "4.5" + unit never strains the row; still bold + on-scale. */
   .mw-ten3__plate2-num { font-size: clamp(44px, 13.5vw, 60px); }
+  /* Surface the FINAL stat value on the stacked phone layout. The scroll-tied count-up fades
+     the stat in via opacity:var(--num-rev) and overwrites .mw-ten3__plate2-val each frame, so at
+     the row's natural reading position the figures read as 0/half. Force the stat opaque and
+     paint the final value from data-val via ::after (the live node is collapsed; the terracotta
+     unit is a SIBLING, untouched) — same fix as the tablet-portrait block below. */
+  .mw-ten3__plate2-stat { opacity: 1; }
+  .mw-ten3__plate2-val { font-size: 0; }
+  .mw-ten3__plate2-val::after { content: attr(data-val); font-size: clamp(44px, 13.5vw, 60px); }
   .mw-ten3__plate2-label {
     margin-top: 0;
     margin-left: auto;
