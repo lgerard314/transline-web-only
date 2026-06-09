@@ -6316,6 +6316,143 @@ html[data-brand="miller"] {
   .mw-secd-track > .mw-secd--check.is-secd-pinned .mw-secd__eyebrow-top { height: 0; margin: 0; overflow: hidden; }
 }
 
+/* ── PHONE PORTRAIT redesign (≤600px) ──────────────────────────────────────────
+   The desktop checkmark frieze is an 18-column horizontal band; squeezed into a
+   ~340px column it collapses to a ~150px strip of illegible ~20px diamonds with the
+   four category labels colliding. On a phone the pin is off and the hover spotlight /
+   single-photo straighten are dead (no hover) — so the frieze can't be "explored," it
+   just has to READ. We therefore RE-FLOW the flat lattice (DOM order: cat, p0..p3 × 4
+   categories) out of absolute positioning into a clean in-flow CSS grid: ONE stacked
+   "sector block" per category — a legibly-sized cream category diamond on the left
+   beside a 2×2 argyle quad of its four example-photo diamonds. Same rotated-diamond /
+   argyle motif, same warm clay palette, every photo + label legible, no horizontal
+   page overflow, and the existing scroll-reveal (SectorGridMotion03 writes --secd3-* as
+   a transform on each cell) still settles the cells into their new grid slots untouched.
+   Scoped entirely to .mw-secd--check; nothing here is a desktop (base) rule. */
+@media (max-width: 600px) {
+  /* The grid stops being an aspect-ratio'd absolute canvas and becomes a fully EXPLICIT
+     grid (template rows + columns hand-laid, with dedicated GAP tracks so within-quad
+     diamonds touch point-to-point while sectors stay clearly separated). Diamond sizes
+     are explicit (var --secd-ph / --secd-lbl) so nothing stretches — the earlier 1fr +
+     aspect-ratio attempt let cells blow up. Columns: [label][label-gap][photoL][photoR].
+     Rows: 11 = (top,bot) per sector × 4 with a sector-gap row between. The inline
+     aspect-ratio:cols/rows and the 75px·cols width cap are overridden. */
+  .mw-secd--check .mw-secd__grid {
+    --secd-ph: clamp(74px, 22.5vw, 94px);   /* photo diamond box */
+    --secd-lbl: clamp(116px, 32vw, 144px);  /* category label diamond box — fits the long names */
+    --secd-colgap: clamp(8px, 2.4vw, 16px); /* label ↔ photo-quad gap */
+    --secd-sgap: clamp(20px, 6vw, 38px);    /* gap between stacked sectors */
+    width: 100% !important;                  /* fill the content column (overrides the 75px·cols ideal cap) */
+    max-width: 430px;
+    margin-inline: auto;
+    margin-top: clamp(6px, 2.5vw, 18px);     /* the desktop spotlight headroom (100–150px) is pointless with no spotlight */
+    aspect-ratio: auto !important;           /* clear the inline aspectRatio so the grid takes its own content height */
+    display: grid;
+    grid-template-columns: var(--secd-lbl) var(--secd-colgap) var(--secd-ph) var(--secd-ph);
+    grid-template-rows:
+      var(--secd-ph) var(--secd-ph) var(--secd-sgap)
+      var(--secd-ph) var(--secd-ph) var(--secd-sgap)
+      var(--secd-ph) var(--secd-ph) var(--secd-sgap)
+      var(--secd-ph) var(--secd-ph);
+    column-gap: 0;
+    row-gap: 0;
+    justify-content: center;   /* centre the whole ladder in the column */
+    align-items: stretch;
+    justify-items: stretch;
+  }
+  /* Cells leave ABSOLUTE flow for GRID flow, but stay position:RELATIVE — their children
+     (.mw-secd__photo-clip and .mw-secd__cat-svg are position:absolute; inset:…) must keep
+     resolving against THIS box, not escape to the relatively-positioned .mw-secd__grid and
+     blow up to full-grid size. left/top are zeroed so relative positioning adds no shift;
+     explicit equal width+height keeps the box square (→ diamond after the clip). */
+  .mw-secd--check .mw-secd__photo,
+  .mw-secd--check .mw-secd__cat {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    width: 100% !important;     /* fill the (fixed-size) grid track */
+    height: 100%;
+    min-width: 0;
+    aspect-ratio: auto;         /* size is governed by the track, not aspect-ratio */
+  }
+  /* The .mw-secd--int photo rule pins left/top/width from vars + animates them — kill that
+     transition so a resize can't slide a cell across the new grid. (The scroll-reveal's
+     own transform on each cell is untouched, so the staggered entrance still plays.) */
+  .mw-secd--check .mw-secd__photo { transition: none; }
+
+  /* Explicit placement. Label in col1 spanning its two photo rows; the four photos as a
+     2×2 quad in cols 3/4 (si0 si1 over si2 si3). */
+  .mw-secd--check .mw-secd__cat { grid-column: 1; }
+  .mw-secd--check .mw-secd__photo[data-si="0"],
+  .mw-secd--check .mw-secd__photo[data-si="2"] { grid-column: 3; }
+  .mw-secd--check .mw-secd__photo[data-si="1"],
+  .mw-secd--check .mw-secd__photo[data-si="3"] { grid-column: 4; }
+  .mw-secd--check .mw-secd__photo[data-si="0"],
+  .mw-secd--check .mw-secd__photo[data-si="1"] { grid-row: var(--secd-row-top); }
+  .mw-secd--check .mw-secd__photo[data-si="2"],
+  .mw-secd--check .mw-secd__photo[data-si="3"] { grid-row: var(--secd-row-bot); }
+  .mw-secd--check .mw-secd__cat[data-cat="0"] { grid-row: 1 / span 2; }
+  .mw-secd--check .mw-secd__cat[data-cat="1"] { grid-row: 4 / span 2; }
+  .mw-secd--check .mw-secd__cat[data-cat="2"] { grid-row: 7 / span 2; }
+  .mw-secd--check .mw-secd__cat[data-cat="3"] { grid-row: 10 / span 2; }
+  .mw-secd--check .mw-secd__photo[data-cat="0"] { --secd-row-top: 1;  --secd-row-bot: 2;  }
+  .mw-secd--check .mw-secd__photo[data-cat="1"] { --secd-row-top: 4;  --secd-row-bot: 5;  }
+  .mw-secd--check .mw-secd__photo[data-cat="2"] { --secd-row-top: 7;  --secd-row-bot: 8;  }
+  .mw-secd--check .mw-secd__photo[data-cat="3"] { --secd-row-top: 10; --secd-row-bot: 11; }
+
+  /* Category label diamond — keep the cream/inverted resting look; the box is now bigger
+     so the longest name ("INFRASTRUCTURE") reads. The svg fills the box (inset:gap); the
+     name layer sits on top. Allow a 2-line wrap as a safety valve for the long names.
+     The cat spans its 2 photo rows (≈2·--secd-ph tall) but must stay SQUARE (a regular
+     diamond, not a stretched rhombus) — so give it an explicit square size and centre it
+     vertically against the quad rather than stretching to the full 2-row height. */
+  .mw-secd--check .mw-secd__cat {
+    z-index: 3;
+    height: var(--secd-lbl) !important;
+    align-self: center;
+    justify-self: center;
+  }
+  .mw-secd--check .mw-secd__cat-name {
+    font-size: clamp(12px, 3.4vw, 15px);
+    line-height: 1.02;
+    letter-spacing: 0.01em;
+    text-wrap: balance;
+  }
+  .mw-secd--check .mw-secd__cat-face { padding: 0 16%; }
+
+  /* Photo quad above the label in z so the cream label's empty corners never cover a photo.
+     The rhombus clip + walnut backstop + clay overlay all come from the base rules. */
+  .mw-secd--check .mw-secd__photo { z-index: 4; }
+
+  /* The on-photo names are hover-only captions (dead on touch); like desktop ≤1024 the
+     photos stay label-free and the four category diamonds carry the meaning. Keep the
+     hover caption hidden so a stray tap can't strand it on screen. */
+  .mw-secd--check .mw-secd__cap { display: none; }
+
+  /* The cream label diamonds read faint-on-cream and never get the hover "activation" a
+     phone can't trigger — give the resting svg a soft clay shadow (the desktop look kills
+     it at rest, restores it on hover) so each label lifts off the paper as a deliberate
+     cream "stamp." Stronger border too, for a crisper edge. */
+  .mw-secd--check .mw-secd__cat-svg { filter: drop-shadow(0 6px 14px rgba(33, 20, 12, 0.16)); }
+  .mw-secd--check .mw-secd__cat-fill { stroke-width: 2.4; }
+
+  /* The scroll-reveal (SectorGridMotion03) holds the cells hidden — opacity:0, scale 0.25,
+     off-screen-left — until EVERY diamond has cleared the viewport bottom. On desktop the
+     pin masks that; on a phone the grid is ~830px tall (taller than the usable viewport),
+     so that gate can leave a large blank band on first encounter and fires late. Mobile is
+     better served by simply SHOWING the lattice (this is exactly what reduced-motion already
+     does); override the armed hidden pose so the grid is present immediately. The header
+     items keep their own per-item mask-rise. */
+  .mw-secd--check .mw-secd__grid.is-armed > * {
+    opacity: 1 !important;
+    transform: none !important;
+    will-change: auto;
+  }
+
+  /* Belt-and-braces: this re-flow can never push a horizontal page scrollbar. */
+  .mw-secd--check { overflow-x: clip; }
+}
+
 /* ════════════════════════════════════════════════════════════════
    Who-we-serve v1 (mw-secd2*) — ARC GALLERY. Ported from an external
    arc-hero reference, rebuilt CSS-only in the clay system: SQUARED
