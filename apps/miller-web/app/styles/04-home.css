@@ -3981,6 +3981,113 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
   .mw-trust--tsb01 .mw-cert { opacity: 1 !important; animation: none !important; }
 }
 
+/* ── Certs banner · TABLET-PORTRAIT pass (601–1024, portrait only, tsb01-scoped) ──
+   SELF-SUFFICIENT block — appended after every preceding certs rule so it wins
+   the cascade where it overlaps. It must stand alone across the whole range:
+   the ≤1100 rule reaches up to 1100 (so 768/820/1024-portrait all inherit its
+   2×2 grid) but there is NO ≤900 certs rule, and the ≤600 ledger never matches
+   here — so this block restates the full intended layout without leaning on any
+   width-only block. Desktop (≥1025 in landscape, and any fine-pointer width) and
+   the committed ≤600 mobile ledger are both outside this query → untouched.
+
+   THE DEFECT THIS FIXES: at these wide tablet half-columns the base
+   `.mw-trust--tsb01 .mw-cert { justify-content:center }` centers each card's
+   JS-equalized (narrow) inner block inside its much-wider cell, leaving a large
+   dead gutter on BOTH sides — the four cards floated as centered islands with no
+   relationship to their cell edges and a big void under the "PDF·KB" line. We
+   re-anchor each card's content to the cell's left padding (the desktop/ledger
+   anatomy: seal-left + body-right, reading from the left edge), firm up the seal
+   and monolith-number scale for the larger canvas, and tighten the internal
+   rhythm so each cell is balanced top-to-bottom. No new animation is introduced,
+   so the existing prefers-reduced-motion off-switch above still covers the
+   reveal; the JS still equalizes the inners (now left-aligned), and every inner
+   is capped at `max-width:100%` of its own equal-width column → no overflow. ── */
+@media (min-width: 601px) and (max-width: 1024px) and (orientation: portrait) {
+  /* Restate the 2×2 grid so the block is self-sufficient (does not rely on the
+     ≤1100 rule). Keep the grid's framing hairlines: outer left + a top hairline
+     so both rows read as a clean two-up ledger. */
+  .mw-trust--tsb01 .mw-certs {
+    grid-template-columns: 1fr 1fr;
+    border-left: 0.5px solid var(--c-line);
+    border-top: 0.5px solid var(--c-line);
+  }
+  /* 2×2 dividers: no left border on the left column, a top border on the
+     bottom-row cells. (Restated locally so it holds at 1024 too, where only the
+     ≤1100 rule would otherwise supply it.) */
+  .mw-trust--tsb01 .mw-cert:nth-child(odd) { border-left: 0; }
+  .mw-trust--tsb01 .mw-cert:nth-child(3),
+  .mw-trust--tsb01 .mw-cert:nth-child(4) { border-top: 0.5px solid var(--c-line); }
+
+  /* Anchor each card LEFT (kills the centered-island gutter), keep seal-top
+     aligned to the big number, and give the cell comfortable breathing padding.
+     The whole <a> is the tap target — at this padding every cell is well over
+     140px tall, far past the 44px minimum. */
+  .mw-trust--tsb01 .mw-cert {
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: clamp(22px, 3.4vw, 32px) clamp(22px, 3.2vw, 34px);
+    gap: clamp(16px, 2.2vw, 24px);
+  }
+  /* The JS equalizes every inner to the widest card's px width; left-align it
+     against the cell padding and let it grow only to the column (max-width:100%
+     already caps it) so the equalized width can never overflow the half-column. */
+  .mw-trust--tsb01 .mw-certs__inner {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: clamp(16px, 2.2vw, 24px);
+  }
+  /* Seal: firmer than the base clamp at these widths so it balances the larger
+     monolith number (mirrors the mobile ledger's confident seal). Dropped down
+     so its top meets the number's top, skipping the "ISO · YEAR" prefix row
+     (prefix 11px × ~1.2 + 4px margin ≈ 17px), exactly like the desktop card. */
+  .mw-trust--tsb01 .mw-cert__mark {
+    width: clamp(56px, 7.2vw, 68px);
+    margin-top: 18px;
+  }
+  .mw-trust--tsb01 .mw-cert__body {
+    flex: 1;
+    min-width: 0;
+  }
+  .mw-trust--tsb01 .mw-cert__prefix {
+    font-size: 11px;
+    margin-bottom: 4px;
+  }
+  /* Commanding monolith, sized to own the half-column without crowding the seal.
+     Capped so the widest numbers ("14001"/"45001", 5 glyphs) never collide with
+     the seal at 768; the desc wraps to ≤24ch so the inner's natural width stays
+     within the column (no JS-equalized overflow). */
+  .mw-trust--tsb01 .mw-cert__num {
+    font-size: clamp(42px, 6vw, 54px);
+    line-height: 0.84;
+  }
+  .mw-trust--tsb01 .mw-cert__desc {
+    font-size: 13.5px;
+    line-height: 1.4;
+    margin-top: 7px;
+    max-width: 24ch;
+    /* Reserve two lines of description height in EVERY cell. Within a row the
+       descriptions are uneven ("Environmental Management System" /
+       "Certificate of Recognition (Safety)" wrap to two lines while their
+       row-mates stay on one), which would otherwise drop the "PDF·KB ↓" line to
+       different y-positions across the row. A fixed 2-line min-height lands the
+       download cue on a consistent baseline in both cells of each row. */
+    min-height: 2.8em;
+  }
+  /* Download cue: on touch there is no :hover (the accent-bar reveal + arrow
+     nudge never fire), so the static state must read unmistakably as a download.
+     Keep the mono-clay "PDF · KB ↓" pattern but give it presence and a larger,
+     heavier arrow — the same move as the committed mobile ledger. */
+  .mw-trust--tsb01 .mw-cert__pdf {
+    margin-top: 14px;
+    font-size: 11px;
+    gap: 10px;
+  }
+  .mw-trust--tsb01 .mw-cert__arr {
+    font-size: 16px;
+    font-weight: 700;
+  }
+}
+
 /* ─────────────────────────────────────────────────────────────────
    Article 03 — Capabilities. Bento layout on walnut: anchor with
    photo + two stacked features + seven-row registry below. Visual
