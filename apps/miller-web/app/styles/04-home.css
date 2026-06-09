@@ -7398,3 +7398,124 @@ html[data-brand="miller"] {
 @media (prefers-reduced-motion: reduce) {
   .mw-cap-dia__d, .mw-cap-dia__svg, .mw-cap-dia__fill, .mw-cap-dia__title::after { transition: none; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   VBEC / facility (MediaSplit01) — MOBILE PORTRAIT refinement (≤600px).
+   On phones there is NO pin (the pin query is min-width:901px): the section is
+   the static stacked flow intro → image-accordion → 3 figures → capabilities
+   cluster. These rules ONLY touch this section's own selectors (.mw-fac2*,
+   .mw-cap-dia*) and the shared ImageAccordion01 widget SCOPED under .mw-fac2
+   (.mw-fac2 .mw-iacc*) so no other consumer of that widget is affected. They sit
+   AFTER the ≤900 / ≤700 mobile rules so, at equal specificity, source order makes
+   them win for portrait phones; tablets (601–900px) keep the existing treatment.
+   Nothing here is a desktop or ≥901px rule. Reduced-motion is unaffected (the
+   only motion added is a CSS transition that already has reduced-motion off-
+   switches in the base .mw-iacc / .mw-cap-dia blocks above).
+   ═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 600px) {
+  /* ── INTRO ──────────────────────────────────────────────────────────
+     The eyebrow / title / lead read well already. Only nudge: grow the
+     vertical tap target of the secondary "READ THE STORY" text link so it
+     is comfortable on touch (it sits beside the ~52px solid CTA). Visual
+     position stays inline; just more hit-area above/below. */
+  .mw-fac2__about { padding-block: 11px; }
+
+  /* ── IMAGE ACCORDION → VERTICAL CARD STACK (ImageAccordion01, scoped .mw-fac2) ─
+     Round-2 fix. The desktop hover-to-expand accordion fails on a phone: only
+     the open panel was tall, the other five collapsed to ~107px slivers you
+     couldn't read; there was no tap affordance; and the parallax-widened photo
+     (scale 1.34 + data-parallax-x) overflowed the panel and clipped words off
+     the right edge ("…ENVIRONMENTAL CENTR[E]", "VAUGHN BULLOUGH").
+     FIX → re-flow into a clean stack of six EQUAL full-width photo cards, every
+     one open at rest (no hover/tap dependency), photo fitted to the card with NO
+     horizontal parallax offset so nothing is cropped, each with the clay veil +
+     horizontal caption. The accordion JS still toggles `is-open` on tap; these
+     rules neutralise it with !important so all six cards stay full regardless.
+     Only `.mw-fac2 .mw-iacc*` is touched — other ImageAccordion01 consumers and
+     the ≥901px desktop accordion are unaffected. */
+
+  /* Track: plain vertical stack with a comfortable card gap. */
+  .mw-fac2 .mw-iacc__track { gap: clamp(12px, 3.5vw, 18px); }
+
+  /* Every panel is a full-width card of equal, readable height — whether or not
+     the JS marks it `is-open`. !important beats the base `is-open` min-height. */
+  .mw-fac2 .mw-iacc__panel,
+  .mw-fac2 .mw-iacc__panel.is-open {
+    width: 100%;
+    min-height: 0 !important;
+    /* ~16/10 card: tall enough to read the building/sign in every photo. */
+    aspect-ratio: 16 / 10;
+    cursor: default;                 /* not a hover/tap-to-open affordance anymore */
+    border-color: var(--c-navy);     /* uniform clay frame; no "active" accent border (base .is-open uses --c-accent) */
+    box-shadow: 0 16px 38px -28px rgba(42, 27, 18, 0.5);
+  }
+
+  /* Photo fills its card with NO parallax offset so nothing clips off the right.
+     The parallax engine scales/translates .mw-iacc__img inline + via --px-scale;
+     pin it flat and reset the scale so cover-fit shows the whole frame. The zoom
+     layer (entrance + hover-px) is likewise flattened. !important overrides the
+     inline transform the parallax script writes each frame. */
+  .mw-fac2 .mw-iacc__media { clip-path: none !important; }
+  .mw-fac2 .mw-iacc__zoom { transform: none !important; }
+  .mw-fac2 .mw-iacc__img {
+    --px-scale: 1;
+    transform: none !important;
+    object-position: center;
+    /* All photos read at full clarity — no "closed plate" dimming in a stack. */
+    filter: brightness(1) saturate(1.02) !important;
+  }
+
+  /* Caption legibility: a clay scrim at the bottom of EVERY card. This widget
+     renders no .mw-iacc__veil element, so seat the wash via a ::after on the
+     media clip (sits over the photo at z2, under the caption at z3). */
+  .mw-fac2 .mw-iacc__media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(to top, rgba(28, 16, 8, 0.74) 0%, rgba(28, 16, 8, 0.30) 32%, rgba(28, 16, 8, 0) 58%);
+  }
+
+  /* The vertical/centred sliver label is redundant now every card is open — hide
+     it and show the horizontal bottom-left caption on ALL cards (not just open). */
+  .mw-fac2 .mw-iacc__spine { display: none; }
+  .mw-fac2 .mw-iacc__cap,
+  .mw-fac2 .mw-iacc__panel:not(.is-open) .mw-iacc__cap {
+    opacity: 1;
+    transform: none;
+    font-size: 13px;
+    letter-spacing: 0.14em;
+  }
+
+  /* ── FIGURES (64 / 70 / 1996) ───────────────────────────────────────
+     The existing ≤600 rule (gap + scaled numerals) already reads cleanly at
+     360–430 — left as-is. (No rule here.) */
+
+  /* ── CAPABILITIES CLUSTER (.mw-cap-dia) ─────────────────────────────
+     DECISION: keep the signature "diamond of diamonds" argyle motif (it is
+     the section's identity and reads as a cohesive lattice), but make the
+     NAMES comfortably legible on a phone. BEFORE: names hit the 9px floor of
+     clamp(9px,0.95vw,14px) (0.95vw≈3.7px at 390) — small, and the longest
+     names crowded the diamond. FIX: a viewport-scaled name size with a higher
+     floor, slightly looser inner padding so long names have room, and a touch
+     more top separation so the cluster breathes under the figures. The lattice
+     geometry, tones, sheen, and crown diamond are untouched. */
+  .mw-fac2__caps { margin-top: clamp(8px, 3vw, 18px); }
+  .mw-cap-dia { width: 100%; }
+  .mw-cap-dia__face { padding: 0 12%; }
+  .mw-cap-dia__name {
+    /* Was clamp(9px,0.95vw,14px). Floor ~11px at 360, ~12px at 390. */
+    font-size: clamp(11px, 3.15vw, 13px);
+    line-height: 1.08;
+    letter-spacing: 0.01em;
+  }
+  .mw-cap-dia__title {
+    /* Was clamp(11px,1.15vw,18px). Bump the crown to match. */
+    font-size: clamp(13px, 3.7vw, 16px);
+    letter-spacing: 0.03em;
+  }
+
+  /* Belt-and-braces: nothing in this re-flow may push a horizontal scrollbar. */
+  .mw-fac2 { overflow-x: clip; }
+}
