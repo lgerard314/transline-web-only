@@ -6494,6 +6494,53 @@ html[data-brand="miller"] {
   }
 }
 
+/* ── TABLET LANDSCAPE refinement (1000–1366px, landscape, COARSE pointer) ───────
+   The desktop checkmark frieze is comfortably legible at these wide widths, so we
+   KEEP the frieze (no mobile vertical re-flow). The problem is the SHORT landscape
+   HEIGHT (768 / 834): at those heights the PIN is OFF (its gate is min-height:840),
+   so the section flows normally — and two voids that the pin would otherwise absorb
+   are left stranded: (1) the ~100–120px "spotlight headroom" above the frieze (the
+   .mw-secd--int grid margin-top), which only exists to stage the hover-gather row —
+   DEAD on touch (hover:none → the spotlight can never fire); and (2) the base --check
+   bottom band (clamp(192px,19.5vw,336px) ≈ 200–233px) sized for the desktop pin's
+   tall runway, which here just floats empty cream before the next (dark) section.
+   We reclaim both so the eyebrow → frieze → heading → lead → CTA read as one composed
+   group on the short canvas, with calm (not cavernous, not crammed) air top and bottom.
+
+   DESKTOP-INVARIANCE: the `pointer: coarse` guard keeps every fine-pointer desktop at
+   1000–1366px on the untouched base/pin rules. At 1366×1024 (which this query DOES
+   match — coarse, landscape, ≤1366) the PIN is active (height 1024 ≥ 840); the pin
+   block's `.mw-secd-track > .mw-secd--check …` selectors carry higher specificity
+   (0,3,0 / 0,2,0) than the (0,2,0 / 0,1,0) overrides below, so the pin wins there and
+   the 1366 framed composition stays byte-identical — these reductions only take effect
+   at 1024/1194 where the pin is off (base rules, lower specificity). Nothing here is a
+   desktop (base) rule; frieze diamond/label SIZING is untouched (already legible, capped
+   by the content column). Rhythm/placement only. */
+@media (min-width: 1000px) and (max-width: 1366px) and (orientation: landscape) and (pointer: coarse) {
+  /* (1) Reclaim the dead hover-spotlight headroom above the frieze — keep just enough
+     air to separate the eyebrow from the frieze (so they don't crowd) without the
+     cavernous band. vh-tied so it tracks the short canvas. Overrides the .mw-secd--int
+     base margin-top (equal specificity, later in source) at 1024/1194; the pin's
+     higher-specificity rule keeps 1366 untouched. */
+  .mw-secd--check .mw-secd__grid {
+    margin-top: clamp(32px, 4.5vh, 56px);
+  }
+  /* (2) Trim the desktop-pin-sized bottom band to a calm handoff gap to the next
+     section; keep the TOP padding identical to base (clamp(64px,6.5vw,112px) — the
+     eyebrow still needs its clearance below the fixed nav). Overrides the base --check
+     padding-block at 1024/1194; the pin's (0,2,0) rule wins at 1366. */
+  .mw-secd--check {
+    padding-block: clamp(64px, 6.5vw, 112px) clamp(80px, 10vh, 116px);
+  }
+  /* Pull the heading group a touch closer under the frieze so grid → title → lead → CTA
+     compose as one centred unit on the short height (mirrors the portrait pass intent).
+     Equal specificity to the .mw-secd--int base head rule, later in source → wins at
+     1024/1194; the pin head rule (higher specificity) holds at 1366. */
+  .mw-secd--check .mw-secd__head {
+    margin-top: clamp(40px, 5vh, 64px);
+  }
+}
+
 /* ════════════════════════════════════════════════════════════════
    Who-we-serve v1 (mw-secd2*) — ARC GALLERY. Ported from an external
    arc-hero reference, rebuilt CSS-only in the clay system: SQUARED
