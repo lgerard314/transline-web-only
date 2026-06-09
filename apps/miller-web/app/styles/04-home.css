@@ -4088,6 +4088,131 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
   }
 }
 
+/* ── Certs banner · TABLET-LANDSCAPE pass (1000–1366, landscape, COARSE pointer
+   only, tsb01-scoped) ──
+   SELF-SUFFICIENT block — appended after every preceding certs rule so it wins
+   the cascade where it overlaps. The `pointer: coarse` guard is load-bearing:
+   these landscape widths (1024–1366) overlap real desktop window widths, so
+   coarse is what restricts this block to touch tablets and guarantees a mouse
+   desktop (fine pointer) never matches at an identical width — the base desktop
+   4-up row keeps rendering there, untouched. The tablet-PORTRAIT block can never
+   match landscape, and the ≤600 ledger never reaches here, so this block stands
+   alone across the whole wide-but-short canvas (1024×768 · 1194×834 · 1366×1024).
+
+   WHAT IT FIXES. Two different base states land on this canvas, both wrong for a
+   wide-short landscape tablet: (1) at 1024 the ≤1100 rule applies its 2×2 grid —
+   on a 768px-tall viewport that stacks the band into a very TALL two-row block
+   with large dead vertical gutters, wasting the short canvas on a thin trust
+   strip. (2) At 1194/1366 the base desktop 4-up applies, but the tsb01
+   `justify-content:center` centers each card's JS-equalized (narrow) inner inside
+   its much-WIDER cell, so the four cards float as centered islands with uneven
+   side gutters AND — because the descriptions wrap unevenly ("Environmental
+   Management System" goes to two lines while its row-mates stay on one) — the
+   "PDF·KB ↓" download line drifts to DIFFERENT y-positions across the row, so the
+   band reads ragged and unfinished.
+
+   THE FIX. Keep the desktop LANGUAGE (a single horizontal 4-in-a-row that fills
+   the wide canvas and keeps the band appropriately thin on the short height) but
+   re-tune it: force the 4-up grid at 1024 too (override the ≤1100 2×2), re-anchor
+   each card's content to the cell's LEFT padding (kills the centered-island
+   gutters), reserve a consistent 2-line description height so the download cue
+   lands on one baseline across the row, firm up the seal + monolith-number scale
+   for the larger canvas, and give the STATIC "PDF·KB ↓" cue real presence with a
+   larger, heavier arrow (on a coarse pointer :hover never fires, so the desktop
+   accent-bar reveal + arrow nudge never play — the resting state must carry the
+   download affordance, the same move as the committed mobile + tablet-portrait
+   ledgers). No new animation is introduced, so the existing
+   prefers-reduced-motion off-switch above still covers the reveal; the JS still
+   equalizes the inners (now left-aligned) and every inner is capped at
+   `max-width:100%` of its own equal-width column → the equalized inline width can
+   never exceed the cell → NO horizontal overflow at 1024/1194/1366. ── */
+@media (min-width: 1000px) and (max-width: 1366px) and (orientation: landscape) and (pointer: coarse) {
+  /* Force the horizontal 4-up row at every landscape width — at 1024 this
+     overrides the ≤1100 2×2 (and its added top border) so all three widths share
+     one thin single-row band instead of a tall stacked block on the short
+     canvas. Keep the grid's leading left hairline; no top border (a single row
+     is framed by the section's top/bottom borders + per-cell right dividers). */
+  .mw-trust--tsb01 .mw-certs {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-left: 0.5px solid var(--c-line);
+    border-top: 0;
+  }
+  /* Reset the ≤1100 2×2 divider scheme back to the desktop single-row scheme:
+     only the FIRST cell drops its left border (the grid supplies the leading
+     hairline); every cell keeps its base right hairline; and the 2×2's
+     bottom-row top borders are removed since there is no second row here. */
+  .mw-trust--tsb01 .mw-cert:nth-child(odd) { border-left: 0; }
+  .mw-trust--tsb01 .mw-cert {
+    border-left: 0;
+  }
+  .mw-trust--tsb01 .mw-cert:nth-child(3),
+  .mw-trust--tsb01 .mw-cert:nth-child(4) { border-top: 0; }
+  /* Anchor each card LEFT against the cell padding (kills the centered-island
+     gutter), seal-top aligned to the big number, with comfortable touch padding.
+     The whole <a> is the tap target — at this padding each cell is ~130px+ tall,
+     far past the 44px minimum. */
+  .mw-trust--tsb01 .mw-cert {
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: clamp(18px, 2.1vw, 26px) clamp(16px, 1.9vw, 24px);
+    gap: clamp(13px, 1.5vw, 20px);
+  }
+  /* JS equalizes every inner to the widest card's px width; left-align it against
+     the cell padding and let it grow only to the column (max-width:100% already
+     caps it) so the equalized width can never overflow the cell. */
+  .mw-trust--tsb01 .mw-certs__inner {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: clamp(13px, 1.5vw, 20px);
+  }
+  /* Seal: firmer than the base clamp so it balances the larger monolith number,
+     dropped down so its top meets the number's top, skipping the "ISO · YEAR"
+     prefix row (prefix 10.5px × ~1.2 + 4px margin ≈ 17px), like the desktop card. */
+  .mw-trust--tsb01 .mw-cert__mark {
+    width: clamp(50px, 5vw, 62px);
+    margin-top: 17px;
+  }
+  .mw-trust--tsb01 .mw-cert__body {
+    flex: 1;
+    min-width: 0;
+  }
+  .mw-trust--tsb01 .mw-cert__prefix {
+    font-size: 10.5px;
+    margin-bottom: 4px;
+  }
+  /* Commanding monolith, sized to own the column without crowding the seal. Capped
+     so the widest numbers ("14001"/"45001", 5 glyphs) clear the seal even at the
+     tightest 1024 cell. */
+  .mw-trust--tsb01 .mw-cert__num {
+    font-size: clamp(34px, 3.7vw, 50px);
+    line-height: 0.86;
+  }
+  /* Desc wraps to ≤22ch so the inner's natural width stays inside the cell (no
+     JS-equalized overflow); a fixed 2-line min-height reserves equal description
+     height in EVERY card so the "PDF·KB ↓" cue lands on ONE baseline across the
+     row even where a description wraps to two lines and its row-mates do not. */
+  .mw-trust--tsb01 .mw-cert__desc {
+    font-size: 12.5px;
+    line-height: 1.4;
+    margin-top: 6px;
+    max-width: 22ch;
+    min-height: 2.8em;
+  }
+  /* Static download cue: no :hover on a coarse pointer, so the resting state must
+     read unmistakably as a download. Keep the mono-clay "PDF · KB ↓" pattern but
+     give it presence and a larger, heavier arrow — same as the mobile + portrait
+     ledgers. */
+  .mw-trust--tsb01 .mw-cert__pdf {
+    margin-top: 12px;
+    font-size: 10.5px;
+    gap: 9px;
+  }
+  .mw-trust--tsb01 .mw-cert__arr {
+    font-size: 15px;
+    font-weight: 700;
+  }
+}
+
 /* ─────────────────────────────────────────────────────────────────
    Article 03 — Capabilities. Bento layout on walnut: anchor with
    photo + two stacked features + seven-row registry below. Visual
