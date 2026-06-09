@@ -425,6 +425,22 @@ export function MediaSplit01({ content, config = {} }) {
                       <span className="mw-cap-dia__face"><span className="mw-cap-dia__title">{capsTitle}</span></span>
                     </span>
                   </div>
+                  <div className="mw-cap-dia__center" aria-hidden="true">
+                    <svg className="mw-cap-dia__center-svg" viewBox="0 0 200 200" aria-hidden="true">
+                      <rect className="mw-cap-dia__center-fill" x="29.3" y="29.3" width="141.4" height="141.4" rx="0" transform="rotate(45 100 100)" />
+                    </svg>
+                    <span className="mw-cap-dia__center-face">
+                      {capabilities.map((cap, i) => {
+                        const name = capText(cap);
+                        const detail = capDetail(cap, capabilityLines, i);
+                        return (
+                          <span className={`mw-cap-dia__center-item mw-cap-dia__center-item--${i}`} key={`center-${name || i}`}>
+                            {detail ? <span className="mw-cap-dia__center-line">{detail}</span> : null}
+                          </span>
+                        );
+                      })}
+                    </span>
+                  </div>
                   {capabilities.map((cap, i) => {
                     const s = CAP_SLOTS[i];
                     const name = capText(cap);

@@ -3666,6 +3666,51 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
   color: var(--c-accent);
   font-weight: 500;
 }
+/* Right-rail layouts (logo beside headline): one shared grid track centres the
+   stamp logo above the article tag on the same vertical axis. */
+@media (min-width: 961px) {
+  .mw-hero__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(280px, 22vw, 360px);
+    grid-template-rows: minmax(0, 1fr) auto;
+    column-gap: clamp(28px, 3.5vw, 56px);
+    align-content: stretch;
+  }
+  .mw-hero__stack {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    display: grid;
+    grid-template-columns: subgrid;
+    min-height: 0;
+  }
+  .mw-hero__head-row {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: subgrid;
+  }
+  .mw-hero__title { grid-column: 1; }
+  .mw-hero__lead { grid-column: 1; }
+  .mw-hero__mark {
+    grid-column: 2;
+    justify-self: center;
+    width: max-content;
+    max-width: 100%;
+  }
+  .mw-hero__body {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    display: grid;
+    grid-template-columns: subgrid;
+  }
+  .mw-hero__intro { grid-column: 1; }
+  .mw-hero__article {
+    grid-column: 2;
+    justify-self: center;
+    width: max-content;
+    max-width: 100%;
+    text-align: center;
+  }
+}
 @media (max-width: 960px) {
   .mw-hero { min-height: 0; }
   .mw-hero__inner {
@@ -3804,10 +3849,14 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
      under a tall photo). */
   .mw-hero { min-height: calc(100svh - var(--mw-eb-h, 39px) - 76px); }
   .mw-hero__inner {
+    display: flex;
+    flex-direction: column;
     padding-block: clamp(40px, 7vw, 84px) clamp(44px, 6vw, 76px);
     gap: clamp(24px, 3.2vw, 34px);
   }
   .mw-hero__stack {
+    display: flex;
+    flex-direction: column;
     gap: clamp(30px, 4.5vw, 56px);
   }
   .mw-hero__head-row {
@@ -3894,18 +3943,16 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
    unchanged. ── */
 @media (min-width: 1000px) and (max-width: 1366px) and (orientation: landscape) and (pointer: coarse) {
   .mw-hero__inner {
+    grid-template-columns: minmax(0, 1fr) clamp(220px, 20vw, 300px);
+    column-gap: clamp(28px, 3.2vw, 52px);
     padding-block: clamp(38px, 5vh, 64px) clamp(34px, 5vh, 60px);
     gap: clamp(18px, 2.4vh, 26px);
   }
   .mw-hero__stack {
     gap: clamp(24px, 3.2vh, 40px);
   }
-  /* Headline (left) + stamp logo (right rail), top-aligned on the short canvas.
-     The right rail is a touch narrower than desktop so the headline keeps its
-     commanding width. */
+  /* Headline (left) + stamp logo (right rail), top-aligned on the short canvas. */
   .mw-hero__head-row {
-    grid-template-columns: minmax(0, 1fr) clamp(220px, 20vw, 300px);
-    column-gap: clamp(28px, 3.2vw, 52px);
     align-items: start;
   }
   /* Headline: big enough to command the width, capped so the three lines + the
@@ -3924,10 +3971,8 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
     align-self: start;
   }
   .mw-hero__mark-brand { height: clamp(112px, 11vw, 140px); }
-  /* Intro on the left rail, article on the right rail under the logo. */
+  /* Intro on the left rail, article centred under the logo on the right rail. */
   .mw-hero__body {
-    grid-template-columns: minmax(0, 1fr) clamp(220px, 20vw, 300px);
-    column-gap: clamp(28px, 3.2vw, 52px);
     align-items: end;
   }
   /* Lead: a notch more contrast + a measured width for the wide column, with a
@@ -3942,16 +3987,11 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
   /* CTAs stay side-by-side on this wide canvas (comfortable finger targets:
      solid ≈54px, ghost ≈50px tall — both clear the 44px minimum). */
   .mw-hero__ctas { gap: clamp(16px, 1.6vw, 22px); }
-  /* Article tag: one line on the right rail, bottom-aligned with the CTAs —
-     vertically echoing the desktop's logo→article rail. RIGHT-aligned (not
-     centered like desktop) so its right edge tucks under the logo's right edge
-     and the line overflows LEFT into the gutter, away from the hero's right
-     edge — the narrower landscape rail would otherwise clip a centered, nowrap
-     line ("…SINCE 1996" cut to "…SINCE") at the screen edge. */
+  /* Article tag: centred on the logo axis (shared subgrid rail). */
   .mw-hero__article {
-    justify-self: end;
+    justify-self: center;
     align-self: end;
-    text-align: right;
+    text-align: center;
     font-size: 11.5px;
     letter-spacing: 0.1em;
   }
@@ -7579,6 +7619,53 @@ html[data-brand="miller"] {
   text-shadow: none;
   transition: opacity 0.22s ease, transform 0.34s ease;
 }
+.mw-cap-dia__center {
+  position: absolute;
+  left: 33.333333%;
+  top: 33.333333%;
+  z-index: 5;
+  width: 33.333333%;
+  aspect-ratio: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.26s ease;
+}
+.mw-cap-dia__center-svg {
+  position: absolute;
+  inset: var(--secd-gap);
+  width: auto;
+  height: auto;
+  overflow: visible;
+  filter: blur(0.45px) drop-shadow(0 0 14px rgba(0, 0, 0, 0.24));
+}
+.mw-cap-dia__center-fill {
+  fill: rgba(18, 18, 17, 0.74);
+  stroke: none;
+  stroke-width: 0;
+}
+.mw-cap-dia__center-face {
+  position: absolute;
+  inset: var(--secd-gap);
+  display: grid;
+  place-items: center;
+  padding: 0 18%;
+  text-align: center;
+}
+.mw-cap-dia__center-item {
+  grid-area: 1 / 1;
+  display: grid;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.2s ease, transform 0.26s ease;
+}
+.mw-cap-dia__center-line {
+  font-family: var(--font-sans), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(8px, 0.72vw, 11px);
+  line-height: 1.16;
+  color: color-mix(in srgb, var(--c-bg) 84%, var(--c-amber));
+  text-wrap: balance;
+}
 /* Title diamond — deep walnut crown, bolder lettering + a clay stamp tick. */
 .mw-cap-dia__cell--title .mw-cap-dia__fill {
   fill: var(--c-navy);
@@ -7599,6 +7686,9 @@ html[data-brand="miller"] {
 }
 /* Hover — scale the full lattice as one unit so every gap keeps the same pattern. */
 .mw-cap-dia:has(.mw-cap-dia__hit:hover) { --cap-hover-scale: 1.16; }
+.mw-cap-dia:has(.mw-cap-dia__hit:hover) .mw-cap-dia__cell:not(:has(.mw-cap-dia__hit:hover)) {
+  opacity: 0.64;
+}
 .mw-cap-dia__cell--cap:has(.mw-cap-dia__hit:hover) { z-index: 7; }
 .mw-cap-dia__cell--cap:has(.mw-cap-dia__hit:hover) .mw-cap-dia__d {
   transform: scale(1);
@@ -7612,8 +7702,21 @@ html[data-brand="miller"] {
   stroke: none;
   stroke-width: 0;
 }
+.mw-cap-dia:has(.mw-cap-dia__hit:hover) .mw-cap-dia__center {
+  opacity: 1;
+}
+.mw-cap-dia:has(.mw-cap-dia__cell--cap-0 .mw-cap-dia__hit:hover) .mw-cap-dia__center-item--0,
+.mw-cap-dia:has(.mw-cap-dia__cell--cap-1 .mw-cap-dia__hit:hover) .mw-cap-dia__center-item--1,
+.mw-cap-dia:has(.mw-cap-dia__cell--cap-2 .mw-cap-dia__hit:hover) .mw-cap-dia__center-item--2,
+.mw-cap-dia:has(.mw-cap-dia__cell--cap-3 .mw-cap-dia__hit:hover) .mw-cap-dia__center-item--3,
+.mw-cap-dia:has(.mw-cap-dia__cell--cap-4 .mw-cap-dia__hit:hover) .mw-cap-dia__center-item--4,
+.mw-cap-dia:has(.mw-cap-dia__cell--cap-5 .mw-cap-dia__hit:hover) .mw-cap-dia__center-item--5,
+.mw-cap-dia:has(.mw-cap-dia__cell--cap-6 .mw-cap-dia__hit:hover) .mw-cap-dia__center-item--6 {
+  opacity: 1;
+  transform: translateY(0);
+}
 @media (prefers-reduced-motion: reduce) {
-  .mw-cap-dia, .mw-cap-dia__cell, .mw-cap-dia__d, .mw-cap-dia__svg, .mw-cap-dia__fill, .mw-cap-dia__name { transition: none; }
+  .mw-cap-dia, .mw-cap-dia__cell, .mw-cap-dia__d, .mw-cap-dia__svg, .mw-cap-dia__fill, .mw-cap-dia__name, .mw-cap-dia__center, .mw-cap-dia__center-item { transition: none; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════
