@@ -6453,6 +6453,47 @@ html[data-brand="miller"] {
   .mw-secd--check { overflow-x: clip; }
 }
 
+/* ── TABLET PORTRAIT refinement (601–1024px, portrait) ──────────────────────────
+   At tablet-portrait the desktop checkmark frieze already scales down legibly (the
+   ≤600 phone re-flow does NOT apply here — these widths keep the frieze). This is a
+   polish pass on the PINNED framing: the section pins (the 721/840 pin query is
+   active at 768×1024 / 820×1180 / 1024×1366 portrait) and the desktop pin padding is
+   strongly bottom-heavy (top ~10vh vs bottom ~21vh), which "safe center"s the
+   composition high and strands a large empty cream band below the CTA. We rebalance
+   the pin's vertical rhythm so the grid + heading + lead + CTA sit centred in the
+   framed viewport with even air top and bottom, tighten the dead spotlight headroom
+   (the hover spotlight is inert on touch), and pull the heading a touch closer under
+   the frieze so it reads as one composed unit. Selectors mirror the pin block
+   (.mw-secd-track > .mw-secd--check, equal specificity) so this LATER block wins where
+   it overlaps. Frieze diamond/label SIZING is left as-is (already legible, capped by
+   the content column); this is rhythm/placement only. Nothing here is a desktop rule. */
+@media (min-width: 601px) and (max-width: 1024px) and (orientation: portrait) {
+  /* Rebalance the pinned frame: keep enough top clearance for the fixed nav (the
+     eyebrow collapses to 0 when pinned) but cut the over-large bottom band so
+     "safe center" parks the composition near the true viewport middle instead of
+     high with a stranded empty band underneath. Gentle top<bottom asymmetry keeps a
+     clean handoff gap to the next section as the pin releases. */
+  .mw-secd-track > .mw-secd--check {
+    padding-block: clamp(72px, 8vh, 104px) clamp(128px, 13.5vh, 184px);
+  }
+  /* The spotlight headroom above the grid is dead weight on touch (hover:none → no
+     gathered-squares row), so reclaim most of it; the frieze gains room without a
+     reserved empty band above it. */
+  .mw-secd-track > .mw-secd--check .mw-secd__grid {
+    margin-top: clamp(24px, 3vh, 48px);
+  }
+  /* Pull the heading block closer under the frieze so the grid → title → lead → CTA
+     read as one centred group rather than two stranded clusters; trim the inter-item
+     gap slightly to match the tighter rhythm. */
+  .mw-secd-track > .mw-secd--check .mw-secd__head {
+    margin-top: clamp(48px, 5.5vh, 80px);
+    gap: clamp(20px, 2.4vh, 30px);
+  }
+  .mw-secd-track > .mw-secd--check .mw-secd__cta {
+    margin-top: clamp(16px, 2vh, 28px);
+  }
+}
+
 /* ════════════════════════════════════════════════════════════════
    Who-we-serve v1 (mw-secd2*) — ARC GALLERY. Ported from an external
    arc-hero reference, rebuilt CSS-only in the clay system: SQUARED
