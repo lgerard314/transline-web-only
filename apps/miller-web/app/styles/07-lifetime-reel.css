@@ -627,3 +627,59 @@
      (the draw-in comet) is untouched, so the build animation is unchanged. */
   .mw-lr-reel__chain--base path { stroke-opacity: 1; }
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   TABLET LANDSCAPE (1000–1366, landscape, COARSE pointer) — REFINE the chain
+   --------------------------------------------------------------------------
+   Touch tablets held landscape (iPad 1024×768, iPad Pro 1194×834, larger 1366×
+   1024) land in a width band that OVERLAPS desktop, so this block is gated on
+   `pointer: coarse` — a fine-pointer desktop at the same 1000–1366 width keeps
+   the byte-identical base/desktop chain. The pin runway is governed by the
+   existing `(min-width:721px) and (max-width:1024px)` tablet block (≤1024) and
+   the base pin block (>1024); both are LEFT UNTOUCHED — this layers visual
+   refinements on top. Keeps the desktop HORIZONTAL 3-diamond chain (never the
+   ≤600 vertical stack). Appended last so it wins equal-specificity collisions
+   inside this query; no base/desktop rule is edited.
+
+   THE PROBLEM it fixes (measured at the pin, settled, on real touch contexts):
+   base --lr-S is clamp(255px, 29.7vw, 383px). In the LANDSCAPE content column
+   (.mw-inner = min(100% − clamp(48,8vw,144), 1560) ≈ 942px @1024 / 1098px @1194
+   / 1257px @1366), 29.7vw resolves to ≈304 / 355 / 383px, so 3 diamonds very
+   nearly fill the column and the four equal gutters
+   (--lr-gap-even = max(0,(100%−3·S)/4)) collapse — the rendered apex-to-apex
+   connector measured just 5px @1024, 6px @1194, 24px @1366. The three seals read
+   as one jammed block and the continuous "growing line" (the money-shot chain
+   motif) all but disappears at the two iPad sizes. The short pinned height
+   (768/834 frozen at 100vh) also leaves little vertical slack once the big
+   diamonds + the per-diamond captions stack, so oversized diamonds crowd it. */
+@media (min-width: 1000px) and (max-width: 1366px) and (orientation: landscape) and (pointer: coarse) {
+  /* Diamond edge length, re-tuned for the landscape content column so the four
+     equal gutters reopen to real, visible connectors at every landscape width
+     while the diamonds stay generous. Coefficient 24.6vw with floor 244px / cap
+     350px yields S ≈ 252px @1024, 294px @1194, 336px @1366 → measured connectors
+     ≈ 44px / 52px / 59px (was ~5px / ~6px / ~24px) — a clean, continuous
+     left→right pen-sweep at the same connector-to-diamond proportion (~0.17–0.18)
+     as DESKTOP at comparable widths. The diamonds shrink modestly (most at 1366:
+     383→336px, −12%; ~−10% elsewhere), which also relaxes the short pinned-height
+     budget so the eyebrow → chain → captions sequence fits the 768/834 frame
+     without crowding. Floor 244px sits just under the 1024 value so the chain
+     never clamps back closed at the low end; the 350px cap only engages above the
+     range (≈1423px) as a harmless guard and stays well under desktop's 383px.
+     No horizontal overflow: 3·S + 4·gutters == content width by construction
+     (verified docHorizScroll = 0 and symmetric ~59–78px item insets at every
+     width). */
+  .mw-lr-reel { --lr-S: clamp(244px, 24.6vw, 350px); }
+
+  /* Diamond/connector outline contrast over the dark walnut panel + faint map.
+     The settled chain is the terracotta --base layer (the gold draw-in band fades
+     out on data-done). At the base stroke-opacity:.5, --c-accent (#A85A2C)
+     composites to ≈rgb(107,58,30) over the panel (#2E1910) ≈ 1.78:1 — below WCAG
+     1.4.11's 3:1 for the graphic that DEFINES each diamond, so the outline reads
+     faint/soft over the map (the same finding the ≤600 stack and the tablet-
+     portrait block already corrected). Render the settled chain at full --c-accent
+     → ≈3.30:1, a crisp clay edge. Opacity-only (no width change): JS feeds one
+     stroke-width to every chain path, so the diamond↔connector seam stays
+     perfectly uniform, and the separate --gold band (the draw-in comet) is
+     untouched, so the build/draw animation is unchanged. */
+  .mw-lr-reel__chain--base path { stroke-opacity: 1; }
+}
