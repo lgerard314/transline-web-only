@@ -7519,3 +7519,120 @@ html[data-brand="miller"] {
   /* Belt-and-braces: nothing in this re-flow may push a horizontal scrollbar. */
   .mw-fac2 { overflow-x: clip; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   VBEC / facility (MediaSplit01) — TABLET PORTRAIT refinement.
+   Range 601–1024px AND portrait. This range SPLITS on the pin gate
+   (the pinned reveal is min-width:901px + motion-OK):
+     • 601–900px  → NO pin → the STATIC stacked flow (intro → gallery →
+       3 figures → diamond cluster). Same failure the ≤600 pass fixed:
+       the shared ImageAccordion01 falls back to the desktop horizontal
+       hover-accordion (1 open photo + 5 unreadable ~20px slivers). FIX →
+       re-flow the gallery into a 2-COLUMN grid of full, cover-fit photo
+       cards (every one open at rest, scrim caption, no parallax crop),
+       mirroring the ≤600 card treatment but using the wider canvas.
+       Figures + the diamond cluster already read well here — only light
+       breathing-room nudges.
+     • 901–1024px → pin ACTIVE → the desktop 40/60 split + pinned reveal
+       runs on a tall portrait touch canvas. The reveal itself is correct
+       (highlights grow → media swipes right → diamonds roll in & settle);
+       the only blemish is the accordion's 5 collapsed slivers squeezing to
+       a ~20px "barcode" strip at the photo's right edge in the narrower
+       1024 column. FIX → let the open photo fill the column as a single
+       hero plate and drop the slivers, so the media reads as one clean
+       photo that swipes off (the diamond launch reads media.left, so a
+       full-width photo only improves the tuck-under). The pin JS is
+       untouched and unbreakable from CSS.
+   SCOPE: only this section's own selectors (.mw-fac2*, .mw-cap-dia*) and
+   the shared ImageAccordion01 SCOPED under .mw-fac2 (.mw-fac2 .mw-iacc*) so
+   no other consumer of that widget is affected. Nothing here touches any
+   ≥1025px rule, the ≤600 / ≤700 / ≤900 blocks, or reduced-motion (the only
+   motion involved already has its off-switches in the base blocks above).
+   ═══════════════════════════════════════════════════════════════════ */
+@media (min-width: 601px) and (max-width: 1024px) and (orientation: portrait) {
+
+  /* ───────────────────────────────────────────────────────────────
+     601–900px — STATIC stack (pin is min-width:901px, so OFF here).
+     ─────────────────────────────────────────────────────────────── */
+  @media (max-width: 900px) {
+    /* Comfortable touch hit-area on the secondary text link, as on phones. */
+    .mw-fac2__about { padding-block: 11px; }
+
+    /* ── IMAGE ACCORDION → 2-COLUMN PHOTO-CARD GRID (scoped .mw-fac2) ──
+       The ≤900 base rule turns the track into a vertical accordion (1 open
+       + 5 slivers). Override it into a 2×3 grid of equal full cards. The
+       accordion JS still toggles `is-open` on tap; these rules neutralise
+       it (!important on min-height) so all six cards stay full. */
+    .mw-fac2 .mw-iacc__track {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(12px, 2.2vw, 18px);
+      height: auto;          /* was var(--iacc-h) on the base desktop rule */
+      flex-direction: row;   /* neutralise the ≤900 column accordion */
+    }
+    .mw-fac2 .mw-iacc__panel,
+    .mw-fac2 .mw-iacc__panel.is-open {
+      width: 100%;
+      min-height: 0 !important;     /* beat the ≤900 is-open min-height */
+      /* ~3:2 card — the wider 2-col cells read the buildings/signs clearly. */
+      aspect-ratio: 3 / 2;
+      cursor: default;              /* no longer a hover/tap-to-open affordance */
+      border-color: var(--c-navy);  /* uniform clay frame, no "active" accent */
+      box-shadow: 0 16px 38px -28px rgba(42, 27, 18, 0.5);
+    }
+    /* Photo fills its card with NO parallax offset so nothing clips off the
+       right; flatten the entrance zoom + the parallax img transform/scale so
+       cover-fit shows the whole frame. !important beats the per-frame inline
+       transform the parallax script writes. */
+    .mw-fac2 .mw-iacc__media { clip-path: none !important; }
+    .mw-fac2 .mw-iacc__zoom { transform: none !important; }
+    .mw-fac2 .mw-iacc__img {
+      --px-scale: 1;
+      transform: none !important;
+      object-position: center;
+      filter: brightness(1) saturate(1.02) !important;   /* full clarity, no "closed" dimming */
+    }
+    /* Caption scrim — this widget renders no .mw-iacc__veil, so seat the wash
+       via ::after on the media clip (over the photo at z2, under caption z3). */
+    .mw-fac2 .mw-iacc__media::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background: linear-gradient(to top, rgba(28, 16, 8, 0.74) 0%, rgba(28, 16, 8, 0.30) 32%, rgba(28, 16, 8, 0) 58%);
+    }
+    /* Vertical sliver label is redundant now; show the horizontal caption on
+       ALL cards (not only the open one). */
+    .mw-fac2 .mw-iacc__spine { display: none; }
+    .mw-fac2 .mw-iacc__cap,
+    .mw-fac2 .mw-iacc__panel:not(.is-open) .mw-iacc__cap {
+      opacity: 1;
+      transform: none;
+      font-size: clamp(12px, 1.5vw, 14px);
+      letter-spacing: 0.14em;
+    }
+
+    /* ── FIGURES + CAPABILITIES — already legible; just let them breathe a
+       little more than the cramped phone spacing on this wider canvas. */
+    .mw-fac2__caps { margin-top: clamp(12px, 2.6vw, 22px); }
+    .mw-cap-dia { width: min(100%, 560px); }
+
+    /* No horizontal scrollbar from the re-flow. */
+    .mw-fac2 { overflow-x: clip; }
+  }
+
+  /* ───────────────────────────────────────────────────────────────
+     901–1024px — PIN ACTIVE. The reveal is correct; only clean up the
+     gallery so the photo reads as one hero plate (no barcode slivers).
+     Scoped under .mw-fac2 so no other ImageAccordion01 consumer changes.
+     ─────────────────────────────────────────────────────────────── */
+  @media (min-width: 901px) {
+    /* Open panel fills the column as a single hero photo; the 5 collapsed
+       slivers (squeezed to ~20px here) are removed. The open panel keeps the
+       base flex transition, but we force it to span the full track width. */
+    .mw-fac2 .mw-iacc__track { justify-content: stretch; }
+    .mw-fac2 .mw-iacc__panel:not(.is-open) { display: none; }
+    .mw-fac2 .mw-iacc__panel.is-open { flex: 1 1 100%; width: 100%; }
+  }
+}
