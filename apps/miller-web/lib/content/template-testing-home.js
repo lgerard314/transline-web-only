@@ -132,7 +132,7 @@ export const LIFETIME_REEL = {
 export const SERVICES_GRID = {
   headingId: "mw-services-heading",
   eyebrow: "Services",
-  title: { lead: "From routine to emergencies,", em: "we’ve got you covered" },
+  title: { lead: "routines or emergencies-", em: "every waste stream covered" },
   intro: "From routine industrial streams to one-off emergency calls, Miller’s licensed VBEC facility and field crews handle the full spectrum — collection, treatment, and final disposition, all under one roof.",
   learnMore: { label: "Learn more", href: "/industrial-services/" },
   services: orderedServices(),

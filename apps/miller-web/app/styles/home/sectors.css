@@ -483,9 +483,10 @@
   /* Extra bottom room before Lifetime Impact — 3× the base .mw-secd bottom padding. */
   padding-block: clamp(64px, 6.5vw, 112px) clamp(192px, 19.5vw, 336px);
   /* Spotlight gathered-row vertical position (relative to the grid top). Positioned so the TOP of the
-     straightened spotlight PHOTOS sits ~16px above the top of the highest grid photo (si3, row 0).
-     Both boxes share the same clip inset (--secd-gap), so those cancel → −16px exactly. Scoped to --check. */
-  --sp-top: -16px;
+     straightened spotlight PHOTOS sits just a few px (~5px) above the highest point of the highest grid
+     diamond behind them (the si3 row-0 tips). Measured live: the visible gap ≈ (--secd-gap − --sp-top),
+     so −3px lands the row ~5px above the topmost diamond at both 1100 and 1440. Scoped to --check. */
+  --sp-top: -3px;
 }
 .mw-secd--check .mw-secd__grid {
   width: min(100%, calc((75px + var(--secd-gap)) * var(--secd-cols, 18))); /* ideal cap → 150px clip; shrinks with body-content when narrower */

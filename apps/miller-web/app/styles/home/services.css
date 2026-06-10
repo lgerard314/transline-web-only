@@ -37,7 +37,10 @@
 .mw-roster2__title {
   margin-top: 28px;
   max-width: none;
-  font-size: clamp(26px, 4.4vw, 72px);
+  /* Gentle descent: hold 72px to ~1610, then ease down — was clamp(26px,4.4vw,72px),
+     which bled to 63px by 1440 and 45px by 1024 (content column is huge; no reason to
+     shrink the headline that early). Shallower vw + px constant. */
+  font-size: clamp(28px, 3.6vw + 14px, 72px);
   line-height: 0.94;
 }
 .mw-roster2__title-line { display: block; }
@@ -80,8 +83,11 @@
 
 .mw-roster2__layout {
   display: grid;
-  /* list column (left) · collage column (right) */
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.55fr);
+  /* list column (left) · collage column (right). The list column keeps a 290px min so the
+     longest service name ("INDUSTRIAL WASTE TREATMENT") always has room to sit on ONE line
+     (paired with white-space:nowrap on .mw-roster2__row-name) — it never wraps, even at the
+     narrowest side-by-side widths. */
+  grid-template-columns: minmax(290px, 1fr) minmax(0, 1.55fr);
   gap: clamp(28px, 4vw, 76px);
   align-items: start;
   padding-top: 0;
@@ -119,8 +125,12 @@
   --lift: 0px;
   position: relative;
   display: block;
-  /* width fixed by the grid columns; height = 1.1 × width (10% taller than square). */
+  /* width fixed by the grid columns; base height = 1.1 × width (the hover side-by-side range
+     overrides this with an explicit even-rate height). */
   aspect-ratio: 1 / 1.1;
+  /* The card is a size container so the overlay TITLE can be sized in cqw (card-relative) —
+     keeping the longest word fitting the card width regardless of viewport/column count. */
+  container-type: inline-size;
   overflow: hidden;
   text-decoration: none;
   isolation: isolate;
@@ -238,7 +248,14 @@
   flex-direction: column;
   align-items: flex-start;
   gap: clamp(7px, 0.7vw, 11px);
-  padding: clamp(13px, 1.2vw, 20px);
+  /* Horizontal padding = vertical padding + the title→paragraph gap, so the title's
+     left/right inset visually matches the inactive space BELOW it at rest. (That space
+     reads larger than the side padding because the collapsed hidden paragraph still
+     contributes the flex `gap` under the title.) On hover the bottom padding grows to
+     equal the side padding (see .is-active below) so the revealed description sits in a
+     visually symmetric inset; transition it in lock-step with the reveal expand. */
+  padding: clamp(13px, 1.2vw, 20px) clamp(20px, 1.9vw, 31px);
+  transition: padding-bottom 440ms cubic-bezier(.2, .7, .2, 1);
 }
 .mw-roster2__card-overlay::before {
   content: "";
@@ -261,7 +278,13 @@
 .mw-roster2__card-title {
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
   font-weight: 700;
-  font-size: clamp(22px, 2.3vw, 38px);
+  /* Sized to the CARD width (cqw), NOT the viewport: big enough that the longest word
+     ("ENVIRONMENTAL" ≈ 5.97× the font-size) fits the card's content width with ~20px to spare,
+     at every card size — so titles never bleed into the right padding and never shrink more
+     than the card actually requires. 11.4cqw lands ENVIRONMENTAL on a ~20px margin in the
+     narrowest (~188px) card; wider cards just get more margin; capped at 38px. (.mw-roster2__card
+     is the container — see container-type. The ≤1024 touch overrides still win on their ranges.) */
+  font-size: clamp(18px, 11.4cqw, 38px);
   line-height: 0.98;
   letter-spacing: 0.005em;
   text-transform: uppercase;
@@ -286,10 +309,19 @@
   opacity: 1;
   transform: none;
 }
+/* Spotlit: grow the overlay's bottom padding to match its side padding so the revealed
+   description sits in an even, symmetric inset (the resting state intentionally runs a
+   smaller bottom padding — see the overlay rule). */
+.mw-roster2__card.is-active .mw-roster2__card-overlay {
+  padding-bottom: clamp(20px, 1.9vw, 31px);
+}
 .mw-roster2__card-text {
   margin: 0;
   font-family: var(--font-plex-sans), var(--font-body), ui-sans-serif, sans-serif;
-  font-size: clamp(11.5px, 0.86vw, 13.5px);
+  /* Plenty of room on the cards, so barely shrink the hover body — hold ~14–15px across
+     desktop instead of bleeding toward ~12px (was clamp(11.5px,0.86vw,13.5px), then
+     clamp(12px,0.4vw+8px,13.5px); both shrank far more than the cards needed). */
+  font-size: clamp(14px, 0.2vw + 12px, 15px);
   line-height: 1.42;
   color: rgba(245, 230, 203, 0.85);
 }
@@ -409,9 +441,15 @@
 }
 .mw-roster2__row-name {
   min-width: 0;
+  /* Service names never wrap — the list column is given a min-width (on
+     .mw-roster2__layout) so there's always room for the longest name on one line. */
+  white-space: nowrap;
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
   font-weight: 700;
-  font-size: clamp(17px, 1.45vw, 25px);
+  /* Holds 25px on wide screens, eases down, then FREEZES at ~19.4px — the size it has when the
+     list column locks at its 290px min-width (~840px viewport). Below the lock the column stops
+     shrinking, so the names stop shrinking too (floor 19.4px). */
+  font-size: clamp(19.4px, 1vw + 11px, 25px);
   line-height: 1.02;
   letter-spacing: 0.01em;
   text-transform: uppercase;
@@ -436,44 +474,69 @@
 .mw-roster2__lead {
   margin: clamp(18px, 1.6vw, 24px) 0 0;
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
-  font-size: clamp(16px, 1.15vw, 19px);
+  /* Hold 19px to ~1400 then ease — was clamp(16px,1.15vw,19px) (floored 16 by ~1391). */
+  font-size: clamp(16px, 0.5vw + 12px, 19px);
   line-height: 1.6;
   color: var(--c-ink-2);
   max-width: 64ch;
 }
 
 /* ── Responsive ───────────────────────────────────────────── */
-/* ── DESKTOP intermediate · 2-COLUMN collage (1025–1279) ────────────────────────
-   Before the side-by-side layout collapses to stacked at ≤1024, step the collage
-   from 3 columns down to 2 so the cards don't get cramped (~175–220px) in the
-   narrowing right column — the list stays on the left throughout this band. The
-   windowed-scroll PIN, the center-sticky rail, and the hover-to-card alignment all
-   stay ON here (they engage at innerWidth > 1024) and are column-count-AGNOSTIC:
-   the JS reads the live column count from getComputedStyle(grid).gridTemplateColumns,
-   so the list-row → grid-row grouping (bringCardIntoView) and the pinned-scroll
-   track measurement (the windowed-scroll measure() in roster-collage-02.jsx) re-map
-   to PAIRS automatically — hovering a list row scrolls/spotlights the 2-up grid row
-   it belongs to. No pointer guard: this must fire on touch laptops/tablets too (a
-   `pointer: fine` guard would silently skip the whole band on a coarse-pointer
-   device). At 1025–1279 a coarse-pointer landscape tablet now also gets this 2-up
-   collage; above 1280 it returns to the tuned 3-up pinned view. */
-@media (min-width: 1025px) and (max-width: 1279px) {
-  .mw-roster2__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  /* A 2-col grid has no middle column: the base :nth-child(3n+2) parallax now
-     targets scattered cells — and some of them are the column-0 cards the scroll
-     math uses as alignment ANCHORS (groupStart), so any --r2-mid drift on them
-     would desync the hover-to-card scroll. Pin them level. The parallax JS still
-     writes --r2-mid (it's gated > 560), but these cards no longer read it.
-     Mirrors the ≤560 / tablet-portrait / tablet-landscape 2-col resets. */
+/* ── DESKTOP (hover-capable) · side-by-side persists 601–1279, collage steps 3 → 2 → 1 ──
+   Where the primary input can hover (mouse/desktop), the list-left + pinned-collage layout
+   continues far below the touch stack point so the collage steps down one column at a time
+   with the list still on the LEFT (touch devices stay stacked at ≤1024 — see the stack block;
+   extending the hover-spotlight layout onto touch would just re-add the dead rail):
+     • 3-up  ≥ 1280
+     • 2-up  971–1279   (down to where the list column has narrowed to ~335px)
+     • 1-up  601–970    (row splits 50/50: list | single card column; list keeps its 290px min)
+     • stacks ≤ 600     (mobile)
+   CARD HEIGHT decreases at ONE EVEN linear rate across the whole range incl 3-up (no slope
+   kink at the 3→2 break): 242px at 1280, 219px at the ~768 narrow end; 3-up cards grow at the
+   same gentle rate above 1280 (capped 270px). The TITLE is sized in cqw (card-relative) so
+   the longest word ("ENVIRONMENTAL") always fits the card width — see .mw-roster2__card-title.
+   The pin / center-sticky rail / hover-to-card alignment use the SAME `hover:hover` + 600
+   gate as the CSS here (isSideBySide() in roster-collage-02.jsx) and read the live column
+   count, so the list-row → grid-row grouping (bringCardIntoView) and the pinned-scroll
+   measure() re-map automatically — at 1-up each list row maps 1:1 to its card. In every
+   non-3-col sub-band the base :nth-child(3n+2) parallax is pinned level (its cells are
+   scattered and include the column-0 alignment ANCHORS the scroll math measures). The
+   card-title clamp scales down with width so longer names wrap cleanly in the ~200px cards. */
+/* CARD HEIGHT — one EVEN (linear) rate across the WHOLE hover side-by-side range, INCLUDING
+   the 3-up band, so the height decreases at a constant rate through the 3→2 change (no kink at
+   the breakpoint). 4.5vw + 184px ⇒ 242px at the 1280 break (matches the old 3-up height there)
+   and 219px at the narrow ~768 end; it keeps the SAME slope above 1280 too (3-up cards grow
+   gently/linearly rather than by the steeper aspect-ratio rate). Replaces the old per-band
+   aspect-ratio entirely; caps at 270px so ultra-wide cards don't keep growing. */
+@media (hover: hover) and (min-width: 601px) {
+  .mw-roster2__card { aspect-ratio: auto; height: clamp(219px, 4.5vw + 184px, 270px); }
+}
+@media (hover: hover) and (min-width: 601px) and (max-width: 1279px) {
+  /* Non-3-col sub-bands: pin the middle-column parallax level (its :nth-child(3n+2) cells are
+     scattered here and include the column-0 alignment anchors the scroll math measures). */
   .mw-roster2__card:nth-child(3n + 2) {
     transform: translateY(calc(var(--ty) + var(--lift)));
   }
 }
-@media (max-width: 1024px) {
+@media (hover: hover) and (min-width: 971px) and (max-width: 1279px) {
+  .mw-roster2__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (hover: hover) and (min-width: 601px) and (max-width: 970px) {
+  /* 1-up kicks in when the list column has narrowed to ~335px (≈971px viewport in the
+     1fr/1.55fr split). In 1-up the row splits 50/50 — the list and the single card column each
+     take half — except the list keeps its 290px no-wrap min, so on the narrowest 1-up widths it
+     holds 290px rather than dipping below (the names must never wrap). */
+  .mw-roster2__grid { grid-template-columns: minmax(0, 1fr); }
+  .mw-roster2__layout { grid-template-columns: minmax(290px, 1fr) 1fr; }
+}
+/* Stacked single-column (list above collage). Touch (hover:none) stacks at ≤1024 — the rail
+   is hidden there (touch can't hover to spotlight). Hover-capable desktop stays side-by-side
+   down to 601 (the 3→2→1 bands above) and only stacks ≤600. Matches isSideBySide() in the JS. */
+@media (max-width: 600px), (hover: none) and (max-width: 1024px) {
   .mw-roster2__layout { grid-template-columns: 1fr; gap: clamp(28px, 5vw, 48px); }
   .mw-roster2__grid { padding-bottom: clamp(34px, 8vw, 80px); }
-  /* Stacked single-column — the list sits above the collage, so no sticky and no window:
-     the grid just flows full-height (JS also stops sizing/translating below this width). */
+  /* No sticky and no window: the grid just flows full-height (the JS also stops
+     sizing/translating once isSideBySide() is false). */
   .mw-roster2__rail { position: static; top: auto; }
   .mw-roster2__window { position: static; height: auto; overflow: visible; }
 }
@@ -619,7 +682,7 @@
    touch, so each cell carries its title PLUS a multi-line summary; we give cells more
    height than the base 1/1.1 square and retune the overlay type for the larger cards.
    Two columns (not the desktop 3) keeps cards generous and titles uncramped at 768–1024. */
-@media (min-width: 601px) and (max-width: 1024px) and (orientation: portrait) {
+@media (min-width: 601px) and (max-width: 1024px) and (orientation: portrait) and (hover: none) {
   /* Trim the head's trailing space so the cards come up a touch sooner. */
   .mw-roster2__head { margin-bottom: clamp(32px, 5vw, 52px); }
 

@@ -50,7 +50,7 @@ export function SectorGridMotion03() {
         const spin = ease(raw);
         const boxW = cell.offsetWidth || 1;
         const startX = -boxW;
-        const startY = -boxW * 0.5; // above final pose → settles down + right
+        const startY = 0; // pure left-to-right entrance: slide in from the left, no vertical travel
 
         if (raw <= 0) {
           cell.style.setProperty("--secd3-op", "0");

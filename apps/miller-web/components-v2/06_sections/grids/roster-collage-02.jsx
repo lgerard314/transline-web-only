@@ -23,6 +23,20 @@ import { ActionArrow01 } from "@/components-v2/01_marks/arrows/action-arrow-01";
 import { SolidCta01 } from "@/components-v2/02_buttons/solid/solid-cta-01";
 import { sectionProps } from "@/components-v2/section-config";
 
+// The desktop "side-by-side" layout (sticky list + pinned, scroll-jacked collage) persists to
+// different widths by INPUT TYPE: where the primary input can HOVER (mouse/desktop, hover:hover)
+// it continues down to 600px so the collage can step 3→2→1 columns with the list still on the
+// left; on a touch device (hover:none) it stays as before — stacking at ≤1024, where the
+// redundant rail is hidden (touch can't hover to spotlight, which is the whole point of the
+// side-by-side). hover:hover is the right signal (and beats pointer:fine on touchscreen laptops
+// with a trackpad). MUST stay in lock-step with the CSS stack breakpoints in home/services.css
+// (touch/hover:none stacks ≤1024, hover:hover stacks ≤600).
+const isSideBySide = () => {
+  if (typeof window === "undefined") return false;
+  const canHover = typeof window.matchMedia === "function" && window.matchMedia("(hover: hover)").matches;
+  return window.innerWidth > (canHover ? 600 : 1024);
+};
+
 function buildItems({ services = [], externalTile }) {
   const items = services.map((s) => ({
     key: s.id || s.slug,
@@ -83,6 +97,12 @@ export function RosterCollage02({ content, config = {} }) {
   const headRefs = useRef([]); // [eyebrow, title, intro] — each reveals individually
   const hoverAnchor = useRef(null); // pointer pos of the last hover-accepted selection
   const lastScrollAt = useRef(-Infinity); // timestamp of the most recent scroll (ms)
+  // Extra upward grid shift (px, ≥0) from a PRE-PIN hover, on top of the scroll-derived scrub.
+  // The windowed-scroll update() is the SINGLE writer of grid.style.transform: it composes this
+  // offset with the scrub every frame and consumes it 1:1 with scroll, so the hovered card holds
+  // its place on screen while the user scrolls and hands off seamlessly into the pinned scrub —
+  // no snap-back (two writers fighting over the same transform was the old failure mode).
+  const hoverShiftRef = useRef(0);
 
   // Hovering a list row scrolls the pinned collage only within this section's own scroll
   // track. The target is grouped by the responsive column count: every set of N list items
@@ -95,9 +115,7 @@ export function RosterCollage02({ content, config = {} }) {
     const win = windowRef.current;
     const grid = gridRef.current;
     if (!collage || !win || !grid) return;
-    if (window.innerWidth <= 1024) return; // stacked: no window, normal flow
-    const fullyRendered = revealed.length > 0 && revealed.every(Boolean);
-    if (!fullyRendered) return;
+    if (!isSideBySide()) return; // stacked: no window, normal flow
 
     const cols = Math.max(1, getComputedStyle(grid).gridTemplateColumns.split(" ").filter(Boolean).length);
     const groupStart = Math.floor(i / cols) * cols;
@@ -131,6 +149,55 @@ export function RosterCollage02({ content, config = {} }) {
     const trackDocTop = collage.getBoundingClientRect().top + window.scrollY;
     const pinStart = Math.max(0, trackDocTop - stickyTop);
     const pinEnd = pinStart + maxTrackTy;
+
+    // NOT pinned yet (section only partially exposed): DON'T scroll the page — shift the grid in
+    // place so the selected card's row appears FULLY inside the current (partial) window: align
+    // the card's top to its list row when the whole card fits, else shift UP just far enough to
+    // reveal the entire card (e.g. a bottom-of-grid card). Clamps use the LIVE grid/window rects
+    // so they work at the partial window AND compose with a prior hover-shift. The shift is
+    // recorded in hoverShiftRef (the windowed-scroll update() composes + consumes it — see the
+    // ref's comment); the transform write here is just the animated glide to that same value.
+    // No fullyRendered gate: this path never scrolls the page, so it's safe while entering.
+    if (window.scrollY < pinStart) {
+      const reduceM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const winRect = win.getBoundingClientRect();
+      const gridRect = grid.getBoundingClientRect();
+      const cardH = refRect.height;
+      const minTop = winRect.top;               // the card's top can't sit above the window top
+      const maxTop = winRect.bottom - cardH;    // the card's bottom can't sit below the window bottom
+      let targetTop = alignRowTop - peek;       // ideal: align the card's top to its list row…
+      targetTop = maxTop >= minTop ? Math.min(Math.max(targetTop, minTop), maxTop) : maxTop; // …kept fully in-window
+      let s = targetTop - refRect.top;          // extra shift from the card's current position
+      s = Math.min(s, winRect.top - gridRect.top);        // never expose blank above the grid
+      s = Math.max(s, winRect.bottom - gridRect.bottom);  // never expose blank below the grid
+      const curTy = new DOMMatrixReadOnly(getComputedStyle(grid).transform).m42; // current total (≤0 when shifted up)
+      const tyBase = Math.min(Math.max(stickyTop - collage.getBoundingClientRect().top, 0), maxTrackTy);
+      hoverShiftRef.current = Math.max(0, -(curTy + s) - tyBase);
+      grid.style.transition = reduceM ? "none" : "transform 460ms cubic-bezier(.2, .7, .2, 1)";
+      grid.style.transform = `translateY(${(-(tyBase + hoverShiftRef.current)).toFixed(1)}px)`;
+      // The scroll-driven reveal effect doesn't run during a hover-only shift, so the cards that
+      // scrub into/through the window would stay masked (blank). Reveal everything up to and
+      // including the selected row so they're visible (and rise in) as the grid shifts. Because
+      // the shift now SURVIVES scrolling (consumed gradually, never snapped away), later scrolls
+      // measure the truly-shifted positions and the reveal effect stays consistent with this.
+      const lastIdx = Math.min(groupStart + cols - 1, cardRefs.current.length - 1);
+      setCardRevealed((prev) => {
+        let changed = false;
+        const next = cardRefs.current.map((_, k) => {
+          const v = k <= lastIdx ? true : !!prev[k];
+          if (v !== !!prev[k]) changed = true;
+          return v;
+        });
+        return changed ? next : prev;
+      });
+      return;
+    }
+
+    // PINNED (or past): the original behavior — smooth-scroll the page within the pin track so
+    // the scrub aligns the selected row. Gated on the list being fully rendered, and never
+    // scrolling backward once the page has moved past the track.
+    const fullyRendered = revealed.length > 0 && revealed.every(Boolean);
+    if (!fullyRendered) return;
     if (window.scrollY > pinEnd + 2) return;
 
     let target = Math.max(0, Math.round(pinStart + ty));
@@ -201,7 +268,7 @@ export function RosterCollage02({ content, config = {} }) {
     const rail = railRef.current;
     if (!rail) return;
     const setTop = () => {
-      if (window.innerWidth <= 1024) { rail.style.top = ""; return; } // stacked: CSS makes it static
+      if (!isSideBySide()) { rail.style.top = ""; return; } // stacked: CSS makes it static
       const t = Math.max(0, Math.round((window.innerHeight - rail.offsetHeight) / 2));
       rail.style.top = `${t}px`;
     };
@@ -306,7 +373,7 @@ export function RosterCollage02({ content, config = {} }) {
       const win = windowRef.current;
       const grid = gridRef.current;
       const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const windowed = !!win && !reduce && window.innerWidth > 1024;
+      const windowed = !!win && !reduce && isSideBySide();
       const gap = grid ? parseFloat(getComputedStyle(grid).rowGap) || 0 : 0;
       const bandBottom = windowed ? vh - gap : vh; // a card reveals once its slot tops this line
       setCardRevealed((prev) => {
@@ -355,10 +422,11 @@ export function RosterCollage02({ content, config = {} }) {
       grid.style.transform = "";
       win.style.height = "";
       grid.style.removeProperty("--r2-tail-pad");
+      hoverShiftRef.current = 0;
     };
     const measure = () => {
       const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      active = !reduce && window.innerWidth > 1024;
+      active = !reduce && isSideBySide();
       if (!active) { clear(); return; }
       vh = window.innerHeight;
       stickyTop = parseFloat(getComputedStyle(win).top) || 0;   // topbar + gap (sticky offset)
@@ -399,6 +467,7 @@ export function RosterCollage02({ content, config = {} }) {
     };
 
     let raf = 0;
+    let lastY = window.scrollY;
     const update = () => {
       raf = 0;
       if (!active) return;
@@ -406,11 +475,36 @@ export function RosterCollage02({ content, config = {} }) {
       // maxTy while leaving) → cards scrub through the pinned window.
       let ty = stickyTop - collage.getBoundingClientRect().top;
       ty = ty < 0 ? 0 : ty > maxTy ? maxTy : ty;
-      grid.style.transform = `translateY(${(-ty).toFixed(1)}px)`;
+      // Read the grid's CURRENT screen rect and transform together (same style state, before any
+      // writes) so layoutBottom — the grid's untransformed bottom edge — is exact even mid-glide.
+      const gridRect = grid.getBoundingClientRect();
+      const curUp = -(new DOMMatrixReadOnly(getComputedStyle(grid).transform).m42);
+      const layoutBottom = gridRect.bottom + curUp;
+      // A pre-pin hover-shift glide may be mid-flight (see bringCardIntoView): freeze it exactly
+      // where it is — fold the current interpolated transform back into hoverShiftRef — then drop
+      // the transition so live scrubbing is instant. Continuity is preserved: no jump either way.
+      if (grid.style.transition && grid.style.transition !== "none") {
+        hoverShiftRef.current = Math.max(0, curUp - ty);
+        grid.style.transition = "none";
+      }
+      // Scrolling consumes the hover shift 1:1, so the hovered card holds its place on screen
+      // (the same feel as the pinned scrub) until the shift is used up — then normal behavior
+      // resumes, seamlessly, including the handoff into the real pin.
+      const y = window.scrollY;
+      if (hoverShiftRef.current > 0) hoverShiftRef.current = Math.max(0, hoverShiftRef.current - Math.abs(y - lastY));
+      lastY = y;
+      // The total up-shift may never lift the grid's bottom above the window's bottom (that would
+      // expose blank section). The ceiling is LIVE — at a partial (entering) window it's larger
+      // than the pinned scrub range, and the 1:1 consumption keeps the invariant as you scroll.
+      const winTopNow = win.getBoundingClientRect().top;
+      const winBottomNow = Math.min(vh - gap, winTopNow + fullBand);
+      const maxUp = Math.max(0, layoutBottom - winBottomNow);
+      let total = ty + hoverShiftRef.current;
+      if (total > maxUp) { total = maxUp; hoverShiftRef.current = Math.max(0, maxUp - ty); }
+      grid.style.transform = `translateY(${(-total).toFixed(1)}px)`;
       // Keep the window's bottom at vh − gap (the bottom strip) even before it pins; clamp to
       // the full band so the leaving phase just scrolls away normally.
-      const winTop = win.getBoundingClientRect().top;
-      let h = vh - gap - winTop;
+      let h = vh - gap - winTopNow;
       h = h < 0 ? 0 : h > fullBand ? fullBand : h;
       win.style.height = `${h.toFixed(1)}px`;
     };
