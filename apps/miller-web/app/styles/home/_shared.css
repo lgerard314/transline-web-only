@@ -1,0 +1,42 @@
+/* home/_shared.css — cross-section photo grade + parallax helpers */
+/* ════════════════════════════════════════════════════════════
+   Unified photographic grade — one subtle warm "LUT" so every
+   photograph on the page reads as a single art-directed set: calmer
+   saturation, a touch more contrast, and a faint warm cast that pulls
+   cool/neutral shots toward the clay palette. Applied ONLY to
+   photographic layers — never the logos, the blue ISO seals, affiliate
+   marks, social icons, or the truck/vector graphics (those keep their
+   true colour). Non-destructive; tune the whole page from one token.
+   ════════════════════════════════════════════════════════════ */
+html[data-brand="miller"] {
+  --mw-photo-grade: saturate(0.9) contrast(1.05) sepia(0.1) brightness(1.01);
+}
+.mw-svcs-anchor__photo,
+.mw-svcs-card__photo,
+.mw-svcs-tile__photo,
+.mw-sec2__card-photo-img,
+.mw-fac2__photo-main,
+.mw-fac2__thumb img,
+.mw-careers__bleed-photo img {
+  filter: var(--mw-photo-grade);
+}
+
+/* ── Scroll parallax for photos ──────────────────────────────────────────────
+   Every photo tagged [data-parallax-img] drifts a little as it scrolls through
+   the viewport (the same depth feel as the hero). MillerParallax writes --px-y;
+   the base scale gives the drift its headroom so a clipped edge is never exposed,
+   and hover zooms stack by overriding --px-scale. The container must clip. */
+[data-parallax-img] {
+  transform: translate3d(var(--px-x, 0px), var(--px-y, 0px), 0) scale(var(--px-scale, 1.12));
+  will-change: transform;
+  backface-visibility: hidden;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-parallax-img] { transform: none; }
+}
+
+/* Reduced motion: the clay underline-draws appear instantly (no sweep). */
+@media (prefers-reduced-motion: reduce) {
+  .mw-fac2__about::after,
+  .mw-ten2__mission-link::after { transition: none; }
+}

@@ -1,0 +1,144 @@
+/* home/final-cta.css — MultiColumnCta01 · components-v2/06_sections/callouts/multi-column-cta-01.jsx */
+/* ─────────────────────────────────────────────────────────────────
+   Final CTA — cream close. Centered eyebrow + headline + body +
+   two action buttons (Contact + 24/7 emergency).
+   ───────────────────────────────────────────────────────────────── */
+.mw-final {
+  background: var(--c-surface-warm);
+  padding-block: clamp(64px, 6.5vw, 112px);
+  text-align: center;
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+}
+.mw-final::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+/* Full-width 3-column layout: truck (left third), content (center
+   third), logomark (right third). Each item centered within its own
+   column. No max-width — the section spans the full viewport. */
+.mw-final__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  /* Center column is wide enough to keep the H2 on two lines at all
+     desktop widths. Side columns absorb the remaining space. */
+  grid-template-columns: 1fr minmax(680px, 1.6fr) 1fr;
+  align-items: stretch;
+  gap: clamp(20px, 2.5vw, 48px);
+  padding-inline: clamp(24px, 3vw, 56px);
+}
+@media (max-width: 1200px) {
+  .mw-final__grid { grid-template-columns: minmax(0, 1fr) minmax(560px, 2fr) minmax(0, 1fr); }
+}
+@media (max-width: 900px) {
+  .mw-final__grid {
+    grid-template-columns: 1fr;
+    gap: clamp(24px, 4vw, 40px);
+  }
+}
+.mw-final__col { display: flex; align-items: center; justify-content: center; min-width: 0; }
+/* Content column matches the other section heads — flex column with
+   a single row-gap driving the spacing between eyebrow, title, body,
+   and CTA row. */
+.mw-final__col--content {
+  flex-direction: column;
+  text-align: center;
+  row-gap: 24px;
+}
+.mw-final__truck {
+  display: block;
+  width: 100%;
+  max-width: clamp(280px, 30vw, 520px);
+  height: auto;
+  pointer-events: none;
+}
+.mw-final__logomark {
+  display: block;
+  width: clamp(182px, 18.2vw, 286px);
+  height: auto;
+  pointer-events: none;
+  opacity: 0.95;
+}
+@media (max-width: 900px) {
+  /* Drop the truck and put the logomark in its place at the top. */
+  .mw-final__col--truck { display: none; }
+  .mw-final__col--logo { display: flex; order: 0; }
+  .mw-final__col--content { order: 1; }
+  .mw-final__logomark { width: clamp(120px, 32vw, 176px); opacity: 0.95; }
+}
+/* The content column applies row-gap: 24px between every child, so the eyebrow→headline gap would be 24px + this margin. Offset the row-gap so the eyebrow→headline gap equals the standard section header gap, clamp(20px, 1.5vw, 24px), used by fac2/ten3/careers/sec2. */
+.mw-final .mw-final__tag { margin: 0 0 calc(clamp(20px, 1.5vw, 24px) - 24px) 0; }
+.mw-final__title {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(40px, 5vw, 88px);
+  line-height: 0.95;
+  letter-spacing: 0.005em;
+  color: var(--c-ink);
+  text-transform: uppercase;
+  max-width: 22ch;
+}
+.mw-final__body {
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(16px, 1.2vw, 20px);
+  line-height: 1.6;
+  color: var(--c-ink-2);
+  max-width: 56ch;
+}
+.mw-final__row {
+  display: inline-flex;
+  gap: clamp(12px, 1.2vw, 20px);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+/* Light divider + social row beneath the Final CTA buttons. Vertical
+   spacing is handled by .mw-final__col--content's row-gap. */
+.mw-final__divider {
+  width: min(100%, 360px);
+  height: 1px;
+  background: var(--c-line);
+  align-self: center;
+}
+.mw-final__socials {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: clamp(18px, 1.6vw, 28px);
+}
+.mw-final__social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--c-ink-2);
+  transition: color 180ms ease, transform 180ms ease;
+}
+.mw-final__social:hover { color: var(--c-accent); transform: translateY(-2px); }
+.mw-final__social:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 4px; border-radius: 2px; }
+/* Override the ghost CTA inside the Final block — its default
+   palette is built for the dark hero, so on cream we recolor it. */
+.mw-final .mw-cta--ghost {
+  color: var(--c-ink);
+  border-color: var(--c-ink);
+}
+.mw-final .mw-cta--ghost:hover {
+  border-color: var(--c-accent);
+  color: var(--c-accent);
+}
+.mw-final .mw-cta__sup {
+  color: var(--c-ink-2);
+}
+.mw-final .mw-cta__num {
+  color: var(--c-ink);
+}
+
+

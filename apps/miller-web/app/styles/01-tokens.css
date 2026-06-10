@@ -43,7 +43,7 @@ html[data-brand="miller"] {
   --c-grain-on-dark: rgba(245, 230, 203, 0.025);
 }
 
-/* Deepen Miller's dark surfaces to the espresso brown used on the /v2 lifetime
+/* Deepen Miller's dark surfaces to the espresso brown used on the lifetime-reel
    section (#2E1910). Both --c-navy (hero, footer, etc.) AND --c-navy-2 (the
    Careers / scale "walnut anchor" bands) are repainted so every dark-brown
    section matches v2. Scoped to Miller + clay with extra specificity so it beats

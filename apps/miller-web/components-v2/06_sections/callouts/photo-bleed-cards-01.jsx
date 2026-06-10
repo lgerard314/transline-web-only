@@ -21,7 +21,7 @@ export function PhotoBleedCards01({ content, config = {} }) {
         ) : null}
         <header className="mw-careers__head">
           <div className="mw-careers__head-text" data-reveal>
-            {/* Field-head: the /v2 manifest grammar — a mono `stage —— field` document line above the title. */}
+            {/* Field-head: mono `stage —— field` document line above the title. */}
             <p className="mw-careers__field">
               {stage ? <span>{stage}</span> : null}
               <span className="mw-careers__field-rule" />

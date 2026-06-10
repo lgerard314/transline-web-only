@@ -1,0 +1,666 @@
+/* home/facility-pin.css — MediaSplit01 pinned scroll sequence (part 2) */
+/* ─────────────────────────────────────────────────────────────────
+   VBEC pinned reveal (media-split-01.jsx). Cream section throughout.
+   ENTRANCE: left intro rests visible; right column rises UP (easeInOut) to finish with pin-in.
+   PINNED: highlights scroll-scrub immediately on pin (FIG_START_P → FIG_END_P), hold, then scroll scrubs the media exit
+   (SWIPE_START → SWIPE_END on pin P) and diamonds roll in. Remaining track height is release
+   scroll after the sequence. Mobile / reduced-motion: no pin, columns at rest.
+   ───────────────────────────────────────────────────────────────── */
+
+@media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
+  .mw-fac2-track { position: relative; height: var(--fac2-track-h, 250vh); }
+  /* Section pins immediately below the header, sized to the remaining viewport. */
+  .mw-fac2-track > .mw-fac2 {
+    position: sticky;
+    top: var(--fac2-head-off, 115px);
+    height: calc(100vh - var(--fac2-head-off, 115px));
+    padding-block: 0;
+    background: var(--c-surface-warm);
+  }
+  /* Inner fills the pinned viewport (no max-width gutter, no padding); column gutters restored inside. */
+  .mw-fac2-track > .mw-fac2 > .mw-inner {
+    height: 100%;
+    max-width: none;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  /* Grid spans edge-to-edge (no gutter, no gap) so left + right tile the whole section. */
+  .mw-fac2-track .mw-fac2__grid {
+    --fac2-col-pad: clamp(28px, 3.2vw, 56px); /* matches left column inner horizontal pad */
+    height: 100%;
+    grid-template-columns: minmax(0, 40fr) minmax(0, 60fr);
+    gap: 0;
+    margin: 0;
+    align-items: stretch;
+  }
+  /* LEFT — intro column. Bleeds to the screen's left edge; text held in the content gutter via
+     padding-left; vertically centred. Copy rests visible — no clip or mask-rise on entrance. */
+  .mw-fac2-track .mw-fac2__left {
+    position: relative;
+    justify-content: center;
+    overflow: visible;
+    padding-block: clamp(64px, 6.5vw, 112px);
+    padding-right: 0;
+    padding-left: max(clamp(24px, 4vw, 72px), calc((100vw - 1560px) / 2));
+  }
+  /* RIGHT — positioning context for media + caps layers. Rises UP on entrance (JS: --fac2-right-y);
+     flex-centres the media stack so it aligns with the left intro. Left pad matches the left
+     column's right padding so the photo/highlight card sits the same inset from the split. */
+  .mw-fac2-track .mw-fac2__right {
+    position: relative;
+    align-self: stretch;
+    min-width: 0;
+    min-height: 0;
+    padding-left: calc(2 * var(--fac2-col-pad));
+    transform: translateY(var(--fac2-right-y, 0px));
+    will-change: transform;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  /* MEDIA layer (z-index 2) — the photos (LOCKED ratio) + the highlights clip band. On the pin
+     it SWIPES right (--fac2-media-x) and fades out (--fac2-media-op). */
+  .mw-fac2-track .mw-fac2__media {
+    position: relative;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    transform: translateX(var(--fac2-media-x, 0px));
+    opacity: var(--fac2-media-op, 1);
+    will-change: transform, opacity;
+  }
+  /* Locked-ratio gallery, filling the column width and bleeding right (no left inset). */
+  .mw-fac2-track .mw-fac2__media .mw-iacc { --reel-inset: 0px; margin: 0; }
+  /* Clip band — GROWS from 0 → the highlights' height (--fac2-fig-h) so they push out from under
+     the photos; pulled inside the right edge so the text isn't jammed against the screen. */
+  .mw-fac2-track .mw-fac2__figclip {
+    overflow: hidden;
+    height: var(--fac2-fig-h, 0px);
+    margin-right: var(--bleed-right, 0px);
+  }
+  .mw-fac2-track .mw-fac2__figs {
+    margin: 0;
+    border-top: 0;
+    padding-block: clamp(18px, 2vw, 30px);
+    align-items: start;
+  }
+  .mw-fac2-track .mw-fac2__fig { gap: clamp(6px, 0.7vw, 10px); }
+  /* CAPS layer (z-index 1) — the diamond cluster parked centred BEHIND the media; each diamond
+     rolls in (per-cell vars) as the media swipes past. */
+  .mw-fac2-track .mw-fac2__caps {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    margin: 0;
+    margin-right: var(--bleed-right, 0px);
+    padding: 0;
+    display: block;
+    transform: translateY(var(--fac2-cap-y, 2000px));
+    will-change: transform;
+  }
+  .mw-fac2-track .mw-cap-dia__cell {
+    transform: translate3d(var(--cap-tx, 0px), var(--cap-ty, 0px), 0) rotate(var(--cap-rot, 0deg)) scale(var(--cap-sc, 0.12));
+    transform-origin: center;
+    opacity: var(--cap-op, 0);
+    will-change: transform, opacity;
+  }
+  /* Shared stage — dumptruck + diamond cluster share one centred hub once the swipe completes. */
+  .mw-fac2-track .mw-fac2__stage {
+    position: relative;
+    width: min(100%, clamp(520px, 54vw, 760px));
+    margin-inline: auto;
+    aspect-ratio: 1672 / 941;
+    overflow: visible;
+  }
+  .mw-fac2-track .mw-fac2__truck {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    opacity: var(--fac2-truck-op, 0);
+    transform: translateX(var(--fac2-truck-x, 0px));
+    will-change: transform, opacity;
+    --fac2-truck-base: var(--c-bg);
+    --fac2-truck-mid: color-mix(in srgb, var(--c-bg) 80%, var(--c-line));
+    --fac2-truck-shade: color-mix(in srgb, var(--c-bg) 62%, var(--c-line));
+    --fac2-truck-stroke: color-mix(in srgb, var(--c-ink) 26%, var(--c-line));
+  }
+  .mw-fac2-track .mw-fac2__truck-svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+.mw-fac2-track .mw-fac2__stage > .mw-cap-dia {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(var(--cap-hover-scale, 1));
+    transform-origin: center;
+    transition: transform 0.42s cubic-bezier(0.2, 0.7, 0.2, 1);
+    width: min(68%, 480px);
+    margin: 0;
+    z-index: 1;
+  }
+}
+
+/* VBEC swipe-reveal stage wrapper — static/mobile flow only; truck hidden until pin. */
+.mw-fac2__stage { position: relative; }
+.mw-fac2__truck { display: none; }
+
+/* ─────────────────────────────────────────────────────────────────
+   Capabilities diamond-of-diamonds (replaces the 7-cap grid). 8 flat
+   mineral diamonds on the who-we-serve argyle lattice (SAME --secd-gap),
+   hollow centre; a title diamond crowns the top; the hovered diamond
+   brings its one-line detail forward. JSX: media-split-01.jsx (.mw-cap-dia*). */
+.mw-cap-dia {
+  --secd-gap: clamp(2.12px, 0.247vw, 4.24px); /* SAME visible gap as the who-we-serve grid */
+  --cap-hover-scale: 1;
+  position: relative;
+  width: min(100%, 520px);
+  margin-inline: auto;
+  transform: scale(var(--cap-hover-scale));
+  transform-origin: center;
+  transition: transform 0.42s cubic-bezier(0.2, 0.7, 0.2, 1);
+  /* aspect-ratio is set inline (cols / rows) so the lattice stays square-celled */
+}
+.mw-cap-dia__cell {
+  position: absolute;
+  aspect-ratio: 1;          /* square box → diamond after the rounded-rect fill; width set inline */
+  pointer-events: none;     /* boxes overlap at the corners — only the diamond fill is hoverable */
+  transition: opacity 0.28s ease;
+}
+.mw-cap-dia__hit {
+  position: absolute;
+  inset: var(--secd-gap);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  display: block;
+  pointer-events: auto;
+  z-index: 4;
+}
+.mw-cap-dia__d {
+  position: absolute;
+  inset: var(--secd-gap);   /* the gap inset, exactly like .mw-secd__photo-clip */
+  display: block;
+  transform-origin: center;
+  transition: transform 0.42s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.28s ease;
+  will-change: transform;
+}
+.mw-cap-dia__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: none;
+  transform-origin: center;
+  transition: transform 0.48s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.mw-cap-dia__fill {
+  fill: var(--cap-bg, var(--c-accent));
+  stroke: none;
+  stroke-width: 0;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+  transition: fill 0.32s ease;
+}
+.mw-cap-dia__d::after { content: none; }
+.mw-cap-dia__svg {
+  z-index: 0;
+}
+.mw-cap-dia__face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 0;
+  text-align: center;
+  padding: 0 14%;
+  pointer-events: none;     /* hover passes through the text to the diamond fill below */
+  z-index: 2;
+}
+.mw-cap-dia__name {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(9px, 0.95vw, 14px);
+  line-height: 1.05;
+  letter-spacing: 0.015em;
+  text-transform: uppercase;
+  color: var(--c-bg);
+  text-wrap: balance;
+  text-shadow: none;
+  transition: opacity 0.22s ease, transform 0.34s ease;
+}
+.mw-cap-dia__center {
+  position: absolute;
+  left: 33.333333%;
+  top: 33.333333%;
+  z-index: 5;
+  width: 33.333333%;
+  aspect-ratio: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.26s ease;
+}
+.mw-cap-dia__center-svg {
+  position: absolute;
+  inset: var(--secd-gap);
+  width: auto;
+  height: auto;
+  overflow: visible;
+  filter: blur(0.45px) drop-shadow(0 0 14px rgba(0, 0, 0, 0.24));
+  transform: rotate(var(--cap-center-rot, 0deg));
+  transform-origin: center;
+  transition: transform 0.48s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.mw-cap-dia__center-fill {
+  fill: rgba(18, 18, 17, 0.87);
+  stroke: none;
+  stroke-width: 0;
+}
+.mw-cap-dia__center-face {
+  position: absolute;
+  inset: var(--secd-gap);
+  display: grid;
+  place-items: center;
+  padding: 0 18%;
+  text-align: center;
+}
+.mw-cap-dia__center-item {
+  grid-area: 1 / 1;
+  display: grid;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.2s ease, transform 0.26s ease;
+}
+.mw-cap-dia__center-line {
+  font-family: var(--font-sans), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(8.5px, calc(0.72vw + 0.5px), 11.5px);
+  line-height: 1.16;
+  color: color-mix(in srgb, var(--c-bg) 84%, var(--c-amber));
+  text-wrap: balance;
+}
+/* Title diamond — deep walnut crown, bolder lettering + a clay stamp tick. */
+.mw-cap-dia__cell--title .mw-cap-dia__fill {
+  fill: var(--c-navy);
+  stroke: none;
+  stroke-width: 0;
+}
+.mw-cap-dia__title {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(11px, 1.15vw, 18px);
+  line-height: 1.0;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--c-bg);
+}
+.mw-cap-dia__title::after {
+  content: none;
+}
+/* Hover — scale the full lattice as one unit so every gap keeps the same pattern. */
+.mw-cap-dia:has(.mw-cap-dia__hit:hover),
+.mw-cap-dia[data-cap-active="1"] { --cap-hover-scale: 1.2412; }
+.mw-cap-dia:has(.mw-cap-dia__hit:hover) .mw-cap-dia__cell--cap:not(:has(.mw-cap-dia__hit:hover)),
+.mw-cap-dia[data-cap-active="1"] .mw-cap-dia__cell--cap:not(.mw-cap-dia__cell--active) {
+  opacity: 1;
+}
+.mw-cap-dia:has(.mw-cap-dia__hit:hover) .mw-cap-dia__cell--cap:not(:has(.mw-cap-dia__hit:hover)) .mw-cap-dia__fill,
+.mw-cap-dia[data-cap-active="1"] .mw-cap-dia__cell--cap:not(.mw-cap-dia__cell--active) .mw-cap-dia__fill {
+  fill: color-mix(in srgb, var(--c-surface-warm) 72%, var(--c-ink) 28%);
+  opacity: 0.78;
+}
+.mw-cap-dia:has(.mw-cap-dia__hit:hover) .mw-cap-dia__cell--cap:not(:has(.mw-cap-dia__hit:hover)) .mw-cap-dia__name,
+.mw-cap-dia[data-cap-active="1"] .mw-cap-dia__cell--cap:not(.mw-cap-dia__cell--active) .mw-cap-dia__name {
+  color: var(--cap-bg);
+  font-weight: 700;
+}
+.mw-cap-dia:has(.mw-cap-dia__hit:hover) .mw-cap-dia__cell--title .mw-cap-dia__fill,
+.mw-cap-dia[data-cap-active="1"] .mw-cap-dia__cell--title .mw-cap-dia__fill {
+  opacity: 0.7;
+}
+.mw-cap-dia:has(.mw-cap-dia__hit:hover) .mw-cap-dia__cell--title .mw-cap-dia__title,
+.mw-cap-dia[data-cap-active="1"] .mw-cap-dia__cell--title .mw-cap-dia__title {
+  color: #fff;
+}
+.mw-cap-dia__cell--cap:has(.mw-cap-dia__hit:hover),
+.mw-cap-dia__cell--cap.mw-cap-dia__cell--active { z-index: 7; }
+.mw-cap-dia__cell--cap:has(.mw-cap-dia__hit:hover) .mw-cap-dia__d,
+.mw-cap-dia__cell--cap.mw-cap-dia__cell--active .mw-cap-dia__d {
+  transform: scale(1);
+}
+.mw-cap-dia__cell--cap:has(.mw-cap-dia__hit:hover) .mw-cap-dia__svg,
+.mw-cap-dia__cell--cap.mw-cap-dia__cell--active .mw-cap-dia__svg {
+  filter: none;
+  transform: rotate(90deg);
+}
+.mw-cap-dia__cell--cap:has(.mw-cap-dia__hit:hover) .mw-cap-dia__fill,
+.mw-cap-dia__cell--cap.mw-cap-dia__cell--active .mw-cap-dia__fill {
+  stroke: var(--cap-bg);
+  stroke-width: 2px;
+}
+.mw-cap-dia:has(.mw-cap-dia__hit:hover) .mw-cap-dia__center,
+.mw-cap-dia[data-cap-active="1"] .mw-cap-dia__center {
+  opacity: 1;
+}
+.mw-cap-dia[data-cap-active="1"] .mw-cap-dia__center-fill {
+  fill: var(--cap-active-bg);
+  opacity: 1;
+}
+.mw-cap-dia:has(.mw-cap-dia__hit:hover) .mw-cap-dia__center-line,
+.mw-cap-dia[data-cap-active="1"] .mw-cap-dia__center-line {
+  color: #fff;
+}
+.mw-cap-dia:has(.mw-cap-dia__cell--cap-0 .mw-cap-dia__hit:hover) .mw-cap-dia__center-item--0,
+.mw-cap-dia:has(.mw-cap-dia__cell--cap-1 .mw-cap-dia__hit:hover) .mw-cap-dia__center-item--1,
+.mw-cap-dia:has(.mw-cap-dia__cell--cap-2 .mw-cap-dia__hit:hover) .mw-cap-dia__center-item--2,
+.mw-cap-dia:has(.mw-cap-dia__cell--cap-3 .mw-cap-dia__hit:hover) .mw-cap-dia__center-item--3,
+.mw-cap-dia:has(.mw-cap-dia__cell--cap-4 .mw-cap-dia__hit:hover) .mw-cap-dia__center-item--4,
+.mw-cap-dia:has(.mw-cap-dia__cell--cap-5 .mw-cap-dia__hit:hover) .mw-cap-dia__center-item--5,
+.mw-cap-dia:has(.mw-cap-dia__cell--cap-6 .mw-cap-dia__hit:hover) .mw-cap-dia__center-item--6,
+.mw-cap-dia__center-item--active {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-cap-dia, .mw-cap-dia__cell, .mw-cap-dia__d, .mw-cap-dia__svg, .mw-cap-dia__fill, .mw-cap-dia__name, .mw-cap-dia__center, .mw-cap-dia__center-svg, .mw-cap-dia__center-item { transition: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   VBEC / facility (MediaSplit01) — MOBILE PORTRAIT refinement (≤600px).
+   On phones there is NO pin (the pin query is min-width:901px): the section is
+   the static stacked flow intro → image-accordion → 3 figures → capabilities
+   cluster. These rules ONLY touch this section's own selectors (.mw-fac2*,
+   .mw-cap-dia*) and the shared ImageAccordion01 widget SCOPED under .mw-fac2
+   (.mw-fac2 .mw-iacc*) so no other consumer of that widget is affected. They sit
+   AFTER the ≤900 / ≤700 mobile rules so, at equal specificity, source order makes
+   them win for portrait phones; tablets (601–900px) keep the existing treatment.
+   Nothing here is a desktop or ≥901px rule. Reduced-motion is unaffected (the
+   only motion added is a CSS transition that already has reduced-motion off-
+   switches in the base .mw-iacc / .mw-cap-dia blocks above).
+   ═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 600px) {
+  /* ── INTRO ──────────────────────────────────────────────────────────
+     The eyebrow / title / lead read well already. Only nudge: grow the
+     vertical tap target of the secondary "READ THE STORY" text link so it
+     is comfortable on touch (it sits beside the ~52px solid CTA). Visual
+     position stays inline; just more hit-area above/below. */
+  .mw-fac2__about { padding-block: 11px; }
+
+  /* ── IMAGE ACCORDION → VERTICAL CARD STACK (ImageAccordion01, scoped .mw-fac2) ─
+     Round-2 fix. The desktop hover-to-expand accordion fails on a phone: only
+     the open panel was tall, the other five collapsed to ~107px slivers you
+     couldn't read; there was no tap affordance; and the parallax-widened photo
+     (scale 1.34 + data-parallax-x) overflowed the panel and clipped words off
+     the right edge ("…ENVIRONMENTAL CENTR[E]", "VAUGHN BULLOUGH").
+     FIX → re-flow into a clean stack of six EQUAL full-width photo cards, every
+     one open at rest (no hover/tap dependency), photo fitted to the card with NO
+     horizontal parallax offset so nothing is cropped, each with the clay veil +
+     horizontal caption. The accordion JS still toggles `is-open` on tap; these
+     rules neutralise it with !important so all six cards stay full regardless.
+     Only `.mw-fac2 .mw-iacc*` is touched — other ImageAccordion01 consumers and
+     the ≥901px desktop accordion are unaffected. */
+
+  /* Track: plain vertical stack with a comfortable card gap. */
+  .mw-fac2 .mw-iacc__track { gap: clamp(12px, 3.5vw, 18px); }
+
+  /* Every panel is a full-width card of equal, readable height — whether or not
+     the JS marks it `is-open`. !important beats the base `is-open` min-height. */
+  .mw-fac2 .mw-iacc__panel,
+  .mw-fac2 .mw-iacc__panel.is-open {
+    width: 100%;
+    min-height: 0 !important;
+    /* ~16/10 card: tall enough to read the building/sign in every photo. */
+    aspect-ratio: 16 / 10;
+    cursor: default;                 /* not a hover/tap-to-open affordance anymore */
+    border-color: var(--c-navy);     /* uniform clay frame; no "active" accent border (base .is-open uses --c-accent) */
+    box-shadow: 0 16px 38px -28px rgba(42, 27, 18, 0.5);
+  }
+
+  /* Photo fills its card with NO parallax offset so nothing clips off the right.
+     The parallax engine scales/translates .mw-iacc__img inline + via --px-scale;
+     pin it flat and reset the scale so cover-fit shows the whole frame. The zoom
+     layer (entrance + hover-px) is likewise flattened. !important overrides the
+     inline transform the parallax script writes each frame. */
+  .mw-fac2 .mw-iacc__media { clip-path: none !important; }
+  .mw-fac2 .mw-iacc__zoom { transform: none !important; }
+  .mw-fac2 .mw-iacc__img {
+    --px-scale: 1;
+    transform: none !important;
+    object-position: center;
+    /* All photos read at full clarity — no "closed plate" dimming in a stack. */
+    filter: brightness(1) saturate(1.02) !important;
+  }
+
+  /* Caption legibility: a clay scrim at the bottom of EVERY card. This widget
+     renders no .mw-iacc__veil element, so seat the wash via a ::after on the
+     media clip (sits over the photo at z2, under the caption at z3). */
+  .mw-fac2 .mw-iacc__media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(to top, rgba(28, 16, 8, 0.74) 0%, rgba(28, 16, 8, 0.30) 32%, rgba(28, 16, 8, 0) 58%);
+  }
+
+  /* The vertical/centred sliver label is redundant now every card is open — hide
+     it and show the horizontal bottom-left caption on ALL cards (not just open). */
+  .mw-fac2 .mw-iacc__spine { display: none; }
+  .mw-fac2 .mw-iacc__cap,
+  .mw-fac2 .mw-iacc__panel:not(.is-open) .mw-iacc__cap {
+    opacity: 1;
+    transform: none;
+    font-size: 13px;
+    letter-spacing: 0.14em;
+  }
+
+  /* ── FIGURES (64 / 70 / 1996) ───────────────────────────────────────
+     The existing ≤600 rule (gap + scaled numerals) already reads cleanly at
+     360–430 — left as-is. (No rule here.) */
+
+  /* ── CAPABILITIES CLUSTER (.mw-cap-dia) ─────────────────────────────
+     DECISION: keep the signature "diamond of diamonds" argyle motif (it is
+     the section's identity and reads as a cohesive lattice), but make the
+     NAMES comfortably legible on a phone. BEFORE: names hit the 9px floor of
+     clamp(9px,0.95vw,14px) (0.95vw≈3.7px at 390) — small, and the longest
+     names crowded the diamond. FIX: a viewport-scaled name size with a higher
+     floor, slightly looser inner padding so long names have room, and a touch
+     more top separation so the cluster breathes under the figures. The lattice
+     geometry, flat fill treatment, and crown diamond are untouched. */
+  .mw-fac2__caps { margin-top: clamp(8px, 3vw, 18px); }
+  .mw-cap-dia { width: 100%; }
+  .mw-cap-dia__face { padding: 0 12%; }
+  .mw-cap-dia__name {
+    /* Was clamp(9px,0.95vw,14px). Floor ~11px at 360, ~12px at 390. */
+    font-size: clamp(11px, 3.15vw, 13px);
+    line-height: 1.08;
+    letter-spacing: 0.01em;
+  }
+  .mw-cap-dia__title {
+    /* Was clamp(11px,1.15vw,18px). Bump the crown to match. */
+    font-size: clamp(13px, 3.7vw, 16px);
+    letter-spacing: 0.03em;
+  }
+
+  /* Belt-and-braces: nothing in this re-flow may push a horizontal scrollbar. */
+  .mw-fac2 { overflow-x: clip; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   VBEC / facility (MediaSplit01) — TABLET PORTRAIT refinement.
+   Range 601–1024px AND portrait. This range SPLITS on the pin gate
+   (the pinned reveal is min-width:901px + motion-OK):
+     • 601–900px  → NO pin → the STATIC stacked flow (intro → gallery →
+       3 figures → diamond cluster). Same failure the ≤600 pass fixed:
+       the shared ImageAccordion01 falls back to the desktop horizontal
+       hover-accordion (1 open photo + 5 unreadable ~20px slivers). FIX →
+       re-flow the gallery into a 2-COLUMN grid of full, cover-fit photo
+       cards (every one open at rest, scrim caption, no parallax crop),
+       mirroring the ≤600 card treatment but using the wider canvas.
+       Figures + the diamond cluster already read well here — only light
+       breathing-room nudges.
+     • 901–1024px → pin ACTIVE → the desktop 40/60 split + pinned reveal
+       runs on a tall portrait touch canvas. The reveal itself is correct
+       (highlights grow → media swipes right → diamonds roll in & settle);
+       the only blemish is the accordion's 5 collapsed slivers squeezing to
+       a ~20px "barcode" strip at the photo's right edge in the narrower
+       1024 column. FIX → let the open photo fill the column as a single
+       hero plate and drop the slivers, so the media reads as one clean
+       photo that swipes off (the diamond launch reads media.left, so a
+       full-width photo only improves the tuck-under). The pin JS is
+       untouched and unbreakable from CSS.
+   SCOPE: only this section's own selectors (.mw-fac2*, .mw-cap-dia*) and
+   the shared ImageAccordion01 SCOPED under .mw-fac2 (.mw-fac2 .mw-iacc*) so
+   no other consumer of that widget is affected. Nothing here touches any
+   ≥1025px rule, the ≤600 / ≤700 / ≤900 blocks, or reduced-motion (the only
+   motion involved already has its off-switches in the base blocks above).
+   ═══════════════════════════════════════════════════════════════════ */
+@media (min-width: 601px) and (max-width: 1024px) and (orientation: portrait) {
+
+  /* ───────────────────────────────────────────────────────────────
+     601–900px — STATIC stack (pin is min-width:901px, so OFF here).
+     ─────────────────────────────────────────────────────────────── */
+  @media (max-width: 900px) {
+    /* Comfortable touch hit-area on the secondary text link, as on phones. */
+    .mw-fac2__about { padding-block: 11px; }
+
+    /* ── IMAGE ACCORDION → 2-COLUMN PHOTO-CARD GRID (scoped .mw-fac2) ──
+       The ≤900 base rule turns the track into a vertical accordion (1 open
+       + 5 slivers). Override it into a 2×3 grid of equal full cards. The
+       accordion JS still toggles `is-open` on tap; these rules neutralise
+       it (!important on min-height) so all six cards stay full. */
+    .mw-fac2 .mw-iacc__track {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(12px, 2.2vw, 18px);
+      height: auto;          /* was var(--iacc-h) on the base desktop rule */
+      flex-direction: row;   /* neutralise the ≤900 column accordion */
+    }
+    .mw-fac2 .mw-iacc__panel,
+    .mw-fac2 .mw-iacc__panel.is-open {
+      width: 100%;
+      min-height: 0 !important;     /* beat the ≤900 is-open min-height */
+      /* ~3:2 card — the wider 2-col cells read the buildings/signs clearly. */
+      aspect-ratio: 3 / 2;
+      cursor: default;              /* no longer a hover/tap-to-open affordance */
+      border-color: var(--c-navy);  /* uniform clay frame, no "active" accent */
+      box-shadow: 0 16px 38px -28px rgba(42, 27, 18, 0.5);
+    }
+    /* Photo fills its card with NO parallax offset so nothing clips off the
+       right; flatten the entrance zoom + the parallax img transform/scale so
+       cover-fit shows the whole frame. !important beats the per-frame inline
+       transform the parallax script writes. */
+    .mw-fac2 .mw-iacc__media { clip-path: none !important; }
+    .mw-fac2 .mw-iacc__zoom { transform: none !important; }
+    .mw-fac2 .mw-iacc__img {
+      --px-scale: 1;
+      transform: none !important;
+      object-position: center;
+      filter: brightness(1) saturate(1.02) !important;   /* full clarity, no "closed" dimming */
+    }
+    /* Caption scrim — this widget renders no .mw-iacc__veil, so seat the wash
+       via ::after on the media clip (over the photo at z2, under caption z3). */
+    .mw-fac2 .mw-iacc__media::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background: linear-gradient(to top, rgba(28, 16, 8, 0.74) 0%, rgba(28, 16, 8, 0.30) 32%, rgba(28, 16, 8, 0) 58%);
+    }
+    /* Vertical sliver label is redundant now; show the horizontal caption on
+       ALL cards (not only the open one). */
+    .mw-fac2 .mw-iacc__spine { display: none; }
+    .mw-fac2 .mw-iacc__cap,
+    .mw-fac2 .mw-iacc__panel:not(.is-open) .mw-iacc__cap {
+      opacity: 1;
+      transform: none;
+      font-size: clamp(12px, 1.5vw, 14px);
+      letter-spacing: 0.14em;
+    }
+
+    /* ── FIGURES + CAPABILITIES — already legible; just let them breathe a
+       little more than the cramped phone spacing on this wider canvas. */
+    .mw-fac2__caps { margin-top: clamp(12px, 2.6vw, 22px); }
+    .mw-cap-dia { width: min(100%, 560px); }
+
+    /* No horizontal scrollbar from the re-flow. */
+    .mw-fac2 { overflow-x: clip; }
+  }
+
+  /* ───────────────────────────────────────────────────────────────
+     901–1024px — PIN ACTIVE. The reveal is correct; only clean up the
+     gallery so the photo reads as one hero plate (no barcode slivers).
+     Scoped under .mw-fac2 so no other ImageAccordion01 consumer changes.
+     ─────────────────────────────────────────────────────────────── */
+  @media (min-width: 901px) {
+    /* Open panel fills the column as a single hero photo; the 5 collapsed
+       slivers (squeezed to ~20px here) are removed. The open panel keeps the
+       base flex transition, but we force it to span the full track width. */
+    .mw-fac2 .mw-iacc__track { justify-content: stretch; }
+    .mw-fac2 .mw-iacc__panel:not(.is-open) { display: none; }
+    .mw-fac2 .mw-iacc__panel.is-open { flex: 1 1 100%; width: 100%; }
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   VBEC / facility (MediaSplit01) — TABLET LANDSCAPE refinement.
+   Range 1000–1366px AND landscape AND coarse pointer (a real tablet held
+   sideways: iPad 1024×768, iPad Pro 11" 1194×834, large 1366×1024). The
+   `pointer:coarse` gate is ESSENTIAL — these landscape widths overlap the
+   fine-pointer DESKTOP range (≥1025px), and desktop must stay byte-identical;
+   coarse-pointer narrows this block to touch devices ONLY.
+
+   In this range the PIN IS ACTIVE (the pinned reveal gate is min-width:901px
+   + motion-OK, which 1024/1194/1366 all satisfy), so tablet landscape already
+   runs the full desktop-style 40/60 PINNED sequence: intro left, media right;
+   the 3 highlights grow → media swipes RIGHT → the capability diamonds roll
+   into the argyle cluster and settle. Verified across a scrollY sequence at all
+   three widths (incl. the shortest 1024×768): the intro/CTAs read well, the 3
+   figures land cleanly under the photo, the diamond cluster spreads into the
+   full lattice with every label legible, and there is no vertical crowding or
+   horizontal overflow. The reveal geometry is correct as-is — desktop-derived.
+
+   The ONLY blemish is the SAME one the tablet-PORTRAIT 901–1024 pass fixed:
+   the ImageAccordion01's 5 collapsed panels squeeze to a thin vertical
+   "barcode" sliver strip at the hero photo's right edge during the entrance /
+   pin-in / highlights phase (before the swipe), most pronounced in the narrower
+   1024 column. FIX → reuse the portrait approach verbatim: drop the collapsed
+   slivers and let the OPEN photo fill the media column as one clean hero plate
+   that then swipes off. The diamond launch reads `.mw-fac2__media`'s left edge
+   (not the individual panels), and the swipe reads the same container box, so a
+   full-width single photo leaves the pin JS untouched and only improves the
+   tuck-under. (The pin JS cannot be disabled or broken from CSS regardless.)
+
+   SCOPE: only this section's own selectors (.mw-fac2*) and the shared
+   ImageAccordion01 SCOPED under .mw-fac2 (.mw-fac2 .mw-iacc*) so no other
+   consumer of that widget is affected. Nothing here touches a fine-pointer
+   desktop rule (the coarse-pointer gate excludes ≥1025 desktop), the
+   ≤600 / ≤700 / ≤900 mobile blocks, the tablet-PORTRAIT block, the static
+   (max-width:700/900px) blocks, or any reduced-motion block. Reduced-motion is
+   unaffected: when prefers-reduced-motion is set the pin is OFF (the pin query
+   is no-preference) and the section is the static stacked flow — these rules
+   still tidy the gallery there too, which is the correct static treatment.
+   ═══════════════════════════════════════════════════════════════════ */
+@media (min-width: 1000px) and (max-width: 1366px) and (orientation: landscape) and (pointer: coarse) {
+  /* Single hero photo — remove the collapsed "barcode" slivers and let the open
+     panel fill the media column. Mirrors the tablet-portrait 901–1024 fix. */
+  .mw-fac2 .mw-iacc__track { justify-content: stretch; }
+  .mw-fac2 .mw-iacc__panel:not(.is-open) { display: none; }
+  .mw-fac2 .mw-iacc__panel.is-open { flex: 1 1 100%; width: 100%; }
+
+  /* Belt-and-braces: the single-photo re-flow must never push a horizontal
+     scrollbar (the media still bleeds to the right screen edge by design). */
+  .mw-fac2 { overflow-x: clip; }
+}

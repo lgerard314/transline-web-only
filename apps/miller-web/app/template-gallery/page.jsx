@@ -3,6 +3,7 @@
 // Thin server shell: sets metadata, pulls in the scheme/layout variant CSS
 // (dark/cream/reverse live in template-testing.css), and mounts the client gallery.
 import "./../template-testing/template-testing.css";
+import "./home-legacy.css";
 import "./template-gallery.css";
 import { Gallery } from "./gallery";
 

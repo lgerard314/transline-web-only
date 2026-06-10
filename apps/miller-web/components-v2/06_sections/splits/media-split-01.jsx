@@ -23,7 +23,7 @@ import { sectionProps } from "@/components-v2/section-config";
 //      pinned, accelerating pace) that scroll-drives the photo exit → SWIPE_END.
 //      Remaining track height below SWIPE_END is release scroll after the sequence.
 //
-// Mobile / reduced-motion: no pin, beige section, columns at rest. Styling: app/styles/04-home.css.
+// Mobile / reduced-motion: no pin, beige section, columns at rest. Styling: app/styles/home/facility.css + facility-pin.css.
 const clamp01 = (x) => (x < 0 ? 0 : x > 1 ? 1 : x);
 const ease = (x) => 1 - Math.pow(1 - x, 3);            // easeOutCubic (highlights)
 const easeIn = (x) => x * x * x;                       // easeInCubic — slow start, speeds up (truck fade)
@@ -69,6 +69,19 @@ export function MediaSplit01({ content, config = {} }) {
   const mediaRef = useRef(null);
   const figsRef = useRef(null);
   const capsRef = useRef(null);
+  const [activeCap, setActiveCap] = useState(null);
+  const activeCapRef = useRef(null);
+  const [centerTurn, setCenterTurn] = useState(0);
+  const activateCap = (i) => {
+    const prev = activeCapRef.current;
+    if (prev !== null && prev !== i) setCenterTurn((turn) => turn + 1);
+    activeCapRef.current = i;
+    setActiveCap(i);
+  };
+  const clearActiveCap = () => {
+    activeCapRef.current = null;
+    setActiveCap(null);
+  };
   // Careers-style driver (zoom-collage-01): one continuous rAF loop while the track is in
   // view reads scroll → writes the scene, auto-advances the exit once the user nudges past
   // the highlights hold. Wide viewport + motion OK only; otherwise columns rest static.
@@ -193,14 +206,20 @@ export function MediaSplit01({ content, config = {} }) {
 
       const rightRect = right.getBoundingClientRect();
       const rightTop = rightRect.top;
-      const mediaRect = media.getBoundingClientRect();
-      const exitDist = (vw - mediaRect.left) + mediaRect.width + EXIT_PAD;
-      media.style.setProperty("--fac2-media-x", (exitT * exitDist).toFixed(1) + "px");
+      // Use transform-independent layout metrics for the swipe. Reading
+      // getBoundingClientRect().left here would include the previous
+      // --fac2-media-x write, which can feed back into the next frame when the
+      // page initializes below this pinned section and the user scrolls upward.
+      const mediaBaseLeft = rightRect.left + media.offsetLeft;
+      const mediaBaseWidth = media.offsetWidth || media.getBoundingClientRect().width;
+      const exitDist = (vw - mediaBaseLeft) + mediaBaseWidth + EXIT_PAD;
+      const mediaX = exitT * exitDist;
+      media.style.setProperty("--fac2-media-x", mediaX.toFixed(1) + "px");
       const mediaFade = ease(clamp01((exitT - 0.72) / 0.28));
       media.style.setProperty("--fac2-media-op", (1 - mediaFade).toFixed(3));
       if (exitDone) media.style.visibility = "hidden";
       else media.style.removeProperty("visibility");
-      const containerLeft = media.getBoundingClientRect().left;
+      const containerLeft = mediaBaseLeft + mediaX;
       // Shared body-content right edge (.mw-inner): width min(100% - clamp(48px, 8vw, 144px), 1560px), centred.
       const bodyGutter = Math.max(Math.min(72, Math.max(24, 0.04 * vw)), (vw - 1560) / 2);
       const bodyContentRight = vw - bodyGutter;
@@ -270,7 +289,8 @@ export function MediaSplit01({ content, config = {} }) {
         const truckFadeTravel = containerLeft - stageRect.left;
         const truckRaw = truckFadeTravel <= 0 ? 0 : clamp01(truckFadeTravel / truckFadeSpan);
         const truckEase = easeIn(truckRaw);
-        const tuckRight = Math.max(0, mediaRect.right - stageRect.right, mediaRect.width * 0.22);
+        const mediaRight = mediaBaseLeft + mediaX + mediaBaseWidth;
+        const tuckRight = Math.max(0, mediaRight - stageRect.right, mediaBaseWidth * 0.22);
         const truckX = tuckRight * (1 - truckEase);
         truck.style.setProperty("--fac2-truck-op", truckEase.toFixed(3));
         truck.style.setProperty("--fac2-truck-x", truckX.toFixed(1) + "px");
@@ -416,7 +436,18 @@ export function MediaSplit01({ content, config = {} }) {
                   <div className="mw-fac2__truck" aria-hidden="true">
                     <Fac2Dumptruck01 />
                   </div>
-                  <div className="mw-cap-dia" style={{ aspectRatio: `${CAP_COLS} / ${CAP_ROWS}` }} role="group" aria-label={capsTitle}>
+                  <div
+                    className="mw-cap-dia"
+                    style={{
+                      aspectRatio: `${CAP_COLS} / ${CAP_ROWS}`,
+                      "--cap-active-bg": activeCap === null ? undefined : CAP_TONES[activeCap],
+                      "--cap-center-rot": `${centerTurn * 90}deg`,
+                    }}
+                    role="group"
+                    aria-label={capsTitle}
+                    data-cap-active={activeCap === null ? undefined : "1"}
+                    onMouseLeave={clearActiveCap}
+                  >
                   <div className="mw-cap-dia__cell mw-cap-dia__cell--title" style={capDiaStyle(2, 0)}>
                     <span className="mw-cap-dia__d">
                       <svg className="mw-cap-dia__svg" viewBox="0 0 200 200" aria-hidden="true">
@@ -434,7 +465,10 @@ export function MediaSplit01({ content, config = {} }) {
                         const name = capText(cap);
                         const detail = capDetail(cap, capabilityLines, i);
                         return (
-                          <span className={`mw-cap-dia__center-item mw-cap-dia__center-item--${i}`} key={`center-${name || i}`}>
+                          <span
+                            className={`mw-cap-dia__center-item mw-cap-dia__center-item--${i}${activeCap === i ? " mw-cap-dia__center-item--active" : ""}`}
+                            key={`center-${name || i}`}
+                          >
                             {detail ? <span className="mw-cap-dia__center-line">{detail}</span> : null}
                           </span>
                         );
@@ -447,14 +481,14 @@ export function MediaSplit01({ content, config = {} }) {
                     const detail = capDetail(cap, capabilityLines, i);
                     return (
                       <div
-                        className={`mw-cap-dia__cell mw-cap-dia__cell--cap mw-cap-dia__cell--cap-${i}`}
+                        className={`mw-cap-dia__cell mw-cap-dia__cell--cap mw-cap-dia__cell--cap-${i}${activeCap === i ? " mw-cap-dia__cell--active" : ""}`}
                         style={capDiaStyle(s.col, s.row, {
                           "--cap-bg": CAP_TONES[i],
                         })}
                         key={name || i}
                         aria-label={detail ? `${name}: ${detail}` : name}
                       >
-                        <span className="mw-cap-dia__hit" aria-hidden="true" />
+                        <span className="mw-cap-dia__hit" aria-hidden="true" onMouseEnter={() => activateCap(i)} />
                         <span className="mw-cap-dia__d">
                           <svg className="mw-cap-dia__svg" viewBox="0 0 200 200" aria-hidden="true">
                             <rect className="mw-cap-dia__fill" x="29.3" y="29.3" width="141.4" height="141.4" rx="0" transform="rotate(45 100 100)" />

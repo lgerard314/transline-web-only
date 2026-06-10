@@ -19,7 +19,7 @@
 
 /* per-section literal overrides (hardcoded light values the rebind can't reach) */
 [data-scheme="dark"] .mw-ten3__milestone-body {
-  background: rgba(245, 230, 203, 0.035);   /* was #ffffff (04-home.css:934) */
+  background: rgba(245, 230, 203, 0.035);
   box-shadow: none;
 }
 

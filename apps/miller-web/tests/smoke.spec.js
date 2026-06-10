@@ -312,7 +312,7 @@ test.describe("Home hero", () => {
 
   test("key home sections render", async ({ page }) => {
     await page.goto("/", { waitUntil: "networkidle" });
-    await expect(page.locator(".mw-sec2")).toHaveCount(1);
+    await expect(page.locator(".mw-secd")).toHaveCount(1);
     await expect(page.locator(".mw-fac2")).toHaveCount(1);
     await expect(page.locator(".mw-ten3")).toHaveCount(1);
   });

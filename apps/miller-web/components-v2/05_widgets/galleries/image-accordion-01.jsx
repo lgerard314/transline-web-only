@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 // open panel fills the band with the full photo + a horizontal mono caption, the
 // rest collapse to clay slivers carrying a vertical caption spine. Placed full-bleed
 // so the row runs from the content column to the RIGHT edge of the screen.
-// Styling: app/styles/04-home.css (.mw-iacc*).
+// Styling: app/styles/home/facility.css (.mw-iacc*).
 //
 // Entrance is SCROLL-DRIVEN (the home page's hero / "our history" plate gesture): each
 // photo panel reveals as a clay plate whose window opens — a clip-path inset opening to

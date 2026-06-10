@@ -32,7 +32,7 @@ import { LrDiamondSeal } from "./lr-diamond-seal";
 // caption reaches the screen. On desktop the section is PINNED and the parent feeds
 // `progress` directly (see lifetime-reel-01.jsx), so this self-mapping is unused there.
 const START_VISIBLE_FRAC = 0.6; // fraction of the first diamond visible at progress 0
-const BAND = 90; // px width of the gold "charge" band riding the frontier (keep in sync with mask-size in 07-lifetime-reel.css)
+const BAND = 90; // px width of the gold "charge" band riding the frontier (keep in sync with mask-size in app/styles/home/lifetime.css)
 const CHAIN_SPEED = 4; // the diamond/line gradient build runs this many × the count-up pace (chain finishes in the first 1/CHAIN_SPEED of progress; the numbers are unaffected). Each count still STARTS as its diamond forms (segStart = apexStart/CHAIN_SPEED, so it tracks the sped draw).
 const COUNT_SPEED = 2.8; // the numbers count this many × faster: they all still land TOGETHER but at drawProg = 1/COUNT_SPEED instead of 1, so the whole count completes sooner (desktop/controlled only).
 export function LifetimeReel({ highlights = [], progress }) {

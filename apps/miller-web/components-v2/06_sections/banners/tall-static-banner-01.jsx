@@ -115,7 +115,7 @@ export function TallStaticBanner01({ content, config = {} }) {
 
   return (
     <>
-      {/* Reveal motion owned here (not 04-home.css) so cert cards slide DOWN out
+      {/* Reveal motion owned here (not home/certs.css) so cert cards slide DOWN out
           of the hero/header fold instead of up from below. */}
       <style>{`
         @keyframes mw-cert-rv-tsb01 {

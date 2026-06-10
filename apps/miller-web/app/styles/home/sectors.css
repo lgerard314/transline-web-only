@@ -1,0 +1,872 @@
+/* home/sectors.css — SectorDiamonds04 · components-v2/06_sections/grids/sector-diamonds-04.jsx */
+/* ════════════════════════════════════════════════════════════════
+   Sector Diamonds (mw-secd*) — "who we serve" rebuilt on the diamond
+   motif as a TESSELLATED FIELD (per the mockup). Each category is a
+   cluster of four hard-edged photo diamonds sharing edges to form a
+   larger diamond, with the category's rounded-corner WALNUT diamond
+   embedded as a peer tile (lower-left) whose terracotta ring draws
+   closed on scroll-reveal. On desktop each photo's sub-sector name is
+   pulled OUT into the cream margin above/below the band and joined to
+   its diamond by a thin terracotta LEADER LINE (mw-secd__annot/tag/
+   leader) that leaves the edge centre perpendicular, then runs straight
+   to a label spread along a single top/bottom tier by an order-preserving
+   pass — so no two leaders ever cross; below 1024px (where the band is
+   too small for margin tags) that layer hides and each name falls back to
+   a walnut-wash FOOT in the lower half of its diamond (mw-secd__photo-
+   label). The four clusters alternate high/low into a staggered ribbon.
+   Server shell
+   (SectorDiamonds01) + SectorRosette01 client widget.
+   ════════════════════════════════════════════════════════════════ */
+.mw-secd {
+  /* Inset on every diamond → cream gap between them. Diamonds meet at 45° edges, so
+     the visible gap = inset × √2; this is the services-grid gap (clamp(3px,0.35vw,6px))
+     divided by √2 so the spacing matches the cards above. */
+  --secd-gap: clamp(2.12px, 0.247vw, 4.24px);
+  position: relative;
+  background: var(--c-surface-warm);
+  padding-block: clamp(64px, 6.5vw, 112px);
+  color: var(--c-ink);
+  overflow: clip;
+  isolation: isolate;
+}
+/* 49° paper-grain wash — the same faint diagonal hatch as the other warm sections. */
+.mw-secd::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+.mw-secd > .mw-inner { position: relative; z-index: 1; }
+
+/* ── header: eyebrow → stop-title → lead (matches the mw-sec2 solo rhythm) ── */
+.mw-secd__head {
+  margin-bottom: clamp(40px, 4vw, 64px);
+  display: grid;
+  gap: 22px;
+}
+.mw-secd__head-solo { display: flex; flex-direction: column; gap: 22px; }
+.mw-secd__title {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(36px, 4vw, 72px);
+  line-height: 1;
+  letter-spacing: 0.005em;
+  color: var(--c-ink);
+  text-transform: uppercase;
+  max-width: 22ch;
+}
+.mw-secd__lead {
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(16px, 1.15vw, 19px);
+  line-height: 1.6;
+  color: var(--c-ink-2);
+  max-width: 64ch;
+}
+
+/* ── ONE uniform diamond grid ── cells are absolutely placed on a shared argyle
+   lattice (left/top/width set inline from the lattice coords); cells with no content
+   are simply not rendered, so they read as transparent gaps. Every diamond is inset
+   by --secd-gap so cream shows between them. */
+.mw-secd__grid {
+  position: relative;
+  width: 100%;
+  margin-top: clamp(8px, 1.5vw, 28px);
+  /* aspect-ratio is set inline (cols / rows) so the lattice stays square-celled */
+}
+
+.mw-secd__photo,
+.mw-secd__cat,
+.mw-secd__ghost {
+  position: absolute;
+  aspect-ratio: 1;          /* width is set inline; square box → diamond after clip */
+}
+
+/* photo diamonds — hard-edged clip, upright photo. The square boxes overlap at the
+   corners (diamonds only touch at edges), so the box ignores pointer events and only
+   the clipped diamond is hoverable. */
+.mw-secd__photo { z-index: 2; pointer-events: none; }
+.mw-secd__photo-clip {
+  position: absolute;
+  inset: var(--secd-gap);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  overflow: hidden;
+  background: var(--c-navy);
+  pointer-events: auto;
+  transition: box-shadow 0.4s ease;
+}
+.mw-secd__photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.92) brightness(0.96);
+  transition: filter 0.4s ease, transform 0.55s cubic-bezier(.2,.7,.2,1);
+}
+.mw-secd__photo-clip::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(150deg, rgba(59,36,24,0.05), rgba(168,90,44,0.12));
+  opacity: 1;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.mw-secd__photo-clip:hover { box-shadow: 0 10px 24px rgba(33, 20, 12, 0.32); }
+.mw-secd__photo-clip:hover .mw-secd__photo-img { filter: saturate(1.05) brightness(1.06); transform: scale(1.08); }
+.mw-secd__photo-clip:hover::after { opacity: 0; }
+
+/* Sub-sector label — sits in the LOWER half of each photo diamond on a walnut wash
+   that fades up to clear, so the label foot mirrors the solid-walnut category diamonds
+   while the top of each photo stays clean. Because it lives inside the clipped rhombus
+   it can never bleed into a neighbour. The text parks just above the bottom tip, in the
+   diamond's wide middle band, so longer names stay readable. */
+.mw-secd__photo-label {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  /* push the text up off the narrow bottom tip into the wider band */
+  padding: 0 14% 23%;
+  text-align: center;
+  pointer-events: none;
+  background: linear-gradient(to top,
+    rgba(40, 24, 14, 0.92) 0%,
+    rgba(40, 24, 14, 0.86) 26%,
+    rgba(40, 24, 14, 0.55) 46%,
+    rgba(40, 24, 14, 0) 62%);
+  transition: background 0.4s ease;
+}
+.mw-secd__photo-label-text {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-weight: 500;
+  font-size: clamp(7.5px, 0.72vw, 11px);
+  line-height: 1.14;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+  color: var(--c-bg);
+  text-wrap: balance;
+  /* a hair of shadow so it holds over the brightest photos */
+  text-shadow: 0 1px 3px rgba(20, 11, 5, 0.55);
+}
+/* tiny terracotta tick above the name — the stamp motif, scaled down */
+.mw-secd__photo-label-text::before {
+  content: "";
+  display: block;
+  width: 5px;
+  height: 5px;
+  margin: 0 auto 4px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  transition: transform 0.4s cubic-bezier(.2, .7, .2, 1);
+}
+/* hover ties into the existing photo zoom: deepen the foot + spin the tick */
+.mw-secd__photo-clip:hover .mw-secd__photo-label {
+  background: linear-gradient(to top,
+    rgba(40, 24, 14, 0.95) 0%,
+    rgba(40, 24, 14, 0.9) 30%,
+    rgba(40, 24, 14, 0.62) 50%,
+    rgba(40, 24, 14, 0) 68%);
+}
+.mw-secd__photo-clip:hover .mw-secd__photo-label-text::before { transform: rotate(135deg); }
+
+/* ── Leader-line annotation (desktop) ── names live in the cream margins above/below the
+   band, joined to their diamond by a thin terracotta leader. The field reserves padding
+   for the label tiers; the annotation layer overlays the grid box exactly and its labels
+   overflow up/down into that reserved padding. */
+.mw-secd__field {
+  position: relative;
+  /* reserve room for the outer (perimeter) label tier (~0.95 lattice units ≈ 5.5% of width
+     beyond the band) plus the label itself */
+  --annot-top: clamp(58px, 8vw, 140px);
+  --annot-bot: clamp(62px, 8.5vw, 150px);
+  padding-top: var(--annot-top);
+  padding-bottom: var(--annot-bot);
+}
+/* inside the field the grid's own top margin is folded into --annot-top so the overlay
+   lines up with the grid box exactly */
+.mw-secd__field .mw-secd__grid { margin-top: 0; }
+
+.mw-secd__annot {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--annot-top);
+  bottom: var(--annot-bot);
+  pointer-events: none;
+}
+/* leaders — elbow hairlines drawn in the grid's lattice coordinates (viewBox = cols×rows,
+   uniform), so the 45° stub + 90° turn stay true; non-scaling-stroke keeps them crisp */
+.mw-secd__leaders {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.mw-secd__leader {
+  fill: none;
+  stroke: var(--c-accent);
+  stroke-width: 1.1px;
+  opacity: 0.5;
+}
+/* the clay stamp where the leader meets the diamond */
+.mw-secd__leader-dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: var(--c-accent);
+  border-radius: 1px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  box-shadow: 0 0 0 2px var(--c-surface-warm);
+}
+/* the floating name */
+.mw-secd__tag {
+  position: absolute;
+  display: block;
+  max-width: 13ch;
+  text-align: center;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: clamp(9px, 0.7vw, 11.5px);
+  font-weight: 500;
+  line-height: 1.16;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+  color: var(--c-ink);
+  text-wrap: balance;
+}
+.mw-secd__tag--top { transform: translate(-50%, -100%); }
+.mw-secd__tag--bottom { transform: translate(-50%, 0); }
+/* reveal: hold the annotation hidden until the grid sweeps in, then fade it on */
+.mw-secd__annot { opacity: 1; }
+.mw-secd__grid.is-armed ~ .mw-secd__annot { opacity: 0; }
+.mw-secd__grid.is-armed.is-in ~ .mw-secd__annot { opacity: 1; transition: opacity 0.7s ease 0.4s; }
+@media (prefers-reduced-motion: reduce) {
+  .mw-secd__grid.is-armed ~ .mw-secd__annot,
+  .mw-secd__grid.is-armed.is-in ~ .mw-secd__annot { opacity: 1; transition: none; }
+}
+
+/* On desktop the leader annotation carries the names, so the on-photo labels are hidden.
+   Below the breakpoint the band is too small for margin tags, so we hide the annotation
+   and fall back to the on-photo labels instead. */
+@media (min-width: 1025px) {
+  .mw-secd__photo-label { display: none; }
+}
+@media (max-width: 1024px) {
+  .mw-secd__annot { display: none; }
+  .mw-secd__field { padding-top: 0; padding-bottom: 0; }
+  .mw-secd__field .mw-secd__grid { margin-top: clamp(8px, 1.5vw, 28px); }
+}
+
+/* category — solid rounded-corner walnut diamond, name only (no number, no ring) */
+.mw-secd__cat { z-index: 4; display: grid; place-items: center; }
+.mw-secd__cat-svg {
+  position: absolute;
+  inset: var(--secd-gap);
+  width: auto;
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 7px 16px rgba(33, 20, 12, 0.28));
+}
+.mw-secd__cat-fill { fill: var(--c-navy); }
+.mw-secd__cat-face {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 0 15%;
+}
+.mw-secd__cat-name {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(11px, 1.1vw, 18px);
+  line-height: 0.98;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--c-bg);
+}
+
+/* ── decorative gutter diamonds: the lattice continues off the left of the page as
+   faint walnut outlines (no content), clipped at the section edge ── */
+.mw-secd__ghost { z-index: 1; pointer-events: none; }
+.mw-secd__ghost-svg {
+  position: absolute;
+  inset: var(--secd-gap);
+  width: auto;
+  height: auto;
+  overflow: visible;
+}
+.mw-secd__ghost-shape {
+  fill: none;
+  stroke: var(--c-navy);
+  stroke-width: 2.4;
+  opacity: 0.3;
+}
+
+/* On-scroll reveal — a one-shot CSS keyframe cascade (no scroll handler, no per-frame
+   JS). SectorGridMotion adds .is-armed (cells held hidden), then .is-in when the grid
+   scrolls into view; each diamond fades + slides in from the left, delayed by its
+   x-fraction (--fx) so the band sweeps gutter-first to the right. The browser composites
+   the animation, so it stays smooth at any scroll speed. */
+@keyframes mw-secd-in {
+  from { opacity: 0; transform: translate3d(-34px, 0, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+.mw-secd__grid.is-armed > * { opacity: 0; }
+.mw-secd__grid.is-armed.is-in > * {
+  animation: mw-secd-in 1.2s cubic-bezier(.22, .61, .36, 1) both;
+  animation-delay: calc(var(--fx, 0) * 1s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mw-secd__photo-img { transition: none; }
+  .mw-secd__grid.is-armed > *,
+  .mw-secd__grid.is-armed.is-in > * { opacity: 1; animation: none; }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Who-we-serve 2 (.mw-secd--int) — ENHANCED diamond grid (SectorDiamonds03).
+   Reuses the base .mw-secd__* styling; everything below ports the arc gallery's
+   interaction model onto the grid. Photo cells position from --lx/--ly/--w vars
+   so the hover states can move them without fighting inline left/top. The reveal
+   scrubs each cell's translate/rotate/scale, so the category spotlight (#4) still
+   moves photos via left/top and the single-photo hover (#5) still scales the child
+   .mw-secd__photo-clip — neither collides with the held reveal transform.
+   --sp-* knobs tune the spotlight placement.
+   ════════════════════════════════════════════════════════════════ */
+.mw-secd--int {
+  --sp-slot: 162px;  /* horizontal pitch of the 4 gathered spotlight squares — identical to the arc's --cat-hl-slot */
+  --sp-size: 158px;  /* FIXED gathered-square box (≈151px photo after the inset) so the gap is CONSTANT at any viewport width. Without this the %-based --w grows past --sp-slot on wide screens and the squares overlap (the bug). Matches the arc's 150.8px tile → ~11px gap. */
+  --sp-top: -79px;   /* gathered row sits ABOVE the grid; halved from -161 so the gap to the (bottom-row) category cards is ~50% smaller */
+  --sp-scale: 1;     /* spotlight photos shown as straight squares (no rhombus, 0°) ≈ the arc's 150.8px tile */
+}
+/* Cream band above the grid (now the section TOP, since the header moved below) where the gathered
+   spotlight squares + their captions float — clear cream, readable without any text-shadow. */
+.mw-secd--int .mw-secd__grid { margin-top: clamp(100px, 10vw, 150px); }
+/* Header sits BELOW the grid (mirrors the arc): centered, gap ABOVE it, none below. */
+.mw-secd--int .mw-secd__head { margin-top: clamp(44px, 4.5vw, 72px); margin-bottom: 0; justify-items: center; text-align: center; }
+.mw-secd--int .mw-secd__head-solo { align-items: center; }
+.mw-secd--int .mw-secd__title,
+.mw-secd--int .mw-secd__lead { margin-inline: auto; }
+/* photo cells resolve their resting position from vars → hover states can override left/top */
+.mw-secd--int .mw-secd__photo {
+  left: var(--lx);
+  top: var(--ly);
+  width: var(--w);
+  transition: left 0.5s cubic-bezier(.2, .7, .2, 1), top 0.5s cubic-bezier(.2, .7, .2, 1), width 0.5s cubic-bezier(.2, .7, .2, 1);
+}
+
+/* (#3) scroll-scrubbed reveal — VBEC-style fall-in; SectorGridMotion03 writes
+   --secd3-op / --secd3-sc / --secd3-tx / --secd3-ty / --secd3-rot per cell once
+   every diamond has cleared the viewport bottom (+ buffer). */
+.mw-secd--int .mw-secd__grid.is-armed > * {
+  opacity: var(--secd3-op, 0);
+  transform: translate3d(var(--secd3-tx, 0px), var(--secd3-ty, 0px), 0) rotate(var(--secd3-rot, 0deg)) scale(var(--secd3-sc, 0.25));
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
+/* hover caption — hidden at rest, sits above the photo's top (used by #4 + #5). Styled IDENTICALLY
+   to the arc section's .mw-secd2__card-cap so the spotlighted photos' labels match it exactly. */
+.mw-secd--int .mw-secd__cap {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 28px); /* ≈ the arc's "32px above the photo" (our caption is on the 156px box, photo inset ~3.5px) */
+  transform: translate(-50%, 6px);
+  z-index: 6;
+  max-width: 151px; /* = the arc's caption max-width (116px card × 1.3 scale) so wrapping matches */
+  text-align: center;
+  line-height: 1.18;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+/* Centre the clip in its box via margin:auto so a hover SIZE change stays centred (rotates/straightens
+   about the diamond's centre — no left shift, no box movement). Explicit width/height (not inset) so
+   the size animates smoothly. clip-path in the transition so the rhombus→square straighten is smooth. */
+.mw-secd--int .mw-secd__photo-clip {
+  inset: 0;
+  margin: auto;
+  width: calc(100% - 2 * var(--secd-gap));
+  height: calc(100% - 2 * var(--secd-gap));
+  transition: box-shadow 0.4s ease, transform 0.5s cubic-bezier(.2, .7, .2, 1), clip-path 0.5s cubic-bezier(.2, .7, .2, 1), width 0.5s cubic-bezier(.2, .7, .2, 1), height 0.5s cubic-bezier(.2, .7, .2, 1), filter 0.4s ease, opacity 0.4s ease;
+}
+
+/* (#5) single-photo hover — IDENTICAL to the arc's .mw-secd2__card:hover: straighten to a square,
+   grow 1.15, lift 12px, deepen the shadow, brighten the image. No dimming of the others (the arc
+   doesn't dim on single hover — only on category hover). Only the label's position differs. */
+.mw-secd--int .mw-secd__photo:has(.mw-secd__photo-clip:hover) { z-index: 99; }
+/* The box does NOT move; only the clip straightens + resizes, centred via margin:auto (so it pivots
+   about the diamond's centre — no left shift), plus a tiny lift. Fixed 133px = the arc's single-hover
+   photo size (116×1.15) at any viewport. */
+.mw-secd--int .mw-secd__photo-clip:hover {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  width: 133px;
+  height: 133px;
+  transform: translateY(-6px); /* tiny lift */
+  outline: 1px solid var(--c-line);
+  outline-offset: -1px;
+  box-shadow: 0 16px 34px rgba(33, 20, 12, 0.36);
+}
+.mw-secd--int .mw-secd__photo-clip:hover .mw-secd__photo-img { filter: saturate(1.05) brightness(1.05); transform: none; }
+/* caption tracks the box CENTRE (where the 133px clip is centred) so it clears the photo at any tile size */
+.mw-secd--int .mw-secd__photo-clip:hover ~ .mw-secd__cap { opacity: 1; transform: translate(-50%, 0); bottom: calc(50% + 86px); }
+
+/* (#4) category-diamond hover spotlight — dim the rest, gather this category's four photos into a
+   centred row, grow them, and reveal their captions. left/top resolve against the grid box so the
+   row is always centred whichever category is hovered. */
+/* pointer-events:none while a category is hovered → the gathered photos can't steal :hover from
+   the category beneath them (otherwise the spotlight flickers as they move under the cursor) */
+.mw-secd--int:has(.mw-secd__cat:hover) .mw-secd__photo-clip { filter: saturate(0.32) brightness(0.86); opacity: 0.38; transform: scale(0.96); pointer-events: none; } /* non-matched recede — identical to the arc's category-hover dim */
+/* clear the clay overlay during a category hover so the spotlight photos read clean like the arc */
+.mw-secd--int:has(.mw-secd__cat:hover) .mw-secd__photo-clip::after { opacity: 0; }
+.mw-secd--int:has(.mw-secd__cat:hover) .mw-secd__cat:not(:hover) { opacity: 0.45; }
+.mw-secd--int:has(.mw-secd__cat[data-cat="0"]:hover) .mw-secd__photo[data-cat="0"],
+.mw-secd--int:has(.mw-secd__cat[data-cat="1"]:hover) .mw-secd__photo[data-cat="1"],
+.mw-secd--int:has(.mw-secd__cat[data-cat="2"]:hover) .mw-secd__photo[data-cat="2"],
+.mw-secd--int:has(.mw-secd__cat[data-cat="3"]:hover) .mw-secd__photo[data-cat="3"] {
+  z-index: 40;
+  width: var(--sp-size); /* fixed size on gather → constant gap regardless of viewport width */
+  left: calc(50% - (var(--sp-size) / 2) + ((var(--si) - 1.5) * var(--sp-slot)));
+  top: var(--sp-top);
+}
+.mw-secd--int:has(.mw-secd__cat[data-cat="0"]:hover) .mw-secd__photo[data-cat="0"] .mw-secd__photo-clip,
+.mw-secd--int:has(.mw-secd__cat[data-cat="1"]:hover) .mw-secd__photo[data-cat="1"] .mw-secd__photo-clip,
+.mw-secd--int:has(.mw-secd__cat[data-cat="2"]:hover) .mw-secd__photo[data-cat="2"] .mw-secd__photo-clip,
+.mw-secd--int:has(.mw-secd__cat[data-cat="3"]:hover) .mw-secd__photo[data-cat="3"] .mw-secd__photo-clip {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); /* straighten the rhombus → an upright SQUARE (0°) */
+  filter: saturate(1.04) brightness(1.04);
+  opacity: 1;
+  transform: scale(var(--sp-scale));
+  outline: 1px solid var(--c-line); /* cream hairline — matches the arc's .mw-secd2__card-inner */
+  outline-offset: -1px;
+  box-shadow: 0 26px 50px rgba(33, 20, 12, 0.45); /* identical to the arc spotlight shadow */
+}
+.mw-secd--int:has(.mw-secd__cat[data-cat="0"]:hover) .mw-secd__photo[data-cat="0"] .mw-secd__cap,
+.mw-secd--int:has(.mw-secd__cat[data-cat="1"]:hover) .mw-secd__photo[data-cat="1"] .mw-secd__cap,
+.mw-secd--int:has(.mw-secd__cat[data-cat="2"]:hover) .mw-secd__photo[data-cat="2"] .mw-secd__cap,
+.mw-secd--int:has(.mw-secd__cat[data-cat="3"]:hover) .mw-secd__photo[data-cat="3"] .mw-secd__cap {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-secd--int .mw-secd__photo,
+  .mw-secd--int .mw-secd__photo-clip { transition: none; }
+  .mw-secd--int .mw-secd__grid.is-armed > * { opacity: 1; transform: none; }
+}
+
+/* ── CHECKMARK variant (SectorDiamonds04) ──────────────────────────────────
+   Resting diamonds are sized so the LONGEST category word fits on one line INSIDE
+   the rhombus with a little left/right padding. The category names are single words
+   (never wrap), the longest being INFRASTRUCTURE ≈ 115.6px wide at the 18px font cap.
+   For a text box (width W, line-height h) centred in a rhombus of visible size S to
+   clear the slanted edges with padding p per side: S ≥ W + h + 2p. With W=115.6,
+   h=17.6, p≈8 → S ≈ 150px. So cap the grid at an IDEAL width that makes the visible
+   clip = 150px: clip = 2·gridWidth/cols − 2·gap, so gridWidth = (75px+gap)·cols.
+   At that cap the font sits at its 18px max and INFRASTRUCTURE fits with padding; when
+   body-content is narrower the grid shrinks to 100% of the column (aspect-ratio holds)
+   and the font falls back via clamp(). The single-photo hover (133px) and category
+   spotlight (≈150px) are absolute sizes, unaffected. */
+.mw-secd--check {
+  overflow-x: clip; /* safety net — the grid must never add a page scrollbar */
+  /* Extra bottom room before Lifetime Impact — 3× the base .mw-secd bottom padding. */
+  padding-block: clamp(64px, 6.5vw, 112px) clamp(192px, 19.5vw, 336px);
+  /* Spotlight gathered-row vertical position (relative to the grid top). Positioned so the TOP of the
+     straightened spotlight PHOTOS sits ~16px above the top of the highest grid photo (si3, row 0).
+     Both boxes share the same clip inset (--secd-gap), so those cancel → −16px exactly. Scoped to --check. */
+  --sp-top: -16px;
+}
+.mw-secd--check .mw-secd__grid {
+  width: min(100%, calc((75px + var(--secd-gap)) * var(--secd-cols, 18))); /* ideal cap → 150px clip; shrinks with body-content when narrower */
+  margin-inline: auto;
+}
+/* Eyebrow moved to the TOP of the section, above the diamonds — centred (the tag is inline-flex). The
+   grid's own margin-top (the spotlight band) provides the gap down to the diamonds. */
+.mw-secd--check .mw-secd__eyebrow-top { display: flex; justify-content: center; transition: opacity 0.3s ease; }
+/* The eyebrow shows during the approach, then hides once the section PINS (is-secd-pinned, set in JS) —
+   the pinned view is owned by the grid + its spotlight headroom. Also hidden on category hover (covers
+   the brief case where a category is hovered before the pin fully engages). */
+.mw-secd--check.is-secd-pinned .mw-secd__eyebrow-top,
+.mw-secd--check:has(.mw-secd__cat:hover) .mw-secd__eyebrow-top { opacity: 0; }
+/* Interlocking puts each category's SQUARE box (z4) over the previous mark's top-tip photo;
+   its empty corners would swallow that photo's hover. Make only the rotated diamond + its label
+   hittable so the corners pass clicks/hover through to the photo beneath. (#4 still fires because
+   :hover propagates from the hit child up to .mw-secd__cat.) */
+.mw-secd--check .mw-secd__cat,
+.mw-secd--check .mw-secd__cat-svg { pointer-events: none; }
+.mw-secd--check .mw-secd__cat-fill,
+.mw-secd--check .mw-secd__cat-face { pointer-events: auto; }
+
+/* Category diamonds are INVERTED at rest: cream fill (--c-bg) + walnut text, bordered with --c-line —
+   the SAME color as the arc section's hollow category markers (.mw-secd2__cat-mark). NO drop-shadow at
+   rest (filter:none kills the base svg shadow). On hover they flip back to the normal scheme (walnut
+   fill + cream text), the shadow returns, the border disappears (stroke = fill), and the diamond + label
+   grow noticeably for emphasis. The reveal animation holds a transform on .mw-secd__cat itself, so the
+   grow scales the CHILD svg + face (not the cat). :hover fires via the hittable fill/face propagating up. */
+.mw-secd--check .mw-secd__cat-fill {
+  fill: var(--c-bg);
+  stroke: var(--c-line); /* = the arc category markers' border color (#E8DCC6) */
+  stroke-width: 3;
+  transition: fill 0.3s ease, stroke 0.3s ease;
+}
+.mw-secd--check .mw-secd__cat-name { color: var(--c-navy); transition: color 0.3s ease; }
+.mw-secd--check .mw-secd__cat-svg { filter: none; transition: transform 0.35s cubic-bezier(.2, .7, .2, 1), filter 0.3s ease; } /* no shadow at rest */
+.mw-secd--check .mw-secd__cat-face { transition: transform 0.35s cubic-bezier(.2, .7, .2, 1); }
+.mw-secd--check .mw-secd__cat:hover .mw-secd__cat-fill { fill: var(--c-navy); stroke: var(--c-navy); } /* normal scheme; border hidden */
+.mw-secd--check .mw-secd__cat:hover .mw-secd__cat-name { color: var(--c-bg); }
+.mw-secd--check .mw-secd__cat:hover .mw-secd__cat-svg { filter: drop-shadow(0 7px 16px rgba(33, 20, 12, 0.28)); transform: scale(1.26); } /* shadow returns + grow */
+.mw-secd--check .mw-secd__cat:hover .mw-secd__cat-face { transform: scale(1.26); } /* big, clearly-visible grow for emphasis */
+@media (prefers-reduced-motion: reduce) {
+  .mw-secd--check .mw-secd__cat:hover .mw-secd__cat-svg,
+  .mw-secd--check .mw-secd__cat:hover .mw-secd__cat-face { transform: none; }
+}
+
+/* Spotlight (#4) captions sit closer to their photos: base gap was ~32px (28px above the box top +
+   ~4px clip inset); drop ~40% → ~19px by moving the caption bottom to 100%+15px. Scoped to --check
+   (template #2 keeps 28px); the single-photo hover (#5) overrides bottom separately, so it's unaffected. */
+.mw-secd--check .mw-secd__cap { bottom: calc(100% + 15px); }
+
+/* Single-photo hover (#5) labels — positioned PER POSITION in the ✓ so each lands in clear cream
+   instead of over a neighbouring diamond. The mark rises lower-left→upper-right, so the open zones are:
+   si0 short-arm tip → UP-RIGHT (toward the category diamond); si1/si2 rising arm → UP-LEFT; si3 tip → ABOVE.
+   Relative to each photo's own box, so the same values work for all four categories. */
+.mw-secd--check .mw-secd__photo[data-si="0"] .mw-secd__photo-clip:hover ~ .mw-secd__cap {
+  top: auto;
+  bottom: calc(50% + 80px);
+  transform: translate(calc(-50% + 64px), 0); /* up + right into the cream notch toward the category diamond */
+}
+.mw-secd--check .mw-secd__photo[data-si="1"] .mw-secd__photo-clip:hover ~ .mw-secd__cap,
+.mw-secd--check .mw-secd__photo[data-si="2"] .mw-secd__photo-clip:hover ~ .mw-secd__cap {
+  bottom: calc(50% + 80px); transform: translate(calc(-50% - 64px), 0); /* up + left of the rising-arm photo */
+}
+.mw-secd--check .mw-secd__photo[data-si="3"] .mw-secd__photo-clip:hover ~ .mw-secd__cap {
+  bottom: calc(50% + 86px); transform: translate(-50%, 0); /* above the top tip */
+}
+
+/* The straightened spotlight (#4) + single-hover (#5) cards get the SAME cream hairline frame the arc
+   cards have. The base rule used `outline`, but clip-path (which makes the square) CLIPS the outline
+   away — that's why it never showed. A real `border` lives inside the border-box, so clip-path keeps
+   it; box-sizing:border-box holds the card size constant. Only applied in the straightened states (at
+   rest the rhombus clip would chop a square border). */
+.mw-secd--check:has(.mw-secd__cat[data-cat="0"]:hover) .mw-secd__photo[data-cat="0"] .mw-secd__photo-clip,
+.mw-secd--check:has(.mw-secd__cat[data-cat="1"]:hover) .mw-secd__photo[data-cat="1"] .mw-secd__photo-clip,
+.mw-secd--check:has(.mw-secd__cat[data-cat="2"]:hover) .mw-secd__photo[data-cat="2"] .mw-secd__photo-clip,
+.mw-secd--check:has(.mw-secd__cat[data-cat="3"]:hover) .mw-secd__photo[data-cat="3"] .mw-secd__photo-clip,
+.mw-secd--check .mw-secd__photo-clip:hover {
+  outline: none;
+  border: 1px solid var(--c-line); /* = the arc card-inner hairline (#E8DCC6), now actually visible */
+  box-sizing: border-box;          /* keep the card the same size despite the border */
+}
+
+/* Gather the spotlight row ABOVE THE HOVERED CATEGORY (not the middle of the whole grid): centre the
+   row on each category's own x (--cat-cx, set inline per category), clamped to [23%,77%] so the wide
+   row never runs off the grid for the edge categories. Overrides the base rule's `left: 50% …`. */
+.mw-secd--check:has(.mw-secd__cat[data-cat="0"]:hover) .mw-secd__photo[data-cat="0"],
+.mw-secd--check:has(.mw-secd__cat[data-cat="1"]:hover) .mw-secd__photo[data-cat="1"],
+.mw-secd--check:has(.mw-secd__cat[data-cat="2"]:hover) .mw-secd__photo[data-cat="2"],
+.mw-secd--check:has(.mw-secd__cat[data-cat="3"]:hover) .mw-secd__photo[data-cat="3"] {
+  left: calc(clamp(23%, var(--cat-cx), 77%) - (var(--sp-size) / 2) + ((var(--si) - 1.5) * var(--sp-slot)));
+}
+
+/* 2-line display title (was 3 at 22ch). The header STACKS: title → body-intro → button, each centred
+   (base .mw-secd__head is already a centred grid with a gap). */
+.mw-secd--check .mw-secd__title { max-width: 30ch; text-wrap: balance; }
+.mw-secd--check .mw-secd__cta { margin-top: clamp(4px, 0.6vw, 10px); }
+
+/* Title + body-intro + button all "render in" only once they cross the viewport — using the SERVICES
+   section's list-item mask-rise: each sits in a clipped mask (overflow:hidden) with its content parked
+   at translateY(116%), then rises to 0 when its data-in="1" is set (i.e. when it can fully fit on
+   screen — gated per-frame in JS). No opacity fade — the mask itself hides it. The title + body rise
+   together (one unit); the button is part 2, gated on its own bottom. */
+.mw-secd--check .mw-secd__eyebrow-top,
+.mw-secd--check .mw-secd__title,
+.mw-secd--check .mw-secd__lead,
+.mw-secd--check .mw-secd__cta { overflow: hidden; }
+.mw-secd--check .mw-secd__rise {
+  display: block;
+  transform: translateY(116%);
+  transition: transform 0.95s cubic-bezier(.16, .84, .3, 1);
+}
+.mw-secd--check .mw-secd__eyebrow-top[data-in="1"] .mw-secd__rise,
+.mw-secd--check .mw-secd__title[data-in="1"] .mw-secd__rise,
+.mw-secd--check .mw-secd__lead[data-in="1"] .mw-secd__rise,
+.mw-secd--check .mw-secd__cta[data-in="1"] .mw-secd__rise { transform: none; }
+/* Button rises in 4× as fast as the other items (0.95s → 0.2375s), same easing. */
+.mw-secd--check .mw-secd__cta .mw-secd__rise { transition-duration: 0.2375s; }
+@media (prefers-reduced-motion: reduce) {
+  .mw-secd--check .mw-secd__rise { transform: none; transition: none; }
+}
+
+/* ── Pinned framing PAUSE (mirrors the lifetime-reel sticky) ─────────────────────────────────────
+   The section is wrapped in a tall .mw-secd-track and made sticky, so it FREEZES once it fills the
+   viewport — a brief stop that frames the whole composition (grid + title + body-intro + button) at
+   the right spot so the user can hover the diamonds without anything being cut off, then releases.
+   No scroll-driven reveals; everything just shows. Mobile / short viewport / reduced-motion skip the
+   pin — the track collapses and the section flows normally. */
+.mw-secd-track { position: relative; }
+/* min-height 840 — the floor where the FRAMED view (grid + ~120px spotlight headroom + title +
+   body-intro) fits one screen with the hover spotlight clearing the nav. The BUTTON is intentionally
+   NOT forced into this view: the section grows TALLER than the viewport (min-height:100vh), so the
+   button — with proper spacing below the body — sits below the framed pinned view and scrolls into
+   view as the pin releases. Shorter viewports skip the pin and flow normally. */
+@media (min-width: 721px) and (min-height: 840px) and (prefers-reduced-motion: no-preference) {
+  /* sticky runway: a brief pin hold, then it releases and the button + bottom gap scroll into view */
+  .mw-secd-track { height: calc(100vh + 720px); }
+  .mw-secd-track > .mw-secd--check {
+    position: sticky;
+    top: 0;
+    min-height: 100vh;     /* grows taller than the viewport → the button sits BELOW the framed pinned view */
+    /* top: clear the fixed nav AND the spotlight captions (~57px above the grid); bottom: gap before next section */
+    padding-block: clamp(88px, 10vh, 116px) clamp(168px, 21vh, 336px);
+    display: flex;
+    flex-direction: column;
+    /* CENTRE the composition when there's room (tall / portrait → everything fits, middle-aligned); fall
+       back to top-aligned when it overflows (landscape → grid stays below the nav, button below the fold) */
+    justify-content: safe center;
+  }
+  /* spotlight headroom + a little more breathing room above the grid (and eyebrow→grid gap on approach) */
+  .mw-secd-track > .mw-secd--check .mw-secd__grid { margin-top: clamp(52px, 5.5vh, 80px); }
+  /* GENEROUS spacing: bottom-of-grid → header, then title → body; the body → button gap is modest */
+  .mw-secd-track > .mw-secd--check .mw-secd__head { margin-top: clamp(76px, 9vh, 124px); gap: clamp(24px, 2.8vh, 36px); }
+  .mw-secd-track > .mw-secd--check .mw-secd__cta { margin-top: clamp(20px, 2.4vh, 34px); }
+  /* the eyebrow is already opacity:0 when pinned — collapse its box too so it doesn't eat vertical room */
+  .mw-secd-track > .mw-secd--check.is-secd-pinned .mw-secd__eyebrow-top { height: 0; margin: 0; overflow: hidden; }
+}
+
+/* ── PHONE PORTRAIT redesign (≤600px) ──────────────────────────────────────────
+   The desktop checkmark frieze is an 18-column horizontal band; squeezed into a
+   ~340px column it collapses to a ~150px strip of illegible ~20px diamonds with the
+   four category labels colliding. On a phone the pin is off and the hover spotlight /
+   single-photo straighten are dead (no hover) — so the frieze can't be "explored," it
+   just has to READ. We therefore RE-FLOW the flat lattice (DOM order: cat, p0..p3 × 4
+   categories) out of absolute positioning into a clean in-flow CSS grid: ONE stacked
+   "sector block" per category — a legibly-sized cream category diamond on the left
+   beside a 2×2 argyle quad of its four example-photo diamonds. Same rotated-diamond /
+   argyle motif, same warm clay palette, every photo + label legible, no horizontal
+   page overflow, and the existing scroll-reveal (SectorGridMotion03 writes --secd3-* as
+   a transform on each cell) still settles the cells into their new grid slots untouched.
+   Scoped entirely to .mw-secd--check; nothing here is a desktop (base) rule. */
+@media (max-width: 600px) {
+  /* The grid stops being an aspect-ratio'd absolute canvas and becomes a fully EXPLICIT
+     grid (template rows + columns hand-laid, with dedicated GAP tracks so within-quad
+     diamonds touch point-to-point while sectors stay clearly separated). Diamond sizes
+     are explicit (var --secd-ph / --secd-lbl) so nothing stretches — the earlier 1fr +
+     aspect-ratio attempt let cells blow up. Columns: [label][label-gap][photoL][photoR].
+     Rows: 11 = (top,bot) per sector × 4 with a sector-gap row between. The inline
+     aspect-ratio:cols/rows and the 75px·cols width cap are overridden. */
+  .mw-secd--check .mw-secd__grid {
+    --secd-ph: clamp(74px, 22.5vw, 94px);   /* photo diamond box */
+    --secd-lbl: clamp(116px, 32vw, 144px);  /* category label diamond box — fits the long names */
+    --secd-colgap: clamp(8px, 2.4vw, 16px); /* label ↔ photo-quad gap */
+    --secd-sgap: clamp(20px, 6vw, 38px);    /* gap between stacked sectors */
+    width: 100% !important;                  /* fill the content column (overrides the 75px·cols ideal cap) */
+    max-width: 430px;
+    margin-inline: auto;
+    margin-top: clamp(6px, 2.5vw, 18px);     /* the desktop spotlight headroom (100–150px) is pointless with no spotlight */
+    aspect-ratio: auto !important;           /* clear the inline aspectRatio so the grid takes its own content height */
+    display: grid;
+    grid-template-columns: var(--secd-lbl) var(--secd-colgap) var(--secd-ph) var(--secd-ph);
+    grid-template-rows:
+      var(--secd-ph) var(--secd-ph) var(--secd-sgap)
+      var(--secd-ph) var(--secd-ph) var(--secd-sgap)
+      var(--secd-ph) var(--secd-ph) var(--secd-sgap)
+      var(--secd-ph) var(--secd-ph);
+    column-gap: 0;
+    row-gap: 0;
+    justify-content: center;   /* centre the whole ladder in the column */
+    align-items: stretch;
+    justify-items: stretch;
+  }
+  /* Cells leave ABSOLUTE flow for GRID flow, but stay position:RELATIVE — their children
+     (.mw-secd__photo-clip and .mw-secd__cat-svg are position:absolute; inset:…) must keep
+     resolving against THIS box, not escape to the relatively-positioned .mw-secd__grid and
+     blow up to full-grid size. left/top are zeroed so relative positioning adds no shift;
+     explicit equal width+height keeps the box square (→ diamond after the clip). */
+  .mw-secd--check .mw-secd__photo,
+  .mw-secd--check .mw-secd__cat {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    width: 100% !important;     /* fill the (fixed-size) grid track */
+    height: 100%;
+    min-width: 0;
+    aspect-ratio: auto;         /* size is governed by the track, not aspect-ratio */
+  }
+  /* The .mw-secd--int photo rule pins left/top/width from vars + animates them — kill that
+     transition so a resize can't slide a cell across the new grid. (The scroll-reveal's
+     own transform on each cell is untouched, so the staggered entrance still plays.) */
+  .mw-secd--check .mw-secd__photo { transition: none; }
+
+  /* Explicit placement. Label in col1 spanning its two photo rows; the four photos as a
+     2×2 quad in cols 3/4 (si0 si1 over si2 si3). */
+  .mw-secd--check .mw-secd__cat { grid-column: 1; }
+  .mw-secd--check .mw-secd__photo[data-si="0"],
+  .mw-secd--check .mw-secd__photo[data-si="2"] { grid-column: 3; }
+  .mw-secd--check .mw-secd__photo[data-si="1"],
+  .mw-secd--check .mw-secd__photo[data-si="3"] { grid-column: 4; }
+  .mw-secd--check .mw-secd__photo[data-si="0"],
+  .mw-secd--check .mw-secd__photo[data-si="1"] { grid-row: var(--secd-row-top); }
+  .mw-secd--check .mw-secd__photo[data-si="2"],
+  .mw-secd--check .mw-secd__photo[data-si="3"] { grid-row: var(--secd-row-bot); }
+  .mw-secd--check .mw-secd__cat[data-cat="0"] { grid-row: 1 / span 2; }
+  .mw-secd--check .mw-secd__cat[data-cat="1"] { grid-row: 4 / span 2; }
+  .mw-secd--check .mw-secd__cat[data-cat="2"] { grid-row: 7 / span 2; }
+  .mw-secd--check .mw-secd__cat[data-cat="3"] { grid-row: 10 / span 2; }
+  .mw-secd--check .mw-secd__photo[data-cat="0"] { --secd-row-top: 1;  --secd-row-bot: 2;  }
+  .mw-secd--check .mw-secd__photo[data-cat="1"] { --secd-row-top: 4;  --secd-row-bot: 5;  }
+  .mw-secd--check .mw-secd__photo[data-cat="2"] { --secd-row-top: 7;  --secd-row-bot: 8;  }
+  .mw-secd--check .mw-secd__photo[data-cat="3"] { --secd-row-top: 10; --secd-row-bot: 11; }
+
+  /* Category label diamond — keep the cream/inverted resting look; the box is now bigger
+     so the longest name ("INFRASTRUCTURE") reads. The svg fills the box (inset:gap); the
+     name layer sits on top. Allow a 2-line wrap as a safety valve for the long names.
+     The cat spans its 2 photo rows (≈2·--secd-ph tall) but must stay SQUARE (a regular
+     diamond, not a stretched rhombus) — so give it an explicit square size and centre it
+     vertically against the quad rather than stretching to the full 2-row height. */
+  .mw-secd--check .mw-secd__cat {
+    z-index: 3;
+    height: var(--secd-lbl) !important;
+    align-self: center;
+    justify-self: center;
+  }
+  .mw-secd--check .mw-secd__cat-name {
+    font-size: clamp(12px, 3.4vw, 15px);
+    line-height: 1.02;
+    letter-spacing: 0.01em;
+    text-wrap: balance;
+  }
+  .mw-secd--check .mw-secd__cat-face { padding: 0 16%; }
+
+  /* Photo quad above the label in z so the cream label's empty corners never cover a photo.
+     The rhombus clip + walnut backstop + clay overlay all come from the base rules. */
+  .mw-secd--check .mw-secd__photo { z-index: 4; }
+
+  /* The on-photo names are hover-only captions (dead on touch); like desktop ≤1024 the
+     photos stay label-free and the four category diamonds carry the meaning. Keep the
+     hover caption hidden so a stray tap can't strand it on screen. */
+  .mw-secd--check .mw-secd__cap { display: none; }
+
+  /* The cream label diamonds read faint-on-cream and never get the hover "activation" a
+     phone can't trigger — give the resting svg a soft clay shadow (the desktop look kills
+     it at rest, restores it on hover) so each label lifts off the paper as a deliberate
+     cream "stamp." Stronger border too, for a crisper edge. */
+  .mw-secd--check .mw-secd__cat-svg { filter: drop-shadow(0 6px 14px rgba(33, 20, 12, 0.16)); }
+  .mw-secd--check .mw-secd__cat-fill { stroke-width: 2.4; }
+
+  /* The scroll-reveal (SectorGridMotion03) holds the cells hidden — opacity:0, scale 0.25,
+     off-screen-left — until EVERY diamond has cleared the viewport bottom. On desktop the
+     pin masks that; on a phone the grid is ~830px tall (taller than the usable viewport),
+     so that gate can leave a large blank band on first encounter and fires late. Mobile is
+     better served by simply SHOWING the lattice (this is exactly what reduced-motion already
+     does); override the armed hidden pose so the grid is present immediately. The header
+     items keep their own per-item mask-rise. */
+  .mw-secd--check .mw-secd__grid.is-armed > * {
+    opacity: 1 !important;
+    transform: none !important;
+    will-change: auto;
+  }
+
+  /* Belt-and-braces: this re-flow can never push a horizontal page scrollbar. */
+  .mw-secd--check { overflow-x: clip; }
+}
+
+/* ── TABLET PORTRAIT refinement (601–1024px, portrait) ──────────────────────────
+   At tablet-portrait the desktop checkmark frieze already scales down legibly (the
+   ≤600 phone re-flow does NOT apply here — these widths keep the frieze). This is a
+   polish pass on the PINNED framing: the section pins (the 721/840 pin query is
+   active at 768×1024 / 820×1180 / 1024×1366 portrait) and the desktop pin padding is
+   strongly bottom-heavy (top ~10vh vs bottom ~21vh), which "safe center"s the
+   composition high and strands a large empty cream band below the CTA. We rebalance
+   the pin's vertical rhythm so the grid + heading + lead + CTA sit centred in the
+   framed viewport with even air top and bottom, tighten the dead spotlight headroom
+   (the hover spotlight is inert on touch), and pull the heading a touch closer under
+   the frieze so it reads as one composed unit. Selectors mirror the pin block
+   (.mw-secd-track > .mw-secd--check, equal specificity) so this LATER block wins where
+   it overlaps. Frieze diamond/label SIZING is left as-is (already legible, capped by
+   the content column); this is rhythm/placement only. Nothing here is a desktop rule. */
+@media (min-width: 601px) and (max-width: 1024px) and (orientation: portrait) {
+  /* Rebalance the pinned frame: keep enough top clearance for the fixed nav (the
+     eyebrow collapses to 0 when pinned) but cut the over-large bottom band so
+     "safe center" parks the composition near the true viewport middle instead of
+     high with a stranded empty band underneath. Gentle top<bottom asymmetry keeps a
+     clean handoff gap to the next section as the pin releases. */
+  .mw-secd-track > .mw-secd--check {
+    padding-block: clamp(72px, 8vh, 104px) clamp(128px, 13.5vh, 184px);
+  }
+  /* The spotlight headroom above the grid is dead weight on touch (hover:none → no
+     gathered-squares row), so reclaim most of it; the frieze gains room without a
+     reserved empty band above it. */
+  .mw-secd-track > .mw-secd--check .mw-secd__grid {
+    margin-top: clamp(24px, 3vh, 48px);
+  }
+  /* Pull the heading block closer under the frieze so the grid → title → lead → CTA
+     read as one centred group rather than two stranded clusters; trim the inter-item
+     gap slightly to match the tighter rhythm. */
+  .mw-secd-track > .mw-secd--check .mw-secd__head {
+    margin-top: clamp(48px, 5.5vh, 80px);
+    gap: clamp(20px, 2.4vh, 30px);
+  }
+  .mw-secd-track > .mw-secd--check .mw-secd__cta {
+    margin-top: clamp(16px, 2vh, 28px);
+  }
+}
+
+/* ── TABLET LANDSCAPE refinement (1000–1366px, landscape, COARSE pointer) ───────
+   The desktop checkmark frieze is comfortably legible at these wide widths, so we
+   KEEP the frieze (no mobile vertical re-flow). The problem is the SHORT landscape
+   HEIGHT (768 / 834): at those heights the PIN is OFF (its gate is min-height:840),
+   so the section flows normally — and two voids that the pin would otherwise absorb
+   are left stranded: (1) the ~100–120px "spotlight headroom" above the frieze (the
+   .mw-secd--int grid margin-top), which only exists to stage the hover-gather row —
+   DEAD on touch (hover:none → the spotlight can never fire); and (2) the base --check
+   bottom band (clamp(192px,19.5vw,336px) ≈ 200–233px) sized for the desktop pin's
+   tall runway, which here just floats empty cream before the next (dark) section.
+   We reclaim both so the eyebrow → frieze → heading → lead → CTA read as one composed
+   group on the short canvas, with calm (not cavernous, not crammed) air top and bottom.
+
+   DESKTOP-INVARIANCE: the `pointer: coarse` guard keeps every fine-pointer desktop at
+   1000–1366px on the untouched base/pin rules. At 1366×1024 (which this query DOES
+   match — coarse, landscape, ≤1366) the PIN is active (height 1024 ≥ 840); the pin
+   block's `.mw-secd-track > .mw-secd--check …` selectors carry higher specificity
+   (0,3,0 / 0,2,0) than the (0,2,0 / 0,1,0) overrides below, so the pin wins there and
+   the 1366 framed composition stays byte-identical — these reductions only take effect
+   at 1024/1194 where the pin is off (base rules, lower specificity). Nothing here is a
+   desktop (base) rule; frieze diamond/label SIZING is untouched (already legible, capped
+   by the content column). Rhythm/placement only. */
+@media (min-width: 1000px) and (max-width: 1366px) and (orientation: landscape) and (pointer: coarse) {
+  /* (1) Reclaim the dead hover-spotlight headroom above the frieze — keep just enough
+     air to separate the eyebrow from the frieze (so they don't crowd) without the
+     cavernous band. vh-tied so it tracks the short canvas. Overrides the .mw-secd--int
+     base margin-top (equal specificity, later in source) at 1024/1194; the pin's
+     higher-specificity rule keeps 1366 untouched. */
+  .mw-secd--check .mw-secd__grid {
+    margin-top: clamp(32px, 4.5vh, 56px);
+  }
+  /* (2) Trim the desktop-pin-sized bottom band to a calm handoff gap to the next
+     section; keep the TOP padding identical to base (clamp(64px,6.5vw,112px) — the
+     eyebrow still needs its clearance below the fixed nav). Overrides the base --check
+     padding-block at 1024/1194; the pin's (0,2,0) rule wins at 1366. */
+  .mw-secd--check {
+    padding-block: clamp(64px, 6.5vw, 112px) clamp(80px, 10vh, 116px);
+  }
+  /* Pull the heading group a touch closer under the frieze so grid → title → lead → CTA
+     compose as one centred unit on the short height (mirrors the portrait pass intent).
+     Equal specificity to the .mw-secd--int base head rule, later in source → wins at
+     1024/1194; the pin head rule (higher specificity) holds at 1366. */
+  .mw-secd--check .mw-secd__head {
+    margin-top: clamp(40px, 5vh, 64px);
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════

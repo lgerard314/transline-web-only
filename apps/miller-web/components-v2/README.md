@@ -21,7 +21,9 @@ The lists above drift as templates are added — the live sources of truth are t
 
 ## See every template rendered: `/template-gallery`
 
-The live catalog. `/template-gallery` shows all `06_sections` templates at true site width with placeholder content and **interactive config toggles**; the sub-pages `/template-gallery/{marks,buttons,cards,blocks,widgets}` show the lower layers. Each entry shows the component name and its file path on hover. **Open the gallery first** to find a template that fits before inventing anything. (The gallery and `/template-testing-variants` are noindex dev tools, not product pages.)
+The live catalog. `/template-gallery` shows all `06_sections` templates at true site width with placeholder content and **interactive config toggles**; the sub-pages `/template-gallery/{marks,buttons,cards,blocks,widgets}` show the lower layers. Each entry shows the component name and its file path on hover. **Open the gallery first** to find a template that fits before inventing anything. (The gallery, `/template-testing-variants`, and `/home-lab` are noindex dev tools, not product pages.)
+
+**Home section iteration:** `/home-lab` renders each live home section in isolation with production content — use it when editing pinned scroll sections. Home CSS is split per section under `app/styles/home/` (see `app/styles/home/README.md`).
 
 ## Building or redesigning a miller page (the default workflow)
 

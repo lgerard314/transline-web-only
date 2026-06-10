@@ -1,0 +1,324 @@
+/* home/careers.css — ZoomCollage01 · components-v2/06_sections/callouts/zoom-collage-01.jsx */
+/* ─────────────────────────────────────────────────────────────────
+   Careers — zoom collage. A sticky stage "dives" through a mosaic of
+   crew photos (scroll-scrubbed scale written as --s by the
+   zoom-collage-01 widget) until the centre photo fills the frame, then
+   the invitation copy fades in over a walnut scrim (--reveal). Warm-clay
+   rebuild of a framer-motion zoom-parallax reference — CSS-only motion,
+   tokens only, squared frames. Namespaced mw-czoom (home-only).
+   ───────────────────────────────────────────────────────────────── */
+.mw-czoom {
+  position: relative;
+  background: var(--c-surface-warm);
+  isolation: isolate;
+}
+/* Three equal columns; eyebrow lives in column 1, centred, zero padding on the wrap. */
+.mw-czoom__intro-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 0;
+  margin: 0;
+  pointer-events: none;
+}
+.mw-czoom__intro-col {
+  grid-column: 1;
+  position: relative;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.mw-czoom__intro {
+  position: absolute;
+  left: var(--czoom-intro-x, 50%);
+  transform: translateX(-50%) translateY(calc(var(--intro-out, 0) * -8px));
+  top: 0;
+  padding: 0;
+  margin: clamp(40px, 4.5vh, 60px) 0 0 0;
+  width: max-content;
+  max-width: calc(100vw / 3);
+  opacity: calc(1 - var(--intro-out, 0));
+  pointer-events: auto;
+}
+.mw-czoom__intro-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+}
+.mw-czoom__intro-field::before {
+  content: "";
+  width: 8.1px;
+  height: 8.1px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex: none;
+}
+.mw-czoom__intro-rule { width: clamp(40px, 6vw, 96px); height: 1px; background: currentColor; opacity: 0.4; }
+.mw-czoom__track {
+  position: relative;
+  /* The section pins (sticky stage) over this track; the widget drives the dive from
+     scroll progress over --dive-vh and auto-advances the scroll while pinned. --freeze-vh
+     is a short hold on the finished frame before release. Track = dive + freeze + one viewport. */
+  --dive-vh: 125;
+  --freeze-vh: 25;
+  --center-img-anchor-y: 58%;
+  height: calc((var(--dive-vh) + var(--freeze-vh) + 100) * 1vh);
+}
+.mw-czoom__stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--c-surface-warm);
+}
+/* 49° paper-grain wash, terracotta-on-light — matches the warm cream surface. */
+.mw-czoom__stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+
+.mw-czoom__mosaic { position: absolute; inset: 0; z-index: 1; }
+/* Each cell is the full viewport; the scroll-driven scale (--s) sits HERE so every
+   photo scales about the same point — the viewport centre. The centre photo grows
+   in place to fill; the offset photos translate outward (offset × scale) and sweep
+   off-frame as they enlarge, leaving the centre photo (index 0) as the landing. */
+.mw-czoom__cell {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  transform: scale(var(--s, 1));
+  transform-origin: center;
+  will-change: transform;
+}
+/* The non-centre frames are nudged off-centre and resized so the mosaic reads as a
+   layered spread before the dive (positions ported from the reference). */
+.mw-czoom__frame {
+  position: relative;
+  width: 25vw;
+  height: 25vh;
+  overflow: hidden;
+}
+/* Each frame is laid out LARGER than its on-screen mosaic box (centre at its full
+   100vw/100vh; the rest at 3× their box — see CAP in the widget) and scaled DOWN, so
+   every photo rasterizes from a large source and stays crisp instead of upscaling a
+   small bitmap. Sizes/offsets below are mosaic-box × cap. */
+.mw-czoom__cell:nth-child(1) .mw-czoom__frame { width: 100vw; height: 100vh; }
+.mw-czoom__cell:nth-child(1) .mw-czoom__frame img {
+  object-position: center var(--center-img-anchor-y);
+  transform: scale(var(--center-img-zoom, 1.12));
+  transform-origin: center var(--center-img-anchor-y);
+}
+.mw-czoom__frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.mw-czoom__cell:nth-child(2) .mw-czoom__frame { top: -90vh; left: 15vw; height: 90vh; width: 105vw; }
+.mw-czoom__cell:nth-child(3) .mw-czoom__frame { top: -30vh; left: -75vw; height: 135vh; width: 60vw; }
+.mw-czoom__cell:nth-child(4) .mw-czoom__frame { left: 82.5vw; height: 75vh; width: 75vw; }
+.mw-czoom__cell:nth-child(5) .mw-czoom__frame { top: 82.5vh; left: 15vw; height: 75vh; width: 60vw; }
+.mw-czoom__cell:nth-child(6) .mw-czoom__frame { top: 82.5vh; left: -67.5vw; height: 75vh; width: 90vw; }
+.mw-czoom__cell:nth-child(7) .mw-czoom__frame { top: 67.5vh; left: 75vw; height: 45vh; width: 45vw; }
+/* Convention photo (6th tile, bottom-left) — plain image (no zoom), positioned so the
+   people's heads sit just below the top of the frame. */
+.mw-czoom__cell:nth-child(6) .mw-czoom__frame img { object-position: 50% 73%; }
+/* Booth photo (3rd tile) anchored to the top of its frame. */
+.mw-czoom__cell:nth-child(3) .mw-czoom__frame img { object-position: top; }
+/* Blue Bombers photo (4th tile) is wider than its frame, so it fills the height with
+   no vertical slack — a small scale anchored at the top creates room to nudge it down. */
+.mw-czoom__cell:nth-child(4) .mw-czoom__frame img { transform: scale(1.1); transform-origin: center top; }
+
+/* Invitation overlay — fades in over the filled centre photo as the dive lands. */
+.mw-czoom__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  padding: clamp(24px, 5vw, 80px);
+  opacity: var(--reveal, 0);
+  pointer-events: none;
+}
+.mw-czoom[data-shown] .mw-czoom__overlay,
+.mw-czoom__track[data-shown] .mw-czoom__overlay { pointer-events: auto; }
+/* Legibility scrim — applied ONLY to the centre (landing) photo, not the whole
+   stage, so the cream background stays clean during the dive. It lives inside the
+   centre frame (clipped to the photo, scales with it) and fades in with --reveal.
+   Hero-toned (--c-ink #2A1B12) and weighted to darken the CENTRE where the copy
+   sits — same approach that makes the home hero type read over its site photo. */
+.mw-czoom__cell:nth-child(1) .mw-czoom__frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: var(--reveal, 0);
+  /* Super-dark espresso-brown base (deeper/less warm than --c-ink), with a centre-
+     weighted darken so the copy reads. */
+  background:
+    linear-gradient(rgba(18, 11, 6, 0.62), rgba(18, 11, 6, 0.62)),
+    radial-gradient(ellipse at center, rgba(18, 11, 6, 0.5) 0%, rgba(18, 11, 6, 0.82) 100%);
+}
+.mw-czoom__copy {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(22px, 2.2vw, 34px);
+  text-align: center;
+  max-width: 760px;
+  transform: translateY(calc((1 - var(--reveal, 0)) * 24px));
+}
+.mw-czoom__field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(245, 230, 203, 0.92);
+  text-shadow: 0 1px 10px rgba(42, 27, 18, 0.7);
+}
+.mw-czoom__field::before {
+  content: "";
+  width: 8.1px;
+  height: 8.1px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex: none;
+}
+.mw-czoom__field-rule { width: clamp(40px, 6vw, 96px); height: 1px; background: currentColor; opacity: 0.4; }
+.mw-czoom__title {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  /* Matches the home hero title — pure white, heavier weight for legibility. */
+  font-weight: 700;
+  font-size: clamp(40px, 6vw, 88px);
+  line-height: 0.98;
+  letter-spacing: 0.005em;
+  color: #ffffff;
+  text-transform: uppercase;
+  text-shadow: 0 2px 28px rgba(42, 27, 18, 0.6);
+}
+.mw-czoom__title-em { color: var(--c-accent); display: block; }
+.mw-czoom__lead {
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(16px, 1.2vw, 20px);
+  line-height: 1.6;
+  /* Cream --c-on-navy, like the hero lead, with a soft shadow so it reads on the photo. */
+  color: rgba(245, 230, 203, 0.95);
+  text-shadow: 0 1px 12px rgba(42, 27, 18, 0.7);
+  max-width: 54ch;
+}
+/* Two squared invitation cards — clay-edged links, hover lifts to terracotta. */
+.mw-czoom__cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(12px, 1.4vw, 20px);
+  margin-top: clamp(10px, 1.4vw, 22px);
+}
+.mw-czoom__card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 220px;
+  /* Slightly taller cards; the link is pinned to the bottom so a modest, deliberate
+     gap opens between the title and the link. */
+  min-height: clamp(96px, 7.6vw, 116px);
+  padding: clamp(16px, 1.5vw, 24px) clamp(18px, 1.6vw, 26px);
+  text-align: left;
+  text-decoration: none;
+  /* Extremely dark espresso-brown panel (not the warm/orange tint it had before). */
+  background: rgba(18, 11, 6, 0.78);
+  border: 1px solid rgba(245, 230, 203, 0.28);
+  border-top: 2px solid var(--c-accent);
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+.mw-czoom__card:hover,
+.mw-czoom__card:focus-visible {
+  /* Hover goes DARKER, not brighter. */
+  background: rgba(18, 11, 6, 0.92);
+  border-color: rgba(245, 230, 203, 0.5);
+  transform: translateY(-3px);
+}
+.mw-czoom__card-tag {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--c-amber);
+}
+.mw-czoom__card-title {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(20px, 1.6vw, 26px);
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+.mw-czoom__card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  /* Pin to the bottom of the card; opens a clean gap below the title. */
+  margin-top: auto;
+  padding-top: clamp(10px, 1.1vw, 16px);
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--c-on-navy);
+}
+.mw-czoom__card:hover .mw-czoom__card-link { color: var(--c-amber); }
+.mw-czoom__arrow { transition: transform 0.25s ease; }
+.mw-czoom__card:hover .mw-czoom__arrow { transform: translateX(5px); }
+
+/* Reduced motion: no scroll scrub — collapse the track to one viewport, pin the
+   landing photo filled (the widget writes the final --s/--reveal), copy shown. */
+@media (prefers-reduced-motion: reduce) {
+  .mw-czoom__track { height: 100vh; }
+  .mw-czoom__frame { will-change: auto; }
+  .mw-czoom__card,
+  .mw-czoom__arrow { transition: none; }
+  .mw-czoom__copy { transform: none; }
+}
+.mw-czoom__track[data-reduced] { height: 100vh; }
+
+/* Phone: shorter dive distance; stack the invitation cards full-width. */
+@media (max-width: 700px) {
+  .mw-czoom__track { --dive-vh: 100; }
+  .mw-czoom__card { min-width: 0; width: 100%; }
+  .mw-czoom__cards { width: 100%; max-width: 360px; }
+}
+
+/* VBEC media — rightmost photo flush to the screen; card framing unchanged elsewhere. */
+.mw-fac2-track .mw-fac2__media {
+  padding-right: 0;
+  border-right: none;
+}
+

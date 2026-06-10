@@ -318,10 +318,7 @@ html[data-brand="miller"] .tl-logo > img {
   width: 48px;
   height: 48px;
 }
-/* Topnav logo swap: maple leaf (default / top of home) cross-fades to the
-   Miller logomark once scrolled past the hero mark. The incoming mark rises
-   from below and settles while the leaf lifts away — so it reads as the hero
-   logo flying up into the nav. Both marks are stacked in a fixed 48px box. */
+/* Topnav logo mark. */
 html[data-brand="miller"] .mw-navlogo {
   position: relative;
   width: 48px;
@@ -329,46 +326,12 @@ html[data-brand="miller"] .mw-navlogo {
   flex-shrink: 0;
 }
 html[data-brand="miller"] .mw-navlogo { overflow: visible; }
-/* Swapped state: the Miller logomark fills the box and rises in. */
 html[data-brand="miller"] .mw-navlogo__mark {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: contain;
-  opacity: 0;
-  transform: translateY(11px) scale(1.14);
-  transition: opacity 300ms ease, transform 360ms cubic-bezier(.2, .7, .2, 1);
-}
-/* Default state: the maple leaf wrapped in a diamond frame that echoes the
-   logomark's diamond shape, drawn in the leaf's own brown. */
-html[data-brand="miller"] .mw-navlogo__diamond,
-html[data-brand="miller"] .mw-navlogo__leaf {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transition: opacity 300ms ease;
-}
-html[data-brand="miller"] .mw-navlogo__diamond {
-  width: 33px;
-  height: 33px;
-  transform: translate(-50%, -50%) rotate(45deg);
-  border: 2px solid var(--c-navy);
-  border-radius: 4px;
-}
-html[data-brand="miller"] .mw-navlogo__leaf {
-  width: 22px;
-  height: auto;
-  transform: translate(-50%, -50%);
-}
-/* Swapped → leaf + diamond fade out, logomark settles in. */
-html[data-brand="miller"] .mw-navlogo[data-swapped="1"] .mw-navlogo__leaf,
-html[data-brand="miller"] .mw-navlogo[data-swapped="1"] .mw-navlogo__diamond {
-  opacity: 0;
-}
-html[data-brand="miller"] .mw-navlogo[data-swapped="1"] .mw-navlogo__mark {
-  opacity: 1;
-  transform: none;
 }
 html[data-brand="miller"] .tl-nav-desktop {
   margin-left: 0;
@@ -974,4 +937,3 @@ html[data-brand="miller"] .tl-footer__bot {
 html[data-brand="miller"] .tl-field input,
 html[data-brand="miller"] .tl-field select,
 html[data-brand="miller"] .tl-field textarea { border-radius: 0; }
-

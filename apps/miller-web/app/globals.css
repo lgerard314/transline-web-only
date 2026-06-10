@@ -4,7 +4,7 @@
    01-tokens                  palette lock, type bindings, tl-* token repaints
    02-primitives              atoms, section framing (mw-inner), scroll reveal
    03-chrome                  EmergencyBanner, TopNav, submenu/mega-menu, footer
-   04-home                    home page sections + hero + certs + bento
+   home/*                     one CSS file per live home section (see home/README.md)
    05-service-shared          mw-svc-* toolkit (hero/timeline/CTA/related/...)
    06-service-remediation     LiteYouTube facade, case cards, mw-why grid
    07-service-industrial-cleaning   mw-fleet* dark split
@@ -17,11 +17,21 @@
 @import "./styles/01-tokens.css";
 @import "./styles/02-primitives.css";
 @import "./styles/03-chrome.css";
-@import "./styles/04-home.css";
-@import "./styles/04b-roster-v2.css";
+/* Home — one file per section; see app/styles/home/README.md */
+@import "./styles/home/facility.css";
+@import "./styles/home/history.css";
+@import "./styles/home/affiliates.css";
+@import "./styles/home/final-cta.css";
+@import "./styles/home/hero.css";
+@import "./styles/home/certs.css";
+@import "./styles/home/_shared.css";
+@import "./styles/home/sectors.css";
+@import "./styles/home/careers.css";
+@import "./styles/home/facility-pin.css";
+@import "./styles/home/services.css";
+@import "./styles/home/lifetime.css";
 @import "./styles/05-service-shared.css";
 @import "./styles/06-service-remediation.css";
 @import "./styles/07-service-industrial-cleaning.css";
 @import "./styles/08-service-waste-treatment.css";
 @import "./styles/09-service-project-management.css";
-@import "./styles/07-lifetime-reel.css";

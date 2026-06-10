@@ -11,15 +11,19 @@ import { readFileSync } from "node:fs";
 import postcss from "postcss";
 
 const PARTIALS = [
-  "01-tokens", "02-primitives", "03-chrome", "04-home",
+  "01-tokens", "02-primitives", "03-chrome",
+  "home/facility", "home/history", "home/affiliates", "home/final-cta", "home/hero",
+  "home/certs", "home/_shared", "home/sectors", "home/careers", "home/facility-pin",
+  "home/services", "home/lifetime",
   "05-service-shared", "06-service-remediation",
   "07-service-industrial-cleaning", "08-service-waste-treatment",
   "09-service-project-management",
 ];
 
 const before = execSync("git show HEAD:apps/miller-web/app/globals.css", { encoding: "utf8" });
+const stylesDir = new URL("../app/styles/", import.meta.url);
 const after = PARTIALS.map((p) =>
-  readFileSync(new URL(`../app/styles/${p}.css`, import.meta.url), "utf8")
+  readFileSync(new URL(`${p}.css`, stylesDir), "utf8")
 ).join("\n");
 
 // Walk every declaration, keyed by its at-rule ancestry + selector + property.

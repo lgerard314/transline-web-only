@@ -26,7 +26,6 @@ export function TopNav() {
   const [menuOpen, setMenuOpen]   = useState(false);
   const [openSubmenu, setOpenSub] = useState(null); // id of currently-open desktop submenu
   const [scrollState, setScrollState] = useState("top"); // "top" | "past-hero"
-  const [logoSwapped, setLogoSwapped] = useState(false); // maple leaf → logomark once past the hero mark
 
   // Once the user scrolls past the hero section, hide the emergency
   // banner and collapse the topnav to a compact fixed bar at the very
@@ -40,20 +39,6 @@ export function TopNav() {
         ? hero.getBoundingClientRect().bottom + window.scrollY - 80
         : window.innerHeight * 0.6;
       setScrollState(window.scrollY > threshold ? "past-hero" : "top");
-
-      // Logo swap: the hero mark (logomark + since 1996) sits at the
-      // lower-right of the home hero. While it is still below the fixed
-      // bar the nav shows the maple leaf; once it has scrolled up behind the
-      // bar, swap to the Miller logomark — reading as the hero logo rising
-      // into the nav and replacing the leaf. Routes with no hero mark (every
-      // non-home page) start already swapped to the logomark.
-      const mark = document.querySelector(".mw-hero__mark");
-      const bar = document.querySelector(".tl-topbar");
-      setLogoSwapped(
-        !mark || !bar
-          ? true
-          : mark.getBoundingClientRect().bottom <= bar.getBoundingClientRect().bottom,
-      );
     };
     const onScroll = () => {
       if (raf) return;
@@ -139,9 +124,7 @@ export function TopNav() {
       >
         <div className="tl-topbar__inner" ref={barRef}>
           <Link href="/" className="tl-logo" aria-label="Miller Environmental home">
-            <span className="mw-navlogo" data-swapped={logoSwapped ? "1" : "0"} aria-hidden="true">
-              <span className="mw-navlogo__diamond" />
-              <img className="mw-navlogo__leaf" src="/miller/custom/maple-leaf-graphic.png" alt="" />
+            <span className="mw-navlogo" aria-hidden="true">
               <img className="mw-navlogo__mark" src="/miller/logo/miller-logomark-1.webp" alt="" />
             </span>
             <span>Miller Environmental</span>

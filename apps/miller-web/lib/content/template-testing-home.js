@@ -1,8 +1,7 @@
 // apps/miller-web/lib/content/template-testing-home.js
-// Sandbox content for /template-testing. These arrays are COPIED from the
-// inline, non-exported consts in app/(home)/ section files (which cannot be
-// imported without editing them). Exported, importable HOME/SERVICES/CERTS
-// content is imported directly by the v2 sections, not duplicated here.
+// Home page content shaped for components-v2 section templates. Consumed by
+// app/(home)/page.jsx, /home-lab, /template-testing-variants, and /template-gallery
+// fixtures. Page-specific prose also lives in app/(home)/home.js.
 
 import { HOME } from "@/app/(home)/home";
 import { SERVICES } from "@/lib/services";
@@ -108,7 +107,7 @@ export const HERO = {
     cyclePhrases: [{ text: "hazardous" }, { text: "safe", tone: "accent" }, { text: "reliable", tone: "accent" }],
     line3: "waste disposal",
   },
-  lead: "Twenty-five years of licensed hazardous waste management in Manitoba. One documented chain of custody from your loading dock to final disposition at VBEC.",
+  lead: "Twenty-five years of licensed hazardous waste management in North America. One documented chain of custody from your loading dock to final disposition.",
   primaryCta: { label: "Talk to Miller", href: "/contact-us/" },
   ghostPhone: { sup: "24/7 emergency", num: EMERGENCY_PHONE, href: EMERGENCY_HREF },
   article: { strong: "Miller Environmental Corporation", rest: " · since 1996" },
@@ -116,32 +115,15 @@ export const HERO = {
 
 export const CERTS_BANNER = { ariaLabel: "Certifications", certs: CERTS };
 
-export const CREED = {
-  headingId: "mw-creed-heading",
-  eyebrow: "The Miller difference",
-  statement: { lead: "We don’t hand your waste to", em: "someone else" },
-  body: "Ninety-six percent of every stream is treated, recycled, or disposed in-house at VBEC — one operator, one documented chain of custody, from intake to final disposition.",
-  stat: { label: "Managed in-house", value: "96", unit: "%", note: "treated · recycled · disposed under one roof" },
-};
-
-export const LIFETIME_SCALE = {
-  headingId: "mw-scale-heading",
-  eyebrow: "Lifetime impact · since 1996",
-  figure: { value: 49, suffix: "M+", unit: "tons" },
-  body: "Hazardous and regulated waste collected, treated, and dispositioned under one documented chain of custody — the measured weight of Manitoba’s first licensed hazardous-waste operation.",
-  support: [
-    { value: "40M+", label: "Tons recycled" },
-    { value: "450+", label: "Active clients" },
-    { value: "100%", label: "Chain of custody" },
-  ],
-};
+const LIFETIME_SCALE_BODY =
+  "Hazardous and regulated waste collected, treated, and dispositioned under one documented chain of custody — the measured weight of Manitoba's first licensed hazardous-waste operation.";
 
 export const LIFETIME_REEL = {
   headingId: "mw-lifetime-reel-heading",
   srHeading: "Lifetime impact since 1996",
-  eyebrow: LIFETIME_SCALE.eyebrow,   // "Lifetime impact · since 1996"
+  eyebrow: "Lifetime impact · since 1996",
   highlights: [
-    { value: 49, suffix: "M+", unit: "tons", label: "of disposal", reveal: LIFETIME_SCALE.body },
+    { value: 49, suffix: "M+", unit: "tons", label: "of disposal", reveal: LIFETIME_SCALE_BODY },
     { value: 40, suffix: "M+", unit: "tons", label: "recycled", reveal: "Over 40 million tons recovered and returned to productive use — sorted and treated for reuse rather than landfilled." },
     { value: 100, suffix: "%", unit: "", label: "chain of custody", reveal: "Every load tracked end to end — from the generator’s dock to final disposition, under one unbroken, documented chain of custody." },
   ],

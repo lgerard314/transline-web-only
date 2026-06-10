@@ -1,0 +1,587 @@
+/* home/hero.css — MonumentHero01 · components-v2/06_sections/heroes/monument-hero-01.jsx */
+/* ─────────────────────────────────────────────────────────────────
+   Home — hero. Civic-monument typography on warm walnut. Barlow
+   Condensed display headline with terracotta stamp mark and a
+   paper-grain texture overlay.
+   ───────────────────────────────────────────────────────────────── */
+.mw-hero {
+  position: relative;
+  background: var(--c-navy);
+  color: var(--c-on-navy);
+  overflow: hidden;
+  isolation: isolate;
+  /* Fill the visible viewport below the fixed chrome. Body has
+     padding-top of (--mw-eb-h + 76px) to clear the fixed EB+topnav,
+     so the hero only needs to fill the remaining viewport. */
+  height: calc(100svh - var(--mw-eb-h, 39px) - 76px);
+  min-height: 0;
+  padding-bottom: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+/* Operating-site photograph. Warm-toned via saturation/brightness so it sits inside the clay palette rather than competing with it. */
+/* Wrapper clips the slow push-in zoom and carries the scroll parallax.
+   It overhangs the hero by 14% top & bottom so its transform:translateY
+   (set per-frame by MillerParallax, clamped within that headroom) can
+   drift the photo on scroll without ever exposing a hard edge — the hero
+   itself (overflow:hidden) clips the overhang. The inner .mw-hero__photo
+   owns the zoom transform; keeping the two transforms on separate
+   elements avoids a cascade fight between the load animation and the
+   JS-driven parallax. */
+.mw-hero__photo-wrap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -14%;
+  height: 128%;
+  z-index: 0;
+  overflow: hidden;
+  will-change: transform;
+}
+.mw-hero__photo {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 35%;
+  background-repeat: no-repeat;
+  /* Cinematic grade — moodier/darker/warmer than the generic --mw-photo-grade
+     so the type reads and the hero feels like a film frame, not a stock photo.
+     (Hero is deliberately excluded from the generic grade group.) */
+  filter: saturate(0.8) brightness(0.66) contrast(1.14) sepia(0.14);
+  /* Slow push-in on load, settling 6% zoomed — gives parallax headroom and a
+     cinematic entrance. Parallax translateY is applied to the wrapper. */
+  transform: scale(1.06);
+  animation: mw-hero-zoom 2.4s cubic-bezier(.2, .7, .2, 1) both;
+  will-change: transform;
+}
+@keyframes mw-hero-zoom { from { transform: scale(1.18); } to { transform: scale(1.06); } }
+/* Warm overlay tuned so the operating-site photo reads under the type — lighter than v2 so the facility is visible. */
+.mw-hero__photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(120deg, rgba(42, 27, 18, 0.78) 0%, rgba(42, 27, 18, 0.55) 45%, rgba(42, 27, 18, 0.28) 75%, rgba(42, 27, 18, 0.5) 100%),
+    linear-gradient(to bottom, rgba(42, 27, 18, 0) 30%, rgba(42, 27, 18, 0.78) 100%);
+}
+/* Subtle 49° paper-grain hairlines layered on top of the photo. Keeps the document-texture motif. */
+.mw-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-dark) 38px, var(--c-grain-on-dark) 39px);
+  z-index: 1;
+}
+/* Vertical clay hairline running the height of the hero — the start of the chain-of-custody motif that recurs through the page. */
+.mw-hero::after {
+  content: "";
+  position: absolute;
+  /* Centered in the left gutter: the body content is
+     min(100% - clamp(48px,8vw,144px), 1560px) wide (matching .mw-hero__inner),
+     so each gutter is (100% - content)/2 and its center is (100% - content)/4.
+     Holds through both regimes — the shrinking-gutter phase and the capped
+     1560px phase — and transitions continuously between them. */
+  left: calc((100% - min(100% - clamp(48px, 8vw, 144px), 1560px)) / 4);
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent 0, rgba(168,90,44,0.85) 16%, rgba(168,90,44,0.85) 84%, transparent 100%);
+  z-index: 1;
+}
+/* ── Page-load hero reveal (config.revealOnLoad) ──────────────
+   On load the photo opens from a centered clip-path window to full-bleed while a
+   zoom layer scales 1.6→1 — a one-shot CSS entrance (no scroll, no JS). The hero
+   stays a normal full-viewport section. ── */
+.mw-hero--reveal .mw-hero__photo-wrap {
+  top: 0;
+  height: 100%;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  animation: mw-hero-clip 1.8s cubic-bezier(0.65, 0, 0.35, 1) both;
+  will-change: clip-path;
+}
+.mw-hero--reveal .mw-hero__photo-zoom {
+  position: absolute;
+  inset: 0;
+  transform-origin: center;
+  animation: mw-hero-open 1.8s cubic-bezier(0.65, 0, 0.35, 1) both;
+  will-change: transform;
+}
+/* The photo's own load-zoom is redundant here — the zoom layer owns the entrance;
+   keep the resting 1.06 scale it would have settled to. */
+.mw-hero--reveal .mw-hero__photo { animation: none; transform: scale(1.06); }
+@keyframes mw-hero-clip {
+  from { clip-path: polygon(25% 25%, 75% 25%, 75% 75%, 25% 75%); }
+  to   { clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%); }
+}
+@keyframes mw-hero-open {
+  from { transform: scale(1.6); }
+  to   { transform: scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-hero--reveal .mw-hero__photo-wrap { animation: none; clip-path: none; }
+  .mw-hero--reveal .mw-hero__photo-zoom { animation: none; transform: none; }
+}
+
+.mw-hero__inner {
+  --mw-hero-copy-w: 960px;
+  --mw-hero-copy-gap: 28px;
+  --mw-hero-left-bottom-pad: clamp(72px, 9vh, 105px);
+  position: relative;
+  z-index: 2;
+  flex: 1 1 0;
+  height: 100%;
+  max-height: 100%;
+  box-sizing: border-box;
+  min-height: 0;
+  /* 1560 content width at wide viewports, with 24px gutters at viewports < 1608. */
+  width: min(100% - clamp(48px, 8vw, 144px), 1560px);
+  margin-inline: auto;
+  padding-block: 0 var(--mw-hero-left-bottom-pad);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  container-type: inline-size;
+}
+.mw-hero__article {
+  text-align: center;
+  white-space: nowrap;
+}
+.mw-hero__title {
+  min-width: 0;
+  font-family: var(--font-condensed), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  font-size: clamp(56px, 8.5vw, 152px);
+  line-height: 0.78;
+  letter-spacing: 0.002em;
+  color: #fff;
+  margin: 0;
+  text-transform: uppercase;
+}
+/* ── Hero entrance choreography — kinetic type + staggered fades.
+   Headline lines mask-reveal upward; mark, lead and CTAs fade up after.
+   CSS-only, runs once on load (the hero is above the fold). The
+   reduced-motion off-switch is at the end of this block. ── */
+.mw-hero__line {
+  display: block;
+  overflow: hidden;
+  padding-right: 0.35em;
+  padding-bottom: 0.12em;
+  margin-right: -0.35em;
+  margin-bottom: -0.12em;
+}
+.mw-hero__title .mw-hero__line:nth-child(3) {
+  overflow: visible;
+}
+.mw-hero__line-in { display: block; transform: translateY(116%); animation: mw-hero-rise 0.95s cubic-bezier(.16, .84, .3, 1) both; }
+.mw-hero__portrait-break { display: none; }
+.mw-hero__title .mw-hero__line:nth-child(1) .mw-hero__line-in { animation-delay: 0.45s; }
+.mw-hero__title .mw-hero__line:nth-child(2) .mw-hero__line-in { animation-delay: 0.57s; }
+.mw-hero__title .mw-hero__line:nth-child(3) .mw-hero__line-in { animation-delay: 0.69s; }
+.mw-hero__lead { animation: mw-hero-fade 0.8s ease 0.95s both; }
+.mw-hero__ctas,
+.mw-hero__article { animation: mw-hero-fade-in-place 0.8s ease 1.08s both; }
+@keyframes mw-hero-rise { from { transform: translateY(116%); } to { transform: translateY(0); } }
+@keyframes mw-hero-fade { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes mw-hero-fade-in-place { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .mw-hero__photo,
+  .mw-hero__line-in,
+  .mw-hero__lead,
+  .mw-hero__ctas,
+  .mw-hero__article { animation: none; }
+  .mw-hero__line-in { transform: none; }
+}
+/* Hero period: use a glyph instead of a drawn box so it aligns and wraps like text. */
+.mw-hero__stop {
+  display: inline-block;
+  width: auto;
+  height: auto;
+  background: none;
+  color: var(--c-accent);
+  margin-left: 0.02em;
+  font-family: Bahnschrift, "Arial Black", var(--font-condensed), sans-serif;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  vertical-align: baseline;
+  text-transform: none;
+}
+.mw-hero__stop::before {
+  content: ".";
+}
+/* Glue the last word of a heading to its trailing stop-square so the square can
+   never wrap onto its own line (a word-joiner doesn't suppress the soft-wrap
+   opportunity around an inline-block box, so nowrap is required). */
+.mw-nobr { white-space: nowrap; }
+/* Square period stamp for h1/h2 display headings — the same brand mark as the hero, sized in em so it scales with each heading. */
+.mw-stop {
+  display: inline-block;
+  width: 0.16em;
+  height: 0.16em;
+  background: var(--c-accent);
+  vertical-align: baseline;
+  margin-left: 0.04em;
+}
+
+/* Rotating phrase slot. Inline-block so it can sit next to static text like "in <cycle>". A hidden sizer reserves the width of the longest phrase so the line doesn't shrink/expand when the active phrase changes. */
+.mw-hero__cycle {
+  position: relative;
+  display: inline-block;
+  vertical-align: baseline;
+}
+.mw-hero__cycle-sizer {
+  visibility: hidden;
+  display: inline-block;
+  white-space: pre;
+  pointer-events: none;
+}
+.mw-hero__cycle-item {
+  position: absolute;
+  left: 0;
+  top: 0;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(14%);
+  transition: opacity 680ms cubic-bezier(.2,.7,.2,1), transform 680ms cubic-bezier(.2,.7,.2,1);
+  will-change: opacity, transform;
+}
+.mw-hero__cycle-item.is-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+.mw-hero__cycle-item--accent {
+  color: var(--c-accent);
+}
+/* No auto-appended period — the period lives on the static "waste disposal." line beneath the cycle. */
+@media (prefers-reduced-motion: reduce) {
+  .mw-hero__cycle-item {
+    transition: none;
+    transform: none;
+  }
+}
+.mw-hero__lead {
+  font-family: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(17px, 1.3vw, 21px);
+  line-height: 1.55;
+  max-width: 80%;
+  color: rgba(245, 230, 203, 0.84);
+  margin: 0;
+}
+.mw-hero__copy-main {
+  flex: 1 1 0;
+  width: min(var(--mw-hero-copy-w), 100%);
+  max-width: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--mw-hero-copy-gap);
+}
+.mw-hero__action-row {
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  /* Span the full inner (body-content) width — only the copy column is
+     constrained to --mw-hero-copy-w, so the article tag pins to the far
+     right edge of the content rather than the 960px copy measure. */
+  width: 100%;
+  max-width: 100%;
+}
+.mw-hero__ctas {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: nowrap;
+  gap: 16px;
+  justify-content: flex-start;
+  align-items: center;
+}
+.mw-hero__ctas .mw-cta {
+  box-sizing: border-box;
+  min-height: 65px;
+}
+.mw-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  font: inherit;
+  cursor: pointer;
+  border: 0;
+  appearance: none;
+  transition: transform 180ms ease, background 220ms ease, border-color 220ms ease, color 220ms ease;
+}
+.mw-cta:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 4px;
+}
+.mw-cta--solid {
+  background: var(--c-accent);
+  color: #fff;
+  padding: 18px 28px;
+  border: 1px solid transparent;
+  font-family: var(--font-plex-sans), sans-serif;
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: 0.005em;
+  /* Square button — echoes the stamp mark. */
+  border-radius: 0;
+}
+.mw-cta--solid:hover { background: var(--c-accent-2); transform: translateY(-1px); }
+/* Hero-only: frame the "Talk to Miller" solid button with a thin
+   terracotta border + gap, sized so the outer frame matches the
+   24/7 ghost button's outer height. Solid button padding is
+   reduced from 18px to 10px so the framed group reads as the same
+   height as the ghost. */
+.mw-hero__ctas .mw-cta--solid {
+  border: 1px solid var(--c-accent);
+  padding-block: 18px;
+  outline: 0;
+  background-color: transparent;
+  background:
+    linear-gradient(var(--c-accent), var(--c-accent)) center / calc(100% - 10px) calc(100% - 10px) no-repeat;
+}
+.mw-hero__ctas .mw-cta--solid:hover {
+  border-color: var(--c-accent-2);
+  background-color: transparent;
+  background:
+    linear-gradient(var(--c-accent-2), var(--c-accent-2)) center / calc(100% - 10px) calc(100% - 10px) no-repeat;
+}
+.mw-cta--ghost {
+  background: transparent;
+  color: var(--c-on-navy);
+  padding: 14px 22px;
+  border: 1px solid rgba(245, 230, 203, 0.24);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  border-radius: 0;
+}
+.mw-cta--ghost:hover { border-color: var(--c-accent); color: #fff; }
+.mw-cta__sup {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(245, 230, 203, 0.62);
+}
+.mw-cta__num {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  font-variant-numeric: tabular-nums;
+}
+/* Article number tag — small mono caption pinned to the lower-right of the hero. The first numbered article: this is what makes the page read as a document. */
+.mw-hero__article {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  /* Tightened from 0.2em so the one-line, dot-separated tag fits centered under
+     the logo across desktop widths without overflowing the viewport. */
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(245, 230, 203, 0.5);
+  margin: 0;
+}
+.mw-hero__article strong {
+  color: var(--c-accent);
+  font-weight: 500;
+}
+.mw-hero__title {
+  width: 100%;
+  max-width: 100%;
+  font-size: 132px;
+}
+.mw-hero__title .mw-hero__line-in {
+  white-space: nowrap;
+}
+.mw-hero__lead {
+  width: 80%;
+  max-width: 80%;
+  font-size: 21px;
+}
+.mw-hero__article {
+  flex: 0 0 auto;
+  align-self: flex-end;
+  width: max-content;
+  max-width: 100%;
+  text-align: left;
+}
+.mw-hero__article strong,
+.mw-hero__article-rest {
+  white-space: nowrap;
+}
+.mw-hero__article-short {
+  display: none;
+}
+@media (max-width: 1460px) {
+  .mw-hero__inner {
+    --mw-hero-copy-gap: clamp(24px, calc(0.8vw + 16.32px), 28px);
+  }
+
+  .mw-hero__title {
+    font-size: clamp(58px, calc(7.2vw + 26.88px), 132px);
+  }
+
+  .mw-hero__lead {
+    font-size: clamp(16px, calc(0.4vw + 15.16px), 21px);
+  }
+}
+@media (orientation: portrait) {
+  .mw-hero__portrait-break {
+    display: block;
+  }
+
+  .mw-hero__title {
+    font-size: clamp(84px, 13vw, 132px);
+    line-height: 0.82;
+  }
+
+  .mw-hero__lead {
+    line-height: 1.48;
+  }
+}
+@container (max-width: 760px) {
+  .mw-hero__action-row {
+    display: contents;
+  }
+
+  /* Wrapped layout (tag sits above the header): tag pinned to the top with
+     breathing room, the copy block vertically centered in the space between the
+     bottom of the tag and the top of the buttons, buttons pinned to the bottom
+     (inner's bottom padding). margin-block:auto on the copy splits the free
+     space equally top/bottom; the tag's margin-bottom is 0 so that centering is
+     symmetric about the gap. The copy's internal title↔lead spacing stays at the
+     font-scaled --mw-hero-copy-gap clamp (it uses `gap`, not space-between). */
+  .mw-hero__article {
+    order: 1;
+    width: min(var(--mw-hero-copy-w), 100%);
+    max-width: 100%;
+    margin-top: clamp(28px, 4vh, 48px);
+    margin-bottom: 0;
+    text-align: left;
+  }
+
+  .mw-hero__copy-main {
+    order: 2;
+    flex: 0 0 auto;
+    margin-block: auto;
+  }
+
+  .mw-hero__ctas {
+    order: 3;
+  }
+}
+@media (max-width: 460px) {
+  .mw-hero__inner {
+    --mw-hero-copy-gap: clamp(22px, 6vw, 30px);
+    width: calc(100% - 48px);
+    /* Top spacing comes from the tag's margin-top (set in the @container block)
+       so it stays consistent with the other wrapped viewports; only the bottom
+       padding is owned here. */
+    padding-block: 0 52px;
+  }
+
+  .mw-hero__copy-main {
+    flex: 0 0 auto;
+    margin-block: auto;
+  }
+
+  .mw-hero__action-row {
+    display: contents;
+  }
+
+  .mw-hero__title {
+    font-size: clamp(58px, 17vw, 84px);
+    line-height: 0.86;
+    letter-spacing: -0.004em;
+    text-shadow: 0 1px 18px rgba(28, 18, 11, 0.42);
+  }
+  /* "waste disposal" may wrap on phone; keep disposal + stop glued. */
+  .mw-hero__title .mw-hero__line:nth-child(3) { overflow: visible; }
+  .mw-hero__title .mw-hero__line:nth-child(3) .mw-hero__line-in { white-space: normal; }
+  /* Lead: warmer/brighter cream + tighter measure so the line length is
+     comfortable on the narrow column, with a subtle shadow for legibility over
+     the photo. */
+  .mw-hero__lead {
+    font-size: 16px;
+    line-height: 1.5;
+    width: 80%;
+    max-width: 80%;
+    color: rgba(247, 234, 210, 0.92);
+    text-shadow: 0 1px 10px rgba(28, 18, 11, 0.5);
+  }
+  .mw-hero::after { left: 12px; }
+  .mw-hero__article {
+    order: 1;
+    width: 100%;
+    max-width: 100%;
+    font-size: 10.5px;
+    letter-spacing: 0.05em;
+    text-align: left;
+    white-space: normal;
+    text-wrap: balance;
+  }
+
+  .mw-hero__article-full {
+    display: none;
+  }
+
+  .mw-hero__article-short {
+    display: inline;
+  }
+
+  .mw-hero__article-rest {
+    display: inline;
+    white-space: nowrap;
+  }
+
+  .mw-hero__article-dot {
+    display: inline;
+  }
+
+  .mw-hero__ctas {
+    order: 3;
+    width: 100%;
+    max-width: 100%;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .mw-hero__ctas .mw-cta {
+    width: 100%;
+    flex: 0 0 auto;
+    min-width: 0;
+    min-height: 56px;
+    justify-content: center;
+  }
+  .mw-hero__ctas .mw-cta--ghost {
+    align-items: center;
+    text-align: center;
+  }
+  .mw-hero__ctas .mw-cta--solid {
+    padding: 8px clamp(8px, 2.5vw, 14px);
+    font-size: clamp(11.5px, 3vw, 13.5px);
+    outline-offset: 2px;
+    white-space: nowrap;
+  }
+  .mw-hero__ctas .mw-cta--ghost {
+    padding: 10px clamp(8px, 2.5vw, 12px);
+    border-color: rgba(245, 230, 203, 0.34);
+  }
+  /* Brighten the emergency label one notch so the 24/7 line earns its weight. */
+  .mw-hero__ctas .mw-cta--ghost .mw-cta__sup {
+    font-size: clamp(8.5px, 2.4vw, 9.5px);
+    letter-spacing: 0.14em;
+    color: rgba(245, 230, 203, 0.78);
+  }
+  .mw-hero__ctas .mw-cta__num { font-size: clamp(12px, 3.4vw, 14.5px); }
+}

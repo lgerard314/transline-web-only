@@ -1,0 +1,835 @@
+/* home/facility.css — MediaSplit01 · components-v2/06_sections/splits/media-split-01.jsx */
+/* ─────────────────────────────────────────────────────────────────
+   Facility v2 — copy redesign. Photo-led: a large aerial photo on
+   the right with a smaller plaque photo overlapping its bottom-left
+   corner; a content panel on the left with title, lead, stats, and
+   CTAs. Capabilities below as a clean chip ribbon.
+   ───────────────────────────────────────────────────────────────── */
+.mw-fac2 {
+  position: relative;
+  /* Warm surface on all breakpoints — desktop entrance is column content sliding into place. */
+  background: var(--c-surface-warm);
+  padding-block: clamp(64px, 6.5vw, 112px);
+  color: var(--c-ink);
+  overflow: clip;
+  isolation: isolate;
+}
+/* Faint 49° paper-grain wash — the shared section motif. */
+.mw-fac2::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+/* Vertical text stack: field-line → title → lead → actions → spec band →
+   capabilities. The photo reel runs below it as a full-bleed sibling. */
+.mw-fac2 > .mw-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(26px, 2.8vw, 44px);
+}
+.mw-fac2__head { display: block; margin-bottom: 0; }
+
+/* 45 / 55 two-column split: text content left, photo gallery right. */
+.mw-fac2__grid {
+  /* Right column bleeds past the content container to the viewport's right edge. */
+  --bleed-right: max(clamp(24px, 4vw, 72px), calc((100vw - 1560px) / 2));
+  display: grid;
+  grid-template-columns: minmax(0, 40fr) minmax(0, 60fr);
+  gap: clamp(32px, 4vw, 72px);
+  align-items: start;
+  margin-right: calc(-1 * var(--bleed-right));
+}
+.mw-fac2__left {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(24px, 3vw, 44px);
+}
+.mw-fac2__intro {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(18px, 2vw, 30px);
+}
+/* Hero mask-rise reveal, scroll-scrubbed: each part (eyebrow / header / body /
+   buttons) is clipped by an overflow-hidden mask and its inner element rises from
+   translateY(116%) -> 0 as --p 0 -> 1 (the gallery widget drives --p AFTER the photos
+   push down). Mirrors .mw-hero__line / mw-hero-rise. */
+.mw-fac2__rise { display: block; overflow: hidden; }
+.mw-fac2__rise-in {
+  display: block;
+  transform: translateY(calc((1 - var(--p, 1)) * 116%));
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-fac2__rise-in { transform: none; }
+}
+.mw-fac2__right { min-width: 0; align-self: start; }
+@media (max-width: 900px) {
+  .mw-fac2__grid { grid-template-columns: 1fr; gap: clamp(28px, 5vw, 40px); }
+}
+/* Field-head — manifest grammar on the light scheme: a
+   mono `stage —— field` document line above the condensed title, led by
+   a small clay diamond, with the rule filling the gap so the field name
+   parks at the right edge of the content column. */
+.mw-fac2__field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 clamp(18px, 2vw, 30px);
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+}
+.mw-fac2__field::before {
+  content: "";
+  width: 8.1px;
+  height: 8.1px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex: none;
+}
+.mw-fac2__field-rule {
+  flex: none;
+  width: 40px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.28;
+}
+.mw-fac2__title {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(38px, 4.6vw, 80px);
+  line-height: 0.92;
+  letter-spacing: -0.005em;
+  color: var(--c-accent);
+  text-transform: uppercase;
+  text-wrap: balance;
+  white-space: pre-line;
+}
+
+/* Split: content left, photo composition right */
+.mw-fac2__split {
+  display: grid;
+  grid-template-columns: minmax(0, 5.5fr) minmax(0, 6.5fr);
+  gap: clamp(40px, 5vw, 96px);
+  align-items: start;
+  margin-bottom: 0;
+}
+@media (max-width: 900px) {
+  .mw-fac2__split { grid-template-columns: 1fr; gap: 40px; }
+}
+
+.mw-fac2__content {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(24px, 2.4vw, 36px);
+}
+.mw-fac2__lead {
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(16px, 1.2vw, 19px);
+  line-height: 1.65;
+  color: var(--c-ink-2);
+  max-width: 52ch;
+}
+
+/* Stats — clean horizontal triplet, each with a number on top and a label below */
+.mw-fac2__figs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(20px, 2vw, 36px);
+  margin: 0;
+  padding-block: clamp(16px, 1.8vw, 26px);
+  border-top: 0.5px solid var(--c-line);
+  text-align: center;       /* centre each stat */
+}
+.mw-fac2__fig {
+  display: flex;
+  flex-direction: column;
+  align-items: center;      /* centre the label + value within the column */
+  gap: 8px;
+}
+/* Vertical hairline rules between figures — a refined "spec row". */
+.mw-fac2__fig + .mw-fac2__fig {
+  padding-left: clamp(16px, 1.8vw, 32px);
+  border-left: 0.5px solid var(--c-line);
+}
+.mw-fac2__fig-label {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+}
+.mw-fac2__fig-val {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.mw-fac2__fig-num {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(46px, 4.8vw, 78px);
+  line-height: 0.88;
+  letter-spacing: -0.01em;
+  color: var(--c-ink);
+  font-variant-numeric: tabular-nums;
+}
+.mw-fac2__fig-unit {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(13px, 0.95vw, 15px);
+  line-height: 1.3;
+  color: var(--c-ink-2);
+}
+/* Mobile: keep the spec row 3-up but scale the numerals down and tighten
+   the rules so "1996" doesn't crowd its column on narrow screens. */
+@media (max-width: 600px) {
+  .mw-fac2__figs { gap: clamp(10px, 3vw, 18px); padding-top: 12px; }
+  .mw-fac2__fig + .mw-fac2__fig { padding-left: clamp(10px, 3vw, 18px); }
+  .mw-fac2__fig-num { font-size: clamp(32px, 9.5vw, 44px); }
+}
+
+.mw-fac2__actions {
+  display: flex;
+  gap: clamp(16px, 1.6vw, 28px);
+  align-items: center;
+  flex-wrap: wrap;
+}
+.mw-fac2__about {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.1vw, 18px);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--c-accent-2);
+  text-decoration: none;
+  position: relative;
+  padding-bottom: 3px;
+  transition: color 0.22s ease;
+}
+/* Clay underline that draws in from the left on hover/focus. */
+.mw-fac2__about::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.42s cubic-bezier(.2, .7, .2, 1);
+}
+.mw-fac2__about:hover { color: var(--c-accent); }
+.mw-fac2__about:hover::after,
+.mw-fac2__about:focus-visible::after { transform: scaleX(1); }
+.mw-fac2__lbl-short { display: none; }
+
+/* Right column — the photo gallery with the 3 highlights (spec band)
+   stacked beneath it. */
+.mw-fac2__media-col {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 2vw, 32px);
+}
+
+/* Capabilities list — a plain small header over a single-column list whose
+   numbers use the original section's treatment: large, faded condensed
+   numerals (NumToken01 style) rather than small editorial indices. */
+.mw-fac2__caplist-block {
+  position: relative;
+}
+.mw-fac2__caplist-title {
+  margin: 0 0 clamp(10px, 1vw, 14px);
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.4vw, 19px);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--c-ink);
+}
+.mw-fac2__caplist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.mw-fac2__cap {
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 1.4vw, 20px);
+  padding: clamp(7px, 0.7vw, 10px) 0;
+  border-top: 0.5px solid var(--c-line);
+  transition: color 0.24s ease;
+}
+.mw-fac2__cap:first-child { border-top: 0; }
+/* The numbers from the original section — large, faded condensed numerals. */
+.mw-fac2__cap-idx {
+  flex: none;
+  width: clamp(34px, 2.8vw, 46px);
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(28px, 2.6vw, 40px);
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+  color: var(--c-accent);
+  opacity: 0.22;
+  font-variant-numeric: tabular-nums;
+  transition: opacity 0.24s ease;
+}
+.mw-fac2__cap-name {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(14px, 1vw, 16px);
+  line-height: 1.3;
+  color: var(--c-ink-2);
+  transition: color 0.24s ease;
+}
+.mw-fac2__cap:hover .mw-fac2__cap-idx { opacity: 0.5; }
+.mw-fac2__cap:hover .mw-fac2__cap-name { color: var(--c-ink); }
+
+/* Photo gallery — main photo (3:2) on top with a caption overlaid
+   at the bottom, then a framed thumbnail row below with a soft
+   surface background. Gaps are tightened so the gap above the
+   thumbs row matches the gap between thumbs. */
+.mw-fac2__media {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  /* Warm card framing the photos AND the highlights band. The photos sit at the top; the
+     highlights slide down out of the photos' bottom INTO the card below them (flush, no gap
+     between photos and the highlights band). */
+  background: var(--c-surface-warm);
+  border: 1px solid var(--c-line);
+  box-shadow: 0 28px 64px -34px rgba(42, 27, 18, 0.34);
+  padding: clamp(10px, 0.9vw, 16px);
+}
+.mw-fac2__photo-frame {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: var(--c-navy);
+  border: 1px solid var(--c-navy);
+  box-shadow: 0 24px 60px -28px rgba(42, 27, 18, 0.45);
+  margin: 0;
+  transition: border-color 240ms ease;
+}
+.mw-fac2__photo-frame::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: var(--c-accent);
+  transition: width 480ms cubic-bezier(.2,.7,.2,1);
+  z-index: 3;
+}
+.mw-fac2__photo-frame:hover { border-color: var(--c-accent); }
+.mw-fac2__photo-frame:hover::before { width: 100%; }
+.mw-fac2__photo-main {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  animation: mw-fac2-fade-in 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+/* opacity-only so it never sets `transform` (which the photo parallax owns) */
+@keyframes mw-fac2-fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-fac2__photo-main { animation: none; }
+}
+
+/* Caption overlay — sits at the bottom of the main photo with a soft
+   dark gradient for legibility. Small mono uppercase with a terracotta
+   diamond accent. Re-fades on photo change via the keyed remount. */
+.mw-fac2__photo-cap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: clamp(40px, 4vw, 64px) clamp(14px, 1.4vw, 22px) clamp(12px, 1.2vw, 18px);
+  background: linear-gradient(to top, rgba(42, 27, 18, 0.78) 0%, rgba(42, 27, 18, 0.45) 60%, rgba(42, 27, 18, 0) 100%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--c-on-navy);
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: clamp(11px, 0.9vw, 13px);
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  pointer-events: none;
+  animation: mw-fac2-fade-in 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.mw-fac2__photo-cap-mark {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-fac2__photo-cap { animation: none; }
+}
+
+/* Thumbnail rail — wrapped in a soft surface panel with its own
+   border so it reads as a single picker control. */
+.mw-fac2__thumbs {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: clamp(3px, 0.3vw, 5px);
+  padding: clamp(3px, 0.3vw, 5px);
+  background: var(--c-navy);
+  border: 1px solid var(--c-navy);
+  border-top: 0;
+}
+@media (max-width: 700px) {
+  .mw-fac2__thumbs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  /* Short labels so the button + story link fit on one row. */
+  .mw-fac2__lbl-long { display: none; }
+  .mw-fac2__lbl-short { display: inline; }
+  .mw-fac2__actions { flex-wrap: nowrap; gap: clamp(14px, 4vw, 22px); }
+  /* Slightly larger capabilities heading on mobile. */
+  .mw-fac2__caps-title { font-size: 19px; }
+}
+.mw-fac2__thumb {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  border: 1px solid var(--c-line);
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  background: var(--c-navy);
+  overflow: hidden;
+  isolation: isolate;
+  opacity: 0.7;
+  transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.2, 0.7, 0.2, 1), border-color 0.22s ease;
+}
+.mw-fac2__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* Expanding top-accent bar — mirrors the primary photo frame hover. */
+.mw-fac2__thumb::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: var(--c-accent);
+  transition: width 360ms cubic-bezier(.2, .7, .2, 1);
+  z-index: 3;
+}
+.mw-fac2__thumb:hover {
+  opacity: 0.95;
+  transform: translateY(-2px);
+  border-color: var(--c-accent);
+}
+.mw-fac2__thumb:hover::before { width: 100%; }
+.mw-fac2__thumb.is-active {
+  opacity: 1;
+  border-color: var(--c-accent);
+}
+.mw-fac2__thumb.is-active::after {
+  content: "";
+  position: absolute;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  height: 3px;
+  background: var(--c-accent);
+}
+.mw-fac2__thumb:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 2px;
+}
+
+/* Capability chip ribbon — no divider. Title carries a terracotta
+   diamond accent (matching the section eyebrow pattern) so the
+   sub-section feels integrated with the rest of the VBEC block. */
+/* Onsite capabilities — numbered editorial-industrial grid. Each
+   tile carries a huge faded numeral, a small mono "CAP·NN" callout,
+   the capability name in condensed display, and a top accent bar
+   that expands left→right on hover. Reads like a spec sheet rather
+   than a tag cloud. */
+.mw-fac2__caps {
+  position: relative;
+  padding-top: 0;
+  display: grid;
+  gap: clamp(14px, 1.5vw, 24px);
+}
+.mw-fac2__caps::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(-1 * clamp(21px, 2.1vw, 36px));
+  height: 1px;
+  background: var(--c-line);
+}
+.mw-fac2__caps-head {
+  display: block;
+}
+.mw-fac2__caps-title {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-size: clamp(16px, 1.7vw, 30px);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: 0.005em;
+  color: var(--c-ink);
+  white-space: nowrap;
+}
+.mw-fac2__caps-mark {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+.mw-fac2__caps-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--c-line);
+  border: 1px solid var(--c-line);
+}
+@media (max-width: 1100px) {
+  .mw-fac2__caps-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  .mw-fac2__caps-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 480px) {
+  .mw-fac2__caps-grid { grid-template-columns: 1fr; }
+}
+.mw-fac2__caps-item {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--c-bg);
+  min-height: 0;
+  padding: clamp(10px, 0.85vw, 14px);
+  display: flex;
+  align-items: flex-end;
+  transition: background 0.32s ease;
+}
+.mw-fac2__caps-item:hover { background: var(--c-surface-warm); }
+.mw-fac2__caps-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: var(--c-accent);
+  transition: width 0.42s cubic-bezier(0.2, 0.7, 0.2, 1);
+  z-index: 3;
+}
+.mw-fac2__caps-item:hover::before { width: 100%; }
+.mw-fac2__caps-num {
+  position: absolute;
+  right: -6px;
+  bottom: -14px;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(60px, 5.5vw, 96px);
+  line-height: 0.85;
+  letter-spacing: -0.02em;
+  color: var(--c-accent);
+  opacity: 0.10;
+  pointer-events: none;
+  z-index: 0;
+  user-select: none;
+  transition: opacity 0.32s ease, transform 0.42s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.mw-fac2__caps-item:hover .mw-fac2__caps-num {
+  opacity: 0.20;
+  transform: translate(-3px, -3px);
+}
+.mw-fac2__caps-name {
+  margin: 0;
+  align-self: end;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(17px, 1.32vw, 22px);
+  line-height: 1.15;
+  white-space: normal;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--c-ink);
+  position: relative;
+  z-index: 2;
+  transition: color 0.32s ease, transform 0.42s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.mw-fac2__caps-item:hover .mw-fac2__caps-name {
+  color: var(--c-accent);
+  transform: translateY(-2px);
+}
+/* At narrow widths (4-col, 2-col), the 7th item lands alone in a
+   trailing slot. Span it across the row so it doesn't read as
+   incomplete. */
+@media (max-width: 1100px) {
+  .mw-fac2__caps-grid > .mw-fac2__caps-item:last-child { grid-column: span 2; }
+}
+@media (max-width: 760px) {
+  .mw-fac2__caps-grid > .mw-fac2__caps-item:last-child { grid-column: span 2; }
+}
+@media (max-width: 480px) {
+  .mw-fac2__caps-grid > .mw-fac2__caps-item:last-child { grid-column: auto; }
+}
+/* In the new vertical flow the caps block is separated by the inner flex gap,
+   so the original above-block divider hairline is redundant — drop it. */
+.mw-fac2__caps::before { display: none; }
+
+/* ─────────────────────────────────────────────────────────────────
+   Facility image accordion — ImageAccordion01 (.mw-iacc). A full-bleed
+   hover-expand row that starts under the content column and runs to the
+   RIGHT edge of the screen: the open panel fills the band, the rest collapse
+   to clay slivers carrying a vertical caption spine. CSS-only motion
+   (flex-grow desktop / min-height mobile); open = hover / focus / tap.
+   ───────────────────────────────────────────────────────────────── */
+.mw-iacc {
+  /* Viewport edge → content column's left edge (mirrors .mw-inner:
+     min(100% - clamp(48px,8vw,144px), 1560px), centred). */
+  --reel-inset: max(clamp(24px, 4vw, 72px), calc((100% - 1560px) / 2));
+  /* Row height. The open panel is a 16:9 photo → its width = --iacc-h * 16/9. */
+  --iacc-h: clamp(340px, 26vw, 460px);
+  position: relative;
+  z-index: 1;
+  margin-block: 0;
+}
+/* (no container backdrop — each panel is its own clay plate) */
+.mw-iacc__track {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  /* Right-align the row so the rightmost panel meets the screen edge; the row
+     then extends leftward by its natural width (open 16:9 photo + slivers). */
+  justify-content: flex-end;
+  gap: clamp(2.5px, 0.25vw, 4.5px);
+  height: var(--iacc-h);
+  padding: 0;
+}
+.mw-iacc__panel {
+  position: relative;
+  /* Scroll-driven entrance (the page's plate gesture): the panel RISES + fades in as
+     --p scrubs 0 -> 1, while the photo's clip window opens + zoom-settles below. */
+  transform: translateY(calc((1 - var(--p, 1)) * 72px));
+  opacity: var(--p, 1);
+  flex: 1 1 0; /* slivers fill the remainder to the right edge */
+  min-width: 0;
+  overflow: hidden;
+  isolation: isolate;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--c-navy);
+  background: var(--c-navy);
+  color: var(--c-on-navy);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  box-shadow: 0 18px 44px -30px rgba(42, 27, 18, 0.5);
+  transition: flex-grow 0.62s cubic-bezier(0.2, 0.7, 0.2, 1), flex-basis 0.62s cubic-bezier(0.2, 0.7, 0.2, 1), border-color 0.4s ease;
+}
+.mw-iacc__panel.is-open { flex: 0 0 calc(var(--iacc-h) * 3 / 2); border-color: var(--c-accent); }
+.mw-iacc__panel:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 3px; z-index: 5; }
+
+/* Image stack (the hero/history technique): a clip window → a zoom layer that
+   settles on entrance → the photo, which carries its own parallax drift. Three
+   separate transform layers so the entrance zoom and the scroll parallax never
+   fight (mirrors .mw-hero__photo-wrap and .mw-ten3__plate-window/-zoom). */
+.mw-iacc__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  /* Container reveal: the clay frame shows first, then the clip window opens
+     (inset 16% -> 0) as --p scrubs, so the photo expands into the frame. */
+  clip-path: inset(calc((1 - var(--p, 1)) * 28%));
+}
+.mw-iacc__zoom {
+  position: absolute;
+  inset: 0;
+  transform-origin: center;
+  will-change: transform;
+  /* Entrance zoom-settle: the photo eases from scale 1.22 -> 1 as --p scrubs. */
+  transform: scale(calc(1 + (1 - var(--p, 1)) * 0.45));
+}
+/* (the per-photo brown matte was removed — the whole container is dark brown now) */
+.mw-iacc__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  /* Stronger parallax headroom than the page default (1.12) — near the history
+     plate (1.3) — so the diagonal drift (data-parallax-x) reads clearly. */
+  --px-scale: 1.34;
+  filter: brightness(0.74) saturate(0.94);
+  transition: filter 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.mw-iacc__panel.is-open .mw-iacc__img { filter: brightness(1) saturate(1.02); }
+/* VBEC — mouse parallax on the open panel's zoom layer (--hover-x/y from the widget).
+   Stacks with scroll parallax on the nested <img> so the two never fight. */
+.mw-iacc--hover-px .mw-iacc__panel.is-open .mw-iacc__zoom {
+  transform: translate3d(var(--hover-x, 0px), var(--hover-y, 0px), 0)
+    scale(calc(1 + (1 - var(--p, 1)) * 0.45));
+  transition: transform 0.12s ease-out;
+}
+
+.mw-iacc__veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  /* Light services-card-style wash (rgba(42,27,18) tone) — just enough at the
+     bottom to seat the caption; the photo stays open up top. */
+  background: linear-gradient(to top, rgba(42, 27, 18, 0.46) 0%, rgba(42, 27, 18, 0.12) 58%, rgba(42, 27, 18, 0.05) 100%);
+  transition: background 0.6s ease;
+}
+.mw-iacc__panel.is-open .mw-iacc__veil {
+  background: linear-gradient(to top, rgba(42, 27, 18, 0.62) 0%, rgba(42, 27, 18, 0.14) 32%, rgba(42, 27, 18, 0) 58%);
+}
+
+/* (active top accent bar removed per design) */
+
+.mw-iacc__num {
+  position: absolute;
+  top: clamp(12px, 1.1vw, 18px);
+  right: clamp(12px, 1.1vw, 18px);
+  z-index: 3;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: clamp(11px, 0.85vw, 13px);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--c-on-navy);
+  opacity: 0.82;
+}
+
+/* Collapsed caption — climbs the sliver; hidden on the open panel. */
+.mw-iacc__spine {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(16px, 1.4vw, 24px);
+  z-index: 3;
+  writing-mode: vertical-rl;
+  transform: translateX(-50%) rotate(180deg);
+  transform-origin: center;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: clamp(10px, 0.78vw, 12px);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--c-on-navy);
+  opacity: 0.92;
+  transition: opacity 0.4s ease;
+}
+.mw-iacc__panel.is-open .mw-iacc__spine { opacity: 0; }
+
+/* Open caption — horizontal, bottom-left, with the clay diamond mark. */
+.mw-iacc__cap {
+  position: absolute;
+  left: clamp(16px, 1.5vw, 26px);
+  right: clamp(16px, 1.5vw, 26px);
+  bottom: clamp(16px, 1.5vw, 24px);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  color: var(--c-on-navy);
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: clamp(11px, 0.95vw, 14px);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.45s ease 0.08s, transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) 0.08s;
+  pointer-events: none;
+}
+.mw-iacc__panel.is-open .mw-iacc__cap { opacity: 1; transform: none; }
+.mw-iacc__cap-mark {
+  flex: none;
+  width: 9px;
+  height: 9px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+}
+.mw-iacc__cap-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+/* No veil overlay on the photos — caption legibility comes from a soft
+   text-shadow instead of a gradient wash. */
+.mw-iacc__cap,
+.mw-iacc__spine { text-shadow: 0 1px 4px rgba(20, 12, 6, 0.6), 0 0 2px rgba(20, 12, 6, 0.45); }
+
+/* Mobile (<=900px) — vertical accordion; collapsed rows show a centred label. */
+@media (max-width: 900px) {
+  .mw-iacc__track {
+    flex-direction: column;
+    height: auto;
+    gap: clamp(7px, 1.6vw, 11px);
+    padding: 0;
+  }
+  .mw-iacc__panel {
+    flex: none;
+    width: 100%;
+    min-height: clamp(58px, 13vw, 78px);
+    transition: min-height 0.55s cubic-bezier(0.2, 0.7, 0.2, 1), border-color 0.4s ease;
+  }
+  .mw-iacc__panel.is-open { flex: none; min-height: clamp(280px, 64vw, 380px); }
+  .mw-iacc__spine {
+    writing-mode: horizontal-tb;
+    left: clamp(16px, 4.5vw, 24px);
+    bottom: auto;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    letter-spacing: 0.16em;
+  }
+  .mw-iacc__num { top: 50%; transform: translateY(-50%); }
+  .mw-iacc__panel.is-open .mw-iacc__num { top: clamp(12px, 3vw, 16px); transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-iacc__panel,
+  .mw-iacc__img,
+  .mw-iacc__veil,
+  .mw-iacc__bar,
+  .mw-iacc__cap,
+  .mw-iacc__spine { transition: none !important; }
+  .mw-iacc__panel { transform: none !important; opacity: 1 !important; }
+  .mw-iacc__zoom { transform: none !important; }
+  .mw-iacc__media { clip-path: none !important; }
+}
+

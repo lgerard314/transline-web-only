@@ -26,21 +26,6 @@ test("config: scheme recolors the token-driven surface (resolved color)", async 
   expect(surface).toBe(bg);
 });
 
-test("config: reverse layout flips facility split above breakpoint", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.goto(`${BASE}/template-testing-variants`);
-  const dir = await page.evaluate(() => getComputedStyle(document.querySelector(".mw-fac2__split[data-layout='reverse']")).direction);
-  expect(dir).toBe("rtl");
-  // Prove the columns visually swapped: content now sits to the RIGHT of the media.
-  const { contentLeft, mediaLeft } = await page.evaluate(() => {
-    const split = document.querySelector(".mw-fac2__split[data-layout='reverse']");
-    const contentLeft = split.querySelector(".mw-fac2__content").getBoundingClientRect().left;
-    const mediaLeft = split.querySelector(".mw-fac2__media").getBoundingClientRect().left;
-    return { contentLeft, mediaLeft };
-  });
-  expect(contentLeft).toBeGreaterThan(mediaLeft);
-});
-
 test("dark scheme: section surface + text invert to walnut/cream", async ({ page }) => {
   await page.goto(`${BASE}/template-testing-variants`);
   // history section rendered with scheme:"dark"
@@ -51,11 +36,11 @@ test("dark scheme: section surface + text invert to walnut/cream", async ({ page
   expect(surface).toBe(navy);   // token rebind took effect on the section subtree
 });
 
-test("dark scheme: history milestone body is no longer white", async ({ page }) => {
+test("dark scheme: history milestone copy uses reparented ink tokens", async ({ page }) => {
   await page.goto(`${BASE}/template-testing-variants`);
-  const body = page.locator('.mw-ten3[data-scheme="dark"] .mw-ten3__milestone-body').first();
-  await expect(body).toBeAttached();
-  const bg = await body.evaluate((el) => getComputedStyle(el).backgroundColor);
-  // not white: rgb(255,255,255) / rgba(255,255,255,*) must NOT be the resolved bg
-  expect(bg).not.toMatch(/255,\s*255,\s*255/);
+  const copy = page.locator('.mw-ten3[data-scheme="dark"] .mw-ten3__ibody').first();
+  await expect(copy).toBeAttached();
+  const color = await copy.evaluate((el) => getComputedStyle(el).color);
+  // Cream ink on walnut (`--c-ink-2`), not a hardcoded light-surface black.
+  expect(color).toMatch(/250,\s*243,\s*229|245,\s*230,\s*203/);
 });

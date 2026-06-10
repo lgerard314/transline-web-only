@@ -1,0 +1,841 @@
+/* home/services.css — RosterCollage02 · components-v2/06_sections/grids/roster-collage-02.jsx */
+/* ════════════════════════════════════════════════════════════
+   ROSTER COLLAGE V2 (roster-collage-02) — isolated editable COPY of the home
+   "services" template. Namespaced .mw-roster2* / --r2-* so edits here never
+   touch the original .mw-roster* block in template-gallery/home-legacy.css.
+   Only the home page (/) renders this, via RosterCollage02.
+   ════════════════════════════════════════════════════════════ */
+.mw-roster2 {
+  position: relative;
+  background: var(--c-surface-warm);
+  padding-block: clamp(64px, 6.5vw, 112px);
+  /* Single source of truth for the collage spacing: the grid's row/column gap AND the
+     pinned-window strip at the top & bottom of the screen both use this, so the framing
+     gap is always exactly one card-gap. */
+  --r2-gap: clamp(10px, 1vw, 18px);
+  /* Height of the fixed site topbar in its collapsed (past-hero) state — 56px inner + 1px
+     border. The collage only ever pins well past the hero, so the topbar is always in this
+     state here; the window pins below it so the top gap strip shows beneath the header, not
+     behind it. If the topbar chrome height changes, update this. */
+  --r2-chrome: 57px;
+  /* NOTE: no `overflow: clip/hidden` here — it would establish a scroll container
+     that traps the sibling-sticky rail. Children stay within the section width, and
+     the grain wash (::before, inset:0) and parallax don't overflow horizontally. */
+  isolation: isolate;
+}
+.mw-roster2::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+  pointer-events: none;
+  z-index: 0;
+}
+.mw-roster2 > .mw-inner { position: relative; z-index: 1; }
+
+.mw-roster2__head { margin-bottom: clamp(40px, 4vw, 64px); }
+.mw-roster2__title {
+  margin-top: 28px;
+  max-width: none;
+  font-size: clamp(26px, 4.4vw, 72px);
+  line-height: 0.94;
+}
+.mw-roster2__title-line { display: block; }
+
+/* Per-element header reveal: the eyebrow, title and intro each fade up on their own (driven by
+   headRevealed state → .is-head-in) the moment they fully fit on screen, and reset when they
+   don't — so scrolling back up past one re-runs it. Transition (not a one-shot animation) so it
+   reverses smoothly. */
+.mw-roster2__eyebrow,
+.mw-roster2__title,
+.mw-roster2__lead {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 520ms ease, transform 520ms cubic-bezier(.16, .84, .3, 1);
+}
+.mw-roster2__eyebrow { display: inline-block; } /* a bare <span> ignores transform otherwise */
+.mw-roster2__eyebrow.is-head-in,
+.mw-roster2__title.is-head-in,
+.mw-roster2__lead.is-head-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Signature beat: when the TITLE reveals, the clay stop-period stamps in last — held hidden
+   through the title's fade, then a quick scale-pop with a tiny overshoot, like a rubber stamp
+   pressing down. Re-runs each time the title re-reveals (the animation is tied to .is-head-in).
+   Scoped to this title so no other .mw-stop is touched; fill-mode `both` keeps it hidden during
+   the delay so it never flashes ahead of the headline. */
+@keyframes mw-roster2-stamp {
+  0%   { opacity: 0; transform: scale(0.2); }
+  55%  { opacity: 1; transform: scale(1.18); }
+  78%  { transform: scale(0.92); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.mw-roster2__title.is-head-in .mw-stop {
+  transform-origin: center;
+  animation: mw-roster2-stamp 420ms cubic-bezier(.22, .7, .3, 1.2) both;
+  animation-delay: 280ms;
+}
+
+.mw-roster2__layout {
+  display: grid;
+  /* list column (left) · collage column (right) */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.55fr);
+  gap: clamp(28px, 4vw, 76px);
+  align-items: start;
+  padding-top: 0;
+}
+
+/* ── LEFT · collage ───────────────────────────────────────── */
+/* Pin "track": JS sets its height to the grid's full height so the window below pins for
+   exactly the grid's overflow, then releases. position:relative anchors nothing special —
+   the sticky child measures against the section's scroll. */
+.mw-roster2__collage { position: relative; }
+/* The viewport-tall, clipped window the grid scrolls inside. Pinned with a one-card-gap
+   strip of section showing at the top and bottom of the screen. JS translates the inner
+   grid up 1:1 with scroll while this is stuck. */
+.mw-roster2__window {
+  position: sticky;
+  /* Pin BELOW the fixed topbar with a one-card-gap strip beneath it; the bottom edge leaves
+     the same one-card-gap at the very bottom of the screen. */
+  top: calc(var(--r2-chrome) + var(--r2-gap));
+  height: calc(100vh - var(--r2-chrome) - 2 * var(--r2-gap));
+  overflow: clip;
+}
+.mw-roster2__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* Identical row & column gaps — this is the gap the window strips mirror. */
+  gap: var(--r2-gap);
+  /* JS raises this only when the desktop hover-alignment targets need extra track length
+     for the final card rows. Scoped to this services template. */
+  padding-bottom: var(--r2-tail-pad, 0px);
+  /* Scroll-jacked via inline transform (JS) — no transition so it scrubs with the scroll. */
+  will-change: transform;
+}
+.mw-roster2__card {
+  --ty: 0px;
+  --lift: 0px;
+  position: relative;
+  display: block;
+  /* width fixed by the grid columns; height = 1.1 × width (10% taller than square). */
+  aspect-ratio: 1 / 1.1;
+  overflow: hidden;
+  text-decoration: none;
+  isolation: isolate;
+  transform: translateY(calc(var(--ty) + var(--lift)));
+  transform-origin: center;
+  transition: transform 440ms cubic-bezier(.2, .7, .2, 1), box-shadow 440ms ease;
+}
+/* All three columns START level (no stagger — --ty stays 0 from the base rule).
+   The MIDDLE column then gets a scroll-driven parallax offset: JS writes --r2-mid
+   onto the grid and only the middle-column cards read it, so they drift up/down as
+   the section passes through the viewport while the outer columns track scroll 1:1.
+   The parallax transform tracks scroll continuously, so it is NOT transitioned
+   (a transition would lag the scrub); box-shadow still eases for the hover state. */
+.mw-roster2__card:nth-child(3n + 2) {
+  transform: translateY(calc(var(--ty) + var(--lift) + var(--r2-mid, 0px)));
+  /* Parallax scrub stays instant (transform not transitioned); clip-path is scroll-driven. */
+  transition: box-shadow 440ms ease;
+  will-change: transform;
+}
+/* Spotlit card stays put — no lift, no scale (the box size/position never changes).
+   It just brightens, gets the clay ring, and a SUBTLE shadow. The image zoom +
+   paragraph reveal are the two extracted motions (below). */
+.mw-roster2__card.is-active {
+  z-index: 3;
+  box-shadow: 0 8px 20px -10px rgba(42, 27, 18, 0.32);
+}
+/* Riser: holds all of a card's content and rises out of the card's overflow:hidden mask on
+   reveal — the hero header's line reveal applied to cards (translateY 116% → 0, no fade, no
+   shift; same easing as .mw-hero__line-in / mw-hero-rise and the list rows). The reveal
+   transform lives HERE, not on the card, so the card keeps its parallax transform and its rect
+   stays a stable reveal-trigger slot. */
+.mw-roster2__card-in {
+  position: absolute;
+  inset: 0;
+  transform: translateY(116%);
+  transition: transform 0.95s cubic-bezier(.16, .84, .3, 1);
+  will-change: transform;
+}
+.mw-roster2__card.is-revealed .mw-roster2__card-in { transform: none; }
+
+.mw-roster2__card-photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+  /* Non-active state: black & white + darkened (brightness 0.778) so the spotlit card —
+     which restores full colour below — pops. The filter transition makes the colour fade
+     in on hover. */
+  filter: grayscale(1) brightness(0.778) contrast(1.02);
+  transform: scale(1);
+  transition: filter 320ms ease, transform 520ms ease;
+}
+/* Extracted motion #1 — image zoom (card-7 group-hover:scale-110), plus the
+   exact hover-state photo grade. */
+.mw-roster2__card.is-active .mw-roster2__card-photo {
+  filter: saturate(1.05) brightness(1.1) contrast(1) sepia(0.02);
+  transform: scale(1.1);
+}
+/* Light top wash over the photo (bento-grid-02 photo::after), lifts on hover. */
+.mw-roster2__card-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(42, 27, 18, 0.3) 0%, rgba(42, 27, 18, 0.08) 100%);
+  opacity: 1;
+  transition: opacity 320ms ease;
+}
+.mw-roster2__card.is-active .mw-roster2__card-photo::after { opacity: 0.2; }
+/* Accent ring on the spotlit card. */
+.mw-roster2__card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border: 1px solid transparent;
+  border-radius: inherit;
+  pointer-events: none;
+  transition: border-color 240ms ease;
+}
+/* The active ring only appears once the card has finished rising in (is-rise-done, set when
+   the card-in's transform transition ends) — so it never frames a card mid-motion. */
+.mw-roster2__card.is-active.is-rise-done::after { border-color: var(--c-line); border-width: 1px; }
+.mw-roster2__card:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
+
+/* Action arrow pinned to each card's top-right corner. */
+.mw-roster2__card-arr {
+  position: absolute;
+  top: clamp(9px, 0.9vw, 15px);
+  right: clamp(11px, 1.1vw, 18px);
+  z-index: 2;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-size: clamp(20px, 1.9vw, 32px);
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  transition: transform 240ms cubic-bezier(.2, .7, .2, 1), color 240ms ease;
+}
+.mw-roster2__card.is-active .mw-roster2__card-arr {
+  color: var(--c-amber);
+  /* Rotate the → up so it points 45° up-and-to-the-right (↗). */
+  transform: translate(3px, -3px) rotate(-45deg);
+}
+
+/* Content overlay — title + summary + arrow over the exact bento-grid-02
+   content scrim (__body::before): bottom-anchored, gradient extended past the
+   edges so it reads identically. */
+.mw-roster2__card-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(7px, 0.7vw, 11px);
+  padding: clamp(13px, 1.2vw, 20px);
+}
+.mw-roster2__card-overlay::before {
+  content: "";
+  position: absolute;
+  left: -200px;
+  right: -200px;
+  bottom: -200px;
+  top: -80px;
+  z-index: -1;
+  background: linear-gradient(
+    to top,
+    rgba(6, 3, 1, 0.96) 0%,
+    rgba(6, 3, 1, 0.94) 35%,
+    rgba(6, 3, 1, 0.72) 60%,
+    rgba(6, 3, 1, 0.28) 85%,
+    rgba(6, 3, 1, 0) 100%
+  );
+  pointer-events: none;
+}
+.mw-roster2__card-title {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(22px, 2.3vw, 38px);
+  line-height: 0.98;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: #d9d9d9; /* unselected: ~15% darker than white */
+  transition: color 240ms ease;
+}
+/* The spotlit card's title goes full white; the rest sit ~15% darker. */
+.mw-roster2__card.is-active .mw-roster2__card-title { color: #fff; }
+/* Extracted motion #2 — reveal on hover (card-7's slide-up bottom section),
+   applied to the body paragraph: collapsed (0fr grid row) + faded at rest,
+   expands + fades in when the card is spotlit. The title stays put. */
+.mw-roster2__card-reveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: grid-template-rows 440ms cubic-bezier(.2, .7, .2, 1), opacity 360ms ease, transform 440ms ease;
+}
+.mw-roster2__card-reveal > * { overflow: hidden; min-height: 0; }
+.mw-roster2__card.is-active .mw-roster2__card-reveal {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transform: none;
+}
+.mw-roster2__card-text {
+  margin: 0;
+  font-family: var(--font-plex-sans), var(--font-body), ui-sans-serif, sans-serif;
+  font-size: clamp(11.5px, 0.86vw, 13.5px);
+  line-height: 1.42;
+  color: rgba(245, 230, 203, 0.85);
+}
+
+/* ── Final CTA card (catch-all / contact) ──────────────────────
+   A photo-less tile that completes the collage in place of the old rail Learn-more
+   button. No image — a deep-walnut (dark brown) border on the warm section surface,
+   with an eyebrow + short pitch + the contact CTA. Inherits the base card box
+   (square, same grid cell), but overrides the photo-card internals. */
+.mw-roster2__card--cta {
+  background: transparent;
+  border: 1px solid var(--c-navy); /* deep walnut / dark brown */
+  overflow: hidden; /* also the reveal mask the card-in rises out of */
+  transition: background-color 240ms ease, box-shadow 240ms ease, filter 320ms ease;
+}
+/* The flex layout lives on the riser (card-in fills the card via inset:0). */
+.mw-roster2__card--cta .mw-roster2__card-in {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: clamp(8px, 0.9vw, 14px);
+  padding: clamp(14px, 1.3vw, 22px);
+}
+/* Match the photo cards' unselected scheme: desaturate the whole tile — border, eyebrow,
+   title, text AND the button — to B&W/gray. The background isn't a colour at rest
+   (transparent), so it's unaffected. Colour returns the moment the tile is selected, whether
+   hovered directly or via its "Other services" row (.is-active) — same trigger as the white bg. */
+.mw-roster2__card--cta:not(:hover):not(.is-active) { filter: grayscale(1); }
+.mw-roster2__card--cta:hover,
+.mw-roster2__card--cta.is-active { background: #fff; box-shadow: 0 8px 20px -10px rgba(42, 27, 18, 0.32); }
+.mw-roster2__cta-head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(6px, 0.7vw, 10px);
+}
+/* The eyebrow mark (Eyebrow01) inherits the section's diamond + mono label styling. */
+.mw-roster2__cta-eyebrow { display: block; }
+.mw-roster2__cta-title {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(18px, 1.55vw, 27px);
+  line-height: 0.96;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--c-navy);
+}
+.mw-roster2__cta-text {
+  margin: 0;
+  font-family: var(--font-plex-sans), var(--font-body), ui-sans-serif, sans-serif;
+  font-size: clamp(12px, 0.82vw, 14px);
+  line-height: 1.4;
+  color: var(--c-ink-2);
+}
+.mw-roster2__cta-foot { margin-top: 0; }
+
+/* ── RIGHT · roster menu ──────────────────────────────────── */
+/* SIBLING-STICKY list, centered. The rail is its natural (menu) height and sticks via
+   native position:sticky. Its `top` is set by JS to (viewportHeight − railHeight)/2, so
+   sticky engages exactly when the list reaches vertical CENTER of the screen — not
+   before. The list therefore scrolls normally as it comes into view, locks once centered,
+   and holds there while the sibling collage keeps scrolling, releasing when the collage
+   (the grid-row containing block) bottoms out. Keeping the rail at its natural height
+   (rather than a 100vh box) maximizes the sticky travel = collageHeight − railHeight.
+   The inline top is the only JS-set property; `top:50vh` is a pre-hydration fallback.
+   (Disabled at the stacked ≤1024 breakpoint below.) */
+.mw-roster2__rail {
+  position: sticky;
+  top: 50vh;
+  align-self: start;
+}
+.mw-roster2__menu { list-style: none; margin: 0; padding: 0; }
+.mw-roster2__row {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(12px, 1vw, 18px);
+  padding: clamp(10px, 0.98vw, 15px) 0;
+  text-decoration: none;
+  border-bottom: 1px solid var(--c-line);
+  /* Scroll reveal: each row is hidden until it's fully on screen (JS toggles .is-revealed on
+     scroll — reversible). SAME effect as the hero header's page-load reveal — the row rises up
+     out of a clipped mask (its <li>); no fade, no horizontal shift. translateY(116%) + this
+     easing mirror .mw-hero__line-in / mw-hero-rise. The active/inactive DIM uses
+     filter:opacity() so it never fights the reveal transform. */
+  transform: translateY(116%);
+  transition: transform 0.95s cubic-bezier(.16, .84, .3, 1), filter 220ms ease;
+}
+/* The <li> is the mask the row rises out of (mirrors .mw-hero__line wrapping .mw-hero__line-in). */
+.mw-roster2__menu > li { overflow: hidden; }
+.mw-roster2__menu > li:first-child .mw-roster2__row { border-top: 1px solid var(--c-line); }
+.mw-roster2__row.is-revealed { transform: none; }
+/* Inset focus ring so the mask (overflow:hidden li) can't clip it. */
+.mw-roster2__row:focus-visible { outline: 2px solid var(--c-accent); outline-offset: -2px; }
+.mw-roster2__row:not(.is-active) { filter: opacity(0.79); }
+.mw-roster2__row:not(.is-active):hover { filter: opacity(0.86); }
+/* Diamond marker — small + border-only at rest; spins into a larger filled
+   diamond when spotlit. Fixed-width grid cell keeps the name from shifting. */
+.mw-roster2__row-mark {
+  justify-self: center;
+  width: 8px;
+  height: 8px;
+  border: 1.5px solid var(--c-navy);
+  background: transparent;
+  transform: rotate(45deg);
+  transition: width 280ms cubic-bezier(.2, .7, .2, 1), height 280ms cubic-bezier(.2, .7, .2, 1),
+    background-color 240ms ease, border-color 240ms ease, transform 420ms cubic-bezier(.2, .7, .2, 1);
+}
+.mw-roster2__row.is-active .mw-roster2__row-mark {
+  width: 15px;
+  height: 15px;
+  background: var(--c-accent);
+  border-color: var(--c-accent);
+  transform: rotate(225deg);
+}
+.mw-roster2__row-name {
+  min-width: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(17px, 1.45vw, 25px);
+  line-height: 1.02;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+  transition: color 200ms ease, transform 220ms cubic-bezier(.2, .7, .2, 1);
+}
+/* Active row: just the TEXT nudges right slightly (the diamond mark stays put). */
+.mw-roster2__row.is-active .mw-roster2__row-name { color: var(--c-navy); transform: translateX(clamp(6px, 0.7vw, 11px)); }
+.mw-roster2__row-arr {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-size: clamp(20px, 1.6vw, 26px);
+  font-weight: 700;
+  color: var(--c-accent);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+.mw-roster2__row.is-active .mw-roster2__row-arr { opacity: 1; transform: none; }
+
+/* Section lead — body-intro under the header, matching the other sections
+   (font-size + rhythm mirror .mw-secd__lead). */
+.mw-roster2__lead {
+  margin: clamp(18px, 1.6vw, 24px) 0 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(16px, 1.15vw, 19px);
+  line-height: 1.6;
+  color: var(--c-ink-2);
+  max-width: 64ch;
+}
+
+/* ── Responsive ───────────────────────────────────────────── */
+/* ── DESKTOP intermediate · 2-COLUMN collage (1025–1279) ────────────────────────
+   Before the side-by-side layout collapses to stacked at ≤1024, step the collage
+   from 3 columns down to 2 so the cards don't get cramped (~175–220px) in the
+   narrowing right column — the list stays on the left throughout this band. The
+   windowed-scroll PIN, the center-sticky rail, and the hover-to-card alignment all
+   stay ON here (they engage at innerWidth > 1024) and are column-count-AGNOSTIC:
+   the JS reads the live column count from getComputedStyle(grid).gridTemplateColumns,
+   so the list-row → grid-row grouping (bringCardIntoView) and the pinned-scroll
+   track measurement (the windowed-scroll measure() in roster-collage-02.jsx) re-map
+   to PAIRS automatically — hovering a list row scrolls/spotlights the 2-up grid row
+   it belongs to. No pointer guard: this must fire on touch laptops/tablets too (a
+   `pointer: fine` guard would silently skip the whole band on a coarse-pointer
+   device). At 1025–1279 a coarse-pointer landscape tablet now also gets this 2-up
+   collage; above 1280 it returns to the tuned 3-up pinned view. */
+@media (min-width: 1025px) and (max-width: 1279px) {
+  .mw-roster2__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* A 2-col grid has no middle column: the base :nth-child(3n+2) parallax now
+     targets scattered cells — and some of them are the column-0 cards the scroll
+     math uses as alignment ANCHORS (groupStart), so any --r2-mid drift on them
+     would desync the hover-to-card scroll. Pin them level. The parallax JS still
+     writes --r2-mid (it's gated > 560), but these cards no longer read it.
+     Mirrors the ≤560 / tablet-portrait / tablet-landscape 2-col resets. */
+  .mw-roster2__card:nth-child(3n + 2) {
+    transform: translateY(calc(var(--ty) + var(--lift)));
+  }
+}
+@media (max-width: 1024px) {
+  .mw-roster2__layout { grid-template-columns: 1fr; gap: clamp(28px, 5vw, 48px); }
+  .mw-roster2__grid { padding-bottom: clamp(34px, 8vw, 80px); }
+  /* Stacked single-column — the list sits above the collage, so no sticky and no window:
+     the grid just flows full-height (JS also stops sizing/translating below this width). */
+  .mw-roster2__rail { position: static; top: auto; }
+  .mw-roster2__window { position: static; height: auto; overflow: visible; }
+}
+@media (max-width: 560px) {
+  /* Two columns, all level — parallax is gated off below the 3-column breakpoint (JS). */
+  .mw-roster2__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mw-roster2__card:nth-child(3n + 2) { transform: translateY(calc(var(--ty) + var(--lift))); }
+}
+/* ── MOBILE PORTRAIT (≤600) — scoped phone refinements ───────────────────────────
+   Mobile-only surface. The desktop hover-spotlight that justified the left MENU does not
+   fire on touch (no hover), so on a phone the menu is a second, non-interactive copy of the
+   same service list sitting above an identical grid of photo-card LINKS — pure redundancy that
+   roughly doubles an already very tall section. We HIDE the menu and let the photo cards be the
+   navigation (each card is the service's link, self-labelled, with a → affordance). Because
+   `@media (hover: none)` above force-opens every card's body paragraph on touch, each 2-col cell
+   carries a (sometimes 3-line) title PLUS a 3–4-line summary; the base 1/1.1 cell is too short for
+   that, so titles and body crowd. We give cells more height, retune the overlay type, and let the
+   photo-less CTA card auto-size so its "Contact us" button (clipped by the fixed-ratio box at base)
+   is actually visible. Everything here is inside ≤600 → desktop is provably untouched. */
+@media (max-width: 600px) {
+  /* Trim the head's trailing space a touch so the cards come up sooner on a phone. */
+  .mw-roster2__head { margin-bottom: clamp(28px, 7vw, 40px); }
+
+  /* Hide the redundant, now-functionless menu rail; the cards are the nav on touch. The rows
+     stay in the DOM (untouched for desktop) — just not rendered here. The layout already
+     collapsed to one column at ≤1024, so the collage now stands alone, full-width. */
+  .mw-roster2__rail { display: none; }
+  /* Reclaim the inter-column gap the (now-hidden) rail left in the stacked layout. */
+  .mw-roster2__layout { gap: 0; }
+  /* Slightly tighter card gap on a phone keeps the 2-col grid compact without touching. */
+  .mw-roster2__grid { gap: clamp(9px, 2.4vw, 14px); padding-bottom: clamp(24px, 6vw, 40px); }
+
+  /* Taller cells so a packed card (multi-line title + open body summary) never crowds or clips.
+     1 / 1.28 gives the overlay vertical room while the photo still reads as a strong square-ish
+     image. Height is intrinsic to the card (the reveal transform rides on card-in), so the
+     overflow:hidden rise-mask is unaffected. */
+  .mw-roster2__card { aspect-ratio: 1 / 1.28; }
+  /* Last-row pairing: the catch-all CTA card (the grid's last child) auto-heights to its
+     content (taller than the fixed-ratio photo cells), so its row-mate — the final photo card,
+     CROSS-BORDER SERVICES (:nth-last-child(2)) — would keep the 1/1.28 box and top-align,
+     leaving an empty cream gap below it. Drop that one card's fixed ratio so it stretches to the
+     grid row's height (set by the CTA) and the pair bottom-aligns as one clean block. The photo
+     is position:absolute; inset:0; cover, so a taller cell just reveals more image — no
+     distortion, no clipping. Height stays intrinsic to the card (the reveal transform rides on
+     the inset:0 card-in), so the rise-mask + reduced-motion settle exactly as before. */
+  .mw-roster2__card:nth-last-child(2) { aspect-ratio: auto; }
+
+  /* Overlay: a hair more bottom padding + a clearer title→body gap so the headline and summary
+     read as two distinct blocks instead of colliding (the worst case was INDUSTRIAL WASTE
+     TREATMENT — 3 title lines hard against 4 body lines). */
+  .mw-roster2__card-overlay {
+    gap: 6px;
+    padding: 14px 13px 15px;
+  }
+  /* Cap the title so long names (INDUSTRIAL WASTE TREATMENT, CUSTOMER WASTE COLLECTION) wrap
+     cleanly in a ~165px column without dominating the card; tighten leading/tracking for a
+     denser, deliberate multi-line set. */
+  .mw-roster2__card-title {
+    font-size: 21px;
+    line-height: 0.94;
+    letter-spacing: 0;
+  }
+  /* Body: a touch larger than the desktop floor for phone legibility, with comfortable leading. */
+  .mw-roster2__card-text {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+  /* → affordance: nudge it up to a fixed touch-legible size and keep it clear of the title. */
+  .mw-roster2__card-arr {
+    top: 10px;
+    right: 12px;
+    font-size: 24px;
+  }
+
+  /* CTA card — at base it inherits the fixed 1/1.1 photo-card box with overflow:hidden, which
+     CLIPS the "Contact us" button on a phone (the card is the same height as the photo card
+     beside it, and the button overflows past the bottom). Let it size to its own content so the
+     primary action shows. The riser (card-in) is position:absolute at base — absolute children
+     give the box no height — so we flow it in normal layout here; overflow:hidden stays, so the
+     card-in still rises out of the mask (and reduced-motion's `card-in{transform:none}` still
+     settles it). A min-height keeps it visually paired with the neighbouring photo card. */
+  .mw-roster2__card--cta {
+    aspect-ratio: auto;
+    min-height: 0;
+  }
+  .mw-roster2__card--cta .mw-roster2__card-in {
+    position: static;
+    inset: auto;
+    gap: 12px;
+    padding: 16px 14px;
+  }
+  /* Restore comfortable CTA typography (base clamps floor near the desktop minimums; bump for
+     phone). */
+  .mw-roster2__cta-title { font-size: 22px; line-height: 0.96; }
+  .mw-roster2__cta-text { font-size: 14px; line-height: 1.45; }
+  .mw-roster2__cta-foot { margin-top: 4px; }
+}
+/* Touch / no-hover devices can't trigger the reveal — show every paragraph. */
+@media (hover: none) {
+  .mw-roster2__card-reveal { grid-template-rows: 1fr; opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-roster2__card,
+  .mw-roster2__card-photo,
+  .mw-roster2__card-reveal,
+  .mw-roster2__row-mark,
+  .mw-roster2__row-arr,
+  .mw-roster2__row,
+  .mw-roster2__row-name,
+  .mw-roster2__row-tag { transition: none; }
+  .mw-roster2__card { --lift: 0px; }
+  .mw-roster2__card.is-active .mw-roster2__card-photo { transform: none; }
+  .mw-roster2__row.is-active .mw-roster2__row-mark { transform: none; }
+  /* No scroll-reveal animation — show every list row and card up front, and let the collage
+     flow full-height (no pinned window, no grid scroll-jack; JS also skips both here). */
+  .mw-roster2__row { opacity: 1; transform: none; }
+  .mw-roster2__card-in { transform: none; }
+  /* No rise transition fires here, so is-rise-done is never set — show the active ring on
+     is-active alone. */
+  .mw-roster2__card.is-active::after { border-color: var(--c-line); border-width: 1px; }
+  .mw-roster2__window { position: static; height: auto; overflow: visible; }
+  /* Header bits sit in their final state — no fade-up, no stamp pop. */
+  .mw-roster2__eyebrow,
+  .mw-roster2__title,
+  .mw-roster2__lead { opacity: 1; transform: none; }
+  .mw-roster2__title.is-head-in .mw-stop {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+/* ── TABLET PORTRAIT (601–1024, portrait) — scoped touch-tablet refinements ──────────
+   Tablet-portrait-only surface, appended LAST so it wins on overlap with the shared
+   ≤1024 STACKED baseline it inherits (single-column layout, no pinned window — JS also
+   disables the windowed-PIN / center-sticky rail at ≤1024). Desktop and the committed
+   ≤600 mobile pass are out of this query's range, so both are provably untouched.
+
+   Same touch strategy as the ≤600 mobile pass, tuned for the wider canvas: the desktop
+   hover-spotlight that justified the left MENU never fires on touch, so the rail is a
+   second, non-interactive copy of the service list above an identical grid of photo-card
+   LINKS — pure redundancy in an already very tall section. We HIDE the menu and let the
+   photo cards be the navigation. `@media (hover: none)` force-opens every card body on
+   touch, so each cell carries its title PLUS a multi-line summary; we give cells more
+   height than the base 1/1.1 square and retune the overlay type for the larger cards.
+   Two columns (not the desktop 3) keeps cards generous and titles uncramped at 768–1024. */
+@media (min-width: 601px) and (max-width: 1024px) and (orientation: portrait) {
+  /* Trim the head's trailing space so the cards come up a touch sooner. */
+  .mw-roster2__head { margin-bottom: clamp(32px, 5vw, 52px); }
+
+  /* Hide the redundant, now-functionless menu rail; the cards are the nav on touch. The
+     rows stay in the DOM (untouched for desktop) — just not rendered here. The layout
+     already collapsed to one column at ≤1024, so the collage now stands alone, full-width. */
+  .mw-roster2__rail { display: none; }
+  /* Reclaim the inter-column gap the (now-hidden) rail left in the stacked layout. */
+  .mw-roster2__layout { gap: 0; }
+
+  /* Two columns for the wider tablet canvas (the desktop 3-col makes ~228px cards at 768
+     whose titles + open bodies crowd). A roomier gap than the phone keeps the pair airy. */
+  .mw-roster2__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(12px, 1.8vw, 20px);
+    padding-bottom: clamp(28px, 5vw, 56px);
+  }
+  /* Kill the middle-column parallax here: its JS is gated `>560` so it still writes
+     --r2-mid at this width, but :nth-child(3n+2) selects a scattered set of cells in a
+     2-col grid — they would drift out of alignment. Pin them level (mirrors the ≤560
+     reset). Reduced-motion already neutralizes this separately. */
+  .mw-roster2__card:nth-child(3n + 2) {
+    transform: translateY(calc(var(--ty) + var(--lift)));
+  }
+
+  /* Taller cells so a packed card (multi-line title + force-open body) never crowds. The
+     wider tablet card needs less extra height than the phone (1/1.28): 1/1.16 gives the
+     overlay room while the photo still reads as a strong, near-square image. Height is
+     intrinsic to the card (the reveal transform rides on card-in), so the overflow:hidden
+     rise-mask + reduced-motion settle are unaffected. */
+  .mw-roster2__card { aspect-ratio: 1 / 1.16; }
+  /* Last-row pairing: the catch-all CTA card (last child, idx 11 → 2nd cell of the final
+     2-col row) auto-heights to its content, taller than the fixed-ratio photo cells. Its
+     row-mate — CROSS-BORDER SERVICES (:nth-last-child(2)) — would keep the 1/1.16 box and
+     top-align, leaving an empty cream gap below. Drop that one card's fixed ratio so it
+     stretches to the row height (set by the CTA) and the pair bottom-aligns as one clean
+     block. The photo is position:absolute; inset:0; cover, so a taller cell just reveals
+     more image — no distortion, no clipping; height stays intrinsic (rise-mask unaffected). */
+  .mw-roster2__card:nth-last-child(2) { aspect-ratio: auto; }
+
+  /* Overlay: a touch more bottom padding + a clearer title→body gap so headline and
+     summary read as two distinct blocks at the larger card size. */
+  .mw-roster2__card-overlay {
+    gap: 7px;
+    padding: clamp(15px, 1.8vw, 20px) clamp(15px, 1.7vw, 19px) clamp(16px, 1.8vw, 19px);
+  }
+  /* Title scaled up for the wider cards (vs the phone's fixed 21px); leading/tracking kept
+     tight for a deliberate multi-line set on the longer names. */
+  .mw-roster2__card-title {
+    font-size: clamp(24px, 3vw, 31px);
+    line-height: 0.96;
+    letter-spacing: 0;
+  }
+  /* Body: comfortably legible on a tablet, a step up from the phone floor. */
+  .mw-roster2__card-text {
+    font-size: clamp(13px, 1.5vw, 15px);
+    line-height: 1.42;
+  }
+  /* → affordance: a fixed, touch-legible size, clear of the title. */
+  .mw-roster2__card-arr {
+    top: clamp(11px, 1.4vw, 15px);
+    right: clamp(13px, 1.5vw, 17px);
+    font-size: clamp(26px, 3vw, 32px);
+  }
+
+  /* CTA card — at base it inherits the fixed 1/1.16 photo-card box with overflow:hidden,
+     which CLIPS the "Contact us" button (the card matches the photo cell height and the
+     button overflows past the bottom — same bug the phone pass fixed). Let it size to its
+     own content so the primary action shows. The riser (card-in) is position:absolute at
+     base — absolute children give the box no height — so flow it in normal layout here;
+     overflow:hidden stays, so the card-in still rises out of the mask (and reduced-motion's
+     `card-in{transform:none}` still settles it). A min-height keeps it visually balanced. */
+  .mw-roster2__card--cta {
+    aspect-ratio: auto;
+    min-height: 0;
+  }
+  .mw-roster2__card--cta .mw-roster2__card-in {
+    position: static;
+    inset: auto;
+    gap: clamp(12px, 1.6vw, 18px);
+    padding: clamp(16px, 1.9vw, 22px);
+  }
+  /* Restore comfortable CTA typography for the larger card (base clamps floor near the
+     desktop minimums). */
+  .mw-roster2__cta-title { font-size: clamp(24px, 2.9vw, 30px); line-height: 0.96; }
+  .mw-roster2__cta-text { font-size: clamp(14px, 1.5vw, 16px); line-height: 1.45; }
+  .mw-roster2__cta-foot { margin-top: clamp(4px, 1vw, 10px); }
+}
+/* ── TABLET LANDSCAPE (1000–1366, landscape, touch) — scoped touch-tablet refinements ──
+   Landscape touch-tablet ONLY surface, appended LAST. The `pointer: coarse` guard is
+   ESSENTIAL: 1000–1366px landscape widths overlap real desktops, so this MUST NOT touch a
+   fine-pointer desktop — only a coarse-pointer (touch) device in this band. Desktop, the
+   committed ≤600 mobile pass, and the (orientation:portrait) tablet pass are all out of this
+   query's range, so each is provably untouched.
+
+   This band straddles a HARD JS SPLIT keyed on window.innerWidth (NOT a media query):
+     • innerWidth ≤ 1024 (1024×768 iPad landscape): the windowed-PIN scroll, the center-sticky
+       rail, and bringCardIntoView are ALL DISABLED → NORMAL STACKED flow (the shared ≤1024
+       CSS already makes the window static + the rail static). But the middle-column PARALLAX
+       JS is gated `>560`, so it still writes --r2-mid and :nth-child(3n+2) cards DRIFT.
+     • innerWidth > 1024 (1180 / 1194 / 1366 — iPad Air & Pro landscape): the desktop
+       WINDOWED-PIN + center-sticky rail + parallax are ALL ACTIVE (JS writes inline
+       transforms/heights every frame). This IS the desktop experience; we cannot disable it
+       via CSS and don't try — we leave it intact.
+   So we mirror the JS boundary with two nested width sub-conditions below. */
+
+/* ---- STACKED sub-range (≤1024 landscape, touch): pin = OFF, rail = redundant ----
+   Same touch strategy as the committed ≤600 / tablet-portrait passes (the desktop
+   hover-spotlight that justified the left MENU never fires on touch, so the rail is a second,
+   non-interactive copy of the service list above an identical grid of photo-card LINKS — pure
+   redundancy that ~doubles an already very tall section). We HIDE the menu and let the photo
+   cards be the navigation. We KEEP the desktop 3-col grid here (the 1024 canvas yields generous
+   ~300px cells whose short service titles read cleanly at 3-up, and keeping 3 columns preserves
+   the :nth-child(3n+2) parallax targeting we neutralize below — no re-flow surprises). */
+@media (min-width: 1000px) and (max-width: 1024px) and (orientation: landscape) and (pointer: coarse) {
+  /* Trim the head's trailing space so the cards come up a touch sooner on the short canvas. */
+  .mw-roster2__head { margin-bottom: clamp(28px, 4vw, 44px); }
+
+  /* Hide the redundant, now-functionless menu rail; the cards are the nav on touch. The rows
+     stay in the DOM (untouched for desktop) — just not rendered here. The layout already
+     collapsed to one column at ≤1024, so the collage now stands alone, full-width. */
+  .mw-roster2__rail { display: none; }
+  /* Reclaim the inter-column gap the (now-hidden) rail left in the stacked layout. */
+  .mw-roster2__layout { gap: 0; }
+  /* A roomy card gap for the wide canvas keeps the 3-up grid airy. */
+  .mw-roster2__grid { gap: clamp(12px, 1.6vw, 18px); padding-bottom: clamp(28px, 5vw, 56px); }
+
+  /* Kill the middle-column parallax DRIFT. The parallax JS is gated `>560`, so at 1024 it still
+     writes --r2-mid and the :nth-child(3n+2) (center-column) cards drift DOWN out of row
+     alignment (visible: CROSS-BORDER SERVICES sinks below its row-mates). With the pin OFF here
+     the drift is pure misalignment, not parallax depth — pin those cards level (mirrors the
+     ≤560 / portrait resets). Reduced-motion already neutralizes --r2-mid separately. */
+  .mw-roster2__card:nth-child(3n + 2) {
+    transform: translateY(calc(var(--ty) + var(--lift)));
+  }
+
+  /* A hair more cell height so a packed card (multi-line title + force-open body) never crowds.
+     The wide ~300px cell needs little: 1 / 1.14 gives the overlay room while the photo still
+     reads as a strong near-square image. Height is intrinsic to the card (the reveal transform
+     rides on card-in), so the overflow:hidden rise-mask + reduced-motion settle are unaffected. */
+  .mw-roster2__card { aspect-ratio: 1 / 1.14; }
+  /* Last-row pairing: the catch-all CTA card (last child) auto-heights to its content (taller
+     than the fixed-ratio photo cells). Its row-mate — CROSS-BORDER SERVICES (:nth-last-child(2),
+     the 2nd cell of the final 3-col row) — would keep the 1/1.14 box and top-align, leaving an
+     empty cream gap below. Drop that one card's fixed ratio so it stretches to the CTA-set row
+     height and the pair bottom-aligns as one clean block. The photo is position:absolute;
+     inset:0; cover, so a taller cell just reveals more image — no distortion, no clipping;
+     height stays intrinsic (rise-mask + reduced-motion unaffected). */
+  .mw-roster2__card:nth-last-child(2) { aspect-ratio: auto; }
+
+  /* Overlay: a touch more bottom padding + a clearer title→body gap so headline and summary
+     read as two distinct blocks on the larger cards. */
+  .mw-roster2__card-overlay {
+    gap: 7px;
+    padding: clamp(15px, 1.6vw, 20px) clamp(15px, 1.5vw, 19px) clamp(16px, 1.6vw, 19px);
+  }
+  /* Title scaled for the wide cell; leading/tracking kept tight for a deliberate multi-line set
+     on the longer names (INDUSTRIAL WASTE TREATMENT, CUSTOMER WASTE COLLECTION). */
+  .mw-roster2__card-title {
+    font-size: clamp(24px, 2.6vw, 32px);
+    line-height: 0.96;
+    letter-spacing: 0;
+  }
+  /* Body: comfortably legible on a tablet, a step up from the desktop hover-reveal floor. */
+  .mw-roster2__card-text {
+    font-size: clamp(13px, 1.3vw, 15px);
+    line-height: 1.42;
+  }
+  /* → affordance: a fixed, touch-legible size, clear of the title. */
+  .mw-roster2__card-arr {
+    top: clamp(11px, 1.2vw, 15px);
+    right: clamp(13px, 1.3vw, 18px);
+    font-size: clamp(26px, 2.6vw, 32px);
+  }
+
+  /* CTA card — at base it inherits the fixed 1/1.14 photo-card box with overflow:hidden, which
+     CLIPS the "Contact us" button on the short canvas (and otherwise strands a tall empty gap
+     between the pitch and the button). Let it size to its own content so the primary action
+     shows. The riser (card-in) is position:absolute at base — absolute children give the box no
+     height — so flow it in normal layout here; overflow:hidden stays, so the card-in still rises
+     out of the mask (and reduced-motion's `card-in{transform:none}` still settles it). */
+  .mw-roster2__card--cta {
+    aspect-ratio: auto;
+    min-height: 0;
+  }
+  .mw-roster2__card--cta .mw-roster2__card-in {
+    position: static;
+    inset: auto;
+    gap: clamp(12px, 1.5vw, 18px);
+    padding: clamp(16px, 1.8vw, 22px);
+  }
+  /* Restore comfortable CTA typography for the larger card (base clamps floor near the desktop
+     minimums). */
+  .mw-roster2__cta-title { font-size: clamp(24px, 2.7vw, 30px); line-height: 0.96; }
+  .mw-roster2__cta-text { font-size: clamp(14px, 1.4vw, 16px); line-height: 1.45; }
+  .mw-roster2__cta-foot { margin-top: clamp(4px, 1vw, 10px); }
+}
+
+/* ---- PINNED sub-range (1025–1366 landscape, touch): pin = ON, this IS the desktop view ----
+   At innerWidth > 1024 the JS keeps the windowed-PIN scroll, the center-sticky rail, and the
+   middle-column parallax ALL ACTIVE — verified GOOD on the short 834/1024-tall touch canvas
+   (cards aren't clipped at the window edges; the one-card-gap top/bottom strips stay; the grid
+   scrubs through cleanly; the CTA tile's "Contact us" shows). So we DELIBERATELY leave the
+   desktop composition intact and make only touch-affordance nudges that don't alter desktop
+   (desktop is fine-pointer, out of this `pointer:coarse` query):
+     • The rail STAYS — here it's a balanced left half of the two-column comp AND a column of
+       tappable service LINKS (its hover-spotlight is simply dead on touch). We just guarantee
+       each row clears the 44px touch-target minimum.
+     • Parallax STAYS (intended desktop motion).
+     • On touch every card body is force-open (@media hover:none), so we give the always-on body
+       text a hair more legibility without touching the desktop hover-reveal sizing. */
+@media (min-width: 1025px) and (max-width: 1366px) and (orientation: landscape) and (pointer: coarse) {
+  /* Guarantee a ≥44px touch target on each rail row (base padding can resolve a hair under at
+     the low end of this band); min-height + centered content keeps the rail's visual rhythm. */
+  .mw-roster2__row { min-height: 44px; padding-block: clamp(11px, 1vw, 15px); }
+  /* Force-open body text (touch) sits a touch larger than the desktop hover-reveal floor for
+     legibility on the small pinned cells — desktop (fine pointer) is unaffected by this query. */
+  .mw-roster2__card-text { font-size: clamp(12px, 0.92vw, 13.5px); }
+}

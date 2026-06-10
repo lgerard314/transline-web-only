@@ -26,7 +26,7 @@ Non-negotiables (full detail in the doc):
 
 ## Page route structure
 
-**miller-web is template-first.** Pages are **composed from the shared `components-v2` template library**, not hand-built section by section. The home page and all 6 redesigned service pages are thin `page.jsx` files that order a few `06_sections` templates and feed each a `content` object from `lib/content/`. The authoritative build guide is **`apps/miller-web/components-v2/README.md` — read it before building or changing any miller page or template.** Browse every template rendered at `/template-gallery`.
+**miller-web is template-first.** Pages are **composed from the shared `components-v2` template library**, not hand-built section by section. The home page and all 6 redesigned service pages are thin `page.jsx` files that order a few `06_sections` templates and feed each a `content` object from `lib/content/`. The authoritative build guide is **`apps/miller-web/components-v2/README.md` — read it before building or changing any miller page or template.** Browse every template rendered at `/template-gallery`. Home section CSS lives in **`apps/miller-web/app/styles/home/`** (one file per section); iterate in isolation at **`/home-lab`**.
 
 ```
 app/<route>/

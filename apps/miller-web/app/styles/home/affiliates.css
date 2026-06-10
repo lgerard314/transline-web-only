@@ -1,0 +1,114 @@
+/* home/affiliates.css — RotatingBanner01 · components-v2/06_sections/banners/rotating-banner-01.jsx */
+/* ─────────────────────────────────────────────────────────────────
+   Marquee — a narrow walnut strip between Careers and Final CTA.
+   Continues the dark surface and lets the brand refrains scroll.
+   ───────────────────────────────────────────────────────────────── */
+.mw-marquee {
+  background: var(--c-bg);
+  padding-block: 0;
+  border-top: 0;
+  border-bottom: 1px solid var(--c-line);
+}
+/* Restyled marquee ticker: condensed mono-mix typography, terracotta
+   diamond separators (replacing the middle-dot glyph), and slightly
+   taller track so the refrains read as a deliberate brand band
+   rather than a thin disclaimer strip. Background stays as the
+   surrounding section's navy. */
+.mw-marquee .tl-marquee {
+  background: transparent;
+  border-block: 0;
+  color: rgba(245, 230, 203, 0.78);
+  position: relative;
+  /* Soft fade-out at the section edges to suggest motion off-screen. */
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
+          mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
+}
+.mw-marquee .tl-marquee__track {
+  /* Use the shared left-scrolling direction (no reverse) so the
+     affiliates scroll the opposite way to before. Seamless because the
+     track is a doubled item list. */
+  animation-direction: normal;
+  gap: clamp(48px, 5vw, 88px);
+  padding: clamp(24px, 2.4vw, 38px) 0;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: clamp(13px, 1vw, 14.5px);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 500;
+  align-items: center;
+}
+.mw-marquee .tl-marquee__track span:nth-child(odd) {
+  display: inline-flex;
+  align-items: center;
+}
+/* No separators between logos — the track gap alone spaces them.
+   The shared brand <Marquee> still emits .dot spans; hide them. */
+.mw-marquee .tl-marquee__track .dot {
+  display: none;
+}
+/* Locked "Proud affiliates." label inline with the scrolling logos. The
+   label stays put (outside the marquee's overflow box); the logo track
+   flexes into the remaining width and scrolls beside it. */
+.mw-marquee__row {
+  display: flex;
+  align-items: center;
+  gap: clamp(24px, 3vw, 56px);
+  padding-left: clamp(24px, 5vw, 96px);
+}
+.mw-marquee__row .tl-marquee { flex: 1 1 auto; min-width: 0; }
+/* Eyebrow label — mono tag with the rotated-diamond section mark, in
+   place of the former condensed header. Reads as a small "affiliates"
+   eyebrow beside the scrolling logos. */
+.mw-marquee__label {
+  margin: 0;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-weight: 500;
+  font-size: clamp(12px, 1vw, 14px);
+  line-height: 1;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+}
+.mw-marquee__label::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+}
+/* The eyebrow has no square-colon terminator. */
+.mw-marquee__label .mw-stop-colon { display: none; }
+/* Square-shaped ":" — two stacked terracotta squares, replacing the single square period. */
+.mw-stop-colon {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.18em;
+  height: 0.72em;
+  margin-left: 0.14em;
+  vertical-align: middle;
+  transform: translateY(-0.04em);
+}
+.mw-stop-colon::before,
+.mw-stop-colon::after {
+  content: "";
+  width: 0.15em;
+  height: 0.15em;
+  background: var(--c-accent);
+}
+/* Stop the flex track from shrinking its items — an <img width:auto> in a
+   shrinking flex item collapses to 0 width. flex-shrink:0 keeps each logo at
+   its intrinsic (aspect-ratio) width and lets the track overflow to scroll. */
+.mw-marquee .tl-marquee__track > span { flex-shrink: 0; }
+.mw-marquee__logo {
+  height: clamp(45px, 4.5vw, 63px);
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+

@@ -1,4 +1,5 @@
 import "./../template-testing/template-testing.css";
+import "./../template-gallery/home-legacy.css";
 import { TallStaticBanner01 } from "@/components-v2/06_sections/banners/tall-static-banner-01";
 import { BentoGrid01 } from "@/components-v2/06_sections/grids/bento-grid-01";
 import { HoverCardGrid01 } from "@/components-v2/06_sections/grids/hover-card-grid-01";
@@ -21,8 +22,6 @@ export default function P() {
       <MonumentHero01 content={HERO} config={{ tokens: { "--c-accent": "#7a3d12" } }} />
       {/* scheme demo: `.mw-fac2` surface is `--c-surface-warm`; `cream` remaps it to `--c-bg`. */}
       <MediaSplit01 content={FACILITY} config={{ scheme: "cream" }} />
-      {/* layout demo: reverse the facility split columns above the breakpoint. */}
-      <MediaSplit01 content={FACILITY} config={{ layout: "reverse" }} />
 
       {/* ── dark-scheme fixtures: all 7 light sections rendered dark ──────── */}
       <TallStaticBanner01 content={CERTS_BANNER} config={dark} />

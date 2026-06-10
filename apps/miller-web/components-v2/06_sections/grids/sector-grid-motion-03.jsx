@@ -35,10 +35,12 @@ export function SectorGridMotion03() {
 
     const mqRM = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-    const allDiamondsPastBottom = (vh) => {
+    const layoutBottom = (cell, gridTop) => gridTop + cell.offsetTop + cell.offsetHeight;
+
+    const allDiamondsPastBottom = (vh, list) => {
       const gate = vh - REVEAL_BUFFER;
-      const list = cells();
-      return list.length > 0 && list.every((cell) => cell.getBoundingClientRect().bottom <= gate);
+      const gridTop = grid.getBoundingClientRect().top;
+      return list.length > 0 && list.every((cell) => layoutBottom(cell, gridTop) <= gate);
     };
 
     const applyProgress = (progress, list) => {
@@ -95,13 +97,16 @@ export function SectorGridMotion03() {
         return;
       }
 
-      if (!allDiamondsPastBottom(vh)) {
+      if (!allDiamondsPastBottom(vh, list)) {
         applyProgress(0, list);
         return;
       }
 
       // Geometry-scrubbed: progress grows as the grid rises past the gate (reverses on scroll-up).
-      const lastBottom = Math.max(...list.map((cell) => cell.getBoundingClientRect().bottom));
+      // Use layout geometry, not transformed bounds. Reading getBoundingClientRect() from cells here
+      // feeds the reveal transform back into its own progress calculation, which can jitter on slow scroll.
+      const gridTop = grid.getBoundingClientRect().top;
+      const lastBottom = Math.max(...list.map((cell) => layoutBottom(cell, gridTop)));
       const progress = clamp01((gate - lastBottom) / revealSpan);
       applyProgress(progress, list);
     };

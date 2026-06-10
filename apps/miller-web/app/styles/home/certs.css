@@ -1,0 +1,411 @@
+/* home/certs.css — TallStaticBanner01 · components-v2/06_sections/banners/tall-static-banner-01.jsx */
+/* ─────────────────────────────────────────────────────────────────
+   Article 02 — Certifications. Cream surface with a 49° paper-grain
+   wash. The four cert numbers are typographic monoliths arranged as
+   an asymmetric 4-column band; heading lives in the upper-left and
+   the lead body anchors the upper-right corner.
+   ───────────────────────────────────────────────────────────────── */
+.mw-trust {
+  position: relative;
+  background: var(--c-bg);
+  /* Thin certifications banner — top/bottom and left/right share
+     the same compact padding. */
+  padding-block: clamp(11px, 1.05vw, 19px);
+  padding-inline: clamp(11px, 1.05vw, 19px);
+  color: var(--c-ink);
+  overflow: hidden;
+  isolation: isolate;
+  border-top: 0.5px solid var(--c-line);
+  border-bottom: 0.5px solid var(--c-line);
+}
+.mw-trust::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+/* Cert columns: 4-up compact tiles */
+.mw-certs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  border-left: 0.5px solid var(--c-line);
+}
+.mw-cert {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: clamp(12px, 1.4vw, 22px);
+  position: relative;
+  text-decoration: none;
+  color: var(--c-ink);
+  padding: clamp(12px, 1.1vw, 18px) clamp(14px, 1.2vw, 22px);
+  border-right: 0.5px solid var(--c-line);
+  transition: background 240ms ease;
+  overflow: hidden;
+}
+.mw-cert__mark {
+  display: block;
+  flex-shrink: 0;
+  width: clamp(44px, 4.5vw, 72px);
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  /* Push the icon down so its top edge sits at the top of the
+     large number, skipping over the "ISO · YEAR" prefix row above
+     it. prefix font-size (10.5px) × line-height (~1.2) + its
+     margin-bottom (4px) ≈ 17px. */
+  margin-top: 17px;
+}
+.mw-cert__body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+.mw-cert::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--c-accent);
+  transition: width 360ms cubic-bezier(.2,.7,.2,1);
+}
+.mw-cert:hover { background: var(--c-line-2); }
+.mw-cert:hover::before { width: 100%; }
+.mw-cert:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: -3px;
+}
+.mw-cert__prefix {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--c-accent);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.mw-cert__num {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(32px, 3.4vw, 56px);
+  line-height: 0.86;
+  letter-spacing: -0.005em;
+  color: var(--c-ink);
+  text-transform: uppercase;
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+.mw-cert__desc {
+  font-family: var(--font-plex-sans), sans-serif;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--c-ink-2);
+  margin-top: 6px;
+  max-width: 22ch;
+}
+.mw-cert__pdf {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--c-accent-2);
+  transition: color 180ms ease;
+}
+.mw-cert:hover .mw-cert__pdf { color: var(--c-accent); }
+.mw-cert__arr {
+  font-family: var(--font-plex-sans), sans-serif;
+  font-size: 13px;
+  transition: transform 240ms cubic-bezier(.2,.7,.2,1);
+}
+.mw-cert:hover .mw-cert__arr { transform: translateY(2px); }
+
+@media (max-width: 1100px) {
+  .mw-certs { grid-template-columns: 1fr 1fr; border-top: 0.5px solid var(--c-line); }
+  .mw-cert:nth-child(odd) { border-left: 0; }
+  .mw-cert:nth-child(3),
+  .mw-cert:nth-child(4) { border-top: 0.5px solid var(--c-line); }
+}
+@media (max-width: 600px) {
+  /* Keep the 2×2 grid (from the ≤1100 rule); make each card a compact vertical
+     stack — icon on top, then prefix / big number / description. */
+  .mw-cert {
+    flex-direction: column;
+    gap: 6px;
+    padding: clamp(14px, 4vw, 20px) clamp(12px, 3.5vw, 18px);
+  }
+  .mw-cert__mark { width: 38px; margin-top: 0; }
+  .mw-cert__num { font-size: clamp(34px, 11vw, 46px); }
+  .mw-cert__desc { font-size: 12px; max-width: none; margin-top: 4px; }
+  .mw-cert__pdf { margin-top: 8px; }
+}
+
+/* tall-static-banner-01 — full-width cert link (hover); inner block centered + equal width */
+.mw-trust--tsb01 .mw-cert {
+  justify-content: center;
+}
+.mw-trust--tsb01 .mw-certs__inner {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: clamp(12px, 1.4vw, 22px);
+  width: max-content;
+  max-width: 100%;
+}
+.mw-trust--tsb01 .mw-cert__desc {
+  max-width: none;
+}
+/* Reveal: come up + fade in, like the home services roster rows. Applied to the
+   CARD (not its inner content) so the cards' resting/centered layout is never
+   touched — at rest opacity:0 + a downward offset, settling to opacity:1 +
+   transform:none (identity → no layout shift). The banner drives its OWN reveal
+   (its grid is not a data-reveal-stagger container — see tall-static-banner-01.jsx):
+   the cards rest hidden and fire TOGETHER, no stagger, once each is 50% past the
+   bottom of the viewport (data-in set by the banner's observer at threshold 0.5).
+   We own the hidden resting state and the reduced-motion off-switch here since the
+   house [data-reveal-stagger] rules no longer apply. */
+@keyframes mw-cert-rv {
+  0%   { opacity: 0; transform: translateY(34px); }
+  100% { opacity: 1; transform: none; }
+}
+.mw-trust--tsb01 .mw-cert { opacity: 0; }
+.mw-trust--tsb01 .mw-cert[data-in="1"] {
+  animation: mw-cert-rv 0.8s cubic-bezier(.16, .84, .3, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-trust--tsb01 .mw-cert { opacity: 1 !important; animation: none !important; }
+}
+
+/* ── Certs banner · HORIZONTAL SCROLL (≤1100, tsb01-scoped) ──
+   When four cards no longer fit in one row, keep a single scrollable strip
+   instead of a 2×2 grid or vertical ledger. Placed before the tablet-LANDSCAPE
+   coarse block so touch tablets that still fit 4-across in landscape keep that
+   layout. Scoped to `.mw-trust--tsb01` only — generic `.mw-certs` previews and
+   other consumers of the base grid are untouched. ── */
+@media (max-width: 1100px) {
+  .mw-trust--tsb01 .mw-certs {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+    scrollbar-color: var(--c-accent-2) transparent;
+    grid-template-columns: none;
+    border-left: 0.5px solid var(--c-line);
+    border-top: 0;
+  }
+  .mw-trust--tsb01 .mw-cert {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    min-width: clamp(260px, 68vw, 340px);
+    gap: clamp(14px, 2vw, 22px);
+    padding: clamp(14px, 2.2vw, 22px) clamp(16px, 2.4vw, 24px);
+    border-top: 0;
+    border-left: 0;
+    border-right: 0.5px solid var(--c-line);
+    scroll-snap-align: start;
+  }
+  .mw-trust--tsb01 .mw-cert:nth-child(odd),
+  .mw-trust--tsb01 .mw-cert:nth-child(3),
+  .mw-trust--tsb01 .mw-cert:nth-child(4) {
+    border-left: 0;
+    border-top: 0;
+  }
+  .mw-trust--tsb01 .mw-certs__inner {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: clamp(14px, 2vw, 22px);
+    width: max-content;
+    max-width: 100%;
+  }
+  .mw-trust--tsb01 .mw-cert__mark {
+    width: clamp(44px, 6vw, 60px);
+    margin-top: 16px;
+  }
+  .mw-trust--tsb01 .mw-cert__body {
+    flex: 1;
+    min-width: 0;
+  }
+  .mw-trust--tsb01 .mw-cert__desc {
+    max-width: 24ch;
+    min-height: 2.8em;
+  }
+  .mw-trust--tsb01 .mw-cert__pdf {
+    margin-top: 11px;
+    font-size: 10.5px;
+    gap: 9px;
+  }
+  .mw-trust--tsb01 .mw-cert__arr {
+    font-size: 16px;
+    font-weight: 700;
+  }
+}
+@media (max-width: 600px) {
+  .mw-trust--tsb01 .mw-cert {
+    min-width: clamp(240px, 78vw, 300px);
+    padding: clamp(15px, 4vw, 20px) clamp(14px, 3.8vw, 18px);
+  }
+  .mw-trust--tsb01 .mw-cert__mark {
+    width: clamp(46px, 12vw, 56px);
+  }
+  .mw-trust--tsb01 .mw-cert__num {
+    font-size: clamp(34px, 9vw, 42px);
+  }
+  .mw-trust--tsb01 .mw-cert__desc {
+    font-size: 12.5px;
+    max-width: none;
+    /* Drop the 2.8em (≈2-line) reservation inherited from the ≤1100 block. That
+       reservation aligns the "PDF ↓" cue across cards seen side-by-side on
+       tablet; at phone widths the strip shows one card at a time, so the reserve
+       is pure dead space — let the description collapse to its real height and
+       the download cue sits directly beneath it, shrinking the band. */
+    min-height: 0;
+  }
+}
+
+/* ── Certs banner · TABLET-LANDSCAPE pass (1000–1366, landscape, COARSE pointer
+   only, tsb01-scoped) ──
+   SELF-SUFFICIENT block — appended after every preceding certs rule so it wins
+   the cascade where it overlaps. The `pointer: coarse` guard is load-bearing:
+   these landscape widths (1024–1366) overlap real desktop window widths, so
+   coarse is what restricts this block to touch tablets and guarantees a mouse
+   desktop (fine pointer) never matches at an identical width — the base desktop
+   4-up row keeps rendering there, untouched. The tablet-PORTRAIT block can never
+   match landscape, and the ≤600 ledger never reaches here, so this block stands
+   alone across the whole wide-but-short canvas (1024×768 · 1194×834 · 1366×1024).
+
+   WHAT IT FIXES. Two different base states land on this canvas, both wrong for a
+   wide-short landscape tablet: (1) at 1024 the ≤1100 rule applies its 2×2 grid —
+   on a 768px-tall viewport that stacks the band into a very TALL two-row block
+   with large dead vertical gutters, wasting the short canvas on a thin trust
+   strip. (2) At 1194/1366 the base desktop 4-up applies, but the tsb01
+   `justify-content:center` centers each card's JS-equalized (narrow) inner inside
+   its much-WIDER cell, so the four cards float as centered islands with uneven
+   side gutters AND — because the descriptions wrap unevenly ("Environmental
+   Management System" goes to two lines while its row-mates stay on one) — the
+   "PDF·KB ↓" download line drifts to DIFFERENT y-positions across the row, so the
+   band reads ragged and unfinished.
+
+   THE FIX. Keep the desktop LANGUAGE (a single horizontal 4-in-a-row that fills
+   the wide canvas and keeps the band appropriately thin on the short height) but
+   re-tune it: force the 4-up grid at 1024 too (override the ≤1100 2×2), re-anchor
+   each card's content to the cell's LEFT padding (kills the centered-island
+   gutters), reserve a consistent 2-line description height so the download cue
+   lands on one baseline across the row, firm up the seal + monolith-number scale
+   for the larger canvas, and give the STATIC "PDF·KB ↓" cue real presence with a
+   larger, heavier arrow (on a coarse pointer :hover never fires, so the desktop
+   accent-bar reveal + arrow nudge never play — the resting state must carry the
+   download affordance, the same move as the committed mobile + tablet-portrait
+   ledgers). No new animation is introduced, so the existing
+   prefers-reduced-motion off-switch above still covers the reveal; the JS still
+   equalizes the inners (now left-aligned) and every inner is capped at
+   `max-width:100%` of its own equal-width column → the equalized inline width can
+   never exceed the cell → NO horizontal overflow at 1024/1194/1366. ── */
+@media (min-width: 1000px) and (max-width: 1366px) and (orientation: landscape) and (pointer: coarse) {
+  /* Force the horizontal 4-up row at every landscape width — at 1024 this
+     overrides the ≤1100 2×2 (and its added top border) so all three widths share
+     one thin single-row band instead of a tall stacked block on the short
+     canvas. Keep the grid's leading left hairline; no top border (a single row
+     is framed by the section's top/bottom borders + per-cell right dividers). */
+  .mw-trust--tsb01 .mw-certs {
+    display: grid;
+    overflow-x: visible;
+    scroll-snap-type: none;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-left: 0.5px solid var(--c-line);
+    border-top: 0;
+  }
+  .mw-trust--tsb01 .mw-cert {
+    flex: initial;
+    min-width: 0;
+    scroll-snap-align: none;
+  }
+  /* Reset the ≤1100 2×2 divider scheme back to the desktop single-row scheme:
+     only the FIRST cell drops its left border (the grid supplies the leading
+     hairline); every cell keeps its base right hairline; and the 2×2's
+     bottom-row top borders are removed since there is no second row here. */
+  .mw-trust--tsb01 .mw-cert:nth-child(odd) { border-left: 0; }
+  .mw-trust--tsb01 .mw-cert {
+    border-left: 0;
+  }
+  .mw-trust--tsb01 .mw-cert:nth-child(3),
+  .mw-trust--tsb01 .mw-cert:nth-child(4) { border-top: 0; }
+  /* Anchor each card LEFT against the cell padding (kills the centered-island
+     gutter), seal-top aligned to the big number, with comfortable touch padding.
+     The whole <a> is the tap target — at this padding each cell is ~130px+ tall,
+     far past the 44px minimum. */
+  .mw-trust--tsb01 .mw-cert {
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: clamp(18px, 2.1vw, 26px) clamp(16px, 1.9vw, 24px);
+    gap: clamp(13px, 1.5vw, 20px);
+  }
+  /* JS equalizes every inner to the widest card's px width; left-align it against
+     the cell padding and let it grow only to the column (max-width:100% already
+     caps it) so the equalized width can never overflow the cell. */
+  .mw-trust--tsb01 .mw-certs__inner {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: clamp(13px, 1.5vw, 20px);
+  }
+  /* Seal: firmer than the base clamp so it balances the larger monolith number,
+     dropped down so its top meets the number's top, skipping the "ISO · YEAR"
+     prefix row (prefix 10.5px × ~1.2 + 4px margin ≈ 17px), like the desktop card. */
+  .mw-trust--tsb01 .mw-cert__mark {
+    width: clamp(50px, 5vw, 62px);
+    margin-top: 17px;
+  }
+  .mw-trust--tsb01 .mw-cert__body {
+    flex: 1;
+    min-width: 0;
+  }
+  .mw-trust--tsb01 .mw-cert__prefix {
+    font-size: 10.5px;
+    margin-bottom: 4px;
+  }
+  /* Commanding monolith, sized to own the column without crowding the seal. Capped
+     so the widest numbers ("14001"/"45001", 5 glyphs) clear the seal even at the
+     tightest 1024 cell. */
+  .mw-trust--tsb01 .mw-cert__num {
+    font-size: clamp(34px, 3.7vw, 50px);
+    line-height: 0.86;
+  }
+  .mw-trust--tsb01 .mw-cert__desc {
+    font-size: 12.5px;
+    line-height: 1.4;
+    margin-top: 6px;
+    max-width: 22ch;
+    min-height: 2.8em;
+  }
+  /* Static download cue: no :hover on a coarse pointer, so the resting state must
+     read unmistakably as a download. Keep the mono-clay "PDF · KB ↓" pattern but
+     give it presence and a larger, heavier arrow — same as the mobile + portrait
+     ledgers. */
+  .mw-trust--tsb01 .mw-cert__pdf {
+    margin-top: 12px;
+    font-size: 10.5px;
+    gap: 9px;
+  }
+  .mw-trust--tsb01 .mw-cert__arr {
+    font-size: 15px;
+    font-weight: 700;
+  }
+}
+

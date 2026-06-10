@@ -1,0 +1,2573 @@
+/* template-gallery/home-legacy.css — retired home variants (gallery + template-testing-variants only)
+   Not loaded on the production home page (/).
+*/
+/* ─────────────────────────────────────────────────────────────────
+   Sectors — Variation A. Four cards in a row, each with a compact
+   photo banner at the top, then a quiet card body with the category
+   title + sector list. Adds a fourth "Community" category to capture
+   small business + households + municipal programs.
+   ───────────────────────────────────────────────────────────────── */
+.mw-sec2 {
+  position: relative;
+  background: var(--c-surface-warm);
+  padding-block: clamp(64px, 6.5vw, 112px);
+  color: var(--c-ink);
+  overflow: clip;
+  isolation: isolate;
+}
+.mw-sec2::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+.mw-sec2 > .mw-inner { position: relative; z-index: 1; }
+
+.mw-sec2__head {
+  margin-bottom: clamp(40px, 4.5vw, 72px);
+  display: grid;
+  gap: 22px;
+}
+.mw-sec2__head-split {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: clamp(32px, 4vw, 80px);
+  align-items: end;
+}
+@media (max-width: 900px) {
+  /* Stacked: trim the dead space between the stat block and the first card. */
+  .mw-sec2__head-split { grid-template-columns: 1fr; gap: 22px; align-items: start; }
+  .mw-sec2__head { margin-bottom: clamp(22px, 5vw, 32px); }
+}
+.mw-sec2__head-left { display: flex; flex-direction: column; gap: 22px; }
+.mw-sec2__head-right { display: flex; flex-direction: column; gap: 14px; padding-bottom: 4px; }
+/* Solo header (no stat cycle) — title + lead in a single column; the lead is
+   given a little more room to breathe than it has beside the stat block. */
+.mw-sec2__head-solo { display: flex; flex-direction: column; gap: 22px; }
+.mw-sec2__head-solo .mw-sec2__lead { max-width: 72ch; }
+.mw-sec2__title {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(36px, 4vw, 72px);
+  line-height: 1;
+  letter-spacing: 0.005em;
+  color: var(--c-ink);
+  text-transform: uppercase;
+  max-width: 22ch;
+}
+.mw-sec2__lead {
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(16px, 1.15vw, 19px);
+  line-height: 1.6;
+  color: var(--c-ink-2);
+  max-width: 64ch;
+}
+
+/* Card row */
+.mw-sec2__cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 1.6vw, 28px);
+  align-items: stretch;
+}
+@media (max-width: 1100px) { .mw-sec2__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .mw-sec2__cards { grid-template-columns: 1fr; } }
+
+.mw-sec2__card {
+  display: flex;
+  flex-direction: column;
+  background: var(--c-bg);
+  border: 1px solid var(--c-line);
+  overflow: hidden;
+  position: relative;
+  transition: border-color 0.3s ease, transform 0.42s cubic-bezier(.2, .7, .2, 1), box-shadow 0.42s ease;
+}
+/* Hover border that draws from the top-left + bottom-right corners and meets
+   at the other two corners (matches the careers cards / lifetime-reel split). */
+.mw-sec2__card::before,
+.mw-sec2__card::after {
+  content: "";
+  position: absolute;
+  box-sizing: border-box;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 3;
+  transition: width 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), height 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.18s ease;
+}
+.mw-sec2__card::before {
+  top: 0;
+  left: 0;
+  border-top: 2px solid var(--c-accent);
+  border-left: 2px solid var(--c-accent);
+}
+.mw-sec2__card::after {
+  right: 0;
+  bottom: 0;
+  border-right: 2px solid var(--c-accent);
+  border-bottom: 2px solid var(--c-accent);
+}
+.mw-sec2__card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 22px 40px -28px rgba(42, 27, 18, 0.3);
+}
+.mw-sec2__card:hover::before,
+.mw-sec2__card:hover::after {
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-sec2__card::before,
+  .mw-sec2__card::after { transition: opacity 0.18s ease; }
+}
+
+.mw-sec2__card-photo {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--c-navy);
+}
+.mw-sec2__card-photo-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+.mw-sec2__card-photo-img[data-active] {
+  opacity: 1;
+  z-index: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-sec2__card-photo-img { transition: none; }
+}
+
+.mw-sec2__card-body {
+  padding: clamp(18px, 1.6vw, 24px) clamp(18px, 1.6vw, 24px) clamp(20px, 1.8vw, 28px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 1vw, 16px);
+  flex: 1;
+}
+.mw-sec2__card-title {
+  margin: 0;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+}
+.mw-sec2__card-rule {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: var(--c-line);
+}
+.mw-sec2__card-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.mw-sec2__entry {
+  position: relative;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--c-line-2);
+  transition: padding-left 0.22s cubic-bezier(0.2, 0.7, 0.2, 1), background 0.22s ease;
+}
+.mw-sec2__entry:last-child { border-bottom: 0; }
+.mw-sec2__entry::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 0;
+  background: var(--c-accent);
+  transition: width 0.22s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.mw-sec2__entry:hover,
+.mw-sec2__entry[data-active] {
+  padding-left: 12px;
+}
+.mw-sec2__entry:hover::before,
+.mw-sec2__entry[data-active]::before { width: 3px; }
+.mw-sec2__entry:focus { outline: none; }
+.mw-sec2__entry:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 2px;
+}
+.mw-sec2__entry-name {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(17px, 1.35vw, 21px);
+  line-height: 1.1;
+  letter-spacing: 0.005em;
+  color: var(--c-ink);
+  text-transform: uppercase;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Careers — dark walnut anchor near the bottom of the page. Eyebrow
+   + headline + lead on a 2-col split, then two equal cards for
+   "Culture" and "Hiring now". Cards use a terracotta accent rule
+   and a hover slide.
+   ───────────────────────────────────────────────────────────────── */
+.mw-careers {
+  position: relative;
+  background: var(--c-navy-2);
+  padding-block: clamp(64px, 6.5vw, 112px) clamp(40px, 4vw, 70px);
+  color: var(--c-on-navy);
+  overflow: clip;
+  isolation: isolate;
+}
+.mw-careers::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-dark) 38px, var(--c-grain-on-dark) 39px);
+}
+.mw-careers > .mw-inner { position: relative; z-index: 1; }
+
+.mw-careers__head {
+  margin-bottom: clamp(48px, 5vw, 80px);
+}
+.mw-careers__head-text {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 1.5vw, 24px);
+}
+.mw-careers__title {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(36px, 4vw, 72px);
+  line-height: 1;
+  letter-spacing: 0.005em;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+.mw-careers__title-em {
+  color: var(--c-accent);
+  display: block;
+}
+/* Field-head — manifest grammar, dark-adapted: a mono `stage —— field`
+   document line led by a clay diamond, muted cream text on the dark surface. */
+.mw-careers__field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(245, 230, 203, 0.72);
+}
+.mw-careers__field::before {
+  content: "";
+  width: 8.1px;
+  height: 8.1px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex: none;
+}
+.mw-careers__field-rule { flex: 1; height: 1px; background: currentColor; opacity: 0.3; }
+.mw-careers__lead {
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(16px, 1.2vw, 20px);
+  line-height: 1.6;
+  color: rgba(250, 243, 229, 0.91);
+  max-width: 56ch;
+}
+
+/* Two equal cards — terracotta rule above each, condensed title, sans body, link with arrow */
+.mw-careers__cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(20px, 2.4vw, 48px);
+}
+@media (max-width: 800px) { .mw-careers__cards { grid-template-columns: 1fr; gap: 32px; } }
+.mw-careers__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 1.2vw, 18px);
+  padding: clamp(24px, 2.4vw, 36px) clamp(20px, 2vw, 32px);
+  background: rgba(245, 230, 203, 0.035);
+  border: 1px solid rgba(245, 230, 203, 0.12);
+  transition: background 0.3s ease, border-color 0.3s ease, transform 0.42s cubic-bezier(.2, .7, .2, 1);
+}
+/* Hover border that DRAWS from two opposite corners — top-left and
+   bottom-right — each tracing its two edges outward and meeting at the
+   other two corners (top-right + bottom-left). The rectangular echo of the
+   lifetime-reel "split" diamond seal, which forms from its two opposite
+   vertices at once. ::before owns the top + left edges (grown from the
+   top-left corner); ::after owns the bottom + right (grown from bottom-right). */
+.mw-careers__card::before,
+.mw-careers__card::after {
+  content: "";
+  position: absolute;
+  box-sizing: border-box;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+  transition: width 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), height 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.18s ease;
+}
+.mw-careers__card::before {
+  top: 0;
+  left: 0;
+  border-top: 2px solid var(--c-accent);
+  border-left: 2px solid var(--c-accent);
+}
+.mw-careers__card::after {
+  right: 0;
+  bottom: 0;
+  border-right: 2px solid var(--c-accent);
+  border-bottom: 2px solid var(--c-accent);
+}
+.mw-careers__card:hover {
+  background: rgba(245, 230, 203, 0.06);
+  transform: translateY(-2px);
+}
+.mw-careers__card:hover::before,
+.mw-careers__card:hover::after {
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-careers__card::before,
+  .mw-careers__card::after { transition: none; }
+}
+.mw-careers__card-tag {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+}
+.mw-careers__card-title {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(18px, 1.6vw, 24px);
+  line-height: 1.05;
+  letter-spacing: 0.005em;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+.mw-careers__card-text {
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(14px, 1vw, 15.5px);
+  line-height: 1.6;
+  color: rgba(250, 243, 229, 0.89);
+  flex: 1;
+}
+/* Text-link font matched to the VBEC text-link (.mw-fac2__about): condensed,
+   uppercase, 0.04em — colour kept per the dark surface. */
+.mw-careers__card-link {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.1vw, 18px);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--c-on-navy);
+  text-decoration: none;
+  padding-top: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.2s ease, gap 0.2s ease;
+}
+.mw-careers__card-link:hover { color: var(--c-accent); gap: 12px; }
+
+/* Bleed variant — photo extends as a full-bleed background on the
+   right half of the section (top-to-bottom, all the way to the
+   viewport right edge). Text content sits on the left; the two
+   cards stack into a single column on the right, overlaid on the
+   photo with a dark glass treatment for legibility. */
+.mw-careers--bleed {
+  position: relative;
+}
+.mw-careers--bleed > .mw-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(40px, 4vw, 72px);
+}
+/* 55/45 split: content owns the left ~55%, the photo the right 45%, with a
+   solid vertical divider on the seam. The cards do not overlap the photo. */
+.mw-careers--bleed .mw-careers__head {
+  margin-bottom: 0;
+}
+.mw-careers--bleed .mw-careers__head,
+.mw-careers--bleed .mw-careers__cards {
+  max-width: 52%;
+  padding-right: clamp(24px, 3vw, 56px);
+}
+.mw-careers--bleed .mw-careers__cards {
+  /* one child (the diamond row) — it must span the full content column, not be
+     boxed into one of two old text-card tracks. */
+  grid-template-columns: 1fr;
+  padding-right: clamp(16px, 1.6vw, 28px);
+}
+@media (max-width: 900px) {
+  .mw-careers--bleed .mw-careers__head,
+  .mw-careers--bleed .mw-careers__cards { max-width: 100%; padding-right: 0; }
+  .mw-careers--bleed > .mw-inner { gap: 24px; }
+}
+@media (max-width: 800px) {
+  .mw-careers--bleed .mw-careers__cards { grid-template-columns: 1fr; }
+}
+
+.mw-careers__bleed-photo {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 55%;
+  right: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+/* Vertical divider on the content/photo seam — a solid amber rule running the
+   full height of the section. */
+.mw-careers__bleed-photo::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  z-index: 2;
+  background: var(--c-amber);
+  pointer-events: none;
+}
+.mw-careers__bleed-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+}
+@media (max-width: 900px) {
+  /* Photo flush to the top of the section; clear gap before the eyebrow. */
+  .mw-careers { padding-top: 0; }
+  .mw-careers__bleed-photo {
+    position: relative;
+    left: 0;
+    right: 0;
+    height: clamp(220px, 54vw, 300px);
+    margin-top: 0;
+    margin-bottom: clamp(40px, 9vw, 60px);
+  }
+  .mw-careers__bleed-photo::before { display: none; }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Careers diamond cards — the two callouts rendered as rotated-square seals
+   (same geometry as the lifetime-reel diamonds). Default face = tag + title.
+   On hover/focus the fill darkens, the face hides, and the body copy + "learn
+   more" surface; the body is allowed to overflow the diamond's bounds.
+   ───────────────────────────────────────────────────────────────── */
+.mw-careers__cards { overflow: visible; }
+/* Row holds the two diamonds + the drawn chain overlay (positioning context for
+   the full-width chain SVGs). */
+.mw-cdia-row { position: relative; }
+.mw-cdia-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  column-gap: clamp(16px, 1.6vw, 28px);
+}
+.mw-cdia {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  max-width: clamp(300px, 26vw, 360px);
+  margin-inline: auto;
+  isolation: isolate;
+  text-decoration: none;
+  color: inherit;
+}
+/* the filled diamond behind the content (rotated rounded square) */
+.mw-cdia__fill {
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: 50%;
+  width: 60%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%) rotate(45deg);
+  border-radius: 8%;
+  background: rgba(245, 230, 203, 0.04);
+  box-shadow: inset 0 0 0 1px rgba(245, 230, 203, 0.05);
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+}
+/* default face — title centred inside the diamond */
+.mw-cdia__face {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  max-width: 64%;
+  text-align: center;
+  transition: opacity 0.35s ease;
+}
+.mw-cdia__title {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(20px, 1.8vw, 28px);
+  line-height: 1.04;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: #fff;
+}
+/* hover/focus reveal — body copy + learn-more, allowed to overflow the diamond */
+.mw-cdia__reveal {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: 50%;
+  width: 116%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(12px, 1.2vw, 18px);
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+.mw-cdia__text {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(14px, 1vw, 16px);
+  line-height: 1.55;
+  color: rgba(250, 243, 229, 0.94);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.55);
+}
+/* learn-more link — matches the original careers card link (condensed, uppercase) */
+.mw-cdia__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.1vw, 18px);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--c-on-navy);
+}
+/* — interaction: darken the fill, swap face → reveal (border is NOT touched) — */
+.mw-cdia:hover .mw-cdia__fill,
+.mw-cdia:focus-visible .mw-cdia__fill {
+  background: #26130b;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.4), 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+.mw-cdia:hover .mw-cdia__face,
+.mw-cdia:focus-visible .mw-cdia__face { opacity: 0; }
+.mw-cdia:hover .mw-cdia__reveal,
+.mw-cdia:focus-visible .mw-cdia__reveal { opacity: 1; pointer-events: auto; }
+.mw-cdia:hover .mw-cdia__more,
+.mw-cdia:focus-visible .mw-cdia__more { color: var(--c-accent); }
+/* keyboard focus ring on the seal */
+.mw-cdia:focus-visible { outline: none; }
+.mw-cdia:focus-visible .mw-cdia__fill { outline: 2px solid rgba(245, 230, 203, 0.5); outline-offset: 4px; }
+
+/* ── The drawn chain: lead-in line (screen edge → D1) + D1 outline + connector
+   + D2 outline, in one path, wiped in left→right on scroll (once) with a gold
+   charge band riding the growing edge that fades to settled terracotta. ── */
+.mw-cdia-chain {
+  position: absolute;
+  top: 0;
+  z-index: 1;
+  overflow: visible;
+  pointer-events: none;
+}
+.mw-cdia-chain path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.mw-cdia-chain--base path { stroke: var(--c-accent); }
+.mw-cdia-chain--base {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path var(--cdia-sweep, 1700ms) linear;
+}
+.mw-cdia-row[data-phase="draw"] .mw-cdia-chain--base,
+.mw-cdia-row[data-phase="done"] .mw-cdia-chain--base { clip-path: inset(0 0 0 0); }
+/* gold charge band masks the gold copy so a glint rides the frontier */
+.mw-cdia-chain--gold {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 42%, #000 58%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 42%, #000 58%, transparent);
+  -webkit-mask-size: 220px 100%;
+          mask-size: 220px 100%;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+  -webkit-mask-position: -220px 0;
+          mask-position: -220px 0;
+  opacity: 1;
+}
+.mw-cdia-row[data-phase="draw"] .mw-cdia-chain--gold {
+  -webkit-mask-position: calc(100% + 220px) 0;
+          mask-position: calc(100% + 220px) 0;
+  transition: -webkit-mask-position var(--cdia-sweep, 1700ms) linear, mask-position var(--cdia-sweep, 1700ms) linear;
+}
+.mw-cdia-row[data-phase="done"] .mw-cdia-chain--gold {
+  -webkit-mask-position: calc(100% + 220px) 0;
+          mask-position: calc(100% + 220px) 0;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+/* No-hover / narrow screens: drop the diamond geometry + chain; show a readable
+   stacked callout (title + body + link), left-aligned. */
+@media (max-width: 800px) {
+  .mw-cdia-chain { display: none; }
+  .mw-cdia-grid { grid-template-columns: 1fr; gap: 32px; }
+  .mw-cdia {
+    aspect-ratio: auto;
+    max-width: none;
+    display: block;
+    padding: 4px 0;
+  }
+  .mw-cdia__fill { display: none; }
+  .mw-cdia__face {
+    max-width: none;
+    align-items: flex-start;
+    text-align: left;
+    opacity: 1;
+  }
+  .mw-cdia__reveal {
+    position: static;
+    width: auto;
+    transform: none;
+    margin-top: 14px;
+    align-items: flex-start;
+    text-align: left;
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-cdia__fill,
+  .mw-cdia__face,
+  .mw-cdia__reveal { transition: none; }
+  .mw-cdia-chain--base { transition: none !important; }
+  .mw-cdia-chain--gold { display: none; }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Career reel — vertical expanding photo stack that fills the right-hand
+   photo column. Hover/focus or tap a row to grow it; the active row reveals
+   a mono caption. Used when CAREERS.reelPhotos is set (replaces the single
+   bleed photo). Motion: staggered slide-up on mount + smooth flex expansion.
+   ───────────────────────────────────────────────────────────────── */
+/* Reel column — sits inside .mw-inner, occupying the right ~45% of the content
+   container at the content's own height (not the full section bleed). z-index
+   keeps its panels hoverable; the left content (≤52% wide) never overlaps it. */
+.mw-careers__reel-col {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 55%;
+  right: 0;
+  z-index: 2;
+  overflow: hidden;
+}
+.mw-creel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.mw-creel__panel {
+  position: relative;
+  flex: 1 1 0;
+  min-height: 30px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background-color: #18120d;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  cursor: pointer;
+  overflow: hidden;
+  outline: none;
+  /* darken inactive rows so the active one reads as the focal frame */
+  filter: saturate(0.8) brightness(0.45);
+  /* mount-reveal start state */
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    flex-grow 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+    filter 0.6s ease,
+    opacity 0.6s ease,
+    transform 0.6s ease;
+  /* stagger only the reveal (opacity/transform); flex/filter have no delay */
+  transition-delay: 0s, 0s, calc(var(--i, 0) * 90ms), calc(var(--i, 0) * 90ms);
+  will-change: flex-grow, filter, opacity, transform;
+}
+.mw-creel__panel:first-child { border-top: 0; }
+.mw-creel[data-shown] .mw-creel__panel {
+  opacity: 1;
+  transform: none;
+}
+.mw-creel__panel[data-active] {
+  flex-grow: 11;
+  filter: none;
+  box-shadow: inset 0 0 0 2px var(--c-accent);
+  z-index: 2;
+}
+/* clay focus ring for keyboard users (design-system requirement) */
+.mw-creel__panel:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--c-accent), inset 0 0 0 5px rgba(245, 230, 203, 0.55);
+}
+/* bottom legibility wash — deepens on the active row to seat the caption */
+.mw-creel__shade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 60%;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(8, 5, 3, 0.82), rgba(8, 5, 3, 0));
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.mw-creel__panel[data-active] .mw-creel__shade { opacity: 1; }
+/* mono caption — rides in from the left on the active row */
+.mw-creel__cap {
+  position: absolute;
+  left: clamp(16px, 1.6vw, 24px);
+  bottom: clamp(16px, 1.6vw, 22px);
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  pointer-events: none;
+}
+.mw-creel__cap-mark {
+  width: 9px;
+  height: 9px;
+  flex: none;
+  background: var(--c-accent);
+  transform: rotate(45deg) scale(0.4);
+  opacity: 0;
+  transition: opacity 0.5s ease 0.12s, transform 0.5s ease 0.12s;
+}
+.mw-creel__cap-text {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.65);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(-14px);
+  transition: opacity 0.55s ease 0.1s, transform 0.55s ease 0.1s;
+}
+.mw-creel__panel[data-active] .mw-creel__cap-mark {
+  opacity: 1;
+  transform: rotate(45deg) scale(1);
+}
+.mw-creel__panel[data-active] .mw-creel__cap-text {
+  opacity: 1;
+  transform: none;
+}
+/* On mobile the reel stacks in-flow above the content; give it real height. */
+@media (max-width: 900px) {
+  .mw-careers__reel-col {
+    position: relative;
+    top: auto;
+    bottom: auto;
+    left: 0;
+    right: 0;
+    height: auto;
+    min-height: 440px;
+  }
+}
+/* Motion off-switch — layout still changes, but nothing animates/translates. */
+@media (prefers-reduced-motion: reduce) {
+  .mw-creel__panel {
+    opacity: 1;
+    transform: none;
+    transition: flex-grow 0.001s, filter 0.001s;
+  }
+  .mw-creel__shade,
+  .mw-creel__cap-mark,
+  .mw-creel__cap-text { transition: none; }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────
+   Article 03 — Capabilities. Bento layout on walnut: anchor with
+   photo + two stacked features + seven-row registry below. Visual
+   hierarchy matches editorial intent — the headline capability is
+   visually the biggest one.
+   ───────────────────────────────────────────────────────────────── */
+.mw-services__title-em { color: var(--c-accent); }
+.mw-services__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  column-gap: clamp(32px, 4vw, 80px);
+  row-gap: 0;
+  align-items: end;
+  margin-bottom: clamp(29px, 3vw, 58px);
+}
+.mw-services__head .mw-section-tag { grid-column: 1; grid-row: 1; align-self: end; }
+.mw-services__head .mw-section-title { grid-column: 1; grid-row: 2; margin-top: 28px; }
+.mw-services__intro {
+  grid-column: 2;
+  grid-row: 2;
+  font-family: var(--font-body), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.05vw, 18px);
+  line-height: 1.55;
+  color: var(--c-ink-2);
+  max-width: 52ch;
+  margin: 0;
+  padding-bottom: 0.35em;
+}
+@media (max-width: 900px) {
+  .mw-services__head { grid-template-columns: 1fr; }
+  .mw-services__head .mw-section-tag,
+  .mw-services__head .mw-section-title,
+  .mw-services__intro { grid-column: 1; grid-row: auto; }
+  /* Without resetting grid-row, the title (row 2) and intro (row 2)
+     collapse into the same single-column cell and overlap. Let them
+     flow in source order instead, with breathing room before the intro. */
+  .mw-services__intro { margin-top: clamp(16px, 3vw, 24px); }
+}
+.mw-services {
+  background: var(--c-surface-warm);
+  color: var(--c-ink);
+  padding-block: clamp(68px, 7vw, 124px);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.mw-services::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* Subtle terracotta paper-grain on white — matches the trust section. */
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+.mw-services > .mw-inner { position: relative; z-index: 1; }
+
+/* Bento grid — 11 cells. Anchor (a, 6×2) + 2 stacked features (b, c, each 6×1) + two rows of 4 below. */
+.mw-svcs-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: minmax(220px, 1fr) minmax(220px, 1fr) minmax(280px, 1fr) minmax(280px, 1fr);
+  /* Asymmetric lower rows + a tall feature cell (g = R&D) spanning both rows. Breaks the 4×4 symmetry without a separate "feature" component. */
+  grid-template-areas:
+    "a a a a a a b b b b b b"
+    "a a a a a a c c c c c c"
+    "d d d d e e f f f g g g"
+    "h h h i i j j k k g g g";
+  gap: clamp(3px, 0.35vw, 6px);
+}
+.mw-svcs-grid > li {
+  container-type: inline-size;
+  display: block;
+  min-width: 0;
+}
+.mw-svcs-grid > li:nth-child(1) { grid-area: a; }
+.mw-svcs-grid > li:nth-child(2) { grid-area: b; }
+.mw-svcs-grid > li:nth-child(3) { grid-area: c; }
+.mw-svcs-grid > li:nth-child(4) { grid-area: d; }
+.mw-svcs-grid > li:nth-child(5) { grid-area: e; }
+.mw-svcs-grid > li:nth-child(6) { grid-area: f; }
+.mw-svcs-grid > li:nth-child(7) { grid-area: g; }
+.mw-svcs-grid > li:nth-child(8) { grid-area: h; }
+.mw-svcs-grid > li:nth-child(9) { grid-area: i; }
+.mw-svcs-grid > li:nth-child(10) { grid-area: j; }
+.mw-svcs-grid > li:nth-child(11) { grid-area: k; }
+
+/* ───── 01 — Anchor card (Industrial Waste Treatment). Original treatment, unchanged. ───── */
+.mw-svcs-anchor {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  text-decoration: none;
+  color: inherit;
+  height: 100%;
+  overflow: hidden;
+  background: rgba(245,230,203,0.04);
+  outline: 1px solid rgba(245,230,203,0.14);
+  isolation: isolate;
+  transition: transform 360ms cubic-bezier(.2,.7,.2,1), outline-color 240ms ease;
+}
+.mw-svcs-anchor::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: var(--c-accent);
+  transition: width 360ms cubic-bezier(.2,.7,.2,1);
+  z-index: 3;
+}
+.mw-svcs-anchor:hover { transform: translateY(-3px); outline-color: var(--c-accent); }
+.mw-svcs-anchor:hover::before { width: 100%; }
+.mw-svcs-anchor:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
+.mw-svcs-anchor__photo {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  /* Bright normal state — same filter as card + tile for consistency. */
+  filter: saturate(0.95) brightness(0.96) contrast(1.02) sepia(0.04);
+  transition: transform 1200ms cubic-bezier(.2,.7,.2,1), filter 320ms ease;
+}
+.mw-svcs-grid > li .mw-svcs-anchor:hover .mw-svcs-anchor__photo {
+  transform: scale(1.03);
+  /* Hover BRIGHTENS the photo above the normal state — body::before plate still keeps the bottom ~20% dark. */
+  filter: saturate(1.05) brightness(1.1) contrast(1.0) sepia(0.02);
+}
+.mw-svcs-anchor__photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Very light wash for warm palette cohesion — no heavy darkening up top. */
+  background: linear-gradient(to top, rgba(42,27,18,0.30) 0%, rgba(42,27,18,0.08) 100%);
+  opacity: 1;
+  transition: opacity 320ms ease;
+}
+/* Dense bottom dark plate behind the text — IDENTICAL across anchor / card / tile. */
+.mw-svcs-anchor__body::before {
+  content: "";
+  position: absolute;
+  left: -200px;
+  right: -200px;
+  bottom: -200px;
+  top: -80px;
+  background: linear-gradient(to top,
+    rgba(6, 3, 1, 0.96) 0%,
+    rgba(6, 3, 1, 0.94) 35%,
+    rgba(6, 3, 1, 0.72) 60%,
+    rgba(6, 3, 1, 0.28) 85%,
+    rgba(6, 3, 1, 0) 100%
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+.mw-svcs-anchor__num,
+.mw-svcs-anchor__title-row,
+.mw-svcs-anchor__text {
+  position: relative;
+}
+.mw-svcs-grid > li .mw-svcs-anchor:hover .mw-svcs-anchor__photo::after { opacity: 0.2; }
+.mw-svcs-anchor__body {
+  position: relative;
+  z-index: 1;
+  padding: clamp(28px, 3vw, 56px);
+  max-width: 64ch;
+}
+.mw-svcs-anchor__num {
+  display: block;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--c-accent);
+  margin-bottom: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.mw-svcs-anchor__title-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.18em;
+  margin-bottom: 18px;
+  width: max-content;
+  max-width: 100%;
+}
+.mw-svcs-anchor__title {
+  display: block;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(36px, 4.2vw, 72px);
+  line-height: 0.96;
+  letter-spacing: 0.002em;
+  color: #fff;
+  margin: 0;
+  text-transform: uppercase;
+}
+.mw-svcs-anchor__arr {
+  display: inline-block;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  /* Same scale as the other cards' arrows for visual consistency. */
+  font-size: clamp(24px, 2.2vw, 36px);
+  line-height: 1.05;
+  font-weight: 700;
+  flex-shrink: 0;
+  /* Lift slightly so a small arrow sits at the visual middle of the title's last line (instead of at the descender). */
+  margin-bottom: 0.18em;
+  transition: transform 240ms cubic-bezier(.2,.7,.2,1);
+}
+.mw-svcs-anchor:hover .mw-svcs-anchor__arr { transform: translateX(8px); }
+.mw-svcs-anchor__text {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.1vw, 18px);
+  line-height: 1.55;
+  color: rgba(245,230,203,0.88);
+  margin: 0;
+  max-width: 48ch;
+}
+.mw-svcs-anchor__arr {
+  display: inline;
+  color: var(--c-accent);
+  font-family: var(--font-plex-sans), sans-serif;
+  white-space: nowrap;
+  transition: transform 240ms cubic-bezier(.2,.7,.2,1);
+}
+
+/* ───── 02–03 — Supporting cards. Original photo-backed treatment, but arrow inline with title. ───── */
+.mw-svcs-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+  padding: clamp(24px, 2.4vw, 40px);
+  outline: 1px solid rgba(245,230,203,0.14);
+  transition: outline-color 240ms ease, transform 360ms cubic-bezier(.2,.7,.2,1);
+  overflow: hidden;
+  isolation: isolate;
+}
+.mw-svcs-card__photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+  /* Bright normal state — same filter as anchor + tile for consistency. */
+  filter: saturate(0.95) brightness(0.96) contrast(1.02) sepia(0.04);
+  transition: transform 1200ms cubic-bezier(.2,.7,.2,1), filter 320ms ease;
+}
+.mw-svcs-grid > li .mw-svcs-card:hover .mw-svcs-card__photo {
+  transform: scale(1.04);
+  /* Hover BRIGHTENS the photo above the normal state — body::before plate still keeps the bottom ~20% dark. */
+  filter: saturate(1.05) brightness(1.1) contrast(1.0) sepia(0.02);
+}
+.mw-svcs-card__photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Very light wash for warm palette cohesion — no heavy darkening up top. */
+  background: linear-gradient(to top, rgba(42,27,18,0.30) 0%, rgba(42,27,18,0.08) 100%);
+  opacity: 1;
+  transition: opacity 320ms ease;
+}
+.mw-svcs-card__body::before {
+  content: "";
+  position: absolute;
+  left: -200px;
+  right: -200px;
+  bottom: -200px;
+  top: -80px;
+  background: linear-gradient(to top,
+    rgba(6, 3, 1, 0.96) 0%,
+    rgba(6, 3, 1, 0.94) 35%,
+    rgba(6, 3, 1, 0.72) 60%,
+    rgba(6, 3, 1, 0.28) 85%,
+    rgba(6, 3, 1, 0) 100%
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+.mw-svcs-card__num,
+.mw-svcs-card__title-row,
+.mw-svcs-card__text {
+  position: relative;
+}
+.mw-svcs-grid > li .mw-svcs-card:hover .mw-svcs-card__photo::after { opacity: 0.2; }
+.mw-svcs-card__body { position: relative; z-index: 1; }
+.mw-svcs-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--c-accent);
+  transition: width 360ms cubic-bezier(.2,.7,.2,1);
+  z-index: 2;
+}
+.mw-svcs-card:hover { outline-color: var(--c-accent); transform: translateY(-2px); }
+.mw-svcs-card:hover::before { width: 100%; }
+.mw-svcs-card:focus-visible { outline: 2px solid var(--c-accent); outline-offset: -1px; }
+.mw-svcs-card__num {
+  display: inline-block;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--c-accent);
+  margin-bottom: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.mw-svcs-card__num {
+  display: block;
+}
+.mw-svcs-card__title-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.18em;
+  margin-bottom: 10px;
+  width: max-content;
+  max-width: 100%;
+}
+.mw-svcs-card__title {
+  display: block;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(24px, 2.2vw, 36px);
+  line-height: 1.05;
+  letter-spacing: 0.005em;
+  color: #fff;
+  margin: 0;
+  text-transform: uppercase;
+}
+.mw-svcs-card__arr {
+  display: inline-block;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-size: clamp(24px, 2.2vw, 36px);
+  line-height: 1.05;
+  font-weight: 700;
+  flex-shrink: 0;
+  white-space: nowrap;
+  transition: transform 240ms cubic-bezier(.2,.7,.2,1);
+}
+.mw-svcs-card:hover .mw-svcs-card__arr { transform: translateX(6px); }
+.mw-svcs-card__text {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(245,230,203,0.84);
+  margin: 0;
+  max-width: 44ch;
+}
+
+/* ───── 04–11 — Smaller tiles. Full-card photo darkening (matches the supporting cards above). Arrow inline immediately after the title. ───── */
+.mw-svcs-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+  padding: clamp(20px, 3.5cqw, 36px);
+  outline: 1px solid rgba(245,230,203,0.14);
+  overflow: hidden;
+  isolation: isolate;
+  transition: outline-color 240ms ease, transform 360ms cubic-bezier(.2,.7,.2,1);
+}
+.mw-svcs-tile__photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+  /* Bright normal state — same filter as anchor + card for consistency. */
+  filter: saturate(0.95) brightness(0.96) contrast(1.02) sepia(0.04);
+  transition: transform 1200ms cubic-bezier(.2,.7,.2,1), filter 320ms ease;
+}
+.mw-svcs-grid > li .mw-svcs-tile:hover .mw-svcs-tile__photo {
+  transform: scale(1.04);
+  /* Hover BRIGHTENS the photo above the normal state — body::before plate still keeps the bottom ~20% dark. */
+  filter: saturate(1.05) brightness(1.1) contrast(1.0) sepia(0.02);
+}
+.mw-svcs-tile__photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Very light wash for warm palette cohesion — no heavy darkening up top. */
+  background: linear-gradient(to top, rgba(42,27,18,0.30) 0%, rgba(42,27,18,0.08) 100%);
+  opacity: 1;
+  transition: opacity 320ms ease;
+}
+.mw-svcs-tile__body::before {
+  content: "";
+  position: absolute;
+  left: -200px;
+  right: -200px;
+  bottom: -200px;
+  top: -80px;
+  background: linear-gradient(to top,
+    rgba(6, 3, 1, 0.96) 0%,
+    rgba(6, 3, 1, 0.94) 35%,
+    rgba(6, 3, 1, 0.72) 60%,
+    rgba(6, 3, 1, 0.28) 85%,
+    rgba(6, 3, 1, 0) 100%
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+.mw-svcs-tile__num,
+.mw-svcs-tile__title-row,
+.mw-svcs-tile__text {
+  position: relative;
+}
+.mw-svcs-grid > li .mw-svcs-tile:hover .mw-svcs-tile__photo::after { opacity: 0.2; }
+
+/* Legibility — the brown arrow accents on photo-backed cards. Bumped to a lighter clay (#CA8260) plus a soft walnut text-shadow so they stay readable in both the normal and hover (lighter) photo states. */
+.mw-svcs-anchor__arr,
+.mw-svcs-card__arr,
+.mw-svcs-tile__arr {
+  color: #CA8260;
+  text-shadow: 0 1px 3px rgba(20, 12, 6, 0.6);
+}
+
+/* Hide the "0N" eyebrow numbers on capability cards. */
+.mw-svcs-anchor__num,
+.mw-svcs-card__num,
+.mw-svcs-tile__num {
+  display: none !important;
+}
+.mw-svcs-tile__body { position: relative; z-index: 1; }
+.mw-svcs-tile::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--c-accent);
+  transition: width 360ms cubic-bezier(.2,.7,.2,1);
+  z-index: 2;
+}
+.mw-svcs-tile:hover { outline-color: var(--c-accent); transform: translateY(-2px); }
+.mw-svcs-tile:hover::before { width: 100%; }
+.mw-svcs-tile:focus-visible { outline: 2px solid var(--c-accent); outline-offset: -1px; }
+/* Tile num matches Emergency Response's num exactly — same color / size / weight / spacing / margin. */
+.mw-svcs-tile__num {
+  display: block;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--c-accent);
+  margin-bottom: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.mw-svcs-tile__title-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.18em;
+  margin-bottom: 10px;
+  width: max-content;
+  max-width: 100%;
+}
+.mw-svcs-tile__title {
+  display: block;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(24px, 2.2vw, 36px);
+  line-height: 1.05;
+  letter-spacing: 0.005em;
+  color: #fff;
+  margin: 0;
+  text-transform: uppercase;
+}
+.mw-svcs-tile__arr {
+  display: inline-block;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-size: clamp(24px, 2.2vw, 36px);
+  line-height: 1.05;
+  font-weight: 700;
+  flex-shrink: 0;
+  white-space: nowrap;
+  transition: transform 240ms cubic-bezier(.2,.7,.2,1);
+}
+.mw-svcs-tile:hover .mw-svcs-tile__arr { transform: translateX(6px); }
+.mw-svcs-tile__text {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(245,230,203,0.84);
+  margin: 0;
+  max-width: 44ch;
+}
+
+/* Tablet — anchor full width, supporting features side-by-side, lower tiles use varied widths to keep the asymmetry. */
+@media (max-width: 1100px) {
+  .mw-svcs-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-rows:
+      minmax(360px, 1fr)
+      minmax(240px, 1fr)
+      minmax(240px, 1fr)
+      minmax(240px, 1fr)
+      minmax(240px, 1fr)
+      minmax(240px, 1fr);
+    grid-template-areas:
+      "a a a a a a"
+      "b b b c c c"
+      "d d d d e e"
+      "f f g g g g"
+      "h h h i i i"
+      "j j j k k k";
+  }
+}
+/* Mobile — single column stack with every card rendered identically
+   (anchor / card / tile share the same photo-bg + overlaid-title pattern;
+   here we equalize their sizes so a one-per-row stack reads uniformly). */
+@media (max-width: 720px) {
+  .mw-svcs-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(11, minmax(240px, auto));
+    grid-template-areas: "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k";
+  }
+  /* Let the (un-split) anchor title wrap inside the row so its arrow stays
+     inline at the bottom-right, matching the card/tile cards. */
+  .mw-svcs-anchor__title-row { width: auto; flex-wrap: nowrap; }
+  .mw-svcs-anchor__title { min-width: 0; }
+  /* The anchor pads its __body; the card/tile pad the card container itself.
+     Equalize at the correct level so all cards share one inset (and the card/
+     tile don't double up card-padding + body-padding). */
+  .mw-svcs-anchor__body { padding: clamp(20px, 5.5vw, 30px); max-width: none; }
+  .mw-svcs-card,
+  .mw-svcs-tile { padding: clamp(20px, 5.5vw, 30px); }
+  .mw-svcs-card__body,
+  .mw-svcs-tile__body { max-width: none; }
+  .mw-svcs-anchor__title,
+  .mw-svcs-card__title,
+  .mw-svcs-tile__title {
+    font-size: clamp(28px, 8vw, 40px);
+    line-height: 0.98;
+  }
+  .mw-svcs-anchor__num,
+  .mw-svcs-card__num,
+  .mw-svcs-tile__num {
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+  .mw-svcs-anchor__title-row,
+  .mw-svcs-card__title-row,
+  .mw-svcs-tile__title-row {
+    margin-bottom: 13px;
+  }
+  .mw-svcs-anchor__text,
+  .mw-svcs-card__text,
+  .mw-svcs-tile__text {
+    font-size: 14px;
+    line-height: 1.5;
+    max-width: none;
+  }
+  .mw-svcs-anchor__arr,
+  .mw-svcs-card__arr,
+  .mw-svcs-tile__arr {
+    font-size: clamp(22px, 6vw, 30px);
+  }
+}
+
+/* ── Bento grid 02 — section head above a uniform 3×4 card grid; cell 12
+   is intro copy + Learn more CTA (border only, no fill). ── */
+.mw-services--02 .mw-services__head--02 {
+  display: block;
+  margin-bottom: clamp(29px, 3vw, 58px);
+}
+.mw-services--02 .mw-services__head--02 .mw-section-title {
+  margin-top: 28px;
+  max-width: none;
+  /* Scale down on narrow viewports so both nowrap lines still fit. */
+  font-size: clamp(20px, 4.2vw, 72px);
+  line-height: 0.94;
+}
+.mw-services--02 .mw-services__title-line {
+  display: block;
+  white-space: nowrap;
+}
+.mw-services--02 .mw-svcs-grid--02 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(4, minmax(220px, 1fr));
+  grid-template-areas: none;
+}
+/* bento-grid-01 assigns named areas per li; clear those on the 02 grid. */
+.mw-services--02 .mw-svcs-grid--02 > li {
+  grid-area: auto;
+}
+/* Uniform photo cards — bento-grid-02 only (bento-grid-card-02.jsx). */
+.mw-services--02 .mw-svcs-grid02-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+  padding: clamp(24px, 2.4vw, 40px);
+  outline: 1px solid rgba(245, 230, 203, 0.14);
+  overflow: hidden;
+  isolation: isolate;
+  transition: outline-color 240ms ease, transform 360ms cubic-bezier(.2, .7, .2, 1);
+}
+.mw-services--02 .mw-svcs-grid02-card__photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+  filter: saturate(0.95) brightness(0.96) contrast(1.02) sepia(0.04);
+  transition: filter 320ms ease;
+}
+.mw-services--02 .mw-svcs-grid--02 > li .mw-svcs-grid02-card:hover .mw-svcs-grid02-card__photo {
+  filter: saturate(1.05) brightness(1.1) contrast(1) sepia(0.02);
+}
+.mw-services--02 .mw-svcs-grid02-card__photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(42, 27, 18, 0.3) 0%, rgba(42, 27, 18, 0.08) 100%);
+  opacity: 1;
+  transition: opacity 320ms ease;
+}
+.mw-services--02 .mw-svcs-grid--02 > li .mw-svcs-grid02-card:hover .mw-svcs-grid02-card__photo::after {
+  opacity: 0.2;
+}
+.mw-services--02 .mw-svcs-grid02-card__body::before {
+  content: "";
+  position: absolute;
+  left: -200px;
+  right: -200px;
+  bottom: -200px;
+  top: -80px;
+  background: linear-gradient(
+    to top,
+    rgba(6, 3, 1, 0.96) 0%,
+    rgba(6, 3, 1, 0.94) 35%,
+    rgba(6, 3, 1, 0.72) 60%,
+    rgba(6, 3, 1, 0.28) 85%,
+    rgba(6, 3, 1, 0) 100%
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+.mw-services--02 .mw-svcs-grid02-card__body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  gap: 10px;
+}
+.mw-services--02 .mw-svcs-grid02-card__foot {
+  position: relative;
+  width: 100%;
+}
+/* Hover border that draws from the top-left + bottom-right corners and meets
+   at the other two corners (matches the careers cards / lifetime-reel split). */
+.mw-services--02 .mw-svcs-grid02-card::before,
+.mw-services--02 .mw-svcs-grid02-card::after {
+  content: "";
+  position: absolute;
+  box-sizing: border-box;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+  transition: width 0.5s cubic-bezier(.2, .7, .2, 1), height 0.5s cubic-bezier(.2, .7, .2, 1), opacity 0.18s ease;
+}
+.mw-services--02 .mw-svcs-grid02-card::before {
+  top: 0;
+  left: 0;
+  border-top: 2px solid var(--c-accent);
+  border-left: 2px solid var(--c-accent);
+}
+.mw-services--02 .mw-svcs-grid02-card::after {
+  right: 0;
+  bottom: 0;
+  border-right: 2px solid var(--c-accent);
+  border-bottom: 2px solid var(--c-accent);
+}
+.mw-services--02 .mw-svcs-grid02-card:hover {
+  transform: translateY(-2px);
+}
+.mw-services--02 .mw-svcs-grid02-card:hover::before,
+.mw-services--02 .mw-svcs-grid02-card:hover::after {
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+}
+.mw-services--02 .mw-svcs-grid02-card:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: -1px;
+}
+.mw-services--02 .mw-svcs-grid02-card__num {
+  display: none !important;
+}
+.mw-services--02 .mw-svcs-grid02-card__title {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(24px, 2.2vw, 36px);
+  line-height: 1.05;
+  letter-spacing: 0.005em;
+  color: #fff;
+  text-transform: uppercase;
+}
+.mw-services--02 .mw-svcs-grid02-card__text {
+  margin: 0;
+  padding-right: clamp(36px, 3.2vw, 52px);
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(245, 230, 203, 0.84);
+}
+.mw-services--02 .mw-svcs-grid02-card__arr {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: inline-block;
+  white-space: nowrap;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-size: clamp(24px, 2.2vw, 36px);
+  line-height: 1.05;
+  font-weight: 700;
+  color: #ca8260;
+  text-shadow: 0 1px 3px rgba(20, 12, 6, 0.6);
+  transition: transform 240ms cubic-bezier(.2, .7, .2, 1);
+}
+.mw-services--02 .mw-svcs-grid02-card:hover .mw-svcs-grid02-card__arr {
+  transform: translateX(6px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-services--02 .mw-svcs-grid02-card,
+  .mw-services--02 .mw-svcs-grid02-card__photo,
+  .mw-services--02 .mw-svcs-grid02-card__arr,
+  .mw-services--02 .mw-svcs-grid02-card::before,
+  .mw-services--02 .mw-svcs-grid02-card::after {
+    transition: opacity 0.18s ease;
+  }
+  .mw-services--02 .mw-svcs-grid--02 > li .mw-svcs-grid02-card:hover {
+    transform: none;
+  }
+  .mw-services--02 .mw-svcs-grid--02 > li .mw-svcs-grid02-card:hover .mw-svcs-grid02-card__photo {
+    transform: none;
+  }
+}
+.mw-services--02 .mw-svcs-grid-close {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: clamp(20px, 2vw, 28px);
+  height: 100%;
+  min-height: 100%;
+  padding: clamp(24px, 2.4vw, 40px);
+  background: transparent;
+  outline: none;
+  border: 1px solid var(--c-navy-3);
+}
+.mw-services--02 .mw-svcs-grid-close__text {
+  margin: 0;
+  font-family: var(--font-body), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.05vw, 18px);
+  line-height: 1.55;
+  color: var(--c-ink-2);
+}
+@media (max-width: 900px) {
+  .mw-services--02 .mw-svcs-grid--02 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(6, minmax(200px, auto));
+  }
+}
+@media (max-width: 600px) {
+  .mw-services--02 .mw-svcs-grid--02 {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(12, minmax(200px, auto));
+  }
+}
+
+
+/* ════════════════════════════════════════════════════════════
+
+   ROSTER COLLAGE — services as a "team roster" showcase (roster-collage-01).
+   A staggered, lightly-rotated collage of photo cards on the left; a navigable
+   roster menu on the right. Hover/focus either side to spotlight one service:
+   the active card pops forward in full colour, the rest recede (dimmed, NOT
+   greyscale). Keeps the number+name content-overlay on every card. Warm clay
+   palette, square "stamp" markers, 49° paper grain. Reduced-motion safe.
+   ════════════════════════════════════════════════════════════ */
+.mw-roster {
+  position: relative;
+  background: var(--c-surface-warm);
+  padding-block: clamp(64px, 6.5vw, 112px);
+  overflow: clip;
+  isolation: isolate;
+}
+.mw-roster::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+  pointer-events: none;
+  z-index: 0;
+}
+.mw-roster > .mw-inner { position: relative; z-index: 1; }
+
+.mw-roster__head { margin-bottom: clamp(40px, 4vw, 64px); }
+.mw-roster__title {
+  margin-top: 28px;
+  max-width: none;
+  font-size: clamp(26px, 4.4vw, 72px);
+  line-height: 0.94;
+}
+.mw-roster__title-line { display: block; }
+
+.mw-roster__layout {
+  display: grid;
+  /* list column (left) · collage column (right) */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.55fr);
+  gap: clamp(28px, 4vw, 76px);
+  align-items: start;
+  padding-top: 0;
+}
+
+/* ── LEFT · collage ───────────────────────────────────────── */
+/* Clip frame — in the pinned section JS sizes it to exactly 2 rows and clips the
+   inner grid; everywhere else it's transparent (full grid shows). */
+.mw-roster__collage { position: relative; }
+.mw-roster__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* Identical row & column gaps. The column stagger (--ty) makes adjacent rows
+     overlap slightly — that woven offset is the intended look; the snap pitch
+     follows the row pitch so it still lands by whole rows. */
+  gap: clamp(10px, 1vw, 18px);
+  /* room for the column stagger (translateY) at the bottom */
+  padding-bottom: clamp(44px, 6vw, 104px);
+}
+.mw-roster__card {
+  --ty: 0px;
+  --lift: 0px;
+  position: relative;
+  display: block;
+  /* width fixed by the grid columns; height = 0.8 × the old 4/5 (1.25w → 1.0w) = 20% shorter */
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  text-decoration: none;
+  isolation: isolate;
+  transform: translateY(calc(var(--ty) + var(--lift)));
+  transform-origin: center;
+  transition: transform 440ms cubic-bezier(.2, .7, .2, 1), box-shadow 440ms ease;
+}
+/* Outer columns (1 & 3) drop ~64px; the middle column keeps its raised "peak",
+   nudged down only ~8–18px — just enough that the on-hover lift never clips
+   against the container's top edge. */
+.mw-roster__card:nth-child(3n + 1),
+.mw-roster__card:nth-child(3n + 3) { --ty: clamp(30px, 4.5vw, 84px); }
+.mw-roster__card:nth-child(3n + 2) { --ty: clamp(8px, 1.2vw, 18px); }
+/* Spotlit card stays put — no lift, no scale (the box size/position never changes).
+   It just brightens, gets the clay ring, and a SUBTLE shadow. The image zoom +
+   paragraph reveal are the two extracted motions (below). */
+.mw-roster__card.is-active {
+  z-index: 3;
+  box-shadow: 0 8px 20px -10px rgba(42, 27, 18, 0.32);
+}
+.mw-roster__card-photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+  /* Normal-state grade from bento-grid-02, then 10% darker (brightness 0.96 → 0.864).
+     The spotlit/hover grade below is unchanged. */
+  filter: saturate(0.95) brightness(0.864) contrast(1.02) sepia(0.04);
+  transform: scale(1);
+  transition: filter 320ms ease, transform 520ms ease;
+}
+/* Extracted motion #1 — image zoom (card-7 group-hover:scale-110), plus the
+   exact hover-state photo grade. */
+.mw-roster__card.is-active .mw-roster__card-photo {
+  filter: saturate(1.05) brightness(1.1) contrast(1) sepia(0.02);
+  transform: scale(1.1);
+}
+/* Light top wash over the photo (bento-grid-02 photo::after), lifts on hover. */
+.mw-roster__card-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(42, 27, 18, 0.3) 0%, rgba(42, 27, 18, 0.08) 100%);
+  opacity: 1;
+  transition: opacity 320ms ease;
+}
+.mw-roster__card.is-active .mw-roster__card-photo::after { opacity: 0.2; }
+/* Accent ring on the spotlit card. */
+.mw-roster__card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border: 1px solid transparent;
+  border-radius: inherit;
+  pointer-events: none;
+  transition: border-color 240ms ease;
+}
+.mw-roster__card.is-active::after { border-color: var(--c-navy); border-width: 1px; }
+.mw-roster__card:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
+
+/* Action arrow pinned to each card's top-right corner. */
+.mw-roster__card-arr {
+  position: absolute;
+  top: clamp(9px, 0.9vw, 15px);
+  right: clamp(11px, 1.1vw, 18px);
+  z-index: 2;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-size: clamp(20px, 1.9vw, 32px);
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 1px 5px rgba(20, 12, 6, 0.75);
+  transition: transform 240ms cubic-bezier(.2, .7, .2, 1), color 240ms ease;
+}
+.mw-roster__card.is-active .mw-roster__card-arr {
+  color: var(--c-accent);
+  transform: translate(3px, -3px);
+}
+
+/* Content overlay — title + summary + arrow over the exact bento-grid-02
+   content scrim (__body::before): bottom-anchored, gradient extended past the
+   edges so it reads identically. */
+.mw-roster__card-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(7px, 0.7vw, 11px);
+  padding: clamp(13px, 1.2vw, 20px);
+}
+.mw-roster__card-overlay::before {
+  content: "";
+  position: absolute;
+  left: -200px;
+  right: -200px;
+  bottom: -200px;
+  top: -80px;
+  z-index: -1;
+  background: linear-gradient(
+    to top,
+    rgba(6, 3, 1, 0.96) 0%,
+    rgba(6, 3, 1, 0.94) 35%,
+    rgba(6, 3, 1, 0.72) 60%,
+    rgba(6, 3, 1, 0.28) 85%,
+    rgba(6, 3, 1, 0) 100%
+  );
+  pointer-events: none;
+}
+.mw-roster__card-title {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(22px, 2.3vw, 38px);
+  line-height: 0.98;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: #d9d9d9; /* unselected: ~15% darker than white */
+  transition: color 240ms ease;
+}
+/* The spotlit card's title goes full white; the rest sit ~15% darker. */
+.mw-roster__card.is-active .mw-roster__card-title { color: #fff; }
+/* Extracted motion #2 — reveal on hover (card-7's slide-up bottom section),
+   applied to the body paragraph: collapsed (0fr grid row) + faded at rest,
+   expands + fades in when the card is spotlit. The title stays put. */
+.mw-roster__card-reveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: grid-template-rows 440ms cubic-bezier(.2, .7, .2, 1), opacity 360ms ease, transform 440ms ease;
+}
+.mw-roster__card-reveal > * { overflow: hidden; min-height: 0; }
+.mw-roster__card.is-active .mw-roster__card-reveal {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transform: none;
+}
+.mw-roster__card-text {
+  margin: 0;
+  font-family: var(--font-plex-sans), var(--font-body), ui-sans-serif, sans-serif;
+  font-size: clamp(11.5px, 0.86vw, 13.5px);
+  line-height: 1.42;
+  color: rgba(245, 230, 203, 0.85);
+}
+
+/* ── RIGHT · roster menu ──────────────────────────────────── */
+.mw-roster__rail { position: relative; }
+.mw-roster__menu { list-style: none; margin: 0; padding: 0; }
+.mw-roster__row {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(12px, 1vw, 18px);
+  padding: clamp(10px, 0.98vw, 15px) 0;
+  text-decoration: none;
+  border-bottom: 1px solid var(--c-line);
+  transition: opacity 220ms ease;
+}
+.mw-roster__menu > li:first-child .mw-roster__row { border-top: 1px solid var(--c-line); }
+.mw-roster__row:not(.is-active) { opacity: 0.58; }
+.mw-roster__row:not(.is-active):hover { opacity: 0.86; }
+/* Diamond marker — small + border-only at rest; spins into a larger filled
+   diamond when spotlit. Fixed-width grid cell keeps the name from shifting. */
+.mw-roster__row-mark {
+  justify-self: center;
+  width: 8px;
+  height: 8px;
+  border: 1.5px solid var(--c-navy);
+  background: transparent;
+  transform: rotate(45deg);
+  transition: width 280ms cubic-bezier(.2, .7, .2, 1), height 280ms cubic-bezier(.2, .7, .2, 1),
+    background-color 240ms ease, border-color 240ms ease, transform 420ms cubic-bezier(.2, .7, .2, 1);
+}
+.mw-roster__row.is-active .mw-roster__row-mark {
+  width: 15px;
+  height: 15px;
+  background: var(--c-accent);
+  border-color: var(--c-accent);
+  transform: rotate(225deg);
+}
+.mw-roster__row-name {
+  min-width: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(17px, 1.45vw, 25px);
+  line-height: 1.02;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+  transition: color 200ms ease;
+}
+.mw-roster__row.is-active .mw-roster__row-name { color: var(--c-navy); }
+.mw-roster__row-arr {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-size: clamp(20px, 1.6vw, 26px);
+  font-weight: 700;
+  color: var(--c-accent);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+.mw-roster__row.is-active .mw-roster__row-arr { opacity: 1; transform: none; }
+
+/* Section lead — body-intro under the header, matching the other sections
+   (font-size + rhythm mirror .mw-secd__lead). */
+.mw-roster__lead {
+  margin: clamp(18px, 1.6vw, 24px) 0 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(16px, 1.15vw, 19px);
+  line-height: 1.6;
+  color: var(--c-ink-2);
+  max-width: 64ch;
+}
+/* Learn-more CTA — stays at the bottom of the list column. */
+.mw-roster__foot {
+  margin-top: clamp(22px, 2.4vw, 34px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(16px, 1.6vw, 22px);
+}
+
+/* ── Scroll-pin (config.pin) ──────────────────────────────────
+   A tall wrapper holds a sticky pane that fills the viewport. The header stays
+   put (eyebrow fades out once pinned) while JS translates the collage+menu up
+   so they sweep top→bottom within the pinned frame, then it unpins. ── */
+.mw-roster-pinwrap { position: relative; }
+/* The section is the tall scroll region (height set inline by JS). The header sits
+   in normal flow at the top and scrolls away; only the .mw-roster__pin container
+   (list+grid) is sticky. .mw-inner is stretched tall so the sticky element can
+   stick across the whole region. */
+.mw-roster--pin { height: 100%; padding-block: clamp(40px, 5vw, 80px) 0; }
+.mw-roster--pin .mw-inner { height: 100%; }
+/* Cap the single grid row to the visible band (otherwise it grows to the full card
+   grid, ~1045px, and any vertical centering inside it lands off-screen). */
+.mw-roster--pin .mw-roster__layout { height: 100%; grid-template-rows: 100%; }
+.mw-roster--pin .mw-roster__pin {
+  position: sticky;
+  /* Pin directly under the COMPACT topnav (the emergency bar is hidden and the
+     topnav has collapsed to 56px by the time this section is reached). */
+  top: 56px;
+  height: calc(100svh - 56px);
+}
+.mw-roster--pin .mw-roster__scroller {
+  position: relative;
+  height: 100%;
+  overflow: clip;
+}
+/* The clip frame's HEIGHT is set by JS to equal the list column (first menu row → CTA
+   button); align-self centers it in the band so the two columns are the same height and
+   vertically aligned. JS translates the inner grid as one continuous filmstrip (scrubbed
+   1:1 by scroll — no transition, or it would lag): it starts a small pad below the clip
+   top and ends a small pad above the clip bottom. The list/rail stays static beside it. */
+/* --mw-tk / --mw-bk gate the top / bottom edge fades (0 = off, 1 = on). Registered so
+   they animate: the fade eases in/out over the same time as a snap chunk. */
+@property --mw-tk { syntax: "<number>"; inherits: false; initial-value: 0; }
+@property --mw-bk { syntax: "<number>"; inherits: false; initial-value: 0; }
+.mw-roster--pin .mw-roster__collage {
+  align-self: center;
+  min-height: 0;
+  overflow: clip;
+  /* PER-COLUMN edge fade. Three mask layers tile the width into thirds (outer | middle |
+     outer) — their boundaries fall in the column gaps. Because the middle column is
+     staggered HIGHER, it gets a SHORTER top band (--mw-top-mid) and a LONGER bottom band
+     (--mw-bot-mid) than the outer columns (--mw-top-out / --mw-bot-out); all four are set
+     by JS from the measured stagger. --mw-tk/--mw-bk scale the top/bottom bands by snap
+     step: no top fade at the very start (nothing clipped above), no bottom fade once the
+     last row is reached. All inert when not pinned (vars fall back to 0). */
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent 0, #000 calc(var(--mw-top-out, 0px) * var(--mw-tk, 0)), #000 calc(100% - var(--mw-bot-out, 0px) * var(--mw-bk, 0)), transparent 100%),
+    linear-gradient(to bottom, transparent 0, #000 calc(var(--mw-top-mid, 0px) * var(--mw-tk, 0)), #000 calc(100% - var(--mw-bot-mid, 0px) * var(--mw-bk, 0)), transparent 100%),
+    linear-gradient(to bottom, transparent 0, #000 calc(var(--mw-top-out, 0px) * var(--mw-tk, 0)), #000 calc(100% - var(--mw-bot-out, 0px) * var(--mw-bk, 0)), transparent 100%);
+  mask-image:
+    linear-gradient(to bottom, transparent 0, #000 calc(var(--mw-top-out, 0px) * var(--mw-tk, 0)), #000 calc(100% - var(--mw-bot-out, 0px) * var(--mw-bk, 0)), transparent 100%),
+    linear-gradient(to bottom, transparent 0, #000 calc(var(--mw-top-mid, 0px) * var(--mw-tk, 0)), #000 calc(100% - var(--mw-bot-mid, 0px) * var(--mw-bk, 0)), transparent 100%),
+    linear-gradient(to bottom, transparent 0, #000 calc(var(--mw-top-out, 0px) * var(--mw-tk, 0)), #000 calc(100% - var(--mw-bot-out, 0px) * var(--mw-bk, 0)), transparent 100%);
+  -webkit-mask-size: 34% 100%, 34% 100%, 34% 100%;
+  mask-size: 34% 100%, 34% 100%, 34% 100%;
+  -webkit-mask-position: left, center, right;
+  mask-position: left, center, right;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  transition: --mw-tk 480ms cubic-bezier(.22, .61, .36, 1), --mw-bk 480ms cubic-bezier(.22, .61, .36, 1);
+}
+/* Snap transition: each scroll chunk jumps the grid by one card-row; this animates
+   the jump so the rows glide into place rather than teleporting. */
+.mw-roster--pin .mw-roster__grid { will-change: transform; transition: transform 480ms cubic-bezier(.22, .61, .36, 1); }
+/* List column is exactly the screen-height band, with its content (menu + CTA)
+   vertically CENTERED — equal space above the first item and below the button.
+   Sized off the viewport (not the grid row, which is tall enough to hold the card
+   grid) so centering can't push the list off-screen. */
+.mw-roster--pin .mw-roster__rail {
+  height: calc(100svh - 56px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+@media (prefers-reduced-motion: reduce) {
+  /* No scroll-jacking: fall back to a normal flowed section. */
+  .mw-roster-pinwrap { height: auto !important; }
+  .mw-roster--pin { height: auto; padding-block: clamp(64px, 6.5vw, 112px); }
+  .mw-roster--pin .mw-inner { height: auto; }
+  .mw-roster--pin .mw-roster__layout { height: auto; grid-template-rows: none; }
+  .mw-roster--pin .mw-roster__pin { position: static; height: auto !important; }
+  .mw-roster--pin .mw-roster__scroller { overflow: visible; }
+  .mw-roster--pin .mw-roster__collage { overflow: visible; height: auto !important; -webkit-mask-image: none; mask-image: none; }
+  .mw-roster--pin .mw-roster__rail { height: auto; display: block; }
+  .mw-roster--pin .mw-roster__grid { transition: none; transform: none !important; }
+}
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .mw-roster__layout { grid-template-columns: 1fr; gap: clamp(28px, 5vw, 48px); }
+  .mw-roster__grid { padding-bottom: clamp(34px, 8vw, 80px); }
+  /* No snap-pin below the single-column breakpoint — flow normally. */
+  .mw-roster-pinwrap { height: auto !important; }
+  .mw-roster--pin { height: auto; padding-block: clamp(64px, 6.5vw, 112px); }
+  .mw-roster--pin .mw-inner { height: auto; }
+  .mw-roster--pin .mw-roster__layout { height: auto; grid-template-rows: none; }
+  .mw-roster--pin .mw-roster__pin { position: static; height: auto !important; }
+  .mw-roster--pin .mw-roster__scroller { overflow: visible; }
+  .mw-roster--pin .mw-roster__collage { overflow: visible; height: auto !important; -webkit-mask-image: none; mask-image: none; }
+  .mw-roster--pin .mw-roster__rail { height: auto; display: block; }
+  .mw-roster--pin .mw-roster__grid { transform: none !important; }
+}
+@media (max-width: 560px) {
+  .mw-roster__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mw-roster__card:nth-child(3n + 2),
+  .mw-roster__card:nth-child(3n + 3) { --ty: 0px; }
+  .mw-roster__card:nth-child(2n) { --ty: clamp(20px, 6vw, 40px); }
+}
+/* Touch / no-hover devices can't trigger the reveal — show every paragraph. */
+@media (hover: none) {
+  .mw-roster__card-reveal { grid-template-rows: 1fr; opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-roster__card,
+  .mw-roster__card-photo,
+  .mw-roster__card-reveal,
+  .mw-roster__row-mark,
+  .mw-roster__row-arr,
+  .mw-roster__row,
+  .mw-roster__row-name,
+  .mw-roster__row-tag { transition: none; }
+  .mw-roster__card { --lift: 0px; }
+  .mw-roster__card.is-active .mw-roster__card-photo { transform: none; }
+  .mw-roster__row.is-active .mw-roster__row-mark { transform: none; }
+}
+
+/* ════════════════════════════════════════════════════════════
+
+   CREED — editorial statement interlude (statement-band-01).
+   A photo-free "breath" between the cert strip and the services
+   grid: an oversized brand statement beside a single crescendo
+   stat. Warm cream surface with the shared 49° paper-grain wash.
+   Reveal + reduced-motion handled by the global data-reveal system.
+   ════════════════════════════════════════════════════════════ */
+.mw-creed {
+  position: relative;
+  background: var(--c-surface-warm);
+  /* Match the standard home section rhythm — NOT a double-height band. */
+  padding-block: clamp(64px, 6.5vw, 112px);
+  border-block: 0.5px solid var(--c-line);
+  overflow: clip;
+}
+.mw-creed::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+  pointer-events: none;
+}
+.mw-creed > .mw-inner { position: relative; z-index: 1; }
+
+.mw-creed__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: clamp(36px, 5vw, 88px);
+  /* Columns stretch to equal height so the divider rule structures the band
+     and the stat sits centered against the statement — no bottom-floating void. */
+  align-items: stretch;
+}
+
+/* Statement column — the manifesto. */
+.mw-creed__lead .mw-section-tag { margin-bottom: clamp(26px, 3vw, 44px); }
+.mw-creed__statement {
+  margin: 0;
+  max-width: 17ch;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: clamp(34px, 5.4vw, 78px);
+  line-height: 0.98;
+  letter-spacing: 0.005em;
+  color: var(--c-ink);
+  text-wrap: balance;
+}
+.mw-creed__em { color: var(--c-accent); }
+.mw-creed__body {
+  margin: clamp(28px, 3vw, 40px) 0 0;
+  max-width: 46ch;
+  font-family: var(--font-sans);
+  font-size: clamp(16px, 1.15vw, 19px);
+  line-height: 1.62;
+  color: var(--c-ink-2);
+}
+
+/* Stat column — the crescendo numeral, centered against a full-height clay rule. */
+.mw-creed__stat {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-left: 0.5px solid var(--c-line);
+  padding-left: clamp(28px, 3vw, 52px);
+}
+.mw-creed__stat-label {
+  margin: 0 0 18px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+}
+.mw-creed__stat-fig {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  color: var(--c-accent);
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  line-height: 0.84;
+}
+.mw-creed__stat-num { font-size: clamp(72px, 9.5vw, 148px); letter-spacing: -0.01em; }
+.mw-creed__stat-unit { font-size: clamp(32px, 3.4vw, 56px); }
+.mw-creed__stat-note {
+  margin: 18px 0 0;
+  max-width: 24ch;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  color: var(--c-ink-3);
+}
+
+@media (max-width: 860px) {
+  .mw-creed__grid { grid-template-columns: 1fr; gap: clamp(40px, 8vw, 64px); }
+  .mw-creed__stat {
+    border-left: 0;
+    border-top: 0.5px solid var(--c-line);
+    padding-left: 0;
+    padding-top: clamp(28px, 6vw, 40px);
+  }
+}
+
+
+/* ════════════════════════════════════════════════════════════
+
+   SCALE — the signature moment (scale-band-01).
+   A full-bleed deep-walnut band breaking the long light middle
+   stretch, with one hero-scale figure that counts up on scroll-in
+   (CountUp01) and a quiet secondary trio. The drama is sheer size
+   on a dark field; 49° grain-on-dark keeps the document motif.
+   ════════════════════════════════════════════════════════════ */
+.mw-scale {
+  position: relative;
+  background: var(--c-navy-2);
+  color: var(--c-on-navy);
+  padding-block: clamp(72px, 8vw, 144px);
+  overflow: clip;
+  isolation: isolate;
+}
+.mw-scale::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-dark) 38px, var(--c-grain-on-dark) 39px);
+}
+.mw-scale > .mw-inner { position: relative; z-index: 1; }
+.mw-scale .mw-section-tag { margin-bottom: clamp(20px, 2.2vw, 32px); }
+
+/* The hero figure — count-up numeral + unit on the same baseline. */
+.mw-scale__fig {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: clamp(8px, 1.4vw, 24px);
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  line-height: 0.82;
+}
+.mw-countup { font-variant-numeric: tabular-nums; }
+.mw-scale__num {
+  color: var(--c-accent);
+  font-size: clamp(88px, 19vw, 300px);
+  letter-spacing: -0.015em;
+}
+.mw-scale__unit {
+  color: #ffffff;
+  font-size: clamp(30px, 4.4vw, 80px);
+  letter-spacing: 0.01em;
+}
+.mw-scale__body {
+  margin: clamp(24px, 2.6vw, 40px) 0 0;
+  max-width: 52ch;
+  font-family: var(--font-sans);
+  font-size: clamp(16px, 1.2vw, 20px);
+  line-height: 1.62;
+  color: rgba(250, 243, 229, 0.88);
+}
+
+/* Quiet secondary trio — supporting figures, set off by a top hairline. */
+.mw-scale__support {
+  list-style: none;
+  margin: clamp(40px, 4.5vw, 72px) 0 0;
+  padding: clamp(32px, 3.2vw, 48px) 0 0;
+  border-top: 0.5px solid rgba(245, 230, 203, 0.2);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(24px, 3vw, 56px);
+}
+.mw-scale__support-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.mw-scale__support-val {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(30px, 3.4vw, 52px);
+  line-height: 1;
+  letter-spacing: 0.005em;
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+}
+.mw-scale__support-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(245, 230, 203, 0.66);
+}
+
+@media (max-width: 560px) {
+  .mw-scale__support { grid-template-columns: 1fr; gap: 0; }
+  .mw-scale__support-item {
+    padding-block: clamp(18px, 5vw, 24px);
+    border-top: 0.5px solid rgba(245, 230, 203, 0.14);
+  }
+  .mw-scale__support-item:first-child { border-top: 0; padding-top: 0; }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Who-we-serve v1 (mw-secd2*) — ARC GALLERY. Ported from an external
+   arc-hero reference, rebuilt CSS-only in the clay system: SQUARED
+   photos (no radius), warm tokens only, no foreign palette. 16 sub-
+   industry photos fan along a rainbow arch; per-card angle/position/
+   rotation arrive as CSS custom props (--cosA/--sinA/--rot). The arch is a
+   TRUE half-circle: --arc-rx == --arc-ry == min(480px, 44vw), so it reads
+   as a real semicircle (not a flat ellipse) and stays narrower than the
+   content column. The 4 primary categories ride the SAME arc, dropped
+   below by --cat-drop, collapsing to a 2×2 grid on mobile. Staggered
+   fade-up reveal is driven by SectorGridMotion02 (.is-armed → .is-in).
+   ════════════════════════════════════════════════════════════════ */
+.mw-secd2 {
+  --arc-rx: min(480px, 44vw); /* TRUE half-circle radius (rx == ry) — the original reference's 480px circle, capped at 44vw so the arch never spans the full content width and never clips on smaller screens */
+  --arc-ry: min(480px, 44vw); /* equal to --arc-rx → a real semicircle, not a flat ellipse */
+  --card: 116px; /*  square photo-tile size (category markers reuse the same arc geometry) */
+  --cat-drop: 238px; /* equal vertical gap every category keeps below the photo arch (with --cat-bend 1.0) */
+  --cat-mark: 40px; /*  small clay diamond behind each category label */
+  --cat-bend: 1.0; /*   category arc CONCENTRIC with the photo circle → all four labels sit an equal distance below the arch (the middle two ride up to follow the curve, ends stay put) */
+  --cat-hl-scale: 1.3; /* category-hover spotlight: matched photos grow … */
+  --cat-hl-slot: 162px; /* … gather into a row, this far apart (small gap between cards) … */
+  --cat-hl-gap: 226px; /*  … sitting this far above each category's own marker (equal gap for all four) */
+  position: relative;
+  background: var(--c-surface-warm);
+  padding-block: clamp(72px, 6.5vw, 128px) clamp(64px, 6.5vw, 112px); /* extra top room for spotlight captions */
+  color: var(--c-ink);
+  overflow: clip;
+  isolation: isolate;
+}
+/* 49° paper-grain wash — same faint diagonal hatch as the other warm sections. */
+.mw-secd2::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+
+/* ── the arch ── full-bleed band; pivot anchored bottom-centre so cards swing up into a rainbow ── */
+.mw-secd2__arc {
+  position: relative;
+  z-index: 1;
+  /* width comes from the shared .mw-inner primitive (the body-content column) */
+  height: calc(var(--arc-ry) + var(--card));
+}
+.mw-secd2__card {
+  position: absolute;
+  width: var(--card);
+  height: var(--card);
+  /* elliptical arc: x is a fraction of the content width, y is the flatter px rise */
+  left: calc(50% + (var(--cosA) * var(--arc-rx)));
+  bottom: calc(var(--sinA) * var(--arc-ry));
+  transform: translate(-50%, 50%);
+  z-index: var(--z);
+  /* left/bottom transition so the spotlight can glide the matched photos into a centred row */
+  transition: left 0.55s cubic-bezier(.2, .7, .2, 1), bottom 0.55s cubic-bezier(.2, .7, .2, 1);
+}
+/* squared photo tile — NO radius (brand), walnut backstop, soft clay shadow + cream hairline */
+.mw-secd2__card-inner {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--c-navy);
+  box-shadow: 0 8px 22px rgba(33, 20, 12, 0.26);
+  outline: 1px solid var(--c-line);
+  outline-offset: -1px;
+  transform: rotate(calc(var(--rot) * 1deg));
+  transition: transform 0.5s cubic-bezier(.2, .7, .2, 1), box-shadow 0.4s ease, filter 0.4s ease, opacity 0.4s ease;
+}
+.mw-secd2__card-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.92) brightness(0.96);
+  transition: filter 0.4s ease;
+}
+.mw-secd2__card:hover { z-index: 99; }
+.mw-secd2__card:hover .mw-secd2__card-inner {
+  transform: translateY(-12px) scale(1.15); /* straighten to 0°, grow 15%, lift up so the label clears */
+  box-shadow: 0 16px 34px rgba(33, 20, 12, 0.36);
+}
+.mw-secd2__card:hover .mw-secd2__card-img { filter: saturate(1.05) brightness(1.05); }
+/* reveal this photo's own caption above it (offset clears the lifted, enlarged photo).
+   Side photos have the rising arc right beside them, so a centred caption lands over the
+   neighbouring photos. Shift it OUTWARD (toward the edge / clear cream) proportionally to how far
+   the photo sits from centre (--cosA): centre photos (cosA≈0) stay put, edge photos slide out. */
+.mw-secd2__card:hover .mw-secd2__card-cap {
+  opacity: 1;
+  transform: translate(calc(-50% + (var(--cosA) * 72px)), 0);
+  bottom: calc(100% + 38px);
+}
+
+/* ── category-hover spotlight ── hovering a category card (second arc) reaches across to its
+   four photos in the top arc via :has(). The non-matched photos recede in place; the matched
+   four GATHER into a centred, evenly-spaced row (--cat-hl-slot apart, at --cat-hl-row height),
+   grow ~50% (--cat-hl-scale), and straighten — so every category presents its photos the same
+   readable way with no edge clipping, reusing the normal hover's saturation + shadow language. */
+.mw-secd2:has(.mw-secd2__cat:hover) .mw-secd2__card-inner {
+  filter: saturate(0.32) brightness(0.86);
+  opacity: 0.38;
+  transform: rotate(calc(var(--rot) * 1deg)) scale(0.96); /* the rest recede a hair for depth */
+}
+/* the other three category labels also fade so focus lands on the hovered one */
+.mw-secd2:has(.mw-secd2__cat:hover) .mw-secd2__cat:not(:hover) { opacity: 0.4; }
+/* matched photos slide to centred row slots — left/bottom resolve against the content column,
+   so the row is always centred and never clips, whichever category is hovered */
+.mw-secd2:has(.mw-secd2__cat[data-cat="0"]:hover) .mw-secd2__card[data-cat="0"],
+.mw-secd2:has(.mw-secd2__cat[data-cat="1"]:hover) .mw-secd2__card[data-cat="1"],
+.mw-secd2:has(.mw-secd2__cat[data-cat="2"]:hover) .mw-secd2__card[data-cat="2"],
+.mw-secd2:has(.mw-secd2__cat[data-cat="3"]:hover) .mw-secd2__card[data-cat="3"] {
+  z-index: 50;
+  left: calc(50% + (var(--cat-cx) * var(--arc-rx)) + (var(--gi) * var(--cat-hl-slot)) + var(--cat-dx-cat, 0px));
+  /* Uniform height for every category: the spotlight images' tops line up with the arch's highest
+     (apex) photo. The apex photo sits at ~--arc-ry with a rotated top ≈ +0.65·card; the straightened
+     spotlight cards scale 1.3 → top ≈ +0.65·card too, so the card terms cancel and bottom ≈ --arc-ry. */
+  bottom: var(--arc-ry);
+}
+.mw-secd2:has(.mw-secd2__cat[data-cat="0"]:hover) .mw-secd2__card[data-cat="0"] .mw-secd2__card-inner,
+.mw-secd2:has(.mw-secd2__cat[data-cat="1"]:hover) .mw-secd2__card[data-cat="1"] .mw-secd2__card-inner,
+.mw-secd2:has(.mw-secd2__cat[data-cat="2"]:hover) .mw-secd2__card[data-cat="2"] .mw-secd2__card-inner,
+.mw-secd2:has(.mw-secd2__cat[data-cat="3"]:hover) .mw-secd2__card[data-cat="3"] .mw-secd2__card-inner {
+  opacity: 1;
+  filter: saturate(1.04) brightness(1.04);
+  transform: scale(var(--cat-hl-scale)); /* grow + fully upright (0°) */
+  box-shadow: 0 26px 50px rgba(33, 20, 12, 0.45);
+}
+/* sub-industry caption — sits above each photo; hidden until that photo's category is spotlighted */
+.mw-secd2__card-cap {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 32px); /* clears the scaled photo's top, with breathing room */
+  max-width: calc(var(--card) * var(--cat-hl-scale));
+  text-align: center;
+  line-height: 1.18;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+  opacity: 0;
+  transform: translate(-50%, 6px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.mw-secd2:has(.mw-secd2__cat[data-cat="0"]:hover) .mw-secd2__card[data-cat="0"] .mw-secd2__card-cap,
+.mw-secd2:has(.mw-secd2__cat[data-cat="1"]:hover) .mw-secd2__card[data-cat="1"] .mw-secd2__card-cap,
+.mw-secd2:has(.mw-secd2__cat[data-cat="2"]:hover) .mw-secd2__card[data-cat="2"] .mw-secd2__card-cap,
+.mw-secd2:has(.mw-secd2__cat[data-cat="3"]:hover) .mw-secd2__card[data-cat="3"] .mw-secd2__card-cap {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+/* matching category label/diamond also reads as active so the hovered group feels connected */
+.mw-secd2__cat:hover .mw-secd2__cat-mark { border-color: var(--c-accent); }
+@media (prefers-reduced-motion: reduce) {
+  /* no glide — the gather + spotlight still apply, just without the position/scale animation */
+  .mw-secd2__card { transition: none; }
+}
+
+/* ── second (category) arc ── SAME arc geometry as the photos (--arc-rx/--arc-ry), dropped
+   straight down by --cat-drop so the row reads below the arch. Each category is a small clay
+   DIAMOND marker with its full-size label centred on top of it. Zero-height .mw-inner layer so
+   its children share the photo arch's baseline + content-width coordinate system. */
+.mw-secd2__cats {
+  position: relative;
+  height: 0;
+  margin-inline: auto;
+  z-index: 4;
+}
+.mw-secd2__cat {
+  position: absolute;
+  width: var(--card);
+  height: var(--card);
+  left: calc(50% + (var(--cosA) * var(--arc-rx)) + var(--cat-dx, 0px)); /* same arc x as the photos, + outward nudge for the middle two */
+  bottom: calc((var(--sinA) * var(--arc-ry) * var(--cat-bend)) - var(--cat-drop) - var(--cat-dy, 0px)); /* … arc y, bent + dropped (--cat-dy nudges the end cards down) */
+  transform: translate(-50%, 50%);
+  z-index: var(--z);
+  display: grid;
+  place-items: center; /* stack the small diamond + label in one cell … */
+  place-content: center; /* … and centre that cell on the arc point even when the label
+                            (wider than the card box) overflows, so the marker stays on-arc */
+  cursor: pointer; /* the category is interactive (spotlights its photos) */
+  transition: opacity 0.3s ease;
+}
+/* small border-only clay diamond sitting behind the label (no fill, no shadow) */
+.mw-secd2__cat-mark {
+  grid-area: 1 / 1;
+  width: var(--cat-mark);
+  height: var(--cat-mark);
+  border: 2px solid var(--c-line);
+  transform: rotate(45deg); /* diamond */
+  transition: border-color 0.3s ease;
+}
+/* label — horizontal, on top of the small diamond */
+.mw-secd2__cat-name {
+  grid-area: 1 / 1;
+  z-index: 1;
+  white-space: nowrap;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  /* smaller at rest; grows to the full hover size on hover */
+  font-size: clamp(14.4px, 1.53vw, 24.3px);
+  line-height: 0.98;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--c-ink-2); /* inactive tone — matches the services list's unselected items */
+  transition: font-size 0.28s cubic-bezier(.2, .7, .2, 1), color 0.28s ease;
+}
+.mw-secd2__cat:hover .mw-secd2__cat-name,
+.mw-secd2__cat:focus-within .mw-secd2__cat-name {
+  font-size: clamp(19px, 2vw, 32px);
+  color: var(--c-navy); /* darkens on hover, like the active services item */
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-secd2__cat-name { transition: none; }
+}
+
+/* ── intro copy nested under the arch — real who-we-serve eyebrow/title/lead ── */
+.mw-secd2__intro {
+  position: relative;
+  z-index: 2;
+  max-width: min(94vw, 880px); /* room for the 2-line display title; lead keeps its own 56ch cap */
+  margin-inline: auto;
+  margin-top: clamp(-64px, -5vw, -32px);
+  padding-inline: clamp(20px, 5vw, 40px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+}
+.mw-secd2__title {
+  margin: 0;
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(24px, 4vw, 64px);
+  line-height: 1.02;
+  letter-spacing: 0.005em;
+  color: var(--c-ink);
+  text-transform: uppercase;
+  max-width: 46ch; /* wide enough to keep the longer 2nd line ("from your business to your home") on one line */
+  white-space: pre-line; /* honor the \n in the content as a hard 2-line break */
+}
+.mw-secd2__lead {
+  margin: 0;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(16px, 1.15vw, 19px);
+  line-height: 1.6;
+  color: var(--c-ink-2);
+  max-width: 56ch;
+}
+
+/* responsive card / category sizing — radius stays circular (min(480px, 44vw)) at every width */
+@media (max-width: 1023px) {
+  .mw-secd2 { --card: 86px; --cat-drop: 167px; --cat-mark: 32px; --cat-hl-slot: 124px; --cat-hl-gap: 166px; }
+  .mw-secd2__intro { margin-top: clamp(-52px, -6vw, -28px); }
+}
+@media (max-width: 639px) {
+  .mw-secd2 { --card: 54px; }
+  /* the dropped arc is too tight on phones → lay the 4 diamond+label markers out as a 2×2 grid */
+  .mw-secd2__intro { margin-top: 8px; }
+  .mw-secd2__cats {
+    height: auto;
+    margin: 24px auto 4px;
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    justify-content: center;
+    align-items: center;
+    gap: 22px 30px;
+  }
+  .mw-secd2__cat {
+    position: relative;
+    left: auto; /*  drop the arc offsets — left/bottom would shift the static grid items */
+    bottom: auto;
+    width: auto;
+    height: auto;
+    padding: 12px 6px; /* room for the diamond points above/below the label */
+    transform: none;
+    z-index: auto;
+  }
+}
+
+/* ── staggered fade-up reveal ── SectorGridMotion02 arms the arch (.is-armed) then fires
+   .is-in when it scrolls into view; each card fades + rises, delayed by its index (--ai). */
+@keyframes mw-secd2-arc-in {
+  from { opacity: 0; transform: translate(-50%, 62%); }
+  to   { opacity: 1; transform: translate(-50%, 50%); }
+}
+.mw-secd2__arc.is-armed .mw-secd2__card,
+.mw-secd2__arc.is-armed ~ .mw-secd2__cats .mw-secd2__cat { opacity: 0; }
+.mw-secd2__arc.is-armed.is-in .mw-secd2__card,
+.mw-secd2__arc.is-armed.is-in ~ .mw-secd2__cats .mw-secd2__cat {
+  animation: mw-secd2-arc-in 0.8s cubic-bezier(.22, .61, .36, 1) both;
+  animation-delay: calc(var(--ai) * 70ms);
+}
+/* Intro lines (eyebrow → title → lead) rise in as the finale: the photo sweep runs 0–1.05s and
+   the category diamonds settle 1.12–1.33s, so these land just after, resolving the message. They
+   share the .is-armed/.is-in state, so they reset and replay with the rest of the section. */
+@keyframes mw-secd2-rise {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.mw-secd2__arc.is-armed ~ .mw-secd2__intro > * { opacity: 0; }
+.mw-secd2__arc.is-armed.is-in ~ .mw-secd2__intro > * {
+  animation: mw-secd2-rise 0.7s cubic-bezier(.2, .7, .2, 1) both;
+}
+.mw-secd2__arc.is-armed.is-in ~ .mw-secd2__intro > *:nth-child(1) { animation-delay: 1s; }
+.mw-secd2__arc.is-armed.is-in ~ .mw-secd2__intro > *:nth-child(2) { animation-delay: 1.15s; }
+.mw-secd2__arc.is-armed.is-in ~ .mw-secd2__intro > *:nth-child(3) { animation-delay: 1.3s; }
+@media (prefers-reduced-motion: reduce) {
+  .mw-secd2__card-inner,
+  .mw-secd2__card-img { transition: none; }
+  .mw-secd2__arc.is-armed .mw-secd2__card,
+  .mw-secd2__arc.is-armed.is-in .mw-secd2__card,
+  .mw-secd2__arc.is-armed ~ .mw-secd2__cats .mw-secd2__cat,
+  .mw-secd2__arc.is-armed.is-in ~ .mw-secd2__cats .mw-secd2__cat,
+  .mw-secd2__arc.is-armed ~ .mw-secd2__intro > *,
+  .mw-secd2__arc.is-armed.is-in ~ .mw-secd2__intro > * { opacity: 1; animation: none; }
+}
+/* On mobile the categories are a static 2×2 grid — the arc fade-up (which translates X) would
+   shove them sideways, so keep them at rest regardless of the arch's reveal state. */
+@media (max-width: 639px) {
+  .mw-secd2__arc.is-armed ~ .mw-secd2__cats .mw-secd2__cat,
+  .mw-secd2__arc.is-armed.is-in ~ .mw-secd2__cats .mw-secd2__cat { opacity: 1; animation: none; transform: none; }
+}
+

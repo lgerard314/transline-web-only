@@ -84,11 +84,12 @@ export function RosterCollage02({ content, config = {} }) {
   const hoverAnchor = useRef(null); // pointer pos of the last hover-accepted selection
   const lastScrollAt = useRef(-Infinity); // timestamp of the most recent scroll (ms)
 
-  // Hovering a list row scrolls the page so that row's "set" of N (= column count) cards is
-  // framed within the pinned window. In the windowed model the grid translates 1:1 with page
-  // scroll, so framing a set = choosing the page-scroll that puts the set's row at the window
-  // center. Clamping that to the pinned travel makes the FIRST set sit at the window top and
-  // the LAST set at its bottom; middle sets center. GATED on the list being fully revealed.
+  // Hovering a list row scrolls the pinned collage only within this section's own scroll
+  // track. The target is grouped by the responsive column count: every set of N list items
+  // maps to one grid row, using the row's first-column card as the alignment anchor. Exact
+  // list-to-grid alignment wins until it would leave the pinned travel or clip the active row.
+  // Once the page has already moved past the pinned track, hover only spotlights the row; it
+  // never scrolls the page backward and re-pins the section.
   const bringCardIntoView = (i) => {
     const collage = collageRef.current;
     const win = windowRef.current;
@@ -99,23 +100,41 @@ export function RosterCollage02({ content, config = {} }) {
     if (!fullyRendered) return;
 
     const cols = Math.max(1, getComputedStyle(grid).gridTemplateColumns.split(" ").filter(Boolean).length);
-    const ref = cardRefs.current[Math.floor(i / cols) * cols]; // the set's column-0 card (never parallaxed)
-    if (!ref) return;
+    const groupStart = Math.floor(i / cols) * cols;
+    const alignRow = rowRefs.current[groupStart];
+    const ref = cardRefs.current[groupStart]; // the set's column-0 card (never parallaxed)
+    if (!alignRow || !ref) return;
 
     const stickyTop = parseFloat(getComputedStyle(win).top) || 0; // window's pinned offset (topbar + gap)
     const gap = parseFloat(getComputedStyle(grid).rowGap) || 0;
     const winH = Math.max(0, window.innerHeight - stickyTop - gap); // full (pinned) band height
-    const maxTy = Math.max(0, grid.scrollHeight - winH); // furthest the grid can translate up
-    // Card center as an offset within the grid's own content (transform-independent: both
-    // rects move together with the grid's translate, so their difference is the pure offset).
+    const maxTrackTy = Math.max(0, grid.scrollHeight - winH); // furthest the grid can translate up
     const gridTop = grid.getBoundingClientRect().top;
     const refRect = ref.getBoundingClientRect();
-    const cardCenterInGrid = refRect.top - gridTop + refRect.height / 2;
-    let ty = cardCenterInGrid - winH / 2;          // translate that centers the set in the window
-    ty = ty < 0 ? 0 : ty > maxTy ? maxTy : ty;     // clamp → first set tops out, last set bottoms out
+    const cardTopInGrid = refRect.top - gridTop;
+    const cardBottomInGrid = cardTopInGrid + refRect.height;
+    const alignRowTop = alignRow.getBoundingClientRect().top;
+    const peek = Math.min(8, Math.max(3, gap * 0.35));
+    let ty = cardTopInGrid - (alignRowTop - stickyTop - peek);
+
+    // Keep the selected grid row fully visible. This is the edge-case clamp for tall list
+    // rows / short viewports: exact alignment is preferred, but not at the cost of cutting
+    // off the card row the user is asking to see.
+    const minVisibleTy = Math.max(0, cardBottomInGrid - winH);
+    const maxVisibleTy = Math.max(0, cardTopInGrid);
+    if (ty < minVisibleTy) ty = minVisibleTy;
+    if (ty > maxVisibleTy) ty = maxVisibleTy;
+    if (ty > maxTrackTy) ty = maxTrackTy;
+    if (ty < 0) ty = 0;
+
     // ty = scrollY − (trackDocTop − stickyTop) ⇒ scrollY = trackDocTop − stickyTop + ty
     const trackDocTop = collage.getBoundingClientRect().top + window.scrollY;
-    const target = Math.max(0, Math.round(trackDocTop - stickyTop + ty));
+    const pinStart = Math.max(0, trackDocTop - stickyTop);
+    const pinEnd = pinStart + maxTrackTy;
+    if (window.scrollY > pinEnd + 2) return;
+
+    let target = Math.max(0, Math.round(pinStart + ty));
+    target = target < pinStart ? pinStart : target > pinEnd ? pinEnd : target;
     if (Math.abs(target - window.scrollY) < 2) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     window.scrollTo({ top: target, behavior: reduce ? "auto" : "smooth" });
@@ -335,6 +354,7 @@ export function RosterCollage02({ content, config = {} }) {
       collage.style.height = "";
       grid.style.transform = "";
       win.style.height = "";
+      grid.style.removeProperty("--r2-tail-pad");
     };
     const measure = () => {
       const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -344,7 +364,36 @@ export function RosterCollage02({ content, config = {} }) {
       stickyTop = parseFloat(getComputedStyle(win).top) || 0;   // topbar + gap (sticky offset)
       gap = parseFloat(getComputedStyle(grid).rowGap) || 0;     // the card gap, resolved
       fullBand = Math.max(0, vh - stickyTop - gap);             // window height once pinned
-      const gridH = grid.scrollHeight;
+      const gridStyle = getComputedStyle(grid);
+      const cols = Math.max(1, gridStyle.gridTemplateColumns.split(" ").filter(Boolean).length);
+      const tailPad = parseFloat(gridStyle.paddingBottom) || 0;
+      const baseGridH = Math.max(0, grid.scrollHeight - tailPad);
+      const baseMaxTy = Math.max(0, baseGridH - fullBand);
+      const gridTop = grid.getBoundingClientRect().top;
+      const peek = Math.min(8, Math.max(3, gap * 0.35));
+      let maxAlignedTy = 0;
+
+      for (let groupStart = 0; groupStart < cardRefs.current.length; groupStart += cols) {
+        const ref = cardRefs.current[groupStart];
+        const alignRow = rowRefs.current[groupStart];
+        if (!ref || !alignRow) continue;
+        const refRect = ref.getBoundingClientRect();
+        const cardTopInGrid = refRect.top - gridTop;
+        const cardBottomInGrid = cardTopInGrid + refRect.height;
+        const alignRowTop = alignRow.getBoundingClientRect().top;
+        let ty = cardTopInGrid - (alignRowTop - stickyTop - peek);
+        const minVisibleTy = Math.max(0, cardBottomInGrid - fullBand);
+        const maxVisibleTy = Math.max(0, cardTopInGrid);
+        if (ty < minVisibleTy) ty = minVisibleTy;
+        if (ty > maxVisibleTy) ty = maxVisibleTy;
+        if (ty > maxAlignedTy) maxAlignedTy = ty;
+      }
+
+      const nextTailPad = Math.max(0, Math.ceil(maxAlignedTy - baseMaxTy));
+      if (Math.abs(nextTailPad - tailPad) > 0.5) {
+        grid.style.setProperty("--r2-tail-pad", `${nextTailPad}px`);
+      }
+      const gridH = baseGridH + nextTailPad;
       maxTy = Math.max(0, gridH - fullBand);                    // overflow the grid scrolls through
       collage.style.height = `${gridH}px`;                      // track = grid height → pins for the overflow
     };
