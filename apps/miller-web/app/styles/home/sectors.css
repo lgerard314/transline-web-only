@@ -645,146 +645,129 @@
   .mw-secd-track > .mw-secd--check.is-secd-pinned .mw-secd__eyebrow-top { height: 0; margin: 0; overflow: hidden; }
 }
 
-/* ── PHONE PORTRAIT redesign (≤600px) ──────────────────────────────────────────
-   The desktop checkmark frieze is an 18-column horizontal band; squeezed into a
-   ~340px column it collapses to a ~150px strip of illegible ~20px diamonds with the
-   four category labels colliding. On a phone the pin is off and the hover spotlight /
-   single-photo straighten are dead (no hover) — so the frieze can't be "explored," it
-   just has to READ. We therefore RE-FLOW the flat lattice (DOM order: cat, p0..p3 × 4
-   categories) out of absolute positioning into a clean in-flow CSS grid: ONE stacked
-   "sector block" per category — a legibly-sized cream category diamond on the left
-   beside a 2×2 argyle quad of its four example-photo diamonds. Same rotated-diamond /
-   argyle motif, same warm clay palette, every photo + label legible, no horizontal
-   page overflow, and the existing scroll-reveal (SectorGridMotion03 writes --secd3-* as
-   a transform on each cell) still settles the cells into their new grid slots untouched.
-   Scoped entirely to .mw-secd--check; nothing here is a desktop (base) rule. */
-@media (max-width: 600px) {
-  /* The grid stops being an aspect-ratio'd absolute canvas and becomes a fully EXPLICIT
-     grid (template rows + columns hand-laid, with dedicated GAP tracks so within-quad
-     diamonds touch point-to-point while sectors stay clearly separated). Diamond sizes
-     are explicit (var --secd-ph / --secd-lbl) so nothing stretches — the earlier 1fr +
-     aspect-ratio attempt let cells blow up. Columns: [label][label-gap][photoL][photoR].
-     Rows: 11 = (top,bot) per sector × 4 with a sector-gap row between. The inline
-     aspect-ratio:cols/rows and the 75px·cols width cap are overridden. */
+/* ── PHONE / NARROW redesign (≤720px) — compact frieze + label row below ──────────
+   Under 721px (the pin gate) the 18-col desktop frieze gets too small for its in-lattice
+   category labels — but the BAND itself is right: one horizontal row of interlocked
+   checkmarks. So below 721 we keep the frieze and only re-compose it:
+     • each checkmark drops its in-lattice label diamond and becomes PHOTOS ONLY — the
+       short-arm tip photo on the left, then the vertex photo and two more rising up the
+       right arm (3 on the right side). The four 4-photo marks stay interlocked tip-to-tip
+       (each mark's top photo edge-nests the next mark's tip photo), now on a 17-col lattice.
+       Photo diamonds stay the size the frieze gave them (2/17 ≈ the old 2/18 of the row —
+       NO size jump at the breakpoint).
+     • the four CATEGORY diamonds are re-seated BELOW the band as ONE BIG CHECKMARK of
+       their own — the same ✓ the photo marks draw, scaled up (~3.4× the photo diamonds):
+       INDUSTRIAL at the short-arm tip, INFRASTRUCTURE at the vertex, INSTITUTIONAL
+       rising, COMMUNITY at the top-right tip — centred under the band, tip-to-tip
+       interlocked, large enough that every name finally reads.
+   Everything (eyebrow · band · labels · title · lead · button) fits one portrait screen.
+   Pure CSS re-seat of the same DOM; scoped to .mw-secd--check; nothing here is a ≥721 rule.
+
+   Lattice math (mirrors buildGrid): photo cell N = 4·cat + si sits at left N/17, with
+   si3 on row 0, si0/si2 on row 1, si1 (vertex) on row 2 of a 4-row band (box = 2×2 cells,
+   container aspect 17/4 keeps cells square). The label checkmark draws the same shape on
+   its own 5-col lattice (--secd-mlc wide, diamond = 2 cols), hung below the band via
+   top:100% + margin-top (vertical margin %s resolve against WIDTH — exactly what a
+   lattice needs; each lattice row steps one column unit --secd-mlcol down). */
+@media (max-width: 720px) {
   .mw-secd--check .mw-secd__grid {
-    --secd-ph: clamp(74px, 22.5vw, 94px);   /* photo diamond box */
-    --secd-lbl: clamp(116px, 32vw, 144px);  /* category label diamond box — fits the long names */
-    --secd-colgap: clamp(8px, 2.4vw, 16px); /* label ↔ photo-quad gap */
-    --secd-sgap: clamp(20px, 6vw, 38px);    /* gap between stacked sectors */
-    width: 100% !important;                  /* fill the content column (overrides the 75px·cols ideal cap) */
-    max-width: 430px;
-    margin-inline: auto;
-    margin-top: clamp(6px, 2.5vw, 18px);     /* the desktop spotlight headroom (100–150px) is pointless with no spotlight */
-    aspect-ratio: auto !important;           /* clear the inline aspectRatio so the grid takes its own content height */
-    display: grid;
-    grid-template-columns: var(--secd-lbl) var(--secd-colgap) var(--secd-ph) var(--secd-ph);
-    grid-template-rows:
-      var(--secd-ph) var(--secd-ph) var(--secd-sgap)
-      var(--secd-ph) var(--secd-ph) var(--secd-sgap)
-      var(--secd-ph) var(--secd-ph) var(--secd-sgap)
-      var(--secd-ph) var(--secd-ph);
-    column-gap: 0;
-    row-gap: 0;
-    justify-content: center;   /* centre the whole ladder in the column */
-    align-items: stretch;
-    justify-items: stretch;
+    /* the label CHECKMARK canvas: full column width, capped so wider narrow-screens do not
+       balloon it. 5 lattice cols; one diamond = 2 cols, so the label boxes = 2/5 of this. */
+    --secd-mlc: min(100%, 420px);
+    --secd-mlcol: calc(var(--secd-mlc) / 5);
+    --secd-mlblgap: clamp(12px, 3vw, 22px); /* band → label-checkmark gap */
+    width: 100% !important;          /* fill the column (overrides the 75px·cols ideal cap) */
+    aspect-ratio: 17 / 4 !important; /* the band's own lattice (overrides the inline 18-col ratio) */
+    margin-top: clamp(6px, 2.5vw, 18px); /* the desktop spotlight headroom is pointless with no spotlight */
+    /* reserve the zone hanging below the band: gap + the label checkmark's height (its
+       lattice is 4 rows of --secd-mlcol). Vertical margin %s resolve against WIDTH ✓. */
+    margin-bottom: calc(var(--secd-mlblgap) + var(--secd-mlcol) * 4);
   }
-  /* Cells leave ABSOLUTE flow for GRID flow, but stay position:RELATIVE — their children
-     (.mw-secd__photo-clip and .mw-secd__cat-svg are position:absolute; inset:…) must keep
-     resolving against THIS box, not escape to the relatively-positioned .mw-secd__grid and
-     blow up to full-grid size. left/top are zeroed so relative positioning adds no shift;
-     explicit equal width+height keeps the box square (→ diamond after the clip). */
-  .mw-secd--check .mw-secd__photo,
-  .mw-secd--check .mw-secd__cat {
-    position: relative !important;
-    left: auto !important;
-    top: auto !important;
-    width: 100% !important;     /* fill the (fixed-size) grid track */
-    height: 100%;
-    min-width: 0;
-    aspect-ratio: auto;         /* size is governed by the track, not aspect-ratio */
-  }
-  /* The .mw-secd--int photo rule pins left/top/width from vars + animates them — kill that
-     transition so a resize can't slide a cell across the new grid. (The scroll-reveal's
-     own transform on each cell is untouched, so the staggered entrance still plays.) */
+
+  /* Kill the desktop hover machinery wholesale: the --int photo rule animates left/top/width,
+     and on a narrow HOVER-capable window the category spotlight (#4) would gather four 158px
+     squares into a row far wider than this band. No pointer targets → no :hover → neither
+     #4 nor #5 nor the cat grow can ever fire here. */
   .mw-secd--check .mw-secd__photo { transition: none; }
+  .mw-secd--check .mw-secd__photo-clip,
+  .mw-secd--check .mw-secd__cat-fill,
+  .mw-secd--check .mw-secd__cat-face { pointer-events: none; }
 
-  /* Explicit placement. Label in col1 spanning its two photo rows; the four photos as a
-     2×2 quad in cols 3/4 (si0 si1 over si2 si3). */
-  .mw-secd--check .mw-secd__cat { grid-column: 1; }
+  /* ── photo band: 16 photos on the 17-col lattice (positions beat the --int var rule by
+     specificity; the inline style only carries the custom props, not the properties). */
+  .mw-secd--check .mw-secd__photo { width: calc(100% * 2 / 17); }
+  .mw-secd--check .mw-secd__photo[data-si="3"] { top: 0; }    /* top-right tip */
   .mw-secd--check .mw-secd__photo[data-si="0"],
-  .mw-secd--check .mw-secd__photo[data-si="2"] { grid-column: 3; }
-  .mw-secd--check .mw-secd__photo[data-si="1"],
-  .mw-secd--check .mw-secd__photo[data-si="3"] { grid-column: 4; }
-  .mw-secd--check .mw-secd__photo[data-si="0"],
-  .mw-secd--check .mw-secd__photo[data-si="1"] { grid-row: var(--secd-row-top); }
-  .mw-secd--check .mw-secd__photo[data-si="2"],
-  .mw-secd--check .mw-secd__photo[data-si="3"] { grid-row: var(--secd-row-bot); }
-  .mw-secd--check .mw-secd__cat[data-cat="0"] { grid-row: 1 / span 2; }
-  .mw-secd--check .mw-secd__cat[data-cat="1"] { grid-row: 4 / span 2; }
-  .mw-secd--check .mw-secd__cat[data-cat="2"] { grid-row: 7 / span 2; }
-  .mw-secd--check .mw-secd__cat[data-cat="3"] { grid-row: 10 / span 2; }
-  .mw-secd--check .mw-secd__photo[data-cat="0"] { --secd-row-top: 1;  --secd-row-bot: 2;  }
-  .mw-secd--check .mw-secd__photo[data-cat="1"] { --secd-row-top: 4;  --secd-row-bot: 5;  }
-  .mw-secd--check .mw-secd__photo[data-cat="2"] { --secd-row-top: 7;  --secd-row-bot: 8;  }
-  .mw-secd--check .mw-secd__photo[data-cat="3"] { --secd-row-top: 10; --secd-row-bot: 11; }
+  .mw-secd--check .mw-secd__photo[data-si="2"] { top: 25%; }  /* short-arm tip · rising arm */
+  .mw-secd--check .mw-secd__photo[data-si="1"] { top: 50%; }  /* bottom vertex */
+  .mw-secd--check .mw-secd__photo[data-cat="0"][data-si="0"] { left: 0; }
+  .mw-secd--check .mw-secd__photo[data-cat="0"][data-si="1"] { left: calc(100% * 1 / 17); }
+  .mw-secd--check .mw-secd__photo[data-cat="0"][data-si="2"] { left: calc(100% * 2 / 17); }
+  .mw-secd--check .mw-secd__photo[data-cat="0"][data-si="3"] { left: calc(100% * 3 / 17); }
+  .mw-secd--check .mw-secd__photo[data-cat="1"][data-si="0"] { left: calc(100% * 4 / 17); }
+  .mw-secd--check .mw-secd__photo[data-cat="1"][data-si="1"] { left: calc(100% * 5 / 17); }
+  .mw-secd--check .mw-secd__photo[data-cat="1"][data-si="2"] { left: calc(100% * 6 / 17); }
+  .mw-secd--check .mw-secd__photo[data-cat="1"][data-si="3"] { left: calc(100% * 7 / 17); }
+  .mw-secd--check .mw-secd__photo[data-cat="2"][data-si="0"] { left: calc(100% * 8 / 17); }
+  .mw-secd--check .mw-secd__photo[data-cat="2"][data-si="1"] { left: calc(100% * 9 / 17); }
+  .mw-secd--check .mw-secd__photo[data-cat="2"][data-si="2"] { left: calc(100% * 10 / 17); }
+  .mw-secd--check .mw-secd__photo[data-cat="2"][data-si="3"] { left: calc(100% * 11 / 17); }
+  .mw-secd--check .mw-secd__photo[data-cat="3"][data-si="0"] { left: calc(100% * 12 / 17); }
+  .mw-secd--check .mw-secd__photo[data-cat="3"][data-si="1"] { left: calc(100% * 13 / 17); }
+  .mw-secd--check .mw-secd__photo[data-cat="3"][data-si="2"] { left: calc(100% * 14 / 17); }
+  .mw-secd--check .mw-secd__photo[data-cat="3"][data-si="3"] { left: calc(100% * 15 / 17); }
 
-  /* Category label diamond — keep the cream/inverted resting look; the box is now bigger
-     so the longest name ("INFRASTRUCTURE") reads. The svg fills the box (inset:gap); the
-     name layer sits on top. Allow a 2-line wrap as a safety valve for the long names.
-     The cat spans its 2 photo rows (≈2·--secd-ph tall) but must stay SQUARE (a regular
-     diamond, not a stretched rhombus) — so give it an explicit square size and centre it
-     vertically against the quad rather than stretching to the full 2-row height. */
+  /* ── category diamonds: ONE BIG CHECKMARK below the band (top:100% + margins; the inline
+     style sets left/top/width directly, hence the !importants). Same ✓ shape as the photo
+     marks — cat0 short-arm tip (row 1) · cat1 vertex (row 2) · cat2 rising (row 1) · cat3
+     top-right tip (row 0) — on a centred 5-col lattice; tips touch, edges nest, exactly
+     like the band above it. */
   .mw-secd--check .mw-secd__cat {
+    width: calc(var(--secd-mlcol) * 2) !important;
+    aspect-ratio: 1;
+    top: 100% !important;
     z-index: 3;
-    height: var(--secd-lbl) !important;
-    align-self: center;
-    justify-self: center;
   }
+  .mw-secd--check .mw-secd__cat[data-cat="0"] { left: calc((100% - var(--secd-mlc)) / 2) !important;                          margin-top: calc(var(--secd-mlblgap) + var(--secd-mlcol)); }
+  .mw-secd--check .mw-secd__cat[data-cat="1"] { left: calc((100% - var(--secd-mlc)) / 2 + var(--secd-mlcol)) !important;      margin-top: calc(var(--secd-mlblgap) + var(--secd-mlcol) * 2); }
+  .mw-secd--check .mw-secd__cat[data-cat="2"] { left: calc((100% - var(--secd-mlc)) / 2 + var(--secd-mlcol) * 2) !important;  margin-top: calc(var(--secd-mlblgap) + var(--secd-mlcol)); }
+  .mw-secd--check .mw-secd__cat[data-cat="3"] { left: calc((100% - var(--secd-mlc)) / 2 + var(--secd-mlcol) * 3) !important;  margin-top: var(--secd-mlblgap); }
   .mw-secd--check .mw-secd__cat-name {
-    font-size: clamp(12px, 3.4vw, 15px);
+    font-size: clamp(11px, 3.9vw, 17px);
     line-height: 1.02;
     letter-spacing: 0.01em;
     text-wrap: balance;
   }
-  .mw-secd--check .mw-secd__cat-face { padding: 0 16%; }
+  .mw-secd--check .mw-secd__cat-face { padding: 0 12%; }
 
-  /* Photo quad above the label in z so the cream label's empty corners never cover a photo.
-     The rhombus clip + walnut backstop + clay overlay all come from the base rules. */
-  .mw-secd--check .mw-secd__photo { z-index: 4; }
-
-  /* The on-photo names are hover-only captions (dead on touch); like desktop ≤1024 the
-     photos stay label-free and the four category diamonds carry the meaning. Keep the
-     hover caption hidden so a stray tap can't strand it on screen. */
+  /* On-photo names are hover-only captions (dead here); the label diamonds carry the
+     meaning. Keep them hidden so a stray tap can never strand one on screen. */
   .mw-secd--check .mw-secd__cap { display: none; }
 
-  /* The cream label diamonds read faint-on-cream and never get the hover "activation" a
-     phone can't trigger — give the resting svg a soft clay shadow (the desktop look kills
-     it at rest, restores it on hover) so each label lifts off the paper as a deliberate
-     cream "stamp." Stronger border too, for a crisper edge. */
+  /* The cream label diamonds never get the hover "activation" here — give the resting svg a
+     soft clay shadow + crisper border so each label lifts off the paper as a deliberate cream
+     "stamp" (the desktop look kills the shadow at rest and restores it on hover). */
   .mw-secd--check .mw-secd__cat-svg { filter: drop-shadow(0 6px 14px rgba(33, 20, 12, 0.16)); }
   .mw-secd--check .mw-secd__cat-fill { stroke-width: 2.4; }
 
-  /* The scroll-reveal (SectorGridMotion03) holds the cells hidden — opacity:0, scale 0.25,
-     off-screen-left — until EVERY diamond has cleared the viewport bottom. On desktop the
-     pin masks that; on a phone the grid is ~830px tall (taller than the usable viewport),
-     so that gate can leave a large blank band on first encounter and fires late. Mobile is
-     better served by simply SHOWING the lattice (this is exactly what reduced-motion already
-     does); override the armed hidden pose so the grid is present immediately. The header
-     items keep their own per-item mask-rise. */
+  /* The scroll-reveal (SectorGridMotion03) holds cells hidden until EVERY diamond clears the
+     viewport bottom; with the label zone hanging below the band that gate fires late on short
+     screens. Narrow screens are better served by simply SHOWING the lattice (exactly what
+     reduced-motion already does); override the armed hidden pose. The header items keep
+     their own per-item mask-rise. */
   .mw-secd--check .mw-secd__grid.is-armed > * {
     opacity: 1 !important;
     transform: none !important;
     will-change: auto;
   }
 
-  /* Belt-and-braces: this re-flow can never push a horizontal page scrollbar. */
+  /* Belt-and-braces: this re-seat can never push a horizontal page scrollbar. */
   .mw-secd--check { overflow-x: clip; }
 }
 
-/* ── TABLET PORTRAIT refinement (601–1024px, portrait) ──────────────────────────
+/* ── TABLET PORTRAIT refinement (721–1024px, portrait) ──────────────────────────
    At tablet-portrait the desktop checkmark frieze already scales down legibly (the
-   ≤600 phone re-flow does NOT apply here — these widths keep the frieze). This is a
+   ≤720 stacked-checkmark re-flow does NOT apply here — these widths keep the frieze). This is a
    polish pass on the PINNED framing: the section pins (the 721/840 pin query is
    active at 768×1024 / 820×1180 / 1024×1366 portrait) and the desktop pin padding is
    strongly bottom-heavy (top ~10vh vs bottom ~21vh), which "safe center"s the
@@ -796,7 +779,7 @@
    (.mw-secd-track > .mw-secd--check, equal specificity) so this LATER block wins where
    it overlaps. Frieze diamond/label SIZING is left as-is (already legible, capped by
    the content column); this is rhythm/placement only. Nothing here is a desktop rule. */
-@media (min-width: 601px) and (max-width: 1024px) and (orientation: portrait) {
+@media (min-width: 721px) and (max-width: 1024px) and (orientation: portrait) {
   /* Rebalance the pinned frame: keep enough top clearance for the fixed nav (the
      eyebrow collapses to 0 when pinned) but cut the over-large bottom band so
      "safe center" parks the composition near the true viewport middle instead of

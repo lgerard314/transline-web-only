@@ -26,15 +26,13 @@ import { sectionProps } from "@/components-v2/section-config";
 // The desktop "side-by-side" layout (sticky list + pinned, scroll-jacked collage) persists to
 // different widths by INPUT TYPE: where the primary input can HOVER (mouse/desktop, hover:hover)
 // it continues down to 600px so the collage can step 3→2→1 columns with the list still on the
-// left; on a touch device (hover:none) it stays as before — stacking at ≤1024, where the
-// redundant rail is hidden (touch can't hover to spotlight, which is the whole point of the
-// side-by-side). hover:hover is the right signal (and beats pointer:fine on touchscreen laptops
-// with a trackpad). MUST stay in lock-step with the CSS stack breakpoints in home/services.css
-// (touch/hover:none stacks ≤1024, hover:hover stacks ≤600).
+// left — on EVERY input type. Width is the only gate: touch devices keep the same side-by-side
+// layout (the hover spotlight is replaced there by tap-to-select — see tapSelect below), and
+// the section stacks only at ≤600. MUST stay in lock-step with the CSS stack breakpoint in
+// home/services.css (stacks ≤600, input-agnostic).
 const isSideBySide = () => {
   if (typeof window === "undefined") return false;
-  const canHover = typeof window.matchMedia === "function" && window.matchMedia("(hover: hover)").matches;
-  return window.innerWidth > (canHover ? 600 : 1024);
+  return window.innerWidth > 600;
 };
 
 function buildItems({ services = [], externalTile }) {
@@ -220,6 +218,23 @@ export function RosterCollage02({ content, config = {} }) {
     const a = hoverAnchor.current;
     if (justScrolled && a && Math.hypot(e.clientX - a.x, e.clientY - a.y) < HOVER_MOVE_MIN) return;
     hoverAnchor.current = { x: e.clientX, y: e.clientY };
+    setActive(i);
+    bringCardIntoView(i);
+  };
+
+  // TOUCH TAP-TO-SELECT — the side-by-side persists on touch (hover:none), where the hover
+  // spotlight can't fire. The FIRST tap on a row or card stands in for the hover: it selects
+  // (spotlight + align via bringCardIntoView) and ARMS an explicit "open" affordance on both
+  // the row ("open →" tag) and the card ("Tap again to open →" chip) so it's clear the SECOND
+  // tap follows the link. Gated live on hover:none + side-by-side, so mouse/desktop clicks
+  // (and the stacked ≤600 phone view, where cards navigate directly) pass straight through.
+  const [tapArmed, setTapArmed] = useState(-1);
+  const tapSelect = (i, e) => {
+    if (typeof window.matchMedia !== "function" || !window.matchMedia("(hover: none)").matches) return;
+    if (!isSideBySide()) return;
+    if (tapArmed === i) return; // already armed: let this tap navigate
+    e.preventDefault();
+    setTapArmed(i);
     setActive(i);
     bringCardIntoView(i);
   };
@@ -538,13 +553,16 @@ export function RosterCollage02({ content, config = {} }) {
         <Tag
           {...linkProps}
           ref={(el) => { rowRefs.current[i] = el; }}
-          className={`mw-roster2__row${i === active ? " is-active" : ""}${revealed[i] ? " is-revealed" : ""}`}
+          className={`mw-roster2__row${i === active ? " is-active" : ""}${revealed[i] ? " is-revealed" : ""}${tapArmed === i ? " is-armed" : ""}`}
           onMouseEnter={(e) => selectFromHover(i, e)}
+          onClick={(e) => tapSelect(i, e)}
           onFocus={() => { setActive(i); bringCardIntoView(i); }}
         >
           <span className="mw-roster2__row-mark" aria-hidden="true" />
           <span className="mw-roster2__row-name">{it.title}</span>
           <span className="mw-roster2__row-arr" aria-hidden="true">→</span>
+          {/* tap-to-select affordance — hidden everywhere except touch + armed (CSS-gated). */}
+          <span className="mw-roster2__row-open" aria-hidden="true">open →</span>
         </Tag>
       </li>
     );
@@ -560,8 +578,9 @@ export function RosterCollage02({ content, config = {} }) {
         key={it.key}
         {...linkProps}
         ref={(el) => { cardRefs.current[i] = el; }}
-        className={`mw-roster2__card${i === active ? " is-active" : ""}${cardRevealed[i] ? " is-revealed" : ""}${riseDone[i] ? " is-rise-done" : ""}`}
+        className={`mw-roster2__card${i === active ? " is-active" : ""}${cardRevealed[i] ? " is-revealed" : ""}${riseDone[i] ? " is-rise-done" : ""}${tapArmed === i ? " is-armed" : ""}`}
         onMouseEnter={() => setActive(i)}
+        onClick={(e) => tapSelect(i, e)}
         onFocus={() => setActive(i)}
         onTransitionEnd={(e) => handleCardRiseEnd(i, e)}
         aria-label={it.title}
@@ -576,6 +595,8 @@ export function RosterCollage02({ content, config = {} }) {
             <span className="mw-roster2__card-reveal">
               <span className="mw-roster2__card-text">{it.summary}</span>
             </span>
+            {/* tap-to-select affordance — hidden everywhere except touch + armed (CSS-gated). */}
+            <span className="mw-roster2__tap-hint" aria-hidden="true">Tap again to open →</span>
           </span>
         </span>
       </Tag>
@@ -631,13 +652,16 @@ export function RosterCollage02({ content, config = {} }) {
                 <Link
                   href={cta.href}
                   ref={(el) => { rowRefs.current[ctaIndex] = el; }}
-                  className={`mw-roster2__row${active === ctaIndex ? " is-active" : ""}${revealed[ctaIndex] ? " is-revealed" : ""}`}
+                  className={`mw-roster2__row${active === ctaIndex ? " is-active" : ""}${revealed[ctaIndex] ? " is-revealed" : ""}${tapArmed === ctaIndex ? " is-armed" : ""}`}
                   onMouseEnter={(e) => selectFromHover(ctaIndex, e)}
+                  onClick={(e) => tapSelect(ctaIndex, e)}
                   onFocus={() => { setActive(ctaIndex); bringCardIntoView(ctaIndex); }}
                 >
                   <span className="mw-roster2__row-mark" aria-hidden="true" />
                   <span className="mw-roster2__row-name">{cta.menuLabel}</span>
                   <span className="mw-roster2__row-arr" aria-hidden="true">→</span>
+                  {/* tap-to-select affordance — hidden everywhere except touch + armed (CSS-gated). */}
+                  <span className="mw-roster2__row-open" aria-hidden="true">open →</span>
                 </Link>
               </li>
             </ul>
