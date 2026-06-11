@@ -69,9 +69,133 @@ export function MediaSplit01({ content, config = {} }) {
   const mediaRef = useRef(null);
   const figsRef = useRef(null);
   const capsRef = useRef(null);
+  const altRef = useRef(null);
   const [activeCap, setActiveCap] = useState(null);
   const activeCapRef = useRef(null);
   const [centerTurn, setCenterTurn] = useState(0);
+  // Whether the PIN can own the entrance (mirrors canPin below / the CSS pin gate). On
+  // pin-capable surfaces the gallery rests at --p=1 (reveal={false}) and the pin choreography
+  // is the entrance; on FLOW surfaces (portrait, narrow, short, reduced-motion-off scrub) the
+  // gallery runs its own scroll-scrubbed plate-cascade entrance instead. Initial `true` keeps
+  // SSR/desktop byte-stable (no hidden-panel flash); phones flip after hydration, before the
+  // section scrolls into view.
+  const [pinCapable, setPinCapable] = useState(true);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mqs = ["(min-width: 901px)", "(orientation: landscape)", "(min-height: 640px)"].map((q) => window.matchMedia(q));
+    const mqRM = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setPinCapable(mqs.every((m) => m.matches) && !mqRM.matches);
+    sync();
+    [...mqs, mqRM].forEach((m) => m.addEventListener("change", sync));
+    return () => [...mqs, mqRM].forEach((m) => m.removeEventListener("change", sync));
+  }, []);
+
+  // FLOW-ONLY scroll motion (the CSS lives in the flow media blocks of facility-pin.css, so
+  // the pinned desktop can never see it; the writes likewise only happen when the pin can't
+  // own them). Figures: one-shot staggered rise when the band enters ([data-figs-in]).
+  // Diamond cluster: the desktop ROLL-IN as a reversible SCROLL SCRUB — each cell launches
+  // a width above-left and falls down-right with spin + scale into its lattice slot (the
+  // same vars + formulas the pinned sequence writes), staggered by cell order, while the
+  // dumptruck slides in from the right behind it. The ALT capability spine below the
+  // cluster gets one scrubbed progress var (--capalt-p); its per-item cascade is pure CSS.
+  // Reduced motion: no writes — the CSS defaults rest everything settled.
+  useEffect(() => {
+    if (typeof window === "undefined" || pinCapable) return;
+    const mqRM = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const figclip = figsRef.current ? figsRef.current.parentElement : null;
+    const caps = capsRef.current;
+    const alt = altRef.current;
+
+    const cells = caps ? Array.from(caps.querySelectorAll(".mw-cap-dia__cell")) : [];
+    const truck = caps ? caps.querySelector(".mw-fac2__truck") : null;
+    const stage = caps ? caps.querySelector(".mw-fac2__stage") : null;
+    const SPIN = CAP_ROT + CAP_SPIN;
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      if (mqRM.matches) return;
+      const vh = window.innerHeight || 1;
+      // FIGURES — scroll-scrubbed, completing exactly when the band is fully on-screen:
+      // since the band sits ABOVE the capability rail, it is always fully rendered before
+      // the rail's first card can begin (visual order guaranteed structurally, not by
+      // timers). Reversible with scroll.
+      if (figclip) {
+        const fr = figclip.getBoundingClientRect();
+        if (fr.bottom > -200 && fr.top < vh + 300) {
+          figclip.style.setProperty("--figs-p", clamp01((vh - fr.top) / Math.max(1, fr.height)).toFixed(3));
+        }
+      }
+      if (caps && cells.length && caps.offsetParent !== null) { // skip when the lattice is display:none (≤900)
+        const r = caps.getBoundingClientRect();
+        if (r.bottom > -200 && r.top < vh + 300) {
+          const p = clamp01((vh - r.top) / (vh * 0.78));
+          cells.forEach((cell, k) => {
+            const raw = clamp01((p - k * 0.055) / 0.5);
+            const e = ease(raw);
+            const boxW = cell.offsetWidth || 60;
+            cell.style.setProperty("--cap-tx", ((1 - e) * -boxW).toFixed(1) + "px");
+            cell.style.setProperty("--cap-ty", ((1 - e) * -boxW * 0.5).toFixed(1) + "px");
+            cell.style.setProperty("--cap-rot", (-(1 - e) * SPIN).toFixed(1) + "deg");
+            cell.style.setProperty("--cap-sc", (CAP_START_SCALE + (1 - CAP_START_SCALE) * e).toFixed(3));
+            cell.style.setProperty("--cap-op", clamp01(raw / 0.12).toFixed(3));
+          });
+          if (truck && stage) {
+            const t = easeIn(clamp01((p - 0.2) / 0.65));
+            const sw = stage.getBoundingClientRect().width || 300;
+            truck.style.setProperty("--fac2-truck-op", t.toFixed(3));
+            truck.style.setProperty("--fac2-truck-x", ((1 - t) * sw * 0.28).toFixed(1) + "px");
+          }
+        }
+      }
+      if (alt) {
+        const ar = alt.getBoundingClientRect();
+        if (ar.bottom > -200 && ar.top < vh + 300) {
+          // The rail's cascade spans from its own entry to the SECTION's bottom clearing the
+          // screen bottom — p = 1 exactly then, and the per-card slices (CSS) are spread so
+          // the LAST card lands at p = 1: the rail is still assembling the whole way down,
+          // never "already done" early.
+          const secEl = sectionRef.current;
+          const secBottom = secEl ? secEl.getBoundingClientRect().bottom : ar.bottom;
+          alt.style.setProperty("--capalt-p", clamp01((vh - ar.top) / Math.max(1, secBottom - ar.top)).toFixed(3));
+        }
+      }
+      // STRIP WIPE (≤900 — CSS consumes it there only): the photo card expands in from the
+      // RIGHT screen edge moving LEFT, completing exactly when the TITLE below it (the
+      // section header) has its top at the screen bottom — fully revealed before the
+      // headline enters.
+      const iaccEl = mediaRef.current ? mediaRef.current.querySelector(".mw-iacc") : null;
+      const titleEl = sectionRef.current ? sectionRef.current.querySelector(".mw-fac2__title") : null;
+      if (iaccEl && titleEl) {
+        const ir = iaccEl.getBoundingClientRect();
+        if (ir.bottom > -200 && ir.top < vh + 300) {
+          const titleTop = titleEl.getBoundingClientRect().top;
+          const span = Math.max(1, titleTop - ir.top);
+          iaccEl.style.setProperty("--fac2-strip-p", clamp01((vh - ir.top) / span).toFixed(3));
+        }
+      }
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    // Requeue after the main pin effect's flow-clear (same IO-ordering pattern as lifetime).
+    const io = new IntersectionObserver(onScroll, { threshold: 0, rootMargin: "300px 0px" });
+    if (figclip) io.observe(figclip);
+    if (caps) io.observe(caps);
+    if (alt) io.observe(alt);
+    return () => {
+      io.disconnect();
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+      if (figclip) figclip.style.removeProperty("--figs-p");
+      cells.forEach((c) => ["--cap-tx", "--cap-ty", "--cap-rot", "--cap-sc", "--cap-op"].forEach((p) => c.style.removeProperty(p)));
+      if (truck) { truck.style.removeProperty("--fac2-truck-op"); truck.style.removeProperty("--fac2-truck-x"); }
+      if (alt) alt.style.removeProperty("--capalt-p");
+      const iaccCleanup = mediaRef.current ? mediaRef.current.querySelector(".mw-iacc") : null;
+      if (iaccCleanup) iaccCleanup.style.removeProperty("--fac2-strip-p");
+    };
+  }, [pinCapable]);
   const activateCap = (i) => {
     const prev = activeCapRef.current;
     if (prev !== null && prev !== i) setCenterTurn((turn) => turn + 1);
@@ -82,6 +206,17 @@ export function MediaSplit01({ content, config = {} }) {
     activeCapRef.current = null;
     setActiveCap(null);
   };
+  // Touch/flow: a tap OUTSIDE the cluster clears the active capability (mouseleave never
+  // fires on touch, so the sticky selection had no way off). Desktop keeps mouseleave.
+  useEffect(() => {
+    if (typeof document === "undefined" || activeCap === null) return;
+    const onDown = (e) => {
+      if (e.target && e.target.closest && e.target.closest(".mw-cap-dia")) return;
+      clearActiveCap();
+    };
+    document.addEventListener("pointerdown", onDown);
+    return () => document.removeEventListener("pointerdown", onDown);
+  }, [activeCap]);
   // Careers-style driver (zoom-collage-01): one continuous rAF loop while the track is in
   // view reads scroll → writes the scene, auto-advances the exit once the user nudges past
   // the highlights hold. Wide viewport + motion OK only; otherwise columns rest static.
@@ -89,9 +224,13 @@ export function MediaSplit01({ content, config = {} }) {
     if (typeof window === "undefined") return;
     const track = trackRef.current;
     if (!track) return;
+    // Mirrors the CSS pin gate in home/facility-pin.css exactly: landscape-only, ≥640px tall,
+    // motion-OK (house rule — portrait never pins, any width or pointer).
     const mqWide = window.matchMedia("(min-width: 901px)");
+    const mqLand = window.matchMedia("(orientation: landscape)");
+    const mqTall = window.matchMedia("(min-height: 640px)");
     const mqRM = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const canPin = () => mqWide.matches && !mqRM.matches;
+    const canPin = () => mqWide.matches && mqLand.matches && mqTall.matches && !mqRM.matches;
     let raf = 0, running = false, lastTs = 0, lastY = window.scrollY;
     let exitArmed = false, cancelled = false;
     let lastUserTs = -1e9;
@@ -369,12 +508,16 @@ export function MediaSplit01({ content, config = {} }) {
     }, { threshold: 0 });
     io.observe(track);
     mqWide.addEventListener("change", evaluate);
+    mqLand.addEventListener("change", evaluate);
+    mqTall.addEventListener("change", evaluate);
     mqRM.addEventListener("change", evaluate);
     evaluate();
     return () => {
       io.disconnect();
       stop();
       mqWide.removeEventListener("change", evaluate);
+      mqLand.removeEventListener("change", evaluate);
+      mqTall.removeEventListener("change", evaluate);
       mqRM.removeEventListener("change", evaluate);
     };
   }, [autoScroll]);
@@ -386,32 +529,45 @@ export function MediaSplit01({ content, config = {} }) {
           <div className="mw-fac2__grid">
             {/* LEFT — intro copy at rest (no entrance choreography). */}
             <div className="mw-fac2__left" ref={leftRef}>
+              {/* Each intro part sits in a .mw-fac2__rise mask (the designed hero mask-rise —
+                  CSS exists in facility.css): on FLOW surfaces the gallery widget's scroll
+                  cascade drives --p so the text mask-rises after the photos; on the pinned
+                  desktop reveal={false} rests every riser at --p=1 — byte-identical render.
+                  The modifier classes are the ≤900 single-column ordering hooks. */}
               <div className="mw-fac2__intro">
                 <header className="mw-fac2__head">
-                  <p className="mw-fac2__field">
-                    {stage ? <span>{stage}</span> : null}
-                    <span className="mw-fac2__field-rule" />
-                    <span>{eyebrow}</span>
-                  </p>
-                  <h2 id={headingId} className="mw-fac2__title">
-                    {title.em}
-                  </h2>
+                  <div className="mw-fac2__rise mw-fac2__rise--field"><div className="mw-fac2__rise-in">
+                    <p className="mw-fac2__field">
+                      {stage ? <span>{stage}</span> : null}
+                      <span className="mw-fac2__field-rule" />
+                      <span>{eyebrow}</span>
+                    </p>
+                  </div></div>
+                  <div className="mw-fac2__rise mw-fac2__rise--title"><div className="mw-fac2__rise-in">
+                    <h2 id={headingId} className="mw-fac2__title">
+                      {title.em}
+                    </h2>
+                  </div></div>
                 </header>
 
-                <p className="mw-fac2__lead">{lead}</p>
+                <div className="mw-fac2__rise mw-fac2__rise--lead"><div className="mw-fac2__rise-in">
+                  <p className="mw-fac2__lead">{lead}</p>
+                </div></div>
 
-                <div className="mw-fac2__actions">
-                  <SolidCta01 href={primaryCta.href}>
-                    <span className="mw-fac2__lbl-long">{primaryCta.longLabel}</span>
-                    <span className="mw-fac2__lbl-short">{primaryCta.shortLabel}</span>
-                    {" "}<ActionArrow01 />
-                  </SolidCta01>
-                  <Link href={aboutLink.href} className="mw-fac2__about">
-                    <span className="mw-fac2__lbl-long">{aboutLink.longLabel}</span>
-                    <span className="mw-fac2__lbl-short">{aboutLink.shortLabel}</span>
-                    {" "}<span aria-hidden="true">→</span>
-                  </Link>
-                </div>
+                <div className="mw-fac2__rise mw-fac2__rise--actions"><div className="mw-fac2__rise-in">
+                  <div className="mw-fac2__actions">
+                    <SolidCta01 href={primaryCta.href}>
+                      <span className="mw-fac2__lbl-long">{primaryCta.longLabel}</span>
+                      <span className="mw-fac2__lbl-short">{primaryCta.shortLabel}</span>
+                      {" "}<ActionArrow01 />
+                    </SolidCta01>
+                    <Link href={aboutLink.href} className="mw-fac2__about">
+                      <span className="mw-fac2__lbl-long">{aboutLink.longLabel}</span>
+                      <span className="mw-fac2__lbl-short">{aboutLink.shortLabel}</span>
+                      {" "}<span aria-hidden="true">→</span>
+                    </Link>
+                  </div>
+                </div></div>
               </div>
             </div>
 
@@ -420,7 +576,7 @@ export function MediaSplit01({ content, config = {} }) {
                 rolling in as the media uncovers it. */}
             <div className="mw-fac2__right" ref={rightRef}>
               <div className="mw-fac2__media" ref={mediaRef}>
-                <ImageAccordion01 photos={photos} reveal={false} label="Vaughn Bullough Environmental Centre photo gallery" />
+                <ImageAccordion01 photos={photos} reveal={!pinCapable} label="Vaughn Bullough Environmental Centre photo gallery" />
                 {/* Clip band — the 3 highlights grow out from under the photos (no container). */}
                 <div className="mw-fac2__figclip">
                   <dl className="mw-fac2__figs" aria-label="Facility figures" ref={figsRef}>
@@ -501,6 +657,38 @@ export function MediaSplit01({ content, config = {} }) {
                     );
                   })}
                   </div>
+                </div>
+              </div>
+
+              {/* CAPABILITY RAIL — the single-column (≤900) capabilities view, replacing the
+                  diamond lattice there (the lattice + truck stay on 901–1024 portrait and the
+                  pinned desktop): a thumb-scrollable strip of mineral-toned plates that bleeds
+                  from the LEFT screen edge (the photos bleed right — the strips bookend the
+                  column) and slides in from the left on the scrubbed --capalt-p, each card on
+                  its own slice. display:none ≥901. Styling: facility-pin.css (.mw-capalt*). */}
+              <div className="mw-capalt" ref={altRef} role="group" aria-label={capsTitle}>
+                <p className="mw-capalt__head">
+                  <span>{capsTitle}</span>
+                </p>
+                <div className="mw-capalt__rail">
+                  <span className="mw-capalt__spine" aria-hidden="true" />
+                  <ol className="mw-capalt__list">
+                    {capabilities.map((cap, i) => {
+                      const name = capText(cap);
+                      const detail = capDetail(cap, capabilityLines, i);
+                      return (
+                        <li className="mw-capalt__item" key={`alt-${name || i}`} style={{ "--ci": i, "--alt-bg": CAP_TONES[i] }}>
+                          <span className="mw-capalt__dia" aria-hidden="true">
+                            <span className="mw-capalt__dia-num">{String(i + 1).padStart(2, "0")}</span>
+                          </span>
+                          <span className="mw-capalt__body">
+                            <span className="mw-capalt__name">{capSoftWrap(name)}</span>
+                            {detail ? <span className="mw-capalt__detail">{detail}</span> : null}
+                          </span>
+                        </li>
+                      );
+                    })}
+                  </ol>
                 </div>
               </div>
             </div>

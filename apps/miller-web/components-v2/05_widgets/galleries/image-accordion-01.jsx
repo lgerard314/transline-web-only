@@ -117,28 +117,43 @@ export function ImageAccordion01({ photos, label = "Facility photo gallery", rev
     // transformed rect would feed its --p translate back and deadlock. Reduced-motion rests
     // everything at --p = 1.
     const ease = (x) => 1 - Math.pow(1 - x, 3);          // easeOutCubic
-    const PHOTO_DUR = 640, PHOTO_STAG = 130;             // per-photo span / stagger (timeline units)
-    const TEXT_GAP = 120, TEXT_DUR = 600, TEXT_STAG = 110;
-    const photoTotal = (panels.length - 1) * PHOTO_STAG + PHOTO_DUR;
-    const textTotal = risers.length ? (risers.length - 1) * TEXT_STAG + TEXT_DUR : 0;
-    const TOTAL = photoTotal + TEXT_GAP + textTotal;
+    const PHOTO_DUR = 640, STAG = 130;                   // per-item span / stagger (timeline units)
+    const TEXT_DUR = 600;
+    // CASCADE ORDER FOLLOWS THE VISUAL ORDER, not the DOM: the targets (photo panels +
+    // intro text risers) are slotted by their on-screen position — top first, then left —
+    // so when CSS re-composes the section (e.g. the ≤900 single column places the field
+    // line ABOVE the photo strip), the reveal sweeps exactly what the eye sees, top to
+    // bottom. Recomputed on resize (orientation/breakpoint changes re-order the page).
+    // Panels all share the same resting --p translate, so relative order is unaffected
+    // by measuring mid-pose; a 24px tolerance treats same-row items as ties (sorted by
+    // left, so a horizontal strip sweeps left → right).
+    const targets = [
+      ...panels.map((el) => ({ el, dur: PHOTO_DUR })),
+      ...risers.map((el) => ({ el, dur: TEXT_DUR })),
+    ];
+    let ordered = null;
+    const ensureOrder = () => {
+      if (ordered) return ordered;
+      const measured = targets.map((t) => {
+        const r = t.el.getBoundingClientRect();
+        return { ...t, top: r.top + window.scrollY, left: r.left };
+      });
+      measured.sort((a, b) => (Math.abs(a.top - b.top) > 24 ? a.top - b.top : a.left - b.left));
+      measured.forEach((t, k) => { t.start = k * STAG; });
+      ordered = measured;
+      return ordered;
+    };
+    const TOTAL = (targets.length - 1) * STAG + Math.max(PHOTO_DUR, TEXT_DUR);
+    const photoTotal = TOTAL; // the desktop slope anchors the whole cascade to the photo bottom
     const START = 0.9, END = 0.36;   // mobile fallback scrub: T=0 at root.top 90% vh → TOTAL at 36% vh
     // (Desktop anchors the cascade END to the big photo's bottom instead — see compute().)
 
     let raf = 0;
     const apply = (T) => {
-      for (let i = 0; i < panels.length; i++) {
-        // Stagger: the big/open photo (panel 0) opens FIRST and the small sliver photos
-        // follow LEFT-TO-RIGHT, so the headline picture leads the cascade.
-        const stagIdx = i;
-        const l = (T - stagIdx * PHOTO_STAG) / PHOTO_DUR;
+      for (const t of ensureOrder()) {
+        const l = (T - t.start) / t.dur;
         const v = l <= 0 ? 0 : l >= 1 ? 1 : ease(l);
-        panels[i].style.setProperty("--p", v.toFixed(4));
-      }
-      for (let i = 0; i < risers.length; i++) {
-        const l = (T - photoTotal - TEXT_GAP - i * TEXT_STAG) / TEXT_DUR;
-        const v = l <= 0 ? 0 : l >= 1 ? 1 : ease(l);
-        risers[i].style.setProperty("--p", v.toFixed(4));
+        t.el.style.setProperty("--p", v.toFixed(4));
       }
     };
     const compute = () => {
@@ -163,15 +178,21 @@ export function ImageAccordion01({ photos, label = "Facility photo gallery", rev
       } else {
         const p = Math.min(1, Math.max(0, (START * vh - top) / ((START - END) * vh)));
         T = p * TOTAL;
+        // SUBTLE ZOOM-OUT (≤900 strip): the photos rest slightly zoomed-in and ease OUT as
+        // the strip rises through the viewport — one var on the root, consumed by the zoom
+        // layer in CSS (facility-pin.css), scrubbing 0 → 1 from entry to ~22% viewport.
+        const zo = Math.min(1, Math.max(0, (0.92 * vh - top) / (0.7 * vh)));
+        root.style.setProperty("--iacc-zo", zo.toFixed(3));
       }
       apply(T);
     };
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(compute); };
+    const onResize = () => { ordered = null; onScroll(); }; // re-slot: layout may have re-ordered
 
     if (mq.matches) { setAll("1"); }
     else {
       window.addEventListener("scroll", onScroll, { passive: true });
-      window.addEventListener("resize", onScroll, { passive: true });
+      window.addEventListener("resize", onResize, { passive: true });
       compute();
     }
     const onMq = () => { if (raf) { cancelAnimationFrame(raf); raf = 0; } compute(); };
@@ -179,7 +200,7 @@ export function ImageAccordion01({ photos, label = "Facility photo gallery", rev
 
     return () => {
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      window.removeEventListener("resize", onResize);
       mq.removeEventListener("change", onMq);
       if (raf) cancelAnimationFrame(raf);
     };

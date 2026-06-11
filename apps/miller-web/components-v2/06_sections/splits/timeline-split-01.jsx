@@ -4,6 +4,9 @@ import { TimelineWipe } from "@/components-v2/06_sections/splits/timeline-wipe";
 import { TimelineHeadReveal } from "@/components-v2/06_sections/splits/timeline-head-reveal";
 import { TimelineReveal } from "@/components-v2/06_sections/splits/timeline-reveal";
 import { TimelineStats } from "@/components-v2/06_sections/splits/timeline-stats";
+import { TimelineViewMore } from "@/components-v2/06_sections/splits/timeline-view-more";
+
+const PHONE_RECORD_LIMIT = 5; // ≤700px shows this many milestones before "view full record"
 
 // History — a two-column "record": the LEFT column stacks an image-banner (the
 // truck photo, with the eyebrow/title/lead read over it) above the mission
@@ -71,6 +74,18 @@ export function TimelineSplit01({ content, config = {} }) {
                 ))}
               </ul>
             </aside>
+
+            {/* FLOW-ONLY mission panel — on single-column surfaces the reading order is
+                banner → highlights → mission, but the desktop mission (bmission) is nested
+                INSIDE the banner, so it can't be re-ordered below the aside with CSS alone.
+                This sibling carries the mission there instead (bmission is display:none on
+                those surfaces, this is display:none on desktop — only one is ever in the
+                accessibility tree). */}
+            <div className="mw-ten3__mission-flow">
+              <div className="mw-ten3__mission-panel">
+                <MissionBlock01 paragraphs={mission.paragraphs} cta={mission.cta} heading={mission.heading} />
+              </div>
+            </div>
             </div>
             <TimelineStats />
           </div>
@@ -88,7 +103,7 @@ export function TimelineSplit01({ content, config = {} }) {
               <span className="mw-ten3__field-rule" />
               <span>{eyebrow}</span>
             </p>
-            <ol className="mw-ten3__line" aria-label="Company milestones" data-timeline-reveal>
+            <ol className="mw-ten3__line" id={`${headingId}-record`} tabIndex={-1} aria-label="Company milestones" data-timeline-reveal>
               <span className="mw-ten3__edge mw-ten3__edge--top" aria-hidden="true" />
               {milestones.map((m) => (
               <li className="mw-ten3__item" key={m.year}>
@@ -106,6 +121,10 @@ export function TimelineSplit01({ content, config = {} }) {
             ))}
             <span className="mw-ten3__edge mw-ten3__edge--bottom" aria-hidden="true" />
             </ol>
+            {/* Phone-only ≤700 truncation control (CSS-gated; full record on no-JS/SSR). */}
+            {milestones.length > PHONE_RECORD_LIMIT ? (
+              <TimelineViewMore listId={`${headingId}-record`} moreCount={milestones.length - PHONE_RECORD_LIMIT} />
+            ) : null}
           </div>
           <TimelineReveal />
         </div>

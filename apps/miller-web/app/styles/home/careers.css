@@ -12,21 +12,23 @@
   background: var(--c-surface-warm);
   isolation: isolate;
 }
-/* Three equal columns; eyebrow lives in column 1, centred, zero padding on the wrap. */
+/* Intro eyebrow — centred on the SCREEN, in the cream band ABOVE the photo grid
+   (logan 2026-06-11; it previously hung over the booth tile in column 1, where the
+   fixed header covered it at the pin). The aerial tile below starts at ~11vh, so the
+   eyebrow owns the 56px-header → grid band. Fades/lifts out over the first 8% of the
+   dive (--intro-out), same as before. */
 .mw-czoom__intro-wrap {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   z-index: 2;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: block;
   padding: 0;
   margin: 0;
   pointer-events: none;
 }
 .mw-czoom__intro-col {
-  grid-column: 1;
   position: relative;
   padding: 0;
   margin: 0;
@@ -34,13 +36,13 @@
 }
 .mw-czoom__intro {
   position: absolute;
-  left: var(--czoom-intro-x, 50%);
+  left: 50%;
   transform: translateX(-50%) translateY(calc(var(--intro-out, 0) * -8px));
   top: 0;
   padding: 0;
-  margin: clamp(40px, 4.5vh, 60px) 0 0 0;
+  margin: clamp(64px, 7.5vh, 84px) 0 0 0;
   width: max-content;
-  max-width: calc(100vw / 3);
+  max-width: calc(100vw - 48px);
   opacity: calc(1 - var(--intro-out, 0));
   pointer-events: auto;
 }
@@ -130,7 +132,9 @@
   height: 100%;
   object-fit: cover;
 }
-.mw-czoom__cell:nth-child(2) .mw-czoom__frame { top: -90vh; left: 15vw; height: 90vh; width: 105vw; }
+/* Aerial tile nudged down (rest top 5vh → 11vh) so the screen-centred intro eyebrow
+   sits clear ABOVE the grid and the tile's top no longer hides under the fixed header. */
+.mw-czoom__cell:nth-child(2) .mw-czoom__frame { top: -72vh; left: 15vw; height: 90vh; width: 105vw; }
 .mw-czoom__cell:nth-child(3) .mw-czoom__frame { top: -30vh; left: -75vw; height: 135vh; width: 60vw; }
 .mw-czoom__cell:nth-child(4) .mw-czoom__frame { left: 82.5vw; height: 75vh; width: 75vw; }
 .mw-czoom__cell:nth-child(5) .mw-czoom__frame { top: 82.5vh; left: 15vw; height: 75vh; width: 60vw; }
@@ -309,9 +313,47 @@
 }
 .mw-czoom__track[data-reduced] { height: 100vh; }
 
-/* Phone: shorter dive distance; stack the invitation cards full-width. */
+/* ── FLOW MODE — the pin's exact complement (mirrors PIN_MQS in the zoom-collage-01
+   widget: pinned = ≥721w AND landscape AND ≥560h). Portrait never pins (house rule).
+   The stage becomes a normal in-flow full-bleed band SHORTER than the viewport, and the
+   dive plays ONLY while the section is fully on screen — rest collage through the whole
+   entry, dive from "section bottom meets viewport bottom" to "section top meets
+   viewport top" (the widget's flow window) — because the desktop dive zooms to a
+   CENTRED focal point on a fully-occupied screen; the flow scrub keeps that spatial
+   contract. ~72svh stage height is the trade that buys the on-screen scrub runway
+   (vh − height) while still fitting the landing copy. No sticky, no auto-advance,
+   reversible both ways. */
+@media (orientation: portrait), (max-width: 720px), (max-height: 559px) {
+  .mw-czoom__track,
+  .mw-czoom__track[data-reduced] { height: auto; } /* incl. the reduced-motion 100vh override */
+  .mw-czoom__stage {
+    position: relative;
+    height: clamp(560px, 72svh, 800px);
+  }
+  /* Mosaic re-composed for the portrait stage (stage-relative %, not vw/vh — the
+     desktop spread is landscape-proportioned and collapses to slivers here). Offsets
+     displace each frame from the stage centre; sizes are the REST boxes (FLOW_CAP 1 —
+     the widget scales these up as they sweep off). The centre tile is laid out at the
+     full stage and rests at 1/2.4 ≈ 42% (FLOW_ZOOM[0] = 2.4). */
+  .mw-czoom__cell:nth-child(1) .mw-czoom__frame { width: 100%; height: 100%; }
+  .mw-czoom__cell:nth-child(2) .mw-czoom__frame { top: -34%; left: 4%; width: 86%; height: 15%; }
+  .mw-czoom__cell:nth-child(3) .mw-czoom__frame { top: -15%; left: -34%; width: 27%; height: 23%; }
+  .mw-czoom__cell:nth-child(4) .mw-czoom__frame { top: -14%; left: 35%; width: 27%; height: 19%; }
+  .mw-czoom__cell:nth-child(5) .mw-czoom__frame { top: 31%; left: -27%; width: 40%; height: 16%; }
+  .mw-czoom__cell:nth-child(6) .mw-czoom__frame { top: 33%; left: 13%; width: 36%; height: 18%; }
+  .mw-czoom__cell:nth-child(7) .mw-czoom__frame { top: 42%; left: 40%; width: 18%; height: 11%; }
+  /* The intro eyebrow keeps its screen-centred pose; tighter top margin inside the
+     shorter stage (still clear of the topbar while the band is near the top). */
+  .mw-czoom__intro { margin-top: clamp(20px, 4vh, 44px); }
+  /* Portrait type: the landing headline is the section's statement — scale it up
+     (wrapping to 2–3 lines is welcome); lead and cards stay readable floors. */
+  .mw-czoom__title { font-size: clamp(42px, 10.5vw, 60px); }
+  .mw-czoom__lead { font-size: clamp(15px, 4vw, 18px); }
+  .mw-czoom__overlay { padding: clamp(20px, 5vw, 56px); }
+}
+
+/* Phone: stack the invitation cards full-width. */
 @media (max-width: 700px) {
-  .mw-czoom__track { --dive-vh: 100; }
   .mw-czoom__card { min-width: 0; width: 100%; }
   .mw-czoom__cards { width: 100%; max-width: 360px; }
 }

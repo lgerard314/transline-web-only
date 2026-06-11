@@ -100,9 +100,15 @@ export function LifetimeReel01({ content, config = {} }) {
     if (typeof window === "undefined") return;
     const track = trackRef.current, panel = panelRef.current, inner = innerRef.current;
     if (!track) return;
+    // Mirrors the CSS pin gate in home/lifetime.css exactly: the full-screen pin + auto-scroll
+    // run ONLY on landscape, desktop-like canvases (≥721 wide, ≥640 tall, motion-OK). Portrait
+    // orientations NEVER pin (any width, any pointer) — there the section flows at natural
+    // height and the widget self-drives from scroll (uncontrolled mode).
     const mqWide = window.matchMedia("(min-width: 721px)");
+    const mqLand = window.matchMedia("(orientation: landscape)");
+    const mqTall = window.matchMedia("(min-height: 640px)");
     const mqRM = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const canPin = () => mqWide.matches && !mqRM.matches;
+    const canPin = () => mqWide.matches && mqLand.matches && mqTall.matches && !mqRM.matches;
 
     let raf = 0, running = false, inView = false;
     let lastTs = 0, lastY = window.scrollY, cancelled = false, lastUserTs = -1e9;
@@ -256,6 +262,8 @@ export function LifetimeReel01({ content, config = {} }) {
       window.addEventListener("touchmove", onUserScroll, { passive: true });
     }
     mqWide.addEventListener("change", evaluate);
+    mqLand.addEventListener("change", evaluate);
+    mqTall.addEventListener("change", evaluate);
     mqRM.addEventListener("change", evaluate);
     evaluate();
     return () => {
@@ -266,9 +274,128 @@ export function LifetimeReel01({ content, config = {} }) {
         window.removeEventListener("touchmove", onUserScroll);
       }
       mqWide.removeEventListener("change", evaluate);
+      mqLand.removeEventListener("change", evaluate);
+      mqTall.removeEventListener("change", evaluate);
       mqRM.removeEventListener("change", evaluate);
     };
   }, [autoScroll]);
+
+  // FLOW-MODE ENTRANCE — the DESKTOP entrance translated, not a token zoom: on every
+  // non-pinned surface the dark panel STARTS AS A SMALL BOX at the map's aspect (map fully
+  // opaque inside it, framed) and GROWS — width and height — into the full band as the
+  // section scrolls in, reaching FULL SIZE exactly when the whole section fits above the
+  // screen bottom (P = 1 at section bottom == viewport bottom; same contract as the pinned
+  // version's pin-in). The map stays contain-fitted in the growing box and fades 1 → wash;
+  // the content (eyebrow + chain) fades in over the last 40% of the growth, after which the
+  // widget's own draw/count scrub carries the motion. Past full size, a gentle zoom + drift
+  // (capped to the crop headroom) keeps the settled wash alive for the rest of the pass.
+  // rAF-coalesced, CSS-var writes only. The pin owns all these vars where it exists;
+  // reduced motion rests everything settled (vars cleared → CSS defaults).
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const track = trackRef.current, panel = panelRef.current, inner = innerRef.current;
+    if (!track || !panel) return;
+    const mqWide = window.matchMedia("(min-width: 721px)");
+    const mqLand = window.matchMedia("(orientation: landscape)");
+    const mqTall = window.matchMedia("(min-height: 640px)");
+    const mqRM = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const pinOwns = () => mqWide.matches && mqLand.matches && mqTall.matches && !mqRM.matches; // == canPin
+    const active = () => !pinOwns() && !mqRM.matches;
+    const FLOW_H_START = 0.5;    // start box height as a fraction of the final band height
+    const FLOW_H_CAP = 300;      // …capped in px so big tablets still start visibly "small"
+    const FLOW_OP_OUT = 0.08;    // settled wash once fully grown
+    const FLOW_ZOOM = 0.22;      // post-growth map zoom across the remaining viewport pass
+    const FLOW_DRIFT_FRAC = 0.9; // drift uses ≤90% of the zoom's crop headroom (never bares an edge)
+
+    const clearFlow = () => {
+      ["--lr-panel-w", "--lr-panel-h", "--lr-map-w", "--lr-map-h", "--lr-zoom", "--lr-bg-drift", "--lr-bg-opacity"].forEach((p) => panel.style.removeProperty(p));
+      if (inner) inner.style.removeProperty("--lr-content-in");
+    };
+
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      if (!active()) return;
+      const vh = window.innerHeight || 1;
+      const r = track.getBoundingClientRect();
+      // Pre-roll 300px below the viewport so the small-box pose is staged BEFORE entry
+      // (no flash of the full band at the bottom edge on the first visible frame).
+      if (r.bottom < 0 || r.top > vh + 300) return;
+      const pad = parseFloat(getComputedStyle(track.querySelector(".mw-lr")).paddingTop) || 48;
+      const bandH = Math.max(1, r.height - 2 * pad);
+      // Start box: map-aspect rectangle (the desktop's opening shape), height-led.
+      let hSmall = Math.min(bandH * FLOW_H_START, FLOW_H_CAP);
+      let wSmall = hSmall * MAP_ASPECT;
+      const wMax = r.width * 0.92;
+      if (wSmall > wMax) { wSmall = wMax; hSmall = wSmall / MAP_ASPECT; }
+      // GROWTH P: 0 while the box rises in UNCHANGED, until the TOP HALF of the small box is
+      // visible (box top sits at section top + pad; trigger when boxTop + hSmall/2 crosses the
+      // screen bottom) → 1 when the section's bottom clears the screen bottom (the whole
+      // section fits above it).
+      const startTop = vh - pad - hSmall * 0.5;
+      const endTop = vh - r.height;
+      const P = Math.min(1, Math.max(0, (startTop - r.top) / Math.max(1, startTop - endTop)));
+      const u = smoothstep(P);
+      const w = wSmall + (r.width - wSmall) * u;
+      const h = hSmall + (bandH - hSmall) * u;
+      panel.style.setProperty("--lr-panel-w", ((w / r.width) * 100).toFixed(2) + "%");
+      panel.style.setProperty("--lr-panel-h", h.toFixed(1) + "px");
+      // Map: contain-fitted inside the growing box (inner padding eases out with growth),
+      // capped at the body-content width — the desktop's fitting rules.
+      const padIn = Math.min(24, Math.max(12, 0.035 * r.width)) * (1 - u);
+      const availW = Math.max(0, w - 2 * padIn);
+      const availH = Math.max(0, h - 2 * padIn);
+      let mapW = availW / Math.max(1, availH) > MAP_ASPECT ? availH * MAP_ASPECT : availW;
+      const gutter = Math.min(72, Math.max(24, 0.04 * r.width));
+      mapW = Math.min(mapW, Math.min(r.width - 2 * gutter, 1560));
+      panel.style.setProperty("--lr-map-w", mapW.toFixed(1) + "px");
+      panel.style.setProperty("--lr-map-h", (mapW / MAP_ASPECT).toFixed(1) + "px");
+      // Opacity: fully opaque in the small box → the faint wash once grown.
+      panel.style.setProperty("--lr-bg-opacity", (1 - (1 - FLOW_OP_OUT) * u).toFixed(3));
+      // Content: fades in over the last 40% of the growth (the desktop's content-in window).
+      if (inner) inner.style.setProperty("--lr-content-in", Math.min(1, Math.max(0, (u - 0.6) / 0.4)).toFixed(3));
+      // Post-growth life: gentle zoom + upward drift across the REMAINING viewport pass.
+      const pPass = Math.min(1, Math.max(0, (vh - r.top) / (vh + r.height)));
+      const tail = Math.min(1, Math.max(0, (pPass - 0.45) / 0.55)); // engages as the growth completes
+      const z = 1 + FLOW_ZOOM * tail;
+      const headroom = ((z - 1) / 2) * h * FLOW_DRIFT_FRAC;
+      panel.style.setProperty("--lr-zoom", z.toFixed(3));
+      panel.style.setProperty("--lr-bg-drift", (-(tail * headroom)).toFixed(1) + "px");
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    const sync = () => {
+      if (active()) {
+        window.addEventListener("scroll", onScroll, { passive: true });
+        window.addEventListener("resize", onScroll, { passive: true });
+        update();
+      } else {
+        window.removeEventListener("scroll", onScroll);
+        window.removeEventListener("resize", onScroll);
+        if (raf) { cancelAnimationFrame(raf); raf = 0; }
+        // Reduced motion (pin not owning the vars): clear to the settled CSS defaults
+        // (full band, wash, content visible). When the PIN owns them, leave the vars
+        // alone — its loop writes every frame.
+        if (!pinOwns()) clearFlow();
+      }
+    };
+    sync();
+    const mqs = [mqWide, mqLand, mqTall, mqRM];
+    mqs.forEach((m) => m.addEventListener("change", sync));
+    // The MAIN pin effect's IntersectionObserver calls clearReduced() (wiping these vars)
+    // whenever the track enters view un-pinned. This observer registers AFTER it, so its
+    // callback runs second and re-schedules a write — the scrub survives the clear even
+    // when no further scroll event follows (e.g. a programmatic jump).
+    const io = new IntersectionObserver(onScroll, { threshold: 0, rootMargin: "300px 0px" });
+    io.observe(track);
+    return () => {
+      io.disconnect();
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+      mqs.forEach((m) => m.removeEventListener("change", sync));
+      if (!pinOwns()) clearFlow();
+    };
+  }, []);
 
   // Subtle horizontal mouse parallax on the bg map — background-position only so scroll
   // zoom/drift (transform) stays untouched. Skipped for reduced motion.

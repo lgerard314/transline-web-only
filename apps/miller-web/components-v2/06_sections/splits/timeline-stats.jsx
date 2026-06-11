@@ -19,11 +19,19 @@ import { usePathname } from "next/navigation";
 // scrubbing up from the banner bottom over ~two mouse-wheel clicks of scroll.
 const MISSION_PAUSE_PX = 90;
 const MISSION_RANGE_PX = 220;
+// Pinned-layout gate — the EXACT complement of history.css's single-column collapse
+// query `(max-width: 1200px), (orientation: portrait)`. When this is false the section
+// is the stacked flow layout and the same vars are written from flow-geometry
+// contracts instead (counts complete when the stats band is fully on-screen; mission
+// settles when its panel is fully on-screen). Portrait never pins (house rule).
+const PIN_MQS = ["(min-width: 1201px)", "(orientation: landscape)"];
 export function TimelineStats() {
   const pathname = usePathname();
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const pinMqs = PIN_MQS.map((q) => window.matchMedia(q));
+    const pinned = () => pinMqs.every((m) => m.matches);
     let cols = [];
     let raf = 0;
     let attached = false;
@@ -35,6 +43,10 @@ export function TimelineStats() {
           return {
             stack: col.querySelector(".mw-ten3__stack"),
             banner: col.querySelector(".mw-ten3__banner"),
+            // Flow surfaces show the mission in the flow-only sibling (the in-banner
+            // bmission is display:none there) — that's the element the flow branch
+            // measures and writes --mflow-rev onto.
+            mission: col.querySelector(".mw-ten3__mission-flow"),
             stats: col.querySelector(".mw-ten3__aside"),
             timeline: grid ? grid.querySelector(".mw-ten3__line") : null,
             lastItem: grid ? ([...grid.querySelectorAll(".mw-ten3__item")].pop() || null) : null,
@@ -80,6 +92,35 @@ export function TimelineStats() {
 
     const render = () => {
       raf = 0;
+      const vh = window.innerHeight || document.documentElement.clientHeight || 1;
+      // FLOW (single-column / portrait): geometric contracts, no pin machinery.
+      if (!pinned()) {
+        for (const c of cols) {
+          // Counts complete exactly when the stats band is fully on-screen
+          // ((vh − top)/height is 1 at precisely bottom == vh); rows cascade on
+          // per-row CSS slices of the same var. Reversible both ways.
+          const sr = c.stats.getBoundingClientRect();
+          const numRev = Math.min(Math.max((vh - sr.top) / Math.max(1, sr.height), 0), 1);
+          if (Math.abs(numRev - c.lastNum) >= 0.001) {
+            c.lastNum = numRev;
+            c.stats.style.setProperty("--num-rev", numRev.toFixed(3));
+            for (const v of c.vals) v.el.textContent = (numRev * v.target).toFixed(v.dec);
+          }
+          // Mission settles (rise + fade scrub in CSS) when its panel is fully on-screen.
+          // Written as the UNREGISTERED --mflow-rev on the flow panel itself, so the CSS
+          // fallback of 1 rests it for no-JS / reduced motion (the registered
+          // --mission-rev would pin the fallback to its initial 0).
+          if (c.mission) {
+            const mr = c.mission.getBoundingClientRect();
+            const missionRev = Math.min(Math.max((vh - mr.top) / Math.max(1, mr.height), 0), 1);
+            if (Math.abs(missionRev - c.lastMission) >= 0.001) {
+              c.lastMission = missionRev;
+              c.mission.style.setProperty("--mflow-rev", missionRev.toFixed(3));
+            }
+          }
+        }
+        return;
+      }
       for (const c of cols) {
         const r = c.banner.getBoundingClientRect();
         // The banner pins to the header line (--hdr), so it never scrolls its middle past
@@ -196,6 +237,7 @@ export function TimelineStats() {
       c.stats.style.removeProperty("--stats-row-end");
       c.stats.style.removeProperty("--stats-tail-fade");
       c.banner.style.removeProperty("--mission-rev");
+      if (c.mission) c.mission.style.removeProperty("--mflow-rev");
       if (c.stack) {
         c.stack.style.position = "";
         c.stack.style.top = "";
@@ -238,16 +280,22 @@ export function TimelineStats() {
     };
 
     const sync = () => (mq.matches ? disable() : enable());
+    // Pin↔flow flips (rotation, window resize across 1200px) must drop the other
+    // mode's leftovers — the pinned branch writes inline styles (frozen stack) and
+    // vars the flow branch never manages, and vice versa.
+    const onModeChange = () => { if (attached) { clear(); collect(); onScroll(); } };
 
     const t1 = setTimeout(sync, 60);
     const onLoad = () => { if (attached) { collect(); onScroll(); } else sync(); };
     window.addEventListener("load", onLoad);
     mq.addEventListener("change", sync);
+    pinMqs.forEach((m) => m.addEventListener("change", onModeChange));
 
     return () => {
       clearTimeout(t1);
       window.removeEventListener("load", onLoad);
       mq.removeEventListener("change", sync);
+      pinMqs.forEach((m) => m.removeEventListener("change", onModeChange));
       disable();
     };
   }, [pathname]);

@@ -572,6 +572,12 @@
   /* Trim the head's trailing space a touch so the cards come up sooner on a phone. */
   .mw-roster2__head { margin-bottom: clamp(28px, 7vw, 40px); }
 
+  /* PORTRAIT-SCALE display type: the base clamp is tuned for the desktop content column and
+     bottoms out at ~28px here — far too timid for a phone where the headline IS the section's
+     opening statement. Let it run big and wrap to three/four lines (the title is two stacked
+     lines of condensed caps — more wraps read deliberate, editorial). */
+  .mw-roster2__title { font-size: clamp(34px, 9vw, 46px); }
+
   /* Hide the redundant, now-functionless menu rail; the cards are the nav on touch. The rows
      stay in the DOM (untouched for desktop) — just not rendered here. The layout already
      collapsed to one column at ≤1024, so the collage now stands alone, full-width. */
@@ -596,17 +602,17 @@
     padding: 14px 13px 15px;
   }
   /* Cap the title so long names (INDUSTRIAL WASTE TREATMENT, CUSTOMER WASTE COLLECTION) wrap
-     cleanly in a ~165px column without dominating the card; tighten leading/tracking for a
-     denser, deliberate multi-line set. */
+     cleanly in a full-width column without dominating the card; tighten leading/tracking for a
+     denser, deliberate multi-line set. (Bumped from 21px — phone card type read too small.) */
   .mw-roster2__card-title {
-    font-size: 21px;
+    font-size: 24px;
     line-height: 0.94;
     letter-spacing: 0;
   }
   /* Body: a touch larger than the desktop floor for phone legibility, with comfortable leading. */
   .mw-roster2__card-text {
-    font-size: 13px;
-    line-height: 1.4;
+    font-size: 14px;
+    line-height: 1.45;
   }
   /* → affordance: nudge it up to a fixed touch-legible size and keep it clear of the title. */
   .mw-roster2__card-arr {
@@ -644,7 +650,44 @@
    selected card's body via tap-to-select, exactly like the desktop hover. */
 @media (hover: none) and (max-width: 600px) {
   .mw-roster2__card-reveal { grid-template-rows: 1fr; opacity: 1; transform: none; }
+
+  /* FULL COLOUR on touch phones. The B&W rest grade exists purely as the hover-spotlight's
+     contrast mechanism — on a phone no card can ever be hovered/active, so the whole collage
+     (and the CTA tile's terracotta button) was stranded permanently grayscale. Restore the
+     spotlit grade (slightly tamed) as the resting state, full-white titles included. */
+  .mw-roster2__card-photo { filter: saturate(1.02) brightness(1.02) contrast(1); }
+  .mw-roster2__card-photo::after { opacity: 0.55; }
+  .mw-roster2__card-title { color: #fff; }
+  .mw-roster2__card--cta:not(:hover):not(.is-active) { filter: none; }
 }
+/* ── SMALL PHONES (≤460) — the 1-col cards are the section's whole voice (no list,
+   no neighbours): their titles step up ~25% from the ≤600 base so each card reads
+   as a headline, not a label. */
+@media (max-width: 460px) {
+  .mw-roster2__card-title { font-size: 30px; }
+}
+
+/* ── LARGER MOBILE (461–600) — TWO-UP photo tiles ─────────────────────────────
+   A single full-width column at these widths is a ~3000px monolith of identical slabs.
+   Two-up halves the section's height and reads as a designed collage again. The tiles go
+   photo-forward: the force-open summary (right for the roomy 1-col cards below 461) would
+   bury a ~210px-wide photo in text, so here the summary is dropped and each tile is just
+   photo + title + ↗ — the service page carries the detail. Placed AFTER the ≤600 blocks so
+   it wins their 1-col rules; everything ≤600, so desktop/tablet are provably untouched. */
+@media (min-width: 461px) and (max-width: 600px) {
+  .mw-roster2__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mw-roster2__card { height: auto; aspect-ratio: 1 / 1.18; }
+  /* No summary at this size (display:none also beats the hover:none force-open). */
+  .mw-roster2__card-reveal { display: none; }
+  .mw-roster2__card-title { font-size: clamp(17px, 4.2vw, 22px); }
+  .mw-roster2__card-overlay { padding: 12px 13px 13px; }
+  .mw-roster2__card-arr { font-size: 21px; }
+  /* CTA tile: pair visually with its neighbour (grid stretch already matches heights). */
+  .mw-roster2__card--cta { aspect-ratio: auto; }
+  .mw-roster2__cta-title { font-size: 20px; }
+  .mw-roster2__cta-text { font-size: 13px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .mw-roster2__card,
   .mw-roster2__card-photo,

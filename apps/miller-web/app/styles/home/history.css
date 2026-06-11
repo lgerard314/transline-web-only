@@ -47,9 +47,16 @@
    (overriding the grid's align-items:start) so the sticky mission/stats block
    has room to travel for the whole timeline scroll. */
 .mw-ten3__col { position: relative; display: flex; flex-direction: column; gap: 0; min-width: 0; align-self: stretch; }
+/* 1201–1400 (logan 2026-06-11): the record column narrows FIRST so the banner column
+   keeps its designed width longer before the single-column collapse; ≥1401 desktop is
+   untouched. The record floor (30rem) still clears the milestone measure comfortably. */
+@media (min-width: 1201px) and (max-width: 1400px) {
+  .mw-ten3__grid { grid-template-columns: minmax(0, 1fr) clamp(30rem, 34%, 36rem); }
+}
 /* Collapse to one column before the left column gets cramped by the record's
-   fixed band. */
-@media (max-width: 1200px) {
+   fixed band — and on EVERY portrait orientation regardless of width (pins/pinned
+   stacks are a landscape-only signature; portrait never pins, any width/pointer). */
+@media (max-width: 1200px), (orientation: portrait) {
   .mw-ten3__grid { grid-template-columns: 1fr; gap: clamp(28px, 5vw, 44px); }
 }
 
@@ -545,7 +552,7 @@
 .mw-ten3__edge { --eh: clamp(72px, 11vh, 132px); position: sticky; display: block; height: var(--eh); margin-left: -30px; pointer-events: none; }
 .mw-ten3__edge--top { top: 0; margin-bottom: calc(-1 * var(--eh)); background: linear-gradient(to bottom, var(--c-surface-warm) 22%, transparent); }
 .mw-ten3__edge--bottom { bottom: 0; margin-top: calc(-1 * var(--eh)); background: linear-gradient(to top, var(--c-surface-warm) 22%, transparent); }
-@media (max-width: 1200px) { .mw-ten3__edge { display: none; } } /* single column: no tall scroll band to fade against */
+@media (max-width: 1200px), (orientation: portrait) { .mw-ten3__edge { display: none; } } /* single column: no tall scroll band to fade against */
 .mw-ten3__item { position: relative; z-index: 1; padding: 0 0 clamp(20px, 2.2vw, 32px); }
 .mw-ten3__item:last-child { padding-bottom: 0; }
 .mw-ten3__tick { position: absolute; left: -25px; top: 0.58em; width: 14px; height: 1px; background: var(--c-accent); }
@@ -936,21 +943,126 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
   .mw-ten3__banner { --mission-rev: 1; }
   .mw-ten3__bmission { clip-path: none; }
 }
-@media (max-width: 1200px) {
+@media (max-width: 1200px), (orientation: portrait) {
   /* Single column: image-banner, then highlights, then mission, then the record. The
      type spans the full banner width; the bands drop the full-bleed + chevron + equal-
-     height stretch, becoming plain content-sized blocks stacked under the banner. */
+     height stretch, becoming plain content-sized blocks stacked under the banner.
+     (Portrait at ANY width joins this branch — the pinned stack is landscape-only.) */
   .mw-ten3__head { min-height: clamp(300px, 40vw, 440px); max-width: none; }
   .mw-ten3__stack { position: static; }
   .mw-ten3__banner { clip-path: none; position: static; overflow: visible; }
   .mw-ten3__record { margin-top: 0; }
   .mw-ten3__aside, .mw-ten3__maside { margin-left: 0; width: auto; max-width: none; clip-path: none; overflow: visible; min-height: 0; display: block; transform: none; }
   .mw-ten3__aside { position: static; height: auto; }
-  /* Mission layer flows as a plain white block below the banner image (no pin/clip/zoom). */
-  .mw-ten3__bmission, .mw-ten3__bmission-window, .mw-ten3__bmission-zoom { position: static; inset: auto; clip-path: none; transform: none; }
-  .mw-ten3__bmission-zoom { display: block; padding: clamp(28px, 6vw, 44px) clamp(24px, 5vw, 40px); opacity: 1; }
+  /* (The desktop in-banner mission is display:none on these surfaces — the flow-only
+     .mw-ten3__mission-flow sibling carries the mission below the highlights instead;
+     see the flow block below.) */
   .mw-ten3__plate2-stat { transform: none; }
 }
+
+/* Desktop keeps the in-banner mission; the flow-only sibling renders on the
+   single-column surfaces (re-enabled inside the flow block below — this base rule must
+   stay BEFORE that block so the media query wins the cascade). */
+.mw-ten3__mission-flow { display: none; }
+
+/* ── FLOW MOTION — same query as the single-column collapse above. Un-pinning is not
+   de-animating: the desktop beats survive here as scroll scrubs (playbook §3).
+   TimelineStats detects this branch (its canPin mirror is the collapse complement:
+   ≥1201px AND landscape) and writes the SAME vars from flow-geometry contracts:
+   --num-rev completes when the stats band is fully on-screen; --mission-rev completes
+   when the mission panel is fully on-screen. The chevron WIPE entrance also returns:
+   the banner keeps the sweeping ">" leading edge, but the resting shape is the full
+   rectangle (the apex travels past the right edge), since the full-width band has no
+   record column for a resting chevron to point at. */
+@media (max-width: 1200px), (orientation: portrait) {
+  /* Banner entrance: containing-block fix (photo/scrim confined to the banner — this
+     also cures the photo-bleed ghost-text bug on ≤1200 LANDSCAPE surfaces) + the
+     chevron wipe with a full-rect landing. var(--w) falls back to 1 → full rect for
+     no-JS / reduced-motion. */
+  .mw-ten3__banner {
+    position: relative;
+    overflow: hidden;
+    --wipe-apex: calc(var(--w) * (100% + 2 * var(--ang)) - var(--ang));
+    --wipe-corner: calc(var(--wipe-apex) - var(--ang));
+    clip-path: polygon(0 0, var(--wipe-corner) 0, var(--wipe-apex) 50%, var(--wipe-corner) 100%, 0 100%);
+  }
+  /* ── SINGLE-COLUMN COMPOSITION (logan 2026-06-11): banner → 3 highlights → mission
+     → record, every band FULL SCREEN WIDTH (no right-gutter gap). The desktop mission
+     (bmission) is nested inside the banner, so it is hidden here and the flow-only
+     .mw-ten3__mission-flow sibling (DOM-ordered after the aside) carries it — the
+     wanted order with zero re-ordering CSS. */
+  .mw-ten3__banner {
+    margin-inline: calc(-1 * var(--g));
+    width: calc(100% + 2 * var(--g));
+  }
+  .mw-ten3__head { padding-right: var(--g); }
+  .mw-ten3__bmission { display: none; }
+  .mw-ten3__mission-flow {
+    display: block;
+    /* --g is declared per-band (banner/aside selectors), not inherited — declare it
+       here too or the negative bleed margins silently resolve to 0. */
+    --g: max(clamp(24px, 4vw, 72px), calc((100vw - 1560px) / 2));
+    margin-inline: calc(-1 * var(--g));
+    background: var(--c-bg);
+    border-top: 1px solid var(--c-line);
+    padding: clamp(28px, 5.5vw, 56px) var(--g) clamp(32px, 6vw, 60px);
+    /* Mission rise echo of the desktop sheet: rises 36px + fades as it enters, settled
+       exactly when fully on-screen (--mflow-rev from TimelineStats' flow branch;
+       UNREGISTERED var so the fallback 1 rests it for no-JS / reduced motion). */
+    transform: translateY(calc((1 - var(--mflow-rev, 1)) * 36px));
+    opacity: var(--mflow-rev, 1);
+  }
+  .mw-ten3__mission-flow .mw-ten3__mission-panel { max-width: 46rem; margin-inline: auto; padding: 0; }
+  .mw-ten3__mission-flow .mw-ten2__mission { gap: clamp(13px, 2vw, 20px); }
+  .mw-ten3__mission-flow .mw-ten2__mission-heading { font-size: clamp(21px, 3.2vw, 30px); }
+  .mw-ten3__mission-flow .mw-ten2__mission-copy { font-size: clamp(15px, 2.2vw, 18px); line-height: 1.62; }
+  .mw-ten3__mission-flow .mw-ten2__mission-link { min-height: 44px; padding-block: 10px; font-size: clamp(15px, 2.2vw, 18px); }
+
+  /* 3 HIGHLIGHTS — a full-bleed white proof band directly under the banner, the three
+     stats in ONE ROW (the desktop band's grammar: numeral with its mono label beneath,
+     hairline dividers), replacing the old right-aligned phone ledger. Counts scrub via
+     --num-rev (complete when the band is fully on-screen), columns cascading left→right. */
+  .mw-ten3__aside {
+    margin-inline: calc(-1 * var(--g));
+    width: calc(100% + 2 * var(--g));
+    background: #fff;
+    border-block: 1px solid var(--c-line);
+  }
+  .mw-ten3__plate2-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    padding: clamp(20px, 3.6vw, 36px) var(--g);
+  }
+  .mw-ten3__plate2-stat {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(4px, 1vw, 8px);
+    padding-inline: clamp(10px, 2.6vw, 28px);
+    --t: clamp(0, calc((var(--num-rev, 1) - var(--ri, 0) * 0.22) * 2.2), 1);
+    opacity: var(--t);
+    transform: translateY(calc((1 - var(--t)) * 14px));
+  }
+  .mw-ten3__plate2-stat:nth-child(2) { --ri: 1; }
+  .mw-ten3__plate2-stat:nth-child(3) { --ri: 2; }
+  .mw-ten3__plate2-stat:first-child { padding-left: 0; }
+  .mw-ten3__plate2-stat:last-child { padding-right: 0; }
+  .mw-ten3__plate2-num { font-size: clamp(31px, 8.4vw, 84px); }
+  .mw-ten3__plate2-label {
+    margin-top: 0;
+    font-size: clamp(10.5px, 2.6vw, 14px);
+    line-height: 1.3;
+    letter-spacing: 0.08em;
+  }
+
+  /* The desktop pin runway (padding-bottom: 100dvh − header − banner) has no pin to
+     serve here — it read as a dead cream band after the record. Intentional end margin
+     instead (the sticky record eyebrow still travels the whole list above it). */
+  .mw-ten3__record { padding-bottom: clamp(8px, 3vw, 32px); }
+}
+/* (No extra reduced-motion rules needed for the flow beats: under RM the drivers
+   never attach and clear their vars, so every fallback above — --w 1 → full rect,
+   --mission-rev 1 → settled — rests the section statically by construction.) */
 @media (prefers-reduced-motion: reduce) {
   /* The drivers don't attach → --wipe / --stats-out fall back (full chevron, band at rest).
      Drop the clip and the emerge translate so the bands are plain static panels. */
@@ -963,30 +1075,10 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
   .mw-ten3__plate2-stat { opacity: 1; transform: none; }
 }
 
-/* ── Mobile portrait (≤600). The grid is already single-column from the ≤1200 block
-   (banner photo → mission → stats → record). Here we fix the two structural breaks that
-   block ≤1200 leaves at phone width:
-     1) MISSION reads as faint text over the dark truck photo. The banner's photo + scrim
-        (.mw-ten3__plate-window / ::after, both inset:0) escape the now-static banner and
-        stretch over the mission region, so the dark photo sits BEHIND the mission copy. Fix:
-        re-confine the photo to the banner (the containing-block fix below) AND give the
-        mission's fill layer (.mw-ten3__bmission-window) an opaque cream background, so it
-        reads as a clean, separate prose panel (matching the desktop --c-bg mission panel).
-     2) STATS overflow: three big condensed numerals in a flex ROW can't fit 360–430px, so
-        "4.5 ML/yr SOLVENT RECLAIMED" spills off the right edge. Fix: relay the three stats as
-        full-width ledger ROWS (numeral left, label right) separated by hairlines — overflow-
-        proof and on-brand. All rules are scoped to .mw-ten3* and live only in this query, so
-        desktop and the ≤1200/≤900 tablet layouts are byte-untouched. */
+/* ── Mobile portrait (≤600) — phone-only banner cropping and type/rhythm on top of the
+   shared single-column flow block above (which owns the composition, full-bleed bands,
+   mission-flow panel, and the 3-across highlights row). */
 @media (max-width: 600px) {
-  /* CONTAINING-BLOCK FIX (root cause of both the mission AND stats photo-bleed): at ≤1200 the
-     banner is position:static, so its absolutely-positioned photo (.mw-ten3__plate-window,
-     inset:0) + ::after scrim escape to the nearest positioned ancestor (.mw-ten3__col) and
-     stretch over the WHOLE column — behind the mission and the stats. Re-asserting
-     position:relative on the banner (matching the desktop stacking context) re-confines the
-     photo/scrim to the banner box (headline + mission only); the stats aside is a sibling
-     OUTSIDE the banner, so it can never get the photo behind it. */
-  .mw-ten3__banner { position: relative; }
-
   /* Tighten the headline band so the truck photo isn't a tall dead zone before the mission;
      the photo + scrim (now confined to the banner) crop to roughly this band. */
   .mw-ten3__head {
@@ -994,113 +1086,28 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
     padding-top: clamp(72px, 19vw, 104px);
     padding-bottom: clamp(28px, 8vw, 44px);
   }
+  /* Portrait type scale — the headline IS the section's opening statement on a phone;
+     the desktop clamp floor (34px) is too timid here. Wrapping to 3 lines is welcome. */
+  .mw-ten3__title { font-size: clamp(40px, 11vw, 52px); }
+  .mw-ten3__lead { font-size: clamp(15.5px, 4.2vw, 17px); }
 
-  /* MISSION → clean cream panel. DOM nesting is bmission > window > zoom > panel, so the
-     opaque fill must go on the WINDOW (the fill layer, already var(--c-bg) on desktop) — it
-     sizes to content at ≤1200 and lifts the mission above the banner's photo + scrim
-     (z-index 4 beats the banner's photo/scrim children). The zoom carries the phone padding;
-     a top hairline makes it read as a distinct record card below the photo banner. */
-  .mw-ten3__bmission { position: relative; z-index: 4; }
-  .mw-ten3__bmission-window {
-    position: relative;
-    z-index: 1;
-    background: var(--c-bg);
-    border-top: 1px solid var(--c-line);
-  }
-  .mw-ten3__bmission-zoom {
-    padding: clamp(26px, 7vw, 38px) clamp(22px, 6vw, 34px) clamp(28px, 8vw, 40px);
-  }
-  /* Mission copy sized for a comfortable phone measure; the panel constrains the width. */
-  .mw-ten3__bmission .mw-ten3__mission-panel { max-width: none; }
-  .mw-ten3__bmission .mw-ten2__mission { gap: clamp(12px, 3.2vw, 18px); }
-  .mw-ten3__bmission .mw-ten2__mission-heading { font-size: clamp(21px, 6.2vw, 26px); }
-  .mw-ten3__bmission .mw-ten2__mission-copy { font-size: clamp(14.5px, 4vw, 16px); line-height: 1.6; }
-  /* CTA: pad to a ≥44px tap target without shifting the underline baseline elsewhere. */
-  .mw-ten3__bmission .mw-ten2__mission-link {
-    min-height: 44px;
-    padding-block: 10px;
-    font-size: clamp(15px, 4.2vw, 17px);
-  }
-
-  /* STATS → full-width ledger rows. Container becomes a vertical stack flush to the gutter
-     (drop the wide right pad that pushed the 3rd stat off-screen) on an explicit cream fill
-     so no photo can bleed behind it. */
-  .mw-ten3__aside { background: var(--c-surface-warm); }
-  .mw-ten3__plate2-stats {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0;
-    padding: clamp(6px, 2vw, 12px) clamp(22px, 6vw, 34px) clamp(18px, 5vw, 28px);
-  }
-  /* Each stat is one ledger line: big numeral left, mono label pushed to the right baseline.
-     Full-width rows can't overflow; hairlines between rows replace the vertical dividers. */
-  .mw-ten3__plate2-stat {
-    flex: 0 0 auto;
-    flex-direction: row;
-    align-items: baseline;
-    gap: clamp(12px, 4vw, 20px);
-    padding: clamp(14px, 4vw, 20px) 0;
-  }
-  .mw-ten3__plate2-stat:first-child { padding-top: clamp(8px, 2.5vw, 14px); }
-  /* Horizontal hairline between stacked rows; cancel the desktop vertical divider. */
-  .mw-ten3__plate2-stat + .mw-ten3__plate2-stat::before {
-    top: 0;
-    bottom: auto;
-    left: 0;
-    width: 100%;
-    height: 0.5px;
-  }
-  /* Shrink the numerals so even "4.5" + unit never strains the row; still bold + on-scale. */
-  .mw-ten3__plate2-num { font-size: clamp(44px, 13.5vw, 60px); }
-  /* Surface the FINAL stat value on the stacked phone layout. The scroll-tied count-up fades
-     the stat in via opacity:var(--num-rev) and overwrites .mw-ten3__plate2-val each frame, so at
-     the row's natural reading position the figures read as 0/half. Force the stat opaque and
-     paint the final value from data-val via ::after (the live node is collapsed; the terracotta
-     unit is a SIBLING, untouched) — same fix as the tablet-portrait block below. */
-  .mw-ten3__plate2-stat { opacity: 1; }
-  .mw-ten3__plate2-val { font-size: 0; }
-  .mw-ten3__plate2-val::after { content: attr(data-val); font-size: clamp(44px, 13.5vw, 60px); }
-  .mw-ten3__plate2-label {
-    margin-top: 0;
-    margin-left: auto;
-    text-align: right;
-    align-self: center;
-    font-size: clamp(12px, 3.4vw, 14px);
-    max-width: 11ch;
-    line-height: 1.25;
-  }
+  /* (Mission + stats presentation now lives in the shared flow block above: full-bleed
+     mission-flow panel and the 3-across highlights row — one set of rules for every
+     single-column surface instead of a phone ledger fork.) */
 
   /* Record list: a touch more air between the eyebrow-rule and the milestones, and confirm
      the tick/spine indent reads cleanly at phone width (base values already stack fine). */
   .mw-ten3__record-eyebrow { margin-bottom: clamp(16px, 4.5vw, 24px); }
   .mw-ten3__ibody { max-width: none; }
+  /* Milestone type up to the portrait floors (desktop vw clamps bottom out too small here). */
+  .mw-ten3__ititle { font-size: 21px; }
+  .mw-ten3__year { font-size: 12.5px; }
 }
 
-/* ── Tablet portrait (601–1024, portrait). The grid is already single-column from the ≤1200
-   block (banner photo → mission → stats → record). Same structural break as ≤600 but at a
-   wider canvas: the now-static banner's absolutely-positioned photo (.mw-ten3__plate-window,
-   inset:0) + ::after scrim escape to .mw-ten3__col and paint OVER the mission copy AND the
-   stats — both read as faint ghost text on the dark truck photo (confirmed at 768/820/1024).
-   Fix mirrors the committed ≤600 approach, retuned for tablet:
-     1) MISSION → re-confine the photo to the banner (banner position:relative — restores the
-        desktop stacking context) AND give the mission's fill layer an OPAQUE cream panel
-        (.mw-ten3__bmission-window, raised z-index) so it reads as a clean prose card, exactly
-        like the desktop --c-bg mission panel. Reading measure is capped + centred so the line
-        length stays comfortable up to 1024 (full-bleed would run ~960px / too wide).
-     2) STATS keep the 3-across row — verified to FIT at 768/820/1024 with no overflow — but the
-        aside gets an opaque warm fill so nothing bleeds behind it (belt-and-suspenders with the
-        containing-block fix), matching the cream desktop stat strip.
-   Everything is scoped to .mw-ten3* and lives only in this query, so desktop, the ≤1200/≤900
-   tablet layouts, and the ≤600 phone fix are byte-untouched. */
+/* ── Tablet portrait (601–1024, portrait) — banner cropping and type scale on top of the
+   shared single-column flow block above (which owns the composition, full-bleed bands,
+   mission-flow panel, and the 3-across highlights row). */
 @media (min-width: 601px) and (max-width: 1024px) and (orientation: portrait) {
-  /* CONTAINING-BLOCK FIX (root cause): at ≤1200 the banner is position:static, so its
-     absolutely-positioned photo (.mw-ten3__plate-window, inset:0) + ::after scrim escape to the
-     nearest positioned ancestor (.mw-ten3__col) and stretch over the WHOLE column — behind the
-     mission and the stats. Re-asserting position:relative (matching the desktop stacking
-     context) re-confines photo/scrim to the banner box; the mission and the stats aside are
-     siblings OUTSIDE the banner, so the photo can never sit behind them. */
-  .mw-ten3__banner { position: relative; }
-
   /* Trim the headline band so the truck photo isn't a tall dead zone before the mission card;
      taller than the phone band (more canvas) but cropped to a cinematic strip — the photo +
      scrim (now confined to the banner) crop to roughly this band. */
@@ -1108,70 +1115,61 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
     min-height: clamp(340px, 46vw, 460px);
     padding-bottom: clamp(40px, 6vw, 64px);
   }
+  /* Portrait-tablet type scale — the desktop vw clamps bottom out undersized on this canvas. */
+  .mw-ten3__title { font-size: clamp(46px, 6.4vw, 58px); }
+  .mw-ten3__lead { font-size: clamp(16.5px, 2.2vw, 18px); }
+  .mw-ten3__ititle { font-size: clamp(21px, 2.9vw, 24px); }
 
-  /* MISSION → clean cream panel. DOM nesting is bmission > window > zoom > panel; the opaque
-     fill goes on the WINDOW (the fill layer, already var(--c-bg) on desktop) — it sizes to
-     content at ≤1200 and lifts the mission above the banner's photo + scrim (z-index 4 beats the
-     banner's photo/scrim children). A top hairline reads it as a distinct record card below the
-     photo banner. */
-  .mw-ten3__bmission { position: relative; z-index: 4; }
-  .mw-ten3__bmission-window {
-    position: relative;
-    z-index: 1;
-    background: var(--c-bg);
-    border-top: 1px solid var(--c-line);
-  }
-  /* Tablet reading rhythm: comfortable side gutters + a capped, centred measure so the prose
-     never runs the full ~960px at 1024 (too long to read); generous top/bottom air. */
-  .mw-ten3__bmission-zoom {
-    padding: clamp(40px, 6.5vw, 64px) clamp(40px, 7vw, 72px) clamp(44px, 7vw, 72px);
-  }
-  .mw-ten3__bmission .mw-ten3__mission-panel { max-width: 46rem; margin-inline: auto; }
-  .mw-ten3__bmission .mw-ten2__mission { gap: clamp(16px, 2.4vw, 22px); }
-  .mw-ten3__bmission .mw-ten2__mission-heading { font-size: clamp(24px, 3.4vw, 30px); }
-  .mw-ten3__bmission .mw-ten2__mission-copy { font-size: clamp(16px, 2vw, 18px); line-height: 1.62; }
-  /* CTA: pad to a ≥44px tap target without shifting the underline baseline elsewhere. */
-  .mw-ten3__bmission .mw-ten2__mission-link {
-    min-height: 44px;
-    padding-block: 10px;
-    font-size: clamp(16px, 2vw, 18px);
-  }
+  /* (Mission, stats row, count-up slices, and the runway trim all live in the shared
+     flow block above — one set of rules for every single-column surface.) */
+}
 
-  /* BOTTOM-GAP TRIM (#user-tester). On desktop the record column reserves a tall pin runway
-     (padding-bottom: 100dvh − header − banner) so the left
-     sticky stack stays pinned through the whole milestone list. In this STACKED layout there is
-     no pin (the ≤1200 block already statics the stack), so that runway becomes ~650–1175px of
-     blank cream after the last milestone — the page looks stalled. Replace it with a normal,
-     intentional section-end margin. The desktop pin (≥1025 / landscape) keeps the full runway. */
-  .mw-ten3__record { padding-bottom: clamp(8px, 3vw, 32px); }
-
-  /* STATS → keep the 3-across row (fits at 768/820/1024), just guarantee a clean cream ground so
-     no photo bleeds behind. LEFT-RAIL ALIGNMENT (#dr): the band, the bmission and the milestone
-     <ol> all share the SAME left origin in this stack, and the milestone titles sit a fixed 30px
-     in from it (.mw-ten3__line padding-left:30px → item text). Matching the row's left padding to
-     that same 30px lands the first numeral on the exact milestone-title rail (origin + 30px) at
-     every portrait width — instead of jutting ~30px right under the old clamp(40px,7vw,72px). Keep
-     the right pad as trailing space; the first stat's own padding-left is already 0 (base rule). */
-  .mw-ten3__aside { background: var(--c-surface-warm); }
-  .mw-ten3__plate2-stats {
-    padding: clamp(28px, 4vw, 40px) clamp(40px, 7vw, 72px) clamp(28px, 4vw, 40px) 30px;
-    --stat-pad: clamp(20px, 3vw, 44px);
+/* ── Phone record truncation (logan 2026-06-11): show the first 5 milestones with a
+   "view full record" control so the phone doesn't scroll the whole 11-item ledger.
+   <TimelineViewMore> adds [data-trunc] to the list on mount (JS-on only — no-JS and
+   SSR show everything) and removes it on tap; the control is CSS-visible ONLY at ≤700
+   while the list is truncated, so wider surfaces never see either state. Voice: an
+   in-page TEXT link (the mission-link grammar — condensed uppercase clay) with a
+   down-pointing chevron beneath it, centred under the timeline — it expands the record
+   here, it doesn't navigate anywhere. */
+.mw-ten3__more { display: none; }
+@media (max-width: 700px) {
+  .mw-ten3__line[data-trunc] .mw-ten3__item:nth-of-type(n + 6) { display: none; }
+  .mw-ten3__line[data-trunc] ~ .mw-ten3__more {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    width: max-content;
+    margin: clamp(18px, 5vw, 26px) auto 0;
+    padding: 10px 14px;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    color: var(--c-accent);
+    transition: color 0.2s ease;
   }
-  /* COUNT-UP FINAL VALUE without JS (#user-tester). The numerals are scroll-scrubbed: the driver
-     writes (progress × target) to .mw-ten3__plate2-val.textContent and fades the stat in via
-     opacity:var(--num-rev) — both tied to the DESKTOP pin/timeline reveal. In this STACKED layout
-     there is no pin, so at reading position (row centred) the count is still ~0 and the stat is
-     faded out, badly under-stating the flagship proof numbers. The final value is already in the
-     element's `data-val` attribute, so we surface it CSS-only (analogous to the lifetime-reel
-     sizer/live fix): collapse the live text node (font-size:0) and print data-val via ::after at
-     the real numeral size, and force the stat opaque (defeating the --num-rev fade gate, which is
-     meaningless here). No scroll coupling → the correct 25 / 96 / 4.5 always show. The unit is a
-     SIBLING of .mw-ten3__plate2-val (not a child), so it is untouched by the font-size:0. */
-  .mw-ten3__plate2-stat { opacity: 1; }
-  .mw-ten3__plate2-val { font-size: 0; }
-  .mw-ten3__plate2-val::after {
-    content: attr(data-val);
-    font-size: clamp(64px, 7.2vw, 108px);
+  .mw-ten3__more-label {
+    font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  /* Down-pointing chevron chip under the label (border caret, the house squared voice). */
+  .mw-ten3__more-chev {
+    width: 9px;
+    height: 9px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .mw-ten3__line[data-trunc] ~ .mw-ten3__more:hover,
+  .mw-ten3__line[data-trunc] ~ .mw-ten3__more:focus-visible { color: var(--c-accent-2); }
+  .mw-ten3__line[data-trunc] ~ .mw-ten3__more:hover .mw-ten3__more-chev { transform: rotate(45deg) translate(2px, 2px); }
+  @media (prefers-reduced-motion: reduce) {
+    .mw-ten3__more-chev { transition: none; }
   }
 }
 

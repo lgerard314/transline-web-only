@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Eyebrow01 } from "@/components-v2/01_marks/eyebrows/eyebrow-01";
 import { StopText01 } from "@/components-v2/01_marks/stops/stop-text-01";
 import { SolidCta01 } from "@/components-v2/02_buttons/solid/solid-cta-01";
@@ -54,6 +54,24 @@ export function SectorDiamonds04({ content, config = {} }) {
   const sy = 100 / rows;
   const trackRef = useRef(null);
   const sectionRef = useRef(null);
+  // Touch tap-to-activate for the mobile category row: with no hover, a tap toggles which
+  // category is "on" (drives .is-cat-on → the same activation the desktop :hover gives). The
+  // category diamonds aren't links, so a tap has no navigation to compete with. Desktop frieze
+  // (≥721) is hover-driven and ignores this class, so a stray click there is a no-op.
+  const [activeCat, setActiveCat] = useState(-1);
+
+  // Tap-spotlight dismissal: while a category is active (.is-cat-on), any pointerdown OUTSIDE
+  // a category diamond clears the selection — tapping another category re-selects (its own
+  // onClick runs after this and wins), tapping the same one toggles off via its onClick.
+  useEffect(() => {
+    if (activeCat < 0 || typeof document === "undefined") return;
+    const onDown = (e) => {
+      if (e.target && e.target.closest && e.target.closest(".mw-secd__cat")) return;
+      setActiveCat(-1);
+    };
+    document.addEventListener("pointerdown", onDown);
+    return () => document.removeEventListener("pointerdown", onDown);
+  }, [activeCat]);
 
   // PINNED REVEAL (desktop, tall viewport, motion-OK): the section is wrapped in a tall track and
   // made sticky, so it FREEZES once it fills the viewport. The pinned scroll progress P (0→1) drives
@@ -62,10 +80,16 @@ export function SectorDiamonds04({ content, config = {} }) {
   // paragraph normally — the CSS gates on the SAME query, and we clear --secd-rev so it falls back.
   useEffect(() => {
     if (typeof window === "undefined") return;
+    // Mirrors the CSS pin gate in home/sectors.css exactly (721 wide / 840 tall / LANDSCAPE /
+    // motion-OK). House rule: full-screen pins are landscape-only — portrait never pins, any
+    // width or pointer. Portrait touch re-flows to the phone band layout; portrait fine-pointer
+    // windows keep the frieze but flow. (Also fixed here earlier: the JS height gate sat at 820
+    // vs the CSS's 840, which could hide the eyebrow with no CSS pin engaged.)
     const mqWide = window.matchMedia("(min-width: 721px)");
-    const mqTall = window.matchMedia("(min-height: 820px)");
+    const mqTall = window.matchMedia("(min-height: 840px)");
+    const mqLand = window.matchMedia("(orientation: landscape)");
     const mqRM = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const canPin = () => mqWide.matches && mqTall.matches && !mqRM.matches;
+    const canPin = () => mqWide.matches && mqTall.matches && mqLand.matches && !mqRM.matches;
     let raf = 0;
     const compute = () => {
       raf = 0;
@@ -97,6 +121,7 @@ export function SectorDiamonds04({ content, config = {} }) {
     window.addEventListener("resize", onScroll, { passive: true });
     mqWide.addEventListener("change", onScroll);
     mqTall.addEventListener("change", onScroll);
+    mqLand.addEventListener("change", onScroll);
     mqRM.addEventListener("change", onScroll);
     compute();
     return () => {
@@ -104,6 +129,7 @@ export function SectorDiamonds04({ content, config = {} }) {
       window.removeEventListener("resize", onScroll);
       mqWide.removeEventListener("change", onScroll);
       mqTall.removeEventListener("change", onScroll);
+      mqLand.removeEventListener("change", onScroll);
       mqRM.removeEventListener("change", onScroll);
       if (raf) cancelAnimationFrame(raf);
     };
@@ -123,8 +149,15 @@ export function SectorDiamonds04({ content, config = {} }) {
             if (c.t === "cat") {
               const style = { left: `${c.col * sx}%`, top: `${c.row * sy}%`, width: `${2 * sx}%`, "--fx": c.fx.toFixed(3) };
               return (
-                // data-cat ties the category to its 4 photos so a category hover can spotlight them (CSS :has()).
-                <div className="mw-secd__cat" data-cat={c.ci} style={style} key={`cat-${i}`}>
+                // data-cat ties the category to its 4 photos so a category hover (or tap, on touch)
+                // can spotlight them (CSS :has()). onClick toggles .is-cat-on for the no-hover case.
+                <div
+                  className={`mw-secd__cat${activeCat === c.ci ? " is-cat-on" : ""}`}
+                  data-cat={c.ci}
+                  style={style}
+                  key={`cat-${i}`}
+                  onClick={() => setActiveCat((prev) => (prev === c.ci ? -1 : c.ci))}
+                >
                   <svg className="mw-secd__cat-svg" viewBox="0 0 200 200" aria-hidden="true">
                     <rect className="mw-secd__cat-fill" x="29.3" y="29.3" width="141.4" height="141.4" rx="15" transform="rotate(45 100 100)" />
                   </svg>

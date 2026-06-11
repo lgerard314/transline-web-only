@@ -45,6 +45,7 @@ export function LifetimeReel({ highlights = [], progress }) {
   const [sticky, setSticky] = useState(null); // last diamond hovered/focused/clicked
   const [current, setCurrent] = useState(0); // mobile one-at-a-time index (scroll-synced, tap-overridable)
   const [reduced, setReduced] = useState(false); // prefers-reduced-motion
+  const [phone, setPhone] = useState(false); // ≤720 compact-row mode: ONE caption at a time, tap/scroll-selected
   const [geom, setGeom] = useState(null);  // { linesD, diamondsD, fillsD, stageW, stageH, sw, milestones[6] }
   const stageRef = useRef(null);
   const rootRef = useRef(null);
@@ -110,6 +111,17 @@ export function LifetimeReel({ highlights = [], progress }) {
     return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", measure); };
   }, []);
 
+  // ≤720 = the compact-row presentation (see home/lifetime.css): the same horizontal
+  // three-diamond chain as desktop, with ONE caption shown at a time below it.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(max-width: 720px)");
+    const sync = () => setPhone(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
   // Scroll-driven progress: one rAF-coalesced reader that maps the section's viewport
   // position to 0..1. prefers-reduced-motion pins progress to 1 and attaches no
   // listener. Cleans up the listeners on unmount / mode change.
@@ -138,9 +150,14 @@ export function LifetimeReel({ highlights = [], progress }) {
       const lr = left.getBoundingClientRect();
       if (!lr.height) return;
       const startA = lr.top + START_VISIBLE_FRAC * lr.height; // top 60% of first diamond visible
-      // End: bottom of the body-paragraph caption = top of the section's bottom padding.
+      // End: the caption band's bottom reaching ~66% of the viewport (NOT the viewport bottom —
+      // that finished the whole draw the instant the section entered, so on a tall phone the
+      // chain/count-up appeared already-settled by the time the user looked at it; the extra
+      // 0.34·vh of scroll span keeps the draw + counts visibly scrubbing while the section
+      // climbs to where the eye actually is).
       const endB = band.getBoundingClientRect().bottom;
-      const p = (vh - startA) / ((endB - startA) || 1);
+      const span = (endB - startA) + vh * 0.34;
+      const p = (vh - startA) / (span || 1);
       setInternalProg(Math.min(1, Math.max(0, p)));
     };
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(compute); };
@@ -222,13 +239,19 @@ export function LifetimeReel({ highlights = [], progress }) {
   // finishes together at drawProg = 1/COUNT_SPEED, so that is the cue (no longer the full-scroll
   // `done`). Mobile reveals the current diamond's caption one at a time and ignores this.
   const countsDone = controlled ? drawProg >= (1 / COUNT_SPEED) - 1e-4 : false;
+  // UNCONTROLLED settle cue: on a flowing (no-pin) tablet the chain + counts self-draw from
+  // scroll; once the draw is essentially complete the captions reveal together and tap/hover
+  // emphasis engages — the same end-state the pinned desktop reaches via countsDone. (Reduced
+  // motion pins progress to 1, so this is immediately true there.)
+  const allDone = controlled ? countsDone : drawProg >= 0.92;
   const countsDoneRef = useRef(false);
   countsDoneRef.current = countsDone;
-  // Desktop: hover engages as soon as the body paragraphs render (countsDone). Mobile:
-  // the current one-at-a-time diamond is always hoverable (pointer-events gated in CSS).
+  // Desktop: hover engages as soon as the body paragraphs render (countsDone). Mobile/tablet
+  // (uncontrolled): a tap both emphasises the diamond AND selects it as the current highlight
+  // (drives the phone stack's one-shown caption; harmless >720 where all captions show).
   const select = useCallback((idx) => () => {
     if (controlled) { if (countsDoneRef.current) setSticky(idx); }
-    else setSticky(idx);
+    else { setSticky(idx); setCurrent(idx); }
   }, [controlled]);
   const localOf = (idx) => {
     const g = geom;
@@ -252,14 +275,17 @@ export function LifetimeReel({ highlights = [], progress }) {
   };
 
   // Diamond emphasis (amber border + scale) is hover-only once the body paragraphs render
-  // (countsDone). Captions reveal together at that same moment; hovering a diamond also
-  // bumps that caption to the full body-copy size (data-active on the matching caption).
-  const activeIdx = (countsDone && sticky != null) ? sticky : null;
+  // (countsDone on the pinned desktop; allDone on flowing surfaces). Captions reveal together
+  // at that same moment; hovering a diamond also bumps that caption to the full body-copy
+  // size (data-active on the matching caption).
+  const activeIdx = (allDone && sticky != null) ? sticky : null;
 
   // Mobile one-at-a-time current diamond (chain hidden on mobile): pick the slot whose
   // segment the global progress has entered. Scroll drives `current` (the effect only
-  // fires when the slot actually changes); a dot tap can override it until the next
-  // slot transition.
+  // fires when the index actually changes); a tap can override it until the next
+  // transition. On the ≤720 vertical STACK the diamonds render in DOM order (top→bottom),
+  // so the scroll-advance steps 0→1→2 in DOM order at progress thirds; elsewhere it maps
+  // through the slot order (left→centre→right).
   const slotCurrent = (() => {
     const g = geom;
     if (!g) return 0;
@@ -268,7 +294,15 @@ export function LifetimeReel({ highlights = [], progress }) {
     const c2 = (g.milestones[4] - m0) / span; // right slot segStart
     return drawProg >= c2 ? 2 : drawProg >= c1 ? 1 : 0;
   })();
-  useEffect(() => { setCurrent(orderRef.current[slotCurrent] ?? slotCurrent); }, [slotCurrent]);
+  useEffect(() => {
+    const next = orderRef.current[slotCurrent] ?? slotCurrent;
+    setCurrent(next);
+    // Compact row (≤720): the scroll/draw-advanced selection IS the emphasis — keep sticky in
+    // lockstep so a stale tap can't leave a second amber diamond / a dimmed caption behind.
+    // (The effect fires only when the slot actually changes, so a tap holds until the next
+    // transition — and after the draw settles there are no more transitions to override it.)
+    if (phone) setSticky(next);
+  }, [slotCurrent, phone]);
 
   // Lay out the reveal captions (lock band height to the tallest; slide each under
   // its own diamond). Measured from the live elements; recomputed on load + resize.
@@ -278,6 +312,10 @@ export function LifetimeReel({ highlights = [], progress }) {
     if (!band || !stage || typeof window === "undefined") return;
     const place = () => {
       const bb = band.getBoundingClientRect();
+      // ONE-caption mode (≤720 compact row): the single visible paragraph is always dead-
+      // centred in the band — the per-diamond dx slide only makes sense when all three lanes
+      // show side by side (it drifted the lone caption toward its diamond at 490–720px).
+      const oneCaption = window.matchMedia("(max-width: 720px)").matches;
       let maxH = 0;
       highlights.forEach((_, idx) => {
         const el = captionEls.current[idx];
@@ -288,6 +326,14 @@ export function LifetimeReel({ highlights = [], progress }) {
         const cb = card.getBoundingClientRect();
         const capW = el.offsetWidth;
         const target = (cb.left + cb.width / 2) - (bb.left + bb.width / 2);
+        if (oneCaption) {
+          // The lone caption stays dead-centred, but its amber TICK points at the ACTIVE
+          // highlight: offset the tick to this caption's own diamond centre (each caption
+          // belongs to one diamond, so the tick lands correctly whichever is shown).
+          el.style.setProperty("--lr-cap-dx", "0px");
+          el.style.setProperty("--lr-tick-dx", `${target.toFixed(1)}px`);
+          return;
+        }
         const clampMag = Math.max(0, (bb.width - capW) / 2);
         const dx = Math.max(-clampMag, Math.min(clampMag, target));
         el.style.setProperty("--lr-cap-dx", `${dx}px`);
@@ -306,7 +352,7 @@ export function LifetimeReel({ highlights = [], progress }) {
       data-current={current}
       data-done={done ? "1" : undefined}
       data-active={activeIdx != null ? "1" : undefined}
-      data-hoverable={countsDone ? "1" : undefined}
+      data-hoverable={allDone ? "1" : undefined}
     >
       <div className="mw-lr-reel__stage" ref={stageRef}>
         {/* Unified chain (desktop), revealed left→right by the wipe. Split into z layers
@@ -341,7 +387,9 @@ export function LifetimeReel({ highlights = [], progress }) {
           const name = `${h.value}${h.suffix}${h.unit ? " " + h.unit : ""} — ${h.label}`;
           const local = localOf(idx);
           const started = local > 0;
-          const capShown = controlled ? countsDone : current === idx; // its caption reveals the moment the last counter lands
+          // Caption visibility: pinned desktop → all together when the last counter lands;
+          // phone stack → the current (scroll/tap-selected) one; flowing tablet → all on settle.
+          const capShown = controlled ? countsDone : phone ? current === idx : allDone;
           return (
             <div
               className="mw-lr-reel__item"
@@ -385,10 +433,10 @@ export function LifetimeReel({ highlights = [], progress }) {
           at a time) only the current diamond's caption shows. */}
       <div className="mw-lr-reel__captions" ref={captionsRef}>
         {highlights.map((h, idx) => {
-          // Desktop: hold ALL three captions hidden until the last counter lands
-          // (countsDone), then reveal them together. Mobile: one at a time, the current
-          // diamond's caption.
-          const shown = controlled ? countsDone : current === idx;
+          // Pinned desktop: hold ALL three captions hidden until the last counter lands
+          // (countsDone), then reveal them together. Phone stack: one at a time, the
+          // current diamond's caption. Flowing tablet: all together once the draw settles.
+          const shown = controlled ? countsDone : phone ? current === idx : allDone;
           const hoverable = controlled ? countsDone : shown;
           return (
             <p
