@@ -33,6 +33,7 @@ Pending entries (built on the v2 interior pages, NOT approved — those pages aw
 - **Per-page CSS photo filters** — removed at logan's direction; only home's `--mw-photo-grade` token survives, frozen (imagery.md).
 - **Blue/teal/cool color families in UI, CSS, or generated graphics** (design-language.md; exceptions: third-party marks incl. the ISO seals).
 - **Pills / `rounded-full`** — squared rectangles only (canon).
+- **Drawn-box heading stops** — `.mw-stop` squares built from `width`+`height`+`background` are retired (logan 2026-06-12); the stop is a font `"."` glyph (hero recipe, design-language.md). Recoloring a stop with `background:` is the tell that someone reintroduced the box.
 - **Purposeless image dumps** — a curated composition never degrades into a wall of stacked images on any viewport (responsive.md).
 - **Stripping motion on mobile** — adjust, never remove; `prefers-reduced-motion` is the only off-switch (responsive.md).
 - **New motion MECHANICS without flagging** — new applications of proven mechanics only (motion.md).
