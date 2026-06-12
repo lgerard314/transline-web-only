@@ -1,7 +1,3 @@
-.aws/screens/
-.aws/playwright-audit.py
-.aws/playwright-menu.py
-.aws/playwright-menu-debug.py
 # Track .claude (repo skills/config); keep machine-local bits out
 **/.claude/settings.local.json
 **/.claude/global-plugin-touched
@@ -31,8 +27,11 @@ npm-debug.log*
 Thumbs.db
 
 # Agent scratch (screenshots, probe scripts) — never committed
-.scratch/
+.scratch/*
+!.scratch/.gitkeep
 **/_scratch*/
+**/.pw-*/
+**/*-scratch*/
 
 # Vercel
 .vercel
