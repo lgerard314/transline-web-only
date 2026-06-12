@@ -6,9 +6,13 @@ These are the canonical rendered-pixel references for sections logan has rated a
 
 **The refresh rule (process failure if skipped):** any change that alters the rendered appearance of an approved section MUST refresh that section's screenshots — in EVERY class that has shots of it — and its INDEX rows in the SAME commit as the change. A stale approved shot is worse than none. New pages/sections/classes get rows here only when logan rates them done (the extraction pass in process.md).
 
-## Capture protocol (used for every shot below; reuse it for refreshes)
+## Capture protocol — MECHANICAL, never agent-walked
 
-- Shared dev server (miller-web on :3001), own fresh `chromium.launch()` per agent, closed after; capture at the class's canonical dimensions (responsive.md): desktop 1440×900 fine-pointer; phone 390×844 DPR 3, tablet-portrait 834×1194, tablet-landscape 1194×834 — coarse classes with `isMobile: true, hasTouch: true`.
+**Captures and refreshes run via the checked-in harness, not agents** (`.claude/skills/website-design/scripts/capture-home.mjs` — usage in its README): `node …/capture-home.mjs --section <NN|all> --class <name|all> [--out <dir>]`, as a background process against the running :3001 server. Every shot below is encoded in `capture-home-manifest.mjs` as a pose predicate; the runner converges on the predicate, writes a `capture-report.json`, suffixes misses `.FAILED.png`, and exits nonzero on any failure. Agent/human involvement is REVIEW ONLY: read the report's converged flags and LOOK at the changed shots before committing them. Hand-walked agent captures of approved-page shots are retired — they burned half a rate window doing mechanically what the script does for free. (Changing a section's choreography may require updating its manifest predicate in the same change.)
+
+The encoded protocol, for reference and for authoring new manifest entries:
+
+- Shared dev server (miller-web on :3001), fresh `chromium.launch()` per class, closed after; capture at the class's canonical dimensions (responsive.md): desktop 1440×900 fine-pointer; phone 390×844 DPR 3, tablet-portrait 834×1194, tablet-landscape 1194×834 — coarse classes with `isMobile: true, hasTouch: true`. Dev portal hidden via injected CSS; in-frame image waits race `img.decode()` against a 3s cap (it hangs forever on lazy below-fold images).
 - Walk to the section with REAL stepped scrolls (~400–600px, settle waits) so reveals/lazy images/pin choreography run honestly; never `scrollIntoView` through pinned runways.
 - **Viewport screenshots only.** Element/locator screenshots are forbidden on this page — pinned sections corrupt them (the 07-history element shot stitched VBEC content + empty void; re-captured as viewport walk).
 - Motion-defined sections get mid + settled poses, captured at probed frames (scrollY + rect + progress vars recorded below come from those probes).
