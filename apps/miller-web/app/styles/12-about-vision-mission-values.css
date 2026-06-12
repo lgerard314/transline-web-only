@@ -1,0 +1,340 @@
+/* ============================================================
+   12 - ABOUT: VISION, MISSION AND CORE VALUES (v2)
+   The "company creed" page — typographic manifesto register.
+   mw-vmv-* namespace only; composed from dedicated templates
+   (manifesto-hero-01, creed-band-01 ×2, values-grid-01,
+   doors-close-01). No service-page devices (no title block, no
+   related rail — about page closes with the two doors).
+   ============================================================ */
+
+/* ── §1 Hero — manifesto masthead over full-bleed crew photo ────── */
+.mw-vmv-hero {
+  position: relative;
+  background: var(--c-surface-warm);
+  color: var(--c-ink);
+  isolation: isolate;
+}
+.mw-vmv-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+.mw-vmv-hero__inner { position: relative; z-index: 1; }
+.mw-vmv-hero__masthead { padding-block: clamp(48px, 5vw, 88px) clamp(40px, 4vw, 64px); }
+.mw-vmv-hero .mw-section-tag { margin-bottom: clamp(20px, 1.5vw, 24px); }
+.mw-vmv-hero__title {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(52px, 7.2vw, 118px);
+  line-height: 0.9;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--c-ink);
+  margin: 0 0 clamp(22px, 1.8vw, 30px);
+  max-width: 12ch;
+}
+.mw-vmv-hero__title-em { color: var(--c-accent); }
+.mw-vmv-hero__title-em .mw-stop { background: var(--c-ink); }
+.mw-vmv-hero__lead {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(16px, 1.2vw, 19px);
+  line-height: 1.55;
+  color: var(--c-ink-2);
+  max-width: 56ch;
+  margin: 0;
+}
+.mw-vmv-hero__stage { position: relative; z-index: 1; margin: 0; }
+.mw-vmv-hero__photo {
+  display: block;
+  width: 100%;
+  height: clamp(400px, 38vw, 580px);
+  object-fit: cover;
+  filter: saturate(0.92) contrast(1.05) sepia(0.08);
+}
+.mw-vmv-hero__cap {
+  position: absolute;
+  left: clamp(16px, 4vw, 64px);
+  bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 14px;
+  background: var(--c-surface-warm);
+  border: 1px solid var(--c-line);
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+}
+.mw-vmv-hero__cap-mark {
+  width: 7px;
+  height: 7px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
+/* ── §2/§3 Creed diptych — statement bands with marker sweep ──────
+   p = --creed-p (flow writer; defaults 1 → no-JS/reduced-motion rest
+   complete). Sweep slice: --t = (p − 0.35)/0.65 — the clay marker pass
+   crosses the key phrase across the approach and lands at p = 1. */
+.mw-vmv-creed {
+  --t: clamp(0, calc((var(--creed-p, 1) - 0.35) / 0.65), 1);
+  position: relative;
+  background: var(--c-bg);
+  color: var(--c-ink);
+  overflow: hidden;
+  isolation: isolate;
+  padding-block: clamp(72px, 7vw, 124px);
+}
+.mw-vmv-creed__cap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 clamp(22px, 2vw, 32px);
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+}
+.mw-vmv-creed__cap-mark {
+  width: 8px;
+  height: 8px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+.mw-vmv-creed__statement {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(34px, 3.9vw, 64px);
+  line-height: 1.06;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--c-ink);
+  max-width: 28ch;
+  margin: 0 0 clamp(20px, 2vw, 30px);
+}
+/* The marker pass: a clay wash drawn behind the key phrase's lower half,
+   width driven by --t (scrub-driven; no transition needed). */
+.mw-vmv-creed__sweep {
+  background-image: linear-gradient(rgba(168, 90, 44, 0.30) 0 0);
+  background-repeat: no-repeat;
+  background-position: 0 82%;
+  background-size: calc(var(--t) * 100%) 46%;
+}
+.mw-vmv-creed__note {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(14px, 1.05vw, 16px);
+  line-height: 1.55;
+  color: var(--c-ink-2);
+  max-width: 46ch;
+  margin: 0;
+}
+/* Mirrored (mission) panel: content column shifts to the right edge. */
+.mw-vmv-creed--flip .mw-vmv-creed__cap { justify-content: flex-end; }
+.mw-vmv-creed--flip .mw-vmv-creed__statement,
+.mw-vmv-creed--flip .mw-vmv-creed__note { margin-left: auto; text-align: right; }
+/* Dark (mission) scheme — §12 careers-band text colors. */
+.mw-vmv-creed[data-scheme="dark"] {
+  background: var(--c-navy);
+  color: #fff;
+}
+.mw-vmv-creed[data-scheme="dark"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-dark) 38px, var(--c-grain-on-dark) 39px);
+}
+.mw-vmv-creed[data-scheme="dark"] .mw-vmv-creed__inner { position: relative; z-index: 1; }
+.mw-vmv-creed[data-scheme="dark"] .mw-vmv-creed__cap { color: rgba(250, 243, 229, 0.75); }
+.mw-vmv-creed[data-scheme="dark"] .mw-vmv-creed__statement { color: #fff; }
+.mw-vmv-creed[data-scheme="dark"] .mw-vmv-creed__sweep {
+  background-image: linear-gradient(rgba(201, 122, 74, 0.42) 0 0);
+}
+.mw-vmv-creed[data-scheme="dark"] .mw-vmv-creed__note { color: rgba(250, 243, 229, 0.78); }
+
+/* ── §4 Values — staggered 2×2 editorial grid ─────────────────────
+   Even cards drop by a stair offset (margin, not transform — the
+   reveal owns transforms, §13). Photo + caption chip + name + body. */
+.mw-vmv-values {
+  position: relative;
+  background: var(--c-surface-warm);
+  color: var(--c-ink);
+  overflow: hidden;
+  isolation: isolate;
+  padding-block: clamp(64px, 6.5vw, 112px);
+}
+.mw-vmv-values::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+.mw-vmv-values__inner { position: relative; z-index: 1; }
+.mw-vmv-values .mw-section-tag { margin-bottom: clamp(20px, 1.5vw, 24px); }
+.mw-vmv-values__title { margin-bottom: clamp(16px, 1.4vw, 22px); }
+.mw-vmv-values__lead {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.05vw, 18px);
+  line-height: 1.6;
+  color: var(--c-ink-2);
+  max-width: 52ch;
+  margin: 0 0 clamp(36px, 3.6vw, 56px);
+}
+.mw-vmv-values__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(24px, 2.6vw, 40px);
+  row-gap: clamp(36px, 3.6vw, 56px);
+  align-items: start;
+}
+.mw-vmv-values__card:nth-child(even) { margin-top: clamp(44px, 5vw, 80px); }
+.mw-vmv-values__media {
+  position: relative;
+  margin: 0 0 16px;
+  overflow: hidden;
+  border: 1px solid var(--c-line);
+  background: var(--c-surface);
+  aspect-ratio: 16 / 10;
+}
+.mw-vmv-values__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.92) contrast(1.05) sepia(0.08);
+}
+.mw-vmv-values__chip {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  background: var(--c-surface-warm);
+  border: 1px solid var(--c-line);
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+}
+.mw-vmv-values__chip-mark {
+  width: 6px;
+  height: 6px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+.mw-vmv-values__name {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(21px, 1.8vw, 27px);
+  line-height: 1.05;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--c-ink);
+  margin: 0 0 8px;
+}
+.mw-vmv-values__body {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--c-ink-2);
+  margin: 0;
+  max-width: 52ch;
+}
+
+/* ── §5 Close — two doors out (careers / contact) ─────────────────
+   Light close (§12: never dark before the footer). */
+.mw-vmv-close {
+  position: relative;
+  background: var(--c-bg);
+  color: var(--c-ink);
+  padding-block: clamp(64px, 6.5vw, 112px);
+}
+.mw-vmv-close .mw-section-tag { margin-bottom: clamp(20px, 1.5vw, 24px); }
+.mw-vmv-close__title { margin-bottom: clamp(14px, 1.2vw, 20px); }
+.mw-vmv-close__title-em { color: var(--c-accent); font-style: normal; }
+.mw-vmv-close__title-em .mw-stop { background: var(--c-ink); }
+.mw-vmv-close__body {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.1vw, 18px);
+  line-height: 1.6;
+  color: var(--c-ink-2);
+  max-width: 52ch;
+  text-wrap: balance;
+  margin: 0 0 clamp(32px, 3.2vw, 48px);
+}
+.mw-vmv-close__doors {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(18px, 1.8vw, 26px);
+  max-width: 880px;
+}
+.mw-vmv-close__door {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: clamp(22px, 2.2vw, 30px);
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 240ms ease, transform 320ms cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 320ms ease;
+}
+.mw-vmv-close__door:hover {
+  border-color: var(--c-accent);
+  transform: translateY(-3px);
+  box-shadow: 0 18px 34px -24px rgba(42, 27, 18, 0.34);
+}
+.mw-vmv-close__door-name {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(19px, 1.5vw, 23px);
+  line-height: 1.05;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--c-ink);
+  margin: 0;
+}
+.mw-vmv-close__door-text {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--c-ink-2);
+  margin: 0 0 10px;
+}
+.mw-vmv-close__door-cta {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-vmv-close__door { transition: none; }
+  .mw-vmv-close__door:hover { transform: none; }
+}

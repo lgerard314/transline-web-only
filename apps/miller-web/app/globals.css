@@ -13,7 +13,8 @@
    10-service-customer-waste-collection   mw-cwc-* (first interior v2 page)
    11-service-project-management    mw-pm-<section>-* v2 dossier page (no
                                     overlap with 09's bare .mw-pm/.mw-pm__* tokens)
-   New service page: add 12-service-<slug>.css + one @import below. Never
+   12-about-vision-mission-values   mw-vmv-* v2 "company creed" about page
+   New page: add the next numbered css + one @import below. Never
    add rule blocks back into this file. Shared utilities -> 02-primitives;
    chrome -> 03-chrome.
    ---------------------------------------------------------------------- */
@@ -40,3 +41,4 @@
 @import "./styles/09-service-project-management.css";
 @import "./styles/10-service-customer-waste-collection.css";
 @import "./styles/11-service-project-management.css";
+@import "./styles/12-about-vision-mission-values.css";
