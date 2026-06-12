@@ -195,8 +195,9 @@
   .mw-hero__article { animation: none; }
   .mw-hero__line-in { transform: none; }
 }
-/* Hero period: use a glyph instead of a drawn box so it aligns and wraps like text. */
-.mw-hero__stop {
+/* Period stops — ONE approach site-wide (the hero set it): a real "." glyph in the Bahnschrift stack, never a drawn box. A glyph aligns to the baseline, wraps, scales, and recolors like text (recolor with `color:`, NOT `background:`). .mw-hero__stop and .mw-stop are the same mark; the hero keeps its own class only for its reveal-scoped selectors. */
+.mw-hero__stop,
+.mw-stop {
   display: inline-block;
   width: auto;
   height: auto;
@@ -210,22 +211,14 @@
   vertical-align: baseline;
   text-transform: none;
 }
-.mw-hero__stop::before {
+.mw-hero__stop::before,
+.mw-stop::before {
   content: ".";
 }
-/* Glue the last word of a heading to its trailing stop-square so the square can
+/* Glue the last word of a heading to its trailing stop so the stop can
    never wrap onto its own line (a word-joiner doesn't suppress the soft-wrap
    opportunity around an inline-block box, so nowrap is required). */
 .mw-nobr { white-space: nowrap; }
-/* Square period stamp for h1/h2 display headings — the same brand mark as the hero, sized in em so it scales with each heading. */
-.mw-stop {
-  display: inline-block;
-  width: 0.16em;
-  height: 0.16em;
-  background: var(--c-accent);
-  vertical-align: baseline;
-  margin-left: 0.04em;
-}
 
 /* Rotating phrase slot. Inline-block so it can sit next to static text like "in <cycle>". A hidden sizer reserves the width of the longest phrase so the line doesn't shrink/expand when the active phrase changes. */
 .mw-hero__cycle {

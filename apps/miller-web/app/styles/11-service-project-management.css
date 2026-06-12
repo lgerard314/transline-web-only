@@ -42,7 +42,7 @@
 }
 .mw-pm-hero__title-em { color: var(--c-accent); }
 /* Em line is clay, so the clay stamp would vanish — ink keeps the motif. */
-.mw-pm-hero__title-em .mw-stop { background: var(--c-ink); }
+.mw-pm-hero__title-em .mw-stop { color: var(--c-ink); }
 /* Lead + CTAs share a row under the display line — drafting-sheet split. */
 .mw-pm-hero__side {
   display: flex;
@@ -715,7 +715,7 @@
 .mw-pm-intake .mw-section-tag { margin-bottom: clamp(20px, 1.5vw, 24px); }
 .mw-pm-intake__title { margin-bottom: clamp(18px, 1.6vw, 26px); }
 .mw-pm-intake__title-em { color: var(--c-accent); font-style: normal; }
-.mw-pm-intake__title-em .mw-stop { background: var(--c-ink); }
+.mw-pm-intake__title-em .mw-stop { color: var(--c-ink); }
 .mw-pm-intake__body {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
   font-size: clamp(15px, 1.1vw, 18px);

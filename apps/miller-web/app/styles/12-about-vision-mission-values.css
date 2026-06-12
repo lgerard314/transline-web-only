@@ -37,7 +37,7 @@
   max-width: 12ch;
 }
 .mw-vmv-hero__title-em { color: var(--c-accent); }
-.mw-vmv-hero__title-em .mw-stop { background: var(--c-ink); }
+.mw-vmv-hero__title-em .mw-stop { color: var(--c-ink); }
 .mw-vmv-hero__lead {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
   font-size: clamp(16px, 1.2vw, 19px);
@@ -273,7 +273,7 @@
 .mw-vmv-close .mw-section-tag { margin-bottom: clamp(20px, 1.5vw, 24px); }
 .mw-vmv-close__title { margin-bottom: clamp(14px, 1.2vw, 20px); }
 .mw-vmv-close__title-em { color: var(--c-accent); font-style: normal; }
-.mw-vmv-close__title-em .mw-stop { background: var(--c-ink); }
+.mw-vmv-close__title-em .mw-stop { color: var(--c-ink); }
 .mw-vmv-close__body {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
   font-size: clamp(15px, 1.1vw, 18px);

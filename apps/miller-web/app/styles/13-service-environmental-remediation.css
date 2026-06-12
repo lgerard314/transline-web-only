@@ -68,7 +68,7 @@
   margin: 0 0 clamp(18px, 1.5vw, 24px);
 }
 .mw-rem2-hero__title-em { color: var(--c-accent); }
-.mw-rem2-hero__title-em .mw-stop { background: var(--c-ink); }
+.mw-rem2-hero__title-em .mw-stop { color: var(--c-ink); }
 .mw-rem2-hero__lead {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
   font-size: clamp(15px, 1.1vw, 17.5px);
@@ -730,7 +730,7 @@
 .mw-rem2-cta .mw-section-tag { margin-bottom: clamp(20px, 1.5vw, 24px); }
 .mw-rem2-cta__title { margin-bottom: clamp(18px, 1.6vw, 26px); }
 .mw-rem2-cta__title-em { color: var(--c-accent); font-style: normal; }
-.mw-rem2-cta__title-em .mw-stop { background: var(--c-ink); }
+.mw-rem2-cta__title-em .mw-stop { color: var(--c-ink); }
 .mw-rem2-cta__body {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
   font-size: clamp(15px, 1.1vw, 18px);

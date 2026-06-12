@@ -990,7 +990,7 @@
 }
 .mw-svc-cta--dark .mw-svc-cta__content { max-width: none; }
 .mw-svc-cta--dark .mw-section-tag-mark { background: var(--c-accent); }
-.mw-svc-cta--dark .mw-stop { background: var(--c-accent); }
+.mw-svc-cta--dark .mw-stop { color: var(--c-accent); }
 .mw-svc-cta--dark .mw-section-tag-label { color: rgba(245, 230, 203, 0.82); }
 .mw-svc-cta--dark .mw-svc-cta__title { color: #fff; font-size: clamp(48px, 5.1vw, 90px); }
 .mw-svc-cta__title-em {
@@ -998,7 +998,6 @@
   color: var(--c-accent);
 }
 /* Square period hugs the last word (immediately after "it"). */
-.mw-svc-cta__title .mw-stop { margin-left: -0.06em; }
 .mw-svc-cta--dark .mw-svc-cta__body { color: var(--c-body-on-dark); max-width: 80%; }
 
 /* Dispatch block: brand logomark straddling the left edge of the hotline box
@@ -1219,7 +1218,7 @@
 .mw-sched__panel .mw-section-tag-mark { background: var(--c-accent); }
 .mw-sched__title { color: #fff; font-size: clamp(42px, 4.6vw, 76px); line-height: 0.98; max-width: 20ch; }
 .mw-sched__title-em { font-style: italic; color: var(--c-accent); }
-.mw-sched__title .mw-stop { background: var(--c-accent); }
+.mw-sched__title .mw-stop { color: var(--c-accent); }
 .mw-sched__body {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
   font-size: clamp(15px, 1.15vw, 18px);

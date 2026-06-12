@@ -55,7 +55,7 @@
 }
 .mw-cwc-hero__title-em { color: var(--c-accent); }
 /* The em line is clay, so the clay stamp would vanish — ink keeps the motif visible. */
-.mw-cwc-hero__title-em .mw-stop { background: var(--c-ink); }
+.mw-cwc-hero__title-em .mw-stop { color: var(--c-ink); }
 .mw-cwc-hero__lead {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
   font-size: clamp(16px, 1.2vw, 19px);
@@ -715,7 +715,7 @@
   font-style: italic;
   color: var(--c-accent);
 }
-.mw-cwc-fleet__title .mw-stop { background: var(--c-accent); }
+.mw-cwc-fleet__title .mw-stop { color: var(--c-accent); }
 .mw-cwc-fleet__lead {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
   font-size: clamp(15.5px, 1.15vw, 18px);
@@ -1059,7 +1059,7 @@
   font-style: italic;
   color: var(--c-accent);
 }
-.mw-cwc-sched__title-em .mw-stop { background: var(--c-ink); }
+.mw-cwc-sched__title-em .mw-stop { color: var(--c-ink); }
 .mw-cwc-sched__body {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
   font-size: clamp(15.5px, 1.15vw, 18px);
