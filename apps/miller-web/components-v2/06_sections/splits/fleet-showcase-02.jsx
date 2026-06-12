@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useRef } from "react";
 import { StopText } from "@/components/StopText";
 import { sectionProps } from "@/components-v2/section-config";
 
@@ -6,15 +9,68 @@ import { sectionProps } from "@/components-v2/section-config";
 // miller-env-* reference trucks) over equipment-plate meta blocks on walnut.
 // Dark text colors follow the §12 rule (home Careers values); the photo
 // top-bar-grows-on-hover motif is the house photo grammar adapted to dark.
-// data-reveal sits on the grid cells; the hover lift lives on the inner card
-// (a reveal element can never also be the hover-transform element — §13).
+// The grid is the page's EDGE-SPANNING element: it bleeds off the LEFT
+// viewport edge and stops at the content-right boundary (design-language
+// "break the column" rule; the bleed direction mirrors home's capability
+// rail). The hover lift lives on the inner card, never on a reveal element.
+//
+// Motion contract (M2, playbook §3 — the page's flagship medium):
+//   p = clamp01((viewportBottom − gridTop) / gridHeight) — p hits 1.000
+//   EXACTLY when the grid's bottom meets the viewport bottom (grid fully
+//   visible). The three cards rise (36px + fade) on 0.50-long slices
+//   completing left→right at 0.40 / 0.70 / 1.000 (thr_i = −0.10 + 0.30i) —
+//   assembly is visibly in progress the whole approach and the last unit
+//   settles exactly at the anchor frame. Writer: rAF-coalesced passive
+//   scroll listener (§4.2) + IO-requeue (§4.3). No-JS / reduced motion:
+//   var(--cwcft-p, 1) defaults rest settled; transforms gated to
+//   (prefers-reduced-motion: no-preference).
 //
 // content: { titleId, eyebrow, title, titleEm, lead,
 //            units[{ num, name, role, body, image }], footnote }
 // config:  standard sectionProps passthrough.
+const SLICE_LEN = 0.5;
+const SLICE_C0 = 0.4;
+const SLICE_STEP = 0.3;
+
 export function FleetShowcase02({ content, config = {} }) {
+  const secRef = useRef(null);
+  const gridRef = useRef(null);
+
+  useEffect(() => {
+    const sec = secRef.current;
+    const grid = gridRef.current;
+    if (!sec || !grid) return undefined;
+    const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (mql.matches) return undefined; // CSS default rests settled
+
+    let raf = 0;
+    const write = () => {
+      raf = 0;
+      const vh = window.innerHeight;
+      const r = grid.getBoundingClientRect();
+      const p = Math.min(1, Math.max(0, (vh - r.top) / r.height));
+      sec.style.setProperty("--cwcft-p", p.toFixed(4));
+    };
+    const queue = () => {
+      if (!raf) raf = requestAnimationFrame(write);
+    };
+
+    queue();
+    window.addEventListener("scroll", queue, { passive: true });
+    window.addEventListener("resize", queue);
+    const io = new IntersectionObserver(queue, { rootMargin: "300px 0px" });
+    io.observe(grid);
+
+    return () => {
+      window.removeEventListener("scroll", queue);
+      window.removeEventListener("resize", queue);
+      io.disconnect();
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+
   return (
-    <section className="mw-cwc-fleet" aria-labelledby={content.titleId} {...sectionProps(config)}>
+    <section ref={secRef} className="mw-cwc-fleet" aria-labelledby={content.titleId} {...sectionProps(config)}>
       <div className="mw-cwc-fleet__inner mw-inner">
         <header className="mw-cwc-fleet__head">
           <div className="mw-cwc-fleet__head-main">
@@ -30,9 +86,15 @@ export function FleetShowcase02({ content, config = {} }) {
           <p className="mw-cwc-fleet__lead" data-reveal>{content.lead}</p>
         </header>
 
-        <ul className="mw-cwc-fleet__grid" data-reveal-stagger>
-          {content.units.map((u) => (
-            <li key={u.num} className="mw-cwc-fleet__cell">
+        {/* No data-reveal-stagger here: the M2 assembly scrub IS the grid's
+            arrival (a reveal would double-animate the cells). */}
+        <ul className="mw-cwc-fleet__grid" ref={gridRef}>
+          {content.units.map((u, i) => (
+            <li
+              key={u.num}
+              className="mw-cwc-fleet__cell"
+              style={{ "--thr": (SLICE_C0 + i * SLICE_STEP - SLICE_LEN).toFixed(2) }}
+            >
               <article className="mw-cwc-fleet__card">
                 <figure className="mw-cwc-fleet__photo">
                   <span className="mw-cwc-fleet__photo-bar" aria-hidden="true" />

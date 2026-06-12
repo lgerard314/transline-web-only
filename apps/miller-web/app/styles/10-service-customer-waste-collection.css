@@ -781,7 +781,9 @@
   line-height: 1.55;
   color: rgba(250, 243, 229, 0.91);
   max-width: 46ch;
-  margin: calc(clamp(20px, 1.5vw, 24px) + 1.9em) 0 0;
+  /* Cap-line registration with the title (same derivation as the §2 lead,
+     audit-corrected 0.9em → 1.33em). */
+  margin: calc(clamp(20px, 1.5vw, 24px) + 1.33em) 0 0;
   justify-self: end;
 }
 
@@ -790,7 +792,12 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(20px, 2.2vw, 36px);
-  margin: 0;
+  /* The page's EDGE-SPANNING element (design-language: break the column at
+     least once): the grid bleeds off the LEFT viewport edge and stops at the
+     content-right boundary — mirroring home's left-bled capability rail.
+     50% − 50vw = −(left gutter); the ~half-scrollbar overshoot is cropped by
+     the section's overflow:hidden (it's a bleed edge, nothing to read there). */
+  margin: 0 0 0 calc(50% - 50vw);
   padding: 0;
 }
 .mw-cwc-fleet__card {
@@ -889,6 +896,20 @@
   background: var(--c-accent);
   transform: rotate(45deg);
   flex-shrink: 0;
+}
+
+/* ── M2 fleet assembly scrub (contract in fleet-showcase-02.jsx) ────
+   Consumes the writer's --cwcft-p; cells rise on 0.50-long slices with
+   inline --thr (completions 0.40/0.70/1.000 left→right, the last landing
+   exactly as the grid bottom meets the viewport bottom). The scrub
+   transform lives on the CELL; the hover lift stays on the inner card —
+   different nodes, so they can never fight. Defaults rest settled. */
+@media (prefers-reduced-motion: no-preference) {
+  .mw-cwc-fleet__cell {
+    --t: clamp(0, calc((var(--cwcft-p, 1) - var(--thr, 0)) / 0.5), 1);
+    opacity: var(--t);
+    transform: translateY(calc((1 - var(--t)) * 36px));
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
