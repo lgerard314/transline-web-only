@@ -749,7 +749,10 @@
   color: var(--c-on-navy);
   overflow: hidden;
   isolation: isolate;
-  padding-block: clamp(64px, 6.5vw, 112px);
+  /* The dramatic-register padding (home scale-band class): the dark anchor
+     with its near-full-bleed panel needs more air than the standard clamp
+     (logan 2026-06-12: the section's top/bottom padding read off). */
+  padding-block: clamp(72px, 7.5vw, 132px);
 }
 .mw-cwc-fleet::before {
   content: "";
@@ -893,17 +896,22 @@
    the consult's diamond-scarcity verdict + logan's call.) */
 
 
-/* ── M2 fleet assembly scrub (contract in fleet-showcase-02.jsx) ────
-   Consumes the writer's --cwcft-p; cells rise on 0.50-long slices with
-   inline --thr (completions 0.40/0.70/1.000 left→right, the last landing
-   exactly as the grid bottom meets the viewport bottom). The scrub
-   transform lives on the CELL; the hover lift stays on the inner card —
-   different nodes, so they can never fight. Defaults rest settled. */
+/* ── M2 fleet entrance, restaged (logan 2026-06-12): the PANEL slides in
+   FROM THE EDGE IT TOUCHES — it bleeds off the LEFT viewport edge, so it
+   emerges from the left (logan's correction; an edge-spanning surface
+   comes out of its own bleed edge). Stage-level move consuming the
+   writer's --cwcft-p directly, settling at its bled position EXACTLY when
+   the grid bottom meets the viewport bottom. The per-cell rises are
+   retired; the cells keep their --t slices so the plate LEADERS still
+   draw left→right during the arrival. Defaults rest settled for no-JS;
+   reduced motion never sees the transform. */
 @media (prefers-reduced-motion: no-preference) {
+  .mw-cwc-fleet__panel {
+    transform: translate3d(calc((1 - var(--cwcft-p, 1)) * min(52vw, 760px) * -1), 0, 0);
+    will-change: transform;
+  }
   .mw-cwc-fleet__cell {
     --t: clamp(0, calc((var(--cwcft-p, 1) - var(--thr, 0)) / 0.5), 1);
-    opacity: var(--t);
-    transform: translateY(calc((1 - var(--t)) * 36px));
   }
 }
 

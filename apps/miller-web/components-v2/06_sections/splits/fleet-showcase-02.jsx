@@ -29,16 +29,18 @@ function ParallaxPhoto({ src }) {
 // "break the column" rule; the bleed direction mirrors home's capability
 // rail). The hover lift lives on the inner card, never on a reveal element.
 //
-// Motion contract (M2, playbook §3 — the page's flagship medium):
-//   p = clamp01((viewportBottom − gridTop) / gridHeight) — p hits 1.000
-//   EXACTLY when the grid's bottom meets the viewport bottom (grid fully
-//   visible). The three cards rise (36px + fade) on 0.50-long slices
-//   completing left→right at 0.40 / 0.70 / 1.000 (thr_i = −0.10 + 0.30i) —
-//   assembly is visibly in progress the whole approach and the last unit
-//   settles exactly at the anchor frame. Writer: rAF-coalesced passive
-//   scroll listener (§4.2) + IO-requeue (§4.3). No-JS / reduced motion:
-//   var(--cwcft-p, 1) defaults rest settled; transforms gated to
-//   (prefers-reduced-motion: no-preference).
+// Motion contract (M2, restaged 2026-06-12 per logan — the page's flagship
+// medium is now STAGE-level): p = clamp01((viewportBottom − gridTop) /
+// gridHeight); the PANEL enters FROM THE EDGE IT TOUCHES — it bleeds off
+// the LEFT viewport edge, so it emerges from the left (logan's
+// correction), translateX = −(1 − p) · min(52vw, 760px), settling at its
+// bled position EXACTLY when the grid's bottom meets the viewport bottom.
+// The per-cell rises are retired; the cells keep their 0.50-long --t
+// slices (thr_i = −0.10 + 0.30i) so the plate leaders still draw
+// left→right during the arrival. Writer: rAF-coalesced passive scroll
+// listener (§4.2) + IO-requeue (§4.3). No-JS / reduced motion:
+// var(--cwcft-p, 1) defaults rest settled; transforms gated to
+// (prefers-reduced-motion: no-preference).
 //
 // content: { titleId, eyebrow, title, titleEm, lead,
 //            units[{ num, name, role, body, image }] }
