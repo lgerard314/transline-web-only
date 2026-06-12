@@ -99,23 +99,23 @@
 }
 /* The eyebrow has no square-colon terminator. */
 .mw-marquee__label .mw-stop-colon { display: none; }
-/* Square-shaped ":" — two stacked terracotta squares, replacing the single square period. */
+/* ":" terminator — same approach as .mw-stop (hero recipe): a real glyph in the Bahnschrift stack, never drawn boxes. Recolor with `color:`. */
 .mw-stop-colon {
-  display: inline-flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.18em;
-  height: 0.72em;
-  margin-left: 0.14em;
-  vertical-align: middle;
-  transform: translateY(-0.04em);
+  display: inline-block;
+  width: auto;
+  height: auto;
+  background: none;
+  color: var(--c-accent);
+  margin-left: 0.02em;
+  font-family: Bahnschrift, "Arial Black", var(--font-condensed), sans-serif;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  vertical-align: baseline;
+  text-transform: none;
 }
-.mw-stop-colon::before,
-.mw-stop-colon::after {
-  content: "";
-  width: 0.15em;
-  height: 0.15em;
-  background: var(--c-accent);
+.mw-stop-colon::before {
+  content: ":";
 }
 /* Stop the flex track from shrinking its items — an <img width:auto> in a
    shrinking flex item collapses to 0 width. flex-shrink:0 keeps each logo at
