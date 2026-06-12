@@ -17,9 +17,12 @@ import { sectionProps } from "@/components-v2/section-config";
 //            steps[{ tag, name, body }], notifications[{ title, body }] }
 // config:  standard sectionProps passthrough.
 const STEP_MS = 3600;
+// Station diamond center relative to its <li> top (CSS: top 22px + 9px/2).
+const STATION_CENTER = 26.5;
 
 export function ClosureLadder01({ content, config = {} }) {
   const [index, setIndex] = useState(0);
+  const ladderRef = useRef(null);
   const steps = content.steps;
 
   useEffect(() => {
@@ -30,6 +33,27 @@ export function ClosureLadder01({ content, config = {} }) {
     }, STEP_MS);
     return () => clearInterval(id);
   }, [steps.length]);
+
+  // The fill front and the rail end land ON station centers — measured,
+  // not derived: steps have unequal heights, so a linear idx/(n−1)
+  // fraction overshoots progressively (§4 audit: +80px by the last
+  // station). Runs under reduced motion too (static geometry).
+  useEffect(() => {
+    const ladder = ladderRef.current;
+    if (!ladder) return undefined;
+    const measure = () => {
+      const items = ladder.querySelectorAll(".mw-rem2-proc__step");
+      if (!items.length) return;
+      const active = items[Math.min(index, items.length - 1)];
+      const last = items[items.length - 1];
+      ladder.style.setProperty("--fill-px", `${active.offsetTop + STATION_CENTER}px`);
+      ladder.style.setProperty("--rail-px", `${last.offsetTop + STATION_CENTER}px`);
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(ladder);
+    return () => ro.disconnect();
+  }, [index]);
 
   return (
     <section
@@ -53,7 +77,7 @@ export function ClosureLadder01({ content, config = {} }) {
         </header>
 
         <div className="mw-rem2-proc__grid">
-          <ol className="mw-rem2-proc__ladder" data-reveal>
+          <ol className="mw-rem2-proc__ladder" data-reveal ref={ladderRef}>
             <span className="mw-rem2-proc__rail" aria-hidden="true" />
             <span className="mw-rem2-proc__fill" aria-hidden="true" />
             {steps.map((s, i) => (

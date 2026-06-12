@@ -52,22 +52,22 @@ export const environmentalRemediation = {
       {
         name: "Contaminated soil remediation",
         tag: "Soil · Groundwater",
-        body: "Pollutants removed from industrial, commercial, and residential sites — each assessed for method, impact, and compliance.",
+        body: "Pollutants removed from industrial, commercial, and residential sites, assessed site by site.",
       },
       {
         name: "Hazardous material excavation",
         tag: "Metals · PCBs",
-        body: `Heavy metals, PCBs, and industrial chemicals excavated with precision and processed at the licensed ${VBEC_SHORT}.`,
+        body: `Heavy metals, PCBs, and industrial chemicals excavated and processed at the licensed ${VBEC_SHORT}.`,
       },
       {
         name: "Emergency spill cleanup",
         tag: "24/7 · Response",
-        body: "Diesel, hydrocarbons, and chemicals contained and cleaned — first assessment to final treatment or disposal.",
+        body: "Diesel, hydrocarbons, and chemicals contained and cleaned, assessment through disposal.",
       },
       {
         name: "Fire-damaged site remediation",
         tag: "Asbestos · Soot",
-        body: "Asbestos, soot, and contaminated runoff removed; fire-damaged sites restored to safe, usable condition.",
+        body: "Asbestos, soot, and runoff removed; fire-damaged sites restored to safe condition.",
       },
       {
         name: "Brownfield redevelopment prep",

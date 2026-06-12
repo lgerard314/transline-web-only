@@ -333,21 +333,24 @@
   margin: 0;
   padding: 0 0 0 40px;
 }
+/* Rail terminates AT the closure station (measured --rail-px from the
+   JS layout pass — stations aren't evenly spread, §4 audit). */
 .mw-rem2-proc__rail {
   position: absolute;
   left: 14px;
   top: 10px;
-  bottom: 10px;
+  height: calc(var(--rail-px, 100%) - 10px);
   width: 1px;
   background: var(--c-line);
 }
-/* Fill grows to the active station; height keyed off --idx/--steps. */
+/* Fill front lands exactly on the active station's center (--fill-px
+   measured per step; the old idx/(n−1) fraction overshot up to 80px). */
 .mw-rem2-proc__fill {
   position: absolute;
   left: 14px;
   top: 10px;
   width: 1px;
-  height: calc((var(--idx, 0) / (var(--steps, 5) - 1)) * (100% - 20px));
+  height: calc(var(--fill-px, 10px) - 10px);
   background: var(--c-accent);
   transition: height 600ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
@@ -409,6 +412,9 @@
   background: var(--c-surface);
   border: 1px solid var(--c-line);
   padding: clamp(18px, 1.8vw, 26px);
+  /* Centered against the taller ladder so the right column doesn't read
+     top-heavy (§4 audit). */
+  align-self: center;
 }
 .mw-rem2-proc__feed-cap {
   display: flex;
