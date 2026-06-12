@@ -82,7 +82,8 @@ export const customerWasteCollection = {
     title: "Four steps from dock to disposition",
     lead:
       "Every collection runs the same documented route — from the first profile to a signed manifest at the facility gate.",
-    route: `Your dock → ${VBEC_SHORT}`,
+    routeStart: "Your dock",
+    routeEnd: `${VBEC_SHORT} gate`,
     steps: [
       {
         num: "01",
@@ -94,7 +95,7 @@ export const customerWasteCollection = {
         num: "02",
         tag: "Cadence",
         name: "Schedule",
-        body: "We set a cadence that matches how fast you generate — a one-off clear-out, monthly service, or multiple pickups a week.",
+        body: "We set a cadence that matches how fast you generate — a one-off clear‑out, monthly service, or multiple pickups a week.",
       },
       {
         num: "03",
@@ -245,7 +246,7 @@ export const customerWasteCollection = {
       {
         num: "02",
         name: "We confirm a cadence",
-        text: "You get a pickup schedule sized to how fast you generate, from a one-time clear-out to weekly service.",
+        text: "You get a pickup schedule sized to how fast you generate, from a one-time clear‑out to weekly service.",
       },
       {
         num: "03",

@@ -400,3 +400,296 @@
   .mw-cwc-line__tier { border-bottom: 0; }
   .mw-cwc-line__media { border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 24%, var(--c-line)); }
 }
+
+/* ── §3 Process — the dock → VBEC route as a live transport line ──
+   Single clock (in process-flow-02.jsx) drives the cycling notification
+   stack, the rail fill, the riding truck marker, and the station states.
+   Terminals reuse the hero custody strip's diamond grammar — the page's
+   "documented route" theme, elaborated. */
+.mw-cwc-flow {
+  position: relative;
+  background: var(--c-surface-warm);
+  color: var(--c-ink);
+  overflow: hidden;
+  isolation: isolate;
+  padding-block: clamp(64px, 6.5vw, 112px);
+}
+.mw-cwc-flow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+.mw-cwc-flow__inner { position: relative; z-index: 1; }
+.mw-cwc-flow__intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 440px);
+  gap: clamp(32px, 4vw, 80px);
+  align-items: start;
+  margin-bottom: clamp(56px, 5.5vw, 92px);
+}
+.mw-cwc-flow .mw-section-tag { margin-bottom: clamp(20px, 1.5vw, 24px); }
+.mw-cwc-flow__title { max-width: 18ch; }
+.mw-cwc-flow__lead {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(15.5px, 1.15vw, 18px);
+  line-height: 1.55;
+  color: var(--c-ink-2);
+  max-width: 52ch;
+  margin: clamp(18px, 1.4vw, 22px) 0 0;
+}
+.mw-cwc-flow__notify {
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+  align-self: start;
+  margin-top: calc(clamp(32px, 3.4vw, 60px) * 0.6);
+}
+/* Dispatch-feed panel — frames the notification stack so the column reads
+   authored at every clock state (a lone floating banner read as sparse). */
+.mw-cwc-flow__feed {
+  width: 100%;
+  border: 1px solid var(--c-line);
+  background: color-mix(in srgb, var(--c-bg) 55%, var(--c-surface-warm));
+  padding: clamp(14px, 1.3vw, 18px) clamp(14px, 1.3vw, 18px) clamp(10px, 1vw, 14px);
+}
+.mw-cwc-flow__feed-cap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--c-ink-3);
+}
+.mw-cwc-flow__feed-mark {
+  width: 6px;
+  height: 6px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+/* Page-scoped re-cut of the shared banner chrome toward the squared house
+   language (the shared mw-svc-tl-notify styles still serve emergency-response
+   untouched — these overrides live only under this section's feed panel). */
+.mw-cwc-flow__feed .mw-svc-tl-notify__banner {
+  border-radius: 4px;
+  border: 1px solid var(--c-line);
+  box-shadow: 0 12px 22px -16px rgba(42, 27, 18, 0.3);
+}
+.mw-cwc-flow__feed .mw-svc-tl-notify__icon { border-radius: 4px; }
+
+/* Route frame: [start terminal] [stops track] [end terminal] on one rail. */
+.mw-cwc-flow__route {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: clamp(18px, 2vw, 34px);
+  align-items: start;
+}
+.mw-cwc-flow__terminal {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding-top: 7px; /* optically centers the label on the rail (rail y = 17px) */
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(15px, 1.15vw, 18px);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--c-ink);
+  white-space: nowrap;
+}
+.mw-cwc-flow__terminal-mark {
+  width: 8px;
+  height: 8px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+/* The VBEC gate lights up when the truck arrives (last step active). */
+.mw-cwc-flow__terminal--end { color: var(--c-ink-3); transition: color 400ms ease; }
+.mw-cwc-flow__terminal--end .mw-cwc-flow__terminal-mark { background: var(--c-line); transition: background 400ms ease; }
+.mw-cwc-flow__route[data-arrived] .mw-cwc-flow__terminal--end { color: var(--c-accent); }
+.mw-cwc-flow__route[data-arrived] .mw-cwc-flow__terminal--end .mw-cwc-flow__terminal-mark { background: var(--c-accent); }
+
+.mw-cwc-flow__track {
+  position: relative;
+  /* Gap-aware fill front: x of the active node's center. Must mirror the
+     stops grid's column count and gap exactly. */
+  --stopgap: clamp(20px, 2.2vw, 36px);
+  --fillw: calc(
+    (100% - (var(--steps, 4) - 1) * var(--stopgap)) / var(--steps, 4) * (var(--idx, 0) + 0.5)
+    + var(--stopgap) * var(--idx, 0)
+  );
+}
+.mw-cwc-flow__rail {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 17px;
+  height: 1px;
+  background: color-mix(in srgb, var(--c-ink) 14%, var(--c-line));
+}
+.mw-cwc-flow__fill {
+  position: absolute;
+  left: 0;
+  top: 16px;
+  height: 2px;
+  width: var(--fillw, 12.5%);
+  background: var(--c-accent);
+  transition: width 600ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.mw-cwc-flow__truck {
+  position: absolute;
+  /* Rides the rail just ahead of the fill, nose parked 8px short of the
+     active node's box (node half-width 17px + 8px gap) — glyph and node
+     never share an x-position. */
+  left: calc(var(--fillw, 12.5%) - 25px);
+  top: 15px;
+  width: 40px;
+  color: var(--c-accent);
+  transform: translate(-100%, -100%);
+  transition: left 600ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+/* Arrival: the fill runs through to the gate and the truck parks beside it —
+   the loop's payoff frame shows custody delivered, not a stalled segment. */
+.mw-cwc-flow__route[data-arrived] .mw-cwc-flow__track { --fillw: 100%; }
+.mw-cwc-flow__route[data-arrived] .mw-cwc-flow__truck { left: 100%; }
+.mw-cwc-flow__truck svg { display: block; width: 100%; height: auto; }
+
+.mw-cwc-flow__stops {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--stopgap);
+  margin: 0;
+  padding: 0;
+}
+.mw-cwc-flow__stop {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+/* Station stem — hairline drop from the node to the card. */
+.mw-cwc-flow__stop::before {
+  content: "";
+  position: absolute;
+  top: 34px;
+  bottom: auto;
+  height: 22px;
+  left: 50%;
+  width: 0.5px;
+  background: var(--c-line);
+}
+.mw-cwc-flow__node {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--c-ink-2);
+  background: var(--c-surface-warm);
+  border: 1px solid color-mix(in srgb, var(--c-ink) 22%, var(--c-line));
+  transition: background 300ms ease, color 300ms ease, border-color 300ms ease;
+}
+.mw-cwc-flow__stop[data-state="active"] .mw-cwc-flow__node {
+  background: var(--c-accent);
+  border-color: var(--c-accent);
+  color: #fff;
+  /* Cause before effect: the station lights only once the fill (600ms) has
+     reached it. The delay lives on the destination state, so leaving the
+     state is instant. */
+  transition-delay: 480ms;
+}
+.mw-cwc-flow__stop[data-state="done"] .mw-cwc-flow__node {
+  border-color: var(--c-accent);
+  color: var(--c-accent);
+}
+.mw-cwc-flow__card {
+  width: 100%;
+  margin-top: 56px;
+  padding-top: 16px;
+  position: relative;
+  border-top: 1px solid var(--c-line);
+  text-align: left;
+  transition: opacity 400ms ease;
+}
+/* Clay underline-draw on the active card (house hover motif, repurposed as
+   the station's "current" state). Done stations keep it at low alpha. */
+.mw-cwc-flow__card::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--c-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 500ms cubic-bezier(0.22, 0.61, 0.36, 1), opacity 300ms ease;
+}
+.mw-cwc-flow__stop[data-state="active"] .mw-cwc-flow__card::before { transform: scaleX(1); transition-delay: 540ms, 540ms; }
+.mw-cwc-flow__stop[data-state="done"] .mw-cwc-flow__card::before { transform: scaleX(1); opacity: 0.35; }
+/* 0.78 keeps the dimmed copy ≥ AA on cream (0.55 dropped body text to ~2.6:1). */
+.mw-cwc-flow__stop[data-state="todo"] .mw-cwc-flow__card { opacity: 0.78; }
+.mw-cwc-flow__tag {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+  margin: 0 0 8px;
+}
+.mw-cwc-flow__name {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(19px, 1.55vw, 23px);
+  line-height: 1.05;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--c-ink);
+  margin: 0 0 8px;
+}
+.mw-cwc-flow__text {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--c-ink-2);
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mw-cwc-flow__fill,
+  .mw-cwc-flow__truck,
+  .mw-cwc-flow__node,
+  .mw-cwc-flow__card,
+  .mw-cwc-flow__card::before,
+  .mw-cwc-flow__terminal--end,
+  .mw-cwc-flow__terminal--end .mw-cwc-flow__terminal-mark { transition: none; }
+}
+
+@media (max-width: 960px) {
+  .mw-cwc-flow__intro { grid-template-columns: 1fr; }
+  .mw-cwc-flow__route { grid-template-columns: 1fr; gap: 22px; }
+  .mw-cwc-flow__rail,
+  .mw-cwc-flow__fill,
+  .mw-cwc-flow__truck { display: none; }
+  .mw-cwc-flow__stops { grid-template-columns: 1fr; gap: 28px; }
+  .mw-cwc-flow__stop { flex-direction: row; align-items: flex-start; gap: 16px; }
+  .mw-cwc-flow__stop::before { display: none; }
+  .mw-cwc-flow__card { margin-top: 0; }
+}
