@@ -52,7 +52,6 @@
   width: 100%;
   height: clamp(400px, 38vw, 580px);
   object-fit: cover;
-  filter: saturate(0.92) contrast(1.05) sepia(0.08);
 }
 .mw-vmv-hero__cap {
   position: absolute;
@@ -218,7 +217,6 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  filter: saturate(0.92) contrast(1.05) sepia(0.08);
 }
 .mw-vmv-values__chip {
   position: absolute;
