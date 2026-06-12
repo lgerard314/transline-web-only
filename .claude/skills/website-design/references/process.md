@@ -35,9 +35,17 @@ A page is four nested layers; **opening a layer opens everything beneath it**, s
 - Scope is set per page with per-section overrides — "Restructure the page, Rebuild the hero" is a valid brief.
 - When logan's words sit between two ADJACENT tiers ("redo the design" — Restructure or Refine?), that's a pre-flight question (below), never a silent pick of the cheaper reading.
 
-## Pre-flight — page/section asks open with a stated reading
+## Pre-flight — page/section asks open with a stated WORK ORDER
 
-For any ask bigger than a specific edit (a page, a whole section, "make X better"), the FIRST response opens with a 2–4 line reading BEFORE any work: (1) the scope tier (page default + per-section overrides), (2) the model plan (judgment roles inherit the session model; mechanical roles sonnet — checklist item 9), (3) per-section audits ON or waived. Then PROCEED — **confirm by stating, not by asking**; logan interrupts if the reading is wrong. Questions are reserved for genuine ambiguity (adjacent-tier scope reads, conflicting instructions) and are batched up front per Phase 1 — never mid-build, never as permission theater on a clear ask.
+For any ask bigger than a specific edit (a page, a whole section, "make X better"), the FIRST response opens with the work order — a short stated reading, BEFORE any work, covering whichever of these five axes deviate from defaults or could be misread (2–6 lines total; don't recite defaults):
+
+1. **Surfaces** — which page(s)/section(s) are writable; everything else is read-only.
+2. **Depth** — the scope-ladder tier per surface (unscoped redo = Rebuild).
+3. **Viewports** — desktop-only at 1440×900 (the v2 program default) vs the responsive matrix at real device dimensions (responsive.md) — only when the ask says responsive/mobile or the page is being finished.
+4. **Media & copy** — photos regenerate vs keep (imposed filters never, either way); copy rewritten vs treated as source-of-truth.
+5. **Stop point** — default is through per-section audits + the page finish criteria. A critique/audit-only ask produces a REPORT and ZERO edits. The extraction pass and approved/ reference shots are never in scope without logan's done-rating.
+
+Plus: the model plan (judgment inherits the session model; mechanical sonnet — checklist item 9) and per-section audits ON or waived. Then PROCEED — **confirm by stating, not by asking**; logan interrupts if the reading is wrong. Questions are reserved for genuine ambiguity (adjacent-tier scope reads, conflicting instructions, an axis his words genuinely don't settle) and are batched up front per Phase 1 — never mid-build, never as permission theater on a clear ask.
 
 Per-section audits default ON. Only logan can waive them — the agent NEVER skips an audit on its own initiative ("this section is simple" is the predictable rationalization, not a reason). A waived audit is recorded in that section's commit message so the retro can correlate waived sections with later corrections.
 
