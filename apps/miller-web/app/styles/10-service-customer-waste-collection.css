@@ -340,19 +340,14 @@
 .mw-cwc-line__media[data-size="04"] img { height: calc(var(--media-h) * 0.75); margin-bottom: calc(var(--media-h) * -0.100); }
 
 .mw-cwc-line__meta { padding-top: 18px; }
+/* Pure technical annotation: spec right-aligned, dimmed to the datum-marker
+   register (the lone diamond double-marked the column next to the baseline
+   tick — consult, 2026-06-12). */
 .mw-cwc-line__id {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   margin: 0 0 6px;
-}
-/* Diamond id mark — replaces the banned sequential mono numerals. */
-.mw-cwc-line__id-mark {
-  width: 7px;
-  height: 7px;
-  background: var(--c-accent);
-  transform: rotate(45deg);
-  flex-shrink: 0;
 }
 .mw-cwc-line__spec {
   font-family: var(--font-plex-mono), ui-monospace, monospace;
@@ -361,7 +356,7 @@
   letter-spacing: 0.08em;
   font-variant-numeric: tabular-nums;
   text-transform: uppercase; /* keeps "Bulk" in the drafting register */
-  color: var(--c-ink-2);
+  color: var(--c-ink-3);
 }
 .mw-cwc-line__name {
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
@@ -474,10 +469,9 @@
   background: color-mix(in srgb, var(--c-bg) 55%, var(--c-surface-warm));
   padding: clamp(14px, 1.3vw, 18px) clamp(14px, 1.3vw, 18px) clamp(10px, 1vw, 14px);
 }
+/* Fieldset-style legend — mono caps only; the panel frame contains it (a
+   diamond here read as an eyebrow clone — consult, 2026-06-12). */
 .mw-cwc-flow__feed-cap {
-  display: flex;
-  align-items: center;
-  gap: 8px;
   margin: 0 0 12px;
   font-family: var(--font-plex-mono), ui-monospace, monospace;
   font-size: 11px;
@@ -485,13 +479,6 @@
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--c-ink-3);
-}
-.mw-cwc-flow__feed-mark {
-  width: 6px;
-  height: 6px;
-  background: var(--c-accent);
-  transform: rotate(45deg);
-  flex-shrink: 0;
 }
 /* Page-scoped re-cut of the shared banner chrome toward the squared house
    language (the shared mw-svc-tl-notify styles still serve emergency-response
@@ -845,21 +832,14 @@
 }
 .mw-cwc-fleet__cell:hover .mw-cwc-fleet__photo img { transform: scale(1.03); }
 .mw-cwc-fleet__plate { padding: clamp(14px, 1.4vw, 20px) clamp(14px, 1.4vw, 20px) clamp(16px, 1.5vw, 22px); }
+/* Quiet spec-plate row: the role tag alone, right-aligned (the lone diamond
+   that replaced the numeral was an orphaned bullet — consult, 2026-06-12;
+   diamonds live only in eyebrows / diagram nodes / state markers now). */
 .mw-cwc-fleet__plate-row {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
-  gap: 12px;
   margin: 0 0 10px;
-}
-/* Diamond plate mark — the sequential mono numerals (01/02/03) are banned
-   in the eyebrow register (logan 2026-06-12); the house mark takes the slot. */
-.mw-cwc-fleet__plate-mark {
-  width: 7px;
-  height: 7px;
-  background: var(--c-accent);
-  transform: rotate(45deg);
-  flex-shrink: 0;
 }
 .mw-cwc-fleet__role {
   font-family: var(--font-plex-mono), ui-monospace, monospace;
@@ -887,25 +867,8 @@
   color: var(--c-ink-2);
   margin: 0;
 }
-.mw-cwc-fleet__footnote {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: clamp(24px, 2.4vw, 36px) 0 0;
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(245, 230, 203, 0.62);
-}
-.mw-cwc-fleet__footnote-mark {
-  width: 6px;
-  height: 6px;
-  background: var(--c-accent);
-  transform: rotate(45deg);
-  flex-shrink: 0;
-}
+/* (Fleet footnote removed 2026-06-12 — it was a trailing pseudo-eyebrow;
+   the consult's diamond-scarcity verdict + logan's call.) */
 
 /* ── M2 fleet assembly scrub (contract in fleet-showcase-02.jsx) ────
    Consumes the writer's --cwcft-p; cells rise on 0.50-long slices with
@@ -1171,10 +1134,9 @@
   /* Uniform header→intro gap (home foundation value). */
   margin: clamp(18px, 1.6vw, 24px) 0 clamp(32px, 3vw, 44px);
 }
+/* Column caption — mono caps only, no diamond (it made the section read as
+   opening twice — consult, 2026-06-12). */
 .mw-cwc-sched__next-cap {
-  display: flex;
-  align-items: center;
-  gap: 9px;
   margin: 0 0 18px;
   font-family: var(--font-plex-mono), ui-monospace, monospace;
   font-size: 11px;
@@ -1182,13 +1144,6 @@
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--c-ink-3);
-}
-.mw-cwc-sched__next-mark {
-  width: 6px;
-  height: 6px;
-  background: var(--c-accent);
-  transform: rotate(45deg);
-  flex-shrink: 0;
 }
 .mw-cwc-sched__steps {
   list-style: none;
@@ -1278,9 +1233,6 @@
 /* Reassurance line under the card — fills the rest-state gap and closes the
    pitch ("what happens next" → "and it starts within a day"). */
 .mw-cwc-sched__card-note {
-  display: flex;
-  align-items: center;
-  gap: 9px;
   margin: 14px 2px 0;
   font-family: var(--font-plex-mono), ui-monospace, monospace;
   font-size: 11px;
@@ -1288,13 +1240,6 @@
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--c-ink-3);
-}
-.mw-cwc-sched__card-note-mark {
-  width: 6px;
-  height: 6px;
-  background: var(--c-accent);
-  transform: rotate(45deg);
-  flex-shrink: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {

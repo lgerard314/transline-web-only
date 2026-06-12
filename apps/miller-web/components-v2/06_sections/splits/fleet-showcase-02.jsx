@@ -26,7 +26,7 @@ import { sectionProps } from "@/components-v2/section-config";
 //   (prefers-reduced-motion: no-preference).
 //
 // content: { titleId, eyebrow, title, titleEm, lead,
-//            units[{ num, name, role, body, image }], footnote }
+//            units[{ num, name, role, body, image }] }
 // config:  standard sectionProps passthrough.
 const SLICE_LEN = 0.5;
 const SLICE_C0 = 0.4;
@@ -105,8 +105,10 @@ export function FleetShowcase02({ content, config = {} }) {
                     <img src={u.image} alt="" loading="lazy" />
                   </figure>
                   <div className="mw-cwc-fleet__plate">
+                    {/* Quiet spec-plate tag, nothing else in the row — the
+                        diamond is reserved for eyebrows / diagram nodes /
+                        state markers (consult + logan, 2026-06-12). */}
                     <p className="mw-cwc-fleet__plate-row">
-                      <span className="mw-cwc-fleet__plate-mark" aria-hidden="true" />
                       <span className="mw-cwc-fleet__role">{u.role}</span>
                     </p>
                     <h3 className="mw-cwc-fleet__name">{u.name}</h3>
@@ -118,10 +120,6 @@ export function FleetShowcase02({ content, config = {} }) {
           </ul>
         </div>
 
-        <p className="mw-cwc-fleet__footnote" data-reveal>
-          <span className="mw-cwc-fleet__footnote-mark" aria-hidden="true" />
-          {content.footnote}
-        </p>
       </div>
     </section>
   );

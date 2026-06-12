@@ -148,7 +148,8 @@ export const customerWasteCollection = {
         image: "/miller/cwc/fleet-lightduty.png",
       },
     ],
-    footnote: "Every unit placarded, manifest-equipped, and dispatched from our own yard.",
+    // footnote removed 2026-06-12 (consult + logan): it was a pseudo-eyebrow
+    // trailing the section, and its content already lives in the lead.
   },
 
   // §5 — Stream index (sector manifest + photo swap).

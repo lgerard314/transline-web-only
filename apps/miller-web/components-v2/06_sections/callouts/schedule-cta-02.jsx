@@ -31,8 +31,9 @@ export function ScheduleCta02({ content, config = {} }) {
             </h2>
             <p className="mw-cwc-sched__body" data-reveal>{content.body}</p>
 
+            {/* Mono caps label only — a diamond here made the section read
+                as opening twice (consult, 2026-06-12). */}
             <p className="mw-cwc-sched__next-cap" data-reveal aria-hidden="true">
-              <span className="mw-cwc-sched__next-mark" />
               {content.nextEyebrow}
             </p>
             <ol className="mw-cwc-sched__steps" data-reveal-stagger>
@@ -53,11 +54,9 @@ export function ScheduleCta02({ content, config = {} }) {
               <p className="mw-cwc-sched__form-title">{content.formTitle}</p>
               <ScheduleForm />
             </div>
+            {/* Quiet mono microcopy, no diamond (consult, 2026-06-12). */}
             {content.formNote && (
-              <p className="mw-cwc-sched__card-note">
-                <span className="mw-cwc-sched__card-note-mark" aria-hidden="true" />
-                {content.formNote}
-              </p>
+              <p className="mw-cwc-sched__card-note">{content.formNote}</p>
             )}
           </div>
         </div>

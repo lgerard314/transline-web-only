@@ -143,10 +143,9 @@ export function ProcessFlow02({ content, config = {} }) {
           </header>
           <div className="mw-cwc-flow__notify" data-reveal>
             <div className="mw-cwc-flow__feed">
-              <p className="mw-cwc-flow__feed-cap" aria-hidden="true">
-                <span className="mw-cwc-flow__feed-mark" />
-                Dispatch feed
-              </p>
+              {/* Mono legend only — the panel frame contains it; a diamond
+                  here read as an eyebrow clone (consult, 2026-06-12). */}
+              <p className="mw-cwc-flow__feed-cap" aria-hidden="true">Dispatch feed</p>
               <TimelineNotifyCycle notifications={content.notifications} index={index} />
             </div>
           </div>
