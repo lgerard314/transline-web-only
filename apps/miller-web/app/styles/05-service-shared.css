@@ -1496,6 +1496,15 @@
   isolation: isolate;
   text-decoration: none;
   color: inherit;
+  /* Light hairline frame; barely darkens + subtle lift on hover (house easing).
+     The translate rides the tile's own node — it never resizes the parent. */
+  border: 1px solid var(--c-line);
+  transition: transform 420ms cubic-bezier(0.2, 0.7, 0.2, 1), border-color 420ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.mw-rel__item .mw-svcs-tile:hover,
+.mw-rel__item .mw-svcs-tile:focus-visible {
+  border-color: color-mix(in srgb, var(--c-ink) 25%, var(--c-line));
+  transform: translateY(-3px);
 }
 .mw-rel__item .mw-svcs-tile:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
 .mw-rel__item .mw-svcs-tile__photo {
@@ -1625,6 +1634,8 @@
   .mw-rel__item .mw-svcs-tile__title,
   .mw-rel__item .mw-svcs-tile__arr { transition: none; }
   .mw-rel__item .mw-svcs-tile:hover .mw-svcs-tile__photo { transform: none; }
+  .mw-rel__item .mw-svcs-tile:hover,
+  .mw-rel__item .mw-svcs-tile:focus-visible { transform: none; }
 }
 @media (max-width: 900px) {
   .mw-rel__track { --mw-rel-visible: 2; }

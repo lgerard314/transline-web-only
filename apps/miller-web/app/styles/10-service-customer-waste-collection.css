@@ -993,7 +993,8 @@
 .mw-cwc-index__title { max-width: 22ch; }
 .mw-cwc-index__lead {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
-  font-size: clamp(15.5px, 1.15vw, 18px);
+  /* Home register — header→body paragraph sizes match the home page. */
+  font-size: clamp(17px, 1.35vw, 21px);
   line-height: 1.55;
   color: var(--c-ink-2);
   max-width: 62ch;
@@ -1155,7 +1156,9 @@
 .mw-cwc-index__cap-mark {
   width: 7px;
   height: 7px;
-  background: var(--c-accent);
+  /* Static mark — hollow (border-only), per the static-diamond rule. */
+  background: transparent;
+  border: 1px solid var(--c-accent);
   transform: rotate(45deg);
   flex-shrink: 0;
 }
