@@ -32,6 +32,11 @@
   right: 0;
   width: 62%;
   z-index: 0;
+  /* Feather the photo's left edge into the grained cream (mask on the
+     column itself — a cream overlay pseudo proved unreliable in paint
+     order; §1 audit). */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 16%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 16%);
 }
 .mw-rem2-hero__photo {
   width: 100%;
@@ -40,26 +45,23 @@
   display: block;
   filter: saturate(0.92) contrast(1.05) sepia(0.08);
 }
-/* Soft cream feather on the photo's left edge so the slab seam breathes. */
-.mw-rem2-hero__media::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, var(--c-surface-warm) 0, rgba(251, 248, 242, 0) 18%);
-}
 .mw-rem2-hero__inner { position: relative; z-index: 1; padding-block: clamp(56px, 5.5vw, 96px); }
 .mw-rem2-hero__slab {
-  width: min(100%, 600px);
+  /* Scales with the viewport so the slab-over-photo overlap holds at
+     1680 (fixed 600px collapsed it to ~29px; §1 audit). */
+  width: min(100%, clamp(600px, 40vw, 680px));
   background: var(--c-surface-warm);
   border: 1px solid var(--c-line);
   padding: clamp(28px, 2.8vw, 44px);
-  box-shadow: 0 24px 48px -28px rgba(42, 27, 18, 0.35);
+  box-shadow: 0 32px 72px -24px rgba(42, 27, 18, 0.4), 0 6px 18px -6px rgba(42, 27, 18, 0.25);
 }
 .mw-rem2-hero .mw-section-tag { margin-bottom: clamp(18px, 1.4vw, 22px); }
 .mw-rem2-hero__title {
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
   font-weight: 700;
-  font-size: clamp(40px, 4.6vw, 72px);
+  /* Sized so "CONTAMINATED SITES," holds one line in the slab at every
+     width — the intended 3-line break (§1 audit: 4.6vw runt-wrapped). */
+  font-size: clamp(38px, 4.2vw, 62px);
   line-height: 0.94;
   letter-spacing: 0.005em;
   text-transform: uppercase;
