@@ -885,6 +885,42 @@
 /* (Fleet footnote removed 2026-06-12 — it was a trailing pseudo-eyebrow;
    the consult's diamond-scarcity verdict + logan's call.) */
 
+/* ════════ TEMP — border-treatment comparison variants (delete with the
+   TEMP block in fleet-showcase-02.jsx once logan picks). All values pulled
+   from home grammar: --c-line hairlines, the §2 structural ink-mix tone,
+   the home light-card spec (surface + hairline + tight warm shadow). ════ */
+.mw-cwc-fleet__variant-tag {
+  margin: clamp(28px, 2.6vw, 40px) 0 10px;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--c-amber);
+}
+/* V1 — light hairline around each image */
+.mw-cwc-fleet__panel[data-variant="v1"] .mw-cwc-fleet__photo { border: 1px solid var(--c-line); }
+/* V2 — dark subtle border around each image (the §2 structural tone) */
+.mw-cwc-fleet__panel[data-variant="v2"] .mw-cwc-fleet__photo { border: 1px solid color-mix(in srgb, var(--c-ink) 30%, var(--c-line)); }
+/* V3 — each photo+plate as a white card (home light-card spec) */
+.mw-cwc-fleet__panel[data-variant="v3"] .mw-cwc-fleet__card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  box-shadow: 0 18px 36px -22px rgba(42, 27, 18, 0.28);
+}
+/* V4 — the container panel border goes dark + subtle; images bare */
+.mw-cwc-fleet__panel[data-variant="v4"] { border-color: color-mix(in srgb, var(--c-ink) 35%, var(--c-line)); }
+/* V5 — white mat frame around each image (mounted print). The parallax
+   scale would bleed over the mat (overflow clips at the figure edge, not
+   the content box), so this variant shows the image static. */
+.mw-cwc-fleet__panel[data-variant="v5"] .mw-cwc-fleet__photo {
+  background: var(--c-surface);
+  padding: clamp(6px, 0.6vw, 10px);
+  border: 1px solid var(--c-line);
+}
+.mw-cwc-fleet__panel[data-variant="v5"] .mw-cwc-fleet__photo img { transform: none !important; }
+/* ════════ END TEMP ════════ */
+
 /* ── M2 fleet assembly scrub (contract in fleet-showcase-02.jsx) ────
    Consumes the writer's --cwcft-p; cells rise on 0.50-long slices with
    inline --thr (completions 0.40/0.70/1.000 left→right, the last landing

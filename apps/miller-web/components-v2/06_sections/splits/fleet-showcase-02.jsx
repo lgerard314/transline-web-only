@@ -134,6 +134,45 @@ export function FleetShowcase02({ content, config = {} }) {
           </ul>
         </div>
 
+        {/* ════════ TEMP — BORDER-TREATMENT COMPARISON (logan picks, then
+            this whole block + its CSS get deleted). The panel above is V0
+            (current). Five styled duplicates below, aria-hidden. ════════ */}
+        {[
+          ["v1", "V1 — light hairline around each image"],
+          ["v2", "V2 — dark subtle border around each image"],
+          ["v3", "V3 — white card + hairline around each photo+plate card"],
+          ["v4", "V4 — dark subtle border on the container panel"],
+          ["v5", "V5 — white mat frame around each image (mounted print)"],
+        ].map(([variant, label]) => (
+          <div key={variant} aria-hidden="true">
+            <p className="mw-cwc-fleet__variant-tag">{label}</p>
+            <div className="mw-cwc-fleet__panel" data-variant={variant}>
+              <ul className="mw-cwc-fleet__grid">
+                {content.units.map((u, i) => (
+                  <li
+                    key={u.num}
+                    className="mw-cwc-fleet__cell"
+                    style={{ "--thr": (SLICE_C0 + i * SLICE_STEP - SLICE_LEN).toFixed(2) }}
+                  >
+                    <article className="mw-cwc-fleet__card">
+                      <ParallaxPhoto src={u.image} />
+                      <div className="mw-cwc-fleet__plate">
+                        <p className="mw-cwc-fleet__plate-row">
+                          <span className="mw-cwc-fleet__plate-leader" aria-hidden="true" />
+                          <span className="mw-cwc-fleet__role">{u.role}</span>
+                        </p>
+                        <p className="mw-cwc-fleet__name">{u.name}</p>
+                        <p className="mw-cwc-fleet__body">{u.body}</p>
+                      </div>
+                    </article>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ))}
+        {/* ════════ END TEMP ════════ */}
+
       </div>
     </section>
   );
