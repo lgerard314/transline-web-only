@@ -1160,7 +1160,9 @@
   line-height: 1.55;
   color: var(--c-ink-2);
   max-width: 52ch;
-  margin: clamp(18px, 1.4vw, 22px) 0 clamp(32px, 3vw, 44px);
+  text-wrap: pretty;
+  /* Uniform header→intro gap (home foundation value). */
+  margin: clamp(18px, 1.6vw, 24px) 0 clamp(32px, 3vw, 44px);
 }
 .mw-cwc-sched__next-cap {
   display: flex;
@@ -1298,8 +1300,11 @@
 }
 
 /* §7 related rail: the shared mw-svc-related-sec shell carries its own
-   surface, padding, and border — no page-scoped rules needed (mw-cwc-rel
-   stays as a dormant hook). */
+   surface and border; the page-scoped mw-cwc-rel hook (this is exactly what
+   it exists for) aligns the rail's padding to this page's section rhythm —
+   the shared shell's clamp renders 79.2px @1440 vs the page's uniform
+   93.6px, a probed 14.4px seam dent. Other pages' rails are untouched. */
+.mw-cwc-rel { padding-block: clamp(64px, 6.5vw, 112px); }
 
 @media (max-width: 960px) {
   .mw-cwc-flow__intro { grid-template-columns: 1fr; }
