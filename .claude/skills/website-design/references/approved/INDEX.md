@@ -41,3 +41,28 @@ Known artifact: the small dark "N" badge bottom-left in viewport shots is the Ne
 | 8 | Careers dive | settled focal pose | [08-careers-settled.png](home/desktop/08-careers-settled.png) | Careers dive | `--reveal` 1.000, `--center-img-zoom` 1.0000 — landed AT the anchor |
 | 9 | Affiliates banner (`rotating-banner-01`, `.mw-marquee`) | rest | [09-affiliates-rest.png](home/desktop/09-affiliates-rest.png) | Rotating affiliates banner | all 16 logos loaded; marquee animation reported idle in headless capture — it runs in real browsers |
 | 10 | Final CTA (`multi-column-cta-01`, `.mw-final`) | rest (full visual unit + footer top) | [10-final-cta-rest.png](home/desktop/10-final-cta-rest.png) | Final CTA | headline + lead + CTAs + socials all probed in-frame |
+
+### phone (390×844, DPR 3, touch) — captured 2026-06-12, commit `15bb981`
+
+Pin behavior at this class: lifetime + VBEC FLOW (their pins are landscape-gated); careers PINS (mechanism pin, every surface); sector-diamonds pin is desktop-only. Hover poses don't exist on coarse classes. Captured with the dev portal hidden via client-side CSS.
+
+| File | Pose / facts |
+|---|---|
+| [01-hero-rest.png](home/phone/01-hero-rest.png) | load-reveal settled, scroll 0 |
+| [02-certs-rest.png](home/phone/02-certs-rest.png) | certs as a peek-scroll strip (edge-cut seals are the design); band centered |
+| [03-roster-rest.png](home/phone/03-roster-rest.png) / [-b](home/phone/03-roster-rest-b.png) | stacked service cards, section top + one step deeper |
+| [04-diamonds-settled.png](home/phone/04-diamonds-settled.png) | two-row diamond strip + labels, flowing |
+| [05-lifetime-settled.png](home/phone/05-lifetime-settled.png) | one-row diamonds + caption, flow mode |
+| [06-vbec-settled.png](home/phone/06-vbec-settled.png) | copy + stats + capabilities entering, flow mode |
+| [07-history-rest.png](home/phone/07-history-rest.png) / [-b](home/phone/07-history-rest-b.png) / [-c](home/phone/07-history-rest-c.png) | 3-stop walk (~750px apart), -c shows the careers handoff |
+| [08-careers-enter.png](home/phone/08-careers-enter.png) / [dive-mid](home/phone/08-careers-dive-mid.png) / [settled](home/phone/08-careers-settled.png) | pin engaged at rect.top 0 → mid-dive at ~50% runway → focal settled |
+| [09-affiliates-rest.png](home/phone/09-affiliates-rest.png) | logo strip centered (peek-scroll) |
+| [10-final-cta-rest.png](home/phone/10-final-cta-rest.png) | headline rect.top 99, socials in-frame |
+
+### tablet-portrait (834×1194, DPR 2, touch) — captured 2026-06-12, commit `15bb981`
+
+Pin behavior: same as phone (lifetime/VBEC flow, careers pins, diamonds no pin). Same file set as phone (15 shots) under [home/tablet-portrait/](home/tablet-portrait/) — notable probe facts: careers enter at track top −0.2 with cell `--s` 0.4167 (start state), dive-mid at 42% runway with cell `--s` 0.6538 and `--reveal` 0.000.
+
+### tablet-landscape (1194×834, DPR 2, touch) — captured 2026-06-12, commit `15bb981`
+
+Pin behavior: lifetime + VBEC PIN at this class (landscape gates pass) — so it carries their mid poses; sector-diamonds still flows (desktop-only pin). 17 shots under [home/tablet-landscape/](home/tablet-landscape/): the phone/tabport set PLUS [05-lifetime-mid.png](home/tablet-landscape/05-lifetime-mid.png) (second diamond mid-draw) and [06-vbec-pinned-mid.png](home/tablet-landscape/06-vbec-pinned-mid.png) (`--fac2-fig-h` 141px grown, `--fac2-media-x` 0 — pre-swipe). Other probed poses: 05-lifetime-settled with all three diamonds + captions and VBEC not yet covering (fac2 top 1011 > viewport); 06-vbec-settled at `--cap-op`/`--cap-sc` 1.0 still pinned; 08-careers dive-mid at `--center-img-zoom` 1.1030 / `--reveal` 0.000, settled at 1.0000 / 1.000 with the stage still filling the frame.
