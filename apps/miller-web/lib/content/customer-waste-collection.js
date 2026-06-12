@@ -19,7 +19,6 @@ export const customerWasteCollection = {
     photo: "/miller/cwc/hero-dock.png",
     cta: { label: "Schedule a pickup", href: "/contact-us/" },
     custody: {
-      caption: "One chain of custody",
       nodes: [
         { num: "01", label: "Your dock" },
         { num: "02", label: "Miller truck" },

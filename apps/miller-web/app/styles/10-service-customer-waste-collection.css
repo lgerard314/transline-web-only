@@ -74,7 +74,8 @@
 .mw-cwc-hero__title-em .mw-stop { color: var(--c-ink); }
 .mw-cwc-hero__lead {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
-  font-size: clamp(16px, 1.2vw, 19px);
+  /* HOME register (logan 2026-06-12): header→body paragraph sizes match home. */
+  font-size: clamp(17px, 1.35vw, 21px);
   line-height: 1.55;
   color: var(--c-ink-2);
   /* 50ch (was 52) + pretty: re-wraps the lead so the last line carries
@@ -117,42 +118,27 @@
   display: block;
 }
 
-/* Custody strip — the manifest footer: caption, then three diamond nodes
-   joined by 0.5px hairline connectors (decorative rules are hairlines, §5.8). */
+/* Custody strip — the manifest footer: three diamond nodes joined by 0.5px
+   hairline connectors (decorative rules are hairlines, §5.8). The strip's
+   top border is the ONLY rule at the hero/strip seam (the hero main draws no
+   bottom border), and its bottom border closes the hero against the next
+   section — both the same var(--c-line) the related-services top edge uses
+   (owner 2026-06-12: the inked color-mix edge read too dark). */
 .mw-cwc-hero__custody {
   position: relative;
   z-index: 2;
   background: var(--c-bg);
-  /* Document edge — slightly inked so the manifest strip doesn't float. */
-  border-top: 1px solid color-mix(in srgb, var(--c-ink) 16%, var(--c-line));
+  border-top: 1px solid var(--c-line);
+  border-bottom: 1px solid var(--c-line);
 }
 .mw-cwc-hero__custody-inner {
   display: flex;
   align-items: center;
   gap: clamp(28px, 3.4vw, 64px);
-  padding-block: clamp(18px, 1.9vw, 28px);
-}
-.mw-cwc-hero__custody-cap {
-  margin: 0;
-  display: flex;
-  align-items: center;
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--c-ink-2);
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-/* Run the manifest line from the caption into node 01 so the strip reads as one
-   continuous document line, not a label beside a diagram. */
-.mw-cwc-hero__custody-cap::after {
-  content: "";
-  width: clamp(28px, 3.2vw, 60px);
-  height: 0.5px;
-  background: var(--c-line);
-  margin-left: clamp(16px, 1.8vw, 28px);
+  /* Top padding carries the truck lane — the scroll-driven truck rides just
+     above the node row, inside the strip (absolute; zero layout shift). */
+  padding-top: clamp(46px, 3.8vw, 60px);
+  padding-bottom: clamp(18px, 1.9vw, 28px);
 }
 .mw-cwc-hero__custody-route {
   list-style: none;
@@ -170,7 +156,9 @@
   flex: 1;
   min-width: 0;
 }
-.mw-cwc-hero__custody-node:last-child { flex: 0 0 auto; }
+/* Gate node anchors the truck — relative so the truck's settled (no-JS /
+   reduced-motion) pose sits centered over the gate diamond by construction. */
+.mw-cwc-hero__custody-node:last-child { flex: 0 0 auto; position: relative; }
 .mw-cwc-hero__custody-node::after {
   content: "";
   flex: 1;
@@ -180,10 +168,13 @@
   margin-left: clamp(16px, 1.8vw, 28px);
 }
 .mw-cwc-hero__custody-node:last-child::after { display: none; }
+/* Static diamonds are BORDER-ONLY (owner 2026-06-12): hollow clay outline —
+   the filled mark stays reserved for the section-tag eyebrow. */
 .mw-cwc-hero__custody-mark {
   width: 8px;
   height: 8px;
-  background: var(--c-accent);
+  background: transparent;
+  border: 1px solid var(--c-accent);
   transform: rotate(45deg);
   flex-shrink: 0;
 }
@@ -196,6 +187,25 @@
   color: var(--c-ink);
   white-space: nowrap;
 }
+
+/* Scroll-driven custody truck — motion contract lives in service-hero-02.jsx.
+   Anchored over the GATE diamond (the journey's end); the JS writer slides it
+   back toward the dock by (1 − p) · distance, where --cwch-p (0→1) and
+   --cwch-d (dock-label→gate-diamond center distance, px) are set on the strip.
+   Defaults (--cwch-p: 1 / --cwch-d: 0px) = journey complete: no-JS and
+   prefers-reduced-motion both rest the truck AT the gate, motionless. */
+.mw-cwc-hero__custody-truck {
+  position: absolute;
+  /* Centers the 40px glyph over the 8px gate diamond (diamond center = 4px). */
+  left: -16px;
+  bottom: calc(100% + 4px);
+  width: 40px;
+  color: var(--c-accent);
+  pointer-events: none;
+  transform: translateX(calc((var(--cwch-p, 1) - 1) * var(--cwch-d, 0px)));
+  will-change: transform;
+}
+.mw-cwc-hero__custody-truck svg { display: block; width: 100%; height: auto; }
 
 /* Narrow surfaces — kept sane only; the responsive pass is a later session. */
 @media (max-width: 960px) {
