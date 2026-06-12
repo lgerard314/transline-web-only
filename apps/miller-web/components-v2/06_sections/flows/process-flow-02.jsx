@@ -176,11 +176,11 @@ export function ProcessFlow02({ content, config = {} }) {
                   style={{ "--thr": (ARRIVE_C0 + i * ARRIVE_STEP - ARRIVE_LEN).toFixed(3) }}
                   onMouseEnter={() => hoverStep(i)}
                 >
-                  {/* Diamond node glyph — sequential mono numerals are banned
-                      in the eyebrow register (logan 2026-06-12). */}
-                  <span className="mw-cwc-flow__node" aria-hidden="true">
-                    <span className="mw-cwc-flow__node-mark" />
-                  </span>
+                  {/* Bare diamond node sitting directly on the rail — the 34px
+                      square boxes are retired (logan 2026-06-12: "get rid of
+                      the square shape on the lines and just use diamonds");
+                      sequential mono numerals stay banned. */}
+                  <span className="mw-cwc-flow__node" aria-hidden="true" />
                   <div className="mw-cwc-flow__card">
                     <p className="mw-cwc-flow__tag">{st.tag}</p>
                     <h3 className="mw-cwc-flow__name">{st.name}</h3>

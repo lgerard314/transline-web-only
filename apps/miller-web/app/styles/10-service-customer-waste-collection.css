@@ -489,13 +489,15 @@
   grid-template-columns: minmax(0, 1fr) minmax(360px, 440px);
   gap: clamp(32px, 4vw, 80px);
   align-items: start;
-  margin-bottom: clamp(56px, 5.5vw, 92px);
+  /* Widened intro→route runway (logan 2026-06-12: the section read compact). */
+  margin-bottom: clamp(64px, 6.5vw, 104px);
 }
 .mw-cwc-flow .mw-section-tag { margin-bottom: clamp(20px, 1.5vw, 24px); }
 .mw-cwc-flow__title { max-width: 18ch; }
 .mw-cwc-flow__lead {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
-  font-size: clamp(15.5px, 1.15vw, 18px);
+  /* HOME lead register (logan 2026-06-12 — the interior lead read small). */
+  font-size: clamp(17px, 1.35vw, 21px);
   line-height: 1.55;
   color: var(--c-ink-2);
   max-width: 52ch;
@@ -512,8 +514,9 @@
      row (≈1em) + the uniform eyebrow→header margin + the title's cap inset
      (≈0.264× the title's clamp(32px,3.4vw,60px) — Barlow Condensed's
      negative half-leading puts the cap ~13px below the line-box top @1440;
-     audit-measured). */
-  margin-top: calc(clamp(20px, 1.5vw, 24px) + 1em + clamp(8.4px, 0.92vw, 15.9px));
+     audit-measured) — then dropped a further 18px below the cap line
+     (logan 2026-06-12: the panel sat high and the section read compact). */
+  margin-top: calc(clamp(20px, 1.5vw, 24px) + 1em + clamp(8.4px, 0.92vw, 15.9px) + 18px);
 }
 /* Dispatch-feed panel — frames the notification stack so the column reads
    authored at every clock state (a lone floating banner read as sparse). */
@@ -578,6 +581,12 @@
   transform: rotate(45deg);
   flex-shrink: 0;
 }
+/* The dock diamond is HOLLOW (logan 2026-06-12) — on this route only DYNAMIC
+   state fills a diamond: stations fill when active, the gate fills on arrival. */
+.mw-cwc-flow__terminal--start .mw-cwc-flow__terminal-mark {
+  background: transparent;
+  border: 1px solid var(--c-accent);
+}
 /* The VBEC gate lights up when the truck arrives (last step active). */
 .mw-cwc-flow__terminal--end { color: var(--c-ink-3); transition: color 400ms ease; }
 .mw-cwc-flow__terminal--end .mw-cwc-flow__terminal-mark { background: var(--c-line); transition: background 400ms ease; }
@@ -613,10 +622,10 @@
 }
 .mw-cwc-flow__truck {
   position: absolute;
-  /* Rides the rail just ahead of the fill, nose parked 8px short of the
-     active node's box (node half-width 17px + 8px gap) — glyph and node
-     never share an x-position. */
-  left: calc(var(--fillw, 12.5%) - 25px);
+  /* Rides the rail just ahead of the fill, nose parked short of the active
+     diamond's left tip (node half-diagonal ≈8.5px + ≈8.5px gap) — glyph and
+     node never share an x-position. Re-tuned to the 12px diamonds. */
+  left: calc(var(--fillw, 12.5%) - 17px);
   top: 15px;
   width: 40px;
   color: var(--c-accent);
@@ -643,37 +652,30 @@
   flex-direction: column;
   align-items: center;
 }
-/* Station stem — hairline drop from the node to the card. */
+/* Station stem — hairline drop from below the diamond toward the card. */
 .mw-cwc-flow__stop::before {
   content: "";
   position: absolute;
-  top: 34px;
+  top: 31px; /* diamond's bottom tip sits at y ≈ 25.5px (+ air) */
   bottom: auto;
-  height: 22px;
+  height: 30px;
   left: 50%;
   width: 0.5px;
   background: var(--c-line);
 }
+/* Bare diamond station node sitting directly ON the rail — the 34px square
+   boxes are retired (logan 2026-06-12: "get rid of the square shape on the
+   lines and just use diamonds"). Solid warm-surface bg so the rail never
+   strikes through; hollow clay-ish border at rest → filled clay when active
+   → clay border-only when done — the terminals' hollow→filled language. */
 .mw-cwc-flow__node {
   position: relative;
   z-index: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
+  width: 12px;
+  height: 12px;
+  margin-top: 11px; /* layout center y = 17px — exactly the rail line */
   background: var(--c-surface-warm);
-  border: 1px solid color-mix(in srgb, var(--c-ink) 22%, var(--c-line));
-  transition: background 300ms ease, border-color 300ms ease;
-}
-/* Diamond glyph inside the station box (the numerals are banned): hollow at
-   rest, white-filled on the lit station, clay-hollow when done — the same
-   hollow→filled state language as the index rows and terminals. */
-.mw-cwc-flow__node-mark {
-  width: 9px;
-  height: 9px;
-  border: 1px solid color-mix(in srgb, var(--c-ink) 40%, var(--c-line));
-  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--c-accent) 45%, var(--c-line));
   transform: rotate(45deg);
   transition: background 300ms ease, border-color 300ms ease;
 }
@@ -685,16 +687,12 @@
      state is instant. */
   transition-delay: 480ms;
 }
-.mw-cwc-flow__stop[data-state="active"] .mw-cwc-flow__node-mark {
-  border-color: #fff;
-  background: #fff;
-  transition-delay: 480ms;
-}
 .mw-cwc-flow__stop[data-state="done"] .mw-cwc-flow__node { border-color: var(--c-accent); }
-.mw-cwc-flow__stop[data-state="done"] .mw-cwc-flow__node-mark { border-color: var(--c-accent); }
 .mw-cwc-flow__card {
   width: 100%;
-  margin-top: 56px;
+  /* node→card air widened with the section's breathing pass (was 56px against
+     the 34px boxes; the smaller diamonds + owner's spacing note = 84px). */
+  margin-top: 84px;
   padding-top: 16px;
   position: relative;
   border-top: 1px solid var(--c-line);
@@ -778,7 +776,6 @@
   .mw-cwc-flow__fill,
   .mw-cwc-flow__truck,
   .mw-cwc-flow__node,
-  .mw-cwc-flow__node-mark,
   .mw-cwc-flow__card,
   .mw-cwc-flow__card::before,
   .mw-cwc-flow__terminal--end,
