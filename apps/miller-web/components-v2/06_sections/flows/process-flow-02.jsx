@@ -150,7 +150,11 @@ export function ProcessFlow02({ content, config = {} }) {
                   data-state={i < index ? "done" : i === index ? "active" : "todo"}
                   style={{ "--thr": (ARRIVE_C0 + i * ARRIVE_STEP - ARRIVE_LEN).toFixed(3) }}
                 >
-                  <span className="mw-cwc-flow__node" aria-hidden="true">{st.num}</span>
+                  {/* Diamond node glyph — sequential mono numerals are banned
+                      in the eyebrow register (logan 2026-06-12). */}
+                  <span className="mw-cwc-flow__node" aria-hidden="true">
+                    <span className="mw-cwc-flow__node-mark" />
+                  </span>
                   <div className="mw-cwc-flow__card">
                     <p className="mw-cwc-flow__tag">{st.tag}</p>
                     <h3 className="mw-cwc-flow__name">{st.name}</h3>

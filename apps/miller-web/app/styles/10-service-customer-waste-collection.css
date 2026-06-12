@@ -172,13 +172,6 @@
   transform: rotate(45deg);
   flex-shrink: 0;
 }
-.mw-cwc-hero__custody-num {
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  color: var(--c-accent);
-}
 .mw-cwc-hero__custody-label {
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
   font-weight: 600;
@@ -350,15 +343,16 @@
 .mw-cwc-line__id {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
   margin: 0 0 6px;
 }
-.mw-cwc-line__num {
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  color: var(--c-accent);
+/* Diamond id mark — replaces the banned sequential mono numerals. */
+.mw-cwc-line__id-mark {
+  width: 7px;
+  height: 7px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex-shrink: 0;
 }
 .mw-cwc-line__spec {
   font-family: var(--font-plex-mono), ui-monospace, monospace;
@@ -627,28 +621,36 @@
   justify-content: center;
   width: 34px;
   height: 34px;
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  color: var(--c-ink-2);
   background: var(--c-surface-warm);
   border: 1px solid color-mix(in srgb, var(--c-ink) 22%, var(--c-line));
-  transition: background 300ms ease, color 300ms ease, border-color 300ms ease;
+  transition: background 300ms ease, border-color 300ms ease;
+}
+/* Diamond glyph inside the station box (the numerals are banned): hollow at
+   rest, white-filled on the lit station, clay-hollow when done — the same
+   hollow→filled state language as the index rows and terminals. */
+.mw-cwc-flow__node-mark {
+  width: 9px;
+  height: 9px;
+  border: 1px solid color-mix(in srgb, var(--c-ink) 40%, var(--c-line));
+  background: transparent;
+  transform: rotate(45deg);
+  transition: background 300ms ease, border-color 300ms ease;
 }
 .mw-cwc-flow__stop[data-state="active"] .mw-cwc-flow__node {
   background: var(--c-accent);
   border-color: var(--c-accent);
-  color: #fff;
   /* Cause before effect: the station lights only once the fill (600ms) has
      reached it. The delay lives on the destination state, so leaving the
      state is instant. */
   transition-delay: 480ms;
 }
-.mw-cwc-flow__stop[data-state="done"] .mw-cwc-flow__node {
-  border-color: var(--c-accent);
-  color: var(--c-accent);
+.mw-cwc-flow__stop[data-state="active"] .mw-cwc-flow__node-mark {
+  border-color: #fff;
+  background: #fff;
+  transition-delay: 480ms;
 }
+.mw-cwc-flow__stop[data-state="done"] .mw-cwc-flow__node { border-color: var(--c-accent); }
+.mw-cwc-flow__stop[data-state="done"] .mw-cwc-flow__node-mark { border-color: var(--c-accent); }
 .mw-cwc-flow__card {
   width: 100%;
   margin-top: 56px;
@@ -735,6 +737,7 @@
   .mw-cwc-flow__fill,
   .mw-cwc-flow__truck,
   .mw-cwc-flow__node,
+  .mw-cwc-flow__node-mark,
   .mw-cwc-flow__card,
   .mw-cwc-flow__card::before,
   .mw-cwc-flow__terminal--end,

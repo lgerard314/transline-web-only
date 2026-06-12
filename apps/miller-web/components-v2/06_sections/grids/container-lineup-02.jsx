@@ -125,8 +125,10 @@ export function ContainerLineup02({ content, config = {} }) {
                   )}
                 </div>
                 <div className="mw-cwc-line__meta">
+                  {/* Diamond mark, not a sequential mono numeral (banned in
+                      the eyebrow register, logan 2026-06-12). */}
                   <p className="mw-cwc-line__id">
-                    <span className="mw-cwc-line__num" aria-hidden="true">{t.num}</span>
+                    <span className="mw-cwc-line__id-mark" aria-hidden="true" />
                     <span className="mw-cwc-line__spec">{t.spec}</span>
                   </p>
                   <h3 className="mw-cwc-line__name">{t.name}</h3>

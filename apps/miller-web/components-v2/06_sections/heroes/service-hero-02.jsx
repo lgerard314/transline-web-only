@@ -56,10 +56,11 @@ export function ServiceHero02({ content, config = {} }) {
             aria-label="Chain of custody"
             {...(reveal ? { "data-reveal-stagger": true } : {})}
           >
+            {/* No sequential mono numerals (banned in the eyebrow register,
+                logan 2026-06-12) — the diamond + label carry each node. */}
             {content.custody.nodes.map((n) => (
               <li key={n.num} className="mw-cwc-hero__custody-node">
                 <span className="mw-cwc-hero__custody-mark" aria-hidden="true" />
-                <span className="mw-cwc-hero__custody-num" aria-hidden="true">{n.num}</span>
                 <span className="mw-cwc-hero__custody-label">{n.label}</span>
               </li>
             ))}
