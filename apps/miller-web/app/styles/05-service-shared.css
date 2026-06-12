@@ -1286,6 +1286,18 @@
   border-color: var(--c-accent);
   box-shadow: 0 0 0 3px rgba(168, 90, 44, 0.14);
 }
+/* ContactForm shares the same .tl-field atoms — give it the same warm
+   focus ring + squared corners (the brand default's hardcoded cool-navy
+   glow violates the no-blue palette lock on every Miller form; PM §6
+   audit catch). */
+.mw-contact-form .tl-field input,
+.mw-contact-form .tl-field textarea { border-radius: 0; }
+.mw-contact-form .tl-field textarea { resize: vertical; }
+.mw-contact-form .tl-field input:focus,
+.mw-contact-form .tl-field textarea:focus {
+  border-color: var(--c-accent);
+  box-shadow: 0 0 0 3px rgba(168, 90, 44, 0.14);
+}
 .mw-sched-form select[data-placeholder="1"] { color: var(--c-ink-3); }
 .mw-sched-form__submit { margin-top: clamp(8px, 1vw, 12px); width: 100%; justify-content: center; }
 
