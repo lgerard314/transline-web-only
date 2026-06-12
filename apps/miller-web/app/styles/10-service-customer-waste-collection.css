@@ -818,6 +818,10 @@
   margin: 0;
   aspect-ratio: 16 / 10;
   overflow: hidden;
+  /* The §12 house photo seat (logan picked V1, 2026-06-12): a light 1px
+     hairline crisply seats each photo on the cream panel — the pale-sky
+     truck shots' edges dissolved into the surface without it. */
+  border: 1px solid var(--c-line);
 }
 /* (Clay bar stub removed 2026-06-12 — it existed for the retired
    hover-grow; non-link photos carry no hover grammar.) */
@@ -885,10 +889,10 @@
 /* (Fleet footnote removed 2026-06-12 — it was a trailing pseudo-eyebrow;
    the consult's diamond-scarcity verdict + logan's call.) */
 
-/* ════════ TEMP — border-treatment comparison variants (delete with the
-   TEMP block in fleet-showcase-02.jsx once logan picks). All values pulled
-   from home grammar: --c-line hairlines, the §2 structural ink-mix tone,
-   the home light-card spec (surface + hairline + tight warm shadow). ════ */
+/* ════════ TEMP — TEXT-treatment comparison variants (delete with the
+   TEMP block in fleet-showcase-02.jsx once logan picks). T0 = the real
+   section above. All values pulled from house grammar: the §5 caption-chip
+   recipe, the §12 dark-surface text set, the roster 0fr reveal. ════════ */
 .mw-cwc-fleet__variant-tag {
   margin: clamp(28px, 2.6vw, 40px) 0 10px;
   font-family: var(--font-plex-mono), ui-monospace, monospace;
@@ -898,27 +902,71 @@
   text-transform: uppercase;
   color: var(--c-amber);
 }
-/* V1 — light hairline around each image */
-.mw-cwc-fleet__panel[data-variant="v1"] .mw-cwc-fleet__photo { border: 1px solid var(--c-line); }
-/* V2 — dark subtle border around each image (the §2 structural tone) */
-.mw-cwc-fleet__panel[data-variant="v2"] .mw-cwc-fleet__photo { border: 1px solid color-mix(in srgb, var(--c-ink) 30%, var(--c-line)); }
-/* V3 — each photo+plate as a white card (home light-card spec) */
-.mw-cwc-fleet__panel[data-variant="v3"] .mw-cwc-fleet__card {
-  background: var(--c-surface);
+/* Chip anchor lives OUTSIDE the clipped figure so chips can overlay/straddle. */
+.mw-cwc-fleet__media { position: relative; }
+/* T1 — the role caption ON the photo (the §5 contained-chip recipe). */
+.mw-cwc-fleet__chip {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  z-index: 2;
+  padding: 8px 12px;
+  background: var(--c-surface-warm);
   border: 1px solid var(--c-line);
-  box-shadow: 0 18px 36px -22px rgba(42, 27, 18, 0.28);
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+  white-space: nowrap;
 }
-/* V4 — the container panel border goes dark + subtle; images bare */
-.mw-cwc-fleet__panel[data-variant="v4"] { border-color: color-mix(in srgb, var(--c-ink) 35%, var(--c-line)); }
-/* V5 — white mat frame around each image (mounted print). The parallax
-   scale would bleed over the mat (overflow clips at the figure edge, not
-   the content box), so this variant shows the image static. */
-.mw-cwc-fleet__panel[data-variant="v5"] .mw-cwc-fleet__photo {
-  background: var(--c-surface);
-  padding: clamp(6px, 0.6vw, 10px);
-  border: 1px solid var(--c-line);
+/* T2 — description hidden at rest, 0fr→1fr reveal on cell hover (roster
+   mechanic; desktop-only by nature — flagged for the responsive pass). */
+.mw-cwc-fleet__body-reveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: grid-template-rows 440ms cubic-bezier(0.2, 0.7, 0.2, 1), opacity 360ms ease, transform 440ms ease;
 }
-.mw-cwc-fleet__panel[data-variant="v5"] .mw-cwc-fleet__photo img { transform: none !important; }
+.mw-cwc-fleet__body-reveal > * { overflow: hidden; min-height: 0; }
+.mw-cwc-fleet__panel[data-text-variant="t2"] .mw-cwc-fleet__cell:hover .mw-cwc-fleet__body-reveal {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transform: none;
+}
+/* T3 — the description plate in a DIFFERENT-COLORED container: a walnut
+   block under the photo (§12 dark-surface text set). */
+.mw-cwc-fleet__panel[data-text-variant="t3"] .mw-cwc-fleet__plate {
+  background: var(--c-navy);
+  margin-top: clamp(8px, 0.8vw, 12px);
+}
+.mw-cwc-fleet__panel[data-text-variant="t3"] .mw-cwc-fleet__name { color: #fff; }
+.mw-cwc-fleet__panel[data-text-variant="t3"] .mw-cwc-fleet__body { color: rgba(250, 243, 229, 0.89); }
+.mw-cwc-fleet__panel[data-text-variant="t3"] .mw-cwc-fleet__role { color: rgba(245, 230, 203, 0.62); }
+.mw-cwc-fleet__panel[data-text-variant="t3"] .mw-cwc-fleet__plate-leader { border-bottom-color: rgba(245, 230, 203, 0.3); }
+/* T4 — content COMPLETELY OUTSIDE the panel: photos-only panel, the text
+   row sits on the walnut below, columns aligned to the photos. */
+.mw-cwc-fleet__textrow {
+  margin-left: calc(50% - 50vw);
+  padding-inline: clamp(10px, 1.2vw, 18px);
+  margin-top: clamp(16px, 1.6vw, 24px);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(10px, 1.2vw, 18px);
+}
+.mw-cwc-fleet__textrow .mw-cwc-fleet__name { color: #fff; }
+.mw-cwc-fleet__textrow .mw-cwc-fleet__body { color: rgba(250, 243, 229, 0.89); }
+.mw-cwc-fleet__textrow .mw-cwc-fleet__role { color: rgba(245, 230, 203, 0.62); }
+.mw-cwc-fleet__textrow .mw-cwc-fleet__plate-leader { border-bottom-color: rgba(245, 230, 203, 0.3); }
+/* T5 — the caption as a physical TAG straddling the photo's top edge. */
+.mw-cwc-fleet__panel[data-text-variant="t5"] .mw-cwc-fleet__chip {
+  top: 0;
+  left: 14px;
+  transform: translateY(-50%);
+  box-shadow: 0 8px 18px -12px rgba(42, 27, 18, 0.4);
+}
 /* ════════ END TEMP ════════ */
 
 /* ── M2 fleet assembly scrub (contract in fleet-showcase-02.jsx) ────
