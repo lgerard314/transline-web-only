@@ -10,7 +10,8 @@
    07-service-industrial-cleaning   mw-fleet* dark split
    08-service-waste-treatment       mw-vbec*, mw-cap-card*
    09-service-project-management    mw-pm*, mw-why--3up
-   New service page: add 10-service-<slug>.css + one @import below. Never
+   10-service-customer-waste-collection   mw-cwc-* (first interior v2 page)
+   New service page: add 11-service-<slug>.css + one @import below. Never
    add rule blocks back into this file. Shared utilities -> 02-primitives;
    chrome -> 03-chrome.
    ---------------------------------------------------------------------- */
@@ -35,3 +36,4 @@
 @import "./styles/07-service-industrial-cleaning.css";
 @import "./styles/08-service-waste-treatment.css";
 @import "./styles/09-service-project-management.css";
+@import "./styles/10-service-customer-waste-collection.css";
