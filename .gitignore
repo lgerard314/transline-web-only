@@ -3,8 +3,8 @@
 .aws/playwright-menu.py
 .aws/playwright-menu-debug.py
 # Track .claude (repo skills/config); keep machine-local bits out
-.claude/settings.local.json
-.claude/global-plugin-touched
+**/.claude/settings.local.json
+**/.claude/global-plugin-touched
 
 # Dependencies
 node_modules/
