@@ -1340,12 +1340,10 @@
   .mw-cwc-sched__grid { grid-template-columns: 1fr; }
 }
 
-/* §7 related rail: the shared mw-svc-related-sec shell carries its own
-   surface and border; the page-scoped mw-cwc-rel hook (this is exactly what
-   it exists for) aligns the rail's padding to this page's section rhythm —
-   the shared shell's clamp renders 79.2px @1440 vs the page's uniform
-   93.6px, a probed 14.4px seam dent. Other pages' rails are untouched. */
-.mw-cwc-rel { padding-block: clamp(64px, 6.5vw, 112px); }
+/* §7 related rail: the shared mw-svc-related-sec shell now carries the
+   BANNER register everywhere (logan 2026-06-12 — eyebrow-only, ~45% less
+   padding), so the old mw-cwc-rel rhythm-alignment override is retired;
+   the hook stays dormant. */
 
 @media (max-width: 960px) {
   .mw-cwc-flow__intro { grid-template-columns: 1fr; }

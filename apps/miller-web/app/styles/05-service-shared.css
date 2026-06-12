@@ -1352,7 +1352,11 @@
   position: relative;
   background: var(--c-bg);
   color: var(--c-ink);
-  padding-block: clamp(56px, 5.5vw, 100px);
+  /* Banner register (logan 2026-06-12): the rail appears on every service
+     page and carries no body-intro — eyebrow-only head, padding cut ~45%
+     from the old clamp(56px,5.5vw,100px) section rhythm. --c-bg is correct
+     here per the surface rule (banners keep the light cream). */
+  padding-block: clamp(32px, 3vw, 56px);
   overflow: hidden;
   isolation: isolate;
   border-top: 1px solid var(--c-line);
@@ -1401,19 +1405,10 @@
   padding-inline: 0;
   box-sizing: border-box;
 }
-.mw-rel__head-text { display: flex; flex-direction: column; gap: clamp(20px, 1.5vw, 24px); }
+.mw-rel__head-text { display: flex; flex-direction: column; }
 .mw-rel__label { margin: 0; }
 .mw-rel__head-text .mw-rel__label { margin-bottom: 0; }
-.mw-rel__heading {
-  margin: 0;
-  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
-  font-weight: 700;
-  font-size: clamp(26px, 2.45vw, 39px);
-  line-height: 1.02;
-  letter-spacing: 0.005em;
-  text-transform: uppercase;
-  color: var(--c-ink);
-}
+/* (.mw-rel__heading retired 2026-06-12 — the rail is eyebrow-only.) */
 .mw-rel__viewport { position: relative; }
 .mw-rel__nav {
   appearance: none;

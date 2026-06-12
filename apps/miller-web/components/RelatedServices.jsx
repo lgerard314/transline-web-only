@@ -26,7 +26,6 @@ const MIDDLE = 1;
 export function RelatedServices({
   currentSlug,
   label = "Other services",
-  heading = "We've got you covered...",
   titleId,
   allHref = "/industrial-services/",
   allLabel = "All services",
@@ -87,13 +86,15 @@ export function RelatedServices({
 
   return (
     <div className="mw-rel">
+      {/* Eyebrow-only head (logan 2026-06-12): the rail is a BANNER — it
+          appears on every service page, so it announces itself with the
+          eyebrow alone; the display heading was retired. */}
       <div className="mw-rel__head" data-reveal>
         <div className="mw-rel__head-text">
           <LabelTag id={titleId} className="mw-section-tag mw-rel__label">
             <span className="mw-section-tag-mark" aria-hidden="true" />
             <span className="mw-section-tag-label">{label}</span>
           </LabelTag>
-          <h3 className="mw-rel__heading">{heading}</h3>
         </div>
         <Link href={allHref} className="mw-rel__all">
           {allLabel} <span aria-hidden="true">&rarr;</span>
