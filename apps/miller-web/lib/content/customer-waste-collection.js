@@ -3,9 +3,7 @@
 // components-v2 *-02 templates this page composes. The v1 module
 // (service-customer-waste-collection.js) stays untouched for reference.
 
-import { EMERGENCY_PHONE, VBEC_FULL_NAME, VBEC_SHORT } from "./brand";
-
-const EMERGENCY_TEL = `tel:${EMERGENCY_PHONE.replace(/[^0-9+]/g, "")}`;
+import { VBEC_FULL_NAME, VBEC_SHORT } from "./brand";
 
 export const customerWasteCollection = {
   slug: "customer-waste-collection",
@@ -19,8 +17,6 @@ export const customerWasteCollection = {
     lead:
       "Scheduled, documented collection of hazardous and non-hazardous waste in any container — from a single pail to full van loads — moved from your loading dock to the licensed VBEC facility under one chain of custody.",
     photo: "/miller/cwc/hero-dock.png",
-    emergencyDisplay: EMERGENCY_PHONE,
-    emergencyHref: EMERGENCY_TEL,
     cta: { label: "Schedule a pickup", href: "/contact-us/" },
     custody: {
       caption: "One chain of custody",

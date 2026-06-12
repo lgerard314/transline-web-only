@@ -51,7 +51,8 @@
   letter-spacing: 0.005em;
   text-transform: uppercase;
   color: var(--c-ink);
-  margin: 0 0 clamp(20px, 1.5vw, 24px);
+  /* Uniform header→intro gap (home foundation value, one value site-wide). */
+  margin: 0 0 clamp(18px, 1.6vw, 24px);
 }
 .mw-cwc-hero__title-em { color: var(--c-accent); }
 /* The em line is clay, so the clay stamp would vanish — ink keeps the motif visible. */
@@ -61,15 +62,14 @@
   font-size: clamp(16px, 1.2vw, 19px);
   line-height: 1.55;
   color: var(--c-ink-2);
-  max-width: 52ch;
+  /* 50ch (was 52) + pretty: re-wraps the lead so the last line carries
+     "chain of custody." instead of a two-word runt (audit finding §1.1). */
+  max-width: 50ch;
+  text-wrap: pretty;
   margin: 0 0 clamp(28px, 2.6vw, 40px);
 }
-/* Home-button pair at equal height (§12). Ghost recolored for light surface. */
+/* Single primary CTA (non-emergency hero rule, logan 2026-06-12). */
 .mw-cwc-hero__ctas { display: flex; flex-wrap: wrap; gap: 16px; align-items: stretch; }
-.mw-cwc-hero .mw-cta--ghost { color: var(--c-ink); border-color: var(--c-ink); justify-content: center; }
-.mw-cwc-hero .mw-cta--ghost:hover { border-color: var(--c-accent); color: var(--c-accent); background: rgba(168, 90, 44, 0.06); }
-.mw-cwc-hero .mw-cta__sup { color: var(--c-ink-2); }
-.mw-cwc-hero .mw-cta__num { color: var(--c-ink); }
 
 /* Full-height photo bleed off the right screen edge; soft fade into the
    surface on its left edge so the masthead reads as one plane. */

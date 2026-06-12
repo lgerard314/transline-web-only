@@ -7,10 +7,11 @@ import { sectionProps } from "@/components-v2/section-config";
 // runs the full hero height on the right, and a manifest-style custody strip
 // (your dock → Miller truck → VBEC gate) closes the hero base — the page's
 // "documented route" signature. §12 rules hold: light surface, ONE eyebrow,
-// home-button pair at equal height, no breadcrumb.
+// no breadcrumb, and a SINGLE primary CTA (the 24/7 emergency pair is
+// home + emergency-page-only per the locked hero rule, logan 2026-06-12).
 //
 // content: { titleId, eyebrow, title, titleEm, lead, photo,
-//            emergencyDisplay, emergencyHref, cta { label, href },
+//            cta { label, href },
 //            custody { caption, nodes[{ num, label }] } }
 // config:  { reveal = true } — standard data-reveal entrances on/off.
 export function ServiceHero02({ content, config = {} }) {
@@ -33,14 +34,6 @@ export function ServiceHero02({ content, config = {} }) {
             </h1>
             <p className="mw-cwc-hero__lead" {...rv}>{content.lead}</p>
             <div className="mw-cwc-hero__ctas" {...rv}>
-              <a
-                href={content.emergencyHref}
-                className="mw-cta mw-cta--ghost"
-                aria-label={`Call 24/7 emergency: ${content.emergencyDisplay}`}
-              >
-                <span className="mw-cta__sup">24/7 emergency</span>
-                <span className="mw-cta__num">{content.emergencyDisplay}</span>
-              </a>
               <Link href={content.cta.href} className="mw-cta mw-cta--solid">
                 {content.cta.label} <span aria-hidden="true">→</span>
               </Link>
@@ -52,10 +45,17 @@ export function ServiceHero02({ content, config = {} }) {
         </div>
       </div>
 
-      <div className="mw-cwc-hero__custody" {...rv}>
+      <div className="mw-cwc-hero__custody">
         <div className="mw-cwc-hero__custody-inner mw-inner">
-          <p className="mw-cwc-hero__custody-cap">{content.custody.caption}</p>
-          <ol className="mw-cwc-hero__custody-route" aria-label="Chain of custody">
+          <p className="mw-cwc-hero__custody-cap" {...rv}>{content.custody.caption}</p>
+          {/* Stagger on the route list: the three custody nodes cascade
+              left→right (the strip's surface stays put; only the nodes
+              arrive) — a SMALL per the page's motion budget. */}
+          <ol
+            className="mw-cwc-hero__custody-route"
+            aria-label="Chain of custody"
+            {...(reveal ? { "data-reveal-stagger": true } : {})}
+          >
             {content.custody.nodes.map((n) => (
               <li key={n.num} className="mw-cwc-hero__custody-node">
                 <span className="mw-cwc-hero__custody-mark" aria-hidden="true" />
