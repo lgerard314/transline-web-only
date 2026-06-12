@@ -63,6 +63,7 @@
 .mw-pm-hero .mw-cta--ghost { color: var(--c-ink); border-color: var(--c-ink); justify-content: center; }
 .mw-pm-hero .mw-cta--ghost:hover { border-color: var(--c-accent); color: var(--c-accent); background: rgba(168, 90, 44, 0.06); }
 .mw-pm-hero .mw-cta__num { color: var(--c-ink); }
+.mw-pm-hero .mw-cta__sup { color: var(--c-ink-2); }
 .mw-pm-hero .mw-cta--ghost:hover .mw-cta__num { color: var(--c-accent); }
 
 /* Full-bleed photo stage. */
@@ -384,3 +385,393 @@
   transform: rotate(45deg);
   flex-shrink: 0;
 }
+
+/* ── §4 Delivered work — editorial portfolio wall ─────────────────
+   Two feature cards over four standard cards on one 4-track grid.
+   Hover draws drafting crop-mark corners + a small photo zoom. */
+.mw-pm-work {
+  position: relative;
+  background: var(--c-bg);
+  color: var(--c-ink);
+  padding-block: clamp(64px, 6.5vw, 112px);
+}
+.mw-pm-work .mw-section-tag { margin-bottom: clamp(20px, 1.5vw, 24px); }
+.mw-pm-work__title { margin-bottom: clamp(16px, 1.4vw, 22px); }
+.mw-pm-work__lead {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.05vw, 18px);
+  line-height: 1.6;
+  color: var(--c-ink-2);
+  max-width: 52ch;
+  margin: 0 0 clamp(32px, 3.2vw, 52px);
+}
+.mw-pm-work__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(18px, 1.8vw, 26px);
+  row-gap: clamp(28px, 2.6vw, 40px);
+}
+.mw-pm-work__card { display: flex; flex-direction: column; }
+.mw-pm-work__card[data-feature="1"] { grid-column: span 2; }
+.mw-pm-work__media {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--c-line);
+  background: var(--c-surface-warm);
+  aspect-ratio: 4 / 3;
+}
+.mw-pm-work__card[data-feature="1"] .mw-pm-work__media { aspect-ratio: 16 / 9; }
+.mw-pm-work__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.92) contrast(1.05) sepia(0.08);
+}
+/* Drafting crop-mark corners (top-left / bottom-right) draw on hover. */
+.mw-pm-work__corners { position: absolute; inset: 0; pointer-events: none; }
+.mw-pm-work__corners::before,
+.mw-pm-work__corners::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  opacity: 0;
+}
+.mw-pm-work__corners::before {
+  top: 12px;
+  left: 12px;
+  border-top: 2px solid var(--c-accent);
+  border-left: 2px solid var(--c-accent);
+}
+.mw-pm-work__corners::after {
+  right: 12px;
+  bottom: 12px;
+  border-right: 2px solid var(--c-accent);
+  border-bottom: 2px solid var(--c-accent);
+}
+.mw-pm-work__card:hover .mw-pm-work__corners::before,
+.mw-pm-work__card:hover .mw-pm-work__corners::after { opacity: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  .mw-pm-work__photo { transition: transform 600ms cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .mw-pm-work__card:hover .mw-pm-work__photo { transform: scale(1.04); }
+  .mw-pm-work__corners::before { transition: opacity 240ms ease, transform 240ms ease; transform: translate(4px, 4px); }
+  .mw-pm-work__corners::after { transition: opacity 240ms ease, transform 240ms ease; transform: translate(-4px, -4px); }
+  .mw-pm-work__card:hover .mw-pm-work__corners::before,
+  .mw-pm-work__card:hover .mw-pm-work__corners::after { transform: translate(0, 0); }
+}
+.mw-pm-work__meta { padding-top: 14px; }
+.mw-pm-work__id {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+}
+.mw-pm-work__name {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(17px, 1.35vw, 20px);
+  line-height: 1.05;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--c-ink);
+  margin: 0 0 6px;
+  transition: color 240ms ease;
+}
+.mw-pm-work__card[data-feature="1"] .mw-pm-work__name { font-size: clamp(20px, 1.7vw, 26px); }
+.mw-pm-work__card:hover .mw-pm-work__name { color: var(--c-accent); }
+.mw-pm-work__tag {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-ink-3);
+  margin: 0;
+  white-space: nowrap;
+}
+.mw-pm-work__body {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--c-ink-2);
+  margin: 0;
+  max-width: 46ch;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-pm-work__name { transition: none; }
+}
+
+/* ── §5 Escalation band — dark walnut anchor ──────────────────────
+   ER → Projects continuity statement. §12 dark text colors (careers
+   band); full-width handoff meter closes the band. */
+.mw-pm-esc {
+  position: relative;
+  background: var(--c-navy);
+  color: #fff;
+  overflow: hidden;
+  isolation: isolate;
+  padding-block: clamp(64px, 6.5vw, 112px);
+}
+.mw-pm-esc::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-dark) 38px, var(--c-grain-on-dark) 39px);
+}
+.mw-pm-esc__inner { position: relative; z-index: 1; }
+.mw-pm-esc__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+  gap: clamp(40px, 5vw, 110px);
+  align-items: end;
+}
+.mw-pm-esc .mw-section-tag { margin-bottom: clamp(20px, 1.5vw, 24px); }
+.mw-pm-esc .mw-section-tag-label { color: rgba(250, 243, 229, 0.75); }
+.mw-pm-esc__title { color: #fff; margin-bottom: clamp(18px, 1.6vw, 26px); }
+.mw-pm-esc__title-em { color: #c97a4a; font-style: normal; }
+.mw-pm-esc__body {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.1vw, 18px);
+  line-height: 1.6;
+  color: rgba(250, 243, 229, 0.89);
+  max-width: 58ch;
+  margin: 0;
+}
+.mw-pm-esc__hotline {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  padding: 14px 18px;
+  border: 1px solid rgba(250, 243, 229, 0.28);
+  background: rgba(245, 230, 203, 0.035);
+  transition: border-color 240ms ease, background 240ms ease;
+}
+.mw-pm-esc__hotline:hover { border-color: var(--c-accent); background: rgba(168, 90, 44, 0.14); }
+.mw-pm-esc__hotline-logo { width: 40px; height: auto; flex-shrink: 0; }
+.mw-pm-esc__hotline-text { display: flex; flex-direction: column; gap: 3px; }
+.mw-pm-esc__hotline-sup {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(250, 243, 229, 0.72);
+}
+.mw-pm-esc__hotline-num {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(22px, 1.9vw, 28px);
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: #fff;
+}
+.mw-pm-esc__hotline-note {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(250, 243, 229, 0.65);
+  margin: 12px 0 0;
+  max-width: 34ch;
+}
+/* Handoff meter — emergency response ◆ projects group. */
+.mw-pm-esc__meter {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: clamp(40px, 4vw, 64px);
+}
+.mw-pm-esc__meter-end {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(250, 243, 229, 0.72);
+  white-space: nowrap;
+}
+.mw-pm-esc__meter-end--to { color: #fff; }
+.mw-pm-esc__meter-line {
+  position: relative;
+  flex: 1;
+  height: 1px;
+  background: rgba(250, 243, 229, 0.25);
+}
+.mw-pm-esc__meter-mark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 9px;
+  height: 9px;
+  background: var(--c-accent);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-pm-esc__hotline { transition: none; }
+}
+
+/* ── §6 Intake CTA — light close, form card left ──────────────────
+   Form card carries the hero title block frame (1.5px ink) + a
+   drafting-strip header; pitch + what-to-have-ready checklist right. */
+.mw-pm-intake {
+  position: relative;
+  background: var(--c-surface-warm);
+  color: var(--c-ink);
+  overflow: hidden;
+  isolation: isolate;
+  padding-block: clamp(64px, 6.5vw, 112px);
+}
+.mw-pm-intake::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+.mw-pm-intake__inner { position: relative; z-index: 1; }
+.mw-pm-intake__grid {
+  display: grid;
+  grid-template-columns: minmax(380px, 520px) minmax(0, 1fr);
+  gap: clamp(40px, 5vw, 110px);
+  align-items: start;
+}
+.mw-pm-intake__card {
+  background: var(--c-surface);
+  border: 1.5px solid var(--c-ink);
+  padding: clamp(22px, 2.2vw, 32px);
+  box-shadow: 0 18px 36px -22px rgba(42, 27, 18, 0.28);
+  transition: box-shadow 320ms ease, transform 420ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.mw-pm-intake__card:focus-within {
+  transform: translateY(-2px);
+  box-shadow: 0 24px 44px -24px rgba(42, 27, 18, 0.34);
+}
+.mw-pm-intake__form-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+  margin: 0 0 clamp(16px, 1.6vw, 22px);
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--c-line);
+}
+.mw-pm-intake__form-mark {
+  width: 7px;
+  height: 7px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+/* ContactForm label/error re-binds for the light card (shared rules untouched). */
+.mw-pm-intake .mw-contact-form .tl-field label { color: var(--c-ink-2); }
+.mw-pm-intake .mw-contact-form .tl-field input::placeholder,
+.mw-pm-intake .mw-contact-form .tl-field textarea::placeholder { color: #8a7868; }
+.mw-pm-intake .mw-contact-form .tl-field input[data-error="1"],
+.mw-pm-intake .mw-contact-form .tl-field textarea[data-error="1"] {
+  border-color: #b23a24;
+  box-shadow: 0 0 0 1px #b23a24;
+}
+.mw-pm-intake .mw-contact-form .tl-field input[data-error="1"]:focus,
+.mw-pm-intake .mw-contact-form .tl-field textarea[data-error="1"]:focus {
+  border-color: #b23a24;
+  box-shadow: 0 0 0 1px #b23a24, 0 0 0 4px rgba(178, 58, 36, 0.16);
+}
+.mw-pm-intake .mw-contact-form .tl-field .err { color: #b23a24; }
+.mw-pm-intake__card-note {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 14px 2px 0;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-ink-3);
+}
+.mw-pm-intake__card-note-mark {
+  width: 6px;
+  height: 6px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+.mw-pm-intake .mw-section-tag { margin-bottom: clamp(20px, 1.5vw, 24px); }
+.mw-pm-intake__title { margin-bottom: clamp(18px, 1.6vw, 26px); }
+.mw-pm-intake__title-em { color: var(--c-accent); font-style: normal; }
+.mw-pm-intake__title-em .mw-stop { background: var(--c-ink); }
+.mw-pm-intake__body {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.1vw, 18px);
+  line-height: 1.6;
+  color: var(--c-ink-2);
+  max-width: 54ch;
+  margin: 0 0 clamp(28px, 2.6vw, 40px);
+}
+.mw-pm-intake__ready-cap {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+  margin: 0 0 8px;
+}
+.mw-pm-intake__ready-cap-mark {
+  width: 6px;
+  height: 6px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+.mw-pm-intake__ready {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.mw-pm-intake__ready-row {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding-block: 13px;
+  border-top: 0.5px solid var(--c-line);
+}
+.mw-pm-intake__ready-row:first-child { border-top: 0; padding-top: 0; }
+.mw-pm-intake__ready-mark {
+  width: 7px;
+  height: 7px;
+  margin-top: 6px;
+  border: 1px solid var(--c-accent);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+.mw-pm-intake__ready-text {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--c-ink-2);
+}
+@media (prefers-reduced-motion: reduce) {
+  .mw-pm-intake__card { transition: none; }
+  .mw-pm-intake__card:focus-within { transform: none; }
+}
+
+/* §7 related rail: shared mw-svc-related-sec shell carries its own surface
+   + padding (mw-pm-rel stays a dormant page hook). */
+
