@@ -113,9 +113,11 @@ export function DeliverySchedule01({ content, config = {} }) {
               <span className="mw-pm-gantt__cap-mark" />
               {content.caption}
             </p>
+            {/* Label before mark: the clay payoff diamond seats on the
+                lane's 100% line, under the final milestone (§3 audit). */}
             <p className="mw-pm-gantt__handover">
-              <span className="mw-pm-gantt__handover-mark" />
               {content.handoverLabel}
+              <span className="mw-pm-gantt__handover-mark" />
             </p>
           </div>
         </div>

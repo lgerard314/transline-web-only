@@ -210,7 +210,7 @@
 .mw-pm-group__media {
   margin: 0;
   justify-self: end;
-  width: min(100%, 460px);
+  width: min(100%, 520px);
 }
 .mw-pm-group__photo {
   display: block;
@@ -544,6 +544,11 @@
   max-width: 58ch;
   margin: 0;
 }
+/* Right-anchor the dispatch column to the inner margin (the page's right
+   pole — PROJECTS GROUP below, CONTACT US above), §5 audit fix. width:
+   max-content sizes the column to the box; the note's max-width:0 +
+   min-width:100% trick caps it to the box width. */
+.mw-pm-esc__dispatch { justify-self: end; width: max-content; }
 .mw-pm-esc__hotline {
   display: inline-flex;
   align-items: center;
@@ -579,7 +584,8 @@
   line-height: 1.5;
   color: rgba(250, 243, 229, 0.65);
   margin: 12px 0 0;
-  max-width: 34ch;
+  max-width: 0;
+  min-width: 100%;
 }
 /* Handoff meter — emergency response ◆ projects group. */
 .mw-pm-esc__meter {

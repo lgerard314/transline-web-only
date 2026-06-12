@@ -43,7 +43,7 @@ export const projectManagement = {
     eyebrow: "Who runs it",
     title: "Engineers who own the outcome",
     lead:
-      "Miller's Projects Group has managed a wide variety of projects over the years — on time and on budget. The engineers who scope your work are the same ones standing on it: one accountable team from estimate to as-builts.",
+      "Miller's Projects Group has managed a wide variety of projects over the years — on time and on budget. The engineers who scope your work are the same ones standing on it: one accountable team from estimate to as‑builts.",
     disciplines: [
       {
         name: "Civil engineers",
@@ -94,7 +94,7 @@ export const projectManagement = {
       },
       {
         name: "Closeout & documentation",
-        body: "As-builts, manifests, and a complete compliance file at handover.",
+        body: "As‑builts, manifests, and a complete compliance file at handover.",
         start: 70,
         span: 30,
       },

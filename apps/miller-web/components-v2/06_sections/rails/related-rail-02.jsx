@@ -9,10 +9,13 @@ import { sectionProps } from "@/components-v2/section-config";
 // hook exists only for page-scoped seam spacing.
 //
 // content: { currentSlug, titleId }
+// config:  { hookClass = "mw-cwc-rel" } — page-scoped seam-spacing hook;
+//          defaults keep the CWC page byte-identical.
 export function RelatedRail02({ content, config = {} }) {
+  const { hookClass = "mw-cwc-rel" } = config;
   return (
     <section
-      className="mw-svc-related-sec mw-cwc-rel"
+      className={`mw-svc-related-sec ${hookClass}`}
       aria-labelledby={content.titleId}
       {...sectionProps(config)}
     >
