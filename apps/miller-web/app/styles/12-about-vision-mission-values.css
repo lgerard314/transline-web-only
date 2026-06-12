@@ -57,7 +57,7 @@
 .mw-vmv-hero__cap {
   position: absolute;
   left: clamp(16px, 4vw, 64px);
-  bottom: 18px;
+  bottom: 32px;
   display: flex;
   align-items: center;
   gap: 9px;
@@ -125,7 +125,7 @@
 /* The marker pass: a clay wash drawn behind the key phrase's lower half,
    width driven by --t (scrub-driven; no transition needed). */
 .mw-vmv-creed__sweep {
-  background-image: linear-gradient(rgba(168, 90, 44, 0.30) 0 0);
+  background-image: linear-gradient(rgba(168, 90, 44, 0.34) 0 0);
   background-repeat: no-repeat;
   background-position: 0 82%;
   background-size: calc(var(--t) * 100%) 46%;
@@ -191,6 +191,7 @@
   line-height: 1.6;
   color: var(--c-ink-2);
   max-width: 52ch;
+  text-wrap: pretty;
   margin: 0 0 clamp(36px, 3.6vw, 56px);
 }
 .mw-vmv-values__grid {
@@ -260,6 +261,7 @@
   color: var(--c-ink-2);
   margin: 0;
   max-width: 52ch;
+  text-wrap: pretty;
 }
 
 /* ── §5 Close — two doors out (careers / contact) ─────────────────
@@ -279,7 +281,7 @@
   font-size: clamp(15px, 1.1vw, 18px);
   line-height: 1.6;
   color: var(--c-ink-2);
-  max-width: 52ch;
+  max-width: 62ch;
   text-wrap: balance;
   margin: 0 0 clamp(32px, 3.2vw, 48px);
 }
@@ -320,6 +322,7 @@
   font-size: 14.5px;
   line-height: 1.5;
   color: var(--c-ink-2);
+  text-wrap: pretty;
   margin: 0 0 10px;
 }
 .mw-vmv-close__door-cta {
