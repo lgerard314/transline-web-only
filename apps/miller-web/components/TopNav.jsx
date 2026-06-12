@@ -132,7 +132,7 @@ export function TopNav() {
 
           <nav className="tl-nav-desktop" aria-label="Primary">
             <ul className="tl-nav-list">
-              {NAV_ITEMS.map((n) => {
+              {NAV_ITEMS.filter((n) => ["services","emergency","treatment","projects"].includes(n.id)).map((n) => {
                 const hasChildren = Array.isArray(n.children) && n.children.length > 0;
                 const isOpen = openSubmenu === n.id;
                 if (!hasChildren) {
@@ -175,7 +175,7 @@ export function TopNav() {
                     {isOpen && (
                       <div
                         className="mw-submenu"
-                        data-variant={n.id === "services" ? "mega" : "drop"}
+                        data-variant={["services","emergency","treatment","projects"].includes(n.id) ? "mega" : "drop"}
                         role="menu"
                       >
                         <ul>
@@ -245,7 +245,7 @@ export function TopNav() {
         {...(menuOpen ? {} : { inert: true })}
       >
         <ul className="tl-mobile-nav__list">
-          {NAV_ITEMS.map((n, i) => (
+          {NAV_ITEMS.filter((n) => ["services","emergency","treatment","projects"].includes(n.id)).map((n, i) => (
             <li key={n.id}>
               <Link href={n.path} aria-current={page === n.id ? "page" : undefined}>
                 <span className="tl-mono tl-mobile-nav__num">{String(i + 1).padStart(2, "0")}</span>

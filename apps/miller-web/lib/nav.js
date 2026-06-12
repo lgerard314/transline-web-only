@@ -12,17 +12,23 @@ export const NAV_ITEMS = [
     label: "Services",
     path: "/industrial-services",
     children: [
-      { label: "Customer Waste Collection", path: "/industrial-services/customer-waste-collection" },
-      { label: "Emergency Response",        path: "/industrial-services/emergency-response" },
-      { label: "Environmental Remediation", path: "/industrial-services/environmental-remediation-services" },
-      { label: "Industrial Cleaning",       path: "/industrial-services/industrial-cleaning" },
-      { label: "Industrial Waste Treatment", path: "/industrial-services/industrial-waste-treatment" },
-      { label: "Project Management",        path: "/industrial-services/project-management" },
-      { label: "Research & Development",    path: "/industrial-services/research-development" },
-      { label: "Specialty Recycling",       path: "/industrial-services/specialty-recycling" },
-      { label: "Stewardship",               path: "/industrial-services/stewardship" },
-      { label: "Vacuum Truck",              path: "/industrial-services/vacuum-truck" },
+      { label: "Waste Collection", path: "/industrial-services/customer-waste-collection" },
     ],
+  },
+  {
+    id: "emergency",
+    label: "Emergency",
+    path: "/industrial-services/emergency-response",
+  },
+  {
+    id: "treatment",
+    label: "Treatment",
+    path: "/industrial-services/industrial-waste-treatment",
+  },
+  {
+    id: "projects",
+    label: "Projects",
+    path: "/industrial-services/project-management",
   },
   {
     id: "about",
