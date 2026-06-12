@@ -820,7 +820,8 @@
 .mw-cwc-fleet__title .mw-stop { color: var(--c-accent); }
 .mw-cwc-fleet__lead {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
-  font-size: clamp(15.5px, 1.15vw, 18px);
+  /* Home register (logan 2026-06-12): header→body paragraph sizes match home. */
+  font-size: clamp(17px, 1.35vw, 21px);
   line-height: 1.55;
   color: rgba(250, 243, 229, 0.91);
   max-width: 56ch;
