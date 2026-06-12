@@ -17,6 +17,12 @@ import { sectionProps } from "@/components-v2/section-config";
 // frozen by their own internal check, fill rests at the first station), and
 // the assembly scrub's writer never attaches (CSS defaults rest settled).
 //
+// Hover-to-select (logan 2026-06-12, desktop only — gated on
+// (hover: hover) and (pointer: fine)): hovering a station pauses the clock
+// and moves the synced state there; leaving the stops list resumes the
+// cycle from the hovered step. One index still drives everything, so the
+// banners, fill, truck, and station states can never drift.
+//
 // Motion contract (M3, playbook §3 — ARRIVAL is scroll-scrubbed, STATE stays
 // on the clock; the two consume different variables so they can never fight):
 //   p = clamp01((viewportBottom − routeTop) / routeHeight) — p hits 1.000
@@ -50,18 +56,38 @@ const TruckGlyph = (
 export function ProcessFlow02({ content, config = {} }) {
   const steps = content.steps;
   const [index, setIndex] = useState(0);
+  // Hover-to-select (logan 2026-06-12): on a hover-capable fine pointer,
+  // hovering a station PAUSES the clock and moves the whole synced state
+  // (banners + fill + truck + station light) to that step; leaving the
+  // stops list resumes cycling from wherever the user left it.
+  const [paused, setPaused] = useState(false);
   const cycle = content.notifications?.length || steps.length;
   const interval = content.interval ?? 3400;
   const secRef = useRef(null);
   const routeRef = useRef(null);
 
   useEffect(() => {
-    if (cycle <= 1) return undefined;
+    if (cycle <= 1 || paused) return undefined;
     const mql = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : null;
     if (mql && mql.matches) return undefined; // frozen at step 0
     const id = setInterval(() => setIndex((i) => (i + 1) % cycle), interval);
     return () => clearInterval(id);
-  }, [cycle, interval]);
+  }, [cycle, interval, paused]);
+
+  const hoverCapable = () =>
+    typeof window !== "undefined" &&
+    window.matchMedia &&
+    window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+  const hoverStep = (i) => {
+    if (!hoverCapable()) return;
+    setPaused(true);
+    setIndex(i);
+  };
+  const hoverEnd = () => {
+    if (!hoverCapable()) return;
+    setPaused(false);
+  };
 
   // M3 assembly writer — see the motion contract above.
   useEffect(() => {
@@ -142,13 +168,14 @@ export function ProcessFlow02({ content, config = {} }) {
             <span className="mw-cwc-flow__rail" aria-hidden="true" />
             <span className="mw-cwc-flow__fill" aria-hidden="true" />
             <span className="mw-cwc-flow__truck" aria-hidden="true">{TruckGlyph}</span>
-            <ol className="mw-cwc-flow__stops">
+            <ol className="mw-cwc-flow__stops" onMouseLeave={hoverEnd}>
               {steps.map((st, i) => (
                 <li
                   key={st.num}
                   className="mw-cwc-flow__stop"
                   data-state={i < index ? "done" : i === index ? "active" : "todo"}
                   style={{ "--thr": (ARRIVE_C0 + i * ARRIVE_STEP - ARRIVE_LEN).toFixed(3) }}
+                  onMouseEnter={() => hoverStep(i)}
                 >
                   {/* Diamond node glyph — sequential mono numerals are banned
                       in the eyebrow register (logan 2026-06-12). */}
