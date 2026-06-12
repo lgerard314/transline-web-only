@@ -16,9 +16,30 @@ The end-to-end workflow for building, redesigning, or converting a page. The hom
 - **Section lineup** with: at most one dark anchor (zero is fine; vary its placement across sibling pages), light hero per canon, the close before the footer never dark, a motion mix budgeted by size (motion.md — mediums are the backbone, smalls everywhere, larges rare and deliberate), and at least one EDGE-SPANNING element (screen edge → opposite body-content boundary; design-language.md) so the page breaks the content column at least once. No new motion mechanics on interior pages — flag novel mechanisms to the user instead.
 - **Imagery list** (see imagery.md) — kick generation off FIRST in background agents; it is always the long pole.
 - **Architecture rules:** thin `page.jsx` composition only; copy in a `lib/content/<page>.js` module; dedicated per-page templates when the repo is template-first; page-scoped CSS namespace that cannot collide with existing token prefixes (grep before naming); shared components composed, never forked; changing a shared template requires the blast-radius check and a default-preserving knob.
-- **"Full page modification" means FULL redo.** When the user asks for a page modification/overhaul, the underlying assumption is that everything on it gets redone — never a light touch-up of the existing sections unless he scopes it narrower himself.
+- **Scope per the scope ladder (next section):** an unscoped redo ask defaults to Rebuild — never assume a lighter tier than logan named.
 - **Identify shared-template sections vs page-unique sections.** Some sections are cross-page templates by nature (e.g. the "other services"/related rail reused by ALL service pages): design those once, harden them, and reuse — page-unique compositions get their own templates. Misclassifying a shared section as page-unique forks it; misclassifying a unique section as shared couples pages that should diverge.
 - If direction is genuinely ambiguous, ask up to ~5 multiple-choice questions UP FRONT — never mid-build.
+
+## The scope ladder — how deep does a redo go?
+
+A page is four nested layers; **opening a layer opens everything beneath it**, so a scope names only the HIGHEST open layer:
+
+| Scope word | Highest open layer | Kept | Redone |
+|---|---|---|---|
+| **Rebuild** | Concept — page architecture | nothing | named concept, section lineup/order, devices, composition, execution |
+| **Recast** | Device — section types | concept, lineup, each section's job | each section's device (chosen from vocabulary.md) and everything below |
+| **Restructure** | Composition — section-internal architecture | lineup + devices | the section's internal layout/geometry + execution; motion contracts RE-DERIVED (the geometry changed) |
+| **Refine** | Execution — treatment | lineup + devices + composition | spacing/type application, motion tuning, hover grammar; anchors re-probed at existing geometry |
+
+- **Default: any unscoped redo ask ("update this page", "full page modification", "make it better") = Rebuild.** Never assume a lighter tier on your own; logan scoping it narrower is the only downgrade path. (This subsumes the old "full page modification means FULL redo" rule.)
+- Scope is set per page with per-section overrides — "Restructure the page, Rebuild the hero" is a valid brief.
+- When logan's words sit between two ADJACENT tiers ("redo the design" — Restructure or Refine?), that's a pre-flight question (below), never a silent pick of the cheaper reading.
+
+## Pre-flight — page/section asks open with a stated reading
+
+For any ask bigger than a specific edit (a page, a whole section, "make X better"), the FIRST response opens with a 2–4 line reading BEFORE any work: (1) the scope tier (page default + per-section overrides), (2) the model plan (judgment roles inherit the session model; mechanical roles sonnet — checklist item 9), (3) per-section audits ON or waived. Then PROCEED — **confirm by stating, not by asking**; logan interrupts if the reading is wrong. Questions are reserved for genuine ambiguity (adjacent-tier scope reads, conflicting instructions) and are batched up front per Phase 1 — never mid-build, never as permission theater on a clear ask.
+
+Per-section audits default ON. Only logan can waive them — the agent NEVER skips an audit on its own initiative ("this section is simple" is the predictable rationalization, not a reason). A waived audit is recorded in that section's commit message so the retro can correlate waived sections with later corrections.
 
 ## Phase 2 — the section loop
 
