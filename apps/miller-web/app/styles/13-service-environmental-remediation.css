@@ -614,8 +614,21 @@
   background: #000;
 }
 .mw-rem2-film__screen .mw-lyt { aspect-ratio: 16 / 9; }
-.mw-rem2-film__reel { list-style: none; margin: 0; padding: 0; border-top: 1px solid rgba(250, 243, 229, 0.18); }
-.mw-rem2-film__row { border-bottom: 1px solid rgba(250, 243, 229, 0.18); }
+/* Clay play button — page-scoped override of the shared facade's walnut
+   square (§6 audit; shared .mw-lyt block untouched for the v1 pages). */
+.mw-rem2-film .mw-lyt__play { background: rgba(168, 90, 44, 0.92); }
+/* Reel rows stretch as equal slots against the screen's full height so
+   the column never dead-ends in bare walnut at wide widths (§6 audit). */
+.mw-rem2-film__reel {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid rgba(250, 243, 229, 0.18);
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+}
+.mw-rem2-film__row { flex: 1; display: flex; border-bottom: 1px solid rgba(250, 243, 229, 0.18); }
 .mw-rem2-film__row-btn {
   display: flex;
   gap: 14px;
@@ -723,7 +736,7 @@
   transform: rotate(45deg);
   flex-shrink: 0;
 }
-.mw-rem2-cta__ask { list-style: none; margin: 0; padding: 0; }
+.mw-rem2-cta__ask { list-style: none; margin: 0; padding: 0; max-width: 60ch; }
 .mw-rem2-cta__ask-row {
   display: flex;
   gap: 14px;
