@@ -6,7 +6,7 @@ import { StopText } from "@/components/StopText";
 import { sectionProps } from "@/components-v2/section-config";
 
 // L3 · stream-index-02 — "who we collect from" as a manifest-style sector
-// index (CWC v2 §5). Nine numbered document rows (mono num · condensed name ·
+// index (CWC v2 §5). Nine document rows (diamond mark · condensed name ·
 // example streams) act as a picker for a large photo that swaps on
 // hover/focus/select, with a default-selected row (the CoverageGallery
 // interaction grammar rebuilt as an accessible document index — rows are real
@@ -40,7 +40,7 @@ export function StreamIndex02({ content, config = {} }) {
           <div className="mw-cwc-index__list-col">
             <ol className="mw-cwc-index__list" data-reveal-stagger>
               {sectors.map((s, i) => (
-                <li key={s.num} className="mw-cwc-index__row" data-active={i === active ? "1" : undefined}>
+                <li key={s.name} className="mw-cwc-index__row" data-active={i === active ? "1" : undefined}>
                   <button
                     type="button"
                     className="mw-cwc-index__row-btn"
@@ -49,7 +49,7 @@ export function StreamIndex02({ content, config = {} }) {
                     onFocus={() => setActive(i)}
                     onClick={() => setActive(i)}
                   >
-                    <span className="mw-cwc-index__num" aria-hidden="true">{s.num}</span>
+                    <span className="mw-cwc-index__mark" aria-hidden="true" />
                     <span className="mw-cwc-index__name">{s.name}</span>
                     <span className="mw-cwc-index__leader" aria-hidden="true" />
                     <span className="mw-cwc-index__streams">{s.streams}</span>

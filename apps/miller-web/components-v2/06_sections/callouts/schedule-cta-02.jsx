@@ -37,8 +37,8 @@ export function ScheduleCta02({ content, config = {} }) {
             </p>
             <ol className="mw-cwc-sched__steps" data-reveal-stagger>
               {content.next.map((n) => (
-                <li key={n.num} className="mw-cwc-sched__step">
-                  <span className="mw-cwc-sched__step-num" aria-hidden="true">{n.num}</span>
+                <li key={n.name} className="mw-cwc-sched__step">
+                  <span className="mw-cwc-sched__step-mark" aria-hidden="true" />
                   <div className="mw-cwc-sched__step-body">
                     <h3 className="mw-cwc-sched__step-name">{n.name}</h3>
                     <p className="mw-cwc-sched__step-text">{n.text}</p>

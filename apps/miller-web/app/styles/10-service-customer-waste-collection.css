@@ -895,7 +895,7 @@
 .mw-cwc-index__row { border-bottom: 1px solid var(--c-line); }
 .mw-cwc-index__row-btn {
   display: grid;
-  grid-template-columns: 44px auto minmax(28px, 1fr) auto;
+  grid-template-columns: 14px auto minmax(28px, 1fr) auto;
   align-items: baseline;
   gap: 14px;
   width: 100%;
@@ -918,15 +918,22 @@
 }
 .mw-cwc-index__row[data-active="1"] .mw-cwc-index__row-btn,
 .mw-cwc-index__row-btn:hover { background: rgba(168, 90, 44, 0.05); }
-.mw-cwc-index__num {
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  color: var(--c-ink-3);
-  transition: color 240ms ease;
+/* Diamond row mark — hollow at rest, clay-filled on the locked row (a
+   non-color active cue alongside the accent name + tinted bg). Sits in the
+   baseline grid, so nudge to optically center on the name's cap height. */
+.mw-cwc-index__mark {
+  align-self: center;
+  width: 8px;
+  height: 8px;
+  border: 1px solid color-mix(in srgb, var(--c-ink) 34%, var(--c-line));
+  background: transparent;
+  transform: rotate(45deg);
+  transition: background 240ms ease, border-color 240ms ease;
 }
-.mw-cwc-index__row[data-active="1"] .mw-cwc-index__num { color: var(--c-accent); }
+.mw-cwc-index__row[data-active="1"] .mw-cwc-index__mark {
+  border-color: var(--c-accent);
+  background: var(--c-accent);
+}
 .mw-cwc-index__name {
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
   font-weight: 600;
@@ -1012,13 +1019,13 @@
   .mw-cwc-index__topbar { animation: none; }
   .mw-cwc-index__photo,
   .mw-cwc-index__row-btn,
-  .mw-cwc-index__num,
+  .mw-cwc-index__mark,
   .mw-cwc-index__name { transition: none; }
 }
 
 @media (max-width: 960px) {
   .mw-cwc-index__grid { grid-template-columns: 1fr; }
-  .mw-cwc-index__row-btn { grid-template-columns: 36px minmax(0, 1fr); }
+  .mw-cwc-index__row-btn { grid-template-columns: 14px minmax(0, 1fr); }
   .mw-cwc-index__leader { display: none; }
   .mw-cwc-index__streams { grid-column: 2; text-align: left; }
 }
@@ -1093,16 +1100,18 @@
 .mw-cwc-sched__step {
   display: flex;
   gap: 16px;
-  align-items: baseline;
+  align-items: flex-start;
   padding-top: 16px;
   border-top: 0.5px solid var(--c-line);
 }
-.mw-cwc-sched__step-num {
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
-  font-size: 13.5px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  color: var(--c-accent);
+/* Clay diamond step mark (replaces the mono 01/02/03 — logan's call: no
+   leading numbers on stacked lists). Offset to sit on the name's cap line. */
+.mw-cwc-sched__step-mark {
+  width: 7px;
+  height: 7px;
+  margin-top: 6px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
   flex-shrink: 0;
 }
 .mw-cwc-sched__step-name {
