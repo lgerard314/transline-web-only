@@ -200,12 +200,13 @@
 /* ── §2 Container lineup — the "any volume" freight spec sheet ────
    Four containers stand on a shared baseline at proportional heights;
    a drafting-legend meta block sits under the line per column. The
-   container photos are generated on this section's exact surface color
-   (--c-bg cream) so they sit directly on the page. The rise scrub is
-   the page's one scroll-tied moment (contract in container-lineup-02.jsx). */
+   container photos are white-background shots seated via multiply blend
+   (white × surface = surface exactly). Surface rule (logan 2026-06-12):
+   body-intro sections sit on --c-surface-warm; --c-bg is reserved for
+   banners/CTA-only/in-section containers. */
 .mw-cwc-line {
   position: relative;
-  background: var(--c-bg);
+  background: var(--c-surface-warm);
   color: var(--c-ink);
   overflow: hidden;
   isolation: isolate;
@@ -289,8 +290,10 @@
   overflow: hidden; /* containers rise from behind the baseline */
   /* The multiply blend below needs a backdrop INSIDE this stacking context
      (__inner's z-index isolates it from the section background) — paint the
-     section surface here so white image backgrounds melt into it. */
-  background: var(--c-bg);
+     section surface here so white image backgrounds melt into it. MUST
+     match the section background exactly (flipped with it to surface-warm,
+     logan's surface rule 2026-06-12). */
+  background: var(--c-surface-warm);
 }
 /* Drafting datum marker — a quiet dashed rule + real-world height at each
    subject's top edge, anchored via the per-size --subj (subject height as a
