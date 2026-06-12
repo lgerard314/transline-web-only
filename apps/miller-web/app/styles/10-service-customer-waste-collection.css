@@ -332,21 +332,26 @@
      drum  1024² top 66 bot 957 → fill 0.8711, below-subject 66px (0.0645)
      tote  1024² top 93 bot 918 → fill 0.8066, below-subject 105px (0.1025)
      van8  1254² top 45 bot 1253 → fill 0.9641, below-subject 0px
-   img factor = (realH × 0.468) / fill; sink = factor × belowFrac seats each
-   SUBJECT'S measured bottom row exactly on the clip edge (= the rule's top) —
-   the previous sinks over-shot by 1–6.5px, truncating every subject's base at
-   the rule (pail base curve and pallet feet visibly flat-cut). Only the
-   canvas's empty/shadow lower margin now hides behind the baseline.
-   --subj = factor × fill = subject height as a fraction of the media zone
-   (puts each datum marker on its subject's top edge). */
-.mw-cwc-line__media[data-size="01"] { --subj: 0.188; }
-.mw-cwc-line__media[data-size="02"] { --subj: 0.422; }
-.mw-cwc-line__media[data-size="03"] { --subj: 0.561; }
-.mw-cwc-line__media[data-size="04"] { --subj: 0.936; }
-.mw-cwc-line__media[data-size="01"] img { height: calc(var(--media-h) * 0.229); margin-bottom: calc(var(--media-h) * -0.0212); }
-.mw-cwc-line__media[data-size="02"] img { height: calc(var(--media-h) * 0.484); margin-bottom: calc(var(--media-h) * -0.0312); }
-.mw-cwc-line__media[data-size="03"] img { height: calc(var(--media-h) * 0.696); margin-bottom: calc(var(--media-h) * -0.0714); }
-.mw-cwc-line__media[data-size="04"] img { height: calc(var(--media-h) * 0.971); margin-bottom: 0; }
+   img factor = (realH × 0.468) / fill. Seating criterion (logan, tightened
+   2026-06-12): each PNG's lowest VISIBLE pixel — lum < 250, baked shadow and
+   anti-aliasing included (visible bottoms: pail 929, drum 960, tote 923,
+   van8 1253) — must sit slightly ABOVE the rule, zero pixels crossing it;
+   sink = factor × visibleBelowFrac − 0.005 lifts every visible bottom
+   0.005 × media-h (~1.7px @1440) clear of the rule (the van8 canvas has no
+   lower margin, so its "sink" is a positive 0.005 lift margin). The previous
+   sinks over-shot by 1–6.5px, truncating every subject's base at the rule
+   (pail base curve and pallet feet visibly flat-cut).
+   --subj = (factor × fill + solid-bottom lift) = subject height + lift as a
+   fraction of the media zone (puts each datum marker on its subject's top
+   edge). */
+.mw-cwc-line__media[data-size="01"] { --subj: 0.193; }
+.mw-cwc-line__media[data-size="02"] { --subj: 0.428; }
+.mw-cwc-line__media[data-size="03"] { --subj: 0.570; }
+.mw-cwc-line__media[data-size="04"] { --subj: 0.941; }
+.mw-cwc-line__media[data-size="01"] img { height: calc(var(--media-h) * 0.229); margin-bottom: calc(var(--media-h) * -0.0160); }
+.mw-cwc-line__media[data-size="02"] img { height: calc(var(--media-h) * 0.484); margin-bottom: calc(var(--media-h) * -0.0248); }
+.mw-cwc-line__media[data-size="03"] img { height: calc(var(--media-h) * 0.696); margin-bottom: calc(var(--media-h) * -0.0630); }
+.mw-cwc-line__media[data-size="04"] img { height: calc(var(--media-h) * 0.971); margin-bottom: calc(var(--media-h) * 0.005); }
 
 .mw-cwc-line__meta { padding-top: 18px; }
 /* Pure technical annotation: a dim dotted drafting leader draws into the
