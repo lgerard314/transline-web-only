@@ -19,7 +19,7 @@ Visit `http://localhost:3000` (or the next free port).
 miller-web is **template-first**: the home page and the redesigned service pages
 are composed from the shared `components-v2` template library, fed by content in
 `lib/content/`. Before building or changing a page or template, read
-**`components-v2/README.md`** (the authoritative build + change guide), browse
+the **template guide** in the website-design skill (`C:\Users\logan\.claude\skills\website-design\references\white-owl-templates.md` — `components-v2/README.md` is a stub), browse
 the live catalog at **`/template-gallery`**, and use **`npm run template-map`** to
 see which pages a template change would affect. Visual baseline: `C:\Users\logan\.claude\skills\website-design\references\white-owl-design-system.md` in the website-design skill (`docs/DESIGN-SYSTEM.md` is a stub).
 
