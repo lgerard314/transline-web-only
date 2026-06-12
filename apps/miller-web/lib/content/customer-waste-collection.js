@@ -236,6 +236,7 @@ export const customerWasteCollection = {
     body:
       "Tell us what you generate and how often. We'll build a pickup cadence that keeps your site compliant and your waste volume under control.",
     formTitle: "Request a pickup schedule",
+    formNote: "Reviewed by a coordinator within one business day",
     nextEyebrow: "What happens next",
     next: [
       {

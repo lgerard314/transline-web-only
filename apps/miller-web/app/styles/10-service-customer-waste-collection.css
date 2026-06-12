@@ -848,6 +848,359 @@
   .mw-cwc-fleet__grid { grid-template-columns: 1fr; gap: 24px; }
 }
 
+/* ── §5 Stream index — sector manifest + hover-swap photo ─────────
+   Nine numbered document rows pick the big photo; the active row is the
+   locked state (CoverageGallery grammar, document-index markup). */
+.mw-cwc-index {
+  position: relative;
+  background: var(--c-bg);
+  color: var(--c-ink);
+  overflow: hidden;
+  isolation: isolate;
+  padding-block: clamp(64px, 6.5vw, 112px);
+}
+.mw-cwc-index::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+.mw-cwc-index__inner { position: relative; z-index: 1; }
+.mw-cwc-index__head { margin-bottom: clamp(44px, 4.4vw, 72px); }
+.mw-cwc-index .mw-section-tag { margin-bottom: clamp(20px, 1.5vw, 24px); }
+.mw-cwc-index__title { max-width: 22ch; }
+.mw-cwc-index__lead {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(15.5px, 1.15vw, 18px);
+  line-height: 1.55;
+  color: var(--c-ink-2);
+  max-width: 62ch;
+  margin: clamp(18px, 1.4vw, 22px) 0 0;
+}
+.mw-cwc-index__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: clamp(36px, 4vw, 84px);
+  /* The media column stretches to bookend the full index (rows + CTA). */
+  align-items: stretch;
+}
+.mw-cwc-index__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--c-line);
+}
+.mw-cwc-index__row { border-bottom: 1px solid var(--c-line); }
+.mw-cwc-index__row-btn {
+  display: grid;
+  grid-template-columns: 44px auto minmax(28px, 1fr) auto;
+  align-items: baseline;
+  gap: 14px;
+  width: 100%;
+  padding: clamp(13px, 1.2vw, 17px) 10px;
+  background: none;
+  border: 0;
+  border-radius: 0; /* squared focus box — house language */
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  transition: background 240ms ease;
+}
+/* Manifest dot leader — spans the row's middle gulf from name to streams. */
+.mw-cwc-index__leader {
+  align-self: center;
+  height: 0;
+  border-bottom: 1px dotted color-mix(in srgb, var(--c-ink) 26%, var(--c-line));
+  transform: translateY(2px);
+}
+.mw-cwc-index__row[data-active="1"] .mw-cwc-index__row-btn,
+.mw-cwc-index__row-btn:hover { background: rgba(168, 90, 44, 0.05); }
+.mw-cwc-index__num {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  color: var(--c-ink-3);
+  transition: color 240ms ease;
+}
+.mw-cwc-index__row[data-active="1"] .mw-cwc-index__num { color: var(--c-accent); }
+.mw-cwc-index__name {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(19px, 1.6vw, 24px);
+  line-height: 1.05;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--c-ink);
+  transition: color 240ms ease;
+}
+.mw-cwc-index__row[data-active="1"] .mw-cwc-index__name { color: var(--c-accent); }
+.mw-cwc-index__streams {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--c-ink-3);
+  text-align: right;
+}
+.mw-cwc-index__actions { margin-top: clamp(22px, 2.2vw, 32px); }
+
+.mw-cwc-index__media {
+  position: relative;
+  margin: 0;
+  min-height: 380px;
+  overflow: hidden;
+  border: 1px solid var(--c-line);
+  background: var(--c-surface-warm);
+}
+/* Clay top bar wipes in on every swap (remounted per active). */
+.mw-cwc-index__topbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  background: var(--c-accent);
+  z-index: 2;
+  transform-origin: left;
+  animation: mw-cwc-index-wipe 600ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+@keyframes mw-cwc-index-wipe {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.mw-cwc-index__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 420ms ease;
+  filter: saturate(0.9) contrast(1.05) sepia(0.1) brightness(1.01);
+}
+.mw-cwc-index__photo[data-active="1"] { opacity: 1; }
+.mw-cwc-index__cap {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 14px;
+  background: var(--c-surface-warm);
+  border: 1px solid var(--c-line);
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+}
+.mw-cwc-index__cap-mark {
+  width: 7px;
+  height: 7px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mw-cwc-index__topbar { animation: none; }
+  .mw-cwc-index__photo,
+  .mw-cwc-index__row-btn,
+  .mw-cwc-index__num,
+  .mw-cwc-index__name { transition: none; }
+}
+
+@media (max-width: 960px) {
+  .mw-cwc-index__grid { grid-template-columns: 1fr; }
+  .mw-cwc-index__row-btn { grid-template-columns: 36px minmax(0, 1fr); }
+  .mw-cwc-index__leader { display: none; }
+  .mw-cwc-index__streams { grid-column: 2; text-align: left; }
+}
+
+/* ── §6 Schedule CTA — light conversion close ─────────────────────
+   Pitch + what-happens-next beside a white form card with a clay top
+   edge (the dark anchor lives in §4, so this close stays warm per §12). */
+.mw-cwc-sched {
+  position: relative;
+  background: var(--c-surface-warm);
+  color: var(--c-ink);
+  overflow: hidden;
+  isolation: isolate;
+  padding-block: clamp(64px, 6.5vw, 112px);
+}
+.mw-cwc-sched::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+.mw-cwc-sched__inner { position: relative; z-index: 1; }
+.mw-cwc-sched__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(380px, 520px);
+  gap: clamp(40px, 5vw, 110px);
+  align-items: start;
+}
+.mw-cwc-sched .mw-section-tag { margin-bottom: clamp(20px, 1.5vw, 24px); }
+.mw-cwc-sched__title { max-width: 16ch; }
+.mw-cwc-sched__title-em {
+  font-style: italic;
+  color: var(--c-accent);
+}
+.mw-cwc-sched__title-em .mw-stop { background: var(--c-ink); }
+.mw-cwc-sched__body {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(15.5px, 1.15vw, 18px);
+  line-height: 1.55;
+  color: var(--c-ink-2);
+  max-width: 52ch;
+  margin: clamp(18px, 1.4vw, 22px) 0 clamp(32px, 3vw, 44px);
+}
+.mw-cwc-sched__next-cap {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 18px;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--c-ink-3);
+}
+.mw-cwc-sched__next-mark {
+  width: 6px;
+  height: 6px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+.mw-cwc-sched__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 16px;
+}
+.mw-cwc-sched__step {
+  display: flex;
+  gap: 16px;
+  align-items: baseline;
+  padding-top: 16px;
+  border-top: 0.5px solid var(--c-line);
+}
+.mw-cwc-sched__step-num {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--c-accent);
+  flex-shrink: 0;
+}
+.mw-cwc-sched__step-name {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(18px, 1.4vw, 21px);
+  line-height: 1.05;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--c-ink);
+  margin: 0 0 6px;
+}
+.mw-cwc-sched__step-text {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--c-ink-2);
+  margin: 0;
+  max-width: 48ch;
+}
+.mw-cwc-sched__card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-top: 3px solid var(--c-accent);
+  padding: clamp(22px, 2.2vw, 32px);
+  box-shadow: 0 18px 36px -22px rgba(42, 27, 18, 0.28);
+  transition: box-shadow 320ms ease, transform 420ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.mw-cwc-sched__card:focus-within {
+  transform: translateY(-2px);
+  box-shadow: 0 24px 44px -24px rgba(42, 27, 18, 0.34);
+}
+.mw-cwc-sched__form-title {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(20px, 1.6vw, 24px);
+  line-height: 1.05;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--c-ink);
+  margin: 0 0 clamp(16px, 1.6vw, 22px);
+}
+/* ScheduleForm's shared styles bind label color to v1's dark glass card —
+   re-bind for this light card (shared 05-service-shared rules untouched). */
+.mw-cwc-sched .mw-sched-form .tl-field label { color: var(--c-ink-2); }
+/* Warm the form's neutrals to the palette: placeholders walnut-derived, the
+   error state a warm brick red at full strength (the brand baseline's cool
+   rose + pastel borders read off-palette here). Box-shadow ring instead of a
+   border-width change so the layout never shifts. */
+.mw-cwc-sched .mw-sched-form .tl-field input::placeholder,
+.mw-cwc-sched .mw-sched-form .tl-field textarea::placeholder { color: #8a7868; }
+.mw-cwc-sched .mw-sched-form .tl-field input[data-error="1"],
+.mw-cwc-sched .mw-sched-form .tl-field textarea[data-error="1"] {
+  border-color: #b23a24;
+  box-shadow: 0 0 0 1px #b23a24;
+}
+/* Invalid wins under focus — the field being fixed must still read invalid. */
+.mw-cwc-sched .mw-sched-form .tl-field input[data-error="1"]:focus,
+.mw-cwc-sched .mw-sched-form .tl-field textarea[data-error="1"]:focus {
+  border-color: #b23a24;
+  box-shadow: 0 0 0 1px #b23a24, 0 0 0 4px rgba(178, 58, 36, 0.16);
+}
+.mw-cwc-sched .mw-sched-form .tl-field .err { color: #b23a24; }
+/* Reassurance line under the card — fills the rest-state gap and closes the
+   pitch ("what happens next" → "and it starts within a day"). */
+.mw-cwc-sched__card-note {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 14px 2px 0;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-ink-3);
+}
+.mw-cwc-sched__card-note-mark {
+  width: 6px;
+  height: 6px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mw-cwc-sched__card { transition: none; }
+  .mw-cwc-sched__card:focus-within { transform: none; }
+}
+
+@media (max-width: 960px) {
+  .mw-cwc-sched__grid { grid-template-columns: 1fr; }
+}
+
+/* §7 related rail: the shared mw-svc-related-sec shell carries its own
+   surface, padding, and border — no page-scoped rules needed (mw-cwc-rel
+   stays as a dormant hook). */
+
 @media (max-width: 960px) {
   .mw-cwc-flow__intro { grid-template-columns: 1fr; }
   .mw-cwc-flow__route { grid-template-columns: 1fr; gap: 22px; }
