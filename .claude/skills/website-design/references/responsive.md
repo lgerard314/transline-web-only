@@ -30,7 +30,20 @@ After restructuring, the verification is FULL: walk every component at the new w
 
 - **Test the in-between widths,** not just round breakpoints: ~430 (Pro Max class), the 600–720 band, portrait tablets (768/834/1024), landscape tablets, AND a fine-pointer ~650×950 window — the user tests devtools responsive mode, which is FINE-pointer, so `pointer: coarse` gates don't fire there. Both pointer types must be sane at every size.
 - **Touch emulation:** `browser.newContext({ viewport, isMobile: true, hasTouch: true })`; remember the element-screenshot gotcha (verification.md).
-- **Capture at REAL device dimensions — width AND height (logan, 2026-06-12).** A width-only or arbitrary-height window hides cut-offs that exist on actual phones ("fits at 390 wide" is meaningless if the judged pose assumed the wrong height). Use true device viewports — 390×844 (iPhone), 430×932 (Pro Max class), 768×1024 / 834×1194 (portrait tablets), landscape equivalents — with `isMobile`/`hasTouch`/`deviceScaleFactor` set, and judge "fits / in position by X" against that real height. Desktop reference frame is 1440×900.
+- **Capture at REAL device dimensions — width AND height (logan, 2026-06-12).** A width-only or arbitrary-height window hides cut-offs that exist on actual phones ("fits at 390 wide" is meaningless if the judged pose assumed the wrong height). Use the viewport-class canonical dimensions (table below) with `isMobile`/`hasTouch`/`deviceScaleFactor` set on coarse classes, and judge "fits / in position by X" against that real height.
+
+## Viewport classes — the scope + approval vocabulary
+
+Scope statements (work-order axis 3), approvals, and reference shots all speak in these named classes — never freeform words like "mobile" (which phone? which orientation?):
+
+| Class | Canonical capture | Also verify at | Pointer / emulation |
+|---|---|---|---|
+| **desktop** | 1440×900 | 1920 wide; the ~650×950 fine-pointer window | fine, no touch |
+| **phone** | 390×844, DPR 3 | 430×932 (Pro Max class), the 600–720 band | coarse — `isMobile`, `hasTouch` |
+| **tablet-portrait** | 834×1194 | 768×1024 | coarse — `isMobile`, `hasTouch` |
+| **tablet-landscape** | 1194×834 | 1024×768 | coarse — `isMobile`, `hasTouch` |
+
+The default class everywhere is **desktop**. Approval is logan's rating per **surface × class** — a page rated on desktop says nothing about its phone class. Reference shots under `approved/` exist ONLY for classes logan has actually rated (capture-on-approval, never for completeness): an unapproved class's screenshot in the approved set teaches the wrong target. Depth (the scope ladder) applies within whichever classes are in scope — "Restructure the timeline for phone" opens composition at the phone class and leaves desktop untouched.
 - **Reveal order follows VISUAL order** when CSS re-orders layout (`order`, `display:contents`, grid placement) — sort animation targets by on-screen position.
 - **Before deleting CSS rules, grep what they were overriding** — old fallback blocks are often only kept inert by later neutralizing rules; deleting the neutralizer re-activates the legacy block (this exact mistake shipped a broken phone layout).
 - **Type on portrait is bigger than you think** — when torn between two sizes, take the larger.
