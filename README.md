@@ -11,7 +11,7 @@ apps/
 
 ## Design system — read before any UI work
 
-`docs/DESIGN-SYSTEM.md` is the locked design/style baseline for **both** apps, and root `CLAUDE.md` carries the auto-loaded non-negotiables + page route structure. There are two finished reference pages every new/converted page must match: the **Miller home page** (overall language + marketing sections, plus the finished header/footer) and the **Miller emergency-response page** (`/industrial-services/emergency-response` — the interior/service-page reference). Read the design doc before building or redesigning anything.
+The locked design/style baseline for **both** apps lives in the website-design skill at `C:\Users\logan\.claude\skills\website-design\references\white-owl-design-system.md` (`docs/DESIGN-SYSTEM.md` is now a stub pointing there), and root `CLAUDE.md` carries the auto-loaded non-negotiables + page route structure. There are two finished reference pages every new/converted page must match: the **Miller home page** (overall language + marketing sections, plus the finished header/footer) and the **Miller emergency-response page** (`/industrial-services/emergency-response` — the interior/service-page reference). Read the skill canon before building or redesigning anything.
 
 ## Develop
 

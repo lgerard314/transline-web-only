@@ -302,7 +302,7 @@ export function MxReveal() {
 - [ ] No double-`<main>` (root owns it); manifest stage labels present in the a11y tree (not all aria-hidden); count-up SR final value announced once; keyboard tab order + visible clay focus rings; TopNav usable over the v2 hero; AA contrast spot-checks on dark sections; landmarks. Fix + commit.
 
 ### Task 7.3: Perf + final
-- [ ] LCP = preloaded hero; CLS ≈ 0 (explicit dims); below-fold lazy; clip-path capped. **Confirm `/v2` is statically rendered** (`next build` lists it static, not `ƒ` dynamic). Lighthouse spot-check if available. Clean up temp capture scripts. Final commit `feat(miller-v2): /v2 award home — verification + polish`. Optionally append a `/v2` note to `docs/DESIGN-SYSTEM.md` only if promoting.
+- [ ] LCP = preloaded hero; CLS ≈ 0 (explicit dims); below-fold lazy; clip-path capped. **Confirm `/v2` is statically rendered** (`next build` lists it static, not `ƒ` dynamic). Lighthouse spot-check if available. Clean up temp capture scripts. Final commit `feat(miller-v2): /v2 award home — verification + polish`. Optionally append a `/v2` note to the design canon (now `references/white-owl-design-system.md` inside the website-design skill — `docs/DESIGN-SYSTEM.md` is a stub) only if promoting.
 
 ---
 

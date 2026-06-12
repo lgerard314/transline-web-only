@@ -21,7 +21,7 @@ are composed from the shared `components-v2` template library, fed by content in
 `lib/content/`. Before building or changing a page or template, read
 **`components-v2/README.md`** (the authoritative build + change guide), browse
 the live catalog at **`/template-gallery`**, and use **`npm run template-map`** to
-see which pages a template change would affect. Visual baseline: `docs/DESIGN-SYSTEM.md`.
+see which pages a template change would affect. Visual baseline: `C:\Users\logan\.claude\skills\website-design\references\white-owl-design-system.md` in the website-design skill (`docs/DESIGN-SYSTEM.md` is a stub).
 
 ## Imagery
 
