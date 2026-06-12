@@ -204,3 +204,199 @@
   .mw-cwc-hero__custody-inner { flex-direction: column; align-items: flex-start; gap: 14px; }
   .mw-cwc-hero__custody-route { width: 100%; }
 }
+
+/* ── §2 Container lineup — the "any volume" freight spec sheet ────
+   Four containers stand on a shared baseline at proportional heights;
+   a drafting-legend meta block sits under the line per column. The
+   container photos are generated on this section's exact surface color
+   (--c-bg cream) so they sit directly on the page. The rise scrub is
+   the page's one scroll-tied moment (contract in container-lineup-02.jsx). */
+.mw-cwc-line {
+  position: relative;
+  background: var(--c-bg);
+  color: var(--c-ink);
+  overflow: hidden;
+  isolation: isolate;
+  padding-block: clamp(64px, 6.5vw, 112px);
+  /* Tallest container (van load) sets the media zone; everything scales from it. */
+  --media-h: clamp(200px, 19vw, 274px);
+}
+.mw-cwc-line::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+.mw-cwc-line__inner { position: relative; z-index: 1; }
+.mw-cwc-line__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: clamp(28px, 4vw, 80px);
+  align-items: start;
+  margin-bottom: clamp(48px, 5vw, 88px);
+}
+.mw-cwc-line__title { max-width: 18ch; }
+.mw-cwc-line__lead {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(15.5px, 1.15vw, 18px);
+  line-height: 1.55;
+  color: var(--c-ink-2);
+  max-width: 46ch;
+  /* Optically registers the lead's cap line with the title's (the eyebrow
+     row above the title is excluded from the alignment on purpose). */
+  margin: calc(clamp(20px, 1.5vw, 24px) + 1.05em) 0 0;
+  justify-self: end;
+}
+
+.mw-cwc-line__row {
+  position: relative;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(24px, 2.6vw, 44px);
+  margin: 0;
+  padding: 0;
+}
+/* The shared baseline — a structural 1px rule the containers stand on. */
+.mw-cwc-line__row::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--media-h);
+  height: 1px;
+  background: color-mix(in srgb, var(--c-ink) 24%, var(--c-line));
+}
+.mw-cwc-line__tier { position: relative; }
+/* Clay tick crossing the baseline at each column start — ruler marks. */
+.mw-cwc-line__tier::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: calc(var(--media-h) - 5px);
+  width: 2px;
+  height: 11px;
+  background: var(--c-accent);
+  z-index: 1;
+}
+.mw-cwc-line__media {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: var(--media-h);
+  overflow: hidden; /* containers rise from behind the baseline */
+  /* The multiply blend below needs a backdrop INSIDE this stacking context
+     (__inner's z-index isolates it from the section background) — paint the
+     section surface here so white image backgrounds melt into it. */
+  background: var(--c-bg);
+}
+/* Drafting datum marker — a quiet dashed rule + real-world height at each
+   subject's top edge, anchored via the per-size --subj (subject height as a
+   fraction of the media zone). Makes the proportional scale provable. */
+.mw-cwc-line__dim {
+  position: absolute;
+  top: calc(var(--media-h) * (1 - var(--subj, 0.7)) - 7px);
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--c-ink-3);
+}
+.mw-cwc-line__dim-rule {
+  width: clamp(20px, 2vw, 34px);
+  height: 0;
+  border-top: 1px dashed color-mix(in srgb, var(--c-ink) 30%, var(--c-line));
+}
+/* multiply-blend melts the photos' pure-white studio backgrounds into the
+   section surface (white × cream = cream exactly — no visible rectangle);
+   objects pick up a faint warm grade, consistent with the house photo LUT. */
+.mw-cwc-line__media img { width: auto; display: block; mix-blend-mode: multiply; }
+/* Proportional heights — calibrated to ONE real-world scale (drum = 88 cm
+   datum): pail 0.4 m, drum 0.9 m, tote 1.2 m, palletized load 1.0 m, each
+   factor = (target subject px) / (subject's fill fraction of its canvas).
+   The negative bottom margins sink each canvas's empty lower margin behind
+   the baseline (overflow clips it) so the SUBJECT stands on the rule.
+   --subj = subject height as a fraction of the media zone (drives the datum
+   marker position). */
+.mw-cwc-line__media[data-size="01"] { --subj: 0.22; }
+.mw-cwc-line__media[data-size="02"] { --subj: 0.53; }
+.mw-cwc-line__media[data-size="03"] { --subj: 0.70; }
+.mw-cwc-line__media[data-size="04"] { --subj: 0.60; }
+.mw-cwc-line__media[data-size="01"] img { height: calc(var(--media-h) * 0.27); margin-bottom: calc(var(--media-h) * -0.045); }
+.mw-cwc-line__media[data-size="02"] img { height: calc(var(--media-h) * 0.61); margin-bottom: calc(var(--media-h) * -0.055); }
+.mw-cwc-line__media[data-size="03"] img { height: calc(var(--media-h) * 0.84); margin-bottom: calc(var(--media-h) * -0.090); }
+.mw-cwc-line__media[data-size="04"] img { height: calc(var(--media-h) * 0.79); margin-bottom: calc(var(--media-h) * -0.105); }
+
+.mw-cwc-line__meta { padding-top: 18px; }
+.mw-cwc-line__id {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: 0 0 6px;
+}
+.mw-cwc-line__num {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  color: var(--c-accent);
+}
+.mw-cwc-line__spec {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  text-transform: uppercase; /* keeps "Bulk" in the drafting register */
+  color: var(--c-ink-2);
+}
+.mw-cwc-line__name {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(22px, 1.9vw, 28px);
+  line-height: 1.04;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--c-ink);
+  margin: 0 0 8px;
+}
+.mw-cwc-line__note {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--c-ink-3);
+  max-width: 30ch;
+  margin: 0;
+}
+
+/* The rise scrub — consumes the writer's --cwcl-p; rests settled by default
+   (var fallback = 1) and under reduced motion (block is gated). Slices run
+   0.33 of the runway from thr = 0.07 + i·0.20 (completions 0.40/0.60/0.80/1.00). */
+@media (prefers-reduced-motion: no-preference) {
+  .mw-cwc-line__tier { --t: clamp(0, calc((var(--cwcl-p, 1) - var(--thr, 0)) / 0.33), 1); }
+  .mw-cwc-line__media img {
+    opacity: min(1, calc(var(--t, 1) * 2.2));
+    transform: translateY(calc((1 - var(--t, 1)) * 64px));
+    will-change: transform;
+  }
+  .mw-cwc-line__dim { opacity: var(--t, 1); }
+}
+
+@media (max-width: 960px) {
+  .mw-cwc-line__head { grid-template-columns: 1fr; align-items: start; }
+  .mw-cwc-line__lead { justify-self: start; }
+  .mw-cwc-line__row { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 48px; }
+  /* Two rows — the single baseline becomes per-tier rules. */
+  .mw-cwc-line__row::after { display: none; }
+  .mw-cwc-line__tier { border-bottom: 0; }
+  .mw-cwc-line__media { border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 24%, var(--c-line)); }
+}
