@@ -30,5 +30,9 @@ npm-debug.log*
 .idea/
 Thumbs.db
 
+# Agent scratch (screenshots, probe scripts) — never committed
+.scratch/
+**/_scratch*/
+
 # Vercel
 .vercel

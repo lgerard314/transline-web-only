@@ -43,7 +43,7 @@ Spawned subagents (builders, auditors, capture agents) do not automatically load
 
 ## Auditor briefing template
 
-Give every section auditor: the exact route + section selector; the design intent AND motion contract in words; the verification protocol (own fresh headless browser against the already-running shared dev server — NEVER start/kill/restart it; own scratch dir; close the browser after); what to capture (rest + interaction states + seams + 2–3 widths, and for motion the mid-scrub frames + anchor frame); the LOCKED-RULES list of deliberate patterns they must not flag; required return format (verdict + per-finding severity/pixel-evidence/concrete-fix/screenshot-path). Tell them to READ every screenshot, not just probe.
+Give every section auditor: the exact route + section selector; the design intent AND motion contract in words; the verification protocol (own fresh headless browser against the already-running shared dev server — NEVER start/kill/restart it; own subfolder under the gitignored `.scratch/` root; close the browser after); what to capture (rest + interaction states + seams + 2–3 widths, and for motion the mid-scrub frames + anchor frame); the LOCKED-RULES list of deliberate patterns they must not flag; required return format (verdict + per-finding severity/pixel-evidence/concrete-fix/screenshot-path). Tell them to READ every screenshot, not just probe.
 
 Common locked patterns to include (extend per repo): sentence-case body-CTA labels; inverted stamp colors on accent text; the dev-overlay badge in screenshots; per-field error messages; small mono text reading blue-ish in downscaled screenshots (subpixel artifact — verify computed color before claiming a palette violation).
 
