@@ -26,7 +26,7 @@ An external reference is a **structure-and-motion donor, not a design.** You tak
 ## Re-brand, don't recolor
 
 - **Palette is load-bearing — warm clay only.** No blue/teal/violet/slate survives. Token names are historical: `--c-navy` and `--c-blue` are *browns* (trust the hex). Signature accent is `--c-accent` (terracotta).
-- **Add the motifs** where they fit: `mw-section-tag` (rotated-diamond eyebrow), `mw-stop` (clay period glyph on headings — a font `"."`, never a drawn box), the `→` action arrow, numbered "article" framing, the faint 49° paper-grain wash.
+- **Add the motifs** where they fit: `mw-section-tag` (rotated-diamond eyebrow), `mw-stop` (clay period glyph on headings — a font `"."`, never a drawn box), the `→` action arrow, worded document "article" captions (never bare `01/02` item numerals — banned in every composition; diamond marks take that slot), the faint 49° paper-grain wash.
 - **Generic copy is not content.** "Ship faster than ever / all-in-one platform for modern teams" must become real Miller/TL49 copy, or be flagged to the user — never shipped as SaaS filler. Copy lives in `lib/content/`, not inline.
 - Every animation ships a `prefers-reduced-motion` off-switch; prefer the existing `data-reveal` / `data-reveal-stagger` for entrances rather than inventing keyframes.
 
