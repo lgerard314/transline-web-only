@@ -19,41 +19,38 @@
   z-index: 0;
   background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
 }
-/* Faint tiled dumptruck wash — the VBEC truck stamped across the band on the house
-   ~49° diagonal, alternating row direction (built in multi-column-cta-01.jsx via
-   <defs>/<use>). HALF the VBEC stage's prominence: the same --fac2-truck-* recipe the
-   VBEC stage uses, at 0.5 opacity. Sits with the grain (z 0), under the content (z 1),
-   on every viewport. */
+/* Faint tiled truck wash. Two transparent PNG layers are generated from the local
+   truck SVGs so scroll only moves composited image layers, not hundreds of live
+   vector stamps. */
 .mw-final__wash {
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
   opacity: 0.5;
-  --fac2-truck-base: var(--c-bg);
-  --fac2-truck-mid: color-mix(in srgb, var(--c-bg) 80%, var(--c-line));
-  --fac2-truck-shade: color-mix(in srgb, var(--c-bg) 62%, var(--c-line));
-  --fac2-truck-stroke: color-mix(in srgb, var(--c-ink) 26%, var(--c-line));
 }
-/* Scroll-parallax two-way traffic: <FinalWashDrive> maps the section's viewport
-   travel to --wash-drive (−1..1, 0 when centred). Each lane is its own <svg> LAYER,
-   translated in SCREEN space along the ±30° heading vector (cos −30°, sin −30°) =
-   (0.866, −0.5) × 130px travel — left-facing trucks roll down-left, flipped trucks
-   roll up-right, every driver heading straight. translate3d on the svg ELEMENT is
-   GPU-composited (no per-frame repaint of the 280 trucks — the in-svg group
-   transform this replaces was visibly choppy). Layers are oversized 140px so the
-   travel never exposes an edge. Direct scrub: glued to scroll, reversible. */
+/* Scroll-parallax two-way traffic: <FinalWashDrive> writes translate3d directly to
+   each image layer. Layers are oversized so the +/- travel never exposes an edge. */
 .mw-final__wash-layer {
   position: absolute;
-  inset: -140px;
-  width: calc(100% + 280px);
-  height: calc(100% + 280px);
+  inset: -160px;
+  width: calc(100% + 320px);
+  height: calc(100% + 320px);
+  display: block;
+  max-width: none;
+  object-fit: cover;
+  pointer-events: none;
+  transform: translate3d(0, 0, 0);
+  user-select: none;
+}
+.mw-final__wash[data-wash-active="true"] .mw-final__wash-layer {
   will-change: transform;
 }
-.mw-final__wash-layer--rtl { transform: translate3d(calc(var(--wash-drive, 0) * -113px), calc(var(--wash-drive, 0) * 65px), 0); }
-.mw-final__wash-layer--ltr { transform: translate3d(calc(var(--wash-drive, 0) * 113px), calc(var(--wash-drive, 0) * -65px), 0); }
 @media (prefers-reduced-motion: reduce) {
-  .mw-final__wash-layer { transform: none; will-change: auto; }
+  .mw-final__wash-layer {
+    transform: none !important;
+    will-change: auto !important;
+  }
 }
 /* Single centred content column (the old truck-photo / logomark side columns are
    retired — logan 2026-06-11; the wash is the section's only graphic now). */
@@ -142,5 +139,4 @@
 .mw-final .mw-cta__num {
   color: var(--c-ink);
 }
-
 
