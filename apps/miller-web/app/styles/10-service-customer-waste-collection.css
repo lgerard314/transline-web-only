@@ -28,6 +28,21 @@
   background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
 }
 .mw-cwc-hero__main { position: relative; }
+
+/* ── Section-title register = the RENDERED home page (logan 2026-06-12:
+   the page's headers read collectively way smaller than home). The shared
+   .mw-section-title primitive (clamp(32px,3.4vw,60px) → 48.96 @1440) lags
+   the home foundation, whose sections render 57.6–72px (sectors 4vw/72,
+   roster ~66, final CTA 72). Page-scoped so the other interior pages
+   (still on the primitive) are untouched until their own passes. */
+.mw-cwc-line__title,
+.mw-cwc-flow__title,
+.mw-cwc-fleet__title,
+.mw-cwc-index__title,
+.mw-cwc-sched__title {
+  font-size: clamp(36px, 4vw, 72px);
+  line-height: 1;
+}
 .mw-cwc-hero__inner {
   position: relative;
   z-index: 1;
