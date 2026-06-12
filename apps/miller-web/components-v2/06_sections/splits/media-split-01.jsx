@@ -679,9 +679,11 @@ export function MediaSplit01({ content, config = {} }) {
                       const detail = capDetail(cap, capabilityLines, i);
                       return (
                         <li className="mw-capalt__item" key={`alt-${name || i}`} style={{ "--ci": i, "--alt-bg": CAP_TONES[i] }}>
-                          <span className="mw-capalt__dia" aria-hidden="true">
-                            <span className="mw-capalt__dia-num">{String(i + 1).padStart(2, "0")}</span>
-                          </span>
+                          {/* Quiet mineral plate — no index numeral (banned in the eyebrow
+                              register) and no orphaned diamond in its place: the diamond is
+                              reserved for eyebrows / diagram nodes / state markers, and these
+                              plates are non-interactive, so typography carries the row (the
+                              CWC fleet-plate resolution, logan + consult 2026-06-12). */}
                           <span className="mw-capalt__body">
                             <span className="mw-capalt__name">{capSoftWrap(name)}</span>
                             {detail ? <span className="mw-capalt__detail">{detail}</span> : null}

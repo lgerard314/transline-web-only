@@ -545,9 +545,10 @@
 
   /* ── CAPABILITY RAIL — a thumb-scrollable strip of mineral-toned capability
      plates that BLEEDS FROM THE LEFT SCREEN EDGE (the photos bleed right; the two
-     strips bookend the column). Each plate: a hollow cream diamond with the index,
-     the capability name, and its one-line detail — the lattice's tones and grammar
-     re-cut as cards. MOTION: the rail slides in FROM THE LEFT on the scrubbed
+     strips bookend the column). Each plate: the capability name and its one-line
+     detail seated at the foot — the lattice's tones and grammar re-cut as quiet
+     cards (no index numeral, no orphaned diamond — the CWC fleet-plate resolution,
+     logan + consult 2026-06-12). MOTION: the rail slides in FROM THE LEFT on the scrubbed
      --capalt-p (from the flow writer), each card arriving on its own slice
      (--t = clamp((p − thr)·3.2)); after the entrance, the strip is snap-scrollable
      with the next card peeking on the right. Replaces the vertical spine — the
@@ -615,7 +616,8 @@
     scroll-padding-inline: calc(var(--bleed-right) + 2px + var(--strip-pad)) 0;
   }
   .mw-capalt__list::-webkit-scrollbar { display: none; }
-  /* Mineral plate: tone background, index diamond top-left, name + detail seated low. */
+  /* Mineral plate: tone background, name + detail seated low (markless — typography
+     carries the row). */
   .mw-capalt__item {
     /* Slices spread across the WHOLE scrub and swept LEFT→RIGHT in the reversed run:
        card 07 (leftmost, --ci 6) arrives first, card 01 lands LAST — flush at the
@@ -627,32 +629,12 @@
     scroll-snap-align: start;
     display: flex;
     flex-direction: column;
-    gap: 12px;
     min-height: clamp(150px, 37vw, 192px);
     padding: clamp(14px, 3.6vw, 20px);
     background: var(--alt-bg, var(--c-accent));
     box-shadow: 0 16px 32px -20px rgba(33, 20, 12, 0.55);
     opacity: var(--t);
     transform: translateX(calc((1 - var(--t)) * -36px));
-  }
-  .mw-capalt__dia {
-    width: 28px;
-    height: 28px;
-    margin: 4px 0 0 4px;
-    border-radius: 4px;
-    border: 1.5px solid rgba(247, 241, 230, 0.6);
-    display: grid;
-    place-items: center;
-    transform: rotate(45deg);
-    flex: none;
-  }
-  .mw-capalt__dia-num {
-    font-family: var(--font-plex-mono), ui-monospace, monospace;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    color: var(--c-bg);
-    transform: rotate(-45deg); /* keep the index upright inside the diamond */
   }
   .mw-capalt__body {
     display: flex;
