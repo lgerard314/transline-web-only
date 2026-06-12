@@ -760,11 +760,10 @@
   background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-dark) 38px, var(--c-grain-on-dark) 39px);
 }
 .mw-cwc-fleet__inner { position: relative; z-index: 1; }
+/* Single-column head (logan 2026-06-12: the lead floating right of the
+   header on the walnut read out of place) — standard stacked opener:
+   eyebrow → title → lead, like the §3/§5 heads. */
 .mw-cwc-fleet__head {
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
-  gap: clamp(28px, 4vw, 80px);
-  align-items: start;
   margin-bottom: clamp(48px, 5vw, 80px);
 }
 .mw-cwc-fleet .mw-section-tag { margin-bottom: clamp(20px, 1.5vw, 24px); }
@@ -779,11 +778,10 @@
   font-size: clamp(15.5px, 1.15vw, 18px);
   line-height: 1.55;
   color: rgba(250, 243, 229, 0.91);
-  max-width: 46ch;
-  /* Cap-line registration with the title (same derivation as the §2 lead,
-     audit-corrected 0.9em → 1.33em). */
-  margin: calc(clamp(20px, 1.5vw, 24px) + 1.33em) 0 0;
-  justify-self: end;
+  max-width: 56ch;
+  text-wrap: pretty;
+  /* Uniform header→intro gap (home foundation value). */
+  margin: clamp(18px, 1.6vw, 24px) 0 0;
 }
 
 /* The page's EDGE-SPANNING element (design-language: break the column at
@@ -884,13 +882,11 @@
   margin: 0;
   white-space: nowrap;
 }
-/* Caption register (logan's option 1, 2026-06-12): one quiet line directly
-   under the spec line — subordinated, not a floating paragraph. */
 .mw-cwc-fleet__body {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
-  font-size: 13.5px;
-  line-height: 1.45;
-  color: var(--c-ink-3);
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--c-ink-2);
   margin: 0;
 }
 /* (Fleet footnote removed 2026-06-12 — it was a trailing pseudo-eyebrow;
@@ -915,8 +911,6 @@
    the hook never attaches, so the photos rest plain — nothing to disable.) */
 
 @media (max-width: 960px) {
-  .mw-cwc-fleet__head { grid-template-columns: 1fr; }
-  .mw-cwc-fleet__lead { justify-self: start; margin-top: 0; }
   .mw-cwc-fleet__grid { grid-template-columns: 1fr; gap: 24px; }
 }
 
