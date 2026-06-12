@@ -253,26 +253,23 @@
 /* Uniform eyebrow→header gap (home foundation value — this rule was missing
    here, leaving the §2 eyebrow glued 0.5px off the title). */
 .mw-cwc-line .mw-section-tag { margin-bottom: clamp(20px, 1.5vw, 24px); }
+/* Centered head stack (owner 2026-06-12): eyebrow → title → lead, the home
+   sectors intro grammar (.mw-secd--int centers title/lead via margin-inline
+   auto). Replaces the old 2-col head grid + cap-line registration calc. */
 .mw-cwc-line__head {
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
-  gap: clamp(28px, 4vw, 80px);
-  align-items: start;
+  text-align: center;
   margin-bottom: clamp(48px, 5vw, 88px);
 }
-.mw-cwc-line__title { max-width: 18ch; }
+.mw-cwc-line__title { max-width: 18ch; margin-inline: auto; }
 .mw-cwc-line__lead {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
-  font-size: clamp(15.5px, 1.15vw, 18px);
+  /* Home register (owner: header→body sizes must match home). */
+  font-size: clamp(17px, 1.35vw, 21px);
   line-height: 1.55;
   color: var(--c-ink-2);
-  max-width: 46ch;
-  /* Optically registers the lead's first CAP line with the title's cap line:
-     offset = eyebrow row + the uniform eyebrow→header margin + the cap-inset
-     difference between the two fonts. 1.33em set from the §2 audit's dsf=2
-     pixel scan (0.9em left the lead's caps 7px above the title's). */
-  margin: calc(clamp(20px, 1.5vw, 24px) + 1.33em) 0 0;
-  justify-self: end;
+  max-width: 60ch;
+  /* Uniform header→intro gap. */
+  margin: clamp(18px, 1.6vw, 24px) auto 0;
 }
 
 .mw-cwc-line__row {
@@ -428,14 +425,15 @@
   margin: 0;
 }
 
-/* The rise scrub — consumes the writer's --cwcl-p (p = 1.000 exactly when
-   the SECTION bottom meets the viewport bottom; contract in
-   container-lineup-02.jsx). Slice thresholds are GEOMETRY-DERIVED by the
-   writer: --cwcl-thr0 = the frame where the baseline rule crosses the
-   viewport bottom (audit fix — fixed early slices played the entire pail
-   rise below the fold), --cwcl-step spreads the remaining runway so the
-   last completion lands at exactly p = 1.000. Rests settled by default
-   (var fallbacks) and under reduced motion (block is gated). */
+/* The rise scrub — consumes the writer's --cwcl-p (p anchored to the
+   SECTION rect; contract in container-lineup-02.jsx). Slice thresholds are
+   GEOMETRY-DERIVED by the writer: --cwcl-thr0 = the frame where the baseline
+   rule crosses the viewport bottom (audit fix — fixed early slices played
+   the entire pail rise below the fold), --cwcl-step spreads the runway so
+   the LAST completion (van load) lands at exactly p = pEnd — the frame where
+   the bottom of tier 4's meta wrapper crosses the viewport bottom (owner
+   re-anchor 2026-06-12). Rests settled by default (var fallbacks) and under
+   reduced motion (block is gated). */
 @media (prefers-reduced-motion: no-preference) {
   .mw-cwc-line__tier {
     --thr: calc(var(--cwcl-thr0, 0) + var(--i, 0) * var(--cwcl-step, 0.2));
@@ -456,8 +454,7 @@
      only white margin may clip). All factors/sinks/--subj are fractions of
      --media-h, so the proportional scale survives unchanged. */
   .mw-cwc-line { --media-h: clamp(160px, 40vw, 300px); }
-  .mw-cwc-line__head { grid-template-columns: 1fr; align-items: start; }
-  .mw-cwc-line__lead { justify-self: start; }
+  /* (Head is a centered stack at every width now — no per-width override.) */
   .mw-cwc-line__row { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 48px; }
   /* Two rows — the single baseline becomes per-tier rules. */
   .mw-cwc-line__row::after { display: none; }
