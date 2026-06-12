@@ -11,23 +11,28 @@ import { sectionProps } from "@/components-v2/section-config";
 // this page only (the v1 template still serves nothing else, but is left
 // untouched per the template-change protocol).
 //
-// Motion contract (playbook §3, this page's one scroll-tied moment):
-//   progress source — the band's rect vs the viewport;
-//   p = 0 when the band's top crosses the viewport bottom (band entering);
-//   p = 1 EXACTLY when the band's bottom meets the viewport bottom (band fully
-//   visible). Four per-item slices spread across the VISIBLE runway — slices
-//   start at thr = 0.07 + i·0.20 and run 0.33 long, so completions land at
-//   0.40 / 0.60 / 0.80 / 1.00: assembly is visibly in progress the whole
-//   approach and the last container settles exactly at p = 1.000. Containers rise from behind the
-//   baseline (media zone clips). Writer: rAF-coalesced passive scroll listener
-//   (recipe §4.2) + IO-requeue (§4.3). Reduced motion / no-JS: var(--cwcl-p, 1)
-//   defaults rest everything settled, and the CSS transform is additionally
-//   gated to (prefers-reduced-motion: no-preference).
+// Motion contract (playbook §3, M1 — audit-restaged 2026-06-12):
+//   progress source — the SECTION's rect vs the viewport;
+//   p = clamp01((viewportBottom − secTop) / secHeight) — p hits 1.000 EXACTLY
+//   when the section's bottom meets the viewport bottom. The containers rise
+//   from BEHIND the baseline rule (media zone clips), so a rise is only
+//   perceptible once the baseline itself is above the fold — the original
+//   fixed slices (completions from p=0.40) played the entire pail rise below
+//   the fold ("perceptible or it doesn't exist"). Thresholds are therefore
+//   DERIVED FROM GEOMETRY each frame: thr0 = (baselineY − secTop)/secHeight
+//   (slice 0 begins the instant the baseline crosses the viewport bottom),
+//   and step = (1 − thr0 − LEN)/(N−1) spreads the remaining visible runway
+//   so completions land evenly with the LAST at exactly p = 1.000. Every
+//   pixel of every rise happens on-screen, and assembly is visibly in
+//   progress from baseline-crossing to the anchor frame. Writer:
+//   rAF-coalesced passive scroll listener (recipe §4.2) + IO-requeue (§4.3).
+//   Reduced motion / no-JS: var fallbacks rest everything settled, and the
+//   CSS transform is additionally gated to (prefers-reduced-motion:
+//   no-preference).
 //
 // content: { titleId, eyebrow, title, lead, tiers[{ num, name, spec, image, note }] }
 // config:  standard sectionProps passthrough.
-const SLICE_START = 0.07;
-const SLICE_STEP = 0.2;
+const SLICE_LEN = 0.1;
 
 export function ContainerLineup02({ content, config = {} }) {
   const secRef = useRef(null);
@@ -40,13 +45,26 @@ export function ContainerLineup02({ content, config = {} }) {
     const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (mql.matches) return undefined; // CSS default rests settled
 
+    const tierCount = band.querySelectorAll(".mw-cwc-line__tier").length || 4;
     let raf = 0;
     const write = () => {
       raf = 0;
       const vh = window.innerHeight;
-      const r = band.getBoundingClientRect();
+      const r = sec.getBoundingClientRect();
       const p = Math.min(1, Math.max(0, (vh - r.top) / r.height));
       sec.style.setProperty("--cwcl-p", p.toFixed(4));
+      // Geometry-derived slice plan (see the contract above). The baseline
+      // is the bottom of any media box; its section-relative fraction is
+      // scroll-invariant, so this is cheap to recompute per write (and
+      // self-heals across resizes/font swaps).
+      const media = band.querySelector(".mw-cwc-line__media");
+      if (media) {
+        const thr0 = Math.max(0, Math.min(0.9, (media.getBoundingClientRect().bottom - r.top) / r.height));
+        const step = Math.max(0, (1 - thr0 - SLICE_LEN) / (tierCount - 1));
+        sec.style.setProperty("--cwcl-thr0", thr0.toFixed(4));
+        sec.style.setProperty("--cwcl-step", step.toFixed(4));
+        sec.style.setProperty("--cwcl-len", SLICE_LEN.toFixed(2));
+      }
     };
     const queue = () => {
       if (!raf) raf = requestAnimationFrame(write);
@@ -95,7 +113,7 @@ export function ContainerLineup02({ content, config = {} }) {
               <li
                 key={t.num}
                 className="mw-cwc-line__tier"
-                style={{ "--thr": (SLICE_START + i * SLICE_STEP).toFixed(2) }}
+                style={{ "--i": i }}
               >
                 <div className="mw-cwc-line__media" data-size={t.num} aria-hidden="true">
                   <img src={t.image} alt="" loading="lazy" />
