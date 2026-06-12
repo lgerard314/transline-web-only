@@ -14,16 +14,19 @@ import { sectionProps } from "@/components-v2/section-config";
 // re-bound for the light card in this page's CSS). The card's focus-within
 // lift lives on the inner card, never on the scrubbed wrapper.
 //
-// Motion contract (logan 2026-06-12): the form card SHIFTS UP ON SCROLL
-// until it aligns with the left column — p = clamp01((viewportBottom −
-// gridTop) / gridHeight); the card column rides translateY = (1 − p) ·
-// clamp(64px, 8vw, 112px) below its slot and lands flush with the left
-// column's top EXACTLY when the grid's bottom meets the viewport bottom.
-// Writer: rAF-coalesced passive scroll listener (§4.2) + IO-requeue
-// (§4.3). The wrapper's old data-reveal is retired (the scrub IS its
-// entrance — a reveal's fill-mode would fight the var-driven transform).
-// No-JS / reduced motion: var(--cwcs-p, 1) defaults rest aligned;
-// the transform is gated to (prefers-reduced-motion: no-preference).
+// Motion contract (logan 2026-06-12, rev 2 — centered destination): the
+// form card SHIFTS UP ON SCROLL into a VERTICALLY CENTERED pose against
+// the left column — the base layout carries the destination (align-self:
+// center on the form column, so formColCenterY == leftColCenterY at rest);
+// p = clamp01((viewportBottom − gridTop) / gridHeight); the card column
+// rides translateY = (1 − p) · clamp(64px, 8vw, 112px) BELOW that centered
+// slot and lands AT it EXACTLY when the grid's bottom meets the viewport
+// bottom. Writer: rAF-coalesced passive scroll listener (§4.2) +
+// IO-requeue (§4.3). The wrapper's old data-reveal is retired (the scrub
+// IS its entrance — a reveal's fill-mode would fight the var-driven
+// transform). No-JS / reduced motion: var(--cwcs-p, 1) defaults rest
+// CENTERED + settled; the transform is gated to
+// (prefers-reduced-motion: no-preference).
 //
 // content: { titleId, eyebrow, title, titleEm, body, formTitle, nextEyebrow,
 //            next[{ num, name, text }] }
@@ -98,7 +101,7 @@ export function ScheduleCta02({ content, config = {} }) {
             </ol>
           </div>
 
-          {/* No data-reveal: the rise-into-alignment scrub IS this column's
+          {/* No data-reveal: the rise-into-center scrub IS this column's
               entrance. The focus-within lift stays on the inner card. */}
           <div className="mw-cwc-sched__form-col">
             <div className="mw-cwc-sched__card">

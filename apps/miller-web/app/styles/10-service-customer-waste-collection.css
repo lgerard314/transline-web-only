@@ -1204,6 +1204,11 @@
   gap: clamp(40px, 5vw, 110px);
   align-items: start;
 }
+/* Centered destination (logan 2026-06-12): the card's SETTLED pose is
+   vertically centered against the left column — align-self carries the rest
+   state, so no-JS and reduced motion land centered with zero transform; the
+   scrub rides DOWN from this pose and returns to it exactly at p = 1. */
+.mw-cwc-sched__form-col { align-self: center; }
 .mw-cwc-sched .mw-section-tag { margin-bottom: clamp(20px, 1.5vw, 24px); }
 .mw-cwc-sched__title { max-width: 16ch; }
 .mw-cwc-sched__title-em {
@@ -1213,18 +1218,20 @@
 .mw-cwc-sched__title-em .mw-stop { color: var(--c-ink); }
 .mw-cwc-sched__body {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
-  font-size: clamp(15.5px, 1.15vw, 18px);
+  /* Home lead register (logan 2026-06-12: the section's body type ran small). */
+  font-size: clamp(17px, 1.35vw, 21px);
   line-height: 1.55;
   color: var(--c-ink-2);
-  max-width: 52ch;
+  max-width: 48ch;
   text-wrap: pretty;
-  /* Uniform header→intro gap (home foundation value). */
-  margin: clamp(18px, 1.6vw, 24px) 0 clamp(32px, 3vw, 44px);
+  /* Uniform header→intro gap (home foundation value); bottom gap grew with
+     the type so the body→caption seam still reads as a deliberate beat. */
+  margin: clamp(18px, 1.6vw, 24px) 0 clamp(36px, 3.4vw, 52px);
 }
 /* Column caption — mono caps only, no diamond (it made the section read as
    opening twice — consult, 2026-06-12). */
 .mw-cwc-sched__next-cap {
-  margin: 0 0 18px;
+  margin: 0 0 20px;
   font-family: var(--font-plex-mono), ui-monospace, monospace;
   font-size: 11px;
   font-weight: 500;
@@ -1237,47 +1244,51 @@
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 16px;
+  gap: 18px;
 }
 .mw-cwc-sched__step {
   display: flex;
   gap: 16px;
   align-items: flex-start;
-  padding-top: 16px;
+  padding-top: 18px;
   border-top: 0.5px solid var(--c-line);
 }
-/* Clay diamond step mark (replaces the mono 01/02/03 — logan's call: no
-   leading numbers on stacked lists). Offset to sit on the name's cap line. */
+/* Diamond step mark (replaces the mono 01/02/03 — logan's call: no leading
+   numbers on stacked lists). STATIC mark → hollow border-only, per the
+   static-diamond rule (filled = eyebrow/hover states only). Offset to sit
+   on the name's cap line. */
 .mw-cwc-sched__step-mark {
   width: 7px;
   height: 7px;
-  margin-top: 6px;
-  background: var(--c-accent);
+  margin-top: 8px;
+  background: transparent;
+  border: 1px solid var(--c-accent);
   transform: rotate(45deg);
   flex-shrink: 0;
 }
 .mw-cwc-sched__step-name {
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
   font-weight: 600;
-  font-size: clamp(18px, 1.4vw, 21px);
+  font-size: clamp(20px, 1.6vw, 24px);
   line-height: 1.05;
   letter-spacing: 0.005em;
   text-transform: uppercase;
   color: var(--c-ink);
-  margin: 0 0 6px;
+  margin: 0 0 8px;
 }
 .mw-cwc-sched__step-text {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
-  font-size: 14.5px;
+  font-size: 16px;
   line-height: 1.5;
   color: var(--c-ink-2);
   margin: 0;
   max-width: 48ch;
 }
-/* Rise-into-alignment scrub (logan 2026-06-12, contract in
-   schedule-cta-02.jsx): the form column rides below its slot and lands
-   flush with the left column's top exactly at the grid-bottom anchor.
-   Defaults rest aligned for no-JS; reduced motion never sees it. */
+/* Rise-into-center scrub (logan 2026-06-12, contract in
+   schedule-cta-02.jsx): the form column rides below its CENTERED slot and
+   lands vertically centered against the left column exactly at the
+   grid-bottom anchor. Defaults rest centered for no-JS; reduced motion
+   never sees the transform. */
 @media (prefers-reduced-motion: no-preference) {
   .mw-cwc-sched__form-col {
     transform: translate3d(0, calc((1 - var(--cwcs-p, 1)) * clamp(64px, 8vw, 112px)), 0);
@@ -1288,7 +1299,7 @@
   background: var(--c-surface);
   border: 1px solid var(--c-line);
   border-top: 3px solid var(--c-accent);
-  padding: clamp(22px, 2.2vw, 32px);
+  padding: clamp(26px, 2.4vw, 36px);
   box-shadow: 0 18px 36px -22px rgba(42, 27, 18, 0.28);
   transition: box-shadow 320ms ease, transform 420ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
@@ -1299,12 +1310,12 @@
 .mw-cwc-sched__form-title {
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
   font-weight: 600;
-  font-size: clamp(20px, 1.6vw, 24px);
+  font-size: clamp(24px, 1.9vw, 30px);
   line-height: 1.05;
   letter-spacing: 0.005em;
   text-transform: uppercase;
   color: var(--c-ink);
-  margin: 0 0 clamp(16px, 1.6vw, 22px);
+  margin: 0 0 clamp(18px, 1.8vw, 26px);
 }
 /* ScheduleForm's shared styles bind label color to v1's dark glass card —
    re-bind for this light card (shared 05-service-shared rules untouched). */
