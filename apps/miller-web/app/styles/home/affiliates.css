@@ -28,8 +28,18 @@
      affiliates scroll the opposite way to before. Seamless because the
      track is a doubled item list. */
   animation-direction: normal;
-  gap: clamp(48px, 5vw, 88px);
-  padding: clamp(24px, 2.4vw, 38px) 0;
+  /* The brand default (35s ≈ 46px/s) read as nearly static at this track width —
+     2.5× faster lands at a lively ~115px/s that still reads each logo. */
+  animation-duration: 14s;
+  /* SEAMLESS WRAP — two fixes that make the −50% loop point land EXACTLY on one
+     set's width (any error = a visible snap every cycle, the "restarting" read):
+     (1) width: max-content — the brand track otherwise fills its parent, so the
+     keyframe's −50% translated by half the CONTAINER, not half the CONTENT;
+     (2) spacing lives on each item (margin-right below), NOT flex gap — a doubled
+     14-item track holds 13 BETWEEN-item gaps, which puts the wrap half a gap off. */
+  width: max-content;
+  gap: 0;
+  padding: clamp(16px, 1.8vw, 26px) 0 clamp(24px, 2.4vw, 38px);
   font-family: var(--font-plex-mono), ui-monospace, monospace;
   font-size: clamp(13px, 1vw, 14.5px);
   letter-spacing: 0.22em;
@@ -40,22 +50,26 @@
 .mw-marquee .tl-marquee__track span:nth-child(odd) {
   display: inline-flex;
   align-items: center;
+  /* Each logo carries its own trailing space (see the gap:0 note above). */
+  margin-right: clamp(48px, 5vw, 88px);
 }
 /* No separators between logos — the track gap alone spaces them.
    The shared brand <Marquee> still emits .dot spans; hide them. */
 .mw-marquee .tl-marquee__track .dot {
   display: none;
 }
-/* Locked "Proud affiliates." label inline with the scrolling logos. The
-   label stays put (outside the marquee's overflow box); the logo track
-   flexes into the remaining width and scrolls beside it. */
+/* The eyebrow opens the band CENTERED ABOVE the strip — the house section-opener
+   grammar — instead of the old inline-left seat, which read as misplaced and ate the
+   track's width (cramping the logos badly on phones). The strip now runs the full
+   band width on every viewport, fading out symmetrically at both screen edges. */
 .mw-marquee__row {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: clamp(24px, 3vw, 56px);
-  padding-left: clamp(24px, 5vw, 96px);
+  gap: 2px;
+  padding-top: clamp(22px, 2.6vw, 34px);
 }
-.mw-marquee__row .tl-marquee { flex: 1 1 auto; min-width: 0; }
+.mw-marquee__row .tl-marquee { width: 100%; flex: 1 1 auto; min-width: 0; }
 /* Eyebrow label — mono tag with the rotated-diamond section mark, in
    place of the former condensed header. Reads as a small "affiliates"
    eyebrow beside the scrolling logos. */
@@ -67,7 +81,9 @@
   gap: 0.6em;
   font-family: var(--font-plex-mono), ui-monospace, monospace;
   font-weight: 500;
-  font-size: clamp(12px, 1vw, 14px);
+  /* Matches every other section eyebrow (12px fixed — the old clamp hit 14px on
+     desktop and read oversized next to the house fields). */
+  font-size: 12px;
   line-height: 1;
   letter-spacing: 0.22em;
   text-transform: uppercase;

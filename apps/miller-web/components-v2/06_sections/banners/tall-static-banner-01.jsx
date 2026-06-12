@@ -93,7 +93,15 @@ export function TallStaticBanner01({ content, config = {} }) {
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
-          if (e.intersectionRatio >= 0.5) e.target.setAttribute("data-in", "1");
+          if (e.intersectionRatio >= 0.5) {
+            // ONE band, ONE entrance: the first card to cross the line fires ALL of
+            // them. On desktop they share a row and crossed together anyway; on the
+            // ≤1100 horizontal strip the off-screen cards would otherwise sit at
+            // opacity 0 and play their entrance MID-SWIPE (logan: no render motion
+            // on horizontal scroll — they all render at the same time).
+            items().forEach((el) => el.setAttribute("data-in", "1"));
+            break;
+          }
         }
       },
       { threshold: [0, 0.5, 1], rootMargin: "0px" },

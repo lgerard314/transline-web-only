@@ -81,10 +81,12 @@ export function SectorDiamonds04({ content, config = {} }) {
   useEffect(() => {
     if (typeof window === "undefined") return;
     // Mirrors the CSS pin gate in home/sectors.css exactly (721 wide / 840 tall / LANDSCAPE /
-    // motion-OK). House rule: full-screen pins are landscape-only — portrait never pins, any
-    // width or pointer. Portrait touch re-flows to the phone band layout; portrait fine-pointer
-    // windows keep the frieze but flow. (Also fixed here earlier: the JS height gate sat at 820
-    // vs the CSS's 840, which could hide the eyebrow with no CSS pin engaged.)
+    // motion-OK). Motion-test rule (playbook §0): STATIC-composition pins like this framing
+    // pause are landscape-only — portrait never pins them, any width or pointer (full-screen-
+    // converging choreographies are the exception and pin everywhere). Portrait touch re-flows
+    // to the phone band layout; portrait fine-pointer windows keep the frieze but flow. (Also
+    // fixed here earlier: the JS height gate sat at 820 vs the CSS's 840, which could hide the
+    // eyebrow with no CSS pin engaged.)
     const mqWide = window.matchMedia("(min-width: 721px)");
     const mqTall = window.matchMedia("(min-height: 840px)");
     const mqLand = window.matchMedia("(orientation: landscape)");

@@ -23,7 +23,9 @@ const MISSION_RANGE_PX = 220;
 // query `(max-width: 1200px), (orientation: portrait)`. When this is false the section
 // is the stacked flow layout and the same vars are written from flow-geometry
 // contracts instead (counts complete when the stats band is fully on-screen; mission
-// settles when its panel is fully on-screen). Portrait never pins (house rule).
+// settles when its panel is fully on-screen). This is a STATIC-composition pin, so it
+// never pins on portrait (motion-test rule — playbook §0; full-screen-converging
+// choreographies like the careers dive are the exception and pin everywhere).
 const PIN_MQS = ["(min-width: 1201px)", "(orientation: landscape)"];
 export function TimelineStats() {
   const pathname = usePathname();
@@ -87,6 +89,13 @@ export function TimelineStats() {
       const row = c.stats.querySelector(".mw-ten3__plate2-stats");
       if (row) {
         c.stats.style.setProperty("--stats-row-end", (row.offsetTop + row.offsetHeight) + "px");
+        // True chevron clearance for the row's right padding: the clip's right boundary
+        // slopes inward (tinset at the top + redge over the band height), so the inset
+        // at the ROW'S OWN BOTTOM depth — plus breathing room — is what the content
+        // must clear. The old guessed clamp under-cleared and the third stat's unit +
+        // caption were clipped at every pinned width, 1440 included.
+        const rowBottomFrac = Math.min(1, (row.offsetTop + row.offsetHeight) / Math.max(1, hH));
+        c.stats.style.setProperty("--stats-safe-right", (ang + redgePx * rowBottomFrac + 16).toFixed(1) + "px");
       }
     };
 
@@ -106,13 +115,14 @@ export function TimelineStats() {
             c.stats.style.setProperty("--num-rev", numRev.toFixed(3));
             for (const v of c.vals) v.el.textContent = (numRev * v.target).toFixed(v.dec);
           }
-          // Mission settles (rise + fade scrub in CSS) when its panel is fully on-screen.
-          // Written as the UNREGISTERED --mflow-rev on the flow panel itself, so the CSS
-          // fallback of 1 rests it for no-JS / reduced motion (the registered
-          // --mission-rev would pin the fallback to its initial 0).
+          // Mission settles (opacity scrub in CSS) once ~60% of the panel has entered —
+          // completing at full visibility left the panel half-faded for too long under
+          // the highlights band. Written as the UNREGISTERED --mflow-rev on the flow
+          // panel itself, so the CSS fallback of 1 rests it for no-JS / reduced motion
+          // (the registered --mission-rev would pin the fallback to its initial 0).
           if (c.mission) {
             const mr = c.mission.getBoundingClientRect();
-            const missionRev = Math.min(Math.max((vh - mr.top) / Math.max(1, mr.height), 0), 1);
+            const missionRev = Math.min(Math.max((vh - mr.top) / Math.max(1, mr.height * 0.6), 0), 1);
             if (Math.abs(missionRev - c.lastMission) >= 0.001) {
               c.lastMission = missionRev;
               c.mission.style.setProperty("--mflow-rev", missionRev.toFixed(3));
@@ -235,6 +245,7 @@ export function TimelineStats() {
       c.stats.style.removeProperty("--stats-tinset");
       c.stats.style.removeProperty("--stats-redge");
       c.stats.style.removeProperty("--stats-row-end");
+      c.stats.style.removeProperty("--stats-safe-right");
       c.stats.style.removeProperty("--stats-tail-fade");
       c.banner.style.removeProperty("--mission-rev");
       if (c.mission) c.mission.style.removeProperty("--mflow-rev");

@@ -7,9 +7,11 @@
    scroll after the sequence. Mobile / reduced-motion: no pin, columns at rest.
    ───────────────────────────────────────────────────────────────── */
 
-/* House rule (root CLAUDE.md / DESIGN-SYSTEM §9): full-screen pins are LANDSCAPE-only —
-   portrait never pins, any width or pointer, and short landscape (phones) flows too.
-   JS mirrors this gate (canPin in media-split-01.jsx). Off the pin, the section is the
+/* Motion-test rule (root CLAUDE.md / DESIGN-SYSTEM §9 / playbook §0): this is a
+   STATIC-composition pin, so it is LANDSCAPE-only — portrait never pins it, any width
+   or pointer, and short landscape (phones) flows too. (Full-screen-converging
+   choreographies — the careers dive — are the exception and pin everywhere.) JS
+   mirrors this gate (canPin in media-split-01.jsx). Off the pin, the section is the
    static stacked/split flow at natural height. */
 @media (min-width: 901px) and (orientation: landscape) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
   .mw-fac2-track { position: relative; height: var(--fac2-track-h, 250vh); }

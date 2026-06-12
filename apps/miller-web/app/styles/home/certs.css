@@ -214,7 +214,9 @@
     flex-direction: row;
     align-items: flex-start;
     justify-content: flex-start;
-    min-width: clamp(260px, 68vw, 340px);
+    /* Narrow enough that the NEXT card always peeks past the right edge — the strip
+       must read as scrollable at a glance (the old 68vw card filled the band alone). */
+    min-width: clamp(248px, 34vw, 300px);
     gap: clamp(14px, 2vw, 22px);
     padding: clamp(14px, 2.2vw, 22px) clamp(16px, 2.4vw, 24px);
     border-top: 0;
@@ -259,7 +261,8 @@
 }
 @media (max-width: 600px) {
   .mw-trust--tsb01 .mw-cert {
-    min-width: clamp(240px, 78vw, 300px);
+    /* ~62vw keeps a third of the next card visible at phone widths. */
+    min-width: clamp(225px, 62vw, 260px);
     padding: clamp(15px, 4vw, 20px) clamp(14px, 3.8vw, 18px);
   }
   .mw-trust--tsb01 .mw-cert__mark {

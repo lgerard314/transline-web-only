@@ -8,12 +8,15 @@ import { useEffect, useRef, useState } from "react";
    forward), so the effect plays on its own — but the user can scroll to push it along
    faster. Once the dive completes the auto-advance stops and the page scrolls normally.
 
-   PIN IS LANDSCAPE-ONLY (house rule): on portrait / small / short screens (PIN_MQS
-   complement, mirrored by the flow-override block in home/careers.css) the stage is a
-   normal in-flow band shorter than the viewport, and the SAME dive scrubs ONLY while
-   the section is fully on screen (rest pose through entry; dive from "bottom meets
-   viewport bottom" to "top meets viewport top") — no sticky, no auto-advance, fully
-   reversible.
+   THIS SECTION PINS ON EVERY SURFACE, portrait included (logan 2026-06-11): its
+   choreography converges to a full-screen centred focal point — "wait until the
+   section fills the screen, then zoom into the screen" — and the pinned hold IS that
+   mechanism, so un-pinning it breaks the design rather than adapting it. (The
+   portrait-never-pins house rule targets pins that hold OVERSIZED STATIC compositions
+   with dead space — who-we-serve / lifetime / VBEC — not this.) The only thing that
+   varies by surface is the MOSAIC LAYOUT: portrait/small/short screens (COMPACT
+   surfaces, the PIN_MQS complement, mirrored by the media block in home/careers.css)
+   re-compose the spread in stage-relative % with a larger-resting centre tile.
 
    Rebuilt the repo way: NO framer-motion / lenis / tailwind. One rAF loop reads the
    section's scroll progress over a FIXED dive distance (--dive-vh viewport-heights),
@@ -36,34 +39,22 @@ import { useEffect, useRef, useState } from "react";
 // (they only mildly upscale near the very end, by which point they've swept off-frame).
 const ZOOM = [4, 5, 6, 5, 6, 8, 9];
 const CAP = [4, 3, 3, 3, 3, 3, 3];
-// FLOW (non-pinned) surfaces — portrait / small / short screens. The centre tile rests
-// larger (1/2.4 ≈ 42% of the stage, vs 25% pinned) so the mosaic reads as a collage
-// inside the shorter flow stage; the off-centre tiles are laid out AT their rest size
-// (cap 1 — they sweep off within the short entry dive, so layout-size crispness
-// headroom isn't needed and the compositor layers stay small on phones).
-const FLOW_ZOOM = [2.4, 5, 6, 5, 6, 8, 9];
-const FLOW_CAP = [2.4, 1, 1, 1, 1, 1, 1];
-// Pin gate — MUST mirror the CSS flow-override media block in home/careers.css
-// (which is this list's exact complement + the reduced-motion block). Pinning is a
-// landscape-only signature: portrait never pins, any width or pointer (house rule,
-// docs/RESPONSIVE-PLAYBOOK.md §4.1).
+// COMPACT surfaces — portrait / small / short screens. Same pin + dive mechanism; only
+// the mosaic layout differs: the centre tile rests larger (1/2.4 ≈ 42% of the stage,
+// vs 25% on the wide spread) so the portrait collage reads as photos, not slivers; the
+// off-centre tiles are laid out AT their rest size (cap 1 — they sweep off early, so
+// layout-size crispness headroom isn't needed and compositor layers stay small).
+const COMPACT_ZOOM = [2.4, 5, 6, 5, 6, 8, 9];
+const COMPACT_CAP = [2.4, 1, 1, 1, 1, 1, 1];
+// Wide-spread gate — MUST mirror the compact media block in home/careers.css (which is
+// this list's exact complement). Selects the mosaic layout ONLY — the pin runs on
+// every surface.
 const PIN_MQS = ["(min-width: 721px)", "(orientation: landscape)", "(min-height: 560px)"];
 // The overlay (scrim) + copy fade/slide in across this window of the progress — they
 // begin partway through and reach full opacity only when the dive completes (pd 1),
-// i.e. when the centre photo reaches full size. FLOW starts later: on the small stage
-// the copy is wider than the still-growing centre photo, so it must not arrive until
-// the photo is ~96% full (on the pinned viewport the 0.70 window reads fine).
+// i.e. when the centre photo reaches full size.
 const REVEAL_START = 0.70;
-const FLOW_REVEAL_START = 0.86;
 const REVEAL_END = 1.0;
-// FLOW dive window — derived from the DESKTOP choreography's spatial contract: the
-// desktop dive begins at the pin moment (the stage already fills the screen, the
-// centre photo at the screen's centre) and zooms toward that centred focal point until
-// the final frame IS the screen. So on flow surfaces the ENTIRE dive plays while the
-// section is FULLY ON SCREEN: rest pose through the whole entry, dive starts the frame
-// the section bottom meets the viewport bottom, completes the frame its top reaches
-// the viewport top. (Contrast: the lifetime panel's motion is edge-born and
-// non-centred on desktop, so IT scrubs during entry — the desktop tells you which.)
 const DIVE_MS = 2600; // base auto-advance pace (start speed); it accelerates to 2× by the end
 
 export function ZoomCollage01({ photos = [], children, intro, autoScroll = true, diveInitialSlope = 1 }) {
@@ -76,9 +67,10 @@ export function ZoomCollage01({ photos = [], children, intro, autoScroll = true,
     if (!root || typeof window === "undefined") return;
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     const pinMqs = PIN_MQS.map((q) => window.matchMedia(q));
-    // Pin vs flow mode — mirrors the CSS gate exactly; refreshed on resize/rotation.
-    let pinMode = pinMqs.every((m) => m.matches);
-    const syncMode = () => { pinMode = pinMqs.every((m) => m.matches); };
+    // Wide spread vs compact mosaic — mirrors the CSS layout gate exactly; refreshed
+    // on resize/rotation. Layout only; the pin/dive mechanism is identical in both.
+    let wideMode = pinMqs.every((m) => m.matches);
+    const syncMode = () => { wideMode = pinMqs.every((m) => m.matches); };
     let raf = 0;
 
     // The dive plays over a FIXED scroll distance (--dive-vh viewport-heights); extra
@@ -90,8 +82,8 @@ export function ZoomCollage01({ photos = [], children, intro, autoScroll = true,
     };
 
     const apply = (pd, raw = pd) => {
-      const zoomArr = pinMode ? ZOOM : FLOW_ZOOM;
-      const capArr = pinMode ? CAP : FLOW_CAP;
+      const zoomArr = wideMode ? ZOOM : COMPACT_ZOOM;
+      const capArr = wideMode ? CAP : COMPACT_CAP;
       for (let i = 0; i < cellRefs.current.length; i++) {
         const el = cellRefs.current[i];
         if (!el) continue;
@@ -107,8 +99,7 @@ export function ZoomCollage01({ photos = [], children, intro, autoScroll = true,
       root.style.setProperty("--center-img-zoom", centerZoom.toFixed(4));
       const introOut = Math.min(1, Math.max(0, raw / 0.08));
       root.style.setProperty("--intro-out", introOut.toFixed(3));
-      const revealStart = pinMode ? REVEAL_START : FLOW_REVEAL_START;
-      const reveal = Math.min(1, Math.max(0, (pd - revealStart) / (REVEAL_END - revealStart)));
+      const reveal = Math.min(1, Math.max(0, (pd - REVEAL_START) / (REVEAL_END - REVEAL_START)));
       root.style.setProperty("--reveal", reveal.toFixed(3));
       if (reveal > 0.5) root.setAttribute("data-shown", "1");
       else root.removeAttribute("data-shown");
@@ -134,22 +125,14 @@ export function ZoomCollage01({ photos = [], children, intro, autoScroll = true,
       const vh = window.innerHeight || document.documentElement.clientHeight || 1;
       const diveDist = (diveVh / 100) * vh;
       // Progress is tied to scroll position (scrubbed) — scrolling up reverses it.
-      // PINNED: the sticky stage holds while the dive plays over diveDist of track.
-      // FLOW: the dive plays ONLY while the section is fully on screen — 0 at the frame
-      // the section bottom meets the viewport bottom (top = vh − h), 1 at the frame its
-      // top meets the viewport top (top = 0). Geometric, reversible both ways. If the
-      // stage is as tall as the viewport (short-landscape edge), fall back to entry
-      // travel so the dive can still complete.
-      const flowSpan = vh - rect.height;
-      const raw = pinMode
-        ? (diveDist > 0 ? Math.min(1, Math.max(0, -rect.top / diveDist)) : 0)
-        : (flowSpan > 40
-            ? Math.min(1, Math.max(0, (flowSpan - rect.top) / flowSpan))
-            : Math.min(1, Math.max(0, (vh - rect.top) / Math.max(1, rect.height))));
+      // The sticky stage holds (EVERY surface — the pinned hold is this choreography's
+      // mechanism) while the dive plays over diveDist of track; the section rests
+      // through its whole entry (raw 0 until the stage reaches the viewport top).
+      const raw = diveDist > 0 ? Math.min(1, Math.max(0, -rect.top / diveDist)) : 0;
       const startSlope = Math.min(1, Math.max(0, diveInitialSlope));
       const pd = raw * (startSlope + (1 - startSlope) * raw);
       apply(pd, raw);
-      if (autoScroll && pinMode) {
+      if (autoScroll) {
         const y = window.scrollY;
         const pinned = rect.top <= 0 && rect.bottom > vh;
         const userActive = ts - lastUserTs < USER_IDLE_MS;
@@ -208,19 +191,10 @@ export function ZoomCollage01({ photos = [], children, intro, autoScroll = true,
     io.observe(root);
     window.addEventListener("resize", onResize, { passive: true });
     // Rotation can flip the pin gate without a resize event in some embedders; mirror
-    // the matchMedia changes directly so pinMode can never go stale.
+    // the matchMedia changes directly so the layout mode can never go stale.
     pinMqs.forEach((m) => m.addEventListener("change", syncMode));
     readVars();
-    if (pinMode) {
-      apply(0);
-    } else {
-      const r = root.getBoundingClientRect();
-      const vh0 = window.innerHeight || 1;
-      const span = vh0 - r.height;
-      apply(span > 40
-        ? Math.min(1, Math.max(0, (span - r.top) / span))
-        : Math.min(1, Math.max(0, (vh0 - r.top) / Math.max(1, r.height))));
-    }
+    apply(0);
     return () => {
       io.disconnect();
       stop();

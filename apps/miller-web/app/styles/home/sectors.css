@@ -636,17 +636,22 @@
    The section is wrapped in a tall .mw-secd-track and made sticky, so it FREEZES once it fills the
    viewport — a brief stop that frames the whole composition (grid + title + body-intro + button) at
    the right spot so the user can hover the diamonds without anything being cut off, then releases.
-   No scroll-driven reveals; everything just shows. Mobile / short viewport / reduced-motion skip the
-   pin — the track collapses and the section flows normally. */
+   The grid's scrubbed roll-in (SectorGridMotion03) is PIN-ANCHORED on this surface: a sticky
+   freeze also freezes geometry-driven scrubs, so the roll-in completes EXACTLY at the pin frame
+   (progress = 1 − sectionTop/(0.5vh)) — the pinned view always holds the finished, straightened
+   grid. Mobile / short viewport / reduced-motion skip the pin — the track collapses and the
+   section flows normally (the roll-in keeps its grid-rise scrub there). */
 .mw-secd-track { position: relative; }
 /* min-height 840 — the floor where the FRAMED view (grid + ~120px spotlight headroom + title +
    body-intro) fits one screen with the hover spotlight clearing the nav. The BUTTON is intentionally
    NOT forced into this view: the section grows TALLER than the viewport (min-height:100vh), so the
    button — with proper spacing below the body — sits below the framed pinned view and scrolls into
    view as the pin releases. Shorter viewports skip the pin and flow normally. */
-/* The pin exists to FRAME the hover spotlight. House rule (logan, 2026-06-11): full-screen
-   pins are a LANDSCAPE-only signature — portrait orientations never snap to full screen, any
-   width, any pointer (he tests portrait fine-pointer windows via devtools responsive mode).
+/* The pin exists to FRAME the hover spotlight — a STATIC-composition pin, so per the
+   motion-test rule (playbook §0) it is LANDSCAPE-only: portrait orientations never snap to
+   full screen for it, any width, any pointer (logan tests portrait fine-pointer windows via
+   devtools responsive mode; full-screen-converging choreographies like the careers dive are
+   the exception and pin everywhere).
    Portrait touch re-flows to the phone band layout (≤720/portrait-coarse block); portrait
    fine-pointer windows keep the frieze but FLOW at natural height. JS mirrors this gate
    (canPin in sector-diamonds-04.jsx). */

@@ -34,6 +34,10 @@ export function SectorGridMotion03() {
     pre.observe(grid);
 
     const mqRM = window.matchMedia("(prefers-reduced-motion: reduce)");
+    // Mirrors the CSS pin gate in home/sectors.css (sticky framing pause). On
+    // pin-capable surfaces the roll-in is anchored to the PIN FRAME — see render().
+    const mqPin = ["(min-width: 721px)", "(min-height: 840px)", "(orientation: landscape)"].map((q) => window.matchMedia(q));
+    const pinMode = () => mqPin.every((m) => m.matches) && !mqRM.matches;
 
     const layoutBottom = (cell, gridTop) => gridTop + cell.offsetTop + cell.offsetHeight;
 
@@ -94,6 +98,21 @@ export function SectorGridMotion03() {
       // Not reached yet — resting hidden pose.
       if (sectionRect.top > vh) {
         applyProgress(0, list);
+        return;
+      }
+
+      // PIN-ANCHORED CONTRACT (logan 2026-06-11): on pin-capable surfaces the section
+      // freezes (sticky top:0) the moment its top reaches the viewport top — and a
+      // frozen section freezes this geometry-driven scrub with it, so any progress
+      // short of 1 at that frame left the diamonds CROOKED for the whole pinned hold
+      // (wide/short screens never finished in time). Anchor the roll-in to the pin
+      // frame itself: progress runs over the last half-viewport of approach and hits
+      // 1 EXACTLY as the section top reaches 0 — the end of the motion IS the pin
+      // point, so the pinned frame is always the finished grid. Reversible on
+      // scroll-up; flow surfaces below keep the original grid-rise scrub.
+      if (pinMode()) {
+        const runup = Math.max(320, 0.5 * vh);
+        applyProgress(clamp01(1 - sectionRect.top / runup), list);
         return;
       }
 

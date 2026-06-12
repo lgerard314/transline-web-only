@@ -225,7 +225,8 @@ export function MediaSplit01({ content, config = {} }) {
     const track = trackRef.current;
     if (!track) return;
     // Mirrors the CSS pin gate in home/facility-pin.css exactly: landscape-only, ≥640px tall,
-    // motion-OK (house rule — portrait never pins, any width or pointer).
+    // motion-OK (motion-test rule, playbook §0: STATIC-composition pins like this one
+    // never pin on portrait; full-screen-converging choreographies are the exception).
     const mqWide = window.matchMedia("(min-width: 901px)");
     const mqLand = window.matchMedia("(orientation: landscape)");
     const mqTall = window.matchMedia("(min-height: 640px)");

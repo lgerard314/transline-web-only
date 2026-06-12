@@ -54,8 +54,10 @@
   .mw-ten3__grid { grid-template-columns: minmax(0, 1fr) clamp(30rem, 34%, 36rem); }
 }
 /* Collapse to one column before the left column gets cramped by the record's
-   fixed band — and on EVERY portrait orientation regardless of width (pins/pinned
-   stacks are a landscape-only signature; portrait never pins, any width/pointer). */
+   fixed band — and on EVERY portrait orientation regardless of width (this pinned
+   stack holds a STATIC composition, so per the motion-test rule — playbook §0 — it
+   never pins on portrait, any width/pointer; only full-screen-converging
+   choreographies like the careers dive pin everywhere). */
 @media (max-width: 1200px), (orientation: portrait) {
   .mw-ten3__grid { grid-template-columns: 1fr; gap: clamp(28px, 5vw, 44px); }
 }
@@ -787,6 +789,23 @@ html[data-brand="miller"] .mw-ten3__line[data-rev-armed] .mw-ten3__item[data-out
 .mw-ten3__plate2-num { font-family: var(--font-condensed), ui-sans-serif, sans-serif; font-weight: 600; font-size: clamp(64px, 7.2vw, 108px); color: var(--c-ink); line-height: 1; }
 .mw-ten3__plate2-unit { font-size: 0.32em; color: var(--c-accent); margin-left: 2px; }
 .mw-ten3__plate2-label { font-family: var(--font-plex-mono), ui-monospace, monospace; font-size: 16px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--c-ink-2); margin-top: 8px; }
+/* ── Pinned-range stat sizing (≥1201 landscape). The band's COLUMN steps with the
+   record clamp while the numerals tracked the VIEWPORT (7.2vw) and the captions were a
+   FIXED 16px — so the row overflowed the column by ~1240px wide, and the third stat's
+   unit + caption were silently CLIPPED by the chevron even at 1440 (glyph-vs-clip was
+   never probed). Container-relative (cqi) sizing tracks the actual column, and the
+   row's right padding is the JS-computed chevron clearance (--stats-safe-right from
+   TimelineStats.setRedge — chevron inset at the row's own depth + breathing room)
+   instead of a guessed clamp. */
+@media (min-width: 1201px) and (orientation: landscape) {
+  .mw-ten3__aside { container-type: inline-size; }
+  .mw-ten3__plate2-stats {
+    --stat-pad: clamp(16px, 4.2cqi, 44px);
+    padding-right: var(--stats-safe-right, clamp(80px, 13%, 130px));
+  }
+  .mw-ten3__plate2-num { font-size: clamp(56px, 13cqi, 100px); }
+  .mw-ten3__plate2-label { font-size: clamp(11.5px, 1.95cqi, 14.5px); }
+}
 /* MissionBlock01 base typography (live history section — must stay in production CSS). */
 .mw-ten2__mission {
   display: flex;
@@ -1006,10 +1025,10 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
     background: var(--c-bg);
     border-top: 1px solid var(--c-line);
     padding: clamp(28px, 5.5vw, 56px) var(--g) clamp(32px, 6vw, 60px);
-    /* Mission rise echo of the desktop sheet: rises 36px + fades as it enters, settled
-       exactly when fully on-screen (--mflow-rev from TimelineStats' flow branch;
-       UNREGISTERED var so the fallback 1 rests it for no-JS / reduced motion). */
-    transform: translateY(calc((1 - var(--mflow-rev, 1)) * 36px));
+    /* Mission settle: OPACITY-ONLY (--mflow-rev from TimelineStats' flow branch,
+       completing once ~60% of the panel has entered). No translate — a transformed
+       panel pulls away from the highlights band above and opens a gap under it
+       mid-scroll. UNREGISTERED var: fallback 1 rests it for no-JS / reduced motion. */
     opacity: var(--mflow-rev, 1);
   }
   .mw-ten3__mission-flow .mw-ten3__mission-panel { max-width: 46rem; margin-inline: auto; padding: 0; }
@@ -1047,18 +1066,21 @@ html[data-brand="miller"] .mw-ten3__mission-panel .mw-ten2__mission {
   .mw-ten3__plate2-stat:nth-child(3) { --ri: 2; }
   .mw-ten3__plate2-stat:first-child { padding-left: 0; }
   .mw-ten3__plate2-stat:last-child { padding-right: 0; }
-  .mw-ten3__plate2-num { font-size: clamp(31px, 8.4vw, 84px); }
+  .mw-ten3__plate2-num { font-size: clamp(34px, 9.2vw, 84px); }
+  /* Captions stay clearly subordinate — the desktop band's label:numeral ratio
+     (~0.2), not phone-UI-sized labels under small numerals. */
   .mw-ten3__plate2-label {
     margin-top: 0;
-    font-size: clamp(10.5px, 2.6vw, 14px);
+    font-size: clamp(9px, 2.2vw, 12.5px);
     line-height: 1.3;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
   }
 
   /* The desktop pin runway (padding-bottom: 100dvh − header − banner) has no pin to
      serve here — it read as a dead cream band after the record. Intentional end margin
-     instead (the sticky record eyebrow still travels the whole list above it). */
-  .mw-ten3__record { padding-bottom: clamp(8px, 3vw, 32px); }
+     instead, sized to the page's section rhythm (~110px perceived seams; the careers
+     stage below carries almost no top padding of its own). */
+  .mw-ten3__record { padding-bottom: clamp(56px, 12vw, 84px); }
 }
 /* (No extra reduced-motion rules needed for the flow beats: under RM the drivers
    never attach and clear their vars, so every fallback above — --w 1 → full rect,
