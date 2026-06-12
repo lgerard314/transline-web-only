@@ -1,25 +1,74 @@
+"use client";
+
+import { useEffect, useRef } from "react";
 import { ScheduleForm } from "@/components/ScheduleForm";
 import { StopText } from "@/components/StopText";
 import { sectionProps } from "@/components-v2/section-config";
 
 // L3 · schedule-cta-02 — light closing CTA (CWC v2 §6). The page's dark
-// anchor moved to the fleet section (§4), so the conversion close is a warm
+// anchor lives in the fleet section (§4), so the conversion close is a warm
 // split panel per §12 ("the last section before the footer is never dark" —
 // the related rail follows, also light): pitch + what-happens-next steps
 // beside a white form card with a clay top edge. Reuses the shared
 // ScheduleForm (composed, not forked; its dark-card label colors are
-// re-bound for the light card in this page's CSS). data-reveal sits on the
-// form column wrapper, not the card, so the card's focus-within lift can't
-// be overridden by the reveal's fill-mode (§13).
+// re-bound for the light card in this page's CSS). The card's focus-within
+// lift lives on the inner card, never on the scrubbed wrapper.
+//
+// Motion contract (logan 2026-06-12): the form card SHIFTS UP ON SCROLL
+// until it aligns with the left column — p = clamp01((viewportBottom −
+// gridTop) / gridHeight); the card column rides translateY = (1 − p) ·
+// clamp(64px, 8vw, 112px) below its slot and lands flush with the left
+// column's top EXACTLY when the grid's bottom meets the viewport bottom.
+// Writer: rAF-coalesced passive scroll listener (§4.2) + IO-requeue
+// (§4.3). The wrapper's old data-reveal is retired (the scrub IS its
+// entrance — a reveal's fill-mode would fight the var-driven transform).
+// No-JS / reduced motion: var(--cwcs-p, 1) defaults rest aligned;
+// the transform is gated to (prefers-reduced-motion: no-preference).
 //
 // content: { titleId, eyebrow, title, titleEm, body, formTitle, nextEyebrow,
 //            next[{ num, name, text }] }
 // config:  standard sectionProps passthrough.
 export function ScheduleCta02({ content, config = {} }) {
+  const secRef = useRef(null);
+  const gridRef = useRef(null);
+
+  useEffect(() => {
+    const sec = secRef.current;
+    const grid = gridRef.current;
+    if (!sec || !grid) return undefined;
+    const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (mql.matches) return undefined; // CSS default rests aligned
+
+    let raf = 0;
+    const write = () => {
+      raf = 0;
+      const vh = window.innerHeight;
+      const r = grid.getBoundingClientRect();
+      const p = Math.min(1, Math.max(0, (vh - r.top) / r.height));
+      sec.style.setProperty("--cwcs-p", p.toFixed(4));
+    };
+    const queue = () => {
+      if (!raf) raf = requestAnimationFrame(write);
+    };
+
+    queue();
+    window.addEventListener("scroll", queue, { passive: true });
+    window.addEventListener("resize", queue);
+    const io = new IntersectionObserver(queue, { rootMargin: "300px 0px" });
+    io.observe(grid);
+
+    return () => {
+      window.removeEventListener("scroll", queue);
+      window.removeEventListener("resize", queue);
+      io.disconnect();
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+
   return (
-    <section className="mw-cwc-sched" aria-labelledby={content.titleId} {...sectionProps(config)}>
+    <section ref={secRef} className="mw-cwc-sched" aria-labelledby={content.titleId} {...sectionProps(config)}>
       <div className="mw-cwc-sched__inner mw-inner">
-        <div className="mw-cwc-sched__grid">
+        <div className="mw-cwc-sched__grid" ref={gridRef}>
           <div className="mw-cwc-sched__panel">
             <p className="mw-section-tag" data-reveal aria-hidden="true">
               <span className="mw-section-tag-mark" />
@@ -49,7 +98,9 @@ export function ScheduleCta02({ content, config = {} }) {
             </ol>
           </div>
 
-          <div className="mw-cwc-sched__form-col" data-reveal>
+          {/* No data-reveal: the rise-into-alignment scrub IS this column's
+              entrance. The focus-within lift stays on the inner card. */}
+          <div className="mw-cwc-sched__form-col">
             <div className="mw-cwc-sched__card">
               <p className="mw-cwc-sched__form-title">{content.formTitle}</p>
               <ScheduleForm />
