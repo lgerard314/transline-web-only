@@ -121,6 +121,10 @@ export function RelatedServices({
                   data-rel-card
                   aria-hidden={clone ? "true" : undefined}
                 >
+                  {/* The home services (roster) picture-card anatomy: the
+                      arrow pins to the CARD's top-right (so it lives outside
+                      the bottom-anchored body), and the summary sits in a
+                      0fr→1fr reveal wrapper that expands on hover/focus. */}
                   <Link
                     href={`/industrial-services/${s.slug}/`}
                     className="mw-svcs-tile"
@@ -131,6 +135,7 @@ export function RelatedServices({
                       style={{ backgroundImage: `url(${s.photo})` }}
                       aria-hidden="true"
                     />
+                    <span className="mw-svcs-tile__arr" aria-hidden="true">&rarr;</span>
                     <div className="mw-svcs-tile__body">
                       <div className="mw-svcs-tile__title-row">
                         <h3 className="mw-svcs-tile__title">
@@ -142,9 +147,10 @@ export function RelatedServices({
                             </>
                           )}
                         </h3>
-                        <span className="mw-svcs-tile__arr" aria-hidden="true">&rarr;</span>
                       </div>
-                      <p className="mw-svcs-tile__text">{s.summary}</p>
+                      <div className="mw-svcs-tile__reveal">
+                        <p className="mw-svcs-tile__text">{s.summary}</p>
+                      </div>
                     </div>
                   </Link>
                 </li>
