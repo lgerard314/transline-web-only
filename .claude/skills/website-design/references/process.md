@@ -6,6 +6,7 @@ The end-to-end workflow for building, redesigning, or converting a page. The hom
 
 1. Read the repo canon in order (see design-language.md). Re-read it even if remembered — canon evolves between sessions, and stale session notes have caused real regressions (the imposed-photo-grade incident survived two sessions because old notes outranked the actual brief in practice).
 2. Read the existing page (v1) and its content module — the copy is the source of truth for what the service/subject IS, even when every pixel gets replaced.
+2a. **Look at the approved reference screenshots** ([approved/INDEX.md](approved/INDEX.md)) for any device you plan to reuse or any section type similar to what you're building — they are the rendered-pixel bar for spacing, type scale, motion poses, and section handoffs. Consulting them BEFORE building is mandatory for any work that touches a registered device.
 3. Check the user's brief for explicit instructions and re-read it before locking any policy into prompts or docs. The brief outranks memory, playbooks, and this skill.
 
 ## Phase 1 — the design brief (before any code)
@@ -28,6 +29,7 @@ For EACH section, in order:
 3. **Fresh audit subagent** (see briefing template below) — a fresh-eyed model judges the rendered pixels against the bar: "exceptional, high-end, expensive-looking."
 4. **Act on findings:** apply what's right; REJECT WITH CAUSE what contradicts locked patterns (keep a rejection list — auditors repeatedly re-flag deliberate house patterns). Re-probe every applied fix.
 5. **Commit per section** with a message recording what was verified — the work must be traceable section by section.
+6. **If the section is APPROVED (listed in approved/INDEX.md) and your change alters its rendered appearance: refresh its reference screenshots + INDEX rows in the SAME commit.** Recapture with the protocol in the INDEX (viewport walks, probed poses, shots personally Read). Shipping a visual change to an approved section with stale reference shots is a process failure — the stale shot teaches every future agent the wrong target.
 
 ## Micro-commit discipline (applies to ALL passes, not just builds)
 
@@ -54,4 +56,4 @@ Common locked patterns to include (extend per repo): sentence-case body-CTA labe
 - Reduced-motion: every rest state fully settled/complete; clocks frozen.
 - Final section walk with screenshots you have personally read.
 - Deliver representative screenshots to the user; update memory/docs with anything hard-won (new patterns go into the playbook canon + template knobs, never only into one page's CSS).
-- **Extraction pass when the user declares a page DONE:** walk every section of the finished page and update vocabulary.md — add new devices as approved (his done-rating is the approval), update reuse guidance on existing entries the page exercised, and harvest any corrections he made during the build into the forbidden list. New devices built mid-page enter vocabulary.md as `pending` immediately; only his done-rating promotes them.
+- **Extraction pass when the user declares a page DONE:** walk every section of the finished page and update vocabulary.md — add new devices as approved (his done-rating is the approval), update reuse guidance on existing entries the page exercised, and harvest any corrections he made during the build into the forbidden list. New devices built mid-page enter vocabulary.md as `pending` immediately; only his done-rating promotes them. The extraction pass ALSO captures the page's approved reference screenshots (per the protocol in [approved/INDEX.md](approved/INDEX.md)): rest shot per section + mid/settled poses for motion-defined sections + signature hover poses, indexed with capture commit + probe facts, every shot personally Read before it lands.

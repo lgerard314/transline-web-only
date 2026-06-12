@@ -31,6 +31,7 @@ Any section with pinning, sticky positioning, or scroll-tied motion gets a SEQUE
 - Color audit: CSS/chrome/illustrations must be on-palette (grep misses image assets — load them); photographs are judged on realism and quality, never palette conformity.
 - Subpixel artifact warning: small mono text often reads blue-ish in downscaled screenshots — verify the computed color before claiming a palette violation.
 - Screenshot-stitching artifacts (sticky nav baked mid-image on element shots of tall nodes) are capture artifacts, not page bugs — confirm with a viewport shot before "fixing."
+- **On pages containing pinned/sticky sections, element/locator screenshots of tall sections are forbidden outright** — the pin track corrupts the stitch (worked failure: a 2050px history-section locator shot rendered as neighboring-section content plus a giant empty void). Use viewport `page.screenshot()` walks with stepped scrolls instead, and never `scrollIntoView` through a pinned runway — step through it.
 
 ## Capture subagents (parallel matrices)
 

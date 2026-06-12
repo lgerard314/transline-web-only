@@ -38,6 +38,7 @@ Also invoke `frontend-design:frontend-design` — use ONLY its process/craft dis
 | [verification.md](references/verification.md) | Proving visual work — Playwright protocol, probes, screenshot review |
 | [responsive.md](references/responsive.md) | Deriving non-desktop viewports or any viewport-matrix verification |
 | [vocabulary.md](references/vocabulary.md) | Choosing devices for a section — the approved registry (with reuse contracts) + the forbidden list |
+| [approved/INDEX.md](references/approved/INDEX.md) | BEFORE building anything similar to an approved section — the rendered-pixel reference shots (currently the home page) + capture protocol + the refresh-on-change rule |
 | [white-owl-design-system.md](references/white-owl-design-system.md) | White-owl monorepo visual canon (palette/tokens/type/motifs/§12 interior rules) — moved from the repo |
 | [white-owl-responsive-playbook.md](references/white-owl-responsive-playbook.md) | White-owl motion/responsive recipes, §6 checklist, §7 page production — moved from the repo |
 | [white-owl-templates.md](references/white-owl-templates.md) | miller-web components-v2 template library guide — moved from the repo |
@@ -52,3 +53,4 @@ Also invoke `frontend-design:frontend-design` — use ONLY its process/craft dis
 - Every section ships → gets probed → gets a fresh-agent audit → findings applied → committed, before it's "done" ([process.md](references/process.md)).
 - A UI is never "correct" until you've looked at it rendered ([verification.md](references/verification.md)).
 - Edits stay surgically namespaced to your assigned surface — never revert/overwrite/`git reset` work outside your scope (other agents may be mid-flight on it); flag problems there instead of fixing them.
+- **Approved sections carry reference screenshots** ([approved/INDEX.md](references/approved/INDEX.md)) — consult them before building similar work; any change that alters an approved section's rendered appearance MUST refresh its shots + index rows in the same commit.
