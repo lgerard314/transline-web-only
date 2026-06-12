@@ -29,6 +29,12 @@ For EACH section, in order:
 4. **Act on findings:** apply what's right; REJECT WITH CAUSE what contradicts locked patterns (keep a rejection list — auditors repeatedly re-flag deliberate house patterns). Re-probe every applied fix.
 5. **Commit per section** with a message recording what was verified — the work must be traceable section by section.
 
+## Micro-commit discipline (applies to ALL passes, not just builds)
+
+Every major change is its own commit: one per section when building, one per section (or per view/viewport, when that's the unit of work) when optimizing or running an update pass, one per audit-fix round, one per rule/doc change. The goal is that logan can trace and bisect any section's evolution from the log — a day of work squashed into one blob commit is a process failure. Imagery, content modules, and CSS for a section ride in that section's commit.
+
+Worktrees: when work runs in an isolated git worktree (parallel agents mutating files concurrently is the main reason), the same per-section commit cadence applies inside it, and the worktree's branch must be merged back promptly when the work lands — never strand finished work on an unmerged branch. Default remains the shared worktree with surgically scoped edits.
+
 Independent sections' audits may run in parallel as background agents while you build ahead — but every report gets acted on before its section is called done, and if the user asked you to go slow, build strictly one section at a time instead.
 
 ## Subagents do NOT inherit this skill — brief it in

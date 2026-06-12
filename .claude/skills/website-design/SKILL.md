@@ -44,6 +44,8 @@ Also invoke `frontend-design:frontend-design` — use ONLY its process/craft dis
 
 ## Non-negotiables (full detail in the files)
 
+- **The baseline question for every pose, section, and page: "does this look like a very high-end, expensive website?"** — judged in rendered pixels, at rest / mid-motion / settled. Probes passing while something looks cheap (crowding, runt lines, dead voids, drifting alignment) is a FAILURE.
+- **Micro-commit everything trackable:** one commit per section when building, one commit per section/view when optimizing, one commit per major change — never batch a day's work into one blob ([process.md](references/process.md)).
 - Locked palette/type/motifs come from the repo canon — never invented, never "refreshed."
 - Photos are prompted NEUTRAL — no imposed color scheme or grade ([imagery.md](references/imagery.md)).
 - Motion completions land AT exact geometric anchors; imperceptible effects count as missing ([motion.md](references/motion.md)).
