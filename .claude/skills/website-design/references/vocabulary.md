@@ -26,6 +26,8 @@ Seeded 2026-06-12 from the two surfaces logan rates as reference: the HOME page 
 
 Pending entries (built on the v2 interior pages, NOT approved — those pages await update passes): drafting title block (PM hero), gantt schedule draw (PM), marker sweep (VMV creed), before/after restoration wipe (REM), closure ladder (REM), capability ledger sheet (REM), screening room (REM). Treat as candidates; logan rules on them during the page passes.
 
+Logan-directed entries from the CWC update pass (2026-06-12 — he specified the device himself; pending only his done-rating on the page): **mouse-tracking photo parallax** (non-link photos drift ±7–8px after the cursor on a 1.06 headroom, slow ease, soft return — `useMouseParallax` + per-consumer CSS; replaces hover grammar on photos that aren't links, motion.md); **drawing drafting leaders** (dim dotted leaders that clip-draw into right-aligned spec/role tags consuming the item's existing scrub slice — fills marker slots with purposeful per-item motion; CWC §2 id rows + fleet plates).
+
 ## Forbidden list (each entry = a real correction; the why lives at the link)
 
 - **Bare sequential `01/02/…` numerals in the mono/eyebrow register — as ANY item marker, anywhere** (design-language.md; logan 2026-06-12, twice: first banned on stacked lists, then extended to all compositions — cards in a row, plates, route nodes, custody strips). The diamond system takes the slot. The old "compositional numbering stays" carve-out is dead; only worded document captions (a hero "Article" line) survive. Worked refs: CWC fleet plate marks, container id marks, flow node glyphs.
