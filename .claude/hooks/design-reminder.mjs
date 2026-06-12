@@ -82,7 +82,7 @@ if (tool === "Edit" || tool === "Write" || tool === "MultiEdit") {
 if (tool === "Agent" || tool === "Task") {
   if (!due("agent-return", AGENT_COOLDOWN_MIN)) process.exit(0);
   emit(
-    "A subagent returned (auto-reminder, fires max 1/10min). If it was a design auditor: act on each finding or REJECT WITH CAUSE against the locked patterns (vocabulary.md), re-probe every applied fix at proven frames, and commit the section before moving on. If it returned screenshots: Read them yourself before acting on any visual claim. If you are about to spawn another design subagent: it does NOT inherit the website-design skill — run the 8-item Subagent briefing checklist in .claude/skills/website-design/references/process.md (scope, server/browser, .scratch, inlined rules, locked patterns, motion/viewport contracts, return format, commit ownership), and nested coordinators must pass the checklist down verbatim."
+    "A subagent returned (auto-reminder, fires max 1/10min). If it was a design auditor: act on each finding or REJECT WITH CAUSE against the locked patterns (vocabulary.md), re-probe every applied fix at proven frames, and commit the section before moving on. If it returned screenshots: Read them yourself before acting on any visual claim. If you are about to spawn another design subagent: it does NOT inherit the website-design skill — run the 9-item Subagent briefing checklist in .claude/skills/website-design/references/process.md (scope, server/browser, .scratch, inlined rules, locked patterns, motion/viewport contracts, return format, commit ownership, model tier — judgment roles inherit the session model, only mechanical roles run sonnet), and nested coordinators must pass the checklist down verbatim."
   );
 }
 

@@ -45,7 +45,7 @@ Spawned subagents (builders, auditors, capture agents) do not automatically load
 
 ## Subagent briefing checklist — run it on EVERY design-work spawn
 
-Before sending any builder / auditor / capture / verify / fix subagent, confirm the prompt contains all eight. A briefing missing any item is the weakest link in the whole governance stack — thirty seconds here beats an unanchored agent.
+Before sending any builder / auditor / capture / verify / fix subagent, confirm the prompt contains all nine. A briefing missing any item is the weakest link in the whole governance stack — thirty seconds here beats an unanchored agent.
 
 1. **Scope:** exact route(s) + section selector(s) + the writable surface; everything else explicitly read-only — no `git revert`/`reset`/`checkout` of work outside scope, flag instead of fix.
 2. **Server/browser:** shared dev server on its ACTUAL port (state it) — never start/kill/restart it, never edit `next.config.*`; own fresh `chromium.launch()` per run, closed when done.
@@ -55,6 +55,7 @@ Before sending any builder / auditor / capture / verify / fix subagent, confirm 
 6. **Motion + viewport contracts** when relevant: progress source and geometric anchors in words; any non-desktop capture at REAL device dimensions (width AND height, responsive.md).
 7. **Return format:** verdict/data, per-finding severity + pixel evidence + file paths; camera operators return raw facts only, never judgments.
 8. **Commit ownership:** state whether the agent commits (per-section micro-commits) or the coordinator does — never both, never batched.
+9. **Model:** judgment roles (builders, section auditors, anything making a design call or quality verdict) inherit the session model — OMIT the model parameter unless logan directs otherwise. Mechanical roles (camera operators, file sweeps, chunk extractors) may run sonnet. Never downgrade an auditor or builder for cost on your own initiative.
 
 Two coordinator-side rules that ride with the checklist: a NESTED coordinator (an agent spawning its own subagents) passes this checklist down verbatim — every layer re-briefs, because no layer inherits; and the coordinator personally Reads every returned screenshot before acting on a visual claim — subagent reports are claims until verified.
 
