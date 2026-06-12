@@ -1,0 +1,386 @@
+/* ============================================================
+   11 - SERVICE PROJECT MANAGEMENT (v2)
+   The "project dossier" page — drafting-room register. mw-pm-* namespace
+   only; composed from dedicated templates (titleblock-hero-01,
+   discipline-split-01, delivery-schedule-01, portfolio-grid-01,
+   escalation-band-01, intake-cta-01, related-rail-02). The v1 mw-svc-*
+   toolkit (05/09) is untouched and still serves the v1 pages.
+   ============================================================ */
+
+/* ── §1 Hero — drawing-sheet masthead + full-bleed stage ──────────
+   Light full-width masthead over a full-bleed site photo; a drafting
+   title block (the corner block of a drawing sheet) overlaps the
+   photo's lower-right edge. */
+.mw-pm-hero {
+  position: relative;
+  background: var(--c-surface-warm);
+  color: var(--c-ink);
+  isolation: isolate;
+  /* Bottom padding clears the title block hanging below the stage. */
+  padding-bottom: clamp(56px, 5vw, 84px);
+}
+.mw-pm-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+.mw-pm-hero__inner { position: relative; z-index: 1; }
+.mw-pm-hero__masthead { padding-block: clamp(48px, 5vw, 88px) clamp(36px, 3.4vw, 56px); }
+.mw-pm-hero .mw-section-tag { margin-bottom: clamp(20px, 1.5vw, 24px); }
+.mw-pm-hero__title {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: clamp(44px, 6.2vw, 102px);
+  line-height: 0.92;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--c-ink);
+  margin: 0 0 clamp(24px, 2vw, 32px);
+}
+.mw-pm-hero__title-em { color: var(--c-accent); }
+/* Em line is clay, so the clay stamp would vanish — ink keeps the motif. */
+.mw-pm-hero__title-em .mw-stop { background: var(--c-ink); }
+/* Lead + CTAs share a row under the display line — drafting-sheet split. */
+.mw-pm-hero__side {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: clamp(24px, 3vw, 48px);
+}
+.mw-pm-hero__lead {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(16px, 1.2vw, 19px);
+  line-height: 1.55;
+  color: var(--c-ink-2);
+  max-width: 56ch;
+  margin: 0;
+}
+.mw-pm-hero__ctas { display: flex; flex-wrap: wrap; gap: 16px; align-items: stretch; }
+.mw-pm-hero .mw-cta--ghost { color: var(--c-ink); border-color: var(--c-ink); justify-content: center; }
+.mw-pm-hero .mw-cta--ghost:hover { border-color: var(--c-accent); color: var(--c-accent); background: rgba(168, 90, 44, 0.06); }
+.mw-pm-hero .mw-cta__num { color: var(--c-ink); }
+.mw-pm-hero .mw-cta--ghost:hover .mw-cta__num { color: var(--c-accent); }
+
+/* Full-bleed photo stage. */
+.mw-pm-hero__stage { position: relative; z-index: 1; }
+.mw-pm-hero__photo {
+  display: block;
+  width: 100%;
+  height: clamp(380px, 36vw, 560px);
+  object-fit: cover;
+  filter: saturate(0.92) contrast(1.05) sepia(0.08);
+}
+/* Anchor rail: an inner-gutter-aligned frame over the stage; the title
+   block sits at its lower-right and hangs below the photo edge. */
+.mw-pm-hero__anchor {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  pointer-events: none;
+}
+.mw-pm-hero__tblock {
+  pointer-events: auto;
+  transform: translateY(34%);
+  background: var(--c-surface);
+  border: 1.5px solid var(--c-ink);
+  box-shadow: 0 18px 36px -22px rgba(42, 27, 18, 0.32);
+}
+.mw-pm-hero__tblock-cap {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0;
+  padding: 9px 16px;
+  border-bottom: 1px solid var(--c-line);
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+}
+.mw-pm-hero__tblock-mark {
+  width: 7px;
+  height: 7px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+.mw-pm-hero__tblock-grid {
+  display: grid;
+  grid-auto-flow: column;
+  margin: 0;
+}
+.mw-pm-hero__tblock-cell {
+  padding: 12px 16px 14px;
+  border-left: 1px solid var(--c-line);
+}
+.mw-pm-hero__tblock-cell:first-child { border-left: 0; }
+.mw-pm-hero__tblock-k {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--c-ink-3);
+  margin: 0 0 5px;
+}
+.mw-pm-hero__tblock-v {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--c-ink);
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* ── §2 The Projects Group — narrative + discipline ledger + portrait ──
+   Cream ground (alternates against the hero's warm surface). Diamond-marked
+   ledger rows — no leading numbers on stacked lists. */
+.mw-pm-group {
+  position: relative;
+  background: var(--c-bg);
+  color: var(--c-ink);
+  padding-block: clamp(64px, 6.5vw, 112px);
+}
+.mw-pm-group__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  gap: clamp(40px, 5vw, 100px);
+  align-items: center;
+}
+.mw-pm-group .mw-section-tag { margin-bottom: clamp(20px, 1.5vw, 24px); }
+.mw-pm-group__title { margin-bottom: clamp(18px, 1.6vw, 26px); }
+.mw-pm-group__lead {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.1vw, 18px);
+  line-height: 1.6;
+  color: var(--c-ink-2);
+  max-width: 56ch;
+  margin: 0 0 clamp(28px, 2.6vw, 40px);
+}
+.mw-pm-group__ledger {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.mw-pm-group__row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding-block: 16px;
+  border-top: 0.5px solid var(--c-line);
+}
+.mw-pm-group__mark {
+  width: 7px;
+  height: 7px;
+  margin-top: 7px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+.mw-pm-group__name {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(18px, 1.4vw, 21px);
+  line-height: 1.05;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--c-ink);
+  margin: 0 0 5px;
+}
+.mw-pm-group__body {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--c-ink-2);
+  margin: 0;
+  max-width: 52ch;
+}
+.mw-pm-group__media {
+  margin: 0;
+  justify-self: end;
+  width: min(100%, 460px);
+}
+.mw-pm-group__photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border: 1px solid var(--c-line);
+  filter: saturate(0.92) contrast(1.05) sepia(0.08);
+}
+.mw-pm-group__cap {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 12px;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+}
+.mw-pm-group__cap-mark {
+  width: 7px;
+  height: 7px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
+/* ── §3 Delivery schedule — drafting-board gantt (scroll signature) ────
+   p = --pmg-p (JS flow writer; defaults to 1 so no-JS / reduced-motion
+   rests fully drawn). Per-row slice: --t from --thr, length 0.33. Bars
+   draw via clip-path (no texture squish); milestones set in each bar's
+   last 15%; the handover marker fills in the final 4% of the runway. */
+.mw-pm-gantt {
+  position: relative;
+  background: var(--c-surface-warm);
+  color: var(--c-ink);
+  overflow: hidden;
+  isolation: isolate;
+  padding-block: clamp(64px, 6.5vw, 112px);
+}
+.mw-pm-gantt::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 38px, var(--c-grain-on-light) 38px, var(--c-grain-on-light) 39px);
+}
+.mw-pm-gantt__inner { position: relative; z-index: 1; }
+.mw-pm-gantt__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: clamp(20px, 3vw, 56px);
+  align-items: end;
+  margin-bottom: clamp(32px, 3.2vw, 52px);
+}
+.mw-pm-gantt .mw-section-tag { margin-bottom: clamp(20px, 1.5vw, 24px); }
+.mw-pm-gantt__lead {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: clamp(15px, 1.05vw, 18px);
+  line-height: 1.6;
+  color: var(--c-ink-2);
+  max-width: 52ch;
+  margin: 0;
+  justify-self: end;
+}
+.mw-pm-gantt__board {
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  padding: clamp(20px, 2vw, 30px) clamp(20px, 2.2vw, 32px) 0;
+}
+.mw-pm-gantt__rows { list-style: none; margin: 0; padding: 0; }
+.mw-pm-gantt__row {
+  --t: clamp(0, calc((var(--pmg-p, 1) - var(--thr, 0)) / 0.33), 1);
+  display: grid;
+  grid-template-columns: minmax(240px, 300px) minmax(0, 1fr);
+  gap: clamp(20px, 2.4vw, 40px);
+  padding-block: clamp(14px, 1.4vw, 20px);
+  border-bottom: 0.5px solid var(--c-line);
+}
+.mw-pm-gantt__name {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(17px, 1.35vw, 20px);
+  line-height: 1.05;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--c-ink);
+  margin: 0 0 5px;
+}
+.mw-pm-gantt__body {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--c-ink-3);
+  margin: 0;
+  max-width: 40ch;
+}
+/* Week-tick lane: 8 vertical hairlines pace the schedule field. */
+.mw-pm-gantt__lane {
+  position: relative;
+  min-height: 56px;
+  background-image: repeating-linear-gradient(90deg, var(--c-line) 0, var(--c-line) 1px, transparent 1px, transparent calc(12.5% - 0.125px));
+  background-size: calc(100% + 1px) 100%;
+}
+.mw-pm-gantt__bar {
+  position: absolute;
+  top: 50%;
+  left: var(--bar-l, 0%);
+  width: var(--bar-w, 40%);
+  height: 26px;
+  transform: translateY(-50%);
+  background: var(--c-accent);
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 9px, rgba(59, 36, 24, 0.14) 9px, rgba(59, 36, 24, 0.14) 10px);
+}
+.mw-pm-gantt__bar-fill { display: none; }
+/* Milestone diamond at the bar's end — sets in the bar's last 15%. */
+.mw-pm-gantt__milestone {
+  --tm: clamp(0, calc((var(--t) - 0.85) / 0.15), 1);
+  position: absolute;
+  top: 50%;
+  left: calc(var(--bar-l, 0%) + var(--bar-w, 40%));
+  width: 10px;
+  height: 10px;
+  background: var(--c-navy);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .mw-pm-gantt__bar { clip-path: inset(0 calc((1 - var(--t)) * 100%) 0 0); }
+  .mw-pm-gantt__milestone {
+    transform: translate(-50%, -50%) rotate(45deg) scale(var(--tm));
+    opacity: var(--tm);
+  }
+}
+.mw-pm-gantt__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding-block: 14px;
+}
+.mw-pm-gantt__cap,
+.mw-pm-gantt__handover {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+}
+.mw-pm-gantt__cap-mark {
+  width: 7px;
+  height: 7px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+/* Handover diamond fills clay across the runway's final 4%. */
+.mw-pm-gantt__handover { color: var(--c-ink); }
+.mw-pm-gantt__handover-mark {
+  --th: clamp(0, calc((var(--pmg-p, 1) - 0.96) / 0.04), 1);
+  width: 9px;
+  height: 9px;
+  border: 1px solid var(--c-accent);
+  background: rgb(168 90 44 / calc(var(--th) * 100%));
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
