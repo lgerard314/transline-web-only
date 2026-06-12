@@ -210,8 +210,10 @@
   overflow: hidden;
   isolation: isolate;
   padding-block: clamp(64px, 6.5vw, 112px);
-  /* Tallest container (van load) sets the media zone; everything scales from it. */
-  --media-h: clamp(200px, 19vw, 274px);
+  /* Tallest container (the ~2.0 m stacked van load) sets the media zone;
+     everything scales from it. Raised from clamp(200px,19vw,274px) when the
+     4-drum load (1.0 m) became the 8-drum two-pallet stack (2.0 m). */
+  --media-h: clamp(240px, 23vw, 340px);
 }
 .mw-cwc-line::before {
   content: "";
@@ -316,28 +318,35 @@
 /* multiply-blend melts the photos' pure-white studio backgrounds into the
    section surface (white × cream = cream exactly — no visible rectangle);
    objects pick up a faint warm grade, consistent with the house photo LUT. */
-.mw-cwc-line__media img { width: auto; display: block; mix-blend-mode: multiply; }
-/* Proportional heights — calibrated to ONE real-world scale (drum = 88 cm
-   datum): pail 0.4 m, drum 0.9 m, tote 1.2 m, palletized load 1.0 m, each
-   factor = (target subject px) / (subject's fill fraction of its canvas).
-   The negative bottom margins sink each canvas's empty lower margin behind
-   the baseline (overflow clips it) so the SUBJECT stands on the rule.
-   --subj = subject height as a fraction of the media zone (drives the datum
-   marker position). */
-/* --subj fractions audit-calibrated 2026-06-12 from the PNGs' actual subject
-   bounding boxes (the original eyeballed values floated every datum marker
-   2.6–7px off its subject's top edge). Pail/van img factors re-scaled in the
-   same pass so all four tiers render ≈155px/m on one real-world scale (the
-   pail was ~10% small, the van load ~7% large); their --subj and sink
-   margins are scaled by the same ratios. */
-.mw-cwc-line__media[data-size="01"] { --subj: 0.226; }
-.mw-cwc-line__media[data-size="02"] { --subj: 0.516; }
-.mw-cwc-line__media[data-size="03"] { --subj: 0.675; }
-.mw-cwc-line__media[data-size="04"] { --subj: 0.579; }
-.mw-cwc-line__media[data-size="01"] img { height: calc(var(--media-h) * 0.30); margin-bottom: calc(var(--media-h) * -0.050); }
-.mw-cwc-line__media[data-size="02"] img { height: calc(var(--media-h) * 0.61); margin-bottom: calc(var(--media-h) * -0.055); }
-.mw-cwc-line__media[data-size="03"] img { height: calc(var(--media-h) * 0.84); margin-bottom: calc(var(--media-h) * -0.090); }
-.mw-cwc-line__media[data-size="04"] img { height: calc(var(--media-h) * 0.75); margin-bottom: calc(var(--media-h) * -0.100); }
+/* flex-shrink: 0 — the 8-drum canvas (img ≈ media-h wide, square) can exceed
+   the column width; without it flexbox would squish the img horizontally
+   (height is fixed → distortion). Centered overflow only clips the canvas's
+   pure-white side margins (subject is ~60% of canvas width, dead-centered). */
+.mw-cwc-line__media img { width: auto; flex-shrink: 0; display: block; mix-blend-mode: multiply; }
+/* Proportional heights — recalibrated 2026-06-12 (8-drum van load, "fit above
+   the line" pass) to ONE real-world scale: 155 px/m at 1440 (media-h 331.2px,
+   scale = 0.468 × media-h per metre). Pail 0.4 m, drum 0.9 m, tote 1.2 m,
+   stacked van load 2.0 m. Derived on paper from the PNGs' measured solid
+   subject bboxes (lum < 215; canvas px):
+     pail  1024² top 90 bot 928 → fill 0.8193, below-subject 95px (0.0928)
+     drum  1024² top 66 bot 957 → fill 0.8711, below-subject 66px (0.0645)
+     tote  1024² top 93 bot 918 → fill 0.8066, below-subject 105px (0.1025)
+     van8  1254² top 45 bot 1253 → fill 0.9641, below-subject 0px
+   img factor = (realH × 0.468) / fill; sink = factor × belowFrac seats each
+   SUBJECT'S measured bottom row exactly on the clip edge (= the rule's top) —
+   the previous sinks over-shot by 1–6.5px, truncating every subject's base at
+   the rule (pail base curve and pallet feet visibly flat-cut). Only the
+   canvas's empty/shadow lower margin now hides behind the baseline.
+   --subj = factor × fill = subject height as a fraction of the media zone
+   (puts each datum marker on its subject's top edge). */
+.mw-cwc-line__media[data-size="01"] { --subj: 0.188; }
+.mw-cwc-line__media[data-size="02"] { --subj: 0.422; }
+.mw-cwc-line__media[data-size="03"] { --subj: 0.561; }
+.mw-cwc-line__media[data-size="04"] { --subj: 0.936; }
+.mw-cwc-line__media[data-size="01"] img { height: calc(var(--media-h) * 0.229); margin-bottom: calc(var(--media-h) * -0.0212); }
+.mw-cwc-line__media[data-size="02"] img { height: calc(var(--media-h) * 0.484); margin-bottom: calc(var(--media-h) * -0.0312); }
+.mw-cwc-line__media[data-size="03"] img { height: calc(var(--media-h) * 0.696); margin-bottom: calc(var(--media-h) * -0.0714); }
+.mw-cwc-line__media[data-size="04"] img { height: calc(var(--media-h) * 0.971); margin-bottom: 0; }
 
 .mw-cwc-line__meta { padding-top: 18px; }
 /* Pure technical annotation: a dim dotted drafting leader draws into the
@@ -408,6 +417,12 @@
 }
 
 @media (max-width: 960px) {
+  /* Two-up columns are far narrower than desktop's four — rescale the media
+     zone with the column so the ~square 8-drum canvas (img ≈ media-h wide)
+     keeps its subject inside the column (subject is ~60% of canvas width;
+     only white margin may clip). All factors/sinks/--subj are fractions of
+     --media-h, so the proportional scale survives unchanged. */
+  .mw-cwc-line { --media-h: clamp(160px, 40vw, 300px); }
   .mw-cwc-line__head { grid-template-columns: 1fr; align-items: start; }
   .mw-cwc-line__lead { justify-self: start; }
   .mw-cwc-line__row { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 48px; }
