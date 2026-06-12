@@ -819,18 +819,8 @@
   aspect-ratio: 16 / 10;
   overflow: hidden;
 }
-/* Static clay plate accent — non-link photos carry NO hover grammar
-   (logan 2026-06-12); the bar-grow/zoom vocabulary is reserved for linked
-   cards. */
-.mw-cwc-fleet__photo-bar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 56px;
-  height: 3px;
-  background: var(--c-accent);
-  z-index: 1;
-}
+/* (Clay bar stub removed 2026-06-12 — it existed for the retired
+   hover-grow; non-link photos carry no hover grammar.) */
 .mw-cwc-fleet__photo img {
   width: 100%;
   height: 100%;

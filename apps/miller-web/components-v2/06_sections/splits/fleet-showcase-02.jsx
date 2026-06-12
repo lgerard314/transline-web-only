@@ -7,13 +7,13 @@ import { sectionProps } from "@/components-v2/section-config";
 
 // Non-link photo: no hover grammar (no zoom, no bar-grow — reserved for
 // linked cards); instead a mouse-tracking parallax drift once rendered
-// (logan 2026-06-12). The clay top bar stays as a static plate accent.
+// (logan 2026-06-12). The clay bar stub was removed with the hover effect
+// it existed for.
 function ParallaxPhoto({ src }) {
   const ref = useRef(null);
   useMouseParallax(ref);
   return (
     <figure className="mw-cwc-fleet__photo" ref={ref}>
-      <span className="mw-cwc-fleet__photo-bar" aria-hidden="true" />
       <img src={src} alt="" loading="lazy" />
     </figure>
   );
