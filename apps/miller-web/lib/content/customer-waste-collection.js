@@ -125,26 +125,29 @@ export const customerWasteCollection = {
     titleEm: "our trucks",
     lead:
       "No brokers, no third-party haulers. Every collection moves on Miller-owned, hazardous-rated equipment — placarded for transport of dangerous goods, manifest-ready, and matched to the size of your load.",
+    // Bodies are ONE caption line by design (logan 2026-06-12: the plates
+    // are spec-sheet lines; the body is a quiet sub-caption, not a
+    // paragraph). Keep trims under ~60 characters.
     units: [
       {
         num: "01",
         name: "Vacuum units",
         role: "Bulk liquids & sludges",
-        body: "Kenworth, Peterbilt, and Freightliner vacuum trucks for tank bottoms, washwater, and pumpable streams.",
+        body: "Kenworth, Peterbilt & Freightliner pump-out trucks.",
         image: "/miller/cwc/fleet-vacuum.png",
       },
       {
         num: "02",
         name: "Highway tractors",
         role: "Palletized van loads",
-        body: "Volvo and International tractors moving full container loads — palletized drums, totes, and lab packs in dedicated vans.",
+        body: "Volvo & International tractors with dedicated vans.",
         image: "/miller/cwc/fleet-tractor.png",
       },
       {
         num: "03",
         name: "Light duty",
         role: "Small pickups & site support",
-        body: "Super Duty service units for single-pail collections, lab-pack visits, and site assessments across our coverage area.",
+        body: "Super Duty units for lab packs and site visits.",
         image: "/miller/cwc/fleet-lightduty.png",
       },
     ],

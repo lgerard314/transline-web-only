@@ -843,19 +843,22 @@
   }
 }
 .mw-cwc-fleet__plate { padding: clamp(14px, 1.4vw, 20px) clamp(14px, 1.4vw, 20px) clamp(16px, 1.5vw, 22px); }
-/* Spec-plate row: a dim dotted drafting leader draws into the right-aligned
-   role tag (same device as the §2 id rows — fills the old marker slot with
-   purpose, logan 2026-06-12), consuming the cell's own M2 slice --t. */
-.mw-cwc-fleet__plate-row {
+/* The spec-sheet line (logan's T1 pick, 2026-06-12): title + drafting
+   leader + role tag on ONE row — the leader draws into the tag consuming
+   the cell's own M2 slice --t (same device as the §2 id rows). */
+.mw-cwc-fleet__title-row {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 10px;
-  margin: 0 0 10px;
+  margin: 0 0 8px;
 }
 .mw-cwc-fleet__plate-leader {
   flex: 1;
   height: 0;
   border-bottom: 1px dotted color-mix(in srgb, var(--c-ink) 22%, var(--c-line));
+  /* Optically centers the dotted rule on the mono tag beside it (the span
+     is height-0 and sits on the row baseline otherwise). */
+  transform: translateY(-3px);
 }
 @media (prefers-reduced-motion: no-preference) {
   .mw-cwc-fleet__plate-leader { clip-path: inset(0 calc((1 - var(--t, 1)) * 100%) 0 0); }
@@ -868,6 +871,7 @@
   text-transform: uppercase;
   color: var(--c-ink-3);
   text-align: right;
+  white-space: nowrap;
 }
 .mw-cwc-fleet__name {
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
@@ -877,52 +881,21 @@
   letter-spacing: 0.005em;
   text-transform: uppercase;
   color: var(--c-ink);
-  margin: 0 0 8px;
+  margin: 0;
+  white-space: nowrap;
 }
+/* Caption register (logan's option 1, 2026-06-12): one quiet line directly
+   under the spec line — subordinated, not a floating paragraph. */
 .mw-cwc-fleet__body {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
-  font-size: 14.5px;
-  line-height: 1.5;
-  color: var(--c-ink-2);
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--c-ink-3);
   margin: 0;
 }
 /* (Fleet footnote removed 2026-06-12 — it was a trailing pseudo-eyebrow;
    the consult's diamond-scarcity verdict + logan's call.) */
 
-/* ════════ TEMP — T0 vs T1 comparison (delete with the TEMP block in
-   fleet-showcase-02.jsx once logan picks). T1: the TITLE and the
-   leader+role line share ONE row — the plate becomes a single spec-sheet
-   line with the body anchored directly beneath it. ════════ */
-.mw-cwc-fleet__variant-tag {
-  margin: clamp(28px, 2.6vw, 40px) 0 10px;
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--c-amber);
-}
-.mw-cwc-fleet__title-row {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  margin: 0 0 8px;
-}
-.mw-cwc-fleet__name-inline {
-  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
-  font-weight: 600;
-  font-size: clamp(22px, 1.8vw, 27px);
-  line-height: 1.04;
-  letter-spacing: 0.005em;
-  text-transform: uppercase;
-  color: var(--c-ink);
-  white-space: nowrap;
-}
-/* The leader sits on the row baseline (it's height-0, so nudge it up to
-   the optical center of the mono tag beside it). */
-.mw-cwc-fleet__title-row .mw-cwc-fleet__plate-leader { transform: translateY(-3px); }
-.mw-cwc-fleet__title-row .mw-cwc-fleet__role { white-space: nowrap; }
-/* ════════ END TEMP ════════ */
 
 /* ── M2 fleet assembly scrub (contract in fleet-showcase-02.jsx) ────
    Consumes the writer's --cwcft-p; cells rise on 0.50-long slices with

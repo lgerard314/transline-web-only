@@ -116,16 +116,17 @@ export function FleetShowcase02({ content, config = {} }) {
               >
                 <article className="mw-cwc-fleet__card">
                   <ParallaxPhoto src={u.image} />
+                  {/* One spec-sheet line per unit (logan's T1 pick,
+                      2026-06-12): title + drafting leader + role tag share
+                      the row — the leader draws in with the cell's own M2
+                      slice — and the body sits directly beneath in the
+                      caption register, one line. */}
                   <div className="mw-cwc-fleet__plate">
-                    {/* Drafting leader drawing into the role tag — fills the
-                        old marker slot with purpose and draws in with the
-                        cell's own scrub slice (logan 2026-06-12: the emptied
-                        slot read hollow; leaders echo the datum callouts). */}
-                    <p className="mw-cwc-fleet__plate-row">
+                    <div className="mw-cwc-fleet__title-row">
+                      <h3 className="mw-cwc-fleet__name">{u.name}</h3>
                       <span className="mw-cwc-fleet__plate-leader" aria-hidden="true" />
                       <span className="mw-cwc-fleet__role">{u.role}</span>
-                    </p>
-                    <h3 className="mw-cwc-fleet__name">{u.name}</h3>
+                    </div>
                     <p className="mw-cwc-fleet__body">{u.body}</p>
                   </div>
                 </article>
@@ -134,37 +135,6 @@ export function FleetShowcase02({ content, config = {} }) {
           </ul>
         </div>
 
-        {/* ════════ TEMP — T0 vs T1 (logan picks, then this block + its CSS
-            get deleted). The real panel above is T0 (leader+role row above
-            the title). T1 below: TITLE + leader + role share ONE row, body
-            directly beneath. ════════ */}
-        <div aria-hidden="true">
-          <p className="mw-cwc-fleet__variant-tag">T1 — title + leader + role on one row; body below</p>
-          <div className="mw-cwc-fleet__panel" data-text-variant="t1">
-            <ul className="mw-cwc-fleet__grid">
-              {content.units.map((u, i) => (
-                <li
-                  key={u.num}
-                  className="mw-cwc-fleet__cell"
-                  style={{ "--thr": (SLICE_C0 + i * SLICE_STEP - SLICE_LEN).toFixed(2) }}
-                >
-                  <article className="mw-cwc-fleet__card">
-                    <ParallaxPhoto src={u.image} />
-                    <div className="mw-cwc-fleet__plate">
-                      <p className="mw-cwc-fleet__title-row">
-                        <span className="mw-cwc-fleet__name-inline">{u.name}</span>
-                        <span className="mw-cwc-fleet__plate-leader" aria-hidden="true" />
-                        <span className="mw-cwc-fleet__role">{u.role}</span>
-                      </p>
-                      <p className="mw-cwc-fleet__body">{u.body}</p>
-                    </div>
-                  </article>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        {/* ════════ END TEMP ════════ */}
 
       </div>
     </section>
