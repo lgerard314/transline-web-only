@@ -14,7 +14,7 @@ These are the canonical rendered-pixel references for sections logan has rated a
 
 Known artifact: the small dark "N" badge bottom-left in viewport shots is the Next.js dev-mode indicator, not page UI — ignore it.
 
-## Home (route `/`, miller-web) — captured 2026-06-12, commit `9675583`, viewport 1440×900
+## Home (route `/`, miller-web) — captured 2026-06-12, commit `c944d88`, viewport 1440×900
 
 | # | Section (template) | Pose | File | Vocabulary device | Capture probe facts |
 |---|---|---|---|---|---|
