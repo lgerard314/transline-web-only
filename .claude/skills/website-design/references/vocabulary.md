@@ -1,0 +1,42 @@
+# Vocabulary registry — approved devices + forbidden list
+
+The living ledger between the abstract grammar (design-language.md) and the verbatim canon (white-owl-*.md). **Approval is logan's call exclusively** — entries become "approved" only when he rates the page they live on as done. Agents add new devices as `pending`; they never self-approve. When a page is declared done, run the EXTRACTION PASS (process.md): walk every section, add/approve entries, harvest new forbidden items.
+
+Seeded 2026-06-12 from the two surfaces logan rates as reference: the HOME page (~95%, the foundation) and the emergency-response interior page (the §13 canonical interior). Job descriptions are extractions from the rendered work — logan corrects them as he reviews.
+
+## Approved devices (reusable, with judgment)
+
+| Device | Lives in | The job (why it's liked) | Motion class | Reuse guidance |
+|---|---|---|---|---|
+| Monument hero entrance | `monument-hero-01` (home §1) | Dark opening monument with an orchestrated load-in keyframe suite (clip/rise/zoom/fade) — the page arrives with authority instead of popping in | LARGE (entrance, not scroll) | Entrance suites are hero-only; interior heroes stay light per §12 and earn arrival via reveals |
+| ISO certs banner | `tall-static-banner-01` (home §2) | Proof currency presented as a quiet full-width band; the blue ISO seals are a sanctioned third-party-mark exception | SMALL (reveal) | Any "credentials strip" job; never recolor third-party marks |
+| Services roster + title-indent hover | `roster-collage-02` (home §3) | The service list as a designed collage, with the title INDENT on hover — the micro-motion logan names as what makes the page feel alive | SMALL/hover | The indent-on-hover belongs to the site-wide hover grammar for list titles — reuse the behavior anywhere list titles are interactive |
+| Sector diamonds + spotlight | `sector-diamonds-04` (home §4) | Who-we-serve as a rotated-diamond grid with a 4-photo spotlight; pins on desktop ONLY as a fit guarantee (spotlight labels would clip — margin of error too small) | LARGE (utility pin) + MEDIUM | The worked example of a UTILITY pin (motion.md): the pin is engineering, not spectacle — don't carry it to surfaces without the fit problem |
+| Lifetime band growth | `lifetime-reel-01` (home §5) | Stage-level container growth as the section's statement — the band physically expands as you arrive | LARGE (stage transformation) | Stage growth is home-tier; on interior pages flag before using. Diamonds always one row |
+| VBEC media split (pinned beats) | `media-split-01` (home §6) | The sweet-spot exemplar: pinned beat sequence where the cream surface erases the walnut (stage) while the photos container assembles (element) — both targets on one progress source | LARGE pin carrying MEDIUM beats | The photos-container assembly is THE medium-motion reference; reuse the assembly idea freely, the pin choreography sparingly |
+| History timeline scrub | `timeline-split-01` (home §7) | The company story as the page's densest scroll choreography — sticky plates + many small scrub consumers that reward slow scrolling | LARGE/MEDIUM mix | Density this high is home-tier; the per-plate scrub grammar (sticky + slices) reuses well at lower density |
+| Careers dive | `zoom-collage-01` (home §8) | Full-screen-converging zoom — the canonical MECHANISM pin (the hold IS the effect); pins on every surface, only layout adapts | LARGE (mechanism pin) | Mechanism pins are rare by definition; reuse the converge-then-release rhythm only where a section earns a full-screen moment |
+| Rotating affiliates banner | `rotating-banner-01` (home §9) | Partner marks in continuous quiet motion — alive without demanding attention | SMALL (ambient) | Any logo/marks rail; keep it ambient, never a focal moment |
+| Final CTA | `multi-column-cta-01` (home §10) | The close as a multi-column action panel with its own motion payoff (truck wash) — the page ends designed, not truncated | MEDIUM | Closes are light surfaces (§12); one payoff moment max |
+| Notification banners (single-clock) | `TimelineNotifyCycle` + ER response timeline (§13 canon) | iOS-style cycling status banners in lock-step with a route/timeline on ONE clock — logan explicitly loves this device; the Miller logomark on banners stays | MEDIUM (cycling) | Compose, never fork; one clock owns banner index + any synced fill/highlight; freeze at index 0 under reduced motion |
+| Diamond mark system | site-wide (eyebrows, list rows, meters, captions) | The rotated-diamond as eyebrow mark, stacked-list row marker (hollow→filled = state), meter node, caption tick — one motif doing many jobs | SMALL/hover | The default marker everywhere; filled-vs-hollow doubles as a non-color state cue |
+| Edge-spanning surfaces | rule in design-language.md | Photos/cards running from one screen edge to the opposite body-content boundary — breaks the content column, takes scroll effects naturally | usually MEDIUM | At least one per page (required); never past the far gutter |
+
+Pending entries (built on the v2 interior pages, NOT approved — those pages await update passes): drafting title block (PM hero), gantt schedule draw (PM), marker sweep (VMV creed), before/after restoration wipe (REM), closure ladder (REM), capability ledger sheet (REM), screening room (REM). Treat as candidates; logan rules on them during the page passes.
+
+## Forbidden list (each entry = a real correction; the why lives at the link)
+
+- **Mono/eyebrow-font `01/02/…` numbering leading stacked list rows** — use the diamond mark (design-language.md; logan 2026-06-12). Compositional numbering on cards-in-a-row/stations/plates is a different, allowed device.
+- **Imposed color schemes/grades/time-of-day mandates on photo prompts** (imagery.md — the rule this registry exists to never re-learn).
+- **Per-page CSS photo filters** — removed at logan's direction; only home's `--mw-photo-grade` token survives, frozen (imagery.md).
+- **Blue/teal/cool color families in UI, CSS, or generated graphics** (design-language.md; exceptions: third-party marks incl. the ISO seals).
+- **Pills / `rounded-full`** — squared rectangles only (canon).
+- **Purposeless image dumps** — a curated composition never degrades into a wall of stacked images on any viewport (responsive.md).
+- **Stripping motion on mobile** — adjust, never remove; `prefers-reduced-motion` is the only off-switch (responsive.md).
+- **New motion MECHANICS without flagging** — new applications of proven mechanics only (motion.md).
+- **Hover-commit on pickers that control active media players** — click-commit instead; hover-swap tears down a playing video (REM screening-room lesson).
+- **More than one eyebrow per element; dark section directly before the footer; more than one dark anchor on interior pages** (design-language.md; home is the sanctioned multi-anchor exception).
+- **The 24/7 emergency CTA in heroes of non-emergency pages** — home + emergency-related pages only; all other heroes take a single primary CTA (design-language.md; logan 2026-06-12).
+- **Per-section eyebrow→header or header→intro gap values** — those two gaps are one shared site-wide value each, from the home foundation (design-language.md).
+- **Tailwind/shadcn/framer-motion imports; raw hex colors; `var(--x, #hex)` token-guess fallbacks; generic SaaS filler copy** (porting + canon).
+- **Editing the stub files at the old `docs/` paths** — canon edits happen in this skill's `white-owl-*.md` copies only.

@@ -68,7 +68,7 @@ if (tool === "Edit" || tool === "Write" || tool === "MultiEdit") {
   if (!DESIGN_SURFACE.test(fp)) process.exit(0);
   if (!due("design-edit", EDIT_COOLDOWN_MIN)) process.exit(0);
   emit(
-    "Design-surface edit detected (auto-reminder, fires max 1/20min). The website-design skill (~/.claude/skills/website-design) governs this work: motion contracts written BEFORE coding with completions landing AT geometric anchors; probes + your own eyes on rendered pixels before any 'done' claim; the home page is the structural/motion foundation; devices come from vocabulary.md (approved list + forbidden list — no leading numbers on stacked lists, photos prompted neutral, motion adjusted never stripped on mobile). If this session is page/section design work and the skill isn't loaded, invoke it now."
+    "Design-surface edit detected (auto-reminder, fires max 1/20min). The website-design skill (.claude/skills/website-design (in-repo)) governs this work: motion contracts written BEFORE coding with completions landing AT geometric anchors; probes + your own eyes on rendered pixels before any 'done' claim; the home page is the structural/motion foundation; devices come from vocabulary.md (approved list + forbidden list — no leading numbers on stacked lists, photos prompted neutral, motion adjusted never stripped on mobile). If this session is page/section design work and the skill isn't loaded, invoke it now."
   );
 }
 

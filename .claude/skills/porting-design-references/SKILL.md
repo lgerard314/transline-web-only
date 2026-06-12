@@ -10,7 +10,7 @@ description: Use when adapting or porting an external UI reference — a compone
 An external reference is a **structure-and-motion donor, not a design.** You take its *layout idea* and *interaction*, and rebuild it natively in this repo's warm-clay system. You never keep its stack, its palette, its corners, or its generic identity. A correct port looks hand-built for Miller/TL49; a paste job looks like the site you copied it from — that mismatch is exactly what causes the 10-revision death spiral.
 
 **Read first, every single time** — porting from memory is the #1 failure:
-`CLAUDE.md` (repo + app) · the design canon in the website-design skill at `C:\Users\logan\.claude\skills\website-design\references\white-owl-design-system.md` (esp. §13 worked map, §14 TL49 — the old `docs/DESIGN-SYSTEM.md` path is a stub) · `apps/miller-web/app/styles/01-tokens.css` (the real token names) · and skim the two **reference pages** the doc names (Miller home + `/industrial-services/emergency-response`). The port must end up looking like it belongs beside those pages.
+`CLAUDE.md` (repo + app) · the design canon in the website-design skill at `.claude/skills/website-design/references\white-owl-design-system.md` (esp. §13 worked map, §14 TL49 — the old `docs/DESIGN-SYSTEM.md` path is a stub) · `apps/miller-web/app/styles/01-tokens.css` (the real token names) · and skim the two **reference pages** the doc names (Miller home + `/industrial-services/emergency-response`). The port must end up looking like it belongs beside those pages.
 
 ## Strip the foreign stack → use this repo's idioms
 
@@ -32,7 +32,7 @@ An external reference is a **structure-and-motion donor, not a design.** You tak
 
 ## Land it the repo's way
 
-- **miller-web is template-first** (read the template guide in the website-design skill: `C:\Users\logan\.claude\skills\website-design\references\white-owl-templates.md` — the old `components-v2/README.md` path is a stub). Don't drop a one-off component on a page — extend or add a `components-v2` template fed a `content` object, browse `/template-gallery` for an existing fit first, and run `npm run template-map` before editing any shared template. **transline49-web is still bespoke** — mirror the reference pages in its own `tl49-*` layer; do **not** import `@/components-v2` into TL49.
+- **miller-web is template-first** (read the template guide in the website-design skill: `.claude/skills/website-design/references\white-owl-templates.md` — the old `components-v2/README.md` path is a stub). Don't drop a one-off component on a page — extend or add a `components-v2` template fed a `content` object, browse `/template-gallery` for an existing fit first, and run `npm run template-map` before editing any shared template. **transline49-web is still bespoke** — mirror the reference pages in its own `tl49-*` layer; do **not** import `@/components-v2` into TL49.
 - **Verify before you call it done:** run Playwright and **open the screenshots** (desktop + mobile), and compare against the reference pages. Structural assertions don't prove brand fit — look at the pixels.
 
 ## Common mistakes (from real porting failures)
