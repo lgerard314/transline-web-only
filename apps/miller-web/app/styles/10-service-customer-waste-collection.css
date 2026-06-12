@@ -955,7 +955,9 @@
   line-height: 1.55;
   color: var(--c-ink-2);
   max-width: 62ch;
-  margin: clamp(18px, 1.4vw, 22px) 0 0;
+  text-wrap: pretty;
+  /* Uniform header→intro gap (home foundation value). */
+  margin: clamp(18px, 1.6vw, 24px) 0 0;
 }
 .mw-cwc-index__grid {
   display: grid;
@@ -973,7 +975,9 @@
 .mw-cwc-index__row { border-bottom: 1px solid var(--c-line); }
 .mw-cwc-index__row-btn {
   display: grid;
-  grid-template-columns: 14px auto minmax(28px, 1fr) auto;
+  /* 20px mark cell: room for the active diamond's grow (home roster grammar)
+     without the name column ever shifting. */
+  grid-template-columns: 20px auto minmax(28px, 1fr) auto;
   align-items: baseline;
   gap: 14px;
   width: 100%;
@@ -996,21 +1000,26 @@
 }
 .mw-cwc-index__row[data-active="1"] .mw-cwc-index__row-btn,
 .mw-cwc-index__row-btn:hover { background: rgba(168, 90, 44, 0.05); }
-/* Diamond row mark — hollow at rest, clay-filled on the locked row (a
-   non-color active cue alongside the accent name + tinted bg). Sits in the
-   baseline grid, so nudge to optically center on the name's cap height. */
+/* Diamond row mark — hollow at rest; on the locked row it GROWS, fills clay,
+   and spins a quarter turn (the home roster row-mark grammar, scaled to this
+   denser index; the fixed 20px grid cell keeps the name from shifting). */
 .mw-cwc-index__mark {
   align-self: center;
+  justify-self: center;
   width: 8px;
   height: 8px;
   border: 1px solid color-mix(in srgb, var(--c-ink) 34%, var(--c-line));
   background: transparent;
   transform: rotate(45deg);
-  transition: background 240ms ease, border-color 240ms ease;
+  transition: width 280ms cubic-bezier(0.2, 0.7, 0.2, 1), height 280ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    background-color 240ms ease, border-color 240ms ease, transform 420ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 .mw-cwc-index__row[data-active="1"] .mw-cwc-index__mark {
+  width: 12px;
+  height: 12px;
   border-color: var(--c-accent);
   background: var(--c-accent);
+  transform: rotate(225deg);
 }
 .mw-cwc-index__name {
   font-family: var(--font-condensed), ui-sans-serif, sans-serif;
@@ -1020,9 +1029,14 @@
   letter-spacing: 0.005em;
   text-transform: uppercase;
   color: var(--c-ink);
-  transition: color 240ms ease;
+  /* Title-indent on the active/hovered row — the site-wide micro-motion for
+     interactive list titles (home roster: text nudges right, mark stays). */
+  transition: color 200ms ease, transform 220ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
-.mw-cwc-index__row[data-active="1"] .mw-cwc-index__name { color: var(--c-accent); }
+.mw-cwc-index__row[data-active="1"] .mw-cwc-index__name {
+  color: var(--c-accent);
+  transform: translateX(8px);
+}
 .mw-cwc-index__streams {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
   font-size: 13.5px;
@@ -1102,7 +1116,7 @@
 
 @media (max-width: 960px) {
   .mw-cwc-index__grid { grid-template-columns: 1fr; }
-  .mw-cwc-index__row-btn { grid-template-columns: 14px minmax(0, 1fr); }
+  .mw-cwc-index__row-btn { grid-template-columns: 20px minmax(0, 1fr); }
   .mw-cwc-index__leader { display: none; }
   .mw-cwc-index__streams { grid-column: 2; text-align: left; }
 }
