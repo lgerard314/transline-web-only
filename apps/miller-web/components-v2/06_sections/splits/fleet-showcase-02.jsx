@@ -86,32 +86,37 @@ export function FleetShowcase02({ content, config = {} }) {
           <p className="mw-cwc-fleet__lead" data-reveal>{content.lead}</p>
         </header>
 
-        {/* No data-reveal-stagger here: the M2 assembly scrub IS the grid's
-            arrival (a reveal would double-animate the cells). */}
-        <ul className="mw-cwc-fleet__grid" ref={gridRef}>
-          {content.units.map((u, i) => (
-            <li
-              key={u.num}
-              className="mw-cwc-fleet__cell"
-              style={{ "--thr": (SLICE_C0 + i * SLICE_STEP - SLICE_LEN).toFixed(2) }}
-            >
-              <article className="mw-cwc-fleet__card">
-                <figure className="mw-cwc-fleet__photo">
-                  <span className="mw-cwc-fleet__photo-bar" aria-hidden="true" />
-                  <img src={u.image} alt="" loading="lazy" />
-                </figure>
-                <div className="mw-cwc-fleet__plate">
-                  <p className="mw-cwc-fleet__plate-row">
-                    <span className="mw-cwc-fleet__num" aria-hidden="true">{u.num}</span>
-                    <span className="mw-cwc-fleet__role">{u.role}</span>
-                  </p>
-                  <h3 className="mw-cwc-fleet__name">{u.name}</h3>
-                  <p className="mw-cwc-fleet__body">{u.body}</p>
-                </div>
-              </article>
-            </li>
-          ))}
-        </ul>
+        {/* The edge-spanning surface ships INSIDE a container — the VBEC
+            photos-container chrome (warm panel + hairline + deep shadow),
+            per logan's 2026-06-12 rule; the panel carries the left bleed.
+            No data-reveal-stagger: the M2 assembly scrub IS the arrival
+            (cells rise from behind the panel's clipped edge). */}
+        <div className="mw-cwc-fleet__panel">
+          <ul className="mw-cwc-fleet__grid" ref={gridRef}>
+            {content.units.map((u, i) => (
+              <li
+                key={u.num}
+                className="mw-cwc-fleet__cell"
+                style={{ "--thr": (SLICE_C0 + i * SLICE_STEP - SLICE_LEN).toFixed(2) }}
+              >
+                <article className="mw-cwc-fleet__card">
+                  <figure className="mw-cwc-fleet__photo">
+                    <span className="mw-cwc-fleet__photo-bar" aria-hidden="true" />
+                    <img src={u.image} alt="" loading="lazy" />
+                  </figure>
+                  <div className="mw-cwc-fleet__plate">
+                    <p className="mw-cwc-fleet__plate-row">
+                      <span className="mw-cwc-fleet__plate-mark" aria-hidden="true" />
+                      <span className="mw-cwc-fleet__role">{u.role}</span>
+                    </p>
+                    <h3 className="mw-cwc-fleet__name">{u.name}</h3>
+                    <p className="mw-cwc-fleet__body">{u.body}</p>
+                  </div>
+                </article>
+              </li>
+            ))}
+          </ul>
+        </div>
 
         <p className="mw-cwc-fleet__footnote" data-reveal>
           <span className="mw-cwc-fleet__footnote-mark" aria-hidden="true" />

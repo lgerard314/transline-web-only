@@ -787,29 +787,33 @@
   justify-self: end;
 }
 
+/* The page's EDGE-SPANNING element (design-language: break the column at
+   least once) — and per logan's 2026-06-12 rule it ships INSIDE a container:
+   the home-VBEC photos-container chrome (warm surface + hairline + deep
+   shadow + inner padding). The PANEL carries the left bleed off the viewport
+   edge and stops at the content-right boundary; overflow hidden so the M2
+   cells rise from behind the panel's frame like the VBEC photo column.
+   50% − 50vw = −(left gutter); the ~half-scrollbar overshoot is a bleed
+   edge, nothing to read there. */
+.mw-cwc-fleet__panel {
+  margin-left: calc(50% - 50vw);
+  background: var(--c-surface-warm);
+  border: 1px solid var(--c-line);
+  box-shadow: 0 28px 64px -34px rgba(0, 0, 0, 0.55);
+  padding: clamp(10px, 1.2vw, 18px);
+  overflow: hidden;
+}
 .mw-cwc-fleet__grid {
   list-style: none;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(20px, 2.2vw, 36px);
-  /* The page's EDGE-SPANNING element (design-language: break the column at
-     least once): the grid bleeds off the LEFT viewport edge and stops at the
-     content-right boundary — mirroring home's left-bled capability rail.
-     50% − 50vw = −(left gutter); the ~half-scrollbar overshoot is cropped by
-     the section's overflow:hidden (it's a bleed edge, nothing to read there). */
-  margin: 0 0 0 calc(50% - 50vw);
+  gap: clamp(10px, 1.2vw, 18px);
+  margin: 0;
   padding: 0;
 }
-.mw-cwc-fleet__card {
-  height: 100%;
-  background: rgba(245, 230, 203, 0.035);
-  border: 1px solid rgba(245, 230, 203, 0.13);
-  transition: transform 420ms cubic-bezier(0.2, 0.7, 0.2, 1), border-color 320ms ease;
-}
-.mw-cwc-fleet__cell:hover .mw-cwc-fleet__card {
-  transform: translateY(-3px);
-  border-color: rgba(245, 230, 203, 0.22);
-}
+/* Cells sit ON the cream panel (VBEC grammar) — no dark card chrome; the
+   panel surface shows through the gaps. Light-surface text colors below. */
+.mw-cwc-fleet__card { height: 100%; }
 .mw-cwc-fleet__photo {
   position: relative;
   margin: 0;
@@ -837,20 +841,22 @@
   transition: transform 900ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 .mw-cwc-fleet__cell:hover .mw-cwc-fleet__photo img { transform: scale(1.03); }
-.mw-cwc-fleet__plate { padding: clamp(18px, 1.7vw, 24px) clamp(18px, 1.7vw, 24px) clamp(20px, 1.9vw, 26px); }
+.mw-cwc-fleet__plate { padding: clamp(14px, 1.4vw, 20px) clamp(14px, 1.4vw, 20px) clamp(16px, 1.5vw, 22px); }
 .mw-cwc-fleet__plate-row {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
   gap: 12px;
   margin: 0 0 10px;
 }
-.mw-cwc-fleet__num {
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  color: var(--c-accent);
+/* Diamond plate mark — the sequential mono numerals (01/02/03) are banned
+   in the eyebrow register (logan 2026-06-12); the house mark takes the slot. */
+.mw-cwc-fleet__plate-mark {
+  width: 7px;
+  height: 7px;
+  background: var(--c-accent);
+  transform: rotate(45deg);
+  flex-shrink: 0;
 }
 .mw-cwc-fleet__role {
   font-family: var(--font-plex-mono), ui-monospace, monospace;
@@ -858,7 +864,7 @@
   font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(245, 230, 203, 0.62);
+  color: var(--c-ink-3);
   text-align: right;
 }
 .mw-cwc-fleet__name {
@@ -868,14 +874,14 @@
   line-height: 1.04;
   letter-spacing: 0.005em;
   text-transform: uppercase;
-  color: #fff;
+  color: var(--c-ink);
   margin: 0 0 8px;
 }
 .mw-cwc-fleet__body {
   font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
   font-size: 14.5px;
   line-height: 1.5;
-  color: rgba(250, 243, 229, 0.89);
+  color: var(--c-ink-2);
   margin: 0;
 }
 .mw-cwc-fleet__footnote {
@@ -913,10 +919,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .mw-cwc-fleet__card,
   .mw-cwc-fleet__photo-bar,
   .mw-cwc-fleet__photo img { transition: none; }
-  .mw-cwc-fleet__cell:hover .mw-cwc-fleet__card { transform: none; }
   .mw-cwc-fleet__cell:hover .mw-cwc-fleet__photo img { transform: none; }
 }
 
