@@ -456,14 +456,21 @@
   line-height: 1.55;
   color: var(--c-ink-2);
   max-width: 52ch;
-  margin: clamp(18px, 1.4vw, 22px) 0 0;
+  text-wrap: pretty;
+  /* Uniform header→intro gap (home foundation value). */
+  margin: clamp(18px, 1.6vw, 24px) 0 0;
 }
 .mw-cwc-flow__notify {
   min-width: 0;
   display: flex;
   justify-content: center;
   align-self: start;
-  margin-top: calc(clamp(32px, 3.4vw, 60px) * 0.6);
+  /* Registers the feed panel's top edge with the title's CAP line: eyebrow
+     row (≈1em) + the uniform eyebrow→header margin + the title's cap inset
+     (≈0.264× the title's clamp(32px,3.4vw,60px) — Barlow Condensed's
+     negative half-leading puts the cap ~13px below the line-box top @1440;
+     audit-measured). */
+  margin-top: calc(clamp(20px, 1.5vw, 24px) + 1em + clamp(8.4px, 0.92vw, 15.9px));
 }
 /* Dispatch-feed panel — frames the notification stack so the column reads
    authored at every clock state (a lone floating banner read as sparse). */
@@ -501,6 +508,12 @@
   box-shadow: 0 12px 22px -16px rgba(42, 27, 18, 0.3);
 }
 .mw-cwc-flow__feed .mw-svc-tl-notify__icon { border-radius: 4px; }
+/* Tighten the reserved banner slot to exactly two banners + gap (the shared
+   clamp reserves up to 164px and the framed panel made the surplus read as a
+   dead void at clock state 0 / under reduced motion). 130px = 2×60.3px
+   banners + 8px gap at this page's copy lengths (probed @1440) — sized so
+   the 1→2 stack never shifts the route below. */
+.mw-cwc-flow__feed .mw-svc-tl-notify__stage { min-height: 130px; }
 
 /* Route frame: [start terminal] [stops track] [end terminal] on one rail. */
 .mw-cwc-flow__route {
@@ -688,6 +701,34 @@
   line-height: 1.5;
   color: var(--c-ink-2);
   margin: 0;
+}
+
+/* ── M3 route assembly scrub (contract in process-flow-02.jsx) ──────
+   Consumes the writer's --cwcf-p. ARRIVAL only — the clock's state colors
+   and fill width ride on different properties, so the two never fight.
+   Defaults (var(--cwcf-p, 1)) rest settled for no-JS; the whole block is
+   gated so reduced motion never sees a transform. */
+@media (prefers-reduced-motion: no-preference) {
+  /* The rail draws left→right, the front at p of its width. */
+  .mw-cwc-flow__rail {
+    clip-path: inset(0 calc((1 - var(--cwcf-p, 1)) * 100%) 0 0);
+  }
+  /* Per-item arrival slice: t = (p − thr)/0.28. Stations get --thr inline
+     (completions 0.225/0.475/0.725/0.975, just after the draw front passes
+     their node centers); terminals get theirs here. */
+  .mw-cwc-flow__terminal--start { --thr: -0.18; } /* lands at p = 0.10 */
+  .mw-cwc-flow__terminal--end { --thr: 0.72; }    /* lands at p = 1.000 */
+  .mw-cwc-flow__terminal,
+  .mw-cwc-flow__stop {
+    --t: clamp(0, calc((var(--cwcf-p, 1) - var(--thr, 0)) / 0.28), 1);
+    opacity: var(--t);
+    transform: translateY(calc((1 - var(--t)) * 22px));
+  }
+  /* The clock's fill + truck join on the tail slice, after the line exists. */
+  .mw-cwc-flow__fill,
+  .mw-cwc-flow__truck {
+    opacity: clamp(0, calc((var(--cwcf-p, 1) - 0.85) / 0.15), 1);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

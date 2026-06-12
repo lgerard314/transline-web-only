@@ -107,10 +107,13 @@ export const customerWasteCollection = {
       },
     ],
     notifications: [
+      // One-line bodies by design: the feed panel reserves an exact
+      // two-banner slot (130px @1440) so the stack never shifts the route
+      // below — a two-line body would overflow the slot mid-cycle.
       { title: "Streams profiled", body: "Waste types and volumes logged — service sized to your site." },
       { title: "Pickup scheduled", body: "A cadence is set. Your next collection window is booked." },
-      { title: "Packed & manifested", body: "Containers labelled and documented for hazardous transport." },
-      { title: "En route to VBEC", body: `Dedicated truck rolling to the licensed ${VBEC_SHORT} under chain of custody.` },
+      { title: "Packed & manifested", body: "Labelled and documented for hazardous transport." },
+      { title: "En route to VBEC", body: `Dedicated truck rolling to ${VBEC_SHORT} under chain of custody.` },
     ],
   },
 
