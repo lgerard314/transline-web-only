@@ -134,73 +134,36 @@ export function FleetShowcase02({ content, config = {} }) {
           </ul>
         </div>
 
-        {/* ════════ TEMP — TEXT-TREATMENT COMPARISON (logan picks, then this
-            whole block + its CSS get deleted). The panel above is T0
-            (current: leader+role / name / body in the plate). All photos
-            carry the picked V1 hairline. Duplicates aria-hidden. ════════ */}
-        {[
-          ["t1", "T1 — role caption as a chip ON the photo; plate = name + body"],
-          ["t2", "T2 — description hidden, revealed on hover (rest = role + name)"],
-          ["t3", "T3 — description plate in a walnut container under the photo"],
-          ["t4", "T4 — photos-only panel; all text outside on the walnut below"],
-          ["t5", "T5 — role caption as a tag straddling the photo's top edge"],
-        ].map(([variant, label]) => (
-          <div key={variant} aria-hidden="true">
-            <p className="mw-cwc-fleet__variant-tag">{label}</p>
-            <div className="mw-cwc-fleet__panel" data-text-variant={variant}>
-              <ul className="mw-cwc-fleet__grid">
-                {content.units.map((u, i) => (
-                  <li
-                    key={u.num}
-                    className="mw-cwc-fleet__cell"
-                    style={{ "--thr": (SLICE_C0 + i * SLICE_STEP - SLICE_LEN).toFixed(2) }}
-                  >
-                    <article className="mw-cwc-fleet__card">
-                      <div className="mw-cwc-fleet__media">
-                        <ParallaxPhoto src={u.image} />
-                        {(variant === "t1" || variant === "t5") && (
-                          <span className="mw-cwc-fleet__chip">{u.role}</span>
-                        )}
-                      </div>
-                      {variant !== "t4" && (
-                        <div className="mw-cwc-fleet__plate">
-                          {variant !== "t1" && variant !== "t5" && (
-                            <p className="mw-cwc-fleet__plate-row">
-                              <span className="mw-cwc-fleet__plate-leader" aria-hidden="true" />
-                              <span className="mw-cwc-fleet__role">{u.role}</span>
-                            </p>
-                          )}
-                          <p className="mw-cwc-fleet__name">{u.name}</p>
-                          {variant === "t2" ? (
-                            <div className="mw-cwc-fleet__body-reveal">
-                              <p className="mw-cwc-fleet__body">{u.body}</p>
-                            </div>
-                          ) : (
-                            <p className="mw-cwc-fleet__body">{u.body}</p>
-                          )}
-                        </div>
-                      )}
-                    </article>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            {variant === "t4" && (
-              <div className="mw-cwc-fleet__textrow">
-                {content.units.map((u) => (
-                  <div key={u.num}>
-                    <p className="mw-cwc-fleet__plate-row">
-                      <span className="mw-cwc-fleet__plate-leader" aria-hidden="true" />
-                      <span className="mw-cwc-fleet__role">{u.role}</span>
-                    </p>
-                    <p className="mw-cwc-fleet__name">{u.name}</p>
-                    <p className="mw-cwc-fleet__body">{u.body}</p>
-                  </div>
-                ))}
-              </div>
-            )}
+        {/* ════════ TEMP — T0 vs T1 (logan picks, then this block + its CSS
+            get deleted). The real panel above is T0 (leader+role row above
+            the title). T1 below: TITLE + leader + role share ONE row, body
+            directly beneath. ════════ */}
+        <div aria-hidden="true">
+          <p className="mw-cwc-fleet__variant-tag">T1 — title + leader + role on one row; body below</p>
+          <div className="mw-cwc-fleet__panel" data-text-variant="t1">
+            <ul className="mw-cwc-fleet__grid">
+              {content.units.map((u, i) => (
+                <li
+                  key={u.num}
+                  className="mw-cwc-fleet__cell"
+                  style={{ "--thr": (SLICE_C0 + i * SLICE_STEP - SLICE_LEN).toFixed(2) }}
+                >
+                  <article className="mw-cwc-fleet__card">
+                    <ParallaxPhoto src={u.image} />
+                    <div className="mw-cwc-fleet__plate">
+                      <p className="mw-cwc-fleet__title-row">
+                        <span className="mw-cwc-fleet__name-inline">{u.name}</span>
+                        <span className="mw-cwc-fleet__plate-leader" aria-hidden="true" />
+                        <span className="mw-cwc-fleet__role">{u.role}</span>
+                      </p>
+                      <p className="mw-cwc-fleet__body">{u.body}</p>
+                    </div>
+                  </article>
+                </li>
+              ))}
+            </ul>
           </div>
-        ))}
+        </div>
         {/* ════════ END TEMP ════════ */}
 
       </div>

@@ -889,10 +889,10 @@
 /* (Fleet footnote removed 2026-06-12 — it was a trailing pseudo-eyebrow;
    the consult's diamond-scarcity verdict + logan's call.) */
 
-/* ════════ TEMP — TEXT-treatment comparison variants (delete with the
-   TEMP block in fleet-showcase-02.jsx once logan picks). T0 = the real
-   section above. All values pulled from house grammar: the §5 caption-chip
-   recipe, the §12 dark-surface text set, the roster 0fr reveal. ════════ */
+/* ════════ TEMP — T0 vs T1 comparison (delete with the TEMP block in
+   fleet-showcase-02.jsx once logan picks). T1: the TITLE and the
+   leader+role line share ONE row — the plate becomes a single spec-sheet
+   line with the body anchored directly beneath it. ════════ */
 .mw-cwc-fleet__variant-tag {
   margin: clamp(28px, 2.6vw, 40px) 0 10px;
   font-family: var(--font-plex-mono), ui-monospace, monospace;
@@ -902,71 +902,26 @@
   text-transform: uppercase;
   color: var(--c-amber);
 }
-/* Chip anchor lives OUTSIDE the clipped figure so chips can overlay/straddle. */
-.mw-cwc-fleet__media { position: relative; }
-/* T1 — the role caption ON the photo (the §5 contained-chip recipe). */
-.mw-cwc-fleet__chip {
-  position: absolute;
-  left: 12px;
-  top: 12px;
-  z-index: 2;
-  padding: 8px 12px;
-  background: var(--c-surface-warm);
-  border: 1px solid var(--c-line);
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
-  font-size: 10.5px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
+.mw-cwc-fleet__title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0 0 8px;
+}
+.mw-cwc-fleet__name-inline {
+  font-family: var(--font-condensed), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: clamp(22px, 1.8vw, 27px);
+  line-height: 1.04;
+  letter-spacing: 0.005em;
   text-transform: uppercase;
-  color: var(--c-ink-2);
+  color: var(--c-ink);
   white-space: nowrap;
 }
-/* T2 — description hidden at rest, 0fr→1fr reveal on cell hover (roster
-   mechanic; desktop-only by nature — flagged for the responsive pass). */
-.mw-cwc-fleet__body-reveal {
-  display: grid;
-  grid-template-rows: 0fr;
-  opacity: 0;
-  transform: translateY(4px);
-  transition: grid-template-rows 440ms cubic-bezier(0.2, 0.7, 0.2, 1), opacity 360ms ease, transform 440ms ease;
-}
-.mw-cwc-fleet__body-reveal > * { overflow: hidden; min-height: 0; }
-.mw-cwc-fleet__panel[data-text-variant="t2"] .mw-cwc-fleet__cell:hover .mw-cwc-fleet__body-reveal {
-  grid-template-rows: 1fr;
-  opacity: 1;
-  transform: none;
-}
-/* T3 — the description plate in a DIFFERENT-COLORED container: a walnut
-   block under the photo (§12 dark-surface text set). */
-.mw-cwc-fleet__panel[data-text-variant="t3"] .mw-cwc-fleet__plate {
-  background: var(--c-navy);
-  margin-top: clamp(8px, 0.8vw, 12px);
-}
-.mw-cwc-fleet__panel[data-text-variant="t3"] .mw-cwc-fleet__name { color: #fff; }
-.mw-cwc-fleet__panel[data-text-variant="t3"] .mw-cwc-fleet__body { color: rgba(250, 243, 229, 0.89); }
-.mw-cwc-fleet__panel[data-text-variant="t3"] .mw-cwc-fleet__role { color: rgba(245, 230, 203, 0.62); }
-.mw-cwc-fleet__panel[data-text-variant="t3"] .mw-cwc-fleet__plate-leader { border-bottom-color: rgba(245, 230, 203, 0.3); }
-/* T4 — content COMPLETELY OUTSIDE the panel: photos-only panel, the text
-   row sits on the walnut below, columns aligned to the photos. */
-.mw-cwc-fleet__textrow {
-  margin-left: calc(50% - 50vw);
-  padding-inline: clamp(10px, 1.2vw, 18px);
-  margin-top: clamp(16px, 1.6vw, 24px);
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(10px, 1.2vw, 18px);
-}
-.mw-cwc-fleet__textrow .mw-cwc-fleet__name { color: #fff; }
-.mw-cwc-fleet__textrow .mw-cwc-fleet__body { color: rgba(250, 243, 229, 0.89); }
-.mw-cwc-fleet__textrow .mw-cwc-fleet__role { color: rgba(245, 230, 203, 0.62); }
-.mw-cwc-fleet__textrow .mw-cwc-fleet__plate-leader { border-bottom-color: rgba(245, 230, 203, 0.3); }
-/* T5 — the caption as a physical TAG straddling the photo's top edge. */
-.mw-cwc-fleet__panel[data-text-variant="t5"] .mw-cwc-fleet__chip {
-  top: 0;
-  left: 14px;
-  transform: translateY(-50%);
-  box-shadow: 0 8px 18px -12px rgba(42, 27, 18, 0.4);
-}
+/* The leader sits on the row baseline (it's height-0, so nudge it up to
+   the optical center of the mono tag beside it). */
+.mw-cwc-fleet__title-row .mw-cwc-fleet__plate-leader { transform: translateY(-3px); }
+.mw-cwc-fleet__title-row .mw-cwc-fleet__role { white-space: nowrap; }
 /* ════════ END TEMP ════════ */
 
 /* ── M2 fleet assembly scrub (contract in fleet-showcase-02.jsx) ────
