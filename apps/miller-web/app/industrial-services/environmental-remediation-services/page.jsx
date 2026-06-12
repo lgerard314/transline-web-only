@@ -1,12 +1,18 @@
-import { ServiceHero01 } from "@/components-v2/06_sections/heroes/service-hero-01";
-import { PhotoCardGrid01 } from "@/components-v2/06_sections/grids/photo-card-grid-01";
-import { PickerGallery01 } from "@/components-v2/06_sections/pickers/picker-gallery-01";
-import { ProcessFlow01 } from "@/components-v2/06_sections/flows/process-flow-01";
-import { VideoPicker01 } from "@/components-v2/06_sections/pickers/video-picker-01";
-import { WhyBand01 } from "@/components-v2/06_sections/grids/why-band-01";
-import { DispatchCta01 } from "@/components-v2/06_sections/callouts/dispatch-cta-01";
-import { RelatedRail01 } from "@/components-v2/06_sections/rails/related-rail-01";
-import { REMEDIATION as c } from "@/lib/content/service-environmental-remediation";
+import { SlabHero01 } from "@/components-v2/06_sections/heroes/slab-hero-01";
+import { RestorationWipe01 } from "@/components-v2/06_sections/flows/restoration-wipe-01";
+import { CapabilityLedger01 } from "@/components-v2/06_sections/grids/capability-ledger-01";
+import { ClosureLadder01 } from "@/components-v2/06_sections/flows/closure-ladder-01";
+import { CaseRail01 } from "@/components-v2/06_sections/grids/case-rail-01";
+import { ScreeningRoom01 } from "@/components-v2/06_sections/pickers/screening-room-01";
+import { CallbackCta01 } from "@/components-v2/06_sections/callouts/callback-cta-01";
+import { RelatedRail02 } from "@/components-v2/06_sections/rails/related-rail-02";
+import { environmentalRemediation as c } from "@/lib/content/environmental-remediation";
+
+// REM v2 — the "site file" page. Thin composition only: slab hero, the
+// before/after restoration wipe (scroll signature), type-led capability
+// ledger, vertical closure ladder with the cycling site feed, real case
+// studies, the dark screening room (real films), and the walnut-crowned
+// callback close.
 
 export const metadata = {
   title: "Environmental Remediation Services",
@@ -17,32 +23,16 @@ export const metadata = {
 };
 
 export default function RemediationPage() {
-  const whoWeServeContent = {
-    eyebrow: c.whoWeServe.eyebrow,
-    title: c.whoWeServe.title,
-    lead: c.whoWeServe.lead,
-    cta: c.whoWeServe.cta,
-    items: c.whoWeServe.provides,
-    titleId: c.whoWeServe.titleId,
-  };
-
-  const ctaContent = {
-    ...c.cta,
-    emergencyHref: c.hero.emergencyHref,
-    emergencyDisplay: c.hero.emergencyDisplay,
-  };
-
   return (
     <>
-      <ServiceHero01 content={c.hero} config={{ media: "video", reveal: true, ghostPhone: true }} />
-      <PhotoCardGrid01 content={c.whatWeDo} config={{ cardStyle: "wwd", head: "split", variant: "mw-rem-wwd" }} />
-      <PickerGallery01 content={whoWeServeContent} config={{ serve: true }} />
-      <ProcessFlow01 content={c.process} config={{ wide: true }} />
-      <VideoPicker01 content={c.videos} />
-      <PhotoCardGrid01 content={c.caseStudies} config={{ cardStyle: "case", head: "split", variant: "mw-rem-case" }} />
-      <WhyBand01 content={c.whyChoose} config={{ statCycle: true, variant: "mw-why--rem" }} />
-      <DispatchCta01 content={ctaContent} />
-      <RelatedRail01 content={c.related} />
+      <SlabHero01 content={c.hero} />
+      <RestorationWipe01 content={c.wipe} />
+      <CapabilityLedger01 content={c.capabilities} />
+      <ClosureLadder01 content={c.process} />
+      <CaseRail01 content={c.cases} />
+      <ScreeningRoom01 content={c.films} />
+      <CallbackCta01 content={c.cta} />
+      <RelatedRail02 content={c.related} config={{ hookClass: "mw-rem2-rel" }} />
     </>
   );
 }
