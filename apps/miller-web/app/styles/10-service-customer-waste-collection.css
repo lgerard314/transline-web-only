@@ -100,7 +100,6 @@
   object-fit: cover;
   object-position: center;
   display: block;
-  filter: saturate(1.02);
 }
 
 /* Custody strip — the manifest footer: caption, then three diamond nodes
