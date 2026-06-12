@@ -927,7 +927,10 @@
    locked state (CoverageGallery grammar, document-index markup). */
 .mw-cwc-index {
   position: relative;
-  background: var(--c-bg);
+  /* Surface rule (logan 2026-06-12): large sections (anything with a
+     body-intro) sit on --c-surface-warm or walnut; --c-bg is reserved for
+     banners, CTA-only strips, and containers INSIDE sections. */
+  background: var(--c-surface-warm);
   color: var(--c-ink);
   overflow: hidden;
   isolation: isolate;
