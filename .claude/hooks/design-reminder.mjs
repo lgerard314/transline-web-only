@@ -15,7 +15,7 @@ import { readFileSync, writeFileSync, statSync, mkdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-const DESIGN_SURFACE = /(app[\\/].*styles[\\/]|components-v2[\\/]|page\.jsx$|lib[\\/]content[\\/]|app[\\/]styles[\\/])/i;
+const DESIGN_SURFACE = /(app[\\/].*styles[\\/]|components-v2[\\/]|page\.jsx$|lib[\\/]content[\\/]|app[\\/]styles[\\/]|apps[\\/]brand[\\/])/i;
 const EDIT_COOLDOWN_MIN = 20;
 const AGENT_COOLDOWN_MIN = 10;
 
@@ -34,10 +34,17 @@ try {
 }
 
 const tool = evt.tool_name || "";
+// Cooldowns are PER AGENT, not machine-global: multiple sessions run this repo
+// in parallel AND coordinators spawn parallel design subagents — a shared stamp
+// would let the first agent's reminder suppress everyone else's for the whole
+// window. transcript_path is unique per agent (subagents get their own
+// transcript); session_id is the fallback.
+const keySrc = String(evt.transcript_path || evt.session_id || "global");
+const sid = keySrc.split(/[\\/]/).pop().replace(/[^a-z0-9-]/gi, "").slice(0, 24);
 
 function due(kind, minutes) {
   const stampDir = join(tmpdir(), "claude-design-reminder");
-  const stamp = join(stampDir, `${kind}.stamp`);
+  const stamp = join(stampDir, `${kind}-${sid}.stamp`);
   try {
     const age = (Date.now() - statSync(stamp).mtimeMs) / 60000;
     if (age < minutes) return false;
@@ -75,7 +82,7 @@ if (tool === "Edit" || tool === "Write" || tool === "MultiEdit") {
 if (tool === "Agent" || tool === "Task") {
   if (!due("agent-return", AGENT_COOLDOWN_MIN)) process.exit(0);
   emit(
-    "A subagent returned (auto-reminder, fires max 1/10min). If it was a design auditor: act on each finding or REJECT WITH CAUSE against the locked patterns (vocabulary.md), re-probe every applied fix at proven frames, and commit the section before moving on. If you are about to spawn another design subagent: it does NOT inherit the website-design skill — instruct it to invoke the skill or inline the rules it needs in its briefing (process.md templates)."
+    "A subagent returned (auto-reminder, fires max 1/10min). If it was a design auditor: act on each finding or REJECT WITH CAUSE against the locked patterns (vocabulary.md), re-probe every applied fix at proven frames, and commit the section before moving on. If it returned screenshots: Read them yourself before acting on any visual claim. If you are about to spawn another design subagent: it does NOT inherit the website-design skill — run the 8-item Subagent briefing checklist in .claude/skills/website-design/references/process.md (scope, server/browser, .scratch, inlined rules, locked patterns, motion/viewport contracts, return format, commit ownership), and nested coordinators must pass the checklist down verbatim."
   );
 }
 
