@@ -124,12 +124,13 @@ export function ContainerLineup02({ content, config = {} }) {
                     </span>
                   )}
                 </div>
-                <div className="mw-cwc-line__meta">
-                  {/* Pure technical annotation — the spec alone, dimmed to
-                      the datum register; the baseline tick already anchors
-                      the column (consult + logan, 2026-06-12: no diamonds
-                      outside eyebrows / diagram nodes / state markers). */}
+                {/* Meta block reveals as it enters (most text gets scroll
+                    motion — logan 2026-06-12); the id row's drafting leader
+                    draws into the spec with the tier's own scrub slice,
+                    filling the old marker slot with purpose. */}
+                <div className="mw-cwc-line__meta" data-reveal>
                   <p className="mw-cwc-line__id">
+                    <span className="mw-cwc-line__id-leader" aria-hidden="true" />
                     <span className="mw-cwc-line__spec">{t.spec}</span>
                   </p>
                   <h3 className="mw-cwc-line__name">{t.name}</h3>

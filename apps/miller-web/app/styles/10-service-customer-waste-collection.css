@@ -340,14 +340,23 @@
 .mw-cwc-line__media[data-size="04"] img { height: calc(var(--media-h) * 0.75); margin-bottom: calc(var(--media-h) * -0.100); }
 
 .mw-cwc-line__meta { padding-top: 18px; }
-/* Pure technical annotation: spec right-aligned, dimmed to the datum-marker
-   register (the lone diamond double-marked the column next to the baseline
-   tick — consult, 2026-06-12). */
+/* Pure technical annotation: a dim dotted drafting leader draws into the
+   right-aligned spec (echoes the datum callouts; fills the old marker slot
+   with purpose — logan 2026-06-12). The leader consumes the tier's own
+   scrub slice --t, so it draws in left→right as the container rises. */
 .mw-cwc-line__id {
   display: flex;
-  justify-content: flex-end;
   align-items: center;
+  gap: 10px;
   margin: 0 0 6px;
+}
+.mw-cwc-line__id-leader {
+  flex: 1;
+  height: 0;
+  border-bottom: 1px dotted color-mix(in srgb, var(--c-ink) 26%, var(--c-line));
+}
+@media (prefers-reduced-motion: no-preference) {
+  .mw-cwc-line__id-leader { clip-path: inset(0 calc((1 - var(--t, 1)) * 100%) 0 0); }
 }
 .mw-cwc-line__spec {
   font-family: var(--font-plex-mono), ui-monospace, monospace;
@@ -810,8 +819,9 @@
   aspect-ratio: 16 / 10;
   overflow: hidden;
 }
-/* The Careers-card motif on dark: a thick clay top bar that grows to full
-   width on hover. */
+/* Static clay plate accent — non-link photos carry NO hover grammar
+   (logan 2026-06-12); the bar-grow/zoom vocabulary is reserved for linked
+   cards. */
 .mw-cwc-fleet__photo-bar {
   position: absolute;
   top: 0;
@@ -820,26 +830,41 @@
   height: 3px;
   background: var(--c-accent);
   z-index: 1;
-  transition: width 500ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
-.mw-cwc-fleet__cell:hover .mw-cwc-fleet__photo-bar { width: 100%; }
 .mw-cwc-fleet__photo img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 900ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
-.mw-cwc-fleet__cell:hover .mw-cwc-fleet__photo img { transform: scale(1.03); }
+/* Mouse-tracking parallax (useMouseParallax writes --mpx/--mpy on the
+   figure): the img drifts ±7px after the cursor against a 1.06 scale
+   headroom, with a slow ease so it reads as a fluid magnetic follow and
+   returns softly on leave. Vars default 0 → settled center for no-JS. */
+@media (prefers-reduced-motion: no-preference) {
+  .mw-cwc-fleet__photo img {
+    transform: translate3d(calc(var(--mpx, 0) * 7px), calc(var(--mpy, 0) * 7px), 0) scale(1.06);
+    transition: transform 600ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    will-change: transform;
+  }
+}
 .mw-cwc-fleet__plate { padding: clamp(14px, 1.4vw, 20px) clamp(14px, 1.4vw, 20px) clamp(16px, 1.5vw, 22px); }
-/* Quiet spec-plate row: the role tag alone, right-aligned (the lone diamond
-   that replaced the numeral was an orphaned bullet — consult, 2026-06-12;
-   diamonds live only in eyebrows / diagram nodes / state markers now). */
+/* Spec-plate row: a dim dotted drafting leader draws into the right-aligned
+   role tag (same device as the §2 id rows — fills the old marker slot with
+   purpose, logan 2026-06-12), consuming the cell's own M2 slice --t. */
 .mw-cwc-fleet__plate-row {
   display: flex;
-  justify-content: flex-end;
   align-items: center;
+  gap: 10px;
   margin: 0 0 10px;
+}
+.mw-cwc-fleet__plate-leader {
+  flex: 1;
+  height: 0;
+  border-bottom: 1px dotted color-mix(in srgb, var(--c-ink) 22%, var(--c-line));
+}
+@media (prefers-reduced-motion: no-preference) {
+  .mw-cwc-fleet__plate-leader { clip-path: inset(0 calc((1 - var(--t, 1)) * 100%) 0 0); }
 }
 .mw-cwc-fleet__role {
   font-family: var(--font-plex-mono), ui-monospace, monospace;
@@ -884,11 +909,8 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .mw-cwc-fleet__photo-bar,
-  .mw-cwc-fleet__photo img { transition: none; }
-  .mw-cwc-fleet__cell:hover .mw-cwc-fleet__photo img { transform: none; }
-}
+/* (Reduced motion: the parallax block above is gated to no-preference and
+   the hook never attaches, so the photos rest plain — nothing to disable.) */
 
 @media (max-width: 960px) {
   .mw-cwc-fleet__head { grid-template-columns: 1fr; }
@@ -1050,6 +1072,15 @@
   transition: opacity 420ms ease;
 }
 .mw-cwc-index__photo[data-active="1"] { opacity: 1; }
+/* Mouse-tracking parallax on the non-link swap photo (the figure tracks via
+   useMouseParallax; same device as the fleet photos). */
+@media (prefers-reduced-motion: no-preference) {
+  .mw-cwc-index__photo {
+    transform: translate3d(calc(var(--mpx, 0) * 8px), calc(var(--mpy, 0) * 8px), 0) scale(1.06);
+    transition: opacity 420ms ease, transform 600ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    will-change: transform;
+  }
+}
 .mw-cwc-index__cap {
   position: absolute;
   left: 14px;

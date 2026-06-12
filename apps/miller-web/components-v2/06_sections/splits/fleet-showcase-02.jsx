@@ -2,7 +2,22 @@
 
 import { useEffect, useRef } from "react";
 import { StopText } from "@/components/StopText";
+import { useMouseParallax } from "@/components/useMouseParallax";
 import { sectionProps } from "@/components-v2/section-config";
+
+// Non-link photo: no hover grammar (no zoom, no bar-grow — reserved for
+// linked cards); instead a mouse-tracking parallax drift once rendered
+// (logan 2026-06-12). The clay top bar stays as a static plate accent.
+function ParallaxPhoto({ src }) {
+  const ref = useRef(null);
+  useMouseParallax(ref);
+  return (
+    <figure className="mw-cwc-fleet__photo" ref={ref}>
+      <span className="mw-cwc-fleet__photo-bar" aria-hidden="true" />
+      <img src={src} alt="" loading="lazy" />
+    </figure>
+  );
+}
 
 // L3 · fleet-showcase-02 — the page's single dark-walnut anchor (CWC v2 §4):
 // the real fleet, shown off. Three generated unit photos (matched to the
@@ -100,15 +115,14 @@ export function FleetShowcase02({ content, config = {} }) {
                 style={{ "--thr": (SLICE_C0 + i * SLICE_STEP - SLICE_LEN).toFixed(2) }}
               >
                 <article className="mw-cwc-fleet__card">
-                  <figure className="mw-cwc-fleet__photo">
-                    <span className="mw-cwc-fleet__photo-bar" aria-hidden="true" />
-                    <img src={u.image} alt="" loading="lazy" />
-                  </figure>
+                  <ParallaxPhoto src={u.image} />
                   <div className="mw-cwc-fleet__plate">
-                    {/* Quiet spec-plate tag, nothing else in the row — the
-                        diamond is reserved for eyebrows / diagram nodes /
-                        state markers (consult + logan, 2026-06-12). */}
+                    {/* Drafting leader drawing into the role tag — fills the
+                        old marker slot with purpose and draws in with the
+                        cell's own scrub slice (logan 2026-06-12: the emptied
+                        slot read hollow; leaders echo the datum callouts). */}
                     <p className="mw-cwc-fleet__plate-row">
+                      <span className="mw-cwc-fleet__plate-leader" aria-hidden="true" />
                       <span className="mw-cwc-fleet__role">{u.role}</span>
                     </p>
                     <h3 className="mw-cwc-fleet__name">{u.name}</h3>

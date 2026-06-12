@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { StopText } from "@/components/StopText";
+import { useMouseParallax } from "@/components/useMouseParallax";
 import { sectionProps } from "@/components-v2/section-config";
 
 // L3 · stream-index-02 — "who we collect from" as a manifest-style sector
@@ -21,6 +22,10 @@ export function StreamIndex02({ content, config = {} }) {
   const [active, setActive] = useState(() =>
     Math.max(0, sectors.findIndex((s) => s.default))
   );
+  // Non-link photo → mouse-tracking parallax, no hover grammar (logan
+  // 2026-06-12). The figure tracks; CSS drifts whichever img is active.
+  const mediaRef = useRef(null);
+  useMouseParallax(mediaRef);
 
   return (
     <section className="mw-cwc-index" aria-labelledby={content.titleId} {...sectionProps(config)}>
@@ -64,7 +69,7 @@ export function StreamIndex02({ content, config = {} }) {
             </div>
           </div>
 
-          <figure className="mw-cwc-index__media" data-reveal>
+          <figure className="mw-cwc-index__media" data-reveal ref={mediaRef}>
             {/* Keyed by active so the clay top bar replays its wipe per swap. */}
             <span key={active} className="mw-cwc-index__topbar" aria-hidden="true" />
             {sectors.map((s, i) => (
