@@ -42,6 +42,7 @@ Also invoke `frontend-design:frontend-design` — use ONLY its process/craft dis
 | [white-owl-design-system.md](references/white-owl-design-system.md) | White-owl monorepo visual canon (palette/tokens/type/motifs/§12 interior rules) — moved from the repo |
 | [white-owl-responsive-playbook.md](references/white-owl-responsive-playbook.md) | White-owl motion/responsive recipes, §6 checklist, §7 page production — moved from the repo |
 | [white-owl-templates.md](references/white-owl-templates.md) | miller-web components-v2 template library guide — moved from the repo |
+| `.claude/agents/design-auditor.md` | When spawning a section audit — the reusable auditor agent (self-loads this skill); `scripts/eval/` proves it loads canon + isn't a rubber-stamp |
 
 ## Non-negotiables (full detail in the files)
 
