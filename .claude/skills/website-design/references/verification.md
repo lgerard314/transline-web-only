@@ -40,4 +40,4 @@ Any section with pinning, sticky positioning, or scroll-tied motion gets a SEQUE
 
 ## Audits are part of verification
 
-Per-section fresh-agent audits (briefing template in process.md) catch what self-review can't — assume your own blind spots. Their findings are claims: re-probe what you apply, and reject with cause what contradicts locked patterns.
+Per-section fresh-agent audits (briefing template in process.md) catch what self-review can't — assume your own blind spots. Their findings are claims: re-probe what you apply, and reject with cause what contradicts the **auditor don't-flag list** (process.md) or proposes a **forbidden device** (vocabulary.md).

@@ -56,7 +56,7 @@ For EACH section, in order:
 1. **Build / edit (tier-led):** **Refine** → make the treatment change in place (spacing/type/motion-tuning/hover). **Restructure** → rebuild the section's internal composition + CSS. **Recast** → swap the section's device. **Rebuild** → build the template + content + CSS fresh. (See the tier×step table below for which later steps run.)
 2. **Self-probe:** Playwright script asserting the section's geometry at proven frames (anchor frames for motion, pairwise offsets for compositions, overflow/404/pageerror counters) AND screenshots you actually Read. Fix what you see before involving anyone else.
 3. **Fresh audit subagent** (see briefing template below) — a fresh-eyed model judges the rendered pixels against the bar: "exceptional, high-end, expensive-looking."
-4. **Act on findings:** apply what's right; REJECT WITH CAUSE what contradicts locked patterns (keep a rejection list — auditors repeatedly re-flag deliberate house patterns). Re-probe every applied fix.
+4. **Act on findings:** apply what's right; REJECT WITH CAUSE what contradicts the **auditor don't-flag list** (process.md) or proposes a **forbidden device** (vocabulary.md) (keep a rejection list — auditors repeatedly re-flag deliberate house patterns). Re-probe every applied fix.
 5. **Commit per section** with a message recording what was verified — the work must be traceable section by section.
 6. **If the section is APPROVED (listed in approved/INDEX.md) and your change alters its rendered appearance: refresh its reference screenshots + INDEX rows in the SAME commit — MECHANICALLY.** Run the capture harness in the background (`node .claude/skills/website-design/scripts/capture-home.mjs --section <NN> --class all`) and keep working while it runs; your only manual duties are reading the capture-report's converged flags, LOOKING at the changed shots, and updating the INDEX rows. NEVER hand-walk captures with an agent or spawn capture subagents for approved-page shots — that pattern is retired for token cost. If your change altered the section's choreography, update its manifest predicate (`scripts/capture-home-manifest.mjs`) in the same change. Shipping a visual change with stale reference shots is a process failure — the stale shot teaches every future agent the wrong target.
 
@@ -93,7 +93,7 @@ Before sending any builder / auditor / capture / verify / fix subagent, confirm 
 2. **Server/browser:** shared dev server on its ACTUAL port (state it) — never start/kill/restart it, never edit `next.config.*`; own fresh `chromium.launch()` per run, closed when done.
 3. **Artifacts:** all screenshots/scripts under the gitignored `.scratch/<task>/`; writes to `references/approved/` only via the INDEX protocol.
 4. **Rules in the prompt:** instruct the agent to invoke the `website-design` skill, or inline the locked rules the task touches (palette/type/motifs, stop-glyph periods, no leading numbers on stacked lists, neutral photos, motion adjusted never stripped, uniform heading-stack gaps). Subagents inherit NOTHING.
-5. **Locked-patterns list** for auditors — the deliberate house patterns they must not flag (process.md keeps the common set) — plus the expectation that the coordinator may reject findings with cause.
+5. **Auditor don't-flag list (process.md)** — the deliberate house patterns auditors must not flag — plus the expectation that the coordinator may reject findings with cause.
 6. **Motion + viewport contracts** when relevant: progress source and geometric anchors in words; any non-desktop capture at REAL device dimensions (width AND height, responsive.md).
 7. **Return format:** verdict/data, per-finding severity + pixel evidence + file paths; camera operators return raw facts only, never judgments.
 8. **Commit ownership:** state whether the agent commits (per-section micro-commits) or the coordinator does — never both, never batched.
@@ -103,9 +103,14 @@ Two coordinator-side rules that ride with the checklist: a NESTED coordinator (a
 
 ## Auditor briefing template
 
-Give every section auditor: the exact route + section selector; the design intent AND motion contract in words; the verification protocol (own fresh headless browser against the already-running shared dev server — NEVER start/kill/restart it; own subfolder under the gitignored `.scratch/` root; close the browser after); what to capture (rest + interaction states + seams + 2–3 widths, and for motion the mid-scrub frames + anchor frame); the LOCKED-RULES list of deliberate patterns they must not flag; required return format (verdict + per-finding severity/pixel-evidence/concrete-fix/screenshot-path). Tell them to READ every screenshot, not just probe.
+Give every section auditor: the exact route + section selector; the design intent AND motion contract in words; the verification protocol (own fresh headless browser against the already-running shared dev server — NEVER start/kill/restart it; own subfolder under the gitignored `.scratch/` root; close the browser after); what to capture (rest + interaction states + seams + 2–3 widths, and for motion the mid-scrub frames + anchor frame); the **auditor don't-flag list** (process.md, DF-*) they must not flag; required return format (verdict + per-finding severity/pixel-evidence/concrete-fix/screenshot-path). Tell them to READ every screenshot, not just probe.
 
-Common locked patterns to include (extend per repo): sentence-case body-CTA labels; inverted stamp colors on accent text; the dev-overlay badge in screenshots; per-field error messages; small mono text reading blue-ish in downscaled screenshots (subpixel artifact — verify computed color before claiming a palette violation).
+**Auditor don't-flag list** (deliberate house patterns auditors must NOT raise as defects — distinct from vocabulary.md's *forbidden devices*, which must not be BUILT). Cite by ID when rejecting a finding (extend per repo):
+- `DF-1` sentence-case body-CTA labels
+- `DF-2` inverted stamp colors on accent text
+- `DF-3` the dev-overlay badge in screenshots
+- `DF-4` per-field form error messages
+- `DF-5` small mono text reading blue-ish in downscaled screenshots (subpixel artifact — verify computed color before claiming a palette violation)
 
 ## Finish criteria (page level)
 

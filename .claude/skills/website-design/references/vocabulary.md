@@ -30,6 +30,8 @@ Logan-directed entries from the CWC update pass (2026-06-12 — he specified the
 
 ## Forbidden list (each entry = a real correction; the why lives at the link)
 
+> These are **forbidden DEVICES** (must not be BUILT). Distinct from the **auditor don't-flag list** in process.md (deliberate patterns auditors must not RAISE as defects). Don't conflate the two.
+
 - **Bare sequential `01/02/…` numerals in the mono/eyebrow register — as ANY item marker, anywhere** (design-language.md; logan 2026-06-12, twice: first banned on stacked lists, then extended to all compositions — cards in a row, plates, route nodes, custody strips). The diamond system takes the slot. The old "compositional numbering stays" carve-out is dead; only worded document captions (a hero "Article" line) survive. Worked refs: CWC fleet plate marks, container id marks, flow node glyphs.
 - **Imposed color schemes/grades/time-of-day mandates on photo prompts** (imagery.md — the rule this registry exists to never re-learn).
 - **Per-page CSS photo filters** — removed at logan's direction; only home's `--mw-photo-grade` token survives, frozen (imagery.md).
