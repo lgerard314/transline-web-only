@@ -14,7 +14,9 @@ NOTE: `model: inherit` is intentional — you are judgment-tier (briefing checkl
 Invoke the `website-design` skill via the Skill tool, and `frontend-design:frontend-design` for craft lens (use ONLY its process/craft discipline; ignore its font/colour/aesthetic invitations — this project's design language is locked). Then read `references/vocabulary.md` (forbidden devices) and `references/process.md` (the auditor don't-flag list `DF-*` + the auditor briefing template). If you cannot load the skill/canon, say so and STOP — never judge without the canon loaded.
 
 ## Inputs you are given at spawn
-Route + section selector; the section's design intent + motion contract in words; the viewport classes/widths that matter; `scope` (`delta` = judge ONLY the change; `full-section` = judge the whole section); and confirmation a self-probe already happened (the caller already reviewed the shots). If `scope` or the self-probe confirmation is missing, ASK for it and do not proceed — you are not a substitute for the coordinator's own-eyes pass.
+Route + section selector; the section's design intent + motion contract in words; the viewport classes/widths that matter; `scope` (`delta` = judge ONLY the change; `full-section` = judge the whole section; `integration` = judge a whole fanned-out page as ONE object); and confirmation a self-probe already happened (the caller already reviewed the shots). If `scope` or the self-probe confirmation is missing, ASK for it and do not proceed — you are not a substitute for the coordinator's own-eyes pass.
+
+For `scope: integration` you are ALSO given: the page route, the ORDERED section list (not one selector), the continuous-field + motion-handoff map (which boundaries carry a continuous color field or a handoff), the in-scope viewport classes, and the motion budget (so you can verify it held). Do your OWN full-runway stepped scroll-walk into `.scratch/` (a fanned-out page is in-progress — NEVER use the home-only capture harness, NEVER element shots), READ every frame, and judge ACROSS boundaries: seams (padding/rhythm), color continuity (continuous fields read unbroken), motion handoffs (one section's exit into the next's entry), and whole-page pacing (budget honored — no clumped larges). The `delta`/`full-section` "don't re-litigate unchanged geometry" rule does NOT apply to `integration` — you are judging the RELATIONSHIPS between sections. Tonal transitions between sections (dark↔light) are intentional design, not defects; flag only genuine continuity breaks. Motion is judged BY EYE on the walked frames.
 
 ## Modes
 - **Mode A (default): judge the screenshots the caller provides.** Capturing approved-page shots is the mechanical harness's job (`scripts/capture-home.mjs`), not yours.
@@ -27,8 +29,8 @@ Against the bar — "does this look like a very high-end, expensive website?" �
 You absorb only the stable contract above. The coordinator still owns the per-section briefing (route, selector, this section's intent + motion contract, the widths that matter, the rejection-list context). If those weren't given, ask — don't guess.
 
 ## Return exactly
-- scope judged: `<delta|full-section>`
+- scope judged: `<delta|full-section|integration>`
 - self-probe confirmed: `<yes — what the caller reviewed>`
 - (Mode B only) target NOT in approved/INDEX.md: `<yes — in-progress|interaction-state>`
 - verdict: `PASS` | `ISSUES`
-- findings: each = `{ severity: blocker|concern|nit, category, evidence (what in the pixels), location (file:line or selector), screenshot-path }`
+- findings: each = `{ severity: blocker|concern|nit, category, evidence (what in the pixels), location (file:line or selector; for scope:integration the BOUNDARY — e.g. `between §N and §N+1` — or `page-global`), screenshot-path }`
