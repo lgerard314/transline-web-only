@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ScheduleForm } from "@/components/ScheduleForm";
 import { StopText } from "@/components/StopText";
 import { sectionProps } from "@/components-v2/section-config";
@@ -34,6 +34,8 @@ import { sectionProps } from "@/components-v2/section-config";
 export function ScheduleCta02({ content, config = {} }) {
   const secRef = useRef(null);
   const gridRef = useRef(null);
+  const stepRefs = useRef([]);
+  const [stepsIn, setStepsIn] = useState([]);
 
   useEffect(() => {
     const sec = secRef.current;
@@ -68,6 +70,39 @@ export function ScheduleCta02({ content, config = {} }) {
     };
   }, []);
 
+  // Per-step appear reveal — the "what happens next" list fades + rises in as
+  // each step reaches full view (reversible), so the list animates instead of
+  // sitting static (logan 2026-06-13 motion rule: every list gets a per-item
+  // appear-reveal). Rests settled for no-JS / reduced motion.
+  useEffect(() => {
+    let raf = 0;
+    const same = (a, b) => (a.length === b.length && a.every((v, i) => v === b[i]) ? a : b);
+    const resolve = (prev, i, enter, below) => (enter ? true : below ? false : !!prev[i]);
+    const update = () => {
+      raf = 0;
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      setStepsIn((prev) =>
+        same(
+          prev,
+          stepRefs.current.map((el, i) => {
+            if (!el) return false;
+            const r = el.getBoundingClientRect();
+            return resolve(prev, i, r.top >= 0 && r.bottom <= vh, r.top >= vh);
+          }),
+        ),
+      );
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+
   return (
     <section ref={secRef} className="mw-cwc-sched" aria-labelledby={content.titleId} {...sectionProps(config)}>
       <div className="mw-cwc-sched__inner mw-inner">
@@ -88,9 +123,13 @@ export function ScheduleCta02({ content, config = {} }) {
             <p className="mw-cwc-sched__next-cap" data-reveal aria-hidden="true">
               {content.nextEyebrow}
             </p>
-            <ol className="mw-cwc-sched__steps" data-reveal-stagger>
-              {content.next.map((n) => (
-                <li key={n.name} className="mw-cwc-sched__step">
+            <ol className="mw-cwc-sched__steps">
+              {content.next.map((n, i) => (
+                <li
+                  key={n.name}
+                  ref={(el) => { stepRefs.current[i] = el; }}
+                  className={`mw-cwc-sched__step${stepsIn[i] ? " is-revealed" : ""}`}
+                >
                   <span className="mw-cwc-sched__step-mark" aria-hidden="true" />
                   <div className="mw-cwc-sched__step-body">
                     <h3 className="mw-cwc-sched__step-name">{n.name}</h3>

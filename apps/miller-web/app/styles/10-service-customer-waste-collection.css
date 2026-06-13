@@ -1270,6 +1270,17 @@
   padding-top: 18px;
   border-top: 0.5px solid var(--c-line);
 }
+/* Per-step appear reveal (logan 2026-06-13 motion rule): each step fades + rises
+   as it reaches full view (JS toggles .is-revealed, reversible top-down cascade).
+   Gated to no-preference so reduced motion / no-JS rest settled. */
+@media (prefers-reduced-motion: no-preference) {
+  .mw-cwc-sched__step {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.55s ease, transform 0.55s cubic-bezier(.16, .84, .3, 1);
+  }
+  .mw-cwc-sched__step.is-revealed { opacity: 1; transform: none; }
+}
 /* Diamond step mark (replaces the mono 01/02/03 — logan's call: no leading
    numbers on stacked lists). STATIC mark → hollow border-only, per the
    static-diamond rule (filled = eyebrow/hover states only). Offset to sit
