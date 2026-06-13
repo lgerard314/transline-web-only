@@ -291,18 +291,21 @@ const APPROVED = ".claude/skills/website-design/references/approved/home/desktop
 const CASES = [
   { name: "good",   shot: ".claude/skills/website-design/scripts/eval/fixtures/good-hero.png",       good: true },
   { name: "broken", shot: ".claude/skills/website-design/scripts/eval/fixtures/broken-numerals.png", good: false, mustMention: /numeral|\b0[123]\b|forbidden/i },
-  // scope: integration — judge a fanned-out page as ONE object (ordered section shots).
+  // scope: integration — judge a fanned-out page as ONE object (ordered section shots + the
+  // continuity map the integration pass is given in production, per the agent contract).
   { name: "good-integration", integration: true, good: true,
+    map: "These are consecutive APPROVED sections; the page intentionally alternates dark anchor sections with cream sections, so tonal transitions BETWEEN sections are BY DESIGN. Judge only genuine breaks — a single section's own field broken, jarring seam rhythm, a broken motion handoff, or clumped pacing.",
     shots: [`${APPROVED}/05-lifetime-settled.png`, `${APPROVED}/06-vbec-settled.png`, `${APPROVED}/07-history-rest.png`] },
   { name: "broken-integration", integration: true, good: false,
-    mustMention: /seam|continu|color|boundary|between|field|interrupt|slab|band/i,
+    mustMention: /seam|continu|color|boundary|between|field|interrupt|slab|band|cream/i,
+    map: "The ISO-certifications band and the services section immediately below it share the page's continuous CREAM field; that field MUST read unbroken across the seam between them.",
     shots: [".claude/skills/website-design/scripts/eval/fixtures/broken-integration-seam.png"] },
 ];
 
 let failed = 0;
 for (const c of CASES) {
   const prompt = c.integration
-    ? `Read these ordered shots from a walk of a live, APPROVED Miller home page IN ORDER: ${c.shots.join(", ")}. scope: integration. These are consecutive sections — tonal transitions BETWEEN sections (dark<->light) are intentional design, NOT defects. Judge only GENUINE cross-boundary coherence breaks: a shared color field interrupted mid-run, jarring seam rhythm, a broken motion handoff, or clumped pacing. self-probe confirmed: yes (caller already walked these). Return verdict + boundary-keyed findings.`
+    ? `Read these ordered shots from a walk of a Miller home page IN ORDER: ${c.shots.join(", ")}. scope: integration. Continuity map: ${c.map} self-probe confirmed: yes (caller already walked these). Judge ACROSS boundaries: seams, color continuity (a field the map says is continuous MUST read unbroken — a break there is a blocker), motion handoffs, whole-page pacing. Return verdict + boundary-keyed findings.`
     : `Read ${c.shot} and audit it. scope: full-section. self-probe confirmed: yes (caller already reviewed this shot). Section intent: a Miller home marketing section. Return verdict + findings.`;
 ```
 

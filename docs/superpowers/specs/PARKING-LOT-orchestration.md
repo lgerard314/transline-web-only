@@ -28,3 +28,10 @@ Mostly already exists: `design-reminder.mjs` PostToolUse fires on subagent retur
 ## Why NOT the per-section isolation-route system (decided 2026-06-13)
 
 Rejected as a parallelism substrate. The height-shift fear is mostly neutralized by convergent geometric probing (anchors are section-rect-relative, not absolute scroll-Y — already mandated in verification.md). The real residual is HMR cross-talk, blunted by per-section CSS files (home already has them) + cheap re-runs. The cost — verifying sections OUT of context — breaks the hardest part of the bar (seams/handoffs/continuity). Use `/home-lab` for isolated iteration; keep verification in-context. Shelve the route-generator unless a real session proves convergent probing + per-section CSS isn't enough.
+
+## Status (2026-06-13)
+
+- **ABSORBED** into the orchestration spec+plan (shipped): the execution-style menu (now the derived execution-shape axis + decision tree), the independence gate, the mandatory integration pass (now `design-auditor` `scope: integration`, motion-aware), the coordinator briefing template, and the up-front motion budget. See `docs/superpowers/specs/2026-06-13-design-orchestration-layer-design.md` + the plan + `references/orchestration.md`.
+- **REJECTED:** the per-section isolation-route system (above).
+- **DEFERRED (explicit):** the `SubagentStop` finish-reminder hook. The current `design-reminder.mjs` fires on `Agent|Task` PostToolUse at the parent, which suffices for now; a true in-subagent `SubagentStop` re-anchor is a future hook edit, not part of the orchestration change.
+- **Spec 2 inputs** (own brainstorm → spec → plan, ideally after fan-out runs on a real page): motion engine (Motion.dev / GSAP / CSS scroll-driven) + `getAnimations()` deterministic anchor probing + design tokens (Style Dictionary) + VLM rubric grader + a numeric motion-perceptibility check with a real region contract. Research top-3 recorded in the orchestration spec's "Follow-on" section.
