@@ -53,12 +53,25 @@ Per-section audits default ON. Only logan can waive them — the agent NEVER ski
 
 For EACH section, in order:
 
-1. **Build** the template + content + CSS.
+1. **Build / edit (tier-led):** **Refine** → make the treatment change in place (spacing/type/motion-tuning/hover). **Restructure** → rebuild the section's internal composition + CSS. **Recast** → swap the section's device. **Rebuild** → build the template + content + CSS fresh. (See the tier×step table below for which later steps run.)
 2. **Self-probe:** Playwright script asserting the section's geometry at proven frames (anchor frames for motion, pairwise offsets for compositions, overflow/404/pageerror counters) AND screenshots you actually Read. Fix what you see before involving anyone else.
 3. **Fresh audit subagent** (see briefing template below) — a fresh-eyed model judges the rendered pixels against the bar: "exceptional, high-end, expensive-looking."
 4. **Act on findings:** apply what's right; REJECT WITH CAUSE what contradicts locked patterns (keep a rejection list — auditors repeatedly re-flag deliberate house patterns). Re-probe every applied fix.
 5. **Commit per section** with a message recording what was verified — the work must be traceable section by section.
 6. **If the section is APPROVED (listed in approved/INDEX.md) and your change alters its rendered appearance: refresh its reference screenshots + INDEX rows in the SAME commit — MECHANICALLY.** Run the capture harness in the background (`node .claude/skills/website-design/scripts/capture-home.mjs --section <NN> --class all`) and keep working while it runs; your only manual duties are reading the capture-report's converged flags, LOOKING at the changed shots, and updating the INDEX rows. NEVER hand-walk captures with an agent or spawn capture subagents for approved-page shots — that pattern is retired for token cost. If your change altered the section's choreography, update its manifest predicate (`scripts/capture-home-manifest.mjs`) in the same change. Shipping a visual change with stale reference shots is a process failure — the stale shot teaches every future agent the wrong target.
+
+### The loop is tier-gated — run only what the scope tier requires
+
+The scope ladder sets depth; this table sets which loop steps actually run. Read your tier's row before running the loop — do not run the full Rebuild procedure for a lighter tier (a Refine that runs the full loop is the documented waste this table exists to stop). Urgency is real: the mechanical capture harness removed the token cost of re-capture, but the JUDGMENT cost (a judgment-tier auditor re-judging unchanged geometry) survives until you scope by tier.
+
+| Tier | template-map (step 0) | audit scope (step 3) | motion contracts | re-capture (step 6) |
+|---|---|---|---|---|
+| **Rebuild** | run if a shared template's default output changes | full-section — brief the auditor `scope: full-section` | write fresh | only if an approved section's appearance changed → run the harness |
+| **Recast** | run if the section's device is a shared template | full-section | per the new device | same |
+| **Restructure** | run if a shared template changes | full-section | **MUST re-derive** (geometry changed) | same |
+| **Refine** | **skip** when no shared template is touched | **delta — brief the auditor `scope: delta`** (judge the change, not the whole section) | re-probe at existing geometry | same |
+
+Tier-scoping the audit is NOT waiving it — a Refine still gets an audit, just scoped to the delta. The agent never self-waives (only logan waives; a waiver is recorded in the commit).
 
 ## Micro-commit discipline (applies to ALL passes, not just builds)
 
