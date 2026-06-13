@@ -87,8 +87,8 @@
 /* Single primary CTA (non-emergency hero rule, logan 2026-06-12). */
 .mw-cwc-hero__ctas { display: flex; flex-wrap: wrap; gap: 16px; align-items: stretch; }
 
-/* Full-height photo bleed off the right screen edge; soft fade into the
-   surface on its left edge so the masthead reads as one plane. */
+/* Full-height photo bleed off the right screen edge; a crisp clay hairline
+   (the ::after below) frames its left edge against the copy. */
 .mw-cwc-hero__bleed {
   position: absolute;
   top: 0;
@@ -98,16 +98,19 @@
   z-index: 0;
   overflow: hidden;
 }
+/* Crisp clay hairline at the photo's left edge — REPLACES the soft cream fade
+   that washed over the photo (logan 2026-06-13 disliked the gradient on the
+   picture). The same vertical chain-of-custody rule as the home hero: a thin
+   clay line fading out at top/bottom, framing a hard photo edge in the squared
+   house language — no blend over the image. */
 .mw-cwc-hero__bleed::after {
   content: "";
   position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to right,
-    var(--c-surface-warm) 0%,
-    rgba(251, 248, 242, 0.55) 7%,
-    rgba(251, 248, 242, 0) 17%
-  );
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent 0, rgba(168, 90, 44, 0.85) 14%, rgba(168, 90, 44, 0.85) 86%, transparent 100%);
   pointer-events: none;
 }
 .mw-cwc-hero__photo {
