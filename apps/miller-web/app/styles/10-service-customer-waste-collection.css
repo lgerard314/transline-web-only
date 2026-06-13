@@ -839,20 +839,64 @@
    50% − 50vw = −(left gutter); the ~half-scrollbar overshoot is a bleed
    edge, nothing to read there. */
 .mw-cwc-fleet__panel {
-  margin-left: calc(50% - 50vw);
+  /* No longer bleeds off the LEFT with text on it — that put card text OUTSIDE
+     the body column (banned, logan 2026-06-13: written content never leaves the
+     body column). The cream panel now sits fully inside the body column with
+     the three truck cards; the edge-bleed is carried by a decorative no-text
+     endcap (the grid's 4th cell) below. */
+  --fleet-gap: clamp(10px, 1.2vw, 18px);
+  position: relative;
   background: var(--c-surface-warm);
   border: 1px solid var(--c-line);
   box-shadow: 0 28px 64px -34px rgba(0, 0, 0, 0.55);
-  padding: clamp(10px, 1.2vw, 18px);
-  overflow: hidden;
+  padding: var(--fleet-gap);
+  overflow: visible; /* the endcap (4th cell) pokes out the right edge; the section clips it */
 }
 .mw-cwc-fleet__grid {
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(10px, 1.2vw, 18px);
+  /* 4 equal cells sized so ~3.5 show: the 3 truck cards span the body column
+     (text inside the body), and the 4th (decorative endcap) is ~70% visible
+     before the screen edge clips it — a real card bleeding off, not a sliver. */
+  grid-template-columns: repeat(4, calc((100% - 3 * var(--fleet-gap)) / 3.5));
+  gap: var(--fleet-gap);
   margin: 0;
   padding: 0;
+}
+
+/* ── Decorative endplate (the grid's 4th cell) ───────────────────
+   Same width as a truck card, bleeding off the RIGHT screen edge — the page's
+   edge-spanning element, now carrying NO text (written content stays in the
+   body column). A clay field with the 49deg paper-grain and a chain-of-custody
+   diamond (nested) bisected by the edge. */
+.mw-cwc-fleet__endcap {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  background: var(--c-accent);
+  border: 1px solid color-mix(in srgb, var(--c-accent) 72%, #000);
+}
+.mw-cwc-fleet__endcap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(49deg, transparent 0, transparent 22px, rgba(250, 243, 229, 0.1) 22px, rgba(250, 243, 229, 0.1) 23px);
+}
+.mw-cwc-fleet__endcap-mark {
+  position: absolute;
+  top: 50%;
+  left: clamp(26px, 3.4vw, 50px);
+  width: clamp(104px, 13vw, 168px);
+  height: clamp(104px, 13vw, 168px);
+  transform: translate(-50%, -50%) rotate(45deg);
+  border: 1.5px solid rgba(250, 243, 229, 0.5);
+  background: transparent;
+}
+.mw-cwc-fleet__endcap-mark::after {
+  content: "";
+  position: absolute;
+  inset: clamp(16px, 1.8vw, 26px);
+  border: 1px solid rgba(250, 243, 229, 0.3);
 }
 /* Cells sit ON the cream panel (VBEC grammar) — no dark card chrome; the
    panel surface shows through the gaps. Light-surface text colors below. */
@@ -939,22 +983,24 @@
    the consult's diamond-scarcity verdict + logan's call.) */
 
 
-/* ── M2 fleet entrance, restaged (logan 2026-06-12): the PANEL slides in
-   FROM THE EDGE IT TOUCHES — it bleeds off the LEFT viewport edge, so it
-   emerges from the left (logan's correction; an edge-spanning surface
-   comes out of its own bleed edge). Stage-level move consuming the
-   writer's --cwcft-p directly, settling at its bled position EXACTLY when
-   the grid bottom meets the viewport bottom. The per-cell rises are
-   retired; the cells keep their --t slices so the plate LEADERS still
-   draw left→right during the arrival. Defaults rest settled for no-JS;
-   reduced motion never sees the transform. */
+/* ── M2 fleet entrance, re-derived 2026-06-13 (the panel no longer bleeds, so
+   the left-slide is retired). The cells RISE + FADE in on their per-cell --t
+   slice (the plate leaders draw on the same --t), and the decorative endcap
+   SLIDES in from the RIGHT edge it bleeds off — settling as the grid bottom
+   meets the viewport bottom (--cwcft-p -> 1). Defaults rest settled for no-JS;
+   reduced motion never sees a transform. */
 @media (prefers-reduced-motion: no-preference) {
-  .mw-cwc-fleet__panel {
-    transform: translate3d(calc((1 - var(--cwcft-p, 1)) * min(52vw, 760px) * -1), 0, 0);
-    will-change: transform;
-  }
   .mw-cwc-fleet__cell {
     --t: clamp(0, calc((var(--cwcft-p, 1) - var(--thr, 0)) / 0.5), 1);
+  }
+  .mw-cwc-fleet__card {
+    opacity: var(--t, 1);
+    transform: translateY(calc((1 - var(--t, 1)) * 28px));
+    will-change: transform, opacity;
+  }
+  .mw-cwc-fleet__endcap {
+    transform: translateX(calc((1 - var(--cwcft-p, 1)) * 56px));
+    will-change: transform;
   }
 }
 
@@ -963,6 +1009,9 @@
 
 @media (max-width: 960px) {
   .mw-cwc-fleet__grid { grid-template-columns: 1fr; gap: 24px; }
+  /* The edge-bleed endcap is a desktop device; hide it on the stacked layout
+     (the responsive pass will decide its mobile form). */
+  .mw-cwc-fleet__endcap { display: none; }
 }
 
 /* ── §5 Stream index — sector manifest + hover-swap photo ─────────

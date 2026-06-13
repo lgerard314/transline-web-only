@@ -134,6 +134,16 @@ export function FleetShowcase02({ content, config = {} }) {
                 </article>
               </li>
             ))}
+            {/* Decorative endplate — the grid's 4th cell, same size as a truck
+                card, bleeding off the RIGHT screen edge (the section's
+                overflow:hidden clips it). NO text: written content stays inside
+                the body column (logan 2026-06-13). Clay field + 49deg grain + a
+                chain-of-custody diamond; slides in from the edge it bleeds off. */}
+            <li className="mw-cwc-fleet__cell mw-cwc-fleet__cell--endcap" aria-hidden="true">
+              <div className="mw-cwc-fleet__endcap">
+                <span className="mw-cwc-fleet__endcap-mark" />
+              </div>
+            </li>
           </ul>
         </div>
 
