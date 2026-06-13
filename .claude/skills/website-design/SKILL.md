@@ -43,6 +43,7 @@ Also invoke `frontend-design:frontend-design` — use ONLY its process/craft dis
 | [white-owl-responsive-playbook.md](references/white-owl-responsive-playbook.md) | White-owl motion/responsive recipes, §6 checklist, §7 page production — moved from the repo |
 | [white-owl-templates.md](references/white-owl-templates.md) | miller-web components-v2 template library guide — moved from the repo |
 | `.claude/agents/design-auditor.md` | When spawning a section audit — the reusable auditor agent (self-loads this skill); `scripts/eval/` proves it loads canon + isn't a rubber-stamp |
+| [orchestration.md](references/orchestration.md) | When a build touches MORE THAN ONE section — execution shapes, the full-page stop-gate, the independence gate, the coordinator briefing template, and the motion-aware integration pass |
 
 ## Non-negotiables (full detail in the files)
 

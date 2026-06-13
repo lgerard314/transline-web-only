@@ -44,6 +44,7 @@ For any ask bigger than a specific edit (a page, a whole section, "make X better
 3. **Viewport classes** — which named classes are in scope (desktop / phone / tablet-portrait / tablet-landscape — definitions + canonical dimensions in responsive.md; default: desktop only). Depth applies within the classes in scope ("Restructure the timeline for phone" leaves desktop untouched).
 4. **Media & copy** — photos regenerate vs keep (imposed filters never, either way); copy rewritten vs treated as source-of-truth.
 5. **Stop point** — default is through per-section audits + the page finish criteria. A critique/audit-only ask produces a REPORT and ZERO edits. The extraction pass and approved/ reference shots are never in scope without logan's done-rating.
+6. **Execution shape** — for any ask touching MORE THAN ONE section, state the shape (solo / single-page fan-out / multi-page fan-out), DERIVED per orchestration.md (`shape = f(surfaces, independence, depth)`). A single section proceeds solo. A FULL PAGE or MULTIPLE PAGES is a STOP-GATE: present the plan-summary (lineup + shape + why + independence-gate grouping + the up-front motion budget + commit plan) and WAIT for logan's go before spawning anything (orchestration.md). logan may override the shape by name.
 
 Plus: the model plan (judgment inherits the session model; mechanical sonnet — checklist item 9) and per-section audits ON or waived. Then PROCEED — **confirm by stating, not by asking**; logan interrupts if the reading is wrong. Questions are reserved for genuine ambiguity (adjacent-tier scope reads, conflicting instructions, an axis his words genuinely don't settle) and are batched up front per Phase 1 — never mid-build, never as permission theater on a clear ask.
 
@@ -119,6 +120,7 @@ Reusable AGENTS are for stable, repeated contracts. The **auditor** qualifies: i
 ## Finish criteria (page level)
 
 - Seam rhythm consistent across all sections at each width (probe the padding values).
+- **If the page was built by fan-out: its integration pass is clean** — a fresh `design-auditor` with `scope: integration` (orchestration.md) did a full-runway walk judging seams, color continuity, motion handoffs, and whole-page pacing (motion budget honored). A fan-out page is NOT done until it passes.
 - Zero page errors, zero horizontal overflow, zero 404s at every checked width.
 - Reduced-motion: every rest state fully settled/complete; clocks frozen.
 - Final section walk with screenshots you have personally read.
