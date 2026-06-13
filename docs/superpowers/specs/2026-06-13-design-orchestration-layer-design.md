@@ -83,7 +83,7 @@ Success: orchestration.md states the four-part predicate with BOTH app paths, bo
 
 ## Workstream 3 — Coordinator briefing template (multi-page)
 
-Multi-page fan-out spawns page-coordinators. By the agent-scope decision a coordinator is **not** a new agent (its payload — the page work order — is volatile); it's a **documented briefing template** in process.md, sibling to the auditor briefing template + the 9-item checklist. Every spawned coordinator:
+Multi-page fan-out spawns page-coordinators. By the agent-scope decision a coordinator is **not** a new agent (its payload — the page work order — is volatile); it's a **documented briefing template** that lives in orchestration.md (loaded on demand — only multi-page needs it; process.md's pre-flight just points to it), sibling in spirit to the auditor briefing template + the 9-item checklist in process.md. Every spawned coordinator:
 
 - **First action:** self-invoke the `website-design` skill (inherits nothing).
 - Receives its page's **full work order + execution shape + motion budget**.
