@@ -112,6 +112,10 @@ Give every section auditor: the exact route + section selector; the design inten
 - `DF-4` per-field form error messages
 - `DF-5` small mono text reading blue-ish in downscaled screenshots (subpixel artifact — verify computed color before claiming a palette violation)
 
+### Why a design-auditor agent but not a builder / scope / capture agent
+
+Reusable AGENTS are for stable, repeated contracts. The **auditor** qualifies: its payload is mostly stable contract + a pointer to canon, it fires every section → it's a `.claude/agents/` definition (see design-auditor). The others do not: a **builder's** payload is mostly the per-page work order (concept, lineup, copy, namespace) — volatile, so it stays a per-task briefing, not an agent. **Scope** (Rebuild/Recast/Restructure/Refine) is a PARAMETER threaded through the loop table, not an agent type — minting one agent per tier would be four drifting near-duplicates. **Capture** is a deterministic script (scripts/capture-home.mjs), not a judgment role — an agent there would re-introduce the token cost the harness removed. If you feel the pull to "add a builder agent for symmetry," that's consistency in the wrong direction.
+
 ## Finish criteria (page level)
 
 - Seam rhythm consistent across all sections at each width (probe the padding values).
