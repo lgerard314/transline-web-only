@@ -1,6 +1,17 @@
 # Imagery — generate purpose-fit, prompt photos NEUTRAL
 
-The standard: GENERATE the ideal image for the design (codex MCP `image_gen`) instead of hunting the existing library — the user swaps assets later if he wants. Kick image generation off FIRST, in background agents; it is always the long pole of a page build.
+The standard: GENERATE the ideal image for the design (codex MCP `image_gen`) instead of hunting the existing library — the user swaps assets later if he wants.
+
+## Async generation — NEVER block on an image (HARD RULE)
+
+Image generation is the long pole of every page; sitting and waiting on it, one image at a time, is the single biggest time-sink in the whole process. So this is non-negotiable, for EVERYONE — the main agent, builders, orchestrators, nested coordinators alike, for a single image exactly as much as for a set:
+
+1. **NEVER call the codex image MCP inline and wait for it.** ALWAYS delegate the generation to a SUBAGENT spawned in the BACKGROUND (`run_in_background`), then immediately CONTINUE working. Requesting the photo yourself and blocking on the result is forbidden.
+2. **Build through the wait with a placeholder.** Reserve the exact slot — final box + aspect ratio — with a placeholder (or build the surrounding frame) and keep moving to the next work. Do not stall the section or the page on a pending image.
+3. **Reconcile on return.** When the image subagent reports back (you are notified on completion), swap the placeholder for the landed asset and verify it yourself (Read the file) before shipping it.
+4. **Fire them FIRST and in parallel.** At the start of section/page work, kick off ALL known image subagents in the background up front so they generate while you build — never discover an image need late and then block on it.
+
+The image subagent is a MECHANICAL asset operator (it may run sonnet — checklist item 9): the REQUESTER crafts the neutral prompt (per THE PHOTO RULE below) and hands the subagent the full prompt block + the Windows MCP mechanics + the verify-after-write protocol; the subagent just runs the MCP, verifies the write, and returns the saved absolute path. Same async-and-continue pattern as background audits and section fan-out: spawn the slow work, keep building, reconcile when it lands.
 
 ## THE PHOTO RULE — prompts are neutral. No exceptions.
 
@@ -40,4 +51,4 @@ Multi-image sets share one SETTING/REGISTER block — register means subject mat
 - Transparent background needed? Request the page's own bg color instead (user cuts it out later).
 - Object that must sit ON a page surface (spec-sheet/product shots): request a PURE WHITE background and composite with `mix-blend-mode: multiply` (white × surface = surface, mathematically seamless); the blend needs a backdrop inside the element's own stacking context — paint the surface color on the media box itself.
 - Matched before/after pairs: generate the "before" with named registration landmarks (horizon line, treeline, fence), then generate the "after" on the same codex thread with the before attached and "same exact camera position/landmarks"; verify the registration by eye before building on the pair.
-- Parallelize: one background agent per image set, each carrying the full prompt block + verification protocol; review every landed image yourself (Read the file) before shipping it.
+- Parallelize & never block: one BACKGROUND subagent per image (or per set), each carrying the full prompt block + verification protocol; you keep working while they run and review every landed image yourself (Read the file) before shipping it (see the async HARD RULE at the top of this file).
