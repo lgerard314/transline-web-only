@@ -1451,7 +1451,9 @@
 
 .mw-rel__track {
   --mw-rel-gap: clamp(14px, 1.4vw, 20px);
-  --mw-rel-visible: 3;
+  /* 4 visible (was 3) → each card 75% the width = 25% smaller (logan 2026-06-13).
+     Shared rail: applies to every service page. Mobile/tablet keep 2/1 below. */
+  --mw-rel-visible: 4;
   list-style: none;
   margin: 0;
   padding: 4px var(--mw-rel-edge);
