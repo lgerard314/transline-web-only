@@ -16,7 +16,7 @@ export const customerWasteCollection = {
     titleEm: "on your schedule",
     lead:
       "Scheduled, documented collection of hazardous and non-hazardous waste in any container — from a single pail to full van loads — moved from your loading dock to the licensed VBEC facility under one chain of custody.",
-    photo: "/miller/cwc/hero-dock.png",
+    photo: "/miller/cwc/hero-loading-b.png",
     cta: { label: "Schedule a pickup", href: "/contact-us/" },
     custody: {
       nodes: [
